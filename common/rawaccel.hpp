@@ -141,6 +141,7 @@ struct accel_function {
         b = args.accel;
         k = args.lim_exp - 1;
         if (args.accel_mode == mode::natural) b /= k;
+        if (args.accel_mode == mode::power) k++;
         
         speed_offset = args.offset;
         weight = args.weight;
