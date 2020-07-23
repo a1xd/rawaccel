@@ -84,7 +84,8 @@ variables parse(int argc, char** argv) {
     );
     auto pow_mode = "power accel mode:" % (
         clipp::command("power").set(accel_args.accel_mode, mode::power),
-        accel_var
+        accel_var,
+        (clipp::option("scale") & clipp::number("num", accel_args.lim_exp)) % "scale factor"
     );
 
     auto accel_mode_exclusive = (lin_mode | classic_mode | nat_mode | log_mode | sig_mode | pow_mode);
