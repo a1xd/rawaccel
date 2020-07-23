@@ -82,8 +82,12 @@ variables parse(int argc, char** argv) {
         limit_var,
         (clipp::required("midpoint") & clipp::number("speed", accel_args.midpoint)) % "midpoint"
     );
+    auto pow_mode = "power accel mode:" % (
+        clipp::command("power").set(accel_args.accel_mode, mode::power),
+        accel_var
+    );
 
-    auto accel_mode_exclusive = (lin_mode | classic_mode | nat_mode | log_mode | sig_mode);
+    auto accel_mode_exclusive = (lin_mode | classic_mode | nat_mode | log_mode | sig_mode | pow_mode);
     auto accel_opts = "mode-independent accel options:" % (opt_offset, opt_cap, opt_weight, opt_tmin);
 
     bool help = false;

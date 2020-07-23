@@ -8,7 +8,7 @@
 
 namespace rawaccel {   
 
-enum class mode { noaccel, linear, classic, natural, logarithmic, sigmoid };
+enum class mode { noaccel, linear, classic, natural, logarithmic, sigmoid, power };
 
 struct rotator {
     vec2d rot_vec = { 1, 0 };
@@ -97,6 +97,8 @@ struct accel_function {
         case mode::logarithmic: accel_val = log(speed * b + 1); 
             break;
         case mode::sigmoid: accel_val = k / (exp(-b * (speed - m)) + 1); 
+            break;
+        case mode::power: accel_val = pow(speed, b) - 1;
             break;
         default:
             break;
