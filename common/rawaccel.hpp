@@ -99,7 +99,7 @@ struct accel_function {
             break;
         case mode::sigmoid: accel_val = k / (exp(-b * (speed - m)) + 1); 
             break;
-        case mode::power: accel_val = b < 1 ? 0 : pow(speed, b*k) - 1;
+        case mode::power: accel_val = (speed_offset > 0 && speed < 1) ? 0 : pow(speed, b*k) - 1;
             break;
         default:
             break;
