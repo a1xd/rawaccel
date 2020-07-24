@@ -99,7 +99,7 @@ struct accel_function {
             break;
         case mode::sigmoid: accel_val = k / (exp(-b * (speed - m)) + 1); 
             break;
-        case mode::power: accel_val = (speed_offset > 0 && speed < 1) ? 0 : pow(speed, b*k) - 1;
+        case mode::power: accel_val = (speed_offset > 0 && speed < 1) ? 0 : pow(speed*k, b) - 1;
             break;
         default:
             break;
@@ -132,7 +132,7 @@ struct accel_function {
         if (args.time_min <= 0) error("min time must be positive");
         if (args.lim_exp <= 1) {
             if (args.accel_mode == mode::classic) error("exponent must be greater than 1");
-            else if (args.accel_mode == mode::power) error("scale factor must be greater than 1");
+            else if (args.accel_mode == mode::power) { if (args.lim_exp <= 0) error("scale factor must be greater than 0"); }
             else error("limit must be greater than 1");
         }
 
