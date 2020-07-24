@@ -21,31 +21,43 @@ variables parse(int argc, char** argv) {
     vec2d sens = { 1, 1 };
     accel_function::args_t accel_args{};
 
+    auto make_opt_vec = [](vec2d& v, auto first_flag, auto... rest) {
+        return clipp::option(first_flag, rest...) & (
+            clipp::number("xy", v.x, v.y) | (
+                (clipp::required("x") & clipp::number("num", v.x)),
+                (clipp::required("y") & clipp::number("num", v.y))
+            )
+        );
+    };
+
+    auto make_doc_fmt = [] {
+        return clipp::doc_formatting{}
+            .first_column(4)
+            .doc_column(28)
+            .last_column(80)
+            // min value to not split optional vec2 alternatives
+            .alternatives_min_split_size(5);
+    };
+
     // default options
-    auto opt_sens = "sensitivity, <y> defaults to <x> (default = 1)" % (
-        clipp::option("sens") &
-        clipp::number("x", sens.x, sens.y) &
-        clipp::opt_number("y", sens.y)
-    );
+    auto opt_sens = "sensitivity (default = 1)" % make_opt_vec(sens, "sens");
+
     auto opt_rot = "counter-clockwise rotation (default = 0)" % (
         clipp::option("rotate") &
         clipp::number("degrees", degrees)
     );
     
     // mode-independent accel options
-    auto opt_weight = "accel multiplier, <y> defaults to <x> (default = 1)" % (
-        clipp::option("weight") &
-        clipp::number("x", accel_args.weight.x, accel_args.weight.y) &
-        clipp::opt_number("y", accel_args.weight.y)
-    );
+    auto opt_weight = "accel multiplier (default = 1)" % 
+        make_opt_vec(accel_args.weight, "weight");
+
     auto opt_offset = "speed (dots/ms) where accel kicks in (default = 0)" % (
         clipp::option("offset") & clipp::number("speed", accel_args.offset)
     );
-    auto opt_cap = "accel scale cap, <y> defaults to <x> (default = 9)" % (
-        clipp::option("cap") &
-        clipp::number("x", accel_args.cap.x, accel_args.cap.y) &
-        clipp::opt_number("y", accel_args.cap.y)
-    );
+
+    auto opt_cap = "accel scale cap (default = 9)" % 
+        make_opt_vec(accel_args.cap, "cap");
+
     auto opt_tmin = "minimum time between polls (default = 0.4)" % (
         clipp::option("tmin") &
         clipp::number("ms", accel_args.time_min)
@@ -89,7 +101,7 @@ variables parse(int argc, char** argv) {
     );
 
     auto accel_mode_exclusive = (lin_mode | classic_mode | nat_mode | log_mode | sig_mode | pow_mode);
-    auto accel_opts = "mode-independent accel options:" % (opt_offset, opt_cap, opt_weight, opt_tmin);
+    auto accel_opts = "mode-independent accel options:" % (opt_cap, opt_weight, opt_offset, opt_tmin);
 
     bool help = false;
 
@@ -100,15 +112,12 @@ variables parse(int argc, char** argv) {
         );
 
     if (!clipp::parse(argc, argv, cli)) {
-        std::cout << clipp::usage_lines(cli, "rawaccel");
+        std::cout << clipp::usage_lines(cli, "rawaccel", make_doc_fmt());
         std::exit(PARSE_ERROR);
     }
 
     if (help) {
-        auto fmt = clipp::doc_formatting{}.first_column(4)
-            .doc_column(28)
-            .last_column(80);
-        std::cout << clipp::make_man_page(cli, "rawaccel", fmt);
+        std::cout << clipp::make_man_page(cli, "rawaccel", make_doc_fmt());
         std::exit(0);
     }
 
