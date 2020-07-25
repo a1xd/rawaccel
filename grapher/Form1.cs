@@ -10,12 +10,12 @@ using System.Windows.Forms;
 
 namespace grapher
 {
-    public partial class Form1 : Form
+    public partial class RawAcceleration : Form
     {
-        public Form1()
+        public RawAcceleration()
         {
             InitializeComponent();
-            var managedAccel = new ManagedAccel(6, 0, 0.025, 1.01, 0);
+            var managedAccel = new ManagedAccel(6, 0, 1, 0.025, 0);
             var orderedPoints = new SortedDictionary<double, double>();
 
             for (int i = 0; i < 100; i++)
@@ -35,13 +35,15 @@ namespace grapher
                 }
             }
 
-            var series = this.chart1.Series.FirstOrDefault();
+            var series = this.AccelerationChart.Series.FirstOrDefault();
             series.Points.Clear();
 
             foreach (var point in orderedPoints)
             {
                 series.Points.AddXY(point.Key, point.Value);
             }
+
+            this.AccelerationChart.ChartAreas[0].AxisX.RoundAxisValues();
         }
 
         public static double Magnitude(int x, int y)
@@ -52,6 +54,11 @@ namespace grapher
         public static double Magnitude(double x, double y)
         {
             return Math.Sqrt(x * x + y * y);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
