@@ -79,7 +79,7 @@ namespace rawaccel {
     using milliseconds = double;
 
     /// <summary> Struct to hold arguments for an acceleration function. </summary>
-    struct args_t {
+    struct accel_args {
         mode accel_mode = mode::noaccel;
         milliseconds time_min = 0.4;
         double offset = 0;
@@ -97,14 +97,14 @@ namespace rawaccel {
     template <typename T>
     struct accel_implentation {
         
-        /// <summary> The acceleration ramp rate.</summary>
-        double b = 0;
+        /// <summary> First constant for use in acceleration curves. Generally, the acceleration ramp rate.</summary>
+        double curve_constant_one = 0;
 
-        /// <summary> The limit or exponent for various modes. </summary>
-        double k = 0;
+        /// <summary> Second constant for use in acceleration curves. Generally, the limit or exponent in the curve. </summary>
+        double curve_constant_two = 0;
 
-        /// <summary> The midpoint in sigmoid mode. </summary>
-        double m = 0;
+        /// <summary> Third constant for use in acceleration curves. The midpoint in sigmoid mode. </summary>
+        double curve_constant_three = 0;
 
         /// <summary> The offset past which acceleration is applied. Used in power mode. </summary>
         double offset = 0;
@@ -114,11 +114,11 @@ namespace rawaccel {
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        accel_implentation(args_t args)
+        accel_implentation(accel_args args)
         {
-            b = args.accel;
-            k = args.lim_exp - 1;
-            m = args.midpoint;
+            curve_constant_one = args.accel;
+            curve_constant_two = args.lim_exp - 1;
+            curve_constant_three = args.midpoint;
             offset = args.offset;
         }
 
@@ -133,7 +133,7 @@ namespace rawaccel {
         /// Verifies arguments as valid. Errors if not.
         /// </summary>
         /// <param name="args">Arguments to verified.</param>
-        void verify(args_t args) {
+        void verify(accel_args args) {
             if (args.accel < 0) error("accel can not be negative, use a negative weight to compensate");
             if (args.time_min <= 0) error("min time must be positive");
         }
@@ -148,15 +148,15 @@ namespace rawaccel {
     /// <summary> Struct to hold linear acceleration implementation. </summary>
     struct accel_linear : accel_implentation<accel_linear> {
 
-        accel_linear(args_t args)
+        accel_linear(accel_args args)
             : accel_implentation(args) {}
 
         double accelerate(double speed) {
             //f(x) = mx
-            return b * speed;
+            return curve_constant_one * speed;
         }
 
-        void verify(args_t args) {
+        void verify(accel_args args) {
             accel_implentation::verify(args);
             if (args.lim_exp <= 1) error("limit must be greater than 1");
         }
@@ -164,15 +164,15 @@ namespace rawaccel {
 
     /// <summary> Struct to hold "classic" (linear raised to power) acceleration implementation. </summary>
     struct accel_classic : accel_implentation<accel_classic> {
-        accel_classic(args_t args)
+        accel_classic(accel_args args)
             : accel_implentation(args) {}
 
         double accelerate(double speed) {
             //f(x) = (mx)^k
-            return pow(b * speed, k);
+            return pow(curve_constant_one * speed, curve_constant_two);
         }
 
-        void verify(args_t args) {
+        void verify(accel_args args) {
             accel_implentation::verify(args);
             if (args.lim_exp <= 1) error("exponent must be greater than 1");
         }
@@ -180,16 +180,16 @@ namespace rawaccel {
 
     /// <summary> Struct to hold "natural" (vanishing difference) acceleration implementation. </summary>
     struct accel_natural : accel_implentation<accel_natural> {
-        accel_natural(args_t args)
+        accel_natural(accel_args args)
             : accel_implentation(args) 
-        { b /= k; }
+        { curve_constant_one /= curve_constant_two; }
 
         double accelerate(double speed) {
             // f(x) = k(1-e^(-mx))
-            return k - (k * exp(-b * speed));;
+            return curve_constant_two - (curve_constant_two * exp(-curve_constant_one * speed));;
         }
 
-        void verify(args_t args) {
+        void verify(accel_args args) {
             accel_implentation::verify(args);
             if (args.lim_exp <= 1) error("exponent must be greater than 1");
         }
@@ -197,14 +197,14 @@ namespace rawaccel {
 
     /// <summary> Struct to hold logarithmic acceleration implementation. </summary>
     struct accel_logarithmic : accel_implentation<accel_logarithmic> {
-        accel_logarithmic(args_t args)
+        accel_logarithmic(accel_args args)
             : accel_implentation(args) {}
 
         double accelerate(double speed) {
-            return log(speed * b + 1);
+            return log(speed * curve_constant_one + 1);
         }
 
-        void verify(args_t args) {
+        void verify(accel_args args) {
             accel_implentation::verify(args);
             if (args.lim_exp <= 1) error("exponent must be greater than 1");
         }
@@ -212,15 +212,15 @@ namespace rawaccel {
 
     /// <summary> Struct to hold sigmoid (s-shaped) acceleration implementation. </summary>
     struct accel_sigmoid : accel_implentation<accel_sigmoid> {
-        accel_sigmoid(args_t args)
+        accel_sigmoid(accel_args args)
             : accel_implentation(args) {}
 
         double accelerate(double speed) {
             //f(x) = k/(1+e^(-m(c-x)))
-            return k / (exp(-b * (speed - m)) + 1);
+            return curve_constant_two / (exp(-curve_constant_one * (speed - curve_constant_three)) + 1);
         }
 
-        void verify(args_t args) {
+        void verify(accel_args args) {
             accel_implentation::verify(args);
             if (args.lim_exp <= 1) error("exponent must be greater than 1");
         }
@@ -228,18 +228,18 @@ namespace rawaccel {
 
     /// <summary> Struct to hold power (non-additive) acceleration implementation. </summary>
     struct accel_power : accel_implentation<accel_power> {
-        accel_power(args_t args)
+        accel_power(accel_args args)
             : accel_implentation(args)
-        { k++; }
+        { curve_constant_two++; }
 
         double accelerate(double speed) {
             // f(x) = (mx)^k - 1
             // The subtraction of 1 occurs with later addition of 1 in mind, 
             // so that the input vector is directly multiplied by (mx)^k (if unweighted)
-            return (offset > 0 && speed < 1) ? 0 : pow(speed * b, k) - 1;
+            return (offset > 0 && speed < 1) ? 0 : pow(speed * curve_constant_one, curve_constant_two) - 1;
         }
 
-        void verify(args_t args) {
+        void verify(accel_args args) {
             accel_implentation::verify(args);
             if (args.lim_exp <= 0) error("exponent must be greater than 0");
         }
@@ -247,12 +247,12 @@ namespace rawaccel {
 
     /// <summary> Struct to hold acceleration implementation which applies no acceleration. </summary>
     struct accel_noaccel : accel_implentation<accel_noaccel> {
-        accel_noaccel(args_t args)
+        accel_noaccel(accel_args args)
             : accel_implentation(args) {}
 
         double accelerate(double speed) { return 0; }
 
-        void verify(args_t args) {}
+        void verify(accel_args args) {}
     };
     
     /// <summary> Tagged union to hold all accel implementations and allow "polymorphism" via a visitor call. </summary>
@@ -281,7 +281,7 @@ namespace rawaccel {
         /// <summary> The object which sets a min and max for the acceleration scale. </summary>
         vec2<accel_scale_clamp> clamp;
 
-        accel_function(args_t args) {
+        accel_function(accel_args args) {
             switch (args.accel_mode)
             {
 				case mode::linear: accel = accel_linear(args);
@@ -321,7 +321,7 @@ namespace rawaccel {
         /// Verifies acceleration arguments, via visitor function to accel_implementation_t
         /// </summary>
         /// <param name="args">Arguments to be verified</param>
-        void verify(args_t args) const {
+        void verify(accel_args args) const {
             return accel.visit([=](auto accel_t) { accel_t.verify(args); });
         }
 
@@ -358,7 +358,7 @@ namespace rawaccel {
         accel_function accel_fn;
         vec2d sensitivity = { 1, 1 };
 
-        mouse_modifier(double degrees, vec2d sens, args_t accel_args)
+        mouse_modifier(double degrees, vec2d sens, accel_args accel_args)
             : accel_fn(accel_args)
         {
             apply_rotate = degrees != 0;

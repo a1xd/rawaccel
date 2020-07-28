@@ -18,7 +18,7 @@ public:
 
     ManagedAccel(double mode, double offset, double accel, double lim_exp, double midpoint)
     {
-        args_t args{};
+        accel_args args{};
         args.accel = accel;
         args.lim_exp = lim_exp;
         args.midpoint = midpoint;

@@ -19,7 +19,7 @@ void error(const char* s) {
 mouse_modifier parse(int argc, char** argv) {
     double degrees = 0;
     vec2d sens = { 1, 1 };
-    args_t accel_args{};
+    accel_args accel_args{};
 
     auto make_opt_vec = [](vec2d& v, auto first_flag, auto... rest) {
         return clipp::option(first_flag, rest...) & (
