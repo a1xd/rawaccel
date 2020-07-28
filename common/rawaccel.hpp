@@ -5,6 +5,7 @@
 
 #include "vec2.h"
 #include "x64-util.hpp"
+#include "external/tagged-union-single.h"
 
 namespace rawaccel {   
 
@@ -55,8 +56,119 @@ struct accel_scale_clamp {
 
 void error(const char*);
 
+using milliseconds = double;
+
+struct args_t {
+	mode accel_mode = mode::noaccel;
+	milliseconds time_min = 0.4;
+	double offset = 0;
+	double accel = 0;
+	double lim_exp = 2;
+	double midpoint = 0;
+	vec2d weight = { 1, 1 };
+	vec2d cap = { 0, 0 };
+};
+
+struct accel_implentation {
+	double b = 0;
+	double k = 0;
+	double m = 0;
+	double offset = 0;
+
+	accel_implentation(args_t args)
+	{
+		b = args.accel;
+		k = args.lim_exp;
+		m = args.midpoint;
+		offset = args.offset;
+	}
+
+	double virtual accelerate(double speed) { return 0; }
+	void virtual verify(args_t args) {
+		if (args.accel < 0) error("accel can not be negative, use a negative weight to compensate");
+		if (args.time_min <= 0) error("min time must be positive");
+	}
+
+	accel_implentation() = default;
+};
+
+struct accel_linear : accel_implentation {
+    accel_linear(args_t args)
+        : accel_implentation(args) {}
+
+    double virtual accelerate(double speed) override {
+		return b * speed;
+	}
+
+	void virtual verify(args_t args) override {
+		accel_implentation::verify(args);
+		if (args.lim_exp <= 1) error("limit must be greater than 1");
+	}
+};
+
+struct accel_classic : accel_implentation {
+    accel_classic(args_t args)
+        : accel_implentation(args) {}
+
+	double virtual accelerate(double speed) override {
+		return pow(b * speed, k); 
+
+	}
+
+	void virtual verify(args_t args) override {
+		accel_implentation::verify(args);
+		if (args.lim_exp <= 1) error("exponent must be greater than 1");
+	}
+};
+
+struct accel_logarithmic : accel_implentation {
+    accel_logarithmic(args_t args)
+        : accel_implentation(args) {}
+
+	double virtual accelerate(double speed) override {
+		return log(speed * b + 1); 
+	}
+
+	void virtual verify(args_t args) override {
+		accel_implentation::verify(args);
+		if (args.lim_exp <= 1) error("exponent must be greater than 1");
+	}
+};
+
+struct accel_sigmoid : accel_implentation {
+    accel_sigmoid(args_t args)
+        : accel_implentation(args) {}
+
+	double virtual accelerate(double speed) override {
+		return k / (exp(-b * (speed - m)) + 1); 
+
+	}
+
+	void virtual verify(args_t args) override {
+		accel_implentation::verify(args);
+		if (args.lim_exp <= 1) error("exponent must be greater than 1");
+	}
+};
+
+struct accel_power : accel_implentation {
+    accel_power(args_t args)
+        : accel_implentation(args) {}
+
+	double virtual accelerate(double speed) override {
+		return (offset > 0 && speed < 1) ? 0 : pow(speed*b, k) - 1;
+
+
+	}
+
+	void virtual verify(args_t args) override {
+		accel_implentation::verify(args);
+		if (args.lim_exp <= 1) error("exponent must be greater than 1");
+	}
+};
+
+using accel_implementation_t = tagged_union<accel_implentation, accel_linear, accel_classic, accel_logarithmic, accel_sigmoid, accel_power>;
+
 struct accel_function {
-    using milliseconds = double;
 
     /* 
     This value is ideally a few microseconds lower than 
@@ -77,63 +189,13 @@ struct accel_function {
     // or the exponent for classic and power modes
     double k = 1; 
     
+	accel_implementation_t accel = accel_implentation{};
+
     vec2d weight = { 1, 1 };
     vec2<accel_scale_clamp> clamp;
 
-    inline vec2d operator()(const vec2d& input, milliseconds time, mode accel_mode) const {
-        double mag = sqrtsd(input.x * input.x + input.y * input.y);
-        double time_clamped = clampsd(time, time_min, 100);
-        double speed = maxsd(mag / time_clamped - speed_offset, 0);
-
-        double accel_val = 0;
-
-        switch (accel_mode) {
-        case mode::linear: accel_val = b * speed; 
-            break;
-        case mode::classic: accel_val = pow(b * speed, k); 
-            break;
-        case mode::natural: accel_val = k - (k * exp(-b * speed)); 
-            break;
-        case mode::logarithmic: accel_val = log(speed * b + 1); 
-            break;
-        case mode::sigmoid: accel_val = k / (exp(-b * (speed - m)) + 1); 
-            break;
-        case mode::power: accel_val = (speed_offset > 0 && speed < 1) ? 0 : pow(speed*b, k) - 1;
-            break;
-        default:
-            break;
-        }
-
-        double scale_x = weight.x * accel_val + 1;
-        double scale_y = weight.y * accel_val + 1;
-
-        return { 
-            input.x * clamp.x(scale_x), 
-            input.y * clamp.y(scale_y) 
-        };
-    }
-
-    struct args_t {
-        mode accel_mode = mode::noaccel;
-        milliseconds time_min = 0.4;
-        double offset = 0;
-        double accel = 0;
-        double lim_exp = 2;
-        double midpoint = 0;
-        vec2d weight = { 1, 1 };
-        vec2d cap = { 0, 0 };
-    };
-
     accel_function(args_t args) {
-        // Preconditions to guard against division by zero and
-        // ensure the C math functions can not return NaN or -Inf.
-        if (args.accel < 0) error("accel can not be negative, use a negative weight to compensate");
-        if (args.time_min <= 0) error("min time must be positive");
-        if (args.lim_exp <= 1) {
-            if (args.accel_mode == mode::classic) error("exponent must be greater than 1");
-            if (args.accel_mode == mode::power) { if (args.lim_exp <=0 ) error("exponent must be greater than 0"); }
-            else error("limit must be greater than 1");
-        }
+        accel = accel_linear(args);
 
         time_min = args.time_min;
         m = args.midpoint;
@@ -148,6 +210,26 @@ struct accel_function {
         clamp.y = accel_scale_clamp(args.cap.y);
     }
 
+	double apply(double speed) const {
+		return accel.visit([=](auto accel_t) { return accel_t.accelerate(speed); });
+	}
+
+    inline vec2d operator()(const vec2d& input, milliseconds time, mode accel_mode) const {
+        double mag = sqrtsd(input.x * input.x + input.y * input.y);
+        double time_clamped = clampsd(time, time_min, 100);
+        double speed = maxsd(mag / time_clamped - speed_offset, 0);
+
+        double accel_val = apply(speed);
+
+        double scale_x = weight.x * accel_val + 1;
+        double scale_y = weight.y * accel_val + 1;
+
+        return { 
+            input.x * clamp.x(scale_x), 
+            input.y * clamp.y(scale_y) 
+        };
+    }
+
     accel_function() = default;
 };
 
@@ -159,7 +241,7 @@ struct variables {
     accel_function accel_fn;
     vec2d sensitivity = { 1, 1 };
 
-    variables(double degrees, vec2d sens, accel_function::args_t accel_args)
+    variables(double degrees, vec2d sens, args_t accel_args)
         : accel_fn(accel_args)
     {
         apply_rotate = degrees != 0;
