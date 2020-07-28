@@ -48,5 +48,5 @@ public:
         return accel_instance;
     }
 
-    Tuple<double, double>^ Accelerate(int x, int y, double time, double mode);
+    Tuple<double, double>^ Accelerate(int x, int y, double time);
 };
