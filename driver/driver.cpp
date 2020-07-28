@@ -83,7 +83,7 @@ Arguments:
                     DebugPrint(("RA time < min with %d ticks\n", ticks));
                 }
 
-                input = global.vars.accel_fn(input, time, global.vars.accel_mode);
+                input = global.vars.accel_fn(input, time);
             }
 
             double result_x = input.x * global.vars.sensitivity.x + local_carry.x;

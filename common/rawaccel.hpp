@@ -290,7 +290,7 @@ namespace rawaccel {
             return accel.visit([=](auto accel_t) { accel_t.verify(args); });
         }
 
-        inline vec2d operator()(const vec2d& input, milliseconds time, mode accel_mode) const {
+        inline vec2d operator()(const vec2d& input, milliseconds time) const {
             double mag = sqrtsd(input.x * input.x + input.y * input.y);
             double time_clamped = clampsd(time, time_min, 100);
             double speed = maxsd(mag / time_clamped - speed_offset, 0);
@@ -312,7 +312,6 @@ namespace rawaccel {
     struct variables {
         bool apply_rotate = false;
         bool apply_accel = false;
-        mode accel_mode = mode::noaccel;
         rotator rotate;
         accel_function accel_fn;
         vec2d sensitivity = { 1, 1 };
@@ -325,7 +324,6 @@ namespace rawaccel {
             else rotate = rotator();
 
             apply_accel = accel_args.accel_mode != mode::noaccel;
-            accel_mode = accel_args.accel_mode;
 
             if (sens.x == 0) sens.x = 1;
             if (sens.y == 0) sens.y = 1;
