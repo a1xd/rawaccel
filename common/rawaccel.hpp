@@ -330,15 +330,17 @@ namespace rawaccel {
             sensitivity = sens;
         }
 
-        vec2d modify(vec2d input)
+        inline vec2d modify(vec2d input)
         {
             if (apply_rotate)
             {
                 return rotate(input);
             }
+
+            return input;
         }
 
-        vec2d modify(vec2d input, milliseconds time)
+        inline vec2d modify(vec2d input, milliseconds time)
         {
             return accel_fn(modify(input), time);
         }
