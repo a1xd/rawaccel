@@ -1,7 +1,7 @@
 #pragma once
 
 #include "..\common\rawaccel.hpp";
-#include "..\common\rawaccel-userspace.hpp";
+#include "..\common\error.hpp";
 #include <iostream>
 using namespace rawaccel;
 using namespace System;

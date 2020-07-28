@@ -14,6 +14,7 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Error.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-userspace.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)x64-util.hpp" />
