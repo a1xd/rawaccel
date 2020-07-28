@@ -16,7 +16,7 @@ void error(const char* s) {
     throw std::domain_error(s); 
 }
 
-variables parse(int argc, char** argv) {
+mouse_modifier parse(int argc, char** argv) {
     double degrees = 0;
     vec2d sens = { 1, 1 };
     args_t accel_args{};
@@ -121,7 +121,7 @@ variables parse(int argc, char** argv) {
         std::exit(0);
     }
 
-    return variables(-degrees, sens, accel_args);
+    return mouse_modifier(-degrees, sens, accel_args);
 }
 
 } // rawaccel

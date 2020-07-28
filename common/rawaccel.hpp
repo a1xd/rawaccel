@@ -309,14 +309,14 @@ namespace rawaccel {
         accel_function() = default;
     };
 
-    struct variables {
+    struct mouse_modifier {
         bool apply_rotate = false;
         bool apply_accel = false;
         rotator rotate;
         accel_function accel_fn;
         vec2d sensitivity = { 1, 1 };
 
-        variables(double degrees, vec2d sens, args_t accel_args)
+        mouse_modifier(double degrees, vec2d sens, args_t accel_args)
             : accel_fn(accel_args)
         {
             apply_rotate = degrees != 0;
@@ -330,7 +330,20 @@ namespace rawaccel {
             sensitivity = sens;
         }
 
-        variables() = default;
+        vec2d modify(vec2d input)
+        {
+            if (apply_rotate)
+            {
+                return rotate(input);
+            }
+        }
+
+        vec2d modify(vec2d input, milliseconds time)
+        {
+            return accel_fn(modify(input), time);
+        }
+
+        mouse_modifier() = default;
     };
 
 } // rawaccel

@@ -9,7 +9,7 @@
 
 namespace ra = rawaccel;
 
-void write(ra::variables vars) {
+void write(ra::mouse_modifier vars) {
 	HANDLE ra_handle = INVALID_HANDLE_VALUE;
 
 	ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
@@ -24,7 +24,7 @@ void write(ra::variables vars) {
 		ra_handle,               
 		RA_WRITE,
 		&vars,    
-		sizeof(ra::variables),      
+		sizeof(ra::mouse_modifier),      
 		NULL,                     // output buffer
 		0,                        // output buffer size
 		&dummy,                   // bytes returned
