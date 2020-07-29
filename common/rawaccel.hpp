@@ -9,9 +9,6 @@
 
 namespace rawaccel {
 
-    /// <summary> Enum to hold acceleration implementation types (i.e. types of curves.) </summary>
-    enum class mode { noaccel, linear, classic, natural, logarithmic, sigmoid, power };
-
     /// <summary> Struct to hold vector rotation details. </summary>
     struct rotator {
 
@@ -80,7 +77,7 @@ namespace rawaccel {
 
     /// <summary> Struct to hold arguments for an acceleration function. </summary>
     struct accel_args {
-        mode accel_mode = mode::noaccel;
+        int accel_mode = 0;
         milliseconds time_min = 0.4;
         double offset = 0;
         double accel = 0;
@@ -282,20 +279,8 @@ namespace rawaccel {
         vec2<accel_scale_clamp> clamp;
 
         accel_function(accel_args args) {
-            switch (args.accel_mode)
-            {
-				case mode::linear: accel = accel_linear(args);
-                    break;
-				case mode::classic: accel = accel_classic(args);
-                    break;
-				case mode::natural: accel = accel_natural(args);
-                    break;
-				case mode::logarithmic: accel = accel_logarithmic(args);
-                    break;
-				case mode::sigmoid: accel = accel_sigmoid(args);
-                    break;
-				case mode::power: accel = accel_power(args);
-            }
+            accel.tag = args.accel_mode;
+            accel.visit([&](auto& a){ a = {args}; });
 
             // Verification is performed by the accel_implementation object
             // and therefore must occur after the object has been instantiated
@@ -365,7 +350,8 @@ namespace rawaccel {
             if (apply_rotate) rotate = rotator(degrees);
             else rotate = rotator();
 
-            apply_accel = accel_args.accel_mode != mode::noaccel;
+            apply_accel = (accel_args.accel_mode != 0 &&
+						   accel_args.accel_mode != accel_implementation_t::id<accel_noaccel>);
 
             if (sens.x == 0) sens.x = 1;
             if (sens.y == 0) sens.y = 1;

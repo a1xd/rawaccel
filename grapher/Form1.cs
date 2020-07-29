@@ -15,7 +15,7 @@ namespace grapher
         public RawAcceleration()
         {
             InitializeComponent();
-            var managedAccel = new ManagedAccel(6, 0, 1.333, 0.05, 0);
+            var managedAccel = new ManagedAccel(5, 0, 0.3, 1.25, 15);
             var orderedPoints = new SortedDictionary<double, double>();
 
             for (int i = 0; i < 100; i++)

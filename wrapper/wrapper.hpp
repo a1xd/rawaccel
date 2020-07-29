@@ -16,13 +16,13 @@ public:
 	{
 	}
 
-    ManagedAccel(double mode, double offset, double accel, double lim_exp, double midpoint)
+    ManagedAccel(int mode, double offset, double accel, double lim_exp, double midpoint)
     {
         accel_args args{};
         args.accel = accel;
         args.lim_exp = lim_exp;
         args.midpoint = midpoint;
-        args.accel_mode = (rawaccel::mode)mode;
+        args.accel_mode = mode;
         args.offset = offset;
 
 		accel_instance = new accel_function(args);

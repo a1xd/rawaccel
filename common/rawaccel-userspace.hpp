@@ -68,34 +68,34 @@ mouse_modifier parse(int argc, char** argv) {
 
     // modes
     auto noaccel_mode = "no-accel mode" % (
-        clipp::command("off", "noaccel").set(accel_args.accel_mode, mode::noaccel)
+        clipp::command("off", "noaccel").set(accel_args.accel_mode, accel_implementation_t::id<accel_noaccel>)
     );
     auto lin_mode = "linear accel mode:" % (
-        clipp::command("linear").set(accel_args.accel_mode, mode::linear),
+        clipp::command("linear").set(accel_args.accel_mode, accel_implementation_t::id<accel_linear>),
         accel_var
     );
     auto classic_mode = "classic accel mode:" % (
-        clipp::command("classic").set(accel_args.accel_mode, mode::classic),
+        clipp::command("classic").set(accel_args.accel_mode, accel_implementation_t::id<accel_classic>),
         accel_var,
         (clipp::required("exponent") & clipp::number("num", accel_args.lim_exp)) % "exponent"
     );
     auto nat_mode = "natural accel mode:" % (
-        clipp::command("natural").set(accel_args.accel_mode, mode::natural),
+        clipp::command("natural").set(accel_args.accel_mode, accel_implementation_t::id<accel_natural>),
         accel_var,
         limit_var
     );
     auto log_mode = "logarithmic accel mode:" % (
-        clipp::command("logarithmic").set(accel_args.accel_mode, mode::logarithmic),
+        clipp::command("logarithmic").set(accel_args.accel_mode, accel_implementation_t::id<accel_logarithmic>),
         accel_var
     );
     auto sig_mode = "sigmoid accel mode:" % (
-        clipp::command("sigmoid").set(accel_args.accel_mode, mode::sigmoid),
+        clipp::command("sigmoid").set(accel_args.accel_mode, accel_implementation_t::id<accel_sigmoid>),
         accel_var,
         limit_var,
         (clipp::required("midpoint") & clipp::number("speed", accel_args.midpoint)) % "midpoint"
     );
     auto pow_mode = "power accel mode:" % (
-        clipp::command("power").set(accel_args.accel_mode, mode::power) >> [&] { accel_args.accel = 1; },
+        clipp::command("power").set(accel_args.accel_mode, accel_implementation_t::id<accel_power>) >> [&] { accel_args.accel = 1; },
         (clipp::required("exponent") & clipp::number("num", accel_args.lim_exp)) % "exponent",
         (clipp::option("scale") & clipp::number("num", accel_args.accel)) % "scale factor"
     );
