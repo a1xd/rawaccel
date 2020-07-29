@@ -1,7 +1,7 @@
 #pragma once
 
-#include "..\common\rawaccel.hpp";
-#include "..\common\error.hpp";
+#include "..\common\error.hpp"
+#include "wrapper_writer.hpp"
 #include <iostream>
 using namespace rawaccel;
 using namespace System;
@@ -10,6 +10,7 @@ public ref class ManagedAccel
 {
 protected:
 	mouse_modifier* modifier_instance;
+    writer* driverWriter;
 public:
 	ManagedAccel(mouse_modifier* accel)
 		: modifier_instance(accel)
@@ -26,6 +27,7 @@ public:
         args.acc_fn_args.acc_args.offset = offset;
 
 		modifier_instance = new mouse_modifier(args);
+        driverWriter = new writer();
 	}
 
     virtual ~ManagedAccel()
@@ -49,4 +51,8 @@ public:
     }
 
     Tuple<double, double>^ Accelerate(int x, int y, double time);
+
+    void UpdateAccel(int mode, double offset, double accel, double lim_exp, double midpoint);
+
+    void WriteToDriver();
 };

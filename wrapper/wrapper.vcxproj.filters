@@ -18,9 +18,15 @@
     <ClInclude Include="wrapper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="wrapper_writer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wrapper_writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
