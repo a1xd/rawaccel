@@ -9,6 +9,13 @@
 
 namespace rawaccel {
 
+// Error throwing calls std libraries which are unavailable in kernel mode.
+#ifdef _KERNEL_MODE
+    void error(const char*) {}
+#else
+    void error(const char* s);
+#endif
+
     /// <summary> Struct to hold vector rotation details. </summary>
     struct rotator {
 
@@ -66,25 +73,15 @@ namespace rawaccel {
         accel_scale_clamp() = default;
     };
 
-// Error throwing calls std libraries which are unavailable in kernel mode.
-#ifdef _KERNEL_MODE
-    void error(const char*) {}
-#else
-    void error(const char* s);
-#endif
-
     using milliseconds = double;
 
     /// <summary> Struct to hold arguments for an acceleration function. </summary>
     struct accel_args {
-        int accel_mode = 0;
         milliseconds time_min = 0.4;
         double offset = 0;
         double accel = 0;
         double lim_exp = 2;
         double midpoint = 0;
-        vec2d weight = { 1, 1 };
-        vec2d cap = { 0, 0 };
     };
 
     /// <summary>
@@ -255,6 +252,14 @@ namespace rawaccel {
     /// <summary> Tagged union to hold all accel implementations and allow "polymorphism" via a visitor call. </summary>
     using accel_implementation_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_noaccel>;
 
+    struct accel_fn_args {
+        accel_args acc_args = accel_args{};
+        int accel_mode = 0;
+        milliseconds time_min = 0.4;
+        vec2d weight = { 1, 1 };
+        vec2d cap = { 0, 0 };
+    };
+
     /// <summary> Struct for holding acceleration application details. </summary>
     struct accel_function {
 
@@ -278,16 +283,16 @@ namespace rawaccel {
         /// <summary> The object which sets a min and max for the acceleration scale. </summary>
         vec2<accel_scale_clamp> clamp;
 
-        accel_function(accel_args args) {
+        accel_function(accel_fn_args args) {
             accel.tag = args.accel_mode;
-            accel.visit([&](auto& a){ a = {args}; });
+            accel.visit([&](auto& a){ a = {args.acc_args}; });
 
             // Verification is performed by the accel_implementation object
             // and therefore must occur after the object has been instantiated
-            verify(args);
+            verify(args.acc_args);
 
             time_min = args.time_min;
-            speed_offset = args.offset;
+            speed_offset = args.acc_args.offset;
             weight = args.weight;
             clamp.x = accel_scale_clamp(args.cap.x);
             clamp.y = accel_scale_clamp(args.cap.y);
@@ -335,6 +340,13 @@ namespace rawaccel {
         accel_function() = default;
     };
 
+    struct modifier_args
+    {
+        double degrees = 0;
+        vec2d sens = { 1, 1 };
+        accel_fn_args acc_fn_args = accel_fn_args{};
+    };
+
     /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
     struct mouse_modifier {
         bool apply_rotate = false;
@@ -343,19 +355,19 @@ namespace rawaccel {
         accel_function accel_fn;
         vec2d sensitivity = { 1, 1 };
 
-        mouse_modifier(double degrees, vec2d sens, accel_args accel_args)
-            : accel_fn(accel_args)
+        mouse_modifier(modifier_args args)
+            : accel_fn(args.acc_fn_args)
         {
-            apply_rotate = degrees != 0;
-            if (apply_rotate) rotate = rotator(degrees);
+            apply_rotate = args.degrees != 0;
+            if (apply_rotate) rotate = rotator(args.degrees);
             else rotate = rotator();
 
-            apply_accel = (accel_args.accel_mode != 0 &&
-						   accel_args.accel_mode != accel_implementation_t::id<accel_noaccel>);
+            apply_accel = (args.acc_fn_args.accel_mode != 0 &&
+						   args.acc_fn_args.accel_mode != accel_implementation_t::id<accel_noaccel>);
 
-            if (sens.x == 0) sens.x = 1;
-            if (sens.y == 0) sens.y = 1;
-            sensitivity = sens;
+            if (args.sens.x == 0) args.sens.x = 1;
+            if (args.sens.y == 0) args.sens.y = 1;
+            sensitivity = args.sens;
         }
 
         /// <summary>

@@ -18,12 +18,12 @@ public:
 
     ManagedAccel(int mode, double offset, double accel, double lim_exp, double midpoint)
     {
-        accel_args args{};
-        args.accel = accel;
-        args.lim_exp = lim_exp;
-        args.midpoint = midpoint;
+        accel_fn_args args{};
+        args.acc_args.accel = accel;
+        args.acc_args.lim_exp = lim_exp;
+        args.acc_args.midpoint = midpoint;
         args.accel_mode = mode;
-        args.offset = offset;
+        args.acc_args.offset = offset;
 
 		accel_instance = new accel_function(args);
 	}
