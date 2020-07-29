@@ -79,15 +79,15 @@ Arguments:
                     DebugPrint(("RA time < min with %d ticks\n", ticks));
                 }
 
-                input = global.modifier.modify(input, time);
+                input = global.modifier.modify_with_accel(input, time);
             }
             else
             {
-                input = global.modifier.modify(input);
+                input = global.modifier.modify_without_accel(input);
             }
 
-            double result_x = input.x * global.modifier.sensitivity.x + local_carry.x;
-            double result_y = input.y * global.modifier.sensitivity.y + local_carry.y;
+            double result_x = input.x + local_carry.x;
+            double result_y = input.y + local_carry.y;
 
             LONG out_x = static_cast<LONG>(result_x);
             LONG out_y = static_cast<LONG>(result_y);
