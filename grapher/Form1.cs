@@ -44,6 +44,23 @@ namespace grapher
             }
 
             this.AccelerationChart.ChartAreas[0].AxisX.RoundAxisValues();
+
+            this.AccelerationChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+
+            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
+            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
+
+            this.AccelerationChart.ChartAreas[0].CursorY.Interval = 0.001;
+
+            this.AccelerationChart.ChartAreas[0].CursorX.AutoScroll = true;
+            this.AccelerationChart.ChartAreas[0].CursorY.AutoScroll = true;
+
+            this.AccelerationChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            this.AccelerationChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+
+            this.AccelerationChart.ChartAreas[0].CursorX.IsUserEnabled = true;
+            this.AccelerationChart.ChartAreas[0].CursorY.IsUserEnabled = true;
         }
 
         public static double Magnitude(int x, int y)
