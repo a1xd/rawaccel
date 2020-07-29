@@ -6,15 +6,15 @@
 #include "accel_types.hpp"
 
 namespace rawaccel {
-	accel_logarithmic::accel_logarithmic(accel_args args)
+	inline accel_logarithmic::accel_logarithmic(accel_args args)
 		: accel_implentation(args) {}
 
-	double accel_logarithmic::accelerate(double speed) {
+	inline double accel_logarithmic::accelerate(double speed) {
 		//f(x) = log(m*x+1)
 		return log(speed * curve_constant_one + 1);
 	}
 
-	void accel_logarithmic::verify(accel_args args) {
+	inline void accel_logarithmic::verify(accel_args args) {
 		accel_implentation::verify(args);
 		if (args.lim_exp <= 1) error("exponent must be greater than 1");
 	}

@@ -6,15 +6,15 @@
 #include "accel_types.hpp"
 
 namespace rawaccel {
-	accel_linear::accel_linear(accel_args args)
+	inline accel_linear::accel_linear(accel_args args)
 		: accel_implentation(args) {}
 
-	double accel_linear::accelerate(double speed) {
+	inline double accel_linear::accelerate(double speed) {
 		//f(x) = mx
 		return curve_constant_one * speed;
 	}
 
-	void accel_linear::verify(accel_args args) {
+	inline void accel_linear::verify(accel_args args) {
 		accel_implentation::verify(args);
 		if (args.lim_exp <= 1) error("limit must be greater than 1");
 	}

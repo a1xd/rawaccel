@@ -6,15 +6,15 @@
 #include "accel_types.hpp"
 
 namespace rawaccel {
-	accel_classic::accel_classic(accel_args args)
+	inline accel_classic::accel_classic(accel_args args)
 		: accel_implentation(args) {}
 
-	double accel_classic::accelerate(double speed) {
+	inline double accel_classic::accelerate(double speed) {
 		//f(x) = (mx)^k
 		return pow(curve_constant_one * speed, curve_constant_two);
 	}
 
-	void accel_classic::verify(accel_args args) {
+	inline void accel_classic::verify(accel_args args) {
 		accel_implentation::verify(args);
 		if (args.lim_exp <= 1) error("exponent must be greater than 1");
 	}

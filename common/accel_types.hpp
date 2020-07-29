@@ -7,7 +7,7 @@ namespace rawaccel {
 
 // Error throwing calls std libraries which are unavailable in kernel mode.
 #ifdef _KERNEL_MODE
-    void error(const char*) {}
+    inline void error(const char*) {}
 #else
     void error(const char* s);
 #endif

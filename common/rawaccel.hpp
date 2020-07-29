@@ -204,7 +204,7 @@ namespace rawaccel {
         {
             if (apply_rotate)
             {
-                return rotate(input);
+                input = rotate(input);
             }
 
             input.x *= sensitivity.x;
@@ -223,10 +223,14 @@ namespace rawaccel {
         {
             if (apply_rotate)
             {
-                return rotate(input);
+                input = rotate(input);
             }
 
-            input = accel_fn(input, time);
+            if (apply_accel)
+            {
+				input = accel_fn(input, time);
+            }
+
             input.x *= sensitivity.x;
             input.y *= sensitivity.y;
 

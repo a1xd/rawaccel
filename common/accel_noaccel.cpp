@@ -6,10 +6,10 @@
 #include "accel_types.hpp"
 
 namespace rawaccel {
-	accel_noaccel::accel_noaccel(accel_args args)
+	inline accel_noaccel::accel_noaccel(accel_args args)
 		: accel_implentation(args) {}
 
-	double accel_noaccel::accelerate(double speed) { return 0; }
+	inline double accel_noaccel::accelerate(double speed) { return 0; }
 
-	void accel_noaccel::verify(accel_args args) { }
+	inline void accel_noaccel::verify(accel_args args) { }
 }
