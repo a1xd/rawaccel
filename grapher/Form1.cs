@@ -15,14 +15,14 @@ namespace grapher
         public RawAcceleration()
         {
             InitializeComponent();
-            var managedAccel = new ManagedAccel(6, 0, 1, 0.025, 0);
+            var managedAccel = new ManagedAccel(5, 0, 0.3, 1.25, 15);
             var orderedPoints = new SortedDictionary<double, double>();
 
             for (int i = 0; i < 100; i++)
             {
                 for (int j = 0; j <= i; j++)
                 {
-                    var output = managedAccel.Accelerate(i, j, 1, 6);
+                    var output = managedAccel.Accelerate(i, j, 1);
 
                     var inMagnitude = Magnitude(i,j);
                     var outMagnitude = Magnitude(output.Item1, output.Item2);
