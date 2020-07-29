@@ -20,7 +20,7 @@ namespace rawaccel {
     /// <summary> Struct to hold vector rotation details. </summary>
     struct rotator {
 
-        /// <summary> Rotational vector, which points in the direction of the post-rotation positive y axis. </summary>
+        /// <summary> Rotational vector, which points in the direction of the post-rotation positive x axis. </summary>
         vec2d rot_vec = { 1, 0 };
 
         /// <summary>

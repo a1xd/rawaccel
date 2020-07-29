@@ -9,43 +9,43 @@ using namespace System;
 public ref class ManagedAccel
 {
 protected:
-	accel_function* accel_instance;
+	mouse_modifier* modifier_instance;
 public:
-	ManagedAccel(accel_function* accel)
-		: accel_instance(accel)
+	ManagedAccel(mouse_modifier* accel)
+		: modifier_instance(accel)
 	{
 	}
 
     ManagedAccel(int mode, double offset, double accel, double lim_exp, double midpoint)
     {
-        accel_fn_args args{};
-        args.acc_args.accel = accel;
-        args.acc_args.lim_exp = lim_exp;
-        args.acc_args.midpoint = midpoint;
-        args.accel_mode = mode;
-        args.acc_args.offset = offset;
+        modifier_args args{};
+        args.acc_fn_args.acc_args.accel = accel;
+        args.acc_fn_args.acc_args.lim_exp = lim_exp;
+        args.acc_fn_args.acc_args.midpoint = midpoint;
+        args.acc_fn_args.accel_mode = mode;
+        args.acc_fn_args.acc_args.offset = offset;
 
-		accel_instance = new accel_function(args);
+		modifier_instance = new mouse_modifier(args);
 	}
 
     virtual ~ManagedAccel()
     {
-        if (accel_instance != nullptr)
+        if (modifier_instance!= nullptr)
         {
-            delete accel_instance;
+            delete modifier_instance;
         }
     }
     !ManagedAccel()
     {
-        if (accel_instance != nullptr)
+        if (modifier_instance!= nullptr)
         {
-            delete accel_instance;
+            delete modifier_instance;
         }
     }
 
-    accel_function* GetInstance()
+    mouse_modifier* GetInstance()
     {
-        return accel_instance;
+        return modifier_instance;
     }
 
     Tuple<double, double>^ Accelerate(int x, int y, double time);
