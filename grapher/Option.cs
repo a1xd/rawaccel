@@ -22,6 +22,7 @@ namespace grapher
         public void SetName(string name)
         {
             Label.Text = name;
+            Label.Left = Convert.ToInt32((Box.Left / 2.0) - (Label.Width / 2.0));
         }
 
         public void Hide()
@@ -32,6 +33,14 @@ namespace grapher
 
         public void Show()
         {
+            Box.Show();
+            Label.Show();
+        }
+
+        public void Show(string name)
+        {
+            SetName(name);
+
             Box.Show();
             Label.Show();
         }

@@ -56,6 +56,14 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Layouts\ClassicLayout.cs" />
+    <Compile Include="Layouts\DefaultLayout.cs" />
+    <Compile Include="Layouts\LayoutBase.cs" />
+    <Compile Include="Layouts\LinearLayout.cs" />
+    <Compile Include="Layouts\LogLayout.cs" />
+    <Compile Include="Layouts\NaturalLayout.cs" />
+    <Compile Include="Layouts\PowerLayout.cs" />
+    <Compile Include="Layouts\SigmoidLayout.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

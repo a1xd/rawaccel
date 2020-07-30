@@ -21,9 +21,12 @@ namespace grapher
             ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
             AccelerationOptions = new AccelOptions(
                 accelTypeDrop,
-                new Option(accelerationBox, constantOneLabel),
-                new Option(limitBox, constantTwoLabel),
-                new Option(midpointBox, constantThreeLabel));
+                new Option[]
+                {
+                    new Option(accelerationBox, constantOneLabel),
+                    new Option(limitBox, constantTwoLabel),
+                    new Option(midpointBox, constantThreeLabel)
+                });
             Sensitivity = new FieldXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1);
             Rotation = new Field(rotationBox, this, 0);
             Weight = new FieldXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1);
