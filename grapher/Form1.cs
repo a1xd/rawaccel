@@ -166,5 +166,33 @@ namespace grapher
         }
 
         #endregion Methods
+
+        private void accelTypeDrop_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch(this.accelTypeDrop.SelectedItem.ToString())
+            {
+                case ("Linear"):
+                    AccelerationType = 1;
+                    break;
+                case ("Classic"):
+                    AccelerationType = 2;
+                    break;
+                case ("Natural"):
+                    AccelerationType = 3;
+                    break;
+                case ("Logarithmic"):
+                    AccelerationType = 4;
+                    break;
+                case ("Sigmoid"):
+                    AccelerationType = 5;
+                    break;
+                case ("Power"):
+                    AccelerationType = 6;
+                    break;
+                default:
+                    AccelerationType = 0;
+                    break;
+            }
+        }
     }
 }
