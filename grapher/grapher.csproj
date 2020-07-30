@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Field.cs" />
+    <Compile Include="FieldXY.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -20,14 +20,14 @@ namespace grapher
 
             ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
             AccelerationType = 5;
-            Sensitivity = new VectorXY(1);
-            Rotation = new Field("0.0", rotationBox, this, 0);
-            Weight = new VectorXY(1);
-            Cap = new VectorXY(0);
-            Offset = new Field("0.0", offsetBox, this, 0);
-            Acceleration = new Field("0.0", accelerationBox, this, 0);
-            LimitOrExponent = new Field("2.0", limitBox, this, 2);
-            Midpoint = new Field("0.0", midpointBox, this, 0);
+            Sensitivity = new FieldXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1);
+            Rotation = new Field(rotationBox, this, 0);
+            Weight = new FieldXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1);
+            Cap = new FieldXY(capBoxX, capBoxY, capXYLock, this, 0);
+            Offset = new Field(offsetBox, this, 0);
+            Acceleration = new Field(accelerationBox, this, 0);
+            LimitOrExponent = new Field(limitBox, this, 2);
+            Midpoint = new Field(midpointBox, this, 0);
 
             UpdateGraph();
  
@@ -59,13 +59,13 @@ namespace grapher
 
         private int AccelerationType { get; set; }
 
-        private VectorXY Sensitivity { get; set; }
+        private FieldXY Sensitivity { get; set; }
 
         private Field Rotation { get; set; }
 
-        private VectorXY Weight { get; set; }
+        private FieldXY Weight { get; set; }
 
-        private VectorXY Cap { get; set; }
+        private FieldXY Cap { get; set; }
 
         private Field Offset { get; set; }
 
@@ -163,22 +163,6 @@ namespace grapher
                 Midpoint.Data);
             ManagedAcceleration.WriteToDriver();
             UpdateGraph();
-        }
-
-        private void sensitivityBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (TryHandleWithEnter(e, sender, out double data))
-            {
-                Sensitivity.SetBoth(data);
-            }
-        }
-
-        private void capBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (TryHandleWithEnter(e, sender, out double data))
-            {
-                Cap.SetBoth(data);
-            }
         }
 
         #endregion Methods

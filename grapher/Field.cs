@@ -26,14 +26,15 @@ namespace grapher
 
         #region Constructors
 
-        public Field(string defaultText, TextBox box, Form containingForm, double defaultData)
+        public Field(TextBox box, Form containingForm, double defaultData)
         {
-            DefaultText = defaultText;
+            DefaultText = defaultData.ToString("N1");
             Box = box;
             Data = defaultData;
+            DefaultData = defaultData;
             State = FieldState.Undefined;
             ContainingForm = containingForm;
-            box.KeyDown += KeyDown;
+            box.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyDown);
 
             SetToDefault();
         }
@@ -52,6 +53,8 @@ namespace grapher
 
         public FieldState State { get; private set; }
 
+        private double DefaultData { get; }
+
         #endregion Properties
 
         #region Methods
@@ -65,6 +68,7 @@ namespace grapher
                 State = FieldState.Default;
             }
 
+            Data = DefaultData;
             Box.Text = DefaultText;
             ContainingForm.ActiveControl = null;
         }
@@ -91,6 +95,14 @@ namespace grapher
             }
 
             ContainingForm.ActiveControl = null;
+        }
+
+        public void SetToEntered(double value)
+        {
+            SetToEntered();
+
+            Data = value;
+            Box.Text = Data.ToString("N2");
         }
 
         public void SetToUnavailable()
@@ -129,6 +141,7 @@ namespace grapher
                     break;
                 case FieldState.Unavailable:
                     Box.Text = string.Empty;
+                    ContainingForm.ActiveControl = null;
                     break;
                 default:
                     break;
