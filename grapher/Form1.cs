@@ -12,37 +12,14 @@ namespace grapher
 {
     public partial class RawAcceleration : Form
     {
+        #region Constructor
+
         public RawAcceleration()
         {
             InitializeComponent();
-            var managedAccel = new ManagedAccel(5, 0, 0.3, 1.25, 15);
-            var orderedPoints = new SortedDictionary<double, double>();
-
-            for (int i = 0; i < 100; i++)
-            {
-                for (int j = 0; j <= i; j++)
-                {
-                    var output = managedAccel.Accelerate(i, j, 1);
-
-                    var inMagnitude = Magnitude(i,j);
-                    var outMagnitude = Magnitude(output.Item1, output.Item2);
-                    var ratio = inMagnitude > 0 ? outMagnitude / inMagnitude : 0;
-
-                    if (!orderedPoints.ContainsKey(inMagnitude))
-                    {
-                        orderedPoints.Add(inMagnitude, ratio);
-                    }
-                }
-            }
-
-            var series = this.AccelerationChart.Series.FirstOrDefault();
-            series.Points.Clear();
-
-            foreach (var point in orderedPoints)
-            {
-                series.Points.AddXY(point.Key, point.Value);
-            }
-
+            ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
+            UpdateGraph();
+ 
             this.AccelerationChart.ChartAreas[0].AxisX.RoundAxisValues();
 
             this.AccelerationChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
@@ -62,6 +39,33 @@ namespace grapher
             this.AccelerationChart.ChartAreas[0].CursorX.IsUserEnabled = true;
             this.AccelerationChart.ChartAreas[0].CursorY.IsUserEnabled = true;
         }
+        #endregion Constructor
+
+        #region Properties
+
+        public ManagedAccel ManagedAcceleration { get; set; }
+
+        private int AccelerationType { get; set; }
+
+        private Tuple<double, double> Sensitivity { get; set; }
+
+        private double Rotation { get; set; }
+
+        private Tuple<double, double> Weight { get; set; }
+
+        private double Cap { get; set; }
+
+        private double Offset { get; set; }
+
+        private double Acceleration { get; set; }
+
+        private double LimitOrExponent { get; set; }
+
+        private double Midpoint { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public static double Magnitude(int x, int y)
         {
@@ -78,29 +82,43 @@ namespace grapher
 
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void UpdateGraph()
         {
+           var orderedPoints = new SortedDictionary<double, double>();
 
+            for (int i = 0; i < 100; i++)
+            {
+                for (int j = 0; j <= i; j++)
+                {
+                    var output = ManagedAcceleration.Accelerate(i, j, 1);
+
+                    var inMagnitude = Magnitude(i,j);
+                    var outMagnitude = Magnitude(output.Item1, output.Item2);
+                    var ratio = inMagnitude > 0 ? outMagnitude / inMagnitude : 0;
+
+                    if (!orderedPoints.ContainsKey(inMagnitude))
+                    {
+                        orderedPoints.Add(inMagnitude, ratio);
+                    }
+                }
+            }
+
+            var series = this.AccelerationChart.Series.FirstOrDefault();
+            series.Points.Clear();
+
+            foreach (var point in orderedPoints)
+            {
+                series.Points.AddXY(point.Key, point.Value);
+            }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        #endregion Methods
+
+        private void writeButton_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
+            ManagedAcceleration.UpdateAccel(5, 0, 1.3, 9, 15);
+            ManagedAcceleration.WriteToDriver();
+            UpdateGraph();
         }
     }
 }
