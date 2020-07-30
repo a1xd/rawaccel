@@ -25,7 +25,7 @@ namespace grapher
             Weight = new VectorXY(1);
             Cap = new VectorXY(0);
             Offset = 0;
-            Acceleration = 0;
+            Acceleration = new Field("0.0", this.accelerationBox, 0);
             LimitOrExponent = 1.01;
             Midpoint = 0;
 
@@ -69,7 +69,7 @@ namespace grapher
 
         private double Offset { get; set; }
 
-        private double Acceleration { get; set; }
+        private Field Acceleration { get; set; }
 
         private double LimitOrExponent { get; set; }
 
@@ -158,7 +158,7 @@ namespace grapher
                 Cap.X,
                 Cap.Y,
                 Offset,
-                Acceleration,
+                Acceleration.Data,
                 LimitOrExponent,
                 Midpoint);
             ManagedAcceleration.WriteToDriver();
@@ -170,14 +170,6 @@ namespace grapher
             if (TryHandleWithEnter(e, sender, out double data))
             {
                 Sensitivity.SetBoth(data);
-            }
-        }
-
-        private void accelerationBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (TryHandleWithEnter(e, sender, out double data))
-            {
-                Acceleration = data;
             }
         }
 
@@ -222,30 +214,5 @@ namespace grapher
         }
 
         #endregion Methods
-
-        public class VectorXY
-        {
-            public VectorXY(double x)
-            {
-                X = x;
-                Y = x;
-            }
-
-            public VectorXY(double x, double y)
-            {
-                X = x;
-                Y = y;
-            }
-
-            public double X { get; set; }
-
-            public double Y { get; set; }
-
-            public void SetBoth(double value)
-            {
-                X = value;
-                Y = value;
-            }
-        }
     }
 }

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend10 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea12 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend12 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.accelTypeDrop = new System.Windows.Forms.ComboBox();
             this.sensitivityBox = new System.Windows.Forms.TextBox();
@@ -56,19 +56,19 @@
             // 
             // AccelerationChart
             // 
-            chartArea10.AxisX.Title = "Speed (counts/ms)";
-            chartArea10.AxisY.Title = "Sensitivity (magnitude ratio)";
-            chartArea10.Name = "ChartArea1";
-            this.AccelerationChart.ChartAreas.Add(chartArea10);
-            legend10.Name = "Legend1";
-            this.AccelerationChart.Legends.Add(legend10);
+            chartArea12.AxisX.Title = "Speed (counts/ms)";
+            chartArea12.AxisY.Title = "Sensitivity (magnitude ratio)";
+            chartArea12.Name = "ChartArea1";
+            this.AccelerationChart.ChartAreas.Add(chartArea12);
+            legend12.Name = "Legend1";
+            this.AccelerationChart.Legends.Add(legend12);
             this.AccelerationChart.Location = new System.Drawing.Point(162, 0);
             this.AccelerationChart.Name = "AccelerationChart";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.Legend = "Legend1";
-            series10.Name = "Accelerated Sensitivity";
-            this.AccelerationChart.Series.Add(series10);
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series12.Legend = "Legend1";
+            series12.Name = "Accelerated Sensitivity";
+            this.AccelerationChart.Series.Add(series12);
             this.AccelerationChart.Size = new System.Drawing.Size(801, 312);
             this.AccelerationChart.TabIndex = 0;
             this.AccelerationChart.Text = "chart1";
@@ -130,7 +130,6 @@
             this.accelerationBox.Name = "accelerationBox";
             this.accelerationBox.Size = new System.Drawing.Size(51, 20);
             this.accelerationBox.TabIndex = 7;
-            this.accelerationBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.accelerationBox_KeyDown);
             // 
             // label4
             // 
