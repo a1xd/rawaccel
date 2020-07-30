@@ -28,13 +28,14 @@ namespace grapher
 
         public Field(TextBox box, Form containingForm, double defaultData)
         {
-            DefaultText = defaultData.ToString("N1");
+            DefaultText = DecimalString(defaultData);
             Box = box;
             Data = defaultData;
             DefaultData = defaultData;
             State = FieldState.Undefined;
             ContainingForm = containingForm;
             box.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyDown);
+            box.Leave += new System.EventHandler(FocusLeave);
 
             SetToDefault();
         }
@@ -53,6 +54,8 @@ namespace grapher
 
         public FieldState State { get; private set; }
 
+        public FieldState PreviousState { get; private set; }
+
         private double DefaultData { get; }
 
         #endregion Properties
@@ -66,6 +69,7 @@ namespace grapher
                 Box.BackColor = Color.White;
                 Box.ForeColor = Color.Gray;
                 State = FieldState.Default;
+                PreviousState = FieldState.Default;
             }
 
             Data = DefaultData;
@@ -80,6 +84,7 @@ namespace grapher
                 Box.BackColor = Color.White;
                 Box.ForeColor = Color.Black;
 
+                PreviousState = State;
                 State = FieldState.Typing;
             }
 
@@ -93,6 +98,7 @@ namespace grapher
                 Box.BackColor = Color.AntiqueWhite;
                 Box.ForeColor = Color.DarkGray;
 
+                PreviousState = State;
                 State = FieldState.Entered;
             }
 
@@ -104,7 +110,7 @@ namespace grapher
             SetToEntered();
 
             Data = value;
-            Box.Text = Data.ToString("N2");
+            Box.Text = DecimalString(Data);
         }
 
         public void SetToUnavailable()
@@ -115,6 +121,7 @@ namespace grapher
                 Box.ForeColor = Color.LightGray;
                 Box.Text = string.Empty;
 
+                PreviousState = State;
                 State = FieldState.Unavailable;
             }
         }
@@ -152,6 +159,22 @@ namespace grapher
             }
         }
 
+        private void FocusLeave(object sender, EventArgs e)
+        {
+            if (State == FieldState.Typing)
+            {
+                if (PreviousState == FieldState.Default)
+                {
+                    SetToDefault();
+                }
+                else if (PreviousState == FieldState.Entered)
+                {
+                    SetToEntered();
+                    Box.Text = DecimalString(Data);
+                }
+            }
+        }
+
         private void HandleTyping(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -164,12 +187,23 @@ namespace grapher
                 {
                 }
 
-                Box.Text = Data.ToString("N2");
+                Box.Text = DecimalString(Data);
                 e.Handled = true;
                 e.SuppressKeyPress = true;
 
                 SetToEntered();
             }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                ContainingForm.ActiveControl = null;
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private static string DecimalString(double value)
+        {
+            return value.ToString("N2");
         }
 
         #endregion Methods

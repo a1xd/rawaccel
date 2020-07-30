@@ -14,6 +14,7 @@ Tuple<double, double>^ ManagedAccel::Accelerate(int x, int y, double time)
 
 void ManagedAccel::UpdateAccel(
 	int mode,
+	double rotation,
 	double sensitivityX,
 	double sensitivityY,
 	double weightX,
@@ -29,6 +30,7 @@ void ManagedAccel::UpdateAccel(
 
 	modifier_args args{};
 	args.acc_fn_args.accel_mode = mode;
+	args.degrees = rotation;
 	args.sens.x = sensitivityX;
 	args.sens.y = sensitivityY;
 	args.acc_fn_args.weight.x = weightX;

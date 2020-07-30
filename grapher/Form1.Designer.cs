@@ -1,4 +1,6 @@
-﻿namespace grapher
+﻿using System.Linq;
+
+namespace grapher
 {
     partial class RawAcceleration
     {
@@ -82,14 +84,7 @@
             // accelTypeDrop
             // 
             this.accelTypeDrop.FormattingEnabled = true;
-            this.accelTypeDrop.Items.AddRange(new object[] {
-            "Off",
-            "Linear",
-            "Classic",
-            "Natural",
-            "Logarithmic",
-            "Sigmoid",
-            "Power"});
+            this.accelTypeDrop.Items.AddRange(AccelOptions.TypeToIndex.Keys.ToArray());
             this.accelTypeDrop.Location = new System.Drawing.Point(14, 89);
             this.accelTypeDrop.Name = "accelTypeDrop";
             this.accelTypeDrop.Size = new System.Drawing.Size(151, 21);

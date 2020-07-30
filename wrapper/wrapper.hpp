@@ -54,6 +54,7 @@ public:
 
     void UpdateAccel(
         int mode,
+        double rotation,
         double sensitivityX,
         double sensitivityY,
         double weightX,

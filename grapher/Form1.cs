@@ -19,7 +19,7 @@ namespace grapher
             InitializeComponent();
 
             ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
-            AccelerationType = 5;
+            AccelerationType = 0;
             Sensitivity = new FieldXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1);
             Rotation = new Field(rotationBox, this, 0);
             Weight = new FieldXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1);
@@ -151,6 +151,7 @@ namespace grapher
         {
             ManagedAcceleration.UpdateAccel(
                 AccelerationType, 
+                Rotation.Data,
                 Sensitivity.X,
                 Sensitivity.Y,
                 Weight.X,
