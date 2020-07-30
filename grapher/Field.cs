@@ -79,6 +79,7 @@ namespace grapher
             {
                 Box.BackColor = Color.White;
                 Box.ForeColor = Color.Black;
+
                 State = FieldState.Typing;
             }
 
@@ -91,6 +92,7 @@ namespace grapher
             {
                 Box.BackColor = Color.AntiqueWhite;
                 Box.ForeColor = Color.DarkGray;
+
                 State = FieldState.Entered;
             }
 
@@ -112,6 +114,8 @@ namespace grapher
                 Box.BackColor = Color.LightGray;
                 Box.ForeColor = Color.LightGray;
                 Box.Text = string.Empty;
+
+                State = FieldState.Unavailable;
             }
         }
 
@@ -158,9 +162,9 @@ namespace grapher
                 }
                 catch
                 {
-                    Box.Text = Data.ToString();
                 }
 
+                Box.Text = Data.ToString("N2");
                 e.Handled = true;
                 e.SuppressKeyPress = true;
 

@@ -52,11 +52,11 @@ namespace grapher
         {
             if (LockCheckBox.CheckState == CheckState.Checked)
             {
-                SetUnlocked();
+                SetLocked();
             }
             else
             {
-                SetLocked();
+                SetUnlocked();
             }
         }
 
