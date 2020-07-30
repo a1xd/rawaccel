@@ -26,12 +26,13 @@ namespace grapher
 
         #region Constructors
 
-        public Field(string defaultText, TextBox box, double defaultData)
+        public Field(string defaultText, TextBox box, Form containingForm, double defaultData)
         {
             DefaultText = defaultText;
             Box = box;
             Data = defaultData;
             State = FieldState.Undefined;
+            ContainingForm = containingForm;
             box.KeyDown += KeyDown;
 
             SetToDefault();
@@ -42,6 +43,8 @@ namespace grapher
         #region Properties
 
         TextBox Box { get; }
+
+        Form ContainingForm { get; }
 
         public double Data { get; private set; }
 
@@ -57,11 +60,13 @@ namespace grapher
         {
             if (State != FieldState.Default)
             {
-                Box.BackColor = Color.AntiqueWhite;
+                Box.BackColor = Color.White;
                 Box.ForeColor = Color.Gray;
-                Box.Text = DefaultText;
                 State = FieldState.Default;
             }
+
+            Box.Text = DefaultText;
+            ContainingForm.ActiveControl = null;
         }
 
         public void SetToTyping()
@@ -72,16 +77,20 @@ namespace grapher
                 Box.ForeColor = Color.Black;
                 State = FieldState.Typing;
             }
+
+            Box.Text = string.Empty;
         }
 
         public void SetToEntered()
         {
             if (State != FieldState.Entered)
             {
-                Box.BackColor = Color.White;
+                Box.BackColor = Color.AntiqueWhite;
                 Box.ForeColor = Color.DarkGray;
                 State = FieldState.Entered;
             }
+
+            ContainingForm.ActiveControl = null;
         }
 
         public void SetToUnavailable()
@@ -96,33 +105,54 @@ namespace grapher
 
         public void KeyDown(object sender, KeyEventArgs e)
         {
-            if (TryHandleWithEnter(e, sender, out double data))
+            switch(State)
             {
-                Data = data;
+                case FieldState.Default:
+                    if (e.KeyCode == Keys.Enter)
+                    {
+                        SetToDefault();
+                    }
+                    else
+                    {
+                        SetToTyping();
+                    }
+                    break;
+
+                case FieldState.Entered:
+                    if (e.KeyCode != Keys.Enter)
+                    {
+                        SetToTyping();
+                    }
+                    break;
+                case FieldState.Typing:
+                    HandleTyping(sender, e);
+                    break;
+                case FieldState.Unavailable:
+                    Box.Text = string.Empty;
+                    break;
+                default:
+                    break;
             }
         }
 
-        private bool TryHandleWithEnter(KeyEventArgs e, object sender, out double data)
+        private void HandleTyping(object sender, KeyEventArgs e)
         {
-            bool validEntry = false;
-            data = 0.0;
-
             if (e.KeyCode == Keys.Enter)
             {
                 try
                 {
-                    data = Convert.ToDouble(((TextBox)sender).Text);
-                    validEntry = true;
+                    Data = Convert.ToDouble(((TextBox)sender).Text);
                 }
                 catch
                 {
+                    Box.Text = Data.ToString();
                 }
 
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-            }
 
-            return validEntry;
+                SetToEntered();
+            }
         }
 
         #endregion Methods

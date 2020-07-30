@@ -113,7 +113,6 @@
             this.rotationBox.Name = "rotationBox";
             this.rotationBox.Size = new System.Drawing.Size(51, 20);
             this.rotationBox.TabIndex = 5;
-            this.rotationBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rotationBox_KeyDown);
             // 
             // label2
             // 
@@ -186,7 +185,6 @@
             this.limitBox.Name = "limitBox";
             this.limitBox.Size = new System.Drawing.Size(51, 20);
             this.limitBox.TabIndex = 15;
-            this.limitBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.limitBox_KeyDown);
             // 
             // label6
             // 
@@ -203,7 +201,6 @@
             this.midpointBox.Name = "midpointBox";
             this.midpointBox.Size = new System.Drawing.Size(51, 20);
             this.midpointBox.TabIndex = 17;
-            this.midpointBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.midpointBox_KeyDown);
             // 
             // label7
             // 
@@ -220,7 +217,6 @@
             this.offsetBox.Name = "offsetBox";
             this.offsetBox.Size = new System.Drawing.Size(51, 20);
             this.offsetBox.TabIndex = 19;
-            this.offsetBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.offsetBox_KeyDown);
             // 
             // label8
             // 

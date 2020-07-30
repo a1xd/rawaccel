@@ -21,13 +21,13 @@ namespace grapher
             ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
             AccelerationType = 5;
             Sensitivity = new VectorXY(1);
-            Rotation = 0;
+            Rotation = new Field("0.0", rotationBox, this, 0);
             Weight = new VectorXY(1);
             Cap = new VectorXY(0);
-            Offset = 0;
-            Acceleration = new Field("0.0", this.accelerationBox, 0);
-            LimitOrExponent = 1.01;
-            Midpoint = 0;
+            Offset = new Field("0.0", offsetBox, this, 0);
+            Acceleration = new Field("0.0", accelerationBox, this, 0);
+            LimitOrExponent = new Field("2.0", limitBox, this, 2);
+            Midpoint = new Field("0.0", midpointBox, this, 0);
 
             UpdateGraph();
  
@@ -61,19 +61,19 @@ namespace grapher
 
         private VectorXY Sensitivity { get; set; }
 
-        private double Rotation { get; set; }
+        private Field Rotation { get; set; }
 
         private VectorXY Weight { get; set; }
 
         private VectorXY Cap { get; set; }
 
-        private double Offset { get; set; }
+        private Field Offset { get; set; }
 
         private Field Acceleration { get; set; }
 
-        private double LimitOrExponent { get; set; }
+        private Field LimitOrExponent { get; set; }
 
-        private double Midpoint { get; set; }
+        private Field Midpoint { get; set; }
 
         #endregion Properties
 
@@ -157,10 +157,10 @@ namespace grapher
                 Weight.Y,
                 Cap.X,
                 Cap.Y,
-                Offset,
+                Offset.Data,
                 Acceleration.Data,
-                LimitOrExponent,
-                Midpoint);
+                LimitOrExponent.Data,
+                Midpoint.Data);
             ManagedAcceleration.WriteToDriver();
             UpdateGraph();
         }
@@ -173,43 +173,11 @@ namespace grapher
             }
         }
 
-        private void rotationBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (TryHandleWithEnter(e, sender, out double data))
-            {
-                Rotation = data;
-            }
-        }
-
         private void capBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (TryHandleWithEnter(e, sender, out double data))
             {
                 Cap.SetBoth(data);
-            }
-        }
-
-        private void offsetBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (TryHandleWithEnter(e, sender, out double data))
-            {
-                Offset = data;
-            }
-        }
-
-        private void limitBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (TryHandleWithEnter(e, sender, out double data))
-            {
-                LimitOrExponent = data;
-            }
-        }
-
-        private void midpointBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (TryHandleWithEnter(e, sender, out double data))
-            {
-                Midpoint = data;
             }
         }
 
