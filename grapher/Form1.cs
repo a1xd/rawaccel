@@ -19,7 +19,11 @@ namespace grapher
             InitializeComponent();
 
             ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
-            AccelerationType = 0;
+            AccelerationOptions = new AccelOptions(
+                accelTypeDrop,
+                new Option(accelerationBox, constantOneLabel),
+                new Option(limitBox, constantTwoLabel),
+                new Option(midpointBox, constantThreeLabel));
             Sensitivity = new FieldXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1);
             Rotation = new Field(rotationBox, this, 0);
             Weight = new FieldXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1);
@@ -57,7 +61,7 @@ namespace grapher
 
         public ManagedAccel ManagedAcceleration { get; set; }
 
-        private int AccelerationType { get; set; }
+        private AccelOptions AccelerationOptions { get; set; }
 
         private FieldXY Sensitivity { get; set; }
 
@@ -150,7 +154,7 @@ namespace grapher
         private void writeButton_Click(object sender, EventArgs e)
         {
             ManagedAcceleration.UpdateAccel(
-                AccelerationType, 
+                AccelerationOptions.AccelerationIndex, 
                 Rotation.Data,
                 Sensitivity.X,
                 Sensitivity.Y,
@@ -168,32 +172,9 @@ namespace grapher
 
         #endregion Methods
 
-        private void accelTypeDrop_SelectedIndexChanged(object sender, EventArgs e)
+        private void label3_Click(object sender, EventArgs e)
         {
-            switch(this.accelTypeDrop.SelectedItem.ToString())
-            {
-                case ("Linear"):
-                    AccelerationType = 1;
-                    break;
-                case ("Classic"):
-                    AccelerationType = 2;
-                    break;
-                case ("Natural"):
-                    AccelerationType = 3;
-                    break;
-                case ("Logarithmic"):
-                    AccelerationType = 4;
-                    break;
-                case ("Sigmoid"):
-                    AccelerationType = 5;
-                    break;
-                case ("Power"):
-                    AccelerationType = 6;
-                    break;
-                default:
-                    AccelerationType = 0;
-                    break;
-            }
+
         }
     }
 }

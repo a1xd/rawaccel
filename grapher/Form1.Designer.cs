@@ -30,9 +30,9 @@ namespace grapher
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.accelTypeDrop = new System.Windows.Forms.ComboBox();
             this.sensitivityBoxX = new System.Windows.Forms.TextBox();
@@ -40,16 +40,16 @@ namespace grapher
             this.rotationBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.accelerationBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.constantOneLabel = new System.Windows.Forms.Label();
             this.capBoxX = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.weightBoxFirst = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.weightBoxSecond = new System.Windows.Forms.TextBox();
             this.limitBox = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.constantTwoLabel = new System.Windows.Forms.Label();
             this.midpointBox = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.constantThreeLabel = new System.Windows.Forms.Label();
             this.offsetBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.writeButton = new System.Windows.Forms.Button();
@@ -64,19 +64,19 @@ namespace grapher
             // 
             // AccelerationChart
             // 
-            chartArea1.AxisX.Title = "Speed (counts/ms)";
-            chartArea1.AxisY.Title = "Sensitivity (magnitude ratio)";
-            chartArea1.Name = "ChartArea1";
-            this.AccelerationChart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.AccelerationChart.Legends.Add(legend1);
+            chartArea3.AxisX.Title = "Speed (counts/ms)";
+            chartArea3.AxisY.Title = "Sensitivity (magnitude ratio)";
+            chartArea3.Name = "ChartArea1";
+            this.AccelerationChart.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.AccelerationChart.Legends.Add(legend3);
             this.AccelerationChart.Location = new System.Drawing.Point(242, 1);
             this.AccelerationChart.Name = "AccelerationChart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Accelerated Sensitivity";
-            this.AccelerationChart.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Legend = "Legend1";
+            series3.Name = "Accelerated Sensitivity";
+            this.AccelerationChart.Series.Add(series3);
             this.AccelerationChart.Size = new System.Drawing.Size(721, 312);
             this.AccelerationChart.TabIndex = 0;
             this.AccelerationChart.Text = "chart1";
@@ -84,13 +84,11 @@ namespace grapher
             // accelTypeDrop
             // 
             this.accelTypeDrop.FormattingEnabled = true;
-            this.accelTypeDrop.Items.AddRange(AccelOptions.TypeToIndex.Keys.ToArray());
             this.accelTypeDrop.Location = new System.Drawing.Point(14, 89);
             this.accelTypeDrop.Name = "accelTypeDrop";
             this.accelTypeDrop.Size = new System.Drawing.Size(151, 21);
             this.accelTypeDrop.TabIndex = 2;
             this.accelTypeDrop.Text = "Acceleration Type";
-            this.accelTypeDrop.SelectedIndexChanged += new System.EventHandler(this.accelTypeDrop_SelectedIndexChanged);
             // 
             // sensitivityBoxX
             // 
@@ -131,14 +129,15 @@ namespace grapher
             this.accelerationBox.Size = new System.Drawing.Size(70, 20);
             this.accelerationBox.TabIndex = 7;
             // 
-            // label4
+            // constantOneLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 119);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Acceleration";
+            this.constantOneLabel.AutoSize = true;
+            this.constantOneLabel.Location = new System.Drawing.Point(14, 119);
+            this.constantOneLabel.Name = "constantOneLabel";
+            this.constantOneLabel.Size = new System.Drawing.Size(66, 13);
+            this.constantOneLabel.TabIndex = 9;
+            this.constantOneLabel.Text = "Acceleration";
+            this.constantOneLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // capBoxX
             // 
@@ -150,11 +149,13 @@ namespace grapher
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(30, 145);
+            this.label3.Location = new System.Drawing.Point(24, 146);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(26, 13);
             this.label3.TabIndex = 11;
             this.label3.Text = "Cap";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // weightBoxFirst
             // 
@@ -171,6 +172,7 @@ namespace grapher
             this.label5.Size = new System.Drawing.Size(41, 13);
             this.label5.TabIndex = 13;
             this.label5.Text = "Weight";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // weightBoxSecond
             // 
@@ -186,14 +188,15 @@ namespace grapher
             this.limitBox.Size = new System.Drawing.Size(70, 20);
             this.limitBox.TabIndex = 15;
             // 
-            // label6
+            // constantTwoLabel
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 223);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(78, 13);
-            this.label6.TabIndex = 16;
-            this.label6.Text = "Limit/Exponent";
+            this.constantTwoLabel.AutoSize = true;
+            this.constantTwoLabel.Location = new System.Drawing.Point(14, 223);
+            this.constantTwoLabel.Name = "constantTwoLabel";
+            this.constantTwoLabel.Size = new System.Drawing.Size(78, 13);
+            this.constantTwoLabel.TabIndex = 16;
+            this.constantTwoLabel.Text = "Limit/Exponent";
+            this.constantTwoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // midpointBox
             // 
@@ -202,14 +205,15 @@ namespace grapher
             this.midpointBox.Size = new System.Drawing.Size(70, 20);
             this.midpointBox.TabIndex = 17;
             // 
-            // label7
+            // constantThreeLabel
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(21, 249);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(47, 13);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "Midpoint";
+            this.constantThreeLabel.AutoSize = true;
+            this.constantThreeLabel.Location = new System.Drawing.Point(21, 249);
+            this.constantThreeLabel.Name = "constantThreeLabel";
+            this.constantThreeLabel.Size = new System.Drawing.Size(47, 13);
+            this.constantThreeLabel.TabIndex = 18;
+            this.constantThreeLabel.Text = "Midpoint";
+            this.constantThreeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // offsetBox
             // 
@@ -221,11 +225,12 @@ namespace grapher
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(30, 197);
+            this.label8.Location = new System.Drawing.Point(24, 197);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 20;
             this.label8.Text = "Offset";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // writeButton
             // 
@@ -307,16 +312,16 @@ namespace grapher
             this.Controls.Add(this.writeButton);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.offsetBox);
-            this.Controls.Add(this.label7);
+            this.Controls.Add(this.constantThreeLabel);
             this.Controls.Add(this.midpointBox);
-            this.Controls.Add(this.label6);
+            this.Controls.Add(this.constantTwoLabel);
             this.Controls.Add(this.limitBox);
             this.Controls.Add(this.weightBoxSecond);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.weightBoxFirst);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.capBoxX);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.constantOneLabel);
             this.Controls.Add(this.accelerationBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.rotationBox);
@@ -342,16 +347,16 @@ namespace grapher
         private System.Windows.Forms.TextBox rotationBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox accelerationBox;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label constantOneLabel;
         private System.Windows.Forms.TextBox capBoxX;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox weightBoxFirst;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox weightBoxSecond;
         private System.Windows.Forms.TextBox limitBox;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label constantTwoLabel;
         private System.Windows.Forms.TextBox midpointBox;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label constantThreeLabel;
         private System.Windows.Forms.TextBox offsetBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button writeButton;

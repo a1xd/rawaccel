@@ -32,37 +32,132 @@ namespace grapher
             { Power, 6 },
         };
 
-        public AccelOptions(ComboBox accelDropdown)
+        public AccelOptions(
+            ComboBox accelDropdown,
+            Option constOptionOne,
+            Option constOptionTwo,
+            Option constOptionThree
+            )
         {
             AccelDropdown = accelDropdown;
             AccelDropdown.Items.Clear();
             AccelDropdown.Items.AddRange(TypeToIndex.Keys.ToArray());
+            AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
+
+            ConstOptionOne = constOptionOne;
+            ConstOptionTwo = constOptionTwo;
+            ConstOptionThree = constOptionThree;
         }
 
         public ComboBox AccelDropdown { get; }
 
         public int AccelerationIndex { get; private set; }
 
+        public Option ConstOptionOne { get; }
+
+        public Option ConstOptionTwo { get; }
+
+        public Option ConstOptionThree { get; }
+
         private void OnIndexChanged(object sender, EventArgs e)
         {
             var AccelerationType = AccelDropdown.SelectedItem.ToString(); 
             AccelerationIndex = TypeToIndex[AccelerationType];
 
-            /*
             switch (AccelerationType)
             {
                 case Linear:
                     LayoutLinear();
+                    break;
+                case Classic:
+                    LayoutClassic();
+                    break;
+                case Natural:
+                    LayoutNatural();
+                    break;
+                case Logarithmic:
+                    LayoutLogarithmic();
+                    break;
+                case Sigmoid:
+                    LayoutSigmoid();
+                    break;
+                case Power:
+                    LayoutPower();
+                    break;
                 default:
                     LayoutDefault();
                     break;
             }
-            */
         }
 
         private void LayoutDefault()
         {
+            ConstOptionOne.Show();
+            ConstOptionTwo.Show();
+            ConstOptionThree.Hide();
 
+            ConstOptionOne.SetName("Acceleration");
+            ConstOptionTwo.SetName("Limit\\Exponent");
+        }
+
+        private void LayoutLinear()
+        {
+            ConstOptionOne.Show();
+            ConstOptionTwo.Hide();
+            ConstOptionThree.Hide();
+
+            ConstOptionOne.SetName("Acceleration");
+        }
+
+        private void LayoutClassic()
+        {
+            ConstOptionOne.Show();
+            ConstOptionTwo.Show();
+            ConstOptionThree.Hide();
+
+            ConstOptionOne.SetName("Acceleration");
+            ConstOptionTwo.SetName("Exponent");
+        }
+
+        private void LayoutNatural()
+        {
+            ConstOptionOne.Show();
+            ConstOptionTwo.Show();
+            ConstOptionThree.Hide();
+
+            ConstOptionOne.SetName("Acceleration");
+            ConstOptionOne.SetName("Limit");
+        }
+
+        private void LayoutLogarithmic()
+        {
+            ConstOptionOne.Show();
+            ConstOptionTwo.Hide();
+            ConstOptionThree.Hide();
+
+            ConstOptionOne.SetName("Acceleration");
+        }
+
+
+        private void LayoutSigmoid()
+        {
+            ConstOptionOne.Show();
+            ConstOptionTwo.Show();
+            ConstOptionThree.Show();
+
+            ConstOptionOne.SetName("Acceleration");
+            ConstOptionTwo.SetName("Limit");
+            ConstOptionThree.SetName("Midpoint");
+        }
+
+        private void LayoutPower()
+        {
+            ConstOptionOne.Show();
+            ConstOptionTwo.Show();
+            ConstOptionThree.Hide();
+
+            ConstOptionOne.SetName("Scale");
+            ConstOptionTwo.SetName("Exponent");
         }
     }
 }
