@@ -38,6 +38,10 @@ namespace grapher
 
             this.AccelerationChart.ChartAreas[0].CursorX.IsUserEnabled = true;
             this.AccelerationChart.ChartAreas[0].CursorY.IsUserEnabled = true;
+
+            Acceleration = 0;
+            LimitOrExponent = 1.01;
+            Midpoint = 0;
         }
         #endregion Constructor
 
@@ -47,7 +51,7 @@ namespace grapher
 
         private int AccelerationType { get; set; }
 
-        private Tuple<double, double> Sensitivity { get; set; }
+        private double Sensitivity { get; set; }
 
         private double Rotation { get; set; }
 
@@ -116,9 +120,88 @@ namespace grapher
 
         private void writeButton_Click(object sender, EventArgs e)
         {
-            ManagedAcceleration.UpdateAccel(5, 0, 1.3, 9, 15);
+            ManagedAcceleration.UpdateAccel(5, 0, Acceleration, LimitOrExponent, Midpoint);
             ManagedAcceleration.WriteToDriver();
             UpdateGraph();
+        }
+
+        private void sensitivityBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TryHandleWithEnter(e, sender, out double data))
+            {
+                Sensitivity = data;
+            }
+        }
+
+        private bool TryHandleWithEnter(KeyEventArgs e, object sender, out double data)
+        {
+            bool validEntry = false;
+            data = 0.0;
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    data = Convert.ToDouble(((TextBox)sender).Text);
+                    validEntry = true;
+                }
+                catch
+                {
+                }
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+
+            return validEntry;
+        }
+
+        private void accelerationBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TryHandleWithEnter(e, sender, out double data))
+            {
+                Acceleration = data;
+            }
+        }
+
+        private void rotationBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TryHandleWithEnter(e, sender, out double data))
+            {
+                Rotation = data;
+            }
+        }
+
+        private void capBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TryHandleWithEnter(e, sender, out double data))
+            {
+                Cap = data;
+            }
+        }
+
+        private void offsetBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TryHandleWithEnter(e, sender, out double data))
+            {
+                Offset = data;
+            }
+        }
+
+        private void limitBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TryHandleWithEnter(e, sender, out double data))
+            {
+                LimitOrExponent = data;
+            }
+        }
+
+        private void midpointBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TryHandleWithEnter(e, sender, out double data))
+            {
+                Midpoint = data;
+            }
         }
     }
 }
