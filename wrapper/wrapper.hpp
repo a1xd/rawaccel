@@ -52,7 +52,19 @@ public:
 
     Tuple<double, double>^ Accelerate(int x, int y, double time);
 
-    void UpdateAccel(int mode, double offset, double accel, double lim_exp, double midpoint);
+    void UpdateAccel(
+        int mode,
+        double sensitivityX,
+        double sensitivityY,
+        double weightX,
+        double weightY,
+        double capX,
+        double capY,
+        double offset,
+        double accel,
+        double lim_exp,
+        double midpoint);
+
 
     void WriteToDriver();
 };

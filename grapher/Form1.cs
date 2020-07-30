@@ -17,7 +17,18 @@ namespace grapher
         public RawAcceleration()
         {
             InitializeComponent();
+
             ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
+            AccelerationType = 5;
+            Sensitivity = new VectorXY(1);
+            Rotation = 0;
+            Weight = new VectorXY(1);
+            Cap = new VectorXY(0);
+            Offset = 0;
+            Acceleration = 0;
+            LimitOrExponent = 1.01;
+            Midpoint = 0;
+
             UpdateGraph();
  
             this.AccelerationChart.ChartAreas[0].AxisX.RoundAxisValues();
@@ -38,11 +49,8 @@ namespace grapher
 
             this.AccelerationChart.ChartAreas[0].CursorX.IsUserEnabled = true;
             this.AccelerationChart.ChartAreas[0].CursorY.IsUserEnabled = true;
-
-            Acceleration = 0;
-            LimitOrExponent = 1.01;
-            Midpoint = 0;
         }
+
         #endregion Constructor
 
         #region Properties
@@ -51,13 +59,13 @@ namespace grapher
 
         private int AccelerationType { get; set; }
 
-        private double Sensitivity { get; set; }
+        private VectorXY Sensitivity { get; set; }
 
         private double Rotation { get; set; }
 
-        private Tuple<double, double> Weight { get; set; }
+        private VectorXY Weight { get; set; }
 
-        private double Cap { get; set; }
+        private VectorXY Cap { get; set; }
 
         private double Offset { get; set; }
 
@@ -98,7 +106,7 @@ namespace grapher
 
                     var inMagnitude = Magnitude(i,j);
                     var outMagnitude = Magnitude(output.Item1, output.Item2);
-                    var ratio = inMagnitude > 0 ? outMagnitude / inMagnitude : 0;
+                    var ratio = inMagnitude > 0 ? outMagnitude / inMagnitude : Sensitivity.X;
 
                     if (!orderedPoints.ContainsKey(inMagnitude))
                     {
@@ -113,23 +121,6 @@ namespace grapher
             foreach (var point in orderedPoints)
             {
                 series.Points.AddXY(point.Key, point.Value);
-            }
-        }
-
-        #endregion Methods
-
-        private void writeButton_Click(object sender, EventArgs e)
-        {
-            ManagedAcceleration.UpdateAccel(5, 0, Acceleration, LimitOrExponent, Midpoint);
-            ManagedAcceleration.WriteToDriver();
-            UpdateGraph();
-        }
-
-        private void sensitivityBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (TryHandleWithEnter(e, sender, out double data))
-            {
-                Sensitivity = data;
             }
         }
 
@@ -156,6 +147,32 @@ namespace grapher
             return validEntry;
         }
 
+        private void writeButton_Click(object sender, EventArgs e)
+        {
+            ManagedAcceleration.UpdateAccel(
+                AccelerationType, 
+                Sensitivity.X,
+                Sensitivity.Y,
+                Weight.X,
+                Weight.Y,
+                Cap.X,
+                Cap.Y,
+                Offset,
+                Acceleration,
+                LimitOrExponent,
+                Midpoint);
+            ManagedAcceleration.WriteToDriver();
+            UpdateGraph();
+        }
+
+        private void sensitivityBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (TryHandleWithEnter(e, sender, out double data))
+            {
+                Sensitivity.SetBoth(data);
+            }
+        }
+
         private void accelerationBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (TryHandleWithEnter(e, sender, out double data))
@@ -176,7 +193,7 @@ namespace grapher
         {
             if (TryHandleWithEnter(e, sender, out double data))
             {
-                Cap = data;
+                Cap.SetBoth(data);
             }
         }
 
@@ -201,6 +218,33 @@ namespace grapher
             if (TryHandleWithEnter(e, sender, out double data))
             {
                 Midpoint = data;
+            }
+        }
+
+        #endregion Methods
+
+        public class VectorXY
+        {
+            public VectorXY(double x)
+            {
+                X = x;
+                Y = x;
+            }
+
+            public VectorXY(double x, double y)
+            {
+                X = x;
+                Y = y;
+            }
+
+            public double X { get; set; }
+
+            public double Y { get; set; }
+
+            public void SetBoth(double value)
+            {
+                X = value;
+                Y = value;
             }
         }
     }
