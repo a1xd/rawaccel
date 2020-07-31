@@ -19,22 +19,31 @@ namespace grapher
             InitializeComponent();
 
             ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
+            Sensitivity = new OptionXY(new FieldXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1), sensitivityLabel);
+            Rotation = new Option(new Field(rotationBox, this, 0), rotationLabel);
+            Weight = new OptionXY(new FieldXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1), weightLabel);
+            Cap = new OptionXY(new FieldXY(capBoxX, capBoxY, capXYLock, this, 0), capLabel);
+            Offset = new Option(new Field(offsetBox, this, 0), offsetLabel);
+
+            Sensitivity.SetName("Sensitivity");
+            Rotation.SetName("Rotation");
+            Weight.SetName("Weight");
+            Cap.SetName("Cap");
+            Offset.SetName("Offset");
+
+            // The name and layout of these options is handled by AccelerationOptions object.
+            Acceleration = new Option(new Field(accelerationBox, this, 0), constantOneLabel);
+            LimitOrExponent = new Option(new Field(limitBox, this, 2), constantTwoLabel);
+            Midpoint = new Option(new Field(midpointBox, this, 0), constantThreeLabel);
+
             AccelerationOptions = new AccelOptions(
                 accelTypeDrop,
                 new Option[]
                 {
-                    new Option(accelerationBox, constantOneLabel),
-                    new Option(limitBox, constantTwoLabel),
-                    new Option(midpointBox, constantThreeLabel)
+                    Acceleration,
+                    LimitOrExponent,
+                    Midpoint,
                 });
-            Sensitivity = new FieldXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1);
-            Rotation = new Field(rotationBox, this, 0);
-            Weight = new FieldXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1);
-            Cap = new FieldXY(capBoxX, capBoxY, capXYLock, this, 0);
-            Offset = new Field(offsetBox, this, 0);
-            Acceleration = new Field(accelerationBox, this, 0);
-            LimitOrExponent = new Field(limitBox, this, 2);
-            Midpoint = new Field(midpointBox, this, 0);
 
             UpdateGraph();
  
@@ -66,21 +75,21 @@ namespace grapher
 
         private AccelOptions AccelerationOptions { get; set; }
 
-        private FieldXY Sensitivity { get; set; }
+        private OptionXY Sensitivity { get; set; }
 
-        private Field Rotation { get; set; }
+        private Option Rotation { get; set; }
 
-        private FieldXY Weight { get; set; }
+        private OptionXY Weight { get; set; }
 
-        private FieldXY Cap { get; set; }
+        private OptionXY Cap { get; set; }
 
-        private Field Offset { get; set; }
+        private Option Offset { get; set; }
 
-        private Field Acceleration { get; set; }
+        private Option Acceleration { get; set; }
 
-        private Field LimitOrExponent { get; set; }
+        private Option LimitOrExponent { get; set; }
 
-        private Field Midpoint { get; set; }
+        private Option Midpoint { get; set; }
 
         #endregion Properties
 
@@ -113,7 +122,7 @@ namespace grapher
 
                     var inMagnitude = Magnitude(i,j);
                     var outMagnitude = Magnitude(output.Item1, output.Item2);
-                    var ratio = inMagnitude > 0 ? outMagnitude / inMagnitude : Sensitivity.X;
+                    var ratio = inMagnitude > 0 ? outMagnitude / inMagnitude : Sensitivity.Fields.X;
 
                     if (!orderedPoints.ContainsKey(inMagnitude))
                     {
@@ -131,44 +140,21 @@ namespace grapher
             }
         }
 
-        private bool TryHandleWithEnter(KeyEventArgs e, object sender, out double data)
-        {
-            bool validEntry = false;
-            data = 0.0;
-
-            if (e.KeyCode == Keys.Enter)
-            {
-                try
-                {
-                    data = Convert.ToDouble(((TextBox)sender).Text);
-                    validEntry = true;
-                }
-                catch
-                {
-                }
-
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-            }
-
-            return validEntry;
-        }
-
         private void writeButton_Click(object sender, EventArgs e)
         {
             ManagedAcceleration.UpdateAccel(
                 AccelerationOptions.AccelerationIndex, 
-                Rotation.Data,
-                Sensitivity.X,
-                Sensitivity.Y,
-                Weight.X,
-                Weight.Y,
-                Cap.X,
-                Cap.Y,
-                Offset.Data,
-                Acceleration.Data,
-                LimitOrExponent.Data,
-                Midpoint.Data);
+                Rotation.Field.Data,
+                Sensitivity.Fields.X,
+                Sensitivity.Fields.Y,
+                Weight.Fields.X,
+                Weight.Fields.Y,
+                Cap.Fields.X,
+                Cap.Fields.Y,
+                Offset.Field.Data,
+                Acceleration.Field.Data,
+                LimitOrExponent.Field.Data,
+                Midpoint.Field.Data);
             ManagedAcceleration.WriteToDriver();
             UpdateGraph();
         }

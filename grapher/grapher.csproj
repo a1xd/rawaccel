@@ -65,6 +65,7 @@
     <Compile Include="Layouts\PowerLayout.cs" />
     <Compile Include="Layouts\SigmoidLayout.cs" />
     <Compile Include="Option.cs" />
+    <Compile Include="OptionXY.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VectorXY.cs" />

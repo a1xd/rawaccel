@@ -14,7 +14,6 @@ namespace grapher
             XField = new Field(xBox, containingForm, defaultData);
             YField = new Field(yBox, containingForm, defaultData);
             LockCheckBox = lockCheckBox;
-            DefaultData = defaultData;
             LockCheckBox.CheckedChanged += new System.EventHandler(CheckChanged);
             SetLocked();
         }
@@ -40,11 +39,9 @@ namespace grapher
 
         public CheckBox LockCheckBox { get; }
 
-        private Field XField { get; }
+        public Field XField { get; }
 
-        private Field YField { get; }
-
-        private double DefaultData { get; }
+        public Field YField { get; }
 
         private bool Locked { get; set; }
 

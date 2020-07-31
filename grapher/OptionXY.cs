@@ -7,33 +7,34 @@ using System.Windows.Forms;
 
 namespace grapher
 {
-    public class Option
-    {
-        public Option(Field field, Label label)
+    public class OptionXY
+    {        public OptionXY(FieldXY fields, Label label)
         {
-            Field = field;
+            Fields = fields;
             Label = label;
         }
 
-        public Field Field { get; }
+        public FieldXY Fields { get; }
 
         public Label Label { get; }
 
         public void SetName(string name)
         {
             Label.Text = name;
-            Label.Left = Convert.ToInt32((Field.Box.Left / 2.0) - (Label.Width / 2.0));
+            Label.Left = Convert.ToInt32((Fields.XField.Box.Left / 2.0) - (Label.Width / 2.0));
         }
 
         public void Hide()
         {
-            Field.Box.Hide();
+            Fields.XField.Box.Hide();
+            Fields.YField.Box.Hide();
             Label.Hide();
         }
 
         public void Show()
         {
-            Field.Box.Show();
+            Fields.XField.Box.Show();
+            Fields.YField.Box.Show();
             Label.Show();
         }
 
@@ -41,8 +42,10 @@ namespace grapher
         {
             SetName(name);
 
-            Field.Box.Show();
+            Fields.XField.Box.Show();
+            Fields.YField.Box.Show();
             Label.Show();
         }
+
     }
 }

@@ -44,7 +44,7 @@ namespace grapher
 
         #region Properties
 
-        TextBox Box { get; }
+        public TextBox Box { get; }
 
         Form ContainingForm { get; }
 
