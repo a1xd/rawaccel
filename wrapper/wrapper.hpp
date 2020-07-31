@@ -1,52 +1,50 @@
 #pragma once
 
 #include "..\common\rawaccel.hpp";
-#include "..\common\rawaccel-userspace.hpp";
+#include "..\common\accel-error.hpp";
 #include <iostream>
 using namespace rawaccel;
 using namespace System;
 
+
+public value struct ArgsWrapper {
+    int a;
+};
+
 public ref class ManagedAccel
 {
 protected:
-	accel_function* accel_instance;
+	mouse_modifier* modifier_instance;
 public:
-	ManagedAccel(accel_function* accel)
-		: accel_instance(accel)
+	ManagedAccel(mouse_modifier* accel)
+		: modifier_instance(accel)
 	{
 	}
 
-    ManagedAccel(double mode, double offset, double accel, double lim_exp, double midpoint)
+    ManagedAccel(System::IntPtr args)
     {
-        accel_function::args_t args{};
-        args.accel = accel;
-        args.lim_exp = lim_exp;
-        args.midpoint = midpoint;
-        args.accel_mode = (rawaccel::mode)mode;
-        args.offset = offset;
-
-		accel_instance = new accel_function(args);
+        modifier_instance = new mouse_modifier(*reinterpret_cast<modifier_args*>(args.ToPointer()));
 	}
 
     virtual ~ManagedAccel()
     {
-        if (accel_instance != nullptr)
+        if (modifier_instance!= nullptr)
         {
-            delete accel_instance;
+            delete modifier_instance;
         }
     }
     !ManagedAccel()
     {
-        if (accel_instance != nullptr)
+        if (modifier_instance!= nullptr)
         {
-            delete accel_instance;
+            delete modifier_instance;
         }
     }
 
-    accel_function* GetInstance()
+    mouse_modifier* GetInstance()
     {
-        return accel_instance;
+        return modifier_instance;
     }
 
-    Tuple<double, double>^ Accelerate(int x, int y, double time, double mode);
+    Tuple<double, double>^ Accelerate(int x, int y, double time);
 };

@@ -15,7 +15,7 @@ using milliseconds = double;
 
 struct {
     milliseconds tick_interval = 0; // set in DriverEntry
-    ra::variables vars;
+    ra::mouse_modifier modifier;
 } global;
 
 VOID
@@ -69,25 +69,25 @@ Arguments:
                 static_cast<double>(it->LastY)
             };
 
-            if (global.vars.apply_rotate) {
-                input = global.vars.rotate(input);
-            }
-
-            if (global.vars.apply_accel && local_apply_accel) {
+            if (global.modifier.apply_accel && local_apply_accel) {
                 auto now = KeQueryPerformanceCounter(NULL).QuadPart;
                 auto ticks = now - devExt->counter.QuadPart;
                 devExt->counter.QuadPart = now;
 
                 milliseconds time = ticks * global.tick_interval;
-                if (time < global.vars.accel_fn.time_min) {
+                if (time < global.modifier.accel_fn.time_min) {
                     DebugPrint(("RA time < min with %d ticks\n", ticks));
                 }
 
-                input = global.vars.accel_fn(input, time, global.vars.accel_mode);
+                input = global.modifier.modify_with_accel(input, time);
+            }
+            else
+            {
+                input = global.modifier.modify_without_accel(input);
             }
 
-            double result_x = input.x * global.vars.sensitivity.x + local_carry.x;
-            double result_y = input.y * global.vars.sensitivity.y + local_carry.y;
+            double result_x = input.x + local_carry.x;
+            double result_y = input.y + local_carry.y;
 
             LONG out_x = static_cast<LONG>(result_x);
             LONG out_y = static_cast<LONG>(result_y);
@@ -154,7 +154,7 @@ Return Value:
 
     DebugPrint(("Ioctl received into filter control object.\n"));
 
-    if (InputBufferLength != sizeof(ra::variables)) {
+    if (InputBufferLength != sizeof(ra::mouse_modifier)) {
         DebugPrint(("Received unknown request of %u bytes\n", InputBufferLength));
         // status maps to win32 error code 1784: ERROR_INVALID_USER_BUFFER
         WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
@@ -163,7 +163,7 @@ Return Value:
 
     status = WdfRequestRetrieveInputBuffer(
         Request,
-        sizeof(ra::variables),
+        sizeof(ra::mouse_modifier),
         &input_buffer,
         &input_size
     );
@@ -175,7 +175,7 @@ Return Value:
         return;
     }
 
-    global.vars = *reinterpret_cast<ra::variables*>(input_buffer);
+    global.modifier = *reinterpret_cast<ra::mouse_modifier*>(input_buffer);
 
     WdfRequestComplete(Request, STATUS_SUCCESS);
 }

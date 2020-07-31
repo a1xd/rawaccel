@@ -14,6 +14,15 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-base.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-classic.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-linear.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-logarithmic.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-natural.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-noaccel.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-power.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-sigmoid.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-error.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-userspace.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)x64-util.hpp" />

@@ -4,6 +4,7 @@
 
 #include "external/clipp.h"
 
+#include "accel-error.hpp"
 #include "rawaccel.hpp"
 
 namespace rawaccel {
@@ -12,14 +13,14 @@ inline constexpr int SYSTEM_ERROR = -1;
 inline constexpr int PARSE_ERROR = 1;
 inline constexpr int INVALID_ARGUMENT = 2;
 
-void error(const char* s) { 
-    throw std::domain_error(s); 
+template<typename Accel, typename StrFirst, typename... StrRest>
+clipp::parameter make_accel_cmd(modifier_args& args, StrFirst&& first_flag, StrRest&&... rest) {
+    return clipp::command(first_flag, rest...)
+        .set(args.acc_fn_args.accel_mode, accel_impl_t::id<Accel>);
 }
 
-variables parse(int argc, char** argv) {
-    double degrees = 0;
-    vec2d sens = { 1, 1 };
-    accel_function::args_t accel_args{};
+mouse_modifier parse(int argc, char** argv) {
+    modifier_args args{};
 
     auto make_opt_vec = [](vec2d& v, auto first_flag, auto... rest) {
         return clipp::option(first_flag, rest...) & (
@@ -40,64 +41,64 @@ variables parse(int argc, char** argv) {
     };
 
     // default options
-    auto opt_sens = "sensitivity (default = 1)" % make_opt_vec(sens, "sens");
+    auto opt_sens = "sensitivity (default = 1)" % make_opt_vec(args.sens, "sens");
 
     auto opt_rot = "counter-clockwise rotation (default = 0)" % (
         clipp::option("rotate") &
-        clipp::number("degrees", degrees)
+        clipp::number("degrees", args.degrees)
     );
     
     // mode-independent accel options
     auto opt_weight = "accel multiplier (default = 1)" % 
-        make_opt_vec(accel_args.weight, "weight");
+        make_opt_vec(args.acc_fn_args.acc_args.weight, "weight");
 
     auto opt_offset = "speed (dots/ms) where accel kicks in (default = 0)" % (
-        clipp::option("offset") & clipp::number("speed", accel_args.offset)
+        clipp::option("offset") & clipp::number("speed", args.acc_fn_args.acc_args.offset)
     );
 
     auto opt_cap = "accel scale cap (default = 9)" % 
-        make_opt_vec(accel_args.cap, "cap");
+        make_opt_vec(args.acc_fn_args.cap, "cap");
 
     auto opt_tmin = "minimum time between polls (default = 0.4)" % (
         clipp::option("tmin") &
-        clipp::number("ms", accel_args.time_min)
+        clipp::number("ms", args.acc_fn_args.time_min)
     );
 
-    auto accel_var = (clipp::required("accel") & clipp::number("num", accel_args.accel)) % "ramp rate";
-    auto limit_var = (clipp::required("limit") & clipp::number("scale", accel_args.lim_exp)) % "limit";
+    auto accel_var = (clipp::required("accel") & clipp::number("num", args.acc_fn_args.acc_args.accel)) % "ramp rate";
+    auto limit_var = (clipp::required("limit") & clipp::number("scale", args.acc_fn_args.acc_args.limit)) % "limit";
+    auto exp_var = (clipp::required("exponent") & clipp::number("num", args.acc_fn_args.acc_args.exponent)) % "exponent";
 
     // modes
-    auto noaccel_mode = "no-accel mode" % (
-        clipp::command("off", "noaccel").set(accel_args.accel_mode, mode::noaccel)
-    );
+    auto noaccel_mode = "no-accel mode" % make_accel_cmd<accel_noaccel>(args, "off", "noaccel");
+
     auto lin_mode = "linear accel mode:" % (
-        clipp::command("linear").set(accel_args.accel_mode, mode::linear),
+        make_accel_cmd<accel_linear>(args, "linear"),
         accel_var
     );
     auto classic_mode = "classic accel mode:" % (
-        clipp::command("classic").set(accel_args.accel_mode, mode::classic),
+        make_accel_cmd<accel_classic>(args, "classic"),
         accel_var,
-        (clipp::required("exponent") & clipp::number("num", accel_args.lim_exp)) % "exponent"
+        exp_var
     );
     auto nat_mode = "natural accel mode:" % (
-        clipp::command("natural").set(accel_args.accel_mode, mode::natural),
+        make_accel_cmd<accel_natural>(args, "natural"),
         accel_var,
         limit_var
     );
     auto log_mode = "logarithmic accel mode:" % (
-        clipp::command("logarithmic").set(accel_args.accel_mode, mode::logarithmic),
+        make_accel_cmd<accel_logarithmic>(args, "logarithmic"),
         accel_var
     );
     auto sig_mode = "sigmoid accel mode:" % (
-        clipp::command("sigmoid").set(accel_args.accel_mode, mode::sigmoid),
+        make_accel_cmd<accel_sigmoid>(args, "sigmoid"),
         accel_var,
         limit_var,
-        (clipp::required("midpoint") & clipp::number("speed", accel_args.midpoint)) % "midpoint"
+        (clipp::required("midpoint") & clipp::number("speed", args.acc_fn_args.acc_args.midpoint)) % "midpoint"
     );
     auto pow_mode = "power accel mode:" % (
-        clipp::command("power").set(accel_args.accel_mode, mode::power) >> [&] { accel_args.accel = 1; },
-        (clipp::required("exponent") & clipp::number("num", accel_args.lim_exp)) % "exponent",
-        (clipp::option("scale") & clipp::number("num", accel_args.accel)) % "scale factor"
+        make_accel_cmd<accel_power>(args, "power"),
+        exp_var,
+        (clipp::option("scale") & clipp::number("num", args.acc_fn_args.acc_args.power_scale)) % "scale factor"
     );
 
     auto accel_mode_exclusive = (lin_mode | classic_mode | nat_mode | log_mode | sig_mode | pow_mode);
@@ -121,7 +122,7 @@ variables parse(int argc, char** argv) {
         std::exit(0);
     }
 
-    return variables(-degrees, sens, accel_args);
+    return mouse_modifier(args);
 }
 
 } // rawaccel
