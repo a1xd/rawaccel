@@ -8,6 +8,28 @@ namespace grapher
 {
     public class AccelerationSettings
     {
-        public sensitivity
+        public double SensitivityX { get; }
+
+        public double SensitivityY { get; }
+
+        public double Rotation { get; }
+
+        public double Offset { get; }
+
+        public double WeightX { get; }
+
+        public double WeightY { get; }
+
+        public double CapX { get; }
+
+        public double CapY { get; }
+
+        public int AccelerationType { get; }
+
+        public double Acceleration { get; }
+
+        public double LimitOrExponent { get; }
+
+        public double Midpoint { get; }
     }
 }

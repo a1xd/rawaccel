@@ -155,7 +155,6 @@ namespace grapher
             this.capLabel.TabIndex = 11;
             this.capLabel.Text = "Cap";
             this.capLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.capLabel.Click += new System.EventHandler(this.label3_Click);
             // 
             // weightBoxFirst
             // 

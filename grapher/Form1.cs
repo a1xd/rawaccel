@@ -180,10 +180,5 @@ namespace grapher
         }
 
         #endregion Methods
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
