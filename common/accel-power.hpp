@@ -11,7 +11,7 @@ namespace rawaccel {
 		double exponent;
 		double offset;
 
-		accel_power(accel_args args) {
+		accel_power(const accel_args& args) {
 			verify(args);
 
 			weight = args.weight;
@@ -32,7 +32,7 @@ namespace rawaccel {
 			};
 		}
 
-		void verify(accel_args args) const {
+		void verify(const accel_args& args) const {
 			if (args.power_scale <= 0) error("scale must be positive");
 			if (args.exponent <= 0) error("exponent must be greater than 0");
 		}

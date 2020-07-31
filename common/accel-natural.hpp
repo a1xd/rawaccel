@@ -11,7 +11,7 @@ namespace rawaccel {
 		double limit = 1;
 		double midpoint = 0;
 
-		accel_natural(accel_args args) : accel_base(args) {
+		accel_natural(const accel_args& args) : accel_base(args) {
 			verify(args);
 
 			limit = args.limit - 1;
@@ -23,7 +23,7 @@ namespace rawaccel {
 			return limit - (limit * exp(-speed_coeff * speed));
 		}
 
-		void verify(accel_args args) const {
+		void verify(const accel_args& args) const {
 			if (args.limit <= 1) error("limit must be greater than 1");
 		}
 	};

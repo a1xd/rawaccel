@@ -9,7 +9,7 @@ namespace rawaccel {
 	/// <summary> Struct to hold logarithmic acceleration implementation. </summary>
 	struct accel_logarithmic : accel_base {
 
-		accel_logarithmic(accel_args args) : accel_base(args) {}
+		using accel_base::accel_base;
 
 		inline double accelerate(double speed) const {
 			//f(x) = log(m*x+1)

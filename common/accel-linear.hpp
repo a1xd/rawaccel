@@ -5,14 +5,10 @@
 namespace rawaccel {
 
 	/// <summary> Struct to hold linear acceleration implementation. </summary>
-	struct accel_linear : accel_base {
+	struct accel_linear : accel_base { 
 
-		accel_linear(accel_args args) : accel_base(args) {}
+		using accel_base::accel_base; 
 
-		inline double accelerate(double speed) const {
-			//f(x) = mx
-			return speed_coeff * speed;
-		}
 	};
 
 }

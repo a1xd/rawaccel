@@ -11,7 +11,7 @@ namespace rawaccel {
 		double limit = 1;
 		double midpoint = 0;
 
-		accel_sigmoid(accel_args args) : accel_base(args) {
+		accel_sigmoid(const accel_args& args) : accel_base(args) {
 			verify(args);
 
 			limit = args.limit - 1;
@@ -23,7 +23,7 @@ namespace rawaccel {
 			return limit / (exp(-speed_coeff * (speed - midpoint)) + 1);
 		}
 
-		void verify(accel_args args) const {
+		void verify(const accel_args& args) const {
 			if (args.limit <= 1) error("exponent must be greater than 1");
 			if (args.midpoint < 0) error("midpoint must not be negative");
 		}

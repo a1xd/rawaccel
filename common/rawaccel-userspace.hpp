@@ -4,7 +4,7 @@
 
 #include "external/clipp.h"
 
-#include <accel-error.hpp>
+#include "accel-error.hpp"
 #include "rawaccel.hpp"
 
 namespace rawaccel {

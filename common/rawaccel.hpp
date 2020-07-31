@@ -3,7 +3,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "vec2.h"
 #include "x64-util.hpp"
 #include "external/tagged-union-single.h"
 
@@ -104,8 +103,9 @@ namespace rawaccel {
         /// <summary> The object which sets a min and max for the acceleration scale. </summary>
         vec2<accel_scale_clamp> clamp;
 
-        accel_function(accel_fn_args args) {
-            verify(args);
+        accel_function(const accel_fn_args& args) {
+            if (args.time_min <= 0) error("min time must be positive");
+            if (args.acc_args.offset < 0) error("offset must not be negative");
 
             accel.tag = args.accel_mode;
             accel.visit([&](auto& impl){ impl = { args.acc_args }; });
@@ -114,15 +114,6 @@ namespace rawaccel {
             speed_offset = args.acc_args.offset;
             clamp.x = accel_scale_clamp(args.cap.x);
             clamp.y = accel_scale_clamp(args.cap.y);
-        }
-
-        /// <summary>
-        /// Verifies acceleration arguments, via visitor function to accel_impl_t
-        /// </summary>
-        /// <param name="args">Arguments to be verified</param>
-        void verify(accel_fn_args args) {
-            if (args.time_min <= 0) error("min time must be positive");
-            if (args.acc_args.offset < 0) error("offset must not be negative");
         }
 
         /// <summary>
@@ -164,19 +155,22 @@ namespace rawaccel {
         accel_function accel_fn;
         vec2d sensitivity = { 1, 1 };
 
-        mouse_modifier(modifier_args args)
+        mouse_modifier(const modifier_args& args)
             : accel_fn(args.acc_fn_args)
         {
             apply_rotate = args.degrees != 0;
+
             if (apply_rotate) rotate = rotator(args.degrees);
             else rotate = rotator();
 
-            apply_accel = args.acc_fn_args.acc_args.accel != 0 &&
+            apply_accel = args.acc_fn_args.accel_mode != 0 &&
                 args.acc_fn_args.accel_mode != accel_impl_t::id<accel_noaccel>;
 
-            if (args.sens.x == 0) args.sens.x = 1;
-            if (args.sens.y == 0) args.sens.y = 1;
-            sensitivity = args.sens;
+            if (args.sens.x == 0) sensitivity.x = 1;
+            else sensitivity.x = args.sens.x;
+
+            if (args.sens.y == 0) sensitivity.y = 1;
+            else sensitivity.y = args.sens.y;
         }
 
         /// <summary>

@@ -7,9 +7,8 @@ namespace rawaccel {
 	/// <summary> Struct to hold acceleration implementation which applies no acceleration. </summary>
 	struct accel_noaccel : accel_base {
 
-		accel_noaccel(accel_args args) : accel_base(args) {}
+		accel_noaccel(const accel_args&) : accel_base() {}
 
-		inline double accelerate(double) const { return 0; }
 	};
 
 }

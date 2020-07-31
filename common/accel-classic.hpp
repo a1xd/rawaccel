@@ -10,7 +10,7 @@ namespace rawaccel {
 	struct accel_classic : accel_base {
 		double exponent;
 
-		accel_classic(accel_args args) : accel_base(args) {
+		accel_classic(const accel_args& args) : accel_base(args) {
 			verify(args);
 
 			exponent = args.exponent - 1;
@@ -21,7 +21,7 @@ namespace rawaccel {
 			return pow(speed_coeff * speed, exponent);
 		}
 
-		void verify(accel_args args) const {
+		void verify(const accel_args& args) const {
 			if (args.exponent <= 1) error("exponent must be greater than 1");
 		}
 	};

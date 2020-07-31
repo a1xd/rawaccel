@@ -31,16 +31,18 @@ namespace rawaccel {
         /// <summary> Generally, the acceleration ramp rate.
         double speed_coeff = 0;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="accel_base"/> struct.
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        accel_base(accel_args args) {
+        accel_base(const accel_args& args) {
             verify(args);
 
             speed_coeff = args.accel;
             weight = args.weight;
+        }
+
+        /// <summary> 
+        /// Default transformation of speed -> acceleration.
+        /// </summary>
+        inline double accelerate(double speed) const { 
+            return speed_coeff * speed; 
         }
 
         /// <summary> 
@@ -57,7 +59,7 @@ namespace rawaccel {
         /// Verifies arguments as valid. Errors if not.
         /// </summary>
         /// <param name="args">Arguments to verified.</param>
-        void verify(accel_args args) const {
+        void verify(const accel_args& args) const {
             if (args.accel < 0) error("accel can not be negative, use a negative weight to compensate");
         }
 
