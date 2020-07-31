@@ -116,9 +116,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="wrapper.hpp" />
+    <ClInclude Include="wrapper_writer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="wrapper.cpp" />
+    <ClCompile Include="wrapper_writer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
