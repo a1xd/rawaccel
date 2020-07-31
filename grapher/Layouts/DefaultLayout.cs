@@ -10,11 +10,13 @@ namespace grapher.Layouts
     public class DefaultLayout : LayoutBase
     {
         public DefaultLayout()
+            : base()
         {
-            Name = "Off";
+            Name = "Default";
             Index = 0;
-            Show = new bool[] { true, true, true }; 
-            OptionNames = new string[] { Acceleration, $"{Limit}\\{Exponent}", Midpoint }; 
+            ShowOptions = new bool[] { true, true, true, true }; 
+            OptionNames = new string[] { Offset, Acceleration, $"{Limit}\\{Exponent}", Midpoint };
+            ButtonEnabled = false;
         }
     }
 }

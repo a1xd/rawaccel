@@ -9,11 +9,12 @@ namespace grapher.Layouts
     public class LogLayout : LayoutBase
     {
         public LogLayout()
+            : base()
         {
             Name = "Logarithmic";
             Index = 4;
-            Show = new bool[] { true, false, false }; 
-            OptionNames = new string[] { Acceleration, string.Empty, string.Empty }; 
+            ShowOptions = new bool[] { true, true, false, false }; 
+            OptionNames = new string[] { Offset, Acceleration, string.Empty, string.Empty }; 
         }
     }
 }

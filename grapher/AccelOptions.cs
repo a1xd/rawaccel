@@ -10,7 +10,8 @@ namespace grapher
 {
     public class AccelOptions
     {
-        public const int PossibleOptionsCount = 3;
+        public const int PossibleOptionsCount = 4;
+        public const int PossibleOptionsXYCount = 2;
 
         public static readonly Dictionary<string, LayoutBase> AccelerationTypes = new List<LayoutBase>
         {
@@ -21,15 +22,18 @@ namespace grapher
             new LogLayout(),
             new SigmoidLayout(),
             new PowerLayout(),
+            new OffLayout()
         }.ToDictionary(k => k.Name);
 
         public AccelOptions(
             ComboBox accelDropdown,
-            Option[] options)
+            Option[] options,
+            OptionXY[] optionsXY,
+            Button writeButton)
         {
             AccelDropdown = accelDropdown;
             AccelDropdown.Items.Clear();
-            AccelDropdown.Items.AddRange(AccelerationTypes.Keys.ToArray());
+            AccelDropdown.Items.AddRange(AccelerationTypes.Keys.Skip(1).ToArray());
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
             if (options.Length > PossibleOptionsCount)
@@ -37,8 +41,19 @@ namespace grapher
                 throw new Exception("Layout given too many options.");
             }
 
+            if (optionsXY.Length > PossibleOptionsXYCount)
+            {
+                throw new Exception("Layout given too many options.");
+            }
+
             Options = options;
+            OptionsXY = optionsXY;
+            WriteButton = writeButton;
+
+            Layout("Default");
         }
+
+        public Button WriteButton { get; }
 
         public ComboBox AccelDropdown { get; }
 
@@ -46,12 +61,19 @@ namespace grapher
 
         public Option[] Options { get; }
 
+        public OptionXY[] OptionsXY { get; }
+
         private void OnIndexChanged(object sender, EventArgs e)
         {
-            var AccelerationTypeString = AccelDropdown.SelectedItem.ToString(); 
-            var AccelerationType = AccelerationTypes[AccelerationTypeString];
-            AccelerationIndex = AccelerationType.Index;
-            AccelerationType.Layout(Options);
+            var accelerationTypeString = AccelDropdown.SelectedItem.ToString();
+            Layout(accelerationTypeString);
+        }
+
+        private void Layout(string type)
+        {
+            var accelerationType = AccelerationTypes[type];
+            AccelerationIndex = accelerationType.Index;
+            accelerationType.Layout(Options, OptionsXY, WriteButton);
         }
     }
 }

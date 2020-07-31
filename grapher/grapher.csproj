@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccelerationSettings.cs" />
     <Compile Include="AccelOptions.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="FieldXY.cs" />
@@ -63,6 +62,7 @@
     <Compile Include="Layouts\LinearLayout.cs" />
     <Compile Include="Layouts\LogLayout.cs" />
     <Compile Include="Layouts\NaturalLayout.cs" />
+    <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
     <Compile Include="Layouts\SigmoidLayout.cs" />
     <Compile Include="Option.cs" />

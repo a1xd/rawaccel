@@ -1,10 +1,16 @@
 #pragma once
 
-#include "..\common\error.hpp"
 #include "wrapper_writer.hpp"
+#include "..\common\rawaccel.hpp";
+#include "..\common\accel-error.hpp";
 #include <iostream>
 using namespace rawaccel;
 using namespace System;
+
+
+public value struct ArgsWrapper {
+    int a;
+};
 
 public ref class ManagedAccel
 {
@@ -15,18 +21,12 @@ public:
 	ManagedAccel(mouse_modifier* accel)
 		: modifier_instance(accel)
 	{
+        driverWriter = new writer();
 	}
 
-    ManagedAccel(int mode, double offset, double accel, double lim_exp, double midpoint)
+    ManagedAccel(System::IntPtr args)
     {
-        modifier_args args{};
-        args.acc_fn_args.acc_args.accel = accel;
-        args.acc_fn_args.acc_args.lim_exp = lim_exp;
-        args.acc_fn_args.acc_args.midpoint = midpoint;
-        args.acc_fn_args.accel_mode = mode;
-        args.acc_fn_args.acc_args.offset = offset;
-
-		modifier_instance = new mouse_modifier(args);
+        modifier_instance = new mouse_modifier(*reinterpret_cast<modifier_args*>(args.ToPointer()));
         driverWriter = new writer();
 	}
 

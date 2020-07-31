@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace grapher.Layouts
 {
@@ -13,11 +14,14 @@ namespace grapher.Layouts
         public const string Exponent = "Exponent";
         public const string Limit = "Limit";
         public const string Midpoint = "Midpoint";
+        public const string Offset = "Offset";
 
         public LayoutBase()
         {
-            Show = new bool[] { false, false, false };
-            OptionNames = new string[] { string.Empty, string.Empty, string.Empty };
+            ShowOptions = new bool[] { false, false, false, false };
+            ShowOptionsXY = new bool[] { true, true };
+            OptionNames = new string[] { string.Empty, string.Empty, string.Empty, string.Empty };
+            ButtonEnabled = true;
         }
 
         /// <summary>
@@ -28,16 +32,20 @@ namespace grapher.Layouts
 
         public string Name { get; internal set; }
 
-        internal bool[] Show { get; set; }
+        internal bool[] ShowOptions { get; set; }
+
+        internal bool[] ShowOptionsXY { get; set; }
 
         internal string[] OptionNames { get; set; }
 
-        public void Layout(Option[] options)
+        internal bool ButtonEnabled { get; set; }
+
+        public void Layout(Option[] options, OptionXY[] optionsXY, Button button)
         {
             // Relies on AccelOptions to keep lengths correct.
             for (int i = 0; i< options.Length; i++)
             {
-                if (Show[i])
+                if (ShowOptions[i])
                 {
                     options[i].Show(OptionNames[i]);
                 }
@@ -47,6 +55,20 @@ namespace grapher.Layouts
                 }
             }
 
+            // Relies on AccelOptions to keep lengths correct.
+            for (int i = 0; i< optionsXY.Length; i++)
+            {
+                if (ShowOptionsXY[i])
+                {
+                    optionsXY[i].Show();
+                }
+                else
+                {
+                    optionsXY[i].Hide();
+                }
+            }
+
+            button.Enabled = ButtonEnabled;
         }
     }
 }

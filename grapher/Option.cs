@@ -52,8 +52,7 @@ namespace grapher
         {
             SetName(name);
 
-            Field.Box.Show();
-            Label.Show();
+            Show();
         }
     }
 }

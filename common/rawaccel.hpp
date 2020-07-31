@@ -3,17 +3,16 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "vec2.h"
 #include "x64-util.hpp"
 #include "external/tagged-union-single.h"
 
-#include "accel_linear.cpp"
-#include "accel_classic.cpp"
-#include "accel_natural.cpp"
-#include "accel_logarithmic.cpp"
-#include "accel_sigmoid.cpp"
-#include "accel_power.cpp"
-#include "accel_noaccel.cpp"
+#include "accel-linear.hpp"
+#include "accel-classic.hpp"
+#include "accel-natural.hpp"
+#include "accel-logarithmic.hpp"
+#include "accel-sigmoid.hpp"
+#include "accel-power.hpp"
+#include "accel-noaccel.hpp"
 
 namespace rawaccel {
 
@@ -75,13 +74,12 @@ namespace rawaccel {
     };
 
     /// <summary> Tagged union to hold all accel implementations and allow "polymorphism" via a visitor call. </summary>
-    using accel_implementation_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_noaccel>;
+    using accel_impl_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_noaccel>;
 
     struct accel_fn_args {
-        accel_args acc_args = accel_args{};
-        int accel_mode = 0;
+        accel_args acc_args;
+        int accel_mode = accel_impl_t::id<accel_noaccel>;
         milliseconds time_min = 0.4;
-        vec2d weight = { 1, 1 };
         vec2d cap = { 0, 0 };
     };
 
@@ -100,44 +98,22 @@ namespace rawaccel {
         double speed_offset = 0;
 
         /// <summary> The acceleration implementation (i.e. curve) </summary>
-        accel_implementation_t accel;
-
-        /// <summary> The weight of acceleration applied in {x, y} dimensions. </summary>
-        vec2d weight = { 1, 1 };
+        accel_impl_t accel;
 
         /// <summary> The object which sets a min and max for the acceleration scale. </summary>
         vec2<accel_scale_clamp> clamp;
 
-        accel_function(accel_fn_args args) {
-            accel.tag = args.accel_mode;
-            accel.visit([&](auto& a){ a = {args.acc_args}; });
+        accel_function(const accel_fn_args& args) {
+            if (args.time_min <= 0) error("min time must be positive");
+            if (args.acc_args.offset < 0) error("offset must not be negative");
 
-            // Verification is performed by the accel_implementation object
-            // and therefore must occur after the object has been instantiated
-            verify(args.acc_args);
+            accel.tag = args.accel_mode;
+            accel.visit([&](auto& impl){ impl = { args.acc_args }; });
 
             time_min = args.time_min;
             speed_offset = args.acc_args.offset;
-            weight = args.weight;
             clamp.x = accel_scale_clamp(args.cap.x);
             clamp.y = accel_scale_clamp(args.cap.y);
-        }
-
-        /// <summary>
-        /// Applies mouse acceleration to a given speed, via visitor function to accel_implementation_t
-        /// </summary>
-        /// <param name="speed">Speed from which to determine acceleration</param>
-        /// <returns>Acceleration as a ratio magnitudes, as a double</returns>
-        double apply(double speed) const {
-            return accel.visit([=](auto accel_t) { return accel_t.accelerate(speed); });
-        }
-
-        /// <summary>
-        /// Verifies acceleration arguments, via visitor function to accel_implementation_t
-        /// </summary>
-        /// <param name="args">Arguments to be verified</param>
-        void verify(accel_args args) const {
-            return accel.visit([=](auto accel_t) { accel_t.verify(args); });
         }
 
         /// <summary>
@@ -151,25 +127,24 @@ namespace rawaccel {
             double time_clamped = clampsd(time, time_min, 100);
             double speed = maxsd(mag / time_clamped - speed_offset, 0);
 
-            double accel_val = apply(speed);
-
-            double scale_x = weight.x * accel_val + 1;
-            double scale_y = weight.y * accel_val + 1;
+            vec2d scale = accel.visit([=](auto&& impl) {
+                double accel_val = impl.accelerate(speed);
+                return impl.scale(accel_val); 
+            });
 
             return {
-                input.x * clamp.x(scale_x),
-                input.y * clamp.y(scale_y)
+                input.x * clamp.x(scale.x),
+                input.y * clamp.y(scale.y)
             };
         }
 
         accel_function() = default;
     };
 
-    struct modifier_args
-    {
+    struct modifier_args {
         double degrees = 0;
         vec2d sens = { 1, 1 };
-        accel_fn_args acc_fn_args = accel_fn_args{};
+        accel_fn_args acc_fn_args;
     };
 
     /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
@@ -180,19 +155,22 @@ namespace rawaccel {
         accel_function accel_fn;
         vec2d sensitivity = { 1, 1 };
 
-        mouse_modifier(modifier_args args)
+        mouse_modifier(const modifier_args& args)
             : accel_fn(args.acc_fn_args)
         {
             apply_rotate = args.degrees != 0;
+
             if (apply_rotate) rotate = rotator(args.degrees);
             else rotate = rotator();
 
-            apply_accel = (args.acc_fn_args.accel_mode != 0 &&
-						   args.acc_fn_args.accel_mode != accel_implementation_t::id<accel_noaccel>);
+            apply_accel = args.acc_fn_args.accel_mode != 0 &&
+                args.acc_fn_args.accel_mode != accel_impl_t::id<accel_noaccel>;
 
-            if (args.sens.x == 0) args.sens.x = 1;
-            if (args.sens.y == 0) args.sens.y = 1;
-            sensitivity = args.sens;
+            if (args.sens.x == 0) sensitivity.x = 1;
+            else sensitivity.x = args.sens.x;
+
+            if (args.sens.y == 0) sensitivity.y = 1;
+            else sensitivity.y = args.sens.y;
         }
 
         /// <summary>
@@ -226,10 +204,7 @@ namespace rawaccel {
                 input = rotate(input);
             }
 
-            if (apply_accel)
-            {
-				input = accel_fn(input, time);
-            }
+			input = accel_fn(input, time);
 
             input.x *= sensitivity.x;
             input.y *= sensitivity.y;

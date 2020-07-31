@@ -59,6 +59,7 @@ namespace grapher
         {
             Fields.XField.Box.Hide();
             Fields.YField.Box.Hide();
+            Fields.LockCheckBox.Hide();
             Label.Hide();
         }
 
@@ -66,6 +67,7 @@ namespace grapher
         {
             Fields.XField.Box.Show();
             Fields.YField.Box.Show();
+            Fields.LockCheckBox.Show();
             Label.Show();
         }
 
@@ -73,9 +75,7 @@ namespace grapher
         {
             SetName(name);
 
-            Fields.XField.Box.Show();
-            Fields.YField.Box.Show();
-            Label.Show();
+            Show();
         }
 
     }

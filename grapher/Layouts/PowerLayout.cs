@@ -9,11 +9,12 @@ namespace grapher.Layouts
     public class PowerLayout : LayoutBase
     {
         public PowerLayout()
+            : base()
         {
             Name = "Power";
             Index = 6;
-            Show = new bool[] { true, true, false }; 
-            OptionNames = new string[] { Scale, Exponent, string.Empty }; 
+            ShowOptions = new bool[] { true, true, true, false }; 
+            OptionNames = new string[] { Offset, Scale, Exponent, string.Empty }; 
         }
     }
 }

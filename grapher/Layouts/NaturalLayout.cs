@@ -9,11 +9,12 @@ namespace grapher.Layouts
     public class NaturalLayout : LayoutBase
     {
         public NaturalLayout()
+            : base()
         {
             Name = "Natural";
             Index = 3;
-            Show = new bool[] { true, true, false }; 
-            OptionNames = new string[] { Acceleration, Limit, string.Empty }; 
+            ShowOptions = new bool[] { true, true, true, false }; 
+            OptionNames = new string[] { Offset, Acceleration, Limit, string.Empty }; 
         }
     }
 }
