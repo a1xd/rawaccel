@@ -8,10 +8,41 @@ using System.Windows.Forms;
 namespace grapher
 {
     public class OptionXY
-    {        public OptionXY(FieldXY fields, Label label)
+    {
+        public OptionXY(FieldXY fields, Label label)
         {
             Fields = fields;
             Label = label;
+        }
+
+        public OptionXY(
+            TextBox xBox,
+            TextBox yBox,
+            CheckBox lockCheckBox,
+            Form containingForm,
+            double defaultData,
+            Label label)
+            : this(new FieldXY(xBox, yBox, lockCheckBox, containingForm, defaultData), label)
+        {
+        }
+
+        public OptionXY(
+            TextBox xBox,
+            TextBox yBox,
+            CheckBox lockCheckBox,
+            Form containingForm,
+            double defaultData,
+            Label label,
+            string startingName):
+            this(
+                xBox,
+                yBox,
+                lockCheckBox,
+                containingForm,
+                defaultData,
+                label)
+        {
+            SetName(startingName);
         }
 
         public FieldXY Fields { get; }

@@ -15,6 +15,17 @@ namespace grapher
             Label = label;
         }
 
+        public Option(TextBox box, Form containingForm, double defaultData, Label label)
+            : this(new Field(box, containingForm, defaultData), label)
+        {
+        }
+
+        public Option(TextBox box, Form containingForm, double defaultData, Label label, string startingName)
+            : this(box, containingForm, defaultData, label)
+        {
+            SetName(startingName);
+        }
+
         public Field Field { get; }
 
         public Label Label { get; }

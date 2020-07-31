@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -12,24 +13,27 @@ namespace grapher
 {
     public partial class RawAcceleration : Form
     {
+        public struct MagnitudeData
+        {
+            public double magnitude;
+            public int x;
+            public int y;
+        }
+
         #region Constructor
+
+        public static ReadOnlyCollection<MagnitudeData> Magnitudes = GetMagnitudes();
 
         public RawAcceleration()
         {
             InitializeComponent();
 
             ManagedAcceleration = new ManagedAccel(5, 0, 0.3, 1.25, 15);
-            Sensitivity = new OptionXY(new FieldXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1), sensitivityLabel);
-            Rotation = new Option(new Field(rotationBox, this, 0), rotationLabel);
-            Weight = new OptionXY(new FieldXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1), weightLabel);
-            Cap = new OptionXY(new FieldXY(capBoxX, capBoxY, capXYLock, this, 0), capLabel);
-            Offset = new Option(new Field(offsetBox, this, 0), offsetLabel);
-
-            Sensitivity.SetName("Sensitivity");
-            Rotation.SetName("Rotation");
-            Weight.SetName("Weight");
-            Cap.SetName("Cap");
-            Offset.SetName("Offset");
+            Sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity");
+            Rotation = new Option(rotationBox, this, 0, rotationLabel, "Rotation");
+            Weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight");
+            Cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap");
+            Offset = new Option(offsetBox, this, 0, offsetLabel, "Offset");
 
             // The name and layout of these options is handled by AccelerationOptions object.
             Acceleration = new Option(new Field(accelerationBox, this, 0), constantOneLabel);
@@ -95,6 +99,26 @@ namespace grapher
 
         #region Methods
 
+        public static ReadOnlyCollection<MagnitudeData> GetMagnitudes()
+        {
+            var magnitudes = new List<MagnitudeData>();
+            for (int i = 0; i < 100; i++)
+            {
+                for (int j = 0; j <= i; j++)
+                {
+                    MagnitudeData magnitudeData;
+                    magnitudeData.magnitude = Magnitude(i, j);
+                    magnitudeData.x = i;
+                    magnitudeData.y = j;
+                    magnitudes.Add(magnitudeData);
+                }
+            }
+
+            magnitudes.Sort((m1, m2) => m1.magnitude.CompareTo(m2.magnitude));
+
+            return magnitudes.AsReadOnly();
+        }
+
         public static double Magnitude(int x, int y)
         {
             return Math.Sqrt(x * x + y * y);
@@ -114,20 +138,16 @@ namespace grapher
         {
            var orderedPoints = new SortedDictionary<double, double>();
 
-            for (int i = 0; i < 100; i++)
+            foreach (var magnitudeData in Magnitudes)
             {
-                for (int j = 0; j <= i; j++)
+                var output = ManagedAcceleration.Accelerate(magnitudeData.x, magnitudeData.y, 1);
+
+                var outMagnitude = Magnitude(output.Item1, output.Item2);
+                var ratio = magnitudeData.magnitude > 0 ? outMagnitude / magnitudeData.magnitude : Sensitivity.Fields.X;
+
+                if (!orderedPoints.ContainsKey(magnitudeData.magnitude))
                 {
-                    var output = ManagedAcceleration.Accelerate(i, j, 1);
-
-                    var inMagnitude = Magnitude(i,j);
-                    var outMagnitude = Magnitude(output.Item1, output.Item2);
-                    var ratio = inMagnitude > 0 ? outMagnitude / inMagnitude : Sensitivity.Fields.X;
-
-                    if (!orderedPoints.ContainsKey(inMagnitude))
-                    {
-                        orderedPoints.Add(inMagnitude, ratio);
-                    }
+                    orderedPoints.Add(magnitudeData.magnitude, ratio);
                 }
             }
 

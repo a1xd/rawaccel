@@ -46,7 +46,7 @@ namespace grapher
 
         public TextBox Box { get; }
 
-        Form ContainingForm { get; }
+        private Form ContainingForm { get; }
 
         public double Data { get; private set; }
 
