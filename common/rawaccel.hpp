@@ -81,7 +81,6 @@ namespace rawaccel {
         accel_args acc_args;
         int accel_mode = accel_impl_t::id<accel_noaccel>;
         milliseconds time_min = 0.4;
-        vec2d weight = { 1, 1 };
         vec2d cap = { 0, 0 };
     };
 
@@ -102,26 +101,17 @@ namespace rawaccel {
         /// <summary> The acceleration implementation (i.e. curve) </summary>
         accel_impl_t accel;
 
-        /// <summary> The weight of acceleration applied in {x, y} dimensions. </summary>
-        vec2d weight = { 1, 1 };
-
-        /// <summary> The constant added to weighted accel values to get the acceleration scale. </summary>
-        double scale_base = 1;
-
         /// <summary> The object which sets a min and max for the acceleration scale. </summary>
         vec2<accel_scale_clamp> clamp;
 
-        accel_function(accel_fn_args args) : accel_function() {
+        accel_function(accel_fn_args args) {
             verify(args);
 
             accel.tag = args.accel_mode;
             accel.visit([&](auto& impl){ impl = { args.acc_args }; });
 
-            if (accel.tag == accel_impl_t::id<accel_power>) scale_base = 0;
-
             time_min = args.time_min;
             speed_offset = args.acc_args.offset;
-            weight = args.weight;
             clamp.x = accel_scale_clamp(args.cap.x);
             clamp.y = accel_scale_clamp(args.cap.y);
         }
@@ -146,16 +136,14 @@ namespace rawaccel {
             double time_clamped = clampsd(time, time_min, 100);
             double speed = maxsd(mag / time_clamped - speed_offset, 0);
 
-            double accel_val = accel.visit([=](auto&& impl) {
-                return impl.accelerate(speed); 
+            vec2d scale = accel.visit([=](auto&& impl) {
+                double accel_val = impl.accelerate(speed);
+                return impl.scale(accel_val); 
             });
 
-            double scale_x = weight.x * accel_val + scale_base;
-            double scale_y = weight.y * accel_val + scale_base;
-
             return {
-                input.x * clamp.x(scale_x),
-                input.y * clamp.y(scale_y)
+                input.x * clamp.x(scale.x),
+                input.y * clamp.y(scale.y)
             };
         }
 

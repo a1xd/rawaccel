@@ -14,6 +14,7 @@ namespace rawaccel {
 		accel_power(accel_args args) {
 			verify(args);
 
+			weight = args.weight;
 			speed_coeff = args.power_scale;
 			exponent = args.exponent;
 			offset = args.offset;
@@ -24,8 +25,15 @@ namespace rawaccel {
 			return (offset > 0 && speed < 1) ? 1 : pow(speed * speed_coeff, exponent);
 		}
 
+		inline vec2d scale(double accel_val) const {
+			return { 
+				weight.x * accel_val,
+				weight.y * accel_val
+			};
+		}
+
 		void verify(accel_args args) const {
-			if (args.power_scale < 0) error("scale can not be negative");
+			if (args.power_scale <= 0) error("scale must be positive");
 			if (args.exponent <= 0) error("exponent must be greater than 0");
 		}
 	};

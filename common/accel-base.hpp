@@ -1,5 +1,7 @@
 #pragma once
 
+#include "vec2.h"
+
 namespace rawaccel {
 
     // Error throwing calls std libraries which are unavailable in kernel mode.
@@ -15,14 +17,18 @@ namespace rawaccel {
         double exponent = 2;
         double midpoint = 0;
         double power_scale = 1;
+        vec2d weight = { 1, 1 };
     };
 
     /// <summary>
     /// Struct to hold common acceleration curve implementation details.
     /// </summary>
     struct accel_base {
-        
-        /// <summary> Generally, the acceleration ramp rate.</summary>
+
+        /// <summary> Coefficients applied to acceleration per axis.</summary>
+        vec2d weight = { 1, 1 };
+
+        /// <summary> Generally, the acceleration ramp rate.
         double speed_coeff = 0;
 
         /// <summary>
@@ -34,6 +40,17 @@ namespace rawaccel {
             verify(args);
 
             speed_coeff = args.accel;
+            weight = args.weight;
+        }
+
+        /// <summary> 
+        /// Default transformation of acceleration -> mouse input multipliers.
+        /// </summary>
+        inline vec2d scale(double accel_val) const {
+            return {
+                weight.x * accel_val + 1,
+                weight.y * accel_val + 1
+            };
         }
 
         /// <summary>

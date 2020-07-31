@@ -50,7 +50,7 @@ mouse_modifier parse(int argc, char** argv) {
     
     // mode-independent accel options
     auto opt_weight = "accel multiplier (default = 1)" % 
-        make_opt_vec(args.acc_fn_args.weight, "weight");
+        make_opt_vec(args.acc_fn_args.acc_args.weight, "weight");
 
     auto opt_offset = "speed (dots/ms) where accel kicks in (default = 0)" % (
         clipp::option("offset") & clipp::number("speed", args.acc_fn_args.acc_args.offset)
