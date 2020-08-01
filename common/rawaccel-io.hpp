@@ -43,4 +43,33 @@ namespace rawaccel {
 		return mod;
 	}
 
+	void write(mouse_modifier mod) {
+		HANDLE ra_handle = INVALID_HANDLE_VALUE;
+
+		ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
+
+		if (ra_handle == INVALID_HANDLE_VALUE) {
+			throw std::system_error(GetLastError(), std::system_category(), "CreateFile failed");
+		}
+
+		DWORD dummy;
+
+		BOOL success = DeviceIoControl(
+			ra_handle,
+			RA_IOCTL,
+			&mod,                     // input buffer
+			sizeof(mouse_modifier),   // input buffer size
+			NULL,                     // output buffer
+			0,                        // output buffer size
+			&dummy,                   // bytes returned
+			NULL                      // overlapped structure
+		);
+
+		CloseHandle(ra_handle);
+
+		if (!success) {
+			throw std::system_error(GetLastError(), std::system_category(), "DeviceIoControl failed");
+		}
+	}
+
 }

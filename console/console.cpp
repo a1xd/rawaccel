@@ -1,14 +1,13 @@
 #include <iostream>
 
-#define NOMINMAX
-#include <Windows.h>
-
 #include <rawaccel-userspace.hpp>
-#include "console_write.hpp"
+#include <rawaccel-io.hpp>
+
+namespace ra = rawaccel;
 
 int main(int argc, char** argv) {
 	try {
-		write(ra::parse(argc, argv));
+		ra::write(ra::parse(argc, argv));
 	}
 	catch (std::domain_error e) {
 		std::cerr << e.what() << '\n';

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\common\rawaccel.hpp"
+#include <rawaccel.hpp>
 
 struct writer {
 	void writeToDriver(rawaccel::mouse_modifier* modifier);

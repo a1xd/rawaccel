@@ -1,16 +1,14 @@
 #pragma once
 
-#include "wrapper_writer.hpp"
-#include "..\common\rawaccel.hpp";
-#include "..\common\accel-error.hpp";
 #include <iostream>
+
+#include <rawaccel.hpp>
+#include <accel-error.hpp>
+
+#include "wrapper_writer.hpp"
+
 using namespace rawaccel;
 using namespace System;
-
-
-public value struct ArgsWrapper {
-    int a;
-};
 
 public ref class ManagedAccel
 {
