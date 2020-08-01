@@ -1,7 +1,8 @@
 #include <iostream>
 
-#include <rawaccel-userspace.hpp>
 #include <rawaccel-io.hpp>
+
+#include "parse.hpp"
 
 namespace ra = rawaccel;
 

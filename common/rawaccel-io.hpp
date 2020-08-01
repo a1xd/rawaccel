@@ -9,6 +9,9 @@
 
 #define RA_IOCTL CTL_CODE(0x8888, 0x888, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
+#pragma warning(push)
+#pragma warning(disable:4245) // int -> DWORD conversion while passing RA_IOCTL
+
 namespace rawaccel {
 
 	mouse_modifier read() {
@@ -43,6 +46,7 @@ namespace rawaccel {
 		return mod;
 	}
 
+
 	void write(mouse_modifier mod) {
 		HANDLE ra_handle = INVALID_HANDLE_VALUE;
 
@@ -73,3 +77,5 @@ namespace rawaccel {
 	}
 
 }
+
+#pragma warning(pop)
