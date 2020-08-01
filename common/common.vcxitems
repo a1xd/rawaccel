@@ -23,6 +23,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-power.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-sigmoid.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-error.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-io.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-userspace.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)x64-util.hpp" />

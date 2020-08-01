@@ -143,41 +143,60 @@ Return Value:
 --*/
 {
     NTSTATUS status;
-    void* input_buffer;
-    size_t input_size;
+    void* buffer;
+    size_t size;
 
     UNREFERENCED_PARAMETER(Queue);
-    UNREFERENCED_PARAMETER(OutputBufferLength);
     UNREFERENCED_PARAMETER(IoControlCode);
 
     PAGED_CODE();
 
     DebugPrint(("Ioctl received into filter control object.\n"));
 
-    if (InputBufferLength != sizeof(ra::mouse_modifier)) {
-        DebugPrint(("Received unknown request of %u bytes\n", InputBufferLength));
+    if (InputBufferLength == sizeof(ra::mouse_modifier)) {
+        status = WdfRequestRetrieveInputBuffer(
+            Request,
+            sizeof(ra::mouse_modifier),
+            &buffer,
+            &size
+        );
+
+        if (!NT_SUCCESS(status)) {
+            DebugPrint(("RetrieveInputBuffer failed: 0x%x\n", status));
+            // status maps to win32 error code 1359: ERROR_INTERNAL_ERROR
+            WdfRequestComplete(Request, STATUS_MESSAGE_LOST);
+            return;
+        }
+
+        global.modifier = *reinterpret_cast<ra::mouse_modifier*>(buffer);
+
+        WdfRequestComplete(Request, STATUS_SUCCESS);
+    }
+    else if (OutputBufferLength == sizeof(ra::mouse_modifier)) {
+        status = WdfRequestRetrieveOutputBuffer(
+            Request,
+            sizeof(ra::mouse_modifier),
+            &buffer,
+            &size
+        );
+
+        if (!NT_SUCCESS(status)) {
+            DebugPrint(("RetrieveOutputBuffer failed: 0x%x\n", status));
+            // status maps to win32 error code 1359: ERROR_INTERNAL_ERROR
+            WdfRequestComplete(Request, STATUS_MESSAGE_LOST);
+            return;
+        }
+
+        *reinterpret_cast<ra::mouse_modifier*>(buffer) = global.modifier;
+
+        WdfRequestComplete(Request, STATUS_SUCCESS);
+    }
+    else {
+        DebugPrint(("Received unknown request: in %uB, out %uB\n", InputBufferLength, OutputBufferLength));
         // status maps to win32 error code 1784: ERROR_INVALID_USER_BUFFER
         WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
-        return;
     }
 
-    status = WdfRequestRetrieveInputBuffer(
-        Request,
-        sizeof(ra::mouse_modifier),
-        &input_buffer,
-        &input_size
-    );
-
-    if (!NT_SUCCESS(status)) {
-        DebugPrint(("RetrieveInputBuffer failed: 0x%x\n", status));
-        // status maps to win32 error code 1359: ERROR_INTERNAL_ERROR
-        WdfRequestComplete(Request, STATUS_MESSAGE_LOST);
-        return;
-    }
-
-    global.modifier = *reinterpret_cast<ra::mouse_modifier*>(input_buffer);
-
-    WdfRequestComplete(Request, STATUS_SUCCESS);
 }
 #pragma warning(pop) // enable 28118 again
 
