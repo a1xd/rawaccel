@@ -55,16 +55,9 @@ namespace grapher
 
     public partial class RawAcceleration : Form
     {
-        public struct MagnitudeData
-        {
-            public double magnitude;
-            public int x;
-            public int y;
-        }
 
         #region Constructor
 
-        public static ReadOnlyCollection<MagnitudeData> Magnitudes = GetMagnitudes();
 
         public RawAcceleration()
         {
@@ -90,39 +83,51 @@ namespace grapher
             IntPtr args_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(args));
             Marshal.StructureToPtr(args, args_ptr, false);
 
-            ManagedAcceleration = new ManagedAccel(args_ptr);
+            var managedAcceleration = new ManagedAccel(args_ptr);
 
             Marshal.FreeHGlobal(args_ptr);
 
-            Sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity");
-            Rotation = new Option(rotationBox, this, 0, rotationLabel, "Rotation");
-            Weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight");
-            Cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap");
-            Offset = new Option(offsetBox, this, 0, offsetLabel, "Offset");
+            var sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity");
+            var rotation = new Option(rotationBox, this, 0, rotationLabel, "Rotation");
+            var weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight");
+            var cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap");
+            var offset = new Option(offsetBox, this, 0, offsetLabel, "Offset");
 
             // The name and layout of these options is handled by AccelerationOptions object.
-            Acceleration = new Option(new Field(accelerationBox, this, 0), constantOneLabel);
-            LimitOrExponent = new Option(new Field(limitBox, this, 2), constantTwoLabel);
-            Midpoint = new Option(new Field(midpointBox, this, 0), constantThreeLabel);
+            var acceleration = new Option(new Field(accelerationBox, this, 0), constantOneLabel);
+            var limitOrExponent = new Option(new Field(limitBox, this, 2), constantTwoLabel);
+            var midpoint = new Option(new Field(midpointBox, this, 0), constantThreeLabel);
 
-            AccelerationOptions = new AccelOptions(
+            var accelerationOptions = new AccelOptions(
                 accelTypeDrop,
                 new Option[]
                 {
-                    Offset,
-                    Acceleration,
-                    LimitOrExponent,
-                    Midpoint,
+                    offset,
+                    acceleration,
+                    limitOrExponent,
+                    midpoint,
                 },
                 new OptionXY[]
                 {
-                    Weight,
-                    Cap,
+                    weight,
+                    cap,
                 },
                 writeButton);
 
-            UpdateGraph();
- 
+            AccelGUI = new AccelGUI(
+                this,
+                AccelerationChart,
+                managedAcceleration,
+                accelerationOptions,
+                sensitivity,
+                rotation,
+                weight,
+                cap,
+                offset,
+                acceleration,
+                limitOrExponent,
+                midpoint);
+
             this.AccelerationChart.ChartAreas[0].AxisX.RoundAxisValues();
 
             this.AccelerationChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
@@ -147,108 +152,34 @@ namespace grapher
 
         #region Properties
 
-        public ManagedAccel ManagedAcceleration { get; set; }
-
-        private AccelOptions AccelerationOptions { get; set; }
-
-        private OptionXY Sensitivity { get; set; }
-
-        private Option Rotation { get; set; }
-
-        private OptionXY Weight { get; set; }
-
-        private OptionXY Cap { get; set; }
-
-        private Option Offset { get; set; }
-
-        private Option Acceleration { get; set; }
-
-        private Option LimitOrExponent { get; set; }
-
-        private Option Midpoint { get; set; }
+        public AccelGUI AccelGUI { get; }
 
         #endregion Properties
 
         #region Methods
-
-        public static ReadOnlyCollection<MagnitudeData> GetMagnitudes()
-        {
-            var magnitudes = new List<MagnitudeData>();
-            for (int i = 0; i < 100; i++)
-            {
-                for (int j = 0; j <= i; j++)
-                {
-                    MagnitudeData magnitudeData;
-                    magnitudeData.magnitude = Magnitude(i, j);
-                    magnitudeData.x = i;
-                    magnitudeData.y = j;
-                    magnitudes.Add(magnitudeData);
-                }
-            }
-
-            magnitudes.Sort((m1, m2) => m1.magnitude.CompareTo(m2.magnitude));
-
-            return magnitudes.AsReadOnly();
-        }
-
-        public static double Magnitude(int x, int y)
-        {
-            return Math.Sqrt(x * x + y * y);
-        }
-
-        public static double Magnitude(double x, double y)
-        {
-            return Math.Sqrt(x * x + y * y);
-        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void UpdateGraph()
-        {
-           var orderedPoints = new SortedDictionary<double, double>();
-
-            foreach (var magnitudeData in Magnitudes)
-            {
-                var output = ManagedAcceleration.Accelerate(magnitudeData.x, magnitudeData.y, 1);
-
-                var outMagnitude = Magnitude(output.Item1, output.Item2);
-                var ratio = magnitudeData.magnitude > 0 ? outMagnitude / magnitudeData.magnitude : Sensitivity.Fields.X;
-
-                if (!orderedPoints.ContainsKey(magnitudeData.magnitude))
-                {
-                    orderedPoints.Add(magnitudeData.magnitude, ratio);
-                }
-            }
-
-            var series = this.AccelerationChart.Series.FirstOrDefault();
-            series.Points.Clear();
-
-            foreach (var point in orderedPoints)
-            {
-                series.Points.AddXY(point.Key, point.Value);
-            }
-        }
-
         private void writeButton_Click(object sender, EventArgs e)
         {
-            ManagedAcceleration.UpdateAccel(
-                AccelerationOptions.AccelerationIndex, 
-                Rotation.Field.Data,
-                Sensitivity.Fields.X,
-                Sensitivity.Fields.Y,
-                Weight.Fields.X,
-                Weight.Fields.Y,
-                Cap.Fields.X,
-                Cap.Fields.Y,
-                Offset.Field.Data,
-                Acceleration.Field.Data,
-                LimitOrExponent.Field.Data,
-                Midpoint.Field.Data);
-            ManagedAcceleration.WriteToDriver();
-            UpdateGraph();
+            AccelGUI.ManagedAcceleration.UpdateAccel(
+                AccelGUI.AccelerationOptions.AccelerationIndex, 
+                AccelGUI.Rotation.Field.Data,
+                AccelGUI.Sensitivity.Fields.X,
+                AccelGUI.Sensitivity.Fields.Y,
+                AccelGUI.Weight.Fields.X,
+                AccelGUI.Weight.Fields.Y,
+                AccelGUI.Cap.Fields.X,
+                AccelGUI.Cap.Fields.Y,
+                AccelGUI.Offset.Field.Data,
+                AccelGUI.Acceleration.Field.Data,
+                AccelGUI.LimitOrExponent.Field.Data,
+                AccelGUI.Midpoint.Field.Data);
+            AccelGUI.ManagedAcceleration.WriteToDriver();
+            AccelGUI.UpdateGraph();
         }
 
         #endregion Methods

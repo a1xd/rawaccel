@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccelGUI.cs" />
     <Compile Include="AccelOptions.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="FieldXY.cs" />
