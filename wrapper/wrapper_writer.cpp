@@ -1,9 +1,9 @@
 #pragma once
 
-#include "..\console\console_write.cpp"
+#include <rawaccel-io.hpp>
 #include "wrapper_writer.hpp"
 
 void writer::writeToDriver(rawaccel::mouse_modifier* modifier)
 {
-	write(*modifier);
+	rawaccel::write(*modifier);
 }
