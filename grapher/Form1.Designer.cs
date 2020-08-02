@@ -30,6 +30,9 @@ namespace grapher
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -59,24 +62,26 @@ namespace grapher
             this.capXYLock = new System.Windows.Forms.CheckBox();
             this.weightXYLock = new System.Windows.Forms.CheckBox();
             this.LockXYLabel = new System.Windows.Forms.Label();
+            this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             this.SuspendLayout();
             // 
             // AccelerationChart
             // 
-            chartArea2.AxisX.Title = "Speed (counts/ms)";
-            chartArea2.AxisY.Title = "Sensitivity (magnitude ratio)";
-            chartArea2.Name = "ChartArea1";
-            this.AccelerationChart.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.AccelerationChart.Legends.Add(legend2);
+            chartArea1.AxisX.Title = "Speed (counts/ms)";
+            chartArea1.AxisY.Title = "Sensitivity (magnitude ratio)";
+            chartArea1.Name = "ChartArea1";
+            this.AccelerationChart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.AccelerationChart.Legends.Add(legend1);
             this.AccelerationChart.Location = new System.Drawing.Point(242, 1);
             this.AccelerationChart.Name = "AccelerationChart";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Accelerated Sensitivity";
-            this.AccelerationChart.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Accelerated Sensitivity";
+            this.AccelerationChart.Series.Add(series1);
             this.AccelerationChart.Size = new System.Drawing.Size(721, 312);
             this.AccelerationChart.TabIndex = 0;
             this.AccelerationChart.Text = "chart1";
@@ -297,11 +302,29 @@ namespace grapher
             this.LockXYLabel.TabIndex = 27;
             this.LockXYLabel.Text = "Lock X && Y";
             // 
+            // VelocityChart
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.VelocityChart.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.VelocityChart.Legends.Add(legend2);
+            this.VelocityChart.Location = new System.Drawing.Point(242, 319);
+            this.VelocityChart.Name = "VelocityChart";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Mouse Velocity";
+            this.VelocityChart.Series.Add(series2);
+            this.VelocityChart.Size = new System.Drawing.Size(721, 300);
+            this.VelocityChart.TabIndex = 28;
+            this.VelocityChart.Text = "chart1";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(963, 312);
+            this.ClientSize = new System.Drawing.Size(963, 621);
+            this.Controls.Add(this.VelocityChart);
             this.Controls.Add(this.LockXYLabel);
             this.Controls.Add(this.weightXYLock);
             this.Controls.Add(this.capXYLock);
@@ -332,6 +355,7 @@ namespace grapher
             this.Text = "Raw Acceleration Graph";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -365,6 +389,7 @@ namespace grapher
         private System.Windows.Forms.CheckBox capXYLock;
         private System.Windows.Forms.CheckBox weightXYLock;
         private System.Windows.Forms.Label LockXYLabel;
+        private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChart;
     }
 }
 

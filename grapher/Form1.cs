@@ -117,6 +117,7 @@ namespace grapher
             AccelGUI = new AccelGUI(
                 this,
                 AccelerationChart,
+                VelocityChart,
                 managedAcceleration,
                 accelerationOptions,
                 sensitivity,
@@ -146,6 +147,26 @@ namespace grapher
 
             this.AccelerationChart.ChartAreas[0].CursorX.IsUserEnabled = true;
             this.AccelerationChart.ChartAreas[0].CursorY.IsUserEnabled = true;
+
+            this.VelocityChart.ChartAreas[0].AxisX.RoundAxisValues();
+
+            this.VelocityChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+
+            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
+            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
+
+            this.VelocityChart.ChartAreas[0].CursorY.Interval = 0.001;
+
+            this.VelocityChart.ChartAreas[0].CursorX.AutoScroll = true;
+            this.VelocityChart.ChartAreas[0].CursorY.AutoScroll = true;
+
+            this.VelocityChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            this.VelocityChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+
+            this.VelocityChart.ChartAreas[0].CursorX.IsUserEnabled = true;
+            this.VelocityChart.ChartAreas[0].CursorY.IsUserEnabled = true;
+
         }
 
         #endregion Constructor

@@ -25,6 +25,7 @@ namespace grapher
         public AccelGUI(
             RawAcceleration accelForm,
             Chart accelerationChart,
+            Chart velocityChart,
             ManagedAccel managedAccel,
             AccelOptions accelOptions,
             OptionXY sensitivity,
@@ -38,6 +39,7 @@ namespace grapher
         {
             AccelForm = accelForm;
             AccelChart = accelerationChart;
+            VelocityChart = velocityChart;
             ManagedAcceleration = managedAccel;
             AccelerationOptions = accelOptions;
             Sensitivity = sensitivity;
@@ -59,6 +61,8 @@ namespace grapher
         public RawAcceleration AccelForm { get; }
 
         public Chart AccelChart { get; }
+
+        public Chart VelocityChart { get; }
 
         public ManagedAccel ManagedAcceleration { get; }
 
@@ -118,7 +122,8 @@ namespace grapher
 
         public void UpdateGraph()
         {
-           var orderedPoints = new SortedDictionary<double, double>();
+           var orderedAccelPoints = new SortedDictionary<double, double>();
+           var orderedVelocityPoints = new SortedDictionary<double, double>();
 
             foreach (var magnitudeData in Magnitudes)
             {
@@ -127,20 +132,32 @@ namespace grapher
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
                 var ratio = magnitudeData.magnitude > 0 ? outMagnitude / magnitudeData.magnitude : Sensitivity.Fields.X;
 
-                if (!orderedPoints.ContainsKey(magnitudeData.magnitude))
+                if (!orderedAccelPoints.ContainsKey(magnitudeData.magnitude))
                 {
-                    orderedPoints.Add(magnitudeData.magnitude, ratio);
+                    orderedAccelPoints.Add(magnitudeData.magnitude, ratio);
+                }
+
+                if (!orderedVelocityPoints.ContainsKey(magnitudeData.magnitude))
+                {
+                    orderedVelocityPoints.Add(magnitudeData.magnitude, outMagnitude);
                 }
             }
 
-            var series = AccelChart.Series.FirstOrDefault();
-            series.Points.Clear();
+            var accelSeries = AccelChart.Series.FirstOrDefault();
+            accelSeries.Points.Clear();
 
-            foreach (var point in orderedPoints)
+            foreach (var point in orderedAccelPoints)
             {
-                series.Points.AddXY(point.Key, point.Value);
+                accelSeries.Points.AddXY(point.Key, point.Value);
             }
 
+            var velSeries = VelocityChart.Series.FirstOrDefault();
+            velSeries.Points.Clear();
+
+            foreach (var point in orderedVelocityPoints)
+            {
+                velSeries.Points.AddXY(point.Key, point.Value);
+            }
         }
 
 
