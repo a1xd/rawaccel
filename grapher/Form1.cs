@@ -116,9 +116,12 @@ namespace grapher
 
             AccelGUI = new AccelGUI(
                 this,
-                AccelerationChart,
-                VelocityChart,
-                GainChart,
+                new AccelCharts(
+                    this,
+                    AccelerationChart,
+                    VelocityChart,
+                    GainChart,
+                    showVelocityGainToolStripMenuItem),
                 managedAcceleration,
                 accelerationOptions,
                 sensitivity,

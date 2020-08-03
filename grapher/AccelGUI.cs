@@ -24,9 +24,7 @@ namespace grapher
 
         public AccelGUI(
             RawAcceleration accelForm,
-            Chart accelerationChart,
-            Chart velocityChart,
-            Chart gainChart,
+            AccelCharts accelCharts,
             ManagedAccel managedAccel,
             AccelOptions accelOptions,
             OptionXY sensitivity,
@@ -39,9 +37,7 @@ namespace grapher
             Option midpoint)
         {
             AccelForm = accelForm;
-            AccelChart = accelerationChart;
-            VelocityChart = velocityChart;
-            GainChart = gainChart;
+            AccelCharts = accelCharts;
             ManagedAcceleration = managedAccel;
             AccelerationOptions = accelOptions;
             Sensitivity = sensitivity;
@@ -62,11 +58,7 @@ namespace grapher
 
         public RawAcceleration AccelForm { get; }
 
-        public Chart AccelChart { get; }
-
-        public Chart VelocityChart { get; }
-
-        public Chart GainChart { get; }
+        public AccelCharts AccelCharts { get; }
 
         public ManagedAccel ManagedAcceleration { get; }
 
@@ -162,7 +154,7 @@ namespace grapher
                 }
             }
 
-            var accelSeries = AccelChart.Series.FirstOrDefault();
+            var accelSeries = AccelCharts.SensitivityChart.Series.FirstOrDefault();
             accelSeries.Points.Clear();
 
             foreach (var point in orderedAccelPoints)
@@ -170,7 +162,7 @@ namespace grapher
                 accelSeries.Points.AddXY(point.Key, point.Value);
             }
 
-            var velSeries = VelocityChart.Series.FirstOrDefault();
+            var velSeries = AccelCharts.VelocityChart.Series.FirstOrDefault();
             velSeries.Points.Clear();
 
             foreach (var point in orderedVelocityPoints)
@@ -178,7 +170,7 @@ namespace grapher
                 velSeries.Points.AddXY(point.Key, point.Value);
             }
 
-            var gainSeries = GainChart.Series.FirstOrDefault();
+            var gainSeries = AccelCharts.GainChart.Series.FirstOrDefault();
             gainSeries.Points.Clear();
 
             foreach (var point in orderedGainPoints)
