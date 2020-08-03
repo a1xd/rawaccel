@@ -223,7 +223,6 @@ namespace grapher
                 AccelGUI.Acceleration.Field.Data,
                 AccelGUI.LimitOrExponent.Field.Data,
                 AccelGUI.Midpoint.Field.Data);
-            AccelGUI.ManagedAcceleration.WriteToDriver();
             AccelGUI.UpdateGraph();
         }
 

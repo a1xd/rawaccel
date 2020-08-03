@@ -49,6 +49,7 @@ namespace grapher
             LimitOrExponent = limtOrExp;
             Midpoint = midpoint;
 
+            ManagedAcceleration.ReadFromDriver();
             UpdateGraph();
         }
 
