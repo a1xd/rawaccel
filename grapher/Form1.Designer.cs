@@ -36,6 +36,9 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.accelTypeDrop = new System.Windows.Forms.ComboBox();
             this.sensitivityBoxX = new System.Windows.Forms.TextBox();
@@ -63,8 +66,10 @@ namespace grapher
             this.weightXYLock = new System.Windows.Forms.CheckBox();
             this.LockXYLabel = new System.Windows.Forms.Label();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
             this.SuspendLayout();
             // 
             // AccelerationChart
@@ -304,6 +309,8 @@ namespace grapher
             // 
             // VelocityChart
             // 
+            chartArea2.AxisX.Title = "Speed (count/ms)";
+            chartArea2.AxisY.Title = "Output Speed (counts/ms)";
             chartArea2.Name = "ChartArea1";
             this.VelocityChart.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
@@ -319,11 +326,31 @@ namespace grapher
             this.VelocityChart.TabIndex = 28;
             this.VelocityChart.Text = "chart1";
             // 
+            // GainChart
+            // 
+            chartArea3.AxisX.Title = "Speed (counts/ms)";
+            chartArea3.AxisY.Title = "Slope of Velocity Chart";
+            chartArea3.Name = "ChartArea1";
+            this.GainChart.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.GainChart.Legends.Add(legend3);
+            this.GainChart.Location = new System.Drawing.Point(242, 625);
+            this.GainChart.Name = "GainChart";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Legend = "Legend1";
+            series3.Name = "Velocity Gain";
+            this.GainChart.Series.Add(series3);
+            this.GainChart.Size = new System.Drawing.Size(721, 300);
+            this.GainChart.TabIndex = 29;
+            this.GainChart.Text = "chart1";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(963, 621);
+            this.ClientSize = new System.Drawing.Size(963, 925);
+            this.Controls.Add(this.GainChart);
             this.Controls.Add(this.VelocityChart);
             this.Controls.Add(this.LockXYLabel);
             this.Controls.Add(this.weightXYLock);
@@ -356,6 +383,7 @@ namespace grapher
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GainChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -390,6 +418,7 @@ namespace grapher
         private System.Windows.Forms.CheckBox weightXYLock;
         private System.Windows.Forms.Label LockXYLabel;
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChart;
+        private System.Windows.Forms.DataVisualization.Charting.Chart GainChart;
     }
 }
 

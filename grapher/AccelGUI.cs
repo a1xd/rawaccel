@@ -26,6 +26,7 @@ namespace grapher
             RawAcceleration accelForm,
             Chart accelerationChart,
             Chart velocityChart,
+            Chart gainChart,
             ManagedAccel managedAccel,
             AccelOptions accelOptions,
             OptionXY sensitivity,
@@ -40,6 +41,7 @@ namespace grapher
             AccelForm = accelForm;
             AccelChart = accelerationChart;
             VelocityChart = velocityChart;
+            GainChart = gainChart;
             ManagedAcceleration = managedAccel;
             AccelerationOptions = accelOptions;
             Sensitivity = sensitivity;
@@ -63,6 +65,8 @@ namespace grapher
         public Chart AccelChart { get; }
 
         public Chart VelocityChart { get; }
+
+        public Chart GainChart { get; }
 
         public ManagedAccel ManagedAcceleration { get; }
 
@@ -122,8 +126,12 @@ namespace grapher
 
         public void UpdateGraph()
         {
-           var orderedAccelPoints = new SortedDictionary<double, double>();
-           var orderedVelocityPoints = new SortedDictionary<double, double>();
+            var orderedAccelPoints = new SortedDictionary<double, double>();
+            var orderedVelocityPoints = new SortedDictionary<double, double>();
+            var orderedGainPoints = new SortedDictionary<double, double>();
+
+            double lastInputMagnitude = 0;
+            double lastOutputMagnitude = 0;
 
             foreach (var magnitudeData in Magnitudes)
             {
@@ -131,6 +139,12 @@ namespace grapher
 
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
                 var ratio = magnitudeData.magnitude > 0 ? outMagnitude / magnitudeData.magnitude : Sensitivity.Fields.X;
+
+                var inDiff = magnitudeData.magnitude - lastInputMagnitude;
+                var outDiff = outMagnitude - lastOutputMagnitude;
+                var slope = inDiff > 0 ? outDiff / inDiff : Sensitivity.Fields.X;
+                lastInputMagnitude = magnitudeData.magnitude;
+                lastOutputMagnitude = outMagnitude;
 
                 if (!orderedAccelPoints.ContainsKey(magnitudeData.magnitude))
                 {
@@ -140,6 +154,11 @@ namespace grapher
                 if (!orderedVelocityPoints.ContainsKey(magnitudeData.magnitude))
                 {
                     orderedVelocityPoints.Add(magnitudeData.magnitude, outMagnitude);
+                }
+
+                if (!orderedGainPoints.ContainsKey(magnitudeData.magnitude))
+                {
+                    orderedGainPoints.Add(magnitudeData.magnitude, slope);
                 }
             }
 
@@ -157,6 +176,14 @@ namespace grapher
             foreach (var point in orderedVelocityPoints)
             {
                 velSeries.Points.AddXY(point.Key, point.Value);
+            }
+
+            var gainSeries = GainChart.Series.FirstOrDefault();
+            gainSeries.Points.Clear();
+
+            foreach (var point in orderedGainPoints)
+            {
+                gainSeries.Points.AddXY(point.Key, point.Value);
             }
         }
 
