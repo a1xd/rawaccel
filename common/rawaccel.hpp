@@ -4,7 +4,7 @@
 #include <math.h>
 
 #include "x64-util.hpp"
-#include "external/tagged-union-single.h"
+#include "tagged-union-single.h"
 
 #include "accel-linear.hpp"
 #include "accel-classic.hpp"

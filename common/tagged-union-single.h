@@ -137,7 +137,7 @@ struct tagged_union {
     int tag = 0;
 
     struct storage_t {
-        alignas(max_align_of<First, Rest...>) char bytes[max_size_of<First, Rest...>] = "";
+        alignas(max_align_of<First, Rest...>) char bytes[max_size_of<First, Rest...>] = {};
 
         template <typename T>
         inline constexpr T& as() {
