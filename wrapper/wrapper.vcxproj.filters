@@ -18,7 +18,7 @@
     <ClInclude Include="wrapper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wrapper_writer.hpp">
+    <ClInclude Include="wrapper_io.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClCompile Include="wrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="wrapper_writer.cpp">
+    <ClCompile Include="wrapper_io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

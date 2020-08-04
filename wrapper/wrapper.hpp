@@ -5,7 +5,7 @@
 #include <rawaccel.hpp>
 #include <accel-error.hpp>
 
-#include "wrapper_writer.hpp"
+#include "wrapper_io.hpp"
 
 using namespace rawaccel;
 using namespace System;
@@ -14,18 +14,18 @@ public ref class ManagedAccel
 {
 protected:
 	mouse_modifier* modifier_instance;
-    writer* driverWriter;
+    wrapper_io* driverWriter;
 public:
 	ManagedAccel(mouse_modifier* accel)
 		: modifier_instance(accel)
 	{
-        driverWriter = new writer();
+        driverWriter = new wrapper_io();
 	}
 
     ManagedAccel(System::IntPtr args)
     {
         modifier_instance = new mouse_modifier(*reinterpret_cast<modifier_args*>(args.ToPointer()));
-        driverWriter = new writer();
+        driverWriter = new wrapper_io();
 	}
 
     virtual ~ManagedAccel()
@@ -66,4 +66,6 @@ public:
 
 
     void WriteToDriver();
+
+    void ReadFromDriver();
 };

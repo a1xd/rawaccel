@@ -2,6 +2,7 @@
 
 #include <rawaccel.hpp>
 
-struct writer {
+struct wrapper_io {
 	void writeToDriver(rawaccel::mouse_modifier* modifier);
+	rawaccel::mouse_modifier* readFromDriver();
 };

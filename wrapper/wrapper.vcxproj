@@ -117,11 +117,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="wrapper.hpp" />
-    <ClInclude Include="wrapper_writer.hpp" />
+    <ClInclude Include="wrapper_io.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="wrapper.cpp" />
-    <ClCompile Include="wrapper_writer.cpp" />
+    <ClCompile Include="wrapper_io.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

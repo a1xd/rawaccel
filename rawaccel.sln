@@ -23,6 +23,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		common-install\common-install.vcxitems*{058d66c6-d88b-4fdb-b0e4-0a6fe7483b95}*SharedItemsImports = 9
 		common\common.vcxitems*{24b4226f-1461-408f-a1a4-1371c97153ea}*SharedItemsImports = 9
+		common\common.vcxitems*{28a3656f-a1de-405c-b547-191c32ec555f}*SharedItemsImports = 4
 		common\common.vcxitems*{60d6c942-ac20-4c05-a2be-54b5c966534d}*SharedItemsImports = 4
 		common-install\common-install.vcxitems*{896950d1-520a-420a-b6b1-73014b92a68c}*SharedItemsImports = 4
 		common-install\common-install.vcxitems*{a4097ff6-a6f0-44e8-b8d0-538d0fb75936}*SharedItemsImports = 4

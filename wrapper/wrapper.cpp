@@ -30,8 +30,6 @@ void ManagedAccel::UpdateAccel(
 	double lim_exp,
 	double midpoint)
 {
-	delete modifier_instance;
-
 	modifier_args args{};
 	args.acc_fn_args.accel_mode = mode;
 	args.degrees = rotation;
@@ -46,11 +44,21 @@ void ManagedAccel::UpdateAccel(
 	args.acc_fn_args.acc_args.limit = lim_exp;
 	args.acc_fn_args.acc_args.exponent = lim_exp;
 	args.acc_fn_args.acc_args.midpoint = midpoint;
+	
+	mouse_modifier* temp_modifier = new mouse_modifier(args);
+	driverWriter->writeToDriver(temp_modifier);
+	delete temp_modifier;
 
-	modifier_instance = new mouse_modifier(args);
+	ReadFromDriver();
 }
 
 void ManagedAccel::WriteToDriver()
 {
 	driverWriter->writeToDriver(modifier_instance);
+}
+
+void ManagedAccel::ReadFromDriver()
+{
+	delete modifier_instance;
+	modifier_instance = driverWriter->readFromDriver();
 }
