@@ -7,10 +7,11 @@
 
 #include "rawaccel.hpp"
 
-#define RA_IOCTL CTL_CODE(0x8888, 0x888, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define RA_READ CTL_CODE(0x8888, 0x888, METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
+#define RA_WRITE CTL_CODE(0x8888, 0x889, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 #pragma warning(push)
-#pragma warning(disable:4245) // int -> DWORD conversion while passing RA_IOCTL
+#pragma warning(disable:4245) // int -> DWORD conversion while passing CTL_CODE
 
 namespace rawaccel {
 
@@ -28,9 +29,9 @@ namespace rawaccel {
 
 		BOOL success = DeviceIoControl(
 			ra_handle,
-			RA_IOCTL,
+			RA_READ,
 			NULL,					  // input buffer
-			0,						  // input buffer size
+			0,                        // input buffer size
 			&mod,                     // output buffer
 			sizeof(mouse_modifier),   // output buffer size
 			&dummy,                   // bytes returned
@@ -60,7 +61,7 @@ namespace rawaccel {
 
 		BOOL success = DeviceIoControl(
 			ra_handle,
-			RA_IOCTL,
+			RA_WRITE,
 			&mod,                     // input buffer
 			sizeof(mouse_modifier),   // input buffer size
 			NULL,                     // output buffer
