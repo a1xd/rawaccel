@@ -170,13 +170,8 @@ namespace grapher
             }
 
             var accelSeries = AccelCharts.SensitivityChart.Series.FirstOrDefault();
-            accelSeries.Points.Clear();
-
             var velSeries = AccelCharts.VelocityChart.Series.FirstOrDefault();
-            velSeries.Points.Clear();
-
             var gainSeries = AccelCharts.GainChart.Series.FirstOrDefault();
-            gainSeries.Points.Clear();
 
             accelSeries.Points.DataBindXY(OrderedAccelPoints.Keys, OrderedAccelPoints.Values);
             velSeries.Points.DataBindXY(OrderedVelocityPoints.Keys, OrderedVelocityPoints.Values);
