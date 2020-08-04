@@ -34,7 +34,8 @@ namespace grapher
             Option offset,
             Option acceleration,
             Option limtOrExp,
-            Option midpoint)
+            Option midpoint,
+            Button writeButton)
         {
             AccelForm = accelForm;
             AccelCharts = accelCharts;
@@ -48,6 +49,12 @@ namespace grapher
             Acceleration = acceleration;
             LimitOrExponent = limtOrExp;
             Midpoint = midpoint;
+            WriteButton = writeButton;
+
+            OrderedAccelPoints = new SortedDictionary<double, double>();
+            OrderedVelocityPoints = new SortedDictionary<double, double>();
+            OrderedGainPoints = new SortedDictionary<double, double>();
+
 
             ManagedAcceleration.ReadFromDriver();
             UpdateGraph();
@@ -82,6 +89,12 @@ namespace grapher
         public Option Midpoint { get; }
 
         public Button WriteButton { get; }
+
+        public SortedDictionary<double, double> OrderedAccelPoints { get; }
+
+        public SortedDictionary<double, double> OrderedVelocityPoints { get; }
+
+        public SortedDictionary<double, double> OrderedGainPoints { get; }
 
         #endregion properties
 
@@ -119,9 +132,9 @@ namespace grapher
 
         public void UpdateGraph()
         {
-            var orderedAccelPoints = new SortedDictionary<double, double>();
-            var orderedVelocityPoints = new SortedDictionary<double, double>();
-            var orderedGainPoints = new SortedDictionary<double, double>();
+            OrderedAccelPoints.Clear();
+            OrderedVelocityPoints.Clear();
+            OrderedGainPoints.Clear();
 
             double lastInputMagnitude = 0;
             double lastOutputMagnitude = 0;
@@ -139,50 +152,38 @@ namespace grapher
                 lastInputMagnitude = magnitudeData.magnitude;
                 lastOutputMagnitude = outMagnitude;
 
-                if (!orderedAccelPoints.ContainsKey(magnitudeData.magnitude))
+                if (!OrderedAccelPoints.ContainsKey(magnitudeData.magnitude))
                 {
-                    orderedAccelPoints.Add(magnitudeData.magnitude, ratio);
+                    OrderedAccelPoints.Add(magnitudeData.magnitude, ratio);
                 }
 
-                if (!orderedVelocityPoints.ContainsKey(magnitudeData.magnitude))
+                if (!OrderedVelocityPoints.ContainsKey(magnitudeData.magnitude))
                 {
-                    orderedVelocityPoints.Add(magnitudeData.magnitude, outMagnitude);
+                    OrderedVelocityPoints.Add(magnitudeData.magnitude, outMagnitude);
                 }
 
-                if (!orderedGainPoints.ContainsKey(magnitudeData.magnitude))
+                if (!OrderedGainPoints.ContainsKey(magnitudeData.magnitude))
                 {
-                    orderedGainPoints.Add(magnitudeData.magnitude, slope);
+                    OrderedGainPoints.Add(magnitudeData.magnitude, slope);
                 }
+
             }
 
             var accelSeries = AccelCharts.SensitivityChart.Series.FirstOrDefault();
             accelSeries.Points.Clear();
 
-            foreach (var point in orderedAccelPoints)
-            {
-                accelSeries.Points.AddXY(point.Key, point.Value);
-            }
-
             var velSeries = AccelCharts.VelocityChart.Series.FirstOrDefault();
             velSeries.Points.Clear();
-
-            foreach (var point in orderedVelocityPoints)
-            {
-                velSeries.Points.AddXY(point.Key, point.Value);
-            }
 
             var gainSeries = AccelCharts.GainChart.Series.FirstOrDefault();
             gainSeries.Points.Clear();
 
-            foreach (var point in orderedGainPoints)
-            {
-                gainSeries.Points.AddXY(point.Key, point.Value);
-            }
+            accelSeries.Points.DataBindXY(OrderedAccelPoints.Keys, OrderedAccelPoints.Values);
+            velSeries.Points.DataBindXY(OrderedVelocityPoints.Keys, OrderedVelocityPoints.Values);
+            gainSeries.Points.DataBindXY(OrderedGainPoints.Keys, OrderedGainPoints.Values);
         }
 
-
         #endregion methods
-
     }
 
 }

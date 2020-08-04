@@ -131,7 +131,8 @@ namespace grapher
                 offset,
                 acceleration,
                 limitOrExponent,
-                midpoint);
+                midpoint,
+                writeButton);
 
             this.AccelerationChart.ChartAreas[0].AxisX.RoundAxisValues();
 
