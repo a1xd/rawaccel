@@ -11,5 +11,8 @@ void wrapper_io::writeToDriver(rawaccel::mouse_modifier* modifier)
 rawaccel::mouse_modifier* wrapper_io::readFromDriver()
 {
 	rawaccel::mouse_modifier modifier = rawaccel::read();
-	return &(modifier);
+	rawaccel::mouse_modifier* mod_pnt = (rawaccel::mouse_modifier*)malloc(sizeof(rawaccel::mouse_modifier));
+	memcpy(mod_pnt, &modifier, sizeof(rawaccel::mouse_modifier));
+
+	return mod_pnt;
 }

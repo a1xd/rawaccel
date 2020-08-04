@@ -59,5 +59,6 @@ void ManagedAccel::WriteToDriver()
 
 void ManagedAccel::ReadFromDriver()
 {
+	delete modifier_instance;
 	modifier_instance = driverWriter->readFromDriver();
 }
