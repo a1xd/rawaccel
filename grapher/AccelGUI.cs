@@ -169,13 +169,9 @@ namespace grapher
 
             }
 
-            var accelSeries = AccelCharts.SensitivityChart.Series.FirstOrDefault();
-            var velSeries = AccelCharts.VelocityChart.Series.FirstOrDefault();
-            var gainSeries = AccelCharts.GainChart.Series.FirstOrDefault();
-
-            accelSeries.Points.DataBindXY(OrderedAccelPoints.Keys, OrderedAccelPoints.Values);
-            velSeries.Points.DataBindXY(OrderedVelocityPoints.Keys, OrderedVelocityPoints.Values);
-            gainSeries.Points.DataBindXY(OrderedGainPoints.Keys, OrderedGainPoints.Values);
+            AccelCharts.SensitivityChart.Series[0].Points.DataBindXY(OrderedAccelPoints.Keys, OrderedAccelPoints.Values);
+            AccelCharts.VelocityChart.Series[0].Points.DataBindXY(OrderedVelocityPoints.Keys, OrderedVelocityPoints.Values);
+            AccelCharts.GainChart.Series[0].Points.DataBindXY(OrderedGainPoints.Keys, OrderedGainPoints.Values);
         }
 
         #endregion methods
