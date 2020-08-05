@@ -114,6 +114,11 @@ namespace grapher
                 },
                 writeButton);
 
+            var capOptions = new CapOptions(
+                sensitivityToolStripMenuItem,
+                velocityGainToolStripMenuItem,
+                cap);
+
             AccelGUI = new AccelGUI(
                 this,
                 new AccelCharts(
@@ -127,7 +132,7 @@ namespace grapher
                 sensitivity,
                 rotation,
                 weight,
-                cap,
+                capOptions,
                 offset,
                 acceleration,
                 limitOrExponent,
@@ -218,12 +223,13 @@ namespace grapher
                 AccelGUI.Sensitivity.Fields.Y,
                 AccelGUI.Weight.Fields.X,
                 AccelGUI.Weight.Fields.Y,
-                AccelGUI.Cap.Fields.X,
-                AccelGUI.Cap.Fields.Y,
+                AccelGUI.Cap.SensitivityCapX,
+                AccelGUI.Cap.SensitivityCapY,
                 AccelGUI.Offset.Field.Data,
                 AccelGUI.Acceleration.Field.Data,
                 AccelGUI.LimitOrExponent.Field.Data,
-                AccelGUI.Midpoint.Field.Data);
+                AccelGUI.Midpoint.Field.Data,
+                AccelGUI.Cap.VelocityGainCap);
             AccelGUI.UpdateGraph();
         }
 

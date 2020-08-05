@@ -76,11 +76,52 @@ namespace rawaccel {
     /// <summary> Tagged union to hold all accel implementations and allow "polymorphism" via a visitor call. </summary>
     using accel_impl_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_noaccel>;
 
+    struct velocity_gain_cap {
+        double hi = 0;
+        double slope = 0;
+        double intercept = 0;
+        bool cap_gain_enabled = false;
+
+        velocity_gain_cap(double speed, accel_impl_t accel)
+        {
+            if (speed <= 0) return;
+
+            double speed_second = 1.001 * speed;
+            double speed_diff = speed_second - speed;
+            if (speed_diff == 0) return;
+            cap_gain_enabled = true;
+
+			double out_first = accel.visit([=](auto&& impl) {
+                double accel_val = impl.accelerate(speed);
+                return impl.scale(accel_val); 
+            }).x * speed;
+			double out_second = accel.visit([=](auto&& impl) {
+                double accel_val = impl.accelerate(speed_second);
+                return impl.scale(accel_val); 
+            }).x * speed_second;
+
+            hi = speed;
+            slope = (out_second - out_first) / speed_diff;
+            intercept = out_first - slope * speed;
+        }
+
+        inline double operator()(double speed) const {
+			return  slope + intercept / speed;
+        }
+
+        inline bool should_apply(double speed) const {
+            return cap_gain_enabled && speed > hi;
+        }
+
+        velocity_gain_cap() = default;
+    };
+
     struct accel_fn_args {
         accel_args acc_args;
         int accel_mode = accel_impl_t::id<accel_noaccel>;
         milliseconds time_min = 0.4;
         vec2d cap = { 0, 0 };
+        double gain_cap = 0;
     };
 
     /// <summary> Struct for holding acceleration application details. </summary>
@@ -103,17 +144,26 @@ namespace rawaccel {
         /// <summary> The object which sets a min and max for the acceleration scale. </summary>
         vec2<accel_scale_clamp> clamp;
 
+        bool is_cap_gain = false;
+
+        velocity_gain_cap gain_cap = velocity_gain_cap();
+
         accel_function(const accel_fn_args& args) {
             if (args.time_min <= 0) error("min time must be positive");
             if (args.acc_args.offset < 0) error("offset must not be negative");
 
             accel.tag = args.accel_mode;
-            accel.visit([&](auto& impl){ impl = { args.acc_args }; });
+            accel.visit([&](auto& impl) { impl = { args.acc_args }; });
 
             time_min = args.time_min;
             speed_offset = args.acc_args.offset;
             clamp.x = accel_scale_clamp(args.cap.x);
             clamp.y = accel_scale_clamp(args.cap.y);
+
+            if (args.gain_cap > 0) {
+                is_cap_gain = true;
+                gain_cap = velocity_gain_cap(args.gain_cap, accel);
+            }
         }
 
         /// <summary>
@@ -127,10 +177,20 @@ namespace rawaccel {
             double time_clamped = clampsd(time, time_min, 100);
             double speed = maxsd(mag / time_clamped - speed_offset, 0);
 
-            vec2d scale = accel.visit([=](auto&& impl) {
-                double accel_val = impl.accelerate(speed);
-                return impl.scale(accel_val); 
-            });
+            vec2d scale;
+            
+            if (gain_cap.should_apply(speed))
+            {
+                double gain_cap_scale = gain_cap(speed);
+                scale = { gain_cap_scale, gain_cap_scale };
+            }
+            else
+            {
+                scale = accel.visit([=](auto&& impl) {
+                    double accel_val = impl.accelerate(speed);
+                    return impl.scale(accel_val);
+                    });
+            }
 
             return {
                 input.x * clamp.x(scale.x),

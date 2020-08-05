@@ -57,13 +57,13 @@ namespace grapher
             }
         }
 
-        private void SetLocked()
+        public void SetLocked()
         {
             Locked = true;
             YField.SetToUnavailable();
         }
 
-        private void SetUnlocked()
+        public void SetUnlocked()
         {
             Locked = false;
             if (XField.State == Field.FieldState.Default)
