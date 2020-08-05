@@ -76,22 +76,45 @@ namespace rawaccel {
     /// <summary> Tagged union to hold all accel implementations and allow "polymorphism" via a visitor call. </summary>
     using accel_impl_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_noaccel>;
 
+    /// <summary> Struct to hold information about applying a gain cap. </summary>
     struct velocity_gain_cap {
-        double hi = 0;
+
+        // <summary> The minimum speed past which gain cap is applied. </summary>
+        double threshold = 0;
+
+        // <summary> The gain at the point of cap </summary>
         double slope = 0;
+
+        // <summary> The intercept for the line with above slope to give continuous velocity function </summary>
         double intercept = 0;
+
+        // <summary> Whether or not velocity gain cap is enabled </summary>
         bool cap_gain_enabled = false;
 
+        /// <summary>
+        /// Initializes a velocity gain cap for a certain speed threshold
+        /// by estimating the slope at the threshold and creating a line
+        /// with that slope for output velocity calculations.
+        /// </summary>
+        /// <param name="speed"> The speed at which velocity gain cap will kick in </param>
+        /// <param name="offset"> The offset applied in accel calculations </param>
+        /// <param name="accel"> The accel implementation used in the containing accel_fn </param>
         velocity_gain_cap(double speed, double offset, accel_impl_t accel)
         {
             if (speed <= 0) return;
 
+            // Estimate gain at cap point by taking line between two input vs output velocity points.
+            // First input velocity point is at cap; for second pick a velocity a tiny bit larger.
             double speed_second = 1.001 * speed;
             double speed_diff = speed_second - speed;
+
+            // Return if by glitch or strange values the difference in points is 0.
             if (speed_diff == 0) return;
+
             cap_gain_enabled = true;
 
-            // subtract offset for acceleration, like in accel_fn()
+            // Find the corresponding output velocities for the two points.
+            // Subtract offset for acceleration, like in accel_fn()
 			double out_first = accel.visit([=](auto&& impl) {
                 double accel_val = impl.accelerate(speed-offset);
                 return impl.scale(accel_val); 
@@ -101,17 +124,30 @@ namespace rawaccel {
                 return impl.scale(accel_val); 
             }).x * speed_second;
 
-            hi = speed;
+            // Calculate slope and intercept from two points.
             slope = (out_second - out_first) / speed_diff;
             intercept = out_first - slope * speed;
+
+            threshold = speed;
         }
 
+        /// <summary>
+        /// Applies velocity gain cap to speed.
+        /// Returns scale value by which to multiply input to place on gain cap line.
+        /// </summary>
+        /// <param name="speed"> Speed to be capped </param>
+        /// <returns> Scale multiplier for input </returns>
         inline double operator()(double speed) const {
 			return  slope + intercept / speed;
         }
 
+        /// <summary>
+        /// Whether gain cap should be applied to given speed.
+        /// </summary>
+        /// <param name="speed"> Speed to check against threshold. </param>
+        /// <returns> Whether gain cap should be applied. </returns>
         inline bool should_apply(double speed) const {
-            return cap_gain_enabled && speed > hi;
+            return cap_gain_enabled && speed > threshold;
         }
 
         velocity_gain_cap() = default;
@@ -174,7 +210,7 @@ namespace rawaccel {
                 
             vec2d scale;
             
-            // gain_cap needs raw speed for line to work
+            // gain_cap needs raw speed for velocity line calculation
             if (gain_cap.should_apply(raw_speed))
             {
                 double gain_cap_scale = gain_cap(raw_speed);
