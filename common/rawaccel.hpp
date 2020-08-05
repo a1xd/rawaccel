@@ -82,7 +82,7 @@ namespace rawaccel {
         double intercept = 0;
         bool cap_gain_enabled = false;
 
-        velocity_gain_cap(double speed, accel_impl_t accel)
+        velocity_gain_cap(double speed, double offset, accel_impl_t accel)
         {
             if (speed <= 0) return;
 
@@ -91,12 +91,13 @@ namespace rawaccel {
             if (speed_diff == 0) return;
             cap_gain_enabled = true;
 
+            // subtract offset for acceleration, like in accel_fn()
 			double out_first = accel.visit([=](auto&& impl) {
-                double accel_val = impl.accelerate(speed);
+                double accel_val = impl.accelerate(speed-offset);
                 return impl.scale(accel_val); 
             }).x * speed;
 			double out_second = accel.visit([=](auto&& impl) {
-                double accel_val = impl.accelerate(speed_second);
+                double accel_val = impl.accelerate(speed_second-offset);
                 return impl.scale(accel_val); 
             }).x * speed_second;
 
@@ -144,8 +145,6 @@ namespace rawaccel {
         /// <summary> The object which sets a min and max for the acceleration scale. </summary>
         vec2<accel_scale_clamp> clamp;
 
-        bool is_cap_gain = false;
-
         velocity_gain_cap gain_cap = velocity_gain_cap();
 
         accel_function(const accel_fn_args& args) {
@@ -159,11 +158,7 @@ namespace rawaccel {
             speed_offset = args.acc_args.offset;
             clamp.x = accel_scale_clamp(args.cap.x);
             clamp.y = accel_scale_clamp(args.cap.y);
-
-            if (args.gain_cap > 0) {
-                is_cap_gain = true;
-                gain_cap = velocity_gain_cap(args.gain_cap, accel);
-            }
+			gain_cap = velocity_gain_cap(args.gain_cap, speed_offset, accel);
         }
 
         /// <summary>
@@ -175,19 +170,20 @@ namespace rawaccel {
         inline vec2d operator()(const vec2d& input, milliseconds time) const {
             double mag = sqrtsd(input.x * input.x + input.y * input.y);
             double time_clamped = clampsd(time, time_min, 100);
-            double speed = maxsd(mag / time_clamped - speed_offset, 0);
-
+            double raw_speed = mag / time_clamped;
+                
             vec2d scale;
             
-            if (gain_cap.should_apply(speed))
+            // gain_cap needs raw speed for line to work
+            if (gain_cap.should_apply(raw_speed))
             {
-                double gain_cap_scale = gain_cap(speed);
+                double gain_cap_scale = gain_cap(raw_speed);
                 scale = { gain_cap_scale, gain_cap_scale };
             }
             else
             {
                 scale = accel.visit([=](auto&& impl) {
-                    double accel_val = impl.accelerate(speed);
+                    double accel_val = impl.accelerate(maxsd(mag / time_clamped - speed_offset, 0));
                     return impl.scale(accel_val);
                     });
             }
