@@ -33,6 +33,7 @@ namespace grapher
         public double exponent;
         public double midpoint;
         public double power_scale;
+        public double gain_cap;
         public vec2d weight;
     }
 
@@ -75,6 +76,7 @@ namespace grapher
             args.acc_fn_args.acc_args.power_scale = 1;
             args.acc_fn_args.acc_args.weight.x = 1;
             args.acc_fn_args.acc_args.weight.y = 1;
+            args.acc_fn_args.acc_args.gain_cap = 0;
             args.acc_fn_args.accel_mode = (int)accel_mode.natural;
             args.acc_fn_args.time_min = 0.4;
             args.acc_fn_args.cap.x = 0;
@@ -117,7 +119,8 @@ namespace grapher
             var capOptions = new CapOptions(
                 sensitivityToolStripMenuItem,
                 velocityGainToolStripMenuItem,
-                cap);
+                cap,
+                weight);
 
             AccelGUI = new AccelGUI(
                 this,

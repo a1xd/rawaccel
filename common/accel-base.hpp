@@ -24,6 +24,7 @@ namespace rawaccel {
         double exponent = 2;
         double midpoint = 0;
         double power_scale = 1;
+        double gain_cap = 0;
         vec2d weight = { 1, 1 };
     };
 
@@ -68,6 +69,7 @@ namespace rawaccel {
         /// <param name="args">Arguments to verified.</param>
         void verify(const accel_args& args) const {
             if (args.accel < 0) bad_arg("accel can not be negative, use a negative weight to compensate");
+            if (args.gain_cap > 0 && weight.x != weight.y) bad_arg("weight x and y values must be equal with a gain cap");
         }
 
         accel_base() = default;

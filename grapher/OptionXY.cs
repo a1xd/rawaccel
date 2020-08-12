@@ -57,16 +57,14 @@ namespace grapher
 
         public void Hide()
         {
-            Fields.XField.Box.Hide();
-            Fields.YField.Box.Hide();
+            Fields.Hide();
             Fields.LockCheckBox.Hide();
             Label.Hide();
         }
 
         public void Show()
         {
-            Fields.XField.Box.Show();
-            Fields.YField.Box.Show();
+            Fields.Show();
             Fields.LockCheckBox.Show();
             Label.Show();
         }

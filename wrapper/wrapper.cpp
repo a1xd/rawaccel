@@ -45,7 +45,7 @@ void ManagedAccel::UpdateAccel(
 	args.acc_fn_args.acc_args.limit = lim_exp;
 	args.acc_fn_args.acc_args.exponent = lim_exp;
 	args.acc_fn_args.acc_args.midpoint = midpoint;
-	args.acc_fn_args.gain_cap = gain_cap;
+	args.acc_fn_args.acc_args.gain_cap = gain_cap;
 	
 	mouse_modifier* temp_modifier = new mouse_modifier(args);
 	driverWriter->writeToDriver(temp_modifier);

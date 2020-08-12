@@ -160,7 +160,6 @@ namespace rawaccel {
         int accel_mode = accel_impl_t::id<accel_noaccel>;
         milliseconds time_min = 0.4;
         vec2d cap = { 0, 0 };
-        double gain_cap = 0;
     };
 
     /// <summary> Struct for holding acceleration application details. </summary>
@@ -196,7 +195,7 @@ namespace rawaccel {
             speed_offset = args.acc_args.offset;
             clamp.x = accel_scale_clamp(args.cap.x);
             clamp.y = accel_scale_clamp(args.cap.y);
-			gain_cap = velocity_gain_cap(args.gain_cap, speed_offset, accel);
+			gain_cap = velocity_gain_cap(args.acc_args.gain_cap, speed_offset, accel);
         }
 
         /// <summary>
