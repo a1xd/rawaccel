@@ -3,15 +3,11 @@
 #include <iostream>
 
 #include <rawaccel.hpp>
-#include <accel-error.hpp>
+#include <rawaccel-error.hpp>
 
 #include "external/clipp.h"
 
 namespace rawaccel {
-
-    inline constexpr int SYSTEM_ERROR = -1;
-    inline constexpr int PARSE_ERROR = 1;
-    inline constexpr int INVALID_ARGUMENT = 2;
 
     template<typename Accel, typename StrFirst, typename... StrRest>
     clipp::parameter make_accel_cmd(modifier_args& args, StrFirst&& first_flag, StrRest&&... rest) {
@@ -113,6 +109,8 @@ namespace rawaccel {
             );
 
         if (!clipp::parse(argc, argv, cli)) {
+            constexpr int PARSE_ERROR = 1;
+
             std::cout << clipp::usage_lines(cli, "rawaccel", make_doc_fmt());
             std::exit(PARSE_ERROR);
         }

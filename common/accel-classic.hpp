@@ -22,7 +22,7 @@ namespace rawaccel {
 		}
 
 		void verify(const accel_args& args) const {
-			if (args.exponent <= 1) error("exponent must be greater than 1");
+			if (args.exponent <= 1) bad_arg("exponent must be greater than 1");
 		}
 	};
 	

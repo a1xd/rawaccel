@@ -21,7 +21,7 @@ namespace rawaccel {
 		ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
 
 		if (ra_handle == INVALID_HANDLE_VALUE) {
-			throw std::system_error(GetLastError(), std::system_category(), "CreateFile failed");
+			throw install_error();
 		}
 
 		mouse_modifier mod;
@@ -54,7 +54,7 @@ namespace rawaccel {
 		ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
 
 		if (ra_handle == INVALID_HANDLE_VALUE) {
-			throw std::system_error(GetLastError(), std::system_category(), "CreateFile failed");
+			throw install_error();
 		}
 
 		DWORD dummy;
@@ -73,7 +73,10 @@ namespace rawaccel {
 		CloseHandle(ra_handle);
 
 		if (!success) {
-			throw std::system_error(GetLastError(), std::system_category(), "DeviceIoControl failed");
+			if (auto err = GetLastError(); err != ERROR_BUSY) {
+				throw std::system_error(err, std::system_category(), "DeviceIoControl failed");
+			}
+			throw cooldown_error();
 		}
 	}
 

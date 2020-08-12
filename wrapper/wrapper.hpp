@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-#include <rawaccel.hpp>
-#include <accel-error.hpp>
-
 #include "wrapper_io.hpp"
 
 using namespace rawaccel;

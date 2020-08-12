@@ -24,8 +24,8 @@ namespace rawaccel {
 		}
 
 		void verify(const accel_args& args) const {
-			if (args.limit <= 1) error("exponent must be greater than 1");
-			if (args.midpoint < 0) error("midpoint must not be negative");
+			if (args.limit <= 1) bad_arg("exponent must be greater than 1");
+			if (args.midpoint < 0) bad_arg("midpoint must not be negative");
 		}
 	};
 
