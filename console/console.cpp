@@ -10,12 +10,10 @@ int main(int argc, char** argv) {
 	try {
 		ra::write(ra::parse(argc, argv));
 	}
-	catch (std::domain_error e) {
-		std::cerr << e.what() << '\n';
-		return ra::INVALID_ARGUMENT;
+	catch (const std::system_error& e) {
+		std::cerr << e.what() << " (" << e.code() << ")\n";
 	}
-	catch (std::system_error e) {
-		std::cerr << "Error: " << e.what() << " (" << e.code() << ")\n";
-		return ra::SYSTEM_ERROR;
+	catch (const std::exception& e) {
+		std::cerr << e.what() << '\n';
 	}
 }

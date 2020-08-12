@@ -22,7 +22,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-noaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-power.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-sigmoid.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)accel-error.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-error.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-io.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)tagged-union-single.h" />
