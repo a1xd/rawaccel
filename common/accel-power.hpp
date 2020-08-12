@@ -33,8 +33,8 @@ namespace rawaccel {
 		}
 
 		void verify(const accel_args& args) const {
-			if (args.power_scale <= 0) error("scale must be positive");
-			if (args.exponent <= 0) error("exponent must be greater than 0");
+			if (args.power_scale <= 0) bad_arg("scale must be positive");
+			if (args.exponent <= 0) bad_arg("exponent must be greater than 0");
 		}
 	};
 

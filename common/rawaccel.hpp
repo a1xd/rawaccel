@@ -16,6 +16,8 @@
 
 namespace rawaccel {
 
+    using milliseconds = double;
+
     /// <summary> Struct to hold vector rotation details. </summary>
     struct rotator {
 
@@ -184,8 +186,8 @@ namespace rawaccel {
         velocity_gain_cap gain_cap = velocity_gain_cap();
 
         accel_function(const accel_fn_args& args) {
-            if (args.time_min <= 0) error("min time must be positive");
-            if (args.acc_args.offset < 0) error("offset must not be negative");
+            if (args.time_min <= 0) bad_arg("min time must be positive");
+            if (args.acc_args.offset < 0) bad_arg("offset must not be negative");
 
             accel.tag = args.accel_mode;
             accel.visit([&](auto& impl) { impl = { args.acc_args }; });

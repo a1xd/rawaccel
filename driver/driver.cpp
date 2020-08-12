@@ -16,6 +16,7 @@ using milliseconds = double;
 struct {
     milliseconds tick_interval = 0; // set in DriverEntry
     ra::mouse_modifier modifier;
+    counter_t last_write = 0;
 } global;
 
 VOID
@@ -70,9 +71,9 @@ Arguments:
             };
 
             if (global.modifier.apply_accel && local_apply_accel) {
-                auto now = KeQueryPerformanceCounter(NULL).QuadPart;
-                auto ticks = now - devExt->counter.QuadPart;
-                devExt->counter.QuadPart = now;
+                counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+                counter_t ticks = now - devExt->counter;
+                devExt->counter = now;
 
                 milliseconds time = ticks * global.tick_interval;
                 if (time < global.modifier.accel_fn.time_min) {
@@ -154,6 +155,19 @@ Return Value:
     DebugPrint(("Ioctl received into filter control object.\n"));
 
     if (InputBufferLength == sizeof(ra::mouse_modifier)) {
+        constexpr milliseconds WRITE_COOLDOWN_TIME = 1000;
+
+        counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+        counter_t ticks = now - global.last_write;
+        milliseconds time = ticks * global.tick_interval;
+
+        if (global.last_write > 0 && time < WRITE_COOLDOWN_TIME) {
+            DebugPrint(("RA write on cooldown\n"));
+            // status maps to win32 error code 170: ERROR_BUSY 
+            WdfRequestComplete(Request, STATUS_ENCOUNTERED_WRITE_IN_PROGRESS);
+            return;
+        }
+
         status = WdfRequestRetrieveInputBuffer(
             Request,
             sizeof(ra::mouse_modifier),
@@ -169,6 +183,7 @@ Return Value:
         }
 
         global.modifier = *reinterpret_cast<ra::mouse_modifier*>(buffer);
+        global.last_write = now;
 
         WdfRequestComplete(Request, STATUS_SUCCESS);
     }
@@ -550,7 +565,7 @@ Routine Description:
             break;
         }
         
-        devExt->counter = KeQueryPerformanceCounter(NULL);
+        devExt->counter = 0;
         devExt->carry = {};
         devExt->UpperConnectData = *connectData;
 

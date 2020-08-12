@@ -15,8 +15,10 @@
 #define NTDEVICE_NAME         L"\\Device\\rawaccel"
 #define SYMBOLIC_NAME_STRING  L"\\DosDevices\\rawaccel"
 
+using counter_t = long long;
+
 typedef struct _DEVICE_EXTENSION {
-    LARGE_INTEGER counter;
+    counter_t counter;
     vec2d carry;
     CONNECT_DATA UpperConnectData;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;

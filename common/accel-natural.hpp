@@ -24,7 +24,7 @@ namespace rawaccel {
 		}
 
 		void verify(const accel_args& args) const {
-			if (args.limit <= 1) error("limit must be greater than 1");
+			if (args.limit <= 1) bad_arg("limit must be greater than 1");
 		}
 	};
 
