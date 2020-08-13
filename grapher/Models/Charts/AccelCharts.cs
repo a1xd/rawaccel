@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,27 @@ namespace grapher
 {
     public class AccelCharts
     {
+        public struct ChartPoint
+        {
+            public double X;
+            public double Y;
+        }
+
+        public struct EstimatedPoints
+        {
+            public ChartPoint CombinedVelocity;
+            public ChartPoint CombinedSensitivity;
+            public ChartPoint CombinedGain;
+
+            public ChartPoint XVelocity;
+            public ChartPoint XSensitivity;
+            public ChartPoint XGain;
+
+            public ChartPoint YVelocity;
+            public ChartPoint YSensitivity;
+            public ChartPoint YGain;
+        }
+
         public const int ChartSeparationVertical = 10;
 
         /// <summary> Needed to show full contents in form. Unsure why. </summary>
@@ -31,6 +53,22 @@ namespace grapher
             GainChart = gainChart;
             EnableVelocityAndGain = enableVelocityAndGain;
             CheckBoxesXY = checkBoxesXY;
+            AccelData = new AccelData();
+
+            Estimated = new EstimatedPoints
+            {
+                CombinedVelocity = new ChartPoint { X = 0, Y = 0 },
+                CombinedSensitivity = new ChartPoint { X = 0, Y = 0 },
+                CombinedGain = new ChartPoint { X = 0, Y = 0 },
+
+                XVelocity = new ChartPoint { X = 0, Y = 0 },
+                XSensitivity = new ChartPoint { X = 0, Y = 0 },
+                XGain = new ChartPoint { X = 0, Y = 0 },
+
+                YVelocity = new ChartPoint { X = 0, Y = 0 },
+                YSensitivity = new ChartPoint { X = 0, Y = 0 },
+                YGain = new ChartPoint { X = 0, Y = 0 },
+            };
 
             SensitivityChart.SetTop(0);
             VelocityChart.SetHeight(SensitivityChart.Height);
@@ -45,6 +83,7 @@ namespace grapher
             EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableCheckStateChange);
 
             HideVelocityAndGain();
+            Combined = false;
             ShowCombined();
         }
 
@@ -58,25 +97,37 @@ namespace grapher
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
 
+        public AccelData AccelData { get; }
+
+        private EstimatedPoints Estimated;
+
         private ICollection<CheckBox> CheckBoxesXY { get; }
 
         private bool Combined { get; set; }
 
         private int FormBorderHeight { get; }
 
-        public void Bind(AccelData data)
+        public void MakeDots(int x, int y)
+        {
+            AccelData.CalculateDots(x, y, ref Estimated);
+            SensitivityChart.DrawPoints(Estimated.CombinedSensitivity, Estimated.XSensitivity, Estimated.YSensitivity);
+            VelocityChart.DrawPoints(Estimated.CombinedVelocity, Estimated.XVelocity, Estimated.YVelocity);
+            GainChart.DrawPoints(Estimated.CombinedGain, Estimated.XGain, Estimated.YGain);
+        }
+
+        public void Bind()
         {
             if (Combined)
             {
-                SensitivityChart.Bind(data.Combined.AccelPoints);
-                VelocityChart.Bind(data.Combined.VelocityPoints);
-                GainChart.Bind(data.Combined.GainPoints);
+                SensitivityChart.Bind(AccelData.Combined.AccelPoints);
+                VelocityChart.Bind(AccelData.Combined.VelocityPoints);
+                GainChart.Bind(AccelData.Combined.GainPoints);
             }
             else
             {
-                SensitivityChart.BindXY(data.X.AccelPoints, data.Y.AccelPoints);
-                VelocityChart.BindXY(data.X.VelocityPoints, data.Y.VelocityPoints);
-                GainChart.BindXY(data.X.GainPoints, data.Y.GainPoints);
+                SensitivityChart.BindXY(AccelData.X.AccelPoints, AccelData.Y.AccelPoints);
+                VelocityChart.BindXY(AccelData.X.VelocityPoints, AccelData.Y.VelocityPoints);
+                GainChart.BindXY(AccelData.X.GainPoints, AccelData.Y.GainPoints);
             }
         }
 
@@ -132,11 +183,13 @@ namespace grapher
         {
             if (Combined)
             {
+                Combined = false;
+
                 SensitivityChart.SetSeparate();
                 VelocityChart.SetSeparate();
                 GainChart.SetSeparate();
                 UpdateFormWidth();
-                Combined = false;
+                Bind();
             }
         }
 
@@ -144,11 +197,13 @@ namespace grapher
         {
             if (!Combined)
             {
+                Combined = true;
+
                 SensitivityChart.SetCombined();
                 VelocityChart.SetCombined();
                 GainChart.SetCombined();
                 UpdateFormWidth();
-                Combined = true;
+                Bind();
             }
         }
 

@@ -27,5 +27,17 @@ namespace grapher.Models.Calculations
             VelocityPoints.Clear();
             GainPoints.Clear();
         }
+
+        public (double, double, double) FindInValuesFromOut(double outVelocityValue)
+        {
+            var velIdx = ~VelocityPoints.Values.ToList().BinarySearch(outVelocityValue);
+
+            if (velIdx < 0)
+            {
+                velIdx = ~velIdx;
+            }
+
+            return (VelocityPoints.ElementAt(velIdx).Key, AccelPoints.ElementAt(velIdx).Value, GainPoints.ElementAt(velIdx).Value);
+        }
     }
 }

@@ -144,7 +144,8 @@ namespace grapher
                 acceleration,
                 limitOrExponent,
                 midpoint,
-                writeButton);
+                writeButton,
+                MouseLabel);
         }
 
         #endregion Constructor
@@ -156,6 +157,16 @@ namespace grapher
         #endregion Properties
 
         #region Methods
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x00ff)
+            {
+                AccelGUI.MouseWatcher.ReadMouseMove(m);
+            }
+
+            base.WndProc(ref m);
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {

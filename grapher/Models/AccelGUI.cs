@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Mouse;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 namespace grapher
 {
     public class AccelGUI
-    {        
+    {
 
         #region constructors
 
@@ -28,7 +29,8 @@ namespace grapher
             Option acceleration,
             Option limtOrExp,
             Option midpoint,
-            Button writeButton)
+            Button writeButton,
+            Label mouseMoveLabel)
         {
             AccelForm = accelForm;
             AccelCharts = accelCharts;
@@ -43,10 +45,11 @@ namespace grapher
             LimitOrExponent = limtOrExp;
             Midpoint = midpoint;
             WriteButton = writeButton;
-            AccelData = new AccelData();
 
             ManagedAcceleration.ReadFromDriver();
             UpdateGraph();
+
+            MouseWatcher = new MouseWatcher(AccelForm, mouseMoveLabel, AccelCharts);
         }
 
         #endregion constructors
@@ -79,7 +82,7 @@ namespace grapher
 
         public Button WriteButton { get; }
 
-        public AccelData AccelData { get; }
+        public MouseWatcher MouseWatcher { get; }
 
         #endregion properties
 
@@ -88,8 +91,8 @@ namespace grapher
 
         public void UpdateGraph()
         {
-            AccelCalculator.Calculate(AccelData, ManagedAcceleration, Sensitivity.Fields.X);
-            AccelCharts.Bind(AccelData);
+            AccelCalculator.Calculate(AccelCharts.AccelData, ManagedAcceleration, Sensitivity.Fields.X, Sensitivity.Fields.Y);
+            AccelCharts.Bind();
         }
 
         #endregion methods

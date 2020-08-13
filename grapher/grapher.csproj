@@ -52,6 +52,7 @@
     <Compile Include="Models\Calculations\AccelData.cs" />
     <Compile Include="Models\Charts\AccelCharts.cs" />
     <Compile Include="Models\AccelGUI.cs" />
+    <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Options\AccelOptions.cs" />
     <Compile Include="Models\Options\CapOptions.cs" />
     <Compile Include="Models\Charts\ChartXY.cs" />

@@ -23,13 +23,13 @@ namespace grapher.Models.Calculations
         public static ReadOnlyCollection<MagnitudeData> MagnitudesX = GetMagnitudesX();
         public static ReadOnlyCollection<MagnitudeData> MagnitudesY = GetMagnitudesY();
 
-        public static void Calculate(AccelData data, ManagedAccel accel, double starter)
+        public static void Calculate(AccelData data, ManagedAccel accel, double starterX, double starterY)
         {
             data.Clear();
 
-            Calculate(data.Combined, accel, starter, MagnitudesCombined);
-            Calculate(data.X, accel, starter, MagnitudesX);
-            Calculate(data.Y, accel, starter, MagnitudesY);
+            Calculate(data.Combined, accel, starterX, MagnitudesCombined);
+            Calculate(data.X, accel, starterY, MagnitudesX);
+            Calculate(data.Y, accel, starterY, MagnitudesY);
         }
 
         public static void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
@@ -37,7 +37,7 @@ namespace grapher.Models.Calculations
             double lastInputMagnitude = 0;
             double lastOutputMagnitude = 0;
 
-            foreach (var magnitudeDatum in MagnitudesCombined)
+            foreach (var magnitudeDatum in magnitudeData)
             {
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, 1);
 
