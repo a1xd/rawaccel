@@ -9,14 +9,26 @@ namespace grapher
 {
     public class FieldXY
     {
+        public const int DefaultSeparation = 6;
+
+        public const string ShortenedFormatString = "#.###";
+
         public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData)
         {
             XField = new Field(xBox, containingForm, defaultData);
             YField = new Field(yBox, containingForm, defaultData);
+            YField.FormatString = ShortenedFormatString;
             LockCheckBox = lockCheckBox;
             LockCheckBox.CheckedChanged += new System.EventHandler(CheckChanged);
+
+            XField.Box.Width = (YField.Box.Left + YField.Box.Width - XField.Box.Left - DefaultSeparation) / 2;
+            YField.Box.Width = XField.Box.Width;
+
             DefaultWidthX = XField.Box.Width;
             DefaultWidthY = YField.Box.Width;
+
+            YField.Box.Left = XField.Box.Left + XField.Box.Width + DefaultSeparation;
+
             CombinedWidth = DefaultWidthX + DefaultWidthY + YField.Box.Left - (XField.Box.Left + DefaultWidthX);
             SetCombined();
         }
@@ -72,6 +84,7 @@ namespace grapher
             YField.SetToUnavailable();
             YField.Box.Hide();
             XField.Box.Width = CombinedWidth;
+            XField.FormatString = Field.DefaultFormatString;
         }
 
         public void SetSeparate()
@@ -80,6 +93,8 @@ namespace grapher
 
             XField.Box.Width = DefaultWidthX;
             YField.Box.Width = DefaultWidthY;
+
+            XField.FormatString = ShortenedFormatString;
 
             if (XField.State == Field.FieldState.Default)
             {
