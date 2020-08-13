@@ -22,13 +22,15 @@ namespace grapher
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            ToolStripMenuItem enableVelocityAndGain)
+            ToolStripMenuItem enableVelocityAndGain,
+            ICollection<CheckBox> checkBoxesXY)
         {
             ContaingForm = form;
             SensitivityChart = sensitivityChart;
             VelocityChart = velocityChart;
             GainChart = gainChart;
             EnableVelocityAndGain = enableVelocityAndGain;
+            CheckBoxesXY = checkBoxesXY;
 
             SensitivityChart.SetTop(0);
             VelocityChart.SetHeight(SensitivityChart.Height);
@@ -56,15 +58,38 @@ namespace grapher
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
 
+        private ICollection<CheckBox> CheckBoxesXY { get; }
+
         private bool Combined { get; set; }
 
         private int FormBorderHeight { get; }
 
         public void Bind(AccelData data)
         {
-            SensitivityChart.Bind(data.OrderedAccelPoints);
-            VelocityChart.Bind(data.OrderedVelocityPoints);
-            GainChart.Bind(data.OrderedGainPoints);
+            if (Combined)
+            {
+                SensitivityChart.Bind(data.Combined.AccelPoints);
+                VelocityChart.Bind(data.Combined.VelocityPoints);
+                GainChart.Bind(data.Combined.GainPoints);
+            }
+            else
+            {
+                SensitivityChart.BindXY(data.X.AccelPoints, data.Y.AccelPoints);
+                VelocityChart.BindXY(data.X.VelocityPoints, data.Y.VelocityPoints);
+                GainChart.BindXY(data.X.GainPoints, data.Y.GainPoints);
+            }
+        }
+
+        public void RefreshXY()
+        {
+            if (CheckBoxesXY.All(box => box.Checked))
+            {
+                ShowCombined();
+            }
+            else
+            {
+                ShowXandYSeparate();
+            }
         }
 
         private void OnEnableClick(object sender, EventArgs e)
@@ -105,20 +130,26 @@ namespace grapher
 
         private void ShowXandYSeparate()
         {
-            SensitivityChart.SetSeparate();
-            VelocityChart.SetSeparate();
-            GainChart.SetSeparate();
-            UpdateFormWidth();
-            Combined = false;
+            if (Combined)
+            {
+                SensitivityChart.SetSeparate();
+                VelocityChart.SetSeparate();
+                GainChart.SetSeparate();
+                UpdateFormWidth();
+                Combined = false;
+            }
         }
 
         private void ShowCombined()
         {
-            SensitivityChart.SetCombined();
-            VelocityChart.SetCombined();
-            GainChart.SetCombined();
-            UpdateFormWidth();
-            Combined = true;
+            if (!Combined)
+            {
+                SensitivityChart.SetCombined();
+                VelocityChart.SetCombined();
+                GainChart.SetCombined();
+                UpdateFormWidth();
+                Combined = true;
+            }
         }
 
         private void UpdateFormWidth()

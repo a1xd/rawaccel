@@ -89,10 +89,19 @@ namespace grapher
 
             Marshal.FreeHGlobal(args_ptr);
 
-            var sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity");
+            var accelCharts = new AccelCharts(
+                                this,
+                                new ChartXY(AccelerationChart, AccelerationChartY),
+                                new ChartXY(VelocityChart, VelocityChartY),
+                                new ChartXY(GainChart, GainChartY),
+                                showVelocityGainToolStripMenuItem,
+                                new CheckBox[] { sensXYLock, weightXYLock, capXYLock });
+
+
+            var sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity", accelCharts);
             var rotation = new Option(rotationBox, this, 0, rotationLabel, "Rotation");
-            var weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight");
-            var cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap");
+            var weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight", accelCharts);
+            var cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap", accelCharts);
             var offset = new Option(offsetBox, this, 0, offsetLabel, "Offset");
 
             // The name and layout of these options is handled by AccelerationOptions object.
@@ -124,12 +133,7 @@ namespace grapher
 
             AccelGUI = new AccelGUI(
                 this,
-                new AccelCharts(
-                    this,
-                    new ChartXY(AccelerationChart, AccelerationChartY),
-                    new ChartXY(VelocityChart, VelocityChartY),
-                    new ChartXY(GainChart, GainChartY),
-                    showVelocityGainToolStripMenuItem),
+                accelCharts,
                 managedAcceleration,
                 accelerationOptions,
                 sensitivity,

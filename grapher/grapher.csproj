@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Calculations\AccelCalculator.cs" />
+    <Compile Include="Models\Calculations\AccelChartData.cs" />
     <Compile Include="Models\Calculations\AccelData.cs" />
     <Compile Include="Models\Charts\AccelCharts.cs" />
     <Compile Include="Models\AccelGUI.cs" />

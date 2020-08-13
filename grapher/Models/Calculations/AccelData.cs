@@ -10,23 +10,22 @@ namespace grapher.Models.Calculations
     {
         public AccelData()
         {
-            OrderedAccelPoints = new SortedDictionary<double, double>();
-            OrderedVelocityPoints = new SortedDictionary<double, double>();
-            OrderedGainPoints = new SortedDictionary<double, double>();
+            Combined = new AccelChartData();
+            X = new AccelChartData();
+            Y = new AccelChartData();
         }
 
-        public SortedDictionary<double, double> OrderedAccelPoints { get; }
+        public AccelChartData Combined { get; }
 
-        public SortedDictionary<double, double> OrderedVelocityPoints { get; }
+        public AccelChartData X { get; }
 
-        public SortedDictionary<double, double> OrderedGainPoints { get; }
+        public AccelChartData Y { get; }
 
         public void Clear()
         {
-            OrderedAccelPoints.Clear();
-            OrderedVelocityPoints.Clear();
-            OrderedGainPoints.Clear();
+            Combined.Clear();
+            X.Clear();
+            Y.Clear();
         }
-
     }
 }

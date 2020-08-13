@@ -9,6 +9,9 @@ namespace grapher.Models.Calculations
 {
     public static class AccelCalculator
     {
+        public const int MaxCombined = 100;
+        public const int MaxXY = 150;
+
         public struct MagnitudeData
         {
             public double magnitude;
@@ -16,51 +19,59 @@ namespace grapher.Models.Calculations
             public int y;
         }
 
-        public static ReadOnlyCollection<MagnitudeData> Magnitudes = GetMagnitudes();
+        public static ReadOnlyCollection<MagnitudeData> MagnitudesCombined = GetMagnitudes();
+        public static ReadOnlyCollection<MagnitudeData> MagnitudesX = GetMagnitudesX();
+        public static ReadOnlyCollection<MagnitudeData> MagnitudesY = GetMagnitudesY();
 
         public static void Calculate(AccelData data, ManagedAccel accel, double starter)
         {
             data.Clear();
 
+            Calculate(data.Combined, accel, starter, MagnitudesCombined);
+            Calculate(data.X, accel, starter, MagnitudesX);
+            Calculate(data.Y, accel, starter, MagnitudesY);
+        }
+
+        public static void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
+        {
             double lastInputMagnitude = 0;
             double lastOutputMagnitude = 0;
 
-            foreach (var magnitudeData in Magnitudes)
+            foreach (var magnitudeDatum in MagnitudesCombined)
             {
-                var output = accel.Accelerate(magnitudeData.x, magnitudeData.y, 1);
+                var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, 1);
 
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
-                var ratio = magnitudeData.magnitude > 0 ? outMagnitude / magnitudeData.magnitude : starter;
+                var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
 
-                var inDiff = magnitudeData.magnitude - lastInputMagnitude;
+                var inDiff = magnitudeDatum.magnitude - lastInputMagnitude;
                 var outDiff = outMagnitude - lastOutputMagnitude;
                 var slope = inDiff > 0 ? outDiff / inDiff : starter;
 
-                if (!data.OrderedAccelPoints.ContainsKey(magnitudeData.magnitude))
+                if (!data.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
-                    data.OrderedAccelPoints.Add(magnitudeData.magnitude, ratio);
+                    data.AccelPoints.Add(magnitudeDatum.magnitude, ratio);
                 }
 
-                if (!data.OrderedVelocityPoints.ContainsKey(magnitudeData.magnitude))
+                if (!data.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
-                    data.OrderedVelocityPoints.Add(magnitudeData.magnitude, outMagnitude);
+                    data.VelocityPoints.Add(magnitudeDatum.magnitude, outMagnitude);
                 }
 
-                if (!data.OrderedGainPoints.ContainsKey(magnitudeData.magnitude))
+                if (!data.GainPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
-                    data.OrderedGainPoints.Add(magnitudeData.magnitude, slope);
+                    data.GainPoints.Add(magnitudeDatum.magnitude, slope);
                 }
 
-                lastInputMagnitude = magnitudeData.magnitude;
+                lastInputMagnitude = magnitudeDatum.magnitude;
                 lastOutputMagnitude = outMagnitude;
             }
-
         }
 
         public static ReadOnlyCollection<MagnitudeData> GetMagnitudes()
         {
             var magnitudes = new List<MagnitudeData>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < MaxCombined; i++)
             {
                 for (int j = 0; j <= i; j++)
                 {
@@ -73,6 +84,38 @@ namespace grapher.Models.Calculations
             }
 
             magnitudes.Sort((m1, m2) => m1.magnitude.CompareTo(m2.magnitude));
+
+            return magnitudes.AsReadOnly();
+        }
+
+        public static ReadOnlyCollection<MagnitudeData> GetMagnitudesX()
+        {
+            var magnitudes = new List<MagnitudeData>();
+
+            for (int i = 0; i < MaxXY; i++)
+            {
+                MagnitudeData magnitudeData;
+                magnitudeData.magnitude = i;
+                magnitudeData.x = i;
+                magnitudeData.y = 0;
+                magnitudes.Add(magnitudeData);
+            }
+
+            return magnitudes.AsReadOnly();
+        }
+
+        public static ReadOnlyCollection<MagnitudeData> GetMagnitudesY()
+        {
+            var magnitudes = new List<MagnitudeData>();
+
+            for (int i = 0; i < MaxXY; i++)
+            {
+                MagnitudeData magnitudeData;
+                magnitudeData.magnitude = i;
+                magnitudeData.x = 0;
+                magnitudeData.y = i;
+                magnitudes.Add(magnitudeData);
+            }
 
             return magnitudes.AsReadOnly();
         }

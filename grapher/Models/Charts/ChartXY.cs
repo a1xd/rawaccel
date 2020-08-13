@@ -95,6 +95,12 @@ namespace grapher
             ChartX.Series[0].Points.DataBindXY(data.Keys, data.Values);
         }
 
+        public void BindXY(IDictionary dataX, IDictionary dataY)
+        {
+            ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
+            ChartY.Series[0].Points.DataBindXY(dataY.Keys, dataY.Values);
+        }
+
         public void SetCombined()
         {
             if (!Combined)

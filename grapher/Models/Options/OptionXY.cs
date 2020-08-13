@@ -21,8 +21,9 @@ namespace grapher
             CheckBox lockCheckBox,
             Form containingForm,
             double defaultData,
-            Label label)
-            : this(new FieldXY(xBox, yBox, lockCheckBox, containingForm, defaultData), label)
+            Label label,
+            AccelCharts accelCharts)
+            : this(new FieldXY(xBox, yBox, lockCheckBox, containingForm, defaultData, accelCharts), label)
         {
         }
 
@@ -33,14 +34,16 @@ namespace grapher
             Form containingForm,
             double defaultData,
             Label label,
-            string startingName):
+            string startingName,
+            AccelCharts accelCharts):
             this(
                 xBox,
                 yBox,
                 lockCheckBox,
                 containingForm,
                 defaultData,
-                label)
+                label,
+                accelCharts)
         {
             SetName(startingName);
         }
