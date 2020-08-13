@@ -12,7 +12,7 @@ namespace grapher
     {
         #region Constants
 
-        public const string DefaultFormatString = "#.#########";
+        public const string DefaultFormatString = "0.#########";
 
         #endregion Constants
 
@@ -173,7 +173,6 @@ namespace grapher
             if (State == FieldState.Typing)
             {
                 TextToData();
-                SetToEntered();
             }
         }
 
@@ -185,8 +184,6 @@ namespace grapher
 
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-
-                SetToEntered();
             }
             else if (e.KeyCode == Keys.Escape)
             {
@@ -207,6 +204,15 @@ namespace grapher
             }
 
             Box.Text = DecimalString(Data);
+            
+            if (string.Equals(Box.Text, DefaultText))
+            {
+                SetToDefault();
+            }
+            else
+            {
+                SetToEntered();
+            }
         }
 
         private string DecimalString(double value)

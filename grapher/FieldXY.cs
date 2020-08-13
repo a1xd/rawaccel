@@ -9,9 +9,9 @@ namespace grapher
 {
     public class FieldXY
     {
-        public const int DefaultSeparation = 6;
+        public const int DefaultSeparation = 4;
 
-        public const string ShortenedFormatString = "#.###";
+        public const string ShortenedFormatString = "0.###";
 
         public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData)
         {
