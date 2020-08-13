@@ -15,7 +15,10 @@ namespace grapher
             YField = new Field(yBox, containingForm, defaultData);
             LockCheckBox = lockCheckBox;
             LockCheckBox.CheckedChanged += new System.EventHandler(CheckChanged);
-            SetLocked();
+            DefaultWidthX = XField.Box.Width;
+            DefaultWidthY = YField.Box.Width;
+            CombinedWidth = DefaultWidthX + DefaultWidthY + YField.Box.Left - (XField.Box.Left + DefaultWidthX);
+            SetCombined();
         }
         public double X
         {
@@ -26,7 +29,7 @@ namespace grapher
         {
             get
             {
-                if (Locked)
+                if (Combined)
                 {
                     return X;
                 }
@@ -43,29 +46,41 @@ namespace grapher
 
         public Field YField { get; }
 
-        private bool Locked { get; set; }
+        private bool Combined { get; set; }
+
+        private int DefaultWidthX { get; }
+
+        private int DefaultWidthY { get; }
+
+        private int CombinedWidth { get; }
 
         private void CheckChanged(object sender, EventArgs e)
         {
             if (LockCheckBox.CheckState == CheckState.Checked)
             {
-                SetLocked();
+                SetCombined();
             }
             else
             {
-                SetUnlocked();
+                SetSeparate();
             }
         }
 
-        private void SetLocked()
+        public void SetCombined()
         {
-            Locked = true;
+            Combined = true;
             YField.SetToUnavailable();
+            YField.Box.Hide();
+            XField.Box.Width = CombinedWidth;
         }
 
-        private void SetUnlocked()
+        public void SetSeparate()
         {
-            Locked = false;
+            Combined = false;
+
+            XField.Box.Width = DefaultWidthX;
+            YField.Box.Width = DefaultWidthY;
+
             if (XField.State == Field.FieldState.Default)
             {
                 YField.SetToDefault();
@@ -74,6 +89,27 @@ namespace grapher
             {
                 YField.SetToEntered(XField.Data);
             }
+
+            if (XField.Box.Visible)
+            {
+                YField.Box.Show();
+            }
+        }
+
+        public void Show()
+        {
+            XField.Box.Show();
+
+            if (!Combined)
+            {
+                YField.Box.Show();
+            }
+        }
+
+        public void Hide()
+        {
+            XField.Box.Hide();
+            YField.Box.Hide();
         }
     }
 }

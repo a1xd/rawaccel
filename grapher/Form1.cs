@@ -33,6 +33,7 @@ namespace grapher
         public double exponent;
         public double midpoint;
         public double power_scale;
+        public double gain_cap;
         public vec2d weight;
     }
 
@@ -75,6 +76,7 @@ namespace grapher
             args.acc_fn_args.acc_args.power_scale = 1;
             args.acc_fn_args.acc_args.weight.x = 1;
             args.acc_fn_args.acc_args.weight.y = 1;
+            args.acc_fn_args.acc_args.gain_cap = 0;
             args.acc_fn_args.accel_mode = (int)accel_mode.natural;
             args.acc_fn_args.time_min = 0.4;
             args.acc_fn_args.cap.x = 0;
@@ -114,6 +116,12 @@ namespace grapher
                 },
                 writeButton);
 
+            var capOptions = new CapOptions(
+                sensitivityToolStripMenuItem,
+                velocityGainToolStripMenuItem,
+                cap,
+                weight);
+
             AccelGUI = new AccelGUI(
                 this,
                 new AccelCharts(
@@ -127,7 +135,7 @@ namespace grapher
                 sensitivity,
                 rotation,
                 weight,
-                cap,
+                capOptions,
                 offset,
                 acceleration,
                 limitOrExponent,
@@ -218,12 +226,13 @@ namespace grapher
                 AccelGUI.Sensitivity.Fields.Y,
                 AccelGUI.Weight.Fields.X,
                 AccelGUI.Weight.Fields.Y,
-                AccelGUI.Cap.Fields.X,
-                AccelGUI.Cap.Fields.Y,
+                AccelGUI.Cap.SensitivityCapX,
+                AccelGUI.Cap.SensitivityCapY,
                 AccelGUI.Offset.Field.Data,
                 AccelGUI.Acceleration.Field.Data,
                 AccelGUI.LimitOrExponent.Field.Data,
-                AccelGUI.Midpoint.Field.Data);
+                AccelGUI.Midpoint.Field.Data,
+                AccelGUI.Cap.VelocityGainCap);
             AccelGUI.UpdateGraph();
         }
 

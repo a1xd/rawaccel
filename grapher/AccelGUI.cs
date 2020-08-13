@@ -30,7 +30,7 @@ namespace grapher
             OptionXY sensitivity,
             Option rotation,
             OptionXY weight,
-            OptionXY cap,
+            CapOptions cap,
             Option offset,
             Option acceleration,
             Option limtOrExp,
@@ -78,7 +78,7 @@ namespace grapher
 
         public OptionXY Weight { get; }
 
-        public OptionXY Cap { get; }
+        public CapOptions Cap { get; }
 
         public Option Offset { get; }
 
@@ -149,8 +149,6 @@ namespace grapher
                 var inDiff = magnitudeData.magnitude - lastInputMagnitude;
                 var outDiff = outMagnitude - lastOutputMagnitude;
                 var slope = inDiff > 0 ? outDiff / inDiff : Sensitivity.Fields.X;
-                lastInputMagnitude = magnitudeData.magnitude;
-                lastOutputMagnitude = outMagnitude;
 
                 if (!OrderedAccelPoints.ContainsKey(magnitudeData.magnitude))
                 {
@@ -167,6 +165,8 @@ namespace grapher
                     OrderedGainPoints.Add(magnitudeData.magnitude, slope);
                 }
 
+                lastInputMagnitude = magnitudeData.magnitude;
+                lastOutputMagnitude = outMagnitude;
             }
 
             AccelCharts.SensitivityChart.Series[0].Points.DataBindXY(OrderedAccelPoints.Keys, OrderedAccelPoints.Values);

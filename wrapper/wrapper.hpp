@@ -59,7 +59,8 @@ public:
         double offset,
         double accel,
         double lim_exp,
-        double midpoint);
+        double midpoint,
+        double gain_cap);
 
 
     void WriteToDriver();
