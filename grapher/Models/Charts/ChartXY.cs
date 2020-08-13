@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -88,6 +89,11 @@ namespace grapher
         }
 
         public bool Combined { get; private set; }
+
+        public void Bind(IDictionary data)
+        {
+            ChartX.Series[0].Points.DataBindXY(data.Keys, data.Values);
+        }
 
         public void SetCombined()
         {

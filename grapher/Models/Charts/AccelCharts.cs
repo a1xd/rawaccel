@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Calculations;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -55,7 +56,16 @@ namespace grapher
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
 
+        private bool Combined { get; set; }
+
         private int FormBorderHeight { get; }
+
+        public void Bind(AccelData data)
+        {
+            SensitivityChart.Bind(data.OrderedAccelPoints);
+            VelocityChart.Bind(data.OrderedVelocityPoints);
+            GainChart.Bind(data.OrderedGainPoints);
+        }
 
         private void OnEnableClick(object sender, EventArgs e)
         {
@@ -99,6 +109,7 @@ namespace grapher
             VelocityChart.SetSeparate();
             GainChart.SetSeparate();
             UpdateFormWidth();
+            Combined = false;
         }
 
         private void ShowCombined()
@@ -107,6 +118,7 @@ namespace grapher
             VelocityChart.SetCombined();
             GainChart.SetCombined();
             UpdateFormWidth();
+            Combined = true;
         }
 
         private void UpdateFormWidth()

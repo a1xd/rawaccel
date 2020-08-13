@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Calculations;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,14 +12,6 @@ namespace grapher
 {
     public class AccelGUI
     {        
-        public struct MagnitudeData
-        {
-            public double magnitude;
-            public int x;
-            public int y;
-        }
-
-        public static ReadOnlyCollection<MagnitudeData> Magnitudes = GetMagnitudes();
 
         #region constructors
 
@@ -50,11 +43,7 @@ namespace grapher
             LimitOrExponent = limtOrExp;
             Midpoint = midpoint;
             WriteButton = writeButton;
-
-            OrderedAccelPoints = new SortedDictionary<double, double>();
-            OrderedVelocityPoints = new SortedDictionary<double, double>();
-            OrderedGainPoints = new SortedDictionary<double, double>();
-
+            AccelData = new AccelData();
 
             ManagedAcceleration.ReadFromDriver();
             UpdateGraph();
@@ -90,88 +79,17 @@ namespace grapher
 
         public Button WriteButton { get; }
 
-        public SortedDictionary<double, double> OrderedAccelPoints { get; }
-
-        public SortedDictionary<double, double> OrderedVelocityPoints { get; }
-
-        public SortedDictionary<double, double> OrderedGainPoints { get; }
+        public AccelData AccelData { get; }
 
         #endregion properties
 
         #region methods
 
-        public static ReadOnlyCollection<MagnitudeData> GetMagnitudes()
-        {
-            var magnitudes = new List<MagnitudeData>();
-            for (int i = 0; i < 100; i++)
-            {
-                for (int j = 0; j <= i; j++)
-                {
-                    MagnitudeData magnitudeData;
-                    magnitudeData.magnitude = Magnitude(i, j);
-                    magnitudeData.x = i;
-                    magnitudeData.y = j;
-                    magnitudes.Add(magnitudeData);
-                }
-            }
-
-            magnitudes.Sort((m1, m2) => m1.magnitude.CompareTo(m2.magnitude));
-
-            return magnitudes.AsReadOnly();
-        }
-
-        public static double Magnitude(int x, int y)
-        {
-            return Math.Sqrt(x * x + y * y);
-        }
-
-        public static double Magnitude(double x, double y)
-        {
-            return Math.Sqrt(x * x + y * y);
-        }
 
         public void UpdateGraph()
         {
-            OrderedAccelPoints.Clear();
-            OrderedVelocityPoints.Clear();
-            OrderedGainPoints.Clear();
-
-            double lastInputMagnitude = 0;
-            double lastOutputMagnitude = 0;
-
-            foreach (var magnitudeData in Magnitudes)
-            {
-                var output = ManagedAcceleration.Accelerate(magnitudeData.x, magnitudeData.y, 1);
-
-                var outMagnitude = Magnitude(output.Item1, output.Item2);
-                var ratio = magnitudeData.magnitude > 0 ? outMagnitude / magnitudeData.magnitude : Sensitivity.Fields.X;
-
-                var inDiff = magnitudeData.magnitude - lastInputMagnitude;
-                var outDiff = outMagnitude - lastOutputMagnitude;
-                var slope = inDiff > 0 ? outDiff / inDiff : Sensitivity.Fields.X;
-
-                if (!OrderedAccelPoints.ContainsKey(magnitudeData.magnitude))
-                {
-                    OrderedAccelPoints.Add(magnitudeData.magnitude, ratio);
-                }
-
-                if (!OrderedVelocityPoints.ContainsKey(magnitudeData.magnitude))
-                {
-                    OrderedVelocityPoints.Add(magnitudeData.magnitude, outMagnitude);
-                }
-
-                if (!OrderedGainPoints.ContainsKey(magnitudeData.magnitude))
-                {
-                    OrderedGainPoints.Add(magnitudeData.magnitude, slope);
-                }
-
-                lastInputMagnitude = magnitudeData.magnitude;
-                lastOutputMagnitude = outMagnitude;
-            }
-
-            AccelCharts.SensitivityChart.ChartX.Series[0].Points.DataBindXY(OrderedAccelPoints.Keys, OrderedAccelPoints.Values);
-            AccelCharts.VelocityChart.ChartX.Series[0].Points.DataBindXY(OrderedVelocityPoints.Keys, OrderedVelocityPoints.Values);
-            AccelCharts.GainChart.ChartX.Series[0].Points.DataBindXY(OrderedGainPoints.Keys, OrderedGainPoints.Values);
+            AccelCalculator.Calculate(AccelData, ManagedAcceleration, Sensitivity.Fields.X);
+            AccelCharts.Bind(AccelData);
         }
 
         #endregion methods
