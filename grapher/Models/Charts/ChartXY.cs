@@ -1,4 +1,6 @@
-﻿using System;
+﻿using grapher.Models.Charts;
+using grapher.Models.Mouse;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -80,6 +82,12 @@ namespace grapher
 
         public bool Combined { get; private set; }
 
+        private PointData CombinedPointData { get; set; }
+
+        private PointData XPointData { get; set; }
+
+        private PointData YPointData { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -109,26 +117,33 @@ namespace grapher
             chart.Series[1].Points.AddXY(0, 0);
         }
 
-        public static void DrawPoint(Chart chart, ChartPoint point)
+        public static void DrawPoint(Chart chart, PointData point)
         {
-            chart.Series[1].Points[0].XValue = point.X; 
-            chart.Series[1].Points[0].YValues[0] = point.Y; 
+            if (chart.Visible)
+            {
+                (var x, var y) = point.Get();
+                chart.Series[1].Points.DataBindXY(x, y);
+                chart.Update();
+            }
         }
 
-        public void DrawPoints(ChartPoint CombinedPoint, ChartPoint XPoint, ChartPoint YPoint)
+        public void SetPointBinds(PointData combined, PointData x, PointData y)
         {
-            if (Combined)
+            CombinedPointData = combined;
+            XPointData = x;
+            YPointData = y;
+        }
+
+        public void DrawPoints()
+        {
+            if(Combined)
             {
-                DrawPoint(ChartX, CombinedPoint);
+                DrawPoint(ChartX, CombinedPointData);
             }
             else
             {
-                DrawPoint(ChartX, XPoint);
-            }
-
-            if (ChartY.Visible)
-            {
-                DrawPoint(ChartY, YPoint);
+                DrawPoint(ChartX, XPointData);
+                DrawPoint(ChartY, YPointData);
             }
         }
 

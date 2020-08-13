@@ -66,6 +66,8 @@ namespace grapher.Models.Calculations
                 lastInputMagnitude = magnitudeDatum.magnitude;
                 lastOutputMagnitude = outMagnitude;
             }
+
+            data.OrderedVelocityPointsList.AddRange(data.VelocityPoints.Values.ToList());
         }
 
         public static ReadOnlyCollection<MagnitudeData> GetMagnitudes()

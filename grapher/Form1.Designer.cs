@@ -577,6 +577,7 @@ namespace grapher
             this.Name = "RawAcceleration";
             this.Text = "Raw Acceleration Graph";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.RawAcceleration_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).EndInit();

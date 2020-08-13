@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Charts;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,27 +14,6 @@ namespace grapher
 {
     public class AccelCharts
     {
-        public struct ChartPoint
-        {
-            public double X;
-            public double Y;
-        }
-
-        public struct EstimatedPoints
-        {
-            public ChartPoint CombinedVelocity;
-            public ChartPoint CombinedSensitivity;
-            public ChartPoint CombinedGain;
-
-            public ChartPoint XVelocity;
-            public ChartPoint XSensitivity;
-            public ChartPoint XGain;
-
-            public ChartPoint YVelocity;
-            public ChartPoint YSensitivity;
-            public ChartPoint YGain;
-        }
-
         public const int ChartSeparationVertical = 10;
 
         /// <summary> Needed to show full contents in form. Unsure why. </summary>
@@ -47,28 +27,21 @@ namespace grapher
             ToolStripMenuItem enableVelocityAndGain,
             ICollection<CheckBox> checkBoxesXY)
         {
+            Estimated = new EstimatedPoints();
+            EstimatedX = new EstimatedPoints();
+            EstimatedY = new EstimatedPoints();
+            AccelData = new AccelData(Estimated, EstimatedX, EstimatedY);
+
             ContaingForm = form;
             SensitivityChart = sensitivityChart;
             VelocityChart = velocityChart;
             GainChart = gainChart;
             EnableVelocityAndGain = enableVelocityAndGain;
             CheckBoxesXY = checkBoxesXY;
-            AccelData = new AccelData();
 
-            Estimated = new EstimatedPoints
-            {
-                CombinedVelocity = new ChartPoint { X = 0, Y = 0 },
-                CombinedSensitivity = new ChartPoint { X = 0, Y = 0 },
-                CombinedGain = new ChartPoint { X = 0, Y = 0 },
-
-                XVelocity = new ChartPoint { X = 0, Y = 0 },
-                XSensitivity = new ChartPoint { X = 0, Y = 0 },
-                XGain = new ChartPoint { X = 0, Y = 0 },
-
-                YVelocity = new ChartPoint { X = 0, Y = 0 },
-                YSensitivity = new ChartPoint { X = 0, Y = 0 },
-                YGain = new ChartPoint { X = 0, Y = 0 },
-            };
+            SensitivityChart.SetPointBinds(Estimated.Sensitivity, EstimatedX.Sensitivity, EstimatedY.Sensitivity);
+            VelocityChart.SetPointBinds(Estimated.Velocity, EstimatedX.Velocity, EstimatedY.Velocity);
+            GainChart.SetPointBinds(Estimated.Gain, EstimatedX.Gain, EstimatedY.Gain);
 
             SensitivityChart.SetTop(0);
             VelocityChart.SetHeight(SensitivityChart.Height);
@@ -99,7 +72,11 @@ namespace grapher
 
         public AccelData AccelData { get; }
 
-        private EstimatedPoints Estimated;
+        private EstimatedPoints Estimated { get; }
+
+        private EstimatedPoints EstimatedX { get; }
+
+        private EstimatedPoints EstimatedY { get; }
 
         private ICollection<CheckBox> CheckBoxesXY { get; }
 
@@ -109,10 +86,21 @@ namespace grapher
 
         public void MakeDots(int x, int y)
         {
-            AccelData.CalculateDots(x, y, ref Estimated);
-            SensitivityChart.DrawPoints(Estimated.CombinedSensitivity, Estimated.XSensitivity, Estimated.YSensitivity);
-            VelocityChart.DrawPoints(Estimated.CombinedVelocity, Estimated.XVelocity, Estimated.YVelocity);
-            GainChart.DrawPoints(Estimated.CombinedGain, Estimated.XGain, Estimated.YGain);
+            if (Combined)
+            {
+                AccelData.CalculateDots(x, y);
+            }
+            else
+            {
+                AccelData.CalculateDotsXY(x, y);
+            }
+        }
+
+        public void DrawPoints()
+        {
+            SensitivityChart.DrawPoints();
+            VelocityChart.DrawPoints();
+            GainChart.DrawPoints();
         }
 
         public void Bind()

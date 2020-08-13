@@ -193,5 +193,10 @@ namespace grapher
         }
 
         #endregion Methods
+
+        private void RawAcceleration_Paint(object sender, PaintEventArgs e)
+        {
+            AccelGUI.AccelCharts.DrawPoints();
+        }
     }
 }

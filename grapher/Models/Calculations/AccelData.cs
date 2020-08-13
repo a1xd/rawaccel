@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Charts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,18 @@ namespace grapher.Models.Calculations
     public class AccelData
     {
 
-        public AccelData()
+        public AccelData(
+            EstimatedPoints combined,
+            EstimatedPoints x,
+            EstimatedPoints y)
         {
             Combined = new AccelChartData();
             X = new AccelChartData();
             Y = new AccelChartData();
+
+            Estimated = combined;
+            EstimatedX = x;
+            EstimatedY = y;
         }
 
         public AccelChartData Combined { get; }
@@ -23,6 +31,12 @@ namespace grapher.Models.Calculations
 
         public AccelChartData Y { get; }
 
+        private EstimatedPoints Estimated { get; }
+
+        private EstimatedPoints EstimatedX { get; }
+
+        private EstimatedPoints EstimatedY { get; }
+
         public void Clear()
         {
             Combined.Clear();
@@ -30,34 +44,31 @@ namespace grapher.Models.Calculations
             Y.Clear();
         }
 
-        public void CalculateDots(int x, int y, ref EstimatedPoints estimation)
+        public void CalculateDots(int x, int y)
         {
             var magnitude = AccelCalculator.Magnitude(x, y);
 
-            estimation.CombinedVelocity.Y = magnitude;
-            estimation.XVelocity.Y = Math.Abs(x);
-            estimation.YVelocity.Y = Math.Abs(y);
-
             (var inCombVel, var combSens, var combGain) = Combined.FindInValuesFromOut(magnitude);
-            estimation.CombinedVelocity.X = inCombVel;
-            estimation.CombinedSensitivity.X = inCombVel;
-            estimation.CombinedGain.X = inCombVel;
-            estimation.CombinedSensitivity.Y = combSens;
-            estimation.CombinedGain.Y = combGain;
-
-            (var inXVel, var xSens, var xGain) = X.FindInValuesFromOut(estimation.XVelocity.Y);
-            estimation.XVelocity.X = inXVel;
-            estimation.XSensitivity.X = inXVel;
-            estimation.XGain.X = inXVel;
-            estimation.XSensitivity.Y = xSens;
-            estimation.XGain.Y = xGain;
-
-            (var inYVel, var ySens, var yGain) = Y.FindInValuesFromOut(estimation.YVelocity.Y);
-            estimation.YVelocity.X = inYVel;
-            estimation.YSensitivity.X = inYVel;
-            estimation.YGain.X = inYVel;
-            estimation.YSensitivity.Y = ySens;
-            estimation.YGain.Y = yGain;
+            Estimated.Velocity.Set(inCombVel, magnitude);
+            Estimated.Sensitivity.Set(inCombVel, combSens);
+            Estimated.Gain.Set(inCombVel, combGain);
         }
+
+        public void CalculateDotsXY(int x, int y)
+        {
+            var magnitudeX = Math.Abs(x);
+            var magnitudeY = Math.Abs(y);
+
+            (var inXVel, var xSens, var xGain) = X.FindInValuesFromOut(magnitudeX);
+            EstimatedX.Velocity.Set(inXVel, magnitudeX);
+            EstimatedX.Sensitivity.Set(inXVel, xSens);
+            EstimatedX.Gain.Set(inXVel, xGain);
+
+            (var inYVel, var ySens, var yGain) = Y.FindInValuesFromOut(magnitudeY);
+            EstimatedY.Velocity.Set(inYVel, magnitudeY);
+            EstimatedY.Sensitivity.Set(inYVel, ySens);
+            EstimatedY.Gain.Set(inYVel, yGain);
+        }
+
     }
 }

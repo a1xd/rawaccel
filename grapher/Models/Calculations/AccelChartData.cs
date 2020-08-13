@@ -13,6 +13,8 @@ namespace grapher.Models.Calculations
             AccelPoints = new SortedDictionary<double, double>();
             VelocityPoints = new SortedDictionary<double, double>();
             GainPoints = new SortedDictionary<double, double>();
+            OrderedVelocityPointsList = new List<double>();
+            OutVelocityToPoints = new Dictionary<double, (double, double, double)>();
         }
 
         public SortedDictionary<double, double> AccelPoints { get; }
@@ -21,23 +23,42 @@ namespace grapher.Models.Calculations
 
         public SortedDictionary<double, double> GainPoints { get; }
 
+        public List<double> OrderedVelocityPointsList { get; }
+
+        public Dictionary<double, (double, double, double)> OutVelocityToPoints { get; }
+
         public void Clear()
         {
             AccelPoints.Clear();
             VelocityPoints.Clear();
             GainPoints.Clear();
+            OrderedVelocityPointsList.Clear();
+            OutVelocityToPoints.Clear();
         }
 
         public (double, double, double) FindInValuesFromOut(double outVelocityValue)
         {
-            var velIdx = ~VelocityPoints.Values.ToList().BinarySearch(outVelocityValue);
-
-            if (velIdx < 0)
+            if (OutVelocityToPoints.TryGetValue(outVelocityValue, out var values))
             {
-                velIdx = ~velIdx;
+                return values;
             }
+            else
+            {
+                var velIdx = OrderedVelocityPointsList.BinarySearch(outVelocityValue);
 
-            return (VelocityPoints.ElementAt(velIdx).Key, AccelPoints.ElementAt(velIdx).Value, GainPoints.ElementAt(velIdx).Value);
+                if (velIdx < 0)
+                {
+                    velIdx = ~velIdx;
+                }
+
+                velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
+
+                values = (VelocityPoints.ElementAt(velIdx).Key, AccelPoints.ElementAt(velIdx).Value, GainPoints.ElementAt(velIdx).Value);
+
+                OutVelocityToPoints.Add(outVelocityValue, values);
+
+                return values;
+            }
         }
     }
 }
