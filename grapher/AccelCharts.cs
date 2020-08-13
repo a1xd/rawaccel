@@ -11,16 +11,16 @@ namespace grapher
 {
     public class AccelCharts
     {
-        public const int ChartSeparation = 10;
+        public const int ChartSeparationVertical = 10;
 
         /// <summary> Needed to show full contents in form. Unsure why. </summary>
         public const int FormHeightPadding = 35;
 
         public AccelCharts(
             Form form,
-            Chart sensitivityChart,
-            Chart velocityChart,
-            Chart gainChart,
+            ChartXY sensitivityChart,
+            ChartXY velocityChart,
+            ChartXY gainChart,
             ToolStripMenuItem enableVelocityAndGain)
         {
             ContaingForm = form;
@@ -29,11 +29,11 @@ namespace grapher
             GainChart = gainChart;
             EnableVelocityAndGain = enableVelocityAndGain;
 
-            SensitivityChart.Top = 0;
-            VelocityChart.Height = SensitivityChart.Height;
-            VelocityChart.Top = SensitivityChart.Height + ChartSeparation;
-            GainChart.Height = SensitivityChart.Height;
-            GainChart.Top = VelocityChart.Top + VelocityChart.Height + ChartSeparation;
+            SensitivityChart.SetTop(0);
+            VelocityChart.SetHeight(SensitivityChart.Height);
+            VelocityChart.SetTop(SensitivityChart.Height + ChartSeparationVertical);
+            GainChart.SetHeight(SensitivityChart.Height);
+            GainChart.SetTop(VelocityChart.Top + VelocityChart.Height + ChartSeparationVertical);
 
             Rectangle screenRectangle = ContaingForm.RectangleToScreen(ContaingForm.ClientRectangle);
             FormBorderHeight = screenRectangle.Top - ContaingForm.Top;
@@ -42,15 +42,16 @@ namespace grapher
             EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableCheckStateChange);
 
             HideVelocityAndGain();
+            ShowCombined();
         }
 
         public Form ContaingForm { get; }
 
-        public Chart SensitivityChart { get; }
+        public ChartXY SensitivityChart { get; }
 
-        public Chart VelocityChart { get; }
+        public ChartXY VelocityChart { get; }
 
-        public Chart GainChart { get; }
+        public ChartXY GainChart { get; }
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
 
@@ -78,9 +79,9 @@ namespace grapher
             VelocityChart.Show();
             GainChart.Show();
             ContaingForm.Height = SensitivityChart.Height + 
-                                    ChartSeparation +
+                                    ChartSeparationVertical +
                                     VelocityChart.Height +
-                                    ChartSeparation +
+                                    ChartSeparationVertical +
                                     GainChart.Height +
                                     FormBorderHeight;
         }
@@ -90,6 +91,27 @@ namespace grapher
             VelocityChart.Hide();
             GainChart.Hide();
             ContaingForm.Height = SensitivityChart.Height + FormBorderHeight;
+        }
+
+        private void ShowXandYSeparate()
+        {
+            SensitivityChart.SetSeparate();
+            VelocityChart.SetSeparate();
+            GainChart.SetSeparate();
+            UpdateFormWidth();
+        }
+
+        private void ShowCombined()
+        {
+            SensitivityChart.SetCombined();
+            VelocityChart.SetCombined();
+            GainChart.SetCombined();
+            UpdateFormWidth();
+        }
+
+        private void UpdateFormWidth()
+        {
+            ContaingForm.Width = SensitivityChart.Left + SensitivityChart.Width;
         }
     }
 }

@@ -126,9 +126,9 @@ namespace grapher
                 this,
                 new AccelCharts(
                     this,
-                    AccelerationChart,
-                    VelocityChart,
-                    GainChart,
+                    new ChartXY(AccelerationChart, AccelerationChartY),
+                    new ChartXY(VelocityChart, VelocityChartY),
+                    new ChartXY(GainChart, GainChartY),
                     showVelocityGainToolStripMenuItem),
                 managedAcceleration,
                 accelerationOptions,
@@ -141,65 +141,6 @@ namespace grapher
                 limitOrExponent,
                 midpoint,
                 writeButton);
-
-            this.AccelerationChart.ChartAreas[0].AxisX.RoundAxisValues();
-
-            this.AccelerationChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-
-            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
-            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
-
-            this.AccelerationChart.ChartAreas[0].CursorY.Interval = 0.001;
-
-            this.AccelerationChart.ChartAreas[0].CursorX.AutoScroll = true;
-            this.AccelerationChart.ChartAreas[0].CursorY.AutoScroll = true;
-
-            this.AccelerationChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            this.AccelerationChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-
-            this.AccelerationChart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            this.AccelerationChart.ChartAreas[0].CursorY.IsUserEnabled = true;
-
-
-            this.VelocityChart.ChartAreas[0].AxisX.RoundAxisValues();
-
-            this.VelocityChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-
-            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
-            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
-
-            this.VelocityChart.ChartAreas[0].CursorY.Interval = 0.001;
-
-            this.VelocityChart.ChartAreas[0].CursorX.AutoScroll = true;
-            this.VelocityChart.ChartAreas[0].CursorY.AutoScroll = true;
-
-            this.VelocityChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            this.VelocityChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-
-            this.VelocityChart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            this.VelocityChart.ChartAreas[0].CursorY.IsUserEnabled = true;
-
-
-            this.GainChart.ChartAreas[0].AxisX.RoundAxisValues();
-
-            this.GainChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            this.GainChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-
-            this.GainChart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
-            this.GainChart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
-
-            this.GainChart.ChartAreas[0].CursorY.Interval = 0.001;
-
-            this.GainChart.ChartAreas[0].CursorX.AutoScroll = true;
-            this.GainChart.ChartAreas[0].CursorY.AutoScroll = true;
-
-            this.GainChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            this.GainChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-
-            this.GainChart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            this.GainChart.ChartAreas[0].CursorY.IsUserEnabled = true;
         }
 
         #endregion Constructor

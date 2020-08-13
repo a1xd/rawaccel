@@ -169,9 +169,9 @@ namespace grapher
                 lastOutputMagnitude = outMagnitude;
             }
 
-            AccelCharts.SensitivityChart.Series[0].Points.DataBindXY(OrderedAccelPoints.Keys, OrderedAccelPoints.Values);
-            AccelCharts.VelocityChart.Series[0].Points.DataBindXY(OrderedVelocityPoints.Keys, OrderedVelocityPoints.Values);
-            AccelCharts.GainChart.Series[0].Points.DataBindXY(OrderedGainPoints.Keys, OrderedGainPoints.Values);
+            AccelCharts.SensitivityChart.ChartX.Series[0].Points.DataBindXY(OrderedAccelPoints.Keys, OrderedAccelPoints.Values);
+            AccelCharts.VelocityChart.ChartX.Series[0].Points.DataBindXY(OrderedVelocityPoints.Keys, OrderedVelocityPoints.Values);
+            AccelCharts.GainChart.ChartX.Series[0].Points.DataBindXY(OrderedGainPoints.Keys, OrderedGainPoints.Values);
         }
 
         #endregion methods
