@@ -10,6 +10,12 @@ namespace grapher
 {
     public class Field
     {
+        #region Constants
+
+        public const string DefaultFormatString = "0.#########";
+
+        #endregion Constants
+
         #region Enums
 
         public enum FieldState
@@ -34,6 +40,7 @@ namespace grapher
             DefaultData = defaultData;
             State = FieldState.Undefined;
             ContainingForm = containingForm;
+            FormatString = DefaultFormatString;
             box.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyDown);
             box.Leave += new System.EventHandler(FocusLeave);
 
@@ -49,6 +56,8 @@ namespace grapher
         private Form ContainingForm { get; }
 
         public double Data { get; private set; }
+
+        public string FormatString { get; set; }
 
         public string DefaultText { get; }
 
@@ -163,15 +172,7 @@ namespace grapher
         {
             if (State == FieldState.Typing)
             {
-                if (PreviousState == FieldState.Default)
-                {
-                    SetToDefault();
-                }
-                else if (PreviousState == FieldState.Entered)
-                {
-                    SetToEntered();
-                    Box.Text = DecimalString(Data);
-                }
+                TextToData();
             }
         }
 
@@ -179,19 +180,10 @@ namespace grapher
         {
             if (e.KeyCode == Keys.Enter)
             {
-                try
-                {
-                    Data = Convert.ToDouble(((TextBox)sender).Text);
-                }
-                catch
-                {
-                }
+                TextToData();
 
-                Box.Text = DecimalString(Data);
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-
-                SetToEntered();
             }
             else if (e.KeyCode == Keys.Escape)
             {
@@ -201,10 +193,33 @@ namespace grapher
             }
         }
 
-        private static string DecimalString(double value)
+        private void TextToData()
         {
-            return value.ToString("N2");
+            try
+            {
+                Data = Convert.ToDouble(Box.Text);
+            }
+            catch
+            {
+            }
+
+            Box.Text = DecimalString(Data);
+            
+            if (string.Equals(Box.Text, DefaultText))
+            {
+                SetToDefault();
+            }
+            else
+            {
+                SetToEntered();
+            }
         }
+
+        private string DecimalString(double value)
+        {
+            return value.ToString(FormatString);
+        }
+
 
         #endregion Methods
     }

@@ -47,12 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccelCharts.cs" />
-    <Compile Include="AccelGUI.cs" />
-    <Compile Include="AccelOptions.cs" />
-    <Compile Include="CapOptions.cs" />
-    <Compile Include="Field.cs" />
-    <Compile Include="FieldXY.cs" />
+    <Compile Include="Models\Calculations\AccelCalculator.cs" />
+    <Compile Include="Models\Calculations\AccelChartData.cs" />
+    <Compile Include="Models\Calculations\AccelData.cs" />
+    <Compile Include="Models\Charts\AccelCharts.cs" />
+    <Compile Include="Models\AccelGUI.cs" />
+    <Compile Include="Models\Charts\EstimatedPoints.cs" />
+    <Compile Include="Models\Mouse\MouseWatcher.cs" />
+    <Compile Include="Models\Mouse\PointData.cs" />
+    <Compile Include="Models\Options\AccelOptions.cs" />
+    <Compile Include="Models\Options\CapOptions.cs" />
+    <Compile Include="Models\Charts\ChartXY.cs" />
+    <Compile Include="Models\Fields\Field.cs" />
+    <Compile Include="Models\Fields\FieldXY.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,11 +75,10 @@
     <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
     <Compile Include="Layouts\SigmoidLayout.cs" />
-    <Compile Include="Option.cs" />
-    <Compile Include="OptionXY.cs" />
+    <Compile Include="Models\Options\Option.cs" />
+    <Compile Include="Models\Options\OptionXY.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VectorXY.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -40,6 +40,10 @@ public:
         }
     }
 
+    double GetSensitivityX();
+
+    double GetSensitivityY();
+
     mouse_modifier* GetInstance()
     {
         return modifier_instance;

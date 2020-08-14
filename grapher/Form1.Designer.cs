@@ -30,15 +30,30 @@ namespace grapher
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.accelTypeDrop = new System.Windows.Forms.ComboBox();
             this.sensitivityBoxX = new System.Windows.Forms.TextBox();
@@ -74,28 +89,41 @@ namespace grapher
             this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sensitivityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.velocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AccelerationChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.VelocityChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.GainChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.MouseLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AccelerationChartY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.VelocityChartY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GainChartY)).BeginInit();
             this.SuspendLayout();
             // 
             // AccelerationChart
             // 
-            chartArea4.AxisX.Title = "Speed (counts/ms)";
-            chartArea4.AxisY.Title = "Sensitivity (magnitude ratio)";
-            chartArea4.Name = "ChartArea1";
-            this.AccelerationChart.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.AccelerationChart.Legends.Add(legend4);
-            this.AccelerationChart.Location = new System.Drawing.Point(242, 0);
+            chartArea1.AxisX.Title = "Speed (counts/ms)";
+            chartArea1.AxisY.Title = "Sensitivity (magnitude ratio)";
+            chartArea1.Name = "ChartArea1";
+            this.AccelerationChart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.AccelerationChart.Legends.Add(legend1);
+            this.AccelerationChart.Location = new System.Drawing.Point(240, 0);
             this.AccelerationChart.Name = "AccelerationChart";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Legend = "Legend1";
-            series4.Name = "Accelerated Sensitivity";
-            this.AccelerationChart.Series.Add(series4);
-            this.AccelerationChart.Size = new System.Drawing.Size(721, 328);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Accelerated Sensitivity";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series2.Legend = "Legend1";
+            series2.Name = "LastAccelVal";
+            this.AccelerationChart.Series.Add(series1);
+            this.AccelerationChart.Series.Add(series2);
+            this.AccelerationChart.Size = new System.Drawing.Size(723, 328);
             this.AccelerationChart.TabIndex = 0;
             this.AccelerationChart.Text = "chart1";
             // 
@@ -144,7 +172,7 @@ namespace grapher
             // 
             this.accelerationBox.Location = new System.Drawing.Point(106, 125);
             this.accelerationBox.Name = "accelerationBox";
-            this.accelerationBox.Size = new System.Drawing.Size(70, 20);
+            this.accelerationBox.Size = new System.Drawing.Size(69, 20);
             this.accelerationBox.TabIndex = 7;
             // 
             // constantOneLabel
@@ -195,7 +223,7 @@ namespace grapher
             // 
             this.weightBoxSecond.Location = new System.Drawing.Point(144, 177);
             this.weightBoxSecond.Name = "weightBoxSecond";
-            this.weightBoxSecond.Size = new System.Drawing.Size(32, 20);
+            this.weightBoxSecond.Size = new System.Drawing.Size(31, 20);
             this.weightBoxSecond.TabIndex = 14;
             // 
             // limitBox
@@ -268,7 +296,7 @@ namespace grapher
             // 
             // capBoxY
             // 
-            this.capBoxY.Location = new System.Drawing.Point(145, 151);
+            this.capBoxY.Location = new System.Drawing.Point(144, 151);
             this.capBoxY.Name = "capBoxY";
             this.capBoxY.Size = new System.Drawing.Size(31, 20);
             this.capBoxY.TabIndex = 23;
@@ -309,7 +337,7 @@ namespace grapher
             // LockXYLabel
             // 
             this.LockXYLabel.AutoSize = true;
-            this.LockXYLabel.Location = new System.Drawing.Point(175, 30);
+            this.LockXYLabel.Location = new System.Drawing.Point(174, 30);
             this.LockXYLabel.Name = "LockXYLabel";
             this.LockXYLabel.Size = new System.Drawing.Size(60, 13);
             this.LockXYLabel.TabIndex = 27;
@@ -317,39 +345,51 @@ namespace grapher
             // 
             // VelocityChart
             // 
-            chartArea5.AxisX.Title = "Speed (count/ms)";
-            chartArea5.AxisY.Title = "Output Speed (counts/ms)";
-            chartArea5.Name = "ChartArea1";
-            this.VelocityChart.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.VelocityChart.Legends.Add(legend5);
-            this.VelocityChart.Location = new System.Drawing.Point(242, 334);
+            chartArea2.AxisX.Title = "Speed (count/ms)";
+            chartArea2.AxisY.Title = "Output Speed (counts/ms)";
+            chartArea2.Name = "ChartArea1";
+            this.VelocityChart.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.VelocityChart.Legends.Add(legend2);
+            this.VelocityChart.Location = new System.Drawing.Point(240, 334);
             this.VelocityChart.Name = "VelocityChart";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Legend = "Legend1";
-            series5.Name = "Mouse Velocity";
-            this.VelocityChart.Series.Add(series5);
-            this.VelocityChart.Size = new System.Drawing.Size(721, 307);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Legend = "Legend1";
+            series3.Name = "Mouse Velocity";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series4.Legend = "Legend1";
+            series4.Name = "LastVelocityVal";
+            this.VelocityChart.Series.Add(series3);
+            this.VelocityChart.Series.Add(series4);
+            this.VelocityChart.Size = new System.Drawing.Size(723, 307);
             this.VelocityChart.TabIndex = 28;
             this.VelocityChart.Text = "chart1";
             // 
             // GainChart
             // 
-            chartArea6.AxisX.Title = "Speed (counts/ms)";
-            chartArea6.AxisY.Title = "Slope of Velocity Chart";
-            chartArea6.Name = "ChartArea1";
-            this.GainChart.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.GainChart.Legends.Add(legend6);
-            this.GainChart.Location = new System.Drawing.Point(242, 647);
+            chartArea3.AxisX.Title = "Speed (counts/ms)";
+            chartArea3.AxisY.Title = "Slope of Velocity Chart";
+            chartArea3.Name = "ChartArea1";
+            this.GainChart.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.GainChart.Legends.Add(legend3);
+            this.GainChart.Location = new System.Drawing.Point(240, 647);
             this.GainChart.Name = "GainChart";
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Legend = "Legend1";
+            series5.Name = "Velocity Gain";
             series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series6.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             series6.Legend = "Legend1";
-            series6.Name = "Velocity Gain";
+            series6.Name = "LastGainVal";
+            this.GainChart.Series.Add(series5);
             this.GainChart.Series.Add(series6);
-            this.GainChart.Size = new System.Drawing.Size(721, 309);
+            this.GainChart.Size = new System.Drawing.Size(723, 309);
             this.GainChart.TabIndex = 29;
             this.GainChart.Text = "chart1";
             // 
@@ -361,7 +401,7 @@ namespace grapher
             this.advancedToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(963, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1693, 24);
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -395,7 +435,7 @@ namespace grapher
             this.sensitivityToolStripMenuItem,
             this.velocityGainToolStripMenuItem});
             this.capStyleToolStripMenuItem.Name = "capStyleToolStripMenuItem";
-            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.capStyleToolStripMenuItem.Text = "Cap Style";
             // 
             // sensitivityToolStripMenuItem
@@ -403,20 +443,108 @@ namespace grapher
             this.sensitivityToolStripMenuItem.Checked = true;
             this.sensitivityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.sensitivityToolStripMenuItem.Name = "sensitivityToolStripMenuItem";
-            this.sensitivityToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sensitivityToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.sensitivityToolStripMenuItem.Text = "Sensitivity";
             // 
             // velocityGainToolStripMenuItem
             // 
             this.velocityGainToolStripMenuItem.Name = "velocityGainToolStripMenuItem";
-            this.velocityGainToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.velocityGainToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.velocityGainToolStripMenuItem.Text = "Velocity Gain";
+            // 
+            // AccelerationChartY
+            // 
+            chartArea4.AxisX.Title = "Speed (counts/ms)";
+            chartArea4.AxisY.Title = "Sensitivity (magnitude ratio)";
+            chartArea4.Name = "ChartArea1";
+            this.AccelerationChartY.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.AccelerationChartY.Legends.Add(legend4);
+            this.AccelerationChartY.Location = new System.Drawing.Point(969, 0);
+            this.AccelerationChartY.Name = "AccelerationChartY";
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series7.Legend = "Legend1";
+            series7.Name = "Accelerated Sensitivity";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series8.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series8.Legend = "Legend1";
+            series8.Name = "LastAccelVal";
+            this.AccelerationChartY.Series.Add(series7);
+            this.AccelerationChartY.Series.Add(series8);
+            this.AccelerationChartY.Size = new System.Drawing.Size(723, 328);
+            this.AccelerationChartY.TabIndex = 31;
+            this.AccelerationChartY.Text = "chart1";
+            // 
+            // VelocityChartY
+            // 
+            chartArea5.AxisX.Title = "Speed (count/ms)";
+            chartArea5.AxisY.Title = "Output Speed (counts/ms)";
+            chartArea5.Name = "ChartArea1";
+            this.VelocityChartY.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.VelocityChartY.Legends.Add(legend5);
+            this.VelocityChartY.Location = new System.Drawing.Point(970, 334);
+            this.VelocityChartY.Name = "VelocityChartY";
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series9.Legend = "Legend1";
+            series9.Name = "Mouse Velocity";
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series10.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series10.Legend = "Legend1";
+            series10.Name = "LastVelocityVal";
+            this.VelocityChartY.Series.Add(series9);
+            this.VelocityChartY.Series.Add(series10);
+            this.VelocityChartY.Size = new System.Drawing.Size(723, 307);
+            this.VelocityChartY.TabIndex = 32;
+            this.VelocityChartY.Text = "chart1";
+            // 
+            // GainChartY
+            // 
+            chartArea6.AxisX.Title = "Speed (counts/ms)";
+            chartArea6.AxisY.Title = "Slope of Velocity Chart";
+            chartArea6.Name = "ChartArea1";
+            this.GainChartY.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.GainChartY.Legends.Add(legend6);
+            this.GainChartY.Location = new System.Drawing.Point(970, 647);
+            this.GainChartY.Name = "GainChartY";
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series11.Legend = "Legend1";
+            series11.Name = "Velocity Gain";
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series12.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series12.Legend = "Legend1";
+            series12.Name = "LastGainVal";
+            this.GainChartY.Series.Add(series11);
+            this.GainChartY.Series.Add(series12);
+            this.GainChartY.Size = new System.Drawing.Size(723, 309);
+            this.GainChartY.TabIndex = 33;
+            this.GainChartY.Text = "chart1";
+            // 
+            // MouseLabel
+            // 
+            this.MouseLabel.AutoSize = true;
+            this.MouseLabel.Location = new System.Drawing.Point(1, 24);
+            this.MouseLabel.Name = "MouseLabel";
+            this.MouseLabel.Size = new System.Drawing.Size(80, 13);
+            this.MouseLabel.TabIndex = 34;
+            this.MouseLabel.Text = "Last (x, y): (x, y)";
             // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(963, 958);
+            this.ClientSize = new System.Drawing.Size(1693, 958);
+            this.Controls.Add(this.MouseLabel);
+            this.Controls.Add(this.GainChartY);
+            this.Controls.Add(this.VelocityChartY);
+            this.Controls.Add(this.AccelerationChartY);
             this.Controls.Add(this.GainChart);
             this.Controls.Add(this.VelocityChart);
             this.Controls.Add(this.LockXYLabel);
@@ -449,11 +577,15 @@ namespace grapher
             this.Name = "RawAcceleration";
             this.Text = "Raw Acceleration Graph";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.RawAcceleration_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AccelerationChartY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.VelocityChartY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GainChartY)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -496,6 +628,10 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem capStyleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sensitivityToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem velocityGainToolStripMenuItem;
+        private System.Windows.Forms.DataVisualization.Charting.Chart AccelerationChartY;
+        private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChartY;
+        private System.Windows.Forms.DataVisualization.Charting.Chart GainChartY;
+        private System.Windows.Forms.Label MouseLabel;
     }
 }
 

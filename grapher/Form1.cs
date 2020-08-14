@@ -89,10 +89,19 @@ namespace grapher
 
             Marshal.FreeHGlobal(args_ptr);
 
-            var sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity");
+            var accelCharts = new AccelCharts(
+                                this,
+                                new ChartXY(AccelerationChart, AccelerationChartY),
+                                new ChartXY(VelocityChart, VelocityChartY),
+                                new ChartXY(GainChart, GainChartY),
+                                showVelocityGainToolStripMenuItem,
+                                new CheckBox[] { sensXYLock, weightXYLock, capXYLock });
+
+
+            var sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity", accelCharts);
             var rotation = new Option(rotationBox, this, 0, rotationLabel, "Rotation");
-            var weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight");
-            var cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap");
+            var weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight", accelCharts);
+            var cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap", accelCharts);
             var offset = new Option(offsetBox, this, 0, offsetLabel, "Offset");
 
             // The name and layout of these options is handled by AccelerationOptions object.
@@ -124,12 +133,7 @@ namespace grapher
 
             AccelGUI = new AccelGUI(
                 this,
-                new AccelCharts(
-                    this,
-                    AccelerationChart,
-                    VelocityChart,
-                    GainChart,
-                    showVelocityGainToolStripMenuItem),
+                accelCharts,
                 managedAcceleration,
                 accelerationOptions,
                 sensitivity,
@@ -140,66 +144,8 @@ namespace grapher
                 acceleration,
                 limitOrExponent,
                 midpoint,
-                writeButton);
-
-            this.AccelerationChart.ChartAreas[0].AxisX.RoundAxisValues();
-
-            this.AccelerationChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-
-            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
-            this.AccelerationChart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
-
-            this.AccelerationChart.ChartAreas[0].CursorY.Interval = 0.001;
-
-            this.AccelerationChart.ChartAreas[0].CursorX.AutoScroll = true;
-            this.AccelerationChart.ChartAreas[0].CursorY.AutoScroll = true;
-
-            this.AccelerationChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            this.AccelerationChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-
-            this.AccelerationChart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            this.AccelerationChart.ChartAreas[0].CursorY.IsUserEnabled = true;
-
-
-            this.VelocityChart.ChartAreas[0].AxisX.RoundAxisValues();
-
-            this.VelocityChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-
-            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
-            this.VelocityChart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
-
-            this.VelocityChart.ChartAreas[0].CursorY.Interval = 0.001;
-
-            this.VelocityChart.ChartAreas[0].CursorX.AutoScroll = true;
-            this.VelocityChart.ChartAreas[0].CursorY.AutoScroll = true;
-
-            this.VelocityChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            this.VelocityChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-
-            this.VelocityChart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            this.VelocityChart.ChartAreas[0].CursorY.IsUserEnabled = true;
-
-
-            this.GainChart.ChartAreas[0].AxisX.RoundAxisValues();
-
-            this.GainChart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            this.GainChart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
-
-            this.GainChart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
-            this.GainChart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
-
-            this.GainChart.ChartAreas[0].CursorY.Interval = 0.001;
-
-            this.GainChart.ChartAreas[0].CursorX.AutoScroll = true;
-            this.GainChart.ChartAreas[0].CursorY.AutoScroll = true;
-
-            this.GainChart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            this.GainChart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
-
-            this.GainChart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            this.GainChart.ChartAreas[0].CursorY.IsUserEnabled = true;
+                writeButton,
+                MouseLabel);
         }
 
         #endregion Constructor
@@ -211,6 +157,16 @@ namespace grapher
         #endregion Properties
 
         #region Methods
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x00ff)
+            {
+                AccelGUI.MouseWatcher.ReadMouseMove(m);
+            }
+
+            base.WndProc(ref m);
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -237,5 +193,10 @@ namespace grapher
         }
 
         #endregion Methods
+
+        private void RawAcceleration_Paint(object sender, PaintEventArgs e)
+        {
+            AccelGUI.AccelCharts.DrawPoints();
+        }
     }
 }

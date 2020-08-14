@@ -5,6 +5,16 @@
 using namespace rawaccel;
 using namespace System;
 
+double ManagedAccel::GetSensitivityX()
+{
+	return modifier_instance->sensitivity.x;
+}
+
+double ManagedAccel::GetSensitivityY()
+{
+	return modifier_instance->sensitivity.y;
+}
+
 Tuple<double, double>^ ManagedAccel::Accelerate(int x, int y, double time)
 {
 	vec2d input_vec2d = {

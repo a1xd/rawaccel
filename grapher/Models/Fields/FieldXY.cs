@@ -9,14 +9,27 @@ namespace grapher
 {
     public class FieldXY
     {
-        public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData)
+        public const int DefaultSeparation = 4;
+
+        public const string ShortenedFormatString = "0.###";
+
+        public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData, AccelCharts accelCharts)
         {
             XField = new Field(xBox, containingForm, defaultData);
             YField = new Field(yBox, containingForm, defaultData);
+            YField.FormatString = ShortenedFormatString;
             LockCheckBox = lockCheckBox;
             LockCheckBox.CheckedChanged += new System.EventHandler(CheckChanged);
+            AccelCharts = accelCharts;
+
+            XField.Box.Width = (YField.Box.Left + YField.Box.Width - XField.Box.Left - DefaultSeparation) / 2;
+            YField.Box.Width = XField.Box.Width;
+
             DefaultWidthX = XField.Box.Width;
             DefaultWidthY = YField.Box.Width;
+
+            YField.Box.Left = XField.Box.Left + XField.Box.Width + DefaultSeparation;
+
             CombinedWidth = DefaultWidthX + DefaultWidthY + YField.Box.Left - (XField.Box.Left + DefaultWidthX);
             SetCombined();
         }
@@ -46,6 +59,8 @@ namespace grapher
 
         public Field YField { get; }
 
+        private AccelCharts AccelCharts { get; }
+
         private bool Combined { get; set; }
 
         private int DefaultWidthX { get; }
@@ -64,6 +79,8 @@ namespace grapher
             {
                 SetSeparate();
             }
+
+            AccelCharts.RefreshXY();
         }
 
         public void SetCombined()
@@ -72,6 +89,7 @@ namespace grapher
             YField.SetToUnavailable();
             YField.Box.Hide();
             XField.Box.Width = CombinedWidth;
+            XField.FormatString = Field.DefaultFormatString;
         }
 
         public void SetSeparate()
@@ -80,6 +98,8 @@ namespace grapher
 
             XField.Box.Width = DefaultWidthX;
             YField.Box.Width = DefaultWidthY;
+
+            XField.FormatString = ShortenedFormatString;
 
             if (XField.State == Field.FieldState.Default)
             {
