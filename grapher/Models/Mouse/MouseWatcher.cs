@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -691,18 +692,21 @@ namespace grapher.Models.Mouse
             RAWINPUTDEVICE[] devices = new RAWINPUTDEVICE[1];
             devices[0] = device;
             RegisterRawInputDevices(devices, 1, Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
+            PollTime = 1;
         }
 
-        Form ContainingForm { get; }
+        private Form ContainingForm { get; }
 
-        Label Display { get; }
+        private Label Display { get; }
 
-        AccelCharts AccelCharts { get; }
+        private AccelCharts AccelCharts { get; }
 
-        public void OnMouseMove(int x, int y)
+        private double PollTime { get; }
+
+        public void OnMouseMove(int x, int y, double timeInMs)
         {
             Display.Text = $"Last (x, y): ({x}, {y})";
-            AccelCharts.MakeDots(x, y);
+            AccelCharts.MakeDots(x, y, timeInMs);
         }
 
         public void ReadMouseMove(Message message)
@@ -715,7 +719,7 @@ namespace grapher.Models.Mouse
 
             if (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0)
             {
-                OnMouseMove(rawInput.Data.Mouse.LastX, rawInput.Data.Mouse.LastY);
+                OnMouseMove(rawInput.Data.Mouse.LastX, rawInput.Data.Mouse.LastY, PollTime);
             }
 
         }

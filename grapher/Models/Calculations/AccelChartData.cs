@@ -36,7 +36,7 @@ namespace grapher.Models.Calculations
             OutVelocityToPoints.Clear();
         }
 
-        public (double, double, double) FindInValuesFromOut(double outVelocityValue)
+        public (double, double, double) FindPointValuesFromOut(double outVelocityValue)
         {
             if (OutVelocityToPoints.TryGetValue(outVelocityValue, out var values))
             {
@@ -52,11 +52,8 @@ namespace grapher.Models.Calculations
                 }
 
                 velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
-
                 values = (VelocityPoints.ElementAt(velIdx).Key, AccelPoints.ElementAt(velIdx).Value, GainPoints.ElementAt(velIdx).Value);
-
                 OutVelocityToPoints.Add(outVelocityValue, values);
-
                 return values;
             }
         }

@@ -29,18 +29,13 @@ namespace grapher.Models.Mouse
             }
         }
 
-        public (double[], double[]) Get()
+        public void Get(out double[] x, out double[] y)
         {
-            double[] xRet;
-            double[] yRet;
-
             lock(Lock)
             {
-                xRet = X;
-                yRet = Y;
+                x = X;
+                y = Y;
             }
-
-            return (xRet, yRet);
         }
     }
 }

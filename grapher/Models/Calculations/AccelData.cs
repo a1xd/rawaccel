@@ -44,30 +44,30 @@ namespace grapher.Models.Calculations
             Y.Clear();
         }
 
-        public void CalculateDots(int x, int y)
+        public void CalculateDots(int x, int y, double timeInMs)
         {
-            var magnitude = AccelCalculator.Magnitude(x, y);
+            var magnitude = AccelCalculator.Velocity(x, y, timeInMs);
 
-            (var inCombVel, var combSens, var combGain) = Combined.FindInValuesFromOut(magnitude);
+            (var inCombVel, var combSens, var combGain) = Combined.FindPointValuesFromOut(magnitude);
             Estimated.Velocity.Set(inCombVel, magnitude);
             Estimated.Sensitivity.Set(inCombVel, combSens);
             Estimated.Gain.Set(inCombVel, combGain);
         }
 
-        public void CalculateDotsXY(int x, int y)
+        public void CalculateDotsXY(int x, int y, double timeInMs)
         {
-            var magnitudeX = Math.Abs(x);
-            var magnitudeY = Math.Abs(y);
+            var outX = Math.Abs(x);
+            var outY = Math.Abs(y);
 
-            (var inXVel, var xSens, var xGain) = X.FindInValuesFromOut(magnitudeX);
-            EstimatedX.Velocity.Set(inXVel, magnitudeX);
-            EstimatedX.Sensitivity.Set(inXVel, xSens);
-            EstimatedX.Gain.Set(inXVel, xGain);
+            (var inXVelocity, var xSensitivity, var xGain) = X.FindPointValuesFromOut(outX);
+            EstimatedX.Velocity.Set(inXVelocity, outX);
+            EstimatedX.Sensitivity.Set(inXVelocity, xSensitivity);
+            EstimatedX.Gain.Set(inXVelocity, xGain);
 
-            (var inYVel, var ySens, var yGain) = Y.FindInValuesFromOut(magnitudeY);
-            EstimatedY.Velocity.Set(inYVel, magnitudeY);
-            EstimatedY.Sensitivity.Set(inYVel, ySens);
-            EstimatedY.Gain.Set(inYVel, yGain);
+            (var inYVelocity, var ySensitivity, var yGain) = Y.FindPointValuesFromOut(outY);
+            EstimatedY.Velocity.Set(inYVelocity, outY);
+            EstimatedY.Sensitivity.Set(inYVelocity, ySensitivity);
+            EstimatedY.Gain.Set(inYVelocity, yGain);
         }
 
     }

@@ -84,15 +84,15 @@ namespace grapher
 
         private int FormBorderHeight { get; }
 
-        public void MakeDots(int x, int y)
+        public void MakeDots(int x, int y, double timeInMs)
         {
             if (Combined)
             {
-                AccelData.CalculateDots(x, y);
+                AccelData.CalculateDots(x, y, timeInMs);
             }
             else
             {
-                AccelData.CalculateDotsXY(x, y);
+                AccelData.CalculateDotsXY(x, y, timeInMs);
             }
         }
 

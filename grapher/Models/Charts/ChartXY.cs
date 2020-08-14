@@ -121,7 +121,7 @@ namespace grapher
         {
             if (chart.Visible)
             {
-                (var x, var y) = point.Get();
+                point.Get(out var x, out var y);
                 chart.Series[1].Points.DataBindXY(x, y);
                 chart.Update();
             }

@@ -91,7 +91,7 @@ namespace grapher
 
         public void UpdateGraph()
         {
-            AccelCalculator.Calculate(AccelCharts.AccelData, ManagedAcceleration, Sensitivity.Fields.X, Sensitivity.Fields.Y);
+            AccelCalculator.Calculate(AccelCharts.AccelData, ManagedAcceleration);
             AccelCharts.Bind();
         }
 
