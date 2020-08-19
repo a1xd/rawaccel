@@ -12,7 +12,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Off";
-            Index = 7;
+            Index = 8;
             ShowOptions = new bool[] { false, false, false, false }; 
             OptionNames = new string[] { string.Empty, string.Empty, string.Empty, string.Empty };
             ShowOptionsXY = new bool[] { false, false }; 

@@ -9,6 +9,7 @@
 #include "accel-linear.hpp"
 #include "accel-classic.hpp"
 #include "accel-natural.hpp"
+#include "accel-naturalgain.hpp"
 #include "accel-logarithmic.hpp"
 #include "accel-sigmoid.hpp"
 #include "accel-power.hpp"
@@ -76,7 +77,7 @@ namespace rawaccel {
     };
 
     /// <summary> Tagged union to hold all accel implementations and allow "polymorphism" via a visitor call. </summary>
-    using accel_impl_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_noaccel>;
+    using accel_impl_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_naturalgain, accel_noaccel>;
 
     /// <summary> Struct to hold information about applying a gain cap. </summary>
     struct velocity_gain_cap {

@@ -19,6 +19,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-linear.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-logarithmic.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-natural.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-naturalgain.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-noaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-power.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-sigmoid.hpp" />

@@ -18,6 +18,7 @@ namespace grapher
 
         public AccelGUI(
             RawAcceleration accelForm,
+            AccelCalculator accelCalculator,
             AccelCharts accelCharts,
             ManagedAccel managedAccel,
             AccelOptions accelOptions,
@@ -30,9 +31,11 @@ namespace grapher
             Option limtOrExp,
             Option midpoint,
             Button writeButton,
-            Label mouseMoveLabel)
+            Label mouseMoveLabel,
+            ToolStripMenuItem scaleMenuItem)
         {
             AccelForm = accelForm;
+            AccelCalculator = accelCalculator;
             AccelCharts = accelCharts;
             ManagedAcceleration = managedAccel;
             AccelerationOptions = accelOptions;
@@ -45,11 +48,14 @@ namespace grapher
             LimitOrExponent = limtOrExp;
             Midpoint = midpoint;
             WriteButton = writeButton;
+            ScaleMenuItem = scaleMenuItem;
 
             ManagedAcceleration.ReadFromDriver();
             UpdateGraph();
 
             MouseWatcher = new MouseWatcher(AccelForm, mouseMoveLabel, AccelCharts);
+
+            ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
         }
 
         #endregion constructors
@@ -57,6 +63,8 @@ namespace grapher
         #region properties
 
         public RawAcceleration AccelForm { get; }
+
+        public AccelCalculator AccelCalculator { get; }
 
         public AccelCharts AccelCharts { get; }
 
@@ -84,10 +92,11 @@ namespace grapher
 
         public MouseWatcher MouseWatcher { get; }
 
+        public ToolStripMenuItem ScaleMenuItem { get; }
+
         #endregion properties
 
         #region methods
-
 
         public void UpdateGraph()
         {
@@ -95,6 +104,10 @@ namespace grapher
             AccelCharts.Bind();
         }
 
+        private void OnScaleMenuItemClick(object sender, EventArgs e)
+        {
+            UpdateGraph();
+        }
         #endregion methods
     }
 

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using grapher.Models.Calculations;
 
 namespace grapher
 {
@@ -131,8 +132,13 @@ namespace grapher
                 cap,
                 weight);
 
+            AccelCalculator accelCalculator = new AccelCalculator(
+                new Field(DPITextBox.TextBox, this, AccelCalculator.DefaultDPI),
+                new Field(PollRateTextBox.TextBox, this, AccelCalculator.DefaultPollRate));
+
             AccelGUI = new AccelGUI(
                 this,
+                accelCalculator,
                 accelCharts,
                 managedAcceleration,
                 accelerationOptions,
@@ -145,7 +151,8 @@ namespace grapher
                 limitOrExponent,
                 midpoint,
                 writeButton,
-                MouseLabel);
+                MouseLabel,
+                ScaleMenuItem);
         }
 
         #endregion Constructor

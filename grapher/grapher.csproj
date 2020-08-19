@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Layouts\NaturalGainLayout.cs" />
     <Compile Include="Models\Calculations\AccelCalculator.cs" />
     <Compile Include="Models\Calculations\AccelChartData.cs" />
     <Compile Include="Models\Calculations\AccelData.cs" />
