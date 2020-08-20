@@ -23,6 +23,7 @@ namespace grapher
             new SigmoidLayout(),
             new PowerLayout(),
             new NaturalGainLayout(),
+            new SigmoidGainLayout(),
             new OffLayout()
         }.ToDictionary(k => k.Name);
 
