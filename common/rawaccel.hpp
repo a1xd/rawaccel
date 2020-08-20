@@ -185,6 +185,8 @@ namespace rawaccel {
         vec2<accel_scale_clamp> clamp;
 
         velocity_gain_cap gain_cap = velocity_gain_cap();
+        
+        accel_args impl_args;
 
         accel_function(const accel_fn_args& args) {
             if (args.time_min <= 0) bad_arg("min time must be positive");
@@ -192,6 +194,7 @@ namespace rawaccel {
 
             accel.tag = args.accel_mode;
             accel.visit([&](auto& impl) { impl = { args.acc_args }; });
+            impl_args = args.acc_args;
 
             time_min = args.time_min;
             speed_offset = args.acc_args.offset;

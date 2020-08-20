@@ -58,6 +58,8 @@
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
     <Compile Include="Models\Options\AccelOptions.cs" />
+    <Compile Include="Models\Options\ActiveValueLabel.cs" />
+    <Compile Include="Models\Options\ActiveValueLabelXY.cs" />
     <Compile Include="Models\Options\CapOptions.cs" />
     <Compile Include="Models\Charts\ChartXY.cs" />
     <Compile Include="Models\Fields\Field.cs" />

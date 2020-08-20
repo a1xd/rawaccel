@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using grapher.Models.Calculations;
+using grapher.Models.Options;
 
 namespace grapher
 {
     public enum accel_mode 
     {
-        linear=1, classic, natural, logarithmic, sigmoid, power, noaccel
+        linear=1, classic, natural, logarithmic, sigmoid, power, naturalgain, sigmoidgain, noaccel
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -99,16 +100,76 @@ namespace grapher
                                 new CheckBox[] { sensXYLock, weightXYLock, capXYLock });
 
 
-            var sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity", accelCharts);
-            var rotation = new Option(rotationBox, this, 0, rotationLabel, "Rotation");
-            var weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight", accelCharts);
-            var cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap", accelCharts);
-            var offset = new Option(offsetBox, this, 0, offsetLabel, "Offset");
+            var sensitivity = new OptionXY(
+                sensitivityBoxX,
+                sensitivityBoxY,
+                sensXYLock,
+                this,
+                1,
+                sensitivityLabel,
+                new ActiveValueLabelXY(
+                    new ActiveValueLabel(SensitivityActiveXLabel, ActiveValueTitle),
+                    new ActiveValueLabel(SensitivityActiveYLabel, ActiveValueTitle)),
+                "Sensitivity",
+                accelCharts);
+
+            var rotation = new Option(
+                rotationBox,
+                this,
+                0,
+                rotationLabel,
+                new ActiveValueLabel(RotationActiveLabel, ActiveValueTitle),
+                "Rotation");
+
+            var weight = new OptionXY(
+                weightBoxFirst,
+                weightBoxSecond,
+                weightXYLock,
+                this,
+                1,
+                weightLabel,
+                new ActiveValueLabelXY(
+                    new ActiveValueLabel(WeightActiveXLabel, ActiveValueTitle),
+                    new ActiveValueLabel(WeightActiveYLabel, ActiveValueTitle)),
+                "Weight",
+                accelCharts);
+
+            var cap = new OptionXY(
+                capBoxX,
+                capBoxY,
+                capXYLock,
+                this,
+                0,
+                capLabel,
+                new ActiveValueLabelXY(
+                    new ActiveValueLabel(CapActiveXLabel, ActiveValueTitle),
+                    new ActiveValueLabel(CapActiveYLabel, ActiveValueTitle)),
+                "Cap",
+                accelCharts);
+
+            var offset = new Option(
+                offsetBox,
+                this,
+                0,
+                offsetLabel,
+                new ActiveValueLabel(OffsetActiveLabel, ActiveValueTitle),
+                "Offset");
 
             // The name and layout of these options is handled by AccelerationOptions object.
-            var acceleration = new Option(new Field(accelerationBox, this, 0), constantOneLabel);
-            var limitOrExponent = new Option(new Field(limitBox, this, 2), constantTwoLabel);
-            var midpoint = new Option(new Field(midpointBox, this, 0), constantThreeLabel);
+            var acceleration = new Option(
+                new Field(accelerationBox, this, 0),
+                constantOneLabel,
+                new ActiveValueLabel(AccelerationActiveLabel, ActiveValueTitle));
+
+            var limitOrExponent = new Option(
+                new Field(limitBox, this, 2),
+                constantTwoLabel,
+                new ActiveValueLabel(LimitExpActiveLabel, ActiveValueTitle));
+
+            var midpoint = new Option(
+                new Field(midpointBox, this, 0),
+                constantThreeLabel,
+                new ActiveValueLabel(MidpointActiveLabel, ActiveValueTitle));
 
             var accelerationOptions = new AccelOptions(
                 accelTypeDrop,

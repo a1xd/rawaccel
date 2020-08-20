@@ -52,9 +52,9 @@ namespace grapher.Models.Calculations
 
             data.Clear();
 
-            Calculate(data.Combined, accel, accel.GetSensitivityX(), MagnitudesCombined);
-            Calculate(data.X, accel, accel.GetSensitivityX(), MagnitudesX);
-            Calculate(data.Y, accel, accel.GetSensitivityY(), MagnitudesY);
+            Calculate(data.Combined, accel, accel.SensitivityX, MagnitudesCombined);
+            Calculate(data.X, accel, accel.SensitivityX, MagnitudesX);
+            Calculate(data.Y, accel, accel.SensitivityY, MagnitudesY);
         }
 
         public static void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)

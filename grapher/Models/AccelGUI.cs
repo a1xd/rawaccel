@@ -102,6 +102,19 @@ namespace grapher
         {
             AccelCalculator.Calculate(AccelCharts.AccelData, ManagedAcceleration);
             AccelCharts.Bind();
+            UpdateActiveValueLabels();
+        }
+
+        public void UpdateActiveValueLabels()
+        {
+            Sensitivity.SetActiveValues(ManagedAcceleration.SensitivityX, ManagedAcceleration.SensitivityY);
+            Rotation.SetActiveValue(ManagedAcceleration.Rotation);
+            Offset.SetActiveValue(ManagedAcceleration.Offset);
+            Acceleration.SetActiveValue(ManagedAcceleration.Acceleration);
+            Cap.SetActiveValues(ManagedAcceleration.GainCap, ManagedAcceleration.CapX, ManagedAcceleration.CapY, ManagedAcceleration.GainCapEnabled);
+            Weight.SetActiveValues(ManagedAcceleration.WeightX, ManagedAcceleration.WeightY);
+            LimitOrExponent.SetActiveValue(ManagedAcceleration.LimitExp);
+            Midpoint.SetActiveValue(ManagedAcceleration.Midpoint);
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)

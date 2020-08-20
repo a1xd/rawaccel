@@ -99,7 +99,7 @@ namespace grapher
             this.VelocityChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.GainChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.MouseLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.ActiveValueTitle = new System.Windows.Forms.Label();
             this.SensitivityActiveXLabel = new System.Windows.Forms.Label();
             this.SensitivityActiveYLabel = new System.Windows.Forms.Label();
             this.RotationActiveLabel = new System.Windows.Forms.Label();
@@ -600,14 +600,14 @@ namespace grapher
             this.MouseLabel.TabIndex = 34;
             this.MouseLabel.Text = "Last (x, y): (x, y)";
             // 
-            // label1
+            // ActiveValueTitle
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(249, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
-            this.label1.TabIndex = 35;
-            this.label1.Text = "Active Value";
+            this.ActiveValueTitle.AutoSize = true;
+            this.ActiveValueTitle.Location = new System.Drawing.Point(249, 30);
+            this.ActiveValueTitle.Name = "ActiveValueTitle";
+            this.ActiveValueTitle.Size = new System.Drawing.Size(67, 13);
+            this.ActiveValueTitle.TabIndex = 35;
+            this.ActiveValueTitle.Text = "Active Value";
             // 
             // SensitivityActiveXLabel
             // 
@@ -734,7 +734,7 @@ namespace grapher
             this.Controls.Add(this.RotationActiveLabel);
             this.Controls.Add(this.SensitivityActiveYLabel);
             this.Controls.Add(this.SensitivityActiveXLabel);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.ActiveValueTitle);
             this.Controls.Add(this.MouseLabel);
             this.Controls.Add(this.GainChartY);
             this.Controls.Add(this.VelocityChartY);
@@ -832,7 +832,7 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem pollRateToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox PollRateTextBox;
         private System.Windows.Forms.ToolStripMenuItem ScaleMenuItem;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label ActiveValueTitle;
         private System.Windows.Forms.Label SensitivityActiveXLabel;
         private System.Windows.Forms.Label SensitivityActiveYLabel;
         private System.Windows.Forms.Label RotationActiveLabel;
