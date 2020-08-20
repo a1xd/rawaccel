@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,9 @@ namespace grapher
 {
     public class CapOptions
     {
+
+        public const string GainCapFormatString = "0.##";
+
         public CapOptions(
             ToolStripMenuItem sensitivityCapCheck,
             ToolStripMenuItem velocityGainCapCheck,
@@ -86,10 +90,14 @@ namespace grapher
         {
             if (capGainEnabled)
             {
+                CapOption.ActiveValueLabels.X.FormatString = GainCapFormatString;
+                CapOption.ActiveValueLabels.X.Prefix = "Gain";
                 CapOption.SetActiveValues(gainCap, gainCap);
             }
             else
             {
+                CapOption.ActiveValueLabels.X.FormatString = ActiveValueLabel.DefaultFormatString;
+                CapOption.ActiveValueLabels.X.Prefix = string.Empty;
                 CapOption.SetActiveValues(sensCapX, sensCapY);
             }
         }

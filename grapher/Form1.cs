@@ -99,6 +99,10 @@ namespace grapher
                                 showVelocityGainToolStripMenuItem,
                                 new CheckBox[] { sensXYLock, weightXYLock, capXYLock });
 
+            ActiveValueTitle.AutoSize = false;
+            ActiveValueTitle.Left = LockXYLabel.Left + LockXYLabel.Width;
+            ActiveValueTitle.Width = AccelerationChart.Left - ActiveValueTitle.Left;
+            ActiveValueTitle.TextAlign = ContentAlignment.MiddleCenter;
 
             var sensitivity = new OptionXY(
                 sensitivityBoxX,
@@ -185,7 +189,8 @@ namespace grapher
                     weight,
                     cap,
                 },
-                writeButton);
+                writeButton,
+                new ActiveValueLabel(AccelTypeActiveLabel, ActiveValueTitle));
 
             var capOptions = new CapOptions(
                 sensitivityToolStripMenuItem,

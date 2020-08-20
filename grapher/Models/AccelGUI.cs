@@ -109,6 +109,7 @@ namespace grapher
         {
             Sensitivity.SetActiveValues(ManagedAcceleration.SensitivityX, ManagedAcceleration.SensitivityY);
             Rotation.SetActiveValue(ManagedAcceleration.Rotation);
+            AccelerationOptions.SetActiveValue(ManagedAcceleration.Type);
             Offset.SetActiveValue(ManagedAcceleration.Offset);
             Acceleration.SetActiveValue(ManagedAcceleration.Acceleration);
             Cap.SetActiveValues(ManagedAcceleration.GainCap, ManagedAcceleration.CapX, ManagedAcceleration.CapY, ManagedAcceleration.GainCapEnabled);
