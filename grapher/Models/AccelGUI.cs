@@ -1,5 +1,6 @@
 ﻿using grapher.Models.Calculations;
 using grapher.Models.Mouse;
+using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,7 +33,8 @@ namespace grapher
             Option midpoint,
             Button writeButton,
             Label mouseMoveLabel,
-            ToolStripMenuItem scaleMenuItem)
+            ToolStripMenuItem scaleMenuItem,
+            ToolStripMenuItem autoWriteMenuItem)
         {
             AccelForm = accelForm;
             AccelCalculator = accelCalculator;
@@ -51,6 +53,7 @@ namespace grapher
             ScaleMenuItem = scaleMenuItem;
 
             ManagedAcceleration.ReadFromDriver();
+            SavedSettings = StartupLoad(AccelCalculator.DPI, AccelCalculator.PollRate, autoWriteMenuItem);
             UpdateGraph();
 
             MouseWatcher = new MouseWatcher(AccelForm, mouseMoveLabel, AccelCharts);
@@ -63,6 +66,8 @@ namespace grapher
         #region properties
 
         public RawAcceleration AccelForm { get; }
+
+        public RawAccelSettings SavedSettings { get; }
 
         public AccelCalculator AccelCalculator { get; }
 
@@ -103,6 +108,7 @@ namespace grapher
             AccelCalculator.Calculate(AccelCharts.AccelData, ManagedAcceleration);
             AccelCharts.Bind();
             UpdateActiveValueLabels();
+            SavedSettings.Save();
         }
 
         public void UpdateActiveValueLabels()
@@ -116,6 +122,25 @@ namespace grapher
             Weight.SetActiveValues(ManagedAcceleration.WeightX, ManagedAcceleration.WeightY);
             LimitOrExponent.SetActiveValue(ManagedAcceleration.LimitExp);
             Midpoint.SetActiveValue(ManagedAcceleration.Midpoint);
+        }
+
+        private RawAccelSettings StartupLoad(Field dpiField, Field pollRateField, ToolStripMenuItem autoWriteMenuItem)
+        {
+            if (RawAccelSettings.Exists())
+            {
+                var settings = RawAccelSettings.Load();
+                settings.GUISettings.BindToGUI(dpiField, pollRateField, autoWriteMenuItem);
+                return settings;
+            }
+            else
+            {
+                return new RawAccelSettings(
+                    ManagedAcceleration,
+                    new GUISettings(
+                        AccelCalculator.DPI,
+                        AccelCalculator.PollRate,
+                        autoWriteMenuItem));
+            }
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)

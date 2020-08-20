@@ -7,10 +7,13 @@
 using namespace rawaccel;
 using namespace System;
 
+[ Serializable ]
 public ref class ManagedAccel
 {
 protected:
+    [ NonSerialized ]
 	mouse_modifier* modifier_instance;
+    [ NonSerialized ]
     wrapper_io* driverWriter;
 public:
 	ManagedAccel(mouse_modifier* accel)

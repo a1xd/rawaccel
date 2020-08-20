@@ -1,0 +1,23 @@
+{
+  "ManagedAccel": {
+    "Midpoint": 0.0,
+    "LimitExp": 2.8188211394527425,
+    "Offset": 0.0,
+    "WeightY": 0.162,
+    "WeightX": 0.162,
+    "GainCapEnabled": true,
+    "GainCap": 49.127,
+    "CapY": 9.0,
+    "CapX": 9.0,
+    "Acceleration": 0.023716,
+    "Type": 2,
+    "Rotation": 1.0,
+    "SensitivityY": 0.1,
+    "SensitivityX": 0.075
+  },
+  "GUISettings": {
+    "AutoWriteToDriverOnStartup": false,
+    "DPI": 0,
+    "PollRate": 0
+  }
+}

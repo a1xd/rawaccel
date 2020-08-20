@@ -112,6 +112,8 @@ namespace grapher
             this.OffsetActiveLabel = new System.Windows.Forms.Label();
             this.LimitExpActiveLabel = new System.Windows.Forms.Label();
             this.MidpointActiveLabel = new System.Windows.Forms.Label();
+            this.startupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
@@ -417,7 +419,8 @@ namespace grapher
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.graphsToolStripMenuItem,
-            this.advancedToolStripMenuItem});
+            this.advancedToolStripMenuItem,
+            this.startupToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1786, 24);
@@ -717,6 +720,21 @@ namespace grapher
             this.MidpointActiveLabel.TabIndex = 47;
             this.MidpointActiveLabel.Text = "0";
             // 
+            // startupToolStripMenuItem
+            // 
+            this.startupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AutoWriteMenuItem});
+            this.startupToolStripMenuItem.Name = "startupToolStripMenuItem";
+            this.startupToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.startupToolStripMenuItem.Text = "Startup";
+            // 
+            // AutoWriteMenuItem
+            // 
+            this.AutoWriteMenuItem.CheckOnClick = true;
+            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
+            this.AutoWriteMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.AutoWriteMenuItem.Text = "Apply Settings File on Startup";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -845,6 +863,8 @@ namespace grapher
         private System.Windows.Forms.Label OffsetActiveLabel;
         private System.Windows.Forms.Label LimitExpActiveLabel;
         private System.Windows.Forms.Label MidpointActiveLabel;
+        private System.Windows.Forms.ToolStripMenuItem startupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AutoWriteMenuItem;
     }
 }
 

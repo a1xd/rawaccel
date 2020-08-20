@@ -218,7 +218,8 @@ namespace grapher
                 midpoint,
                 writeButton,
                 MouseLabel,
-                ScaleMenuItem);
+                ScaleMenuItem,
+                AutoWriteMenuItem);
         }
 
         #endregion Constructor
