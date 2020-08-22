@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using grapher.Models.Calculations;
 using grapher.Models.Options;
+using grapher.Models.Serialized;
 
 namespace grapher
 {
@@ -90,6 +91,7 @@ namespace grapher
             var managedAcceleration = new ManagedAccel(args_ptr);
 
             Marshal.FreeHGlobal(args_ptr);
+
 
             var accelCharts = new AccelCharts(
                                 this,
@@ -198,15 +200,21 @@ namespace grapher
                 cap,
                 weight);
 
-            AccelCalculator accelCalculator = new AccelCalculator(
+            var accelCalculator = new AccelCalculator(
                 new Field(DPITextBox.TextBox, this, AccelCalculator.DefaultDPI),
                 new Field(PollRateTextBox.TextBox, this, AccelCalculator.DefaultPollRate));
+
+            var settings = new SettingsManager(
+                managedAcceleration,
+                accelCalculator.DPI,
+                accelCalculator.PollRate,
+                AutoWriteMenuItem);
 
             AccelGUI = new AccelGUI(
                 this,
                 accelCalculator,
                 accelCharts,
-                managedAcceleration,
+                settings,
                 accelerationOptions,
                 sensitivity,
                 rotation,
@@ -249,21 +257,7 @@ namespace grapher
 
         private void writeButton_Click(object sender, EventArgs e)
         {
-            AccelGUI.ManagedAcceleration.UpdateAccel(
-                AccelGUI.AccelerationOptions.AccelerationIndex, 
-                AccelGUI.Rotation.Field.Data,
-                AccelGUI.Sensitivity.Fields.X,
-                AccelGUI.Sensitivity.Fields.Y,
-                AccelGUI.Weight.Fields.X,
-                AccelGUI.Weight.Fields.Y,
-                AccelGUI.Cap.SensitivityCapX,
-                AccelGUI.Cap.SensitivityCapY,
-                AccelGUI.Offset.Field.Data,
-                AccelGUI.Acceleration.Field.Data,
-                AccelGUI.LimitOrExponent.Field.Data,
-                AccelGUI.Midpoint.Field.Data,
-                AccelGUI.Cap.VelocityGainCap);
-            AccelGUI.UpdateGraph();
+            AccelGUI.UpdateActiveSettingsFromFields();
         }
 
         #endregion Methods

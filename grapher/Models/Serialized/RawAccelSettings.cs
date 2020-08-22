@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,19 +13,28 @@ namespace grapher.Models.Serialized
     [Serializable]
     public class RawAccelSettings
     {
-        public const string DefaultSettingsFile = @".\settings.json";
+        public const string DefaultSettingsFileName = @"settings.json";
+        public static readonly string ExecutingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        public static readonly string DefaultSettingsFile = Path.Combine(ExecutingDirectory, DefaultSettingsFileName);
+        public static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
+        {
+            MissingMemberHandling = MissingMemberHandling.Error,
+        };
+
+        public RawAccelSettings() { }
 
         public RawAccelSettings(
             ManagedAccel managedAccel,
             GUISettings guiSettings)
         {
-            ManagedAccel = managedAccel;
+            AccelerationSettings = new modifier_args(managedAccel);
             GUISettings = guiSettings;
         }
 
-        public ManagedAccel ManagedAccel { get; set; }
 
         public GUISettings GUISettings { get; set; }
+
+        public modifier_args AccelerationSettings { get; set; }
 
         public static RawAccelSettings Load()
         {
@@ -38,21 +48,14 @@ namespace grapher.Models.Serialized
                 throw new Exception($"Settings file does not exist at {file}");
             }
 
-            object deserializedObject;
+            RawAccelSettings deserializedSettings;
             try
             {
-               deserializedObject = JsonConvert.DeserializeObject(File.ReadAllText(file));
+               deserializedSettings = JsonConvert.DeserializeObject<RawAccelSettings>(File.ReadAllText(file), SerializerSettings);
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception($"Settings file at {file} does not contain valid JSON.");
-            }
-
-            RawAccelSettings deserializedSettings = (RawAccelSettings)deserializedObject;
-
-            if (deserializedSettings == null)
-            {
-                throw new Exception($"Settings file at {file} does not contain valid Raw Accel Settings.");
+                throw new Exception($"Settings file at {file} does not contain valid Raw Accel Settings.", e);
             }
 
             return deserializedSettings;

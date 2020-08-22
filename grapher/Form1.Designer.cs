@@ -95,6 +95,8 @@ namespace grapher
             this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sensitivityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.velocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AccelerationChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.GainChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -112,8 +114,6 @@ namespace grapher
             this.OffsetActiveLabel = new System.Windows.Forms.Label();
             this.LimitExpActiveLabel = new System.Windows.Forms.Label();
             this.MidpointActiveLabel = new System.Windows.Forms.Label();
-            this.startupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
@@ -519,6 +519,23 @@ namespace grapher
             this.velocityGainToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.velocityGainToolStripMenuItem.Text = "Velocity Gain";
             // 
+            // startupToolStripMenuItem
+            // 
+            this.startupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AutoWriteMenuItem});
+            this.startupToolStripMenuItem.Name = "startupToolStripMenuItem";
+            this.startupToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.startupToolStripMenuItem.Text = "Startup";
+            // 
+            // AutoWriteMenuItem
+            // 
+            this.AutoWriteMenuItem.Checked = true;
+            this.AutoWriteMenuItem.CheckOnClick = true;
+            this.AutoWriteMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
+            this.AutoWriteMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.AutoWriteMenuItem.Text = "Apply Settings File on Startup";
+            // 
             // AccelerationChartY
             // 
             chartArea4.AxisX.Title = "Speed (counts/ms)";
@@ -719,21 +736,6 @@ namespace grapher
             this.MidpointActiveLabel.Size = new System.Drawing.Size(13, 13);
             this.MidpointActiveLabel.TabIndex = 47;
             this.MidpointActiveLabel.Text = "0";
-            // 
-            // startupToolStripMenuItem
-            // 
-            this.startupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AutoWriteMenuItem});
-            this.startupToolStripMenuItem.Name = "startupToolStripMenuItem";
-            this.startupToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            this.startupToolStripMenuItem.Text = "Startup";
-            // 
-            // AutoWriteMenuItem
-            // 
-            this.AutoWriteMenuItem.CheckOnClick = true;
-            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
-            this.AutoWriteMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.AutoWriteMenuItem.Text = "Apply Settings File on Startup";
             // 
             // RawAcceleration
             // 

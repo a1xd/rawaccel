@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,41 +12,22 @@ namespace grapher.Models.Serialized
     [Serializable]
     public class GUISettings
     {
-        public GUISettings(
-            Field dpiField,
-            Field pollRateField,
-            ToolStripMenuItem autoWriteMenuItem)
+        public GUISettings() {}
+
+        public GUISettings(bool autoWrite, int dpi, int pollRate)
         {
-            BindToGUI(dpiField, pollRateField, autoWriteMenuItem);
+            AutoWriteToDriverOnStartup = autoWrite;
+            DPI = dpi;
+            PollRate = pollRate;
         }
 
+        [JsonProperty(Order = 1)]
         public bool AutoWriteToDriverOnStartup { get; set; }
 
+        [JsonProperty(Order = 2)]
         public int DPI { get; set; }
 
+        [JsonProperty(Order = 3)]
         public int PollRate { get; set; }
-
-        [field: NonSerialized]
-        private Field DpiField { get; set; }
-
-        [field: NonSerialized]
-        private Field PollRateField { get; set; }
-
-        [field: NonSerialized]
-        private ToolStripMenuItem AutoWriteMenuItem { get; set; }
-
-        public void UpdateSettings()
-        {
-            DPI = (int)DpiField.Data;
-            PollRate = (int)PollRateField.Data;
-            AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked;
-        }
-
-        public void BindToGUI(Field dpiField, Field pollRateField, ToolStripMenuItem autoWriteMenuItem)
-        {
-            DpiField = dpiField;
-            PollRateField = pollRateField;
-            AutoWriteMenuItem = autoWriteMenuItem;
-        }
     }
 }

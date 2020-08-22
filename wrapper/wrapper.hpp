@@ -7,13 +7,10 @@
 using namespace rawaccel;
 using namespace System;
 
-[ Serializable ]
 public ref class ManagedAccel
 {
 protected:
-    [ NonSerialized ]
 	mouse_modifier* modifier_instance;
-    [ NonSerialized ]
     wrapper_io* driverWriter;
 public:
 	ManagedAccel(mouse_modifier* accel)
@@ -27,6 +24,9 @@ public:
         modifier_instance = new mouse_modifier(*reinterpret_cast<modifier_args*>(args.ToPointer()));
         driverWriter = new wrapper_io();
 	}
+
+    // Empty constructor needed for serialization
+    ManagedAccel() {}
 
     virtual ~ManagedAccel()
     {
@@ -49,16 +49,17 @@ public:
     property double Rotation { double get(); }
     property int Type { int get(); }
     property double Acceleration { double get(); }
+    property bool GainCapEnabled { bool get(); }
     property double CapX { double get(); }
     property double CapY { double get(); }
     property double GainCap { double get(); }
-    property bool GainCapEnabled { bool get(); }
     property double WeightX { double get(); }
     property double WeightY { double get(); }
     property double Offset { double get(); }
     property double LimitExp { double get(); }
     property double Midpoint { double get(); }
-
+    property double MinimumTime { double get(); }
+    property double PowerScale { double get(); }
     mouse_modifier* GetInstance()
     {
         return modifier_instance;

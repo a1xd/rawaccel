@@ -31,7 +31,7 @@ void ManagedAccel::UpdateAccel(
 	double midpoint,
 	double gain_cap)
 {
-	modifier_args args{};
+	modifier_args args = modifier_args{};
 	args.acc_fn_args.accel_mode = mode;
 	args.degrees = rotation;
 	args.sens.x = sensitivityX;
@@ -52,6 +52,7 @@ void ManagedAccel::UpdateAccel(
 	delete temp_modifier;
 
 	ReadFromDriver();
+
 }
 
 double ManagedAccel::SensitivityX::get() { return modifier_instance->sensitivity.x; }
@@ -68,6 +69,8 @@ double ManagedAccel::WeightY::get() { return modifier_instance->accel_fn.impl_ar
 double ManagedAccel::Offset::get() { return modifier_instance->accel_fn.speed_offset; }
 double ManagedAccel::LimitExp::get() { return modifier_instance->accel_fn.impl_args.limit; }
 double ManagedAccel::Midpoint::get() { return modifier_instance->accel_fn.impl_args.midpoint; }
+double ManagedAccel::MinimumTime::get() { return modifier_instance->accel_fn.time_min; }
+double ManagedAccel::PowerScale::get() { return modifier_instance->accel_fn.impl_args.power_scale; }
 
 void ManagedAccel::WriteToDriver()
 {

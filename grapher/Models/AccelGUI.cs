@@ -21,7 +21,7 @@ namespace grapher
             RawAcceleration accelForm,
             AccelCalculator accelCalculator,
             AccelCharts accelCharts,
-            ManagedAccel managedAccel,
+            SettingsManager settings,
             AccelOptions accelOptions,
             OptionXY sensitivity,
             Option rotation,
@@ -39,7 +39,6 @@ namespace grapher
             AccelForm = accelForm;
             AccelCalculator = accelCalculator;
             AccelCharts = accelCharts;
-            ManagedAcceleration = managedAccel;
             AccelerationOptions = accelOptions;
             Sensitivity = sensitivity;
             Rotation = rotation;
@@ -51,9 +50,8 @@ namespace grapher
             Midpoint = midpoint;
             WriteButton = writeButton;
             ScaleMenuItem = scaleMenuItem;
-
-            ManagedAcceleration.ReadFromDriver();
-            SavedSettings = StartupLoad(AccelCalculator.DPI, AccelCalculator.PollRate, autoWriteMenuItem);
+            Settings = settings;
+            Settings.Startup();
             UpdateGraph();
 
             MouseWatcher = new MouseWatcher(AccelForm, mouseMoveLabel, AccelCharts);
@@ -67,13 +65,11 @@ namespace grapher
 
         public RawAcceleration AccelForm { get; }
 
-        public RawAccelSettings SavedSettings { get; }
-
         public AccelCalculator AccelCalculator { get; }
 
         public AccelCharts AccelCharts { get; }
 
-        public ManagedAccel ManagedAcceleration { get; }
+        public SettingsManager Settings { get; }
 
         public AccelOptions AccelerationOptions { get; }
 
@@ -103,44 +99,43 @@ namespace grapher
 
         #region methods
 
+        public void UpdateActiveSettingsFromFields()
+        {
+            Settings.UpdateActiveSettings(
+                AccelerationOptions.AccelerationIndex, 
+                Rotation.Field.Data,
+                Sensitivity.Fields.X,
+                Sensitivity.Fields.Y,
+                Weight.Fields.X,
+                Weight.Fields.Y,
+                Cap.SensitivityCapX,
+                Cap.SensitivityCapY,
+                Offset.Field.Data,
+                Acceleration.Field.Data,
+                LimitOrExponent.Field.Data,
+                Midpoint.Field.Data,
+                Cap.VelocityGainCap);
+            UpdateGraph();
+        }
+
         public void UpdateGraph()
         {
-            AccelCalculator.Calculate(AccelCharts.AccelData, ManagedAcceleration);
+            AccelCalculator.Calculate(AccelCharts.AccelData, Settings.ActiveAccel);
             AccelCharts.Bind();
             UpdateActiveValueLabels();
-            SavedSettings.Save();
         }
 
         public void UpdateActiveValueLabels()
         {
-            Sensitivity.SetActiveValues(ManagedAcceleration.SensitivityX, ManagedAcceleration.SensitivityY);
-            Rotation.SetActiveValue(ManagedAcceleration.Rotation);
-            AccelerationOptions.SetActiveValue(ManagedAcceleration.Type);
-            Offset.SetActiveValue(ManagedAcceleration.Offset);
-            Acceleration.SetActiveValue(ManagedAcceleration.Acceleration);
-            Cap.SetActiveValues(ManagedAcceleration.GainCap, ManagedAcceleration.CapX, ManagedAcceleration.CapY, ManagedAcceleration.GainCapEnabled);
-            Weight.SetActiveValues(ManagedAcceleration.WeightX, ManagedAcceleration.WeightY);
-            LimitOrExponent.SetActiveValue(ManagedAcceleration.LimitExp);
-            Midpoint.SetActiveValue(ManagedAcceleration.Midpoint);
-        }
-
-        private RawAccelSettings StartupLoad(Field dpiField, Field pollRateField, ToolStripMenuItem autoWriteMenuItem)
-        {
-            if (RawAccelSettings.Exists())
-            {
-                var settings = RawAccelSettings.Load();
-                settings.GUISettings.BindToGUI(dpiField, pollRateField, autoWriteMenuItem);
-                return settings;
-            }
-            else
-            {
-                return new RawAccelSettings(
-                    ManagedAcceleration,
-                    new GUISettings(
-                        AccelCalculator.DPI,
-                        AccelCalculator.PollRate,
-                        autoWriteMenuItem));
-            }
+            Sensitivity.SetActiveValues(Settings.ActiveAccel.SensitivityX, Settings.ActiveAccel.SensitivityY);
+            Rotation.SetActiveValue(Settings.ActiveAccel.Rotation);
+            AccelerationOptions.SetActiveValue(Settings.ActiveAccel.Type);
+            Offset.SetActiveValue(Settings.ActiveAccel.Offset);
+            Acceleration.SetActiveValue(Settings.ActiveAccel.Acceleration);
+            Cap.SetActiveValues(Settings.ActiveAccel.GainCap, Settings.ActiveAccel.CapX, Settings.ActiveAccel.CapY, Settings.ActiveAccel.GainCapEnabled);
+            Weight.SetActiveValues(Settings.ActiveAccel.WeightX, Settings.ActiveAccel.WeightY);
+            LimitOrExponent.SetActiveValue(Settings.ActiveAccel.LimitExp);
+            Midpoint.SetActiveValue(Settings.ActiveAccel.Midpoint);
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)

@@ -85,7 +85,9 @@
     <Compile Include="Models\Options\Option.cs" />
     <Compile Include="Models\Options\OptionXY.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
+    <Compile Include="Models\Serialized\ModifierArgs.cs" />
     <Compile Include="Models\Serialized\RawAccelSettings.cs" />
+    <Compile Include="Models\Serialized\SettingsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
