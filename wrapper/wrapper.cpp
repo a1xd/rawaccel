@@ -57,7 +57,7 @@ void ManagedAccel::UpdateAccel(
 
 double ManagedAccel::SensitivityX::get() { return modifier_instance->sensitivity.x; }
 double ManagedAccel::SensitivityY::get() { return modifier_instance->sensitivity.y; }
-double ManagedAccel::Rotation::get() { return modifier_instance->rotate.rot_vec.x; }
+double ManagedAccel::Rotation::get() { return atan(modifier_instance->rotate.rot_vec.y / modifier_instance->rotate.rot_vec.x) * 180 / M_PI; }
 int ManagedAccel::Type::get() { return modifier_instance->accel_fn.accel.tag; }
 double ManagedAccel::Acceleration::get() { return modifier_instance->accel_fn.impl_args.accel; }
 double ManagedAccel::CapX::get() { return modifier_instance->accel_fn.clamp.x.hi; }
