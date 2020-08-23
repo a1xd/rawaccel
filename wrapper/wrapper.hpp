@@ -25,6 +25,9 @@ public:
         driverWriter = new wrapper_io();
 	}
 
+    // Empty constructor needed for serialization
+    ManagedAccel() {}
+
     virtual ~ManagedAccel()
     {
         if (modifier_instance!= nullptr)
@@ -40,10 +43,23 @@ public:
         }
     }
 
-    double GetSensitivityX();
-
-    double GetSensitivityY();
-
+    // Duplicate all relevant rawaccel struct members here for access and display in GUI
+    property double SensitivityX { double get(); }
+    property double SensitivityY { double get(); }
+    property double Rotation { double get(); }
+    property int Type { int get(); }
+    property double Acceleration { double get(); }
+    property bool GainCapEnabled { bool get(); }
+    property double CapX { double get(); }
+    property double CapY { double get(); }
+    property double GainCap { double get(); }
+    property double WeightX { double get(); }
+    property double WeightY { double get(); }
+    property double Offset { double get(); }
+    property double LimitExp { double get(); }
+    property double Midpoint { double get(); }
+    property double MinimumTime { double get(); }
+    property double PowerScale { double get(); }
     mouse_modifier* GetInstance()
     {
         return modifier_instance;

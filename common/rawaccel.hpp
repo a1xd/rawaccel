@@ -9,8 +9,10 @@
 #include "accel-linear.hpp"
 #include "accel-classic.hpp"
 #include "accel-natural.hpp"
+#include "accel-naturalgain.hpp"
 #include "accel-logarithmic.hpp"
 #include "accel-sigmoid.hpp"
+#include "accel-sigmoidgain.hpp"
 #include "accel-power.hpp"
 #include "accel-noaccel.hpp"
 
@@ -76,7 +78,7 @@ namespace rawaccel {
     };
 
     /// <summary> Tagged union to hold all accel implementations and allow "polymorphism" via a visitor call. </summary>
-    using accel_impl_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_noaccel>;
+    using accel_impl_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_naturalgain, accel_sigmoidgain, accel_noaccel>;
 
     /// <summary> Struct to hold information about applying a gain cap. </summary>
     struct velocity_gain_cap {
@@ -183,6 +185,8 @@ namespace rawaccel {
         vec2<accel_scale_clamp> clamp;
 
         velocity_gain_cap gain_cap = velocity_gain_cap();
+        
+        accel_args impl_args;
 
         accel_function(const accel_fn_args& args) {
             if (args.time_min <= 0) bad_arg("min time must be positive");
@@ -190,6 +194,7 @@ namespace rawaccel {
 
             accel.tag = args.accel_mode;
             accel.visit([&](auto& impl) { impl = { args.acc_args }; });
+            impl_args = args.acc_args;
 
             time_min = args.time_min;
             speed_offset = args.acc_args.offset;

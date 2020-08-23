@@ -4,13 +4,17 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace grapher.Models.Calculations
 {
-    public static class AccelCalculator
+    public class AccelCalculator
     {
-        public const int MaxCombined = 100;
-        public const int MaxXY = 150;
+        public const int DefaultDPI = 1200;
+        public const int DefaultPollRate = 1000;
+        public const int Resolution = 100;
+        public const double MaxMultiplier = 85;
+        public const double XYToCombinedRatio = 1.3;
 
         public struct MagnitudeData
         {
@@ -19,17 +23,38 @@ namespace grapher.Models.Calculations
             public int y;
         }
 
-        public static ReadOnlyCollection<MagnitudeData> MagnitudesCombined = GetMagnitudes();
-        public static ReadOnlyCollection<MagnitudeData> MagnitudesX = GetMagnitudesX();
-        public static ReadOnlyCollection<MagnitudeData> MagnitudesY = GetMagnitudesY();
 
-        public static void Calculate(AccelData data, ManagedAccel accel)
+        public AccelCalculator(Field dpi, Field pollRate)
         {
+            DPI = dpi;
+            PollRate = pollRate;
+        }
+
+        public ReadOnlyCollection<MagnitudeData> MagnitudesCombined { get; private set; }
+
+        public ReadOnlyCollection<MagnitudeData> MagnitudesX { get; private set; }
+
+        public ReadOnlyCollection<MagnitudeData> MagnitudesY { get; private set; }
+
+        public Field DPI { get; private set; }
+
+        public Field PollRate { get; private set; }
+
+        private double CombinedMaxVelocity { get; set; }
+
+        private double XYMaxVelocity { get; set; }
+
+        private int Increment { get; set; }
+
+        public void Calculate(AccelData data, ManagedAccel accel)
+        {
+            ScaleByMouseSettings();
+
             data.Clear();
 
-            Calculate(data.Combined, accel, accel.GetSensitivityX(), MagnitudesCombined);
-            Calculate(data.X, accel, accel.GetSensitivityX(), MagnitudesX);
-            Calculate(data.Y, accel, accel.GetSensitivityY(), MagnitudesY);
+            Calculate(data.Combined, accel, accel.SensitivityX, MagnitudesCombined);
+            Calculate(data.X, accel, accel.SensitivityX, MagnitudesX);
+            Calculate(data.Y, accel, accel.SensitivityY, MagnitudesY);
         }
 
         public static void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
@@ -70,12 +95,12 @@ namespace grapher.Models.Calculations
             data.OrderedVelocityPointsList.AddRange(data.VelocityPoints.Values.ToList());
         }
 
-        public static ReadOnlyCollection<MagnitudeData> GetMagnitudes()
+        public ReadOnlyCollection<MagnitudeData> GetMagnitudes()
         {
             var magnitudes = new List<MagnitudeData>();
-            for (int i = 0; i < MaxCombined; i++)
+            for (int i = 0; i < CombinedMaxVelocity; i+=Increment)
             {
-                for (int j = 0; j <= i; j++)
+                for (int j = 0; j <= i; j+=Increment)
                 {
                     MagnitudeData magnitudeData;
                     magnitudeData.magnitude = Magnitude(i, j);
@@ -90,11 +115,11 @@ namespace grapher.Models.Calculations
             return magnitudes.AsReadOnly();
         }
 
-        public static ReadOnlyCollection<MagnitudeData> GetMagnitudesX()
+        public ReadOnlyCollection<MagnitudeData> GetMagnitudesX()
         {
             var magnitudes = new List<MagnitudeData>();
 
-            for (int i = 0; i < MaxXY; i++)
+            for (int i = 0; i < XYMaxVelocity; i+=Increment)
             {
                 MagnitudeData magnitudeData;
                 magnitudeData.magnitude = i;
@@ -106,11 +131,11 @@ namespace grapher.Models.Calculations
             return magnitudes.AsReadOnly();
         }
 
-        public static ReadOnlyCollection<MagnitudeData> GetMagnitudesY()
+        public ReadOnlyCollection<MagnitudeData> GetMagnitudesY()
         {
             var magnitudes = new List<MagnitudeData>();
 
-            for (int i = 0; i < MaxXY; i++)
+            for (int i = 0; i < XYMaxVelocity; i+=Increment)
             {
                 MagnitudeData magnitudeData;
                 magnitudeData.magnitude = i;
@@ -140,6 +165,17 @@ namespace grapher.Models.Calculations
         public static double Velocity(double x, double y, double time)
         {
             return Magnitude(x, y) / time;
+        }
+
+        public void ScaleByMouseSettings()
+        {
+            var dpiPollFactor = DPI.Data / PollRate.Data;
+            CombinedMaxVelocity = dpiPollFactor * MaxMultiplier;
+            Increment = (int) Math.Floor(CombinedMaxVelocity / Resolution);
+            XYMaxVelocity = CombinedMaxVelocity * 1.5;
+            MagnitudesCombined = GetMagnitudes();
+            MagnitudesX = GetMagnitudesX();
+            MagnitudesY = GetMagnitudesY();
         }
     }
 }

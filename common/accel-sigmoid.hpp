@@ -19,7 +19,7 @@ namespace rawaccel {
 		}
 
 		inline double accelerate(double speed) const {
-			//f(x) = k/(1+e^(-m(c-x)))
+			//f(x) = k/(1+e^(-m(x-c)))
 			return limit / (exp(-speed_coeff * (speed - midpoint)) + 1);
 		}
 

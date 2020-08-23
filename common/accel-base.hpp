@@ -36,7 +36,7 @@ namespace rawaccel {
         /// <summary> Coefficients applied to acceleration per axis.</summary>
         vec2d weight = { 1, 1 };
 
-        /// <summary> Generally, the acceleration ramp rate.
+        /// <summary> Generally, the acceleration ramp rate.</summary>
         double speed_coeff = 0;
 
         accel_base(const accel_args& args) {

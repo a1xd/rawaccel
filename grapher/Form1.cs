@@ -9,12 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using grapher.Models.Calculations;
+using grapher.Models.Options;
+using grapher.Models.Serialized;
 
 namespace grapher
 {
     public enum accel_mode 
     {
-        linear=1, classic, natural, logarithmic, sigmoid, power, noaccel
+        linear=1, classic, natural, logarithmic, sigmoid, power, naturalgain, sigmoidgain, noaccel
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -89,6 +92,7 @@ namespace grapher
 
             Marshal.FreeHGlobal(args_ptr);
 
+
             var accelCharts = new AccelCharts(
                                 this,
                                 new ChartXY(AccelerationChart, AccelerationChartY),
@@ -97,17 +101,81 @@ namespace grapher
                                 showVelocityGainToolStripMenuItem,
                                 new CheckBox[] { sensXYLock, weightXYLock, capXYLock });
 
+            ActiveValueTitle.AutoSize = false;
+            ActiveValueTitle.Left = LockXYLabel.Left + LockXYLabel.Width;
+            ActiveValueTitle.Width = AccelerationChart.Left - ActiveValueTitle.Left;
+            ActiveValueTitle.TextAlign = ContentAlignment.MiddleCenter;
 
-            var sensitivity = new OptionXY(sensitivityBoxX, sensitivityBoxY, sensXYLock, this, 1, sensitivityLabel, "Sensitivity", accelCharts);
-            var rotation = new Option(rotationBox, this, 0, rotationLabel, "Rotation");
-            var weight = new OptionXY(weightBoxFirst, weightBoxSecond, weightXYLock, this, 1, weightLabel, "Weight", accelCharts);
-            var cap = new OptionXY(capBoxX, capBoxY, capXYLock, this, 0, capLabel, "Cap", accelCharts);
-            var offset = new Option(offsetBox, this, 0, offsetLabel, "Offset");
+            var sensitivity = new OptionXY(
+                sensitivityBoxX,
+                sensitivityBoxY,
+                sensXYLock,
+                this,
+                1,
+                sensitivityLabel,
+                new ActiveValueLabelXY(
+                    new ActiveValueLabel(SensitivityActiveXLabel, ActiveValueTitle),
+                    new ActiveValueLabel(SensitivityActiveYLabel, ActiveValueTitle)),
+                "Sensitivity",
+                accelCharts);
+
+            var rotation = new Option(
+                rotationBox,
+                this,
+                0,
+                rotationLabel,
+                new ActiveValueLabel(RotationActiveLabel, ActiveValueTitle),
+                "Rotation");
+
+            var weight = new OptionXY(
+                weightBoxFirst,
+                weightBoxSecond,
+                weightXYLock,
+                this,
+                1,
+                weightLabel,
+                new ActiveValueLabelXY(
+                    new ActiveValueLabel(WeightActiveXLabel, ActiveValueTitle),
+                    new ActiveValueLabel(WeightActiveYLabel, ActiveValueTitle)),
+                "Weight",
+                accelCharts);
+
+            var cap = new OptionXY(
+                capBoxX,
+                capBoxY,
+                capXYLock,
+                this,
+                0,
+                capLabel,
+                new ActiveValueLabelXY(
+                    new ActiveValueLabel(CapActiveXLabel, ActiveValueTitle),
+                    new ActiveValueLabel(CapActiveYLabel, ActiveValueTitle)),
+                "Cap",
+                accelCharts);
+
+            var offset = new Option(
+                offsetBox,
+                this,
+                0,
+                offsetLabel,
+                new ActiveValueLabel(OffsetActiveLabel, ActiveValueTitle),
+                "Offset");
 
             // The name and layout of these options is handled by AccelerationOptions object.
-            var acceleration = new Option(new Field(accelerationBox, this, 0), constantOneLabel);
-            var limitOrExponent = new Option(new Field(limitBox, this, 2), constantTwoLabel);
-            var midpoint = new Option(new Field(midpointBox, this, 0), constantThreeLabel);
+            var acceleration = new Option(
+                new Field(accelerationBox, this, 0),
+                constantOneLabel,
+                new ActiveValueLabel(AccelerationActiveLabel, ActiveValueTitle));
+
+            var limitOrExponent = new Option(
+                new Field(limitBox, this, 2),
+                constantTwoLabel,
+                new ActiveValueLabel(LimitExpActiveLabel, ActiveValueTitle));
+
+            var midpoint = new Option(
+                new Field(midpointBox, this, 0),
+                constantThreeLabel,
+                new ActiveValueLabel(MidpointActiveLabel, ActiveValueTitle));
 
             var accelerationOptions = new AccelOptions(
                 accelTypeDrop,
@@ -123,7 +191,8 @@ namespace grapher
                     weight,
                     cap,
                 },
-                writeButton);
+                writeButton,
+                new ActiveValueLabel(AccelTypeActiveLabel, ActiveValueTitle));
 
             var capOptions = new CapOptions(
                 sensitivityToolStripMenuItem,
@@ -131,10 +200,21 @@ namespace grapher
                 cap,
                 weight);
 
+            var accelCalculator = new AccelCalculator(
+                new Field(DPITextBox.TextBox, this, AccelCalculator.DefaultDPI),
+                new Field(PollRateTextBox.TextBox, this, AccelCalculator.DefaultPollRate));
+
+            var settings = new SettingsManager(
+                managedAcceleration,
+                accelCalculator.DPI,
+                accelCalculator.PollRate,
+                AutoWriteMenuItem);
+
             AccelGUI = new AccelGUI(
                 this,
+                accelCalculator,
                 accelCharts,
-                managedAcceleration,
+                settings,
                 accelerationOptions,
                 sensitivity,
                 rotation,
@@ -145,7 +225,9 @@ namespace grapher
                 limitOrExponent,
                 midpoint,
                 writeButton,
-                MouseLabel);
+                MouseLabel,
+                ScaleMenuItem,
+                AutoWriteMenuItem);
         }
 
         #endregion Constructor
@@ -175,21 +257,7 @@ namespace grapher
 
         private void writeButton_Click(object sender, EventArgs e)
         {
-            AccelGUI.ManagedAcceleration.UpdateAccel(
-                AccelGUI.AccelerationOptions.AccelerationIndex, 
-                AccelGUI.Rotation.Field.Data,
-                AccelGUI.Sensitivity.Fields.X,
-                AccelGUI.Sensitivity.Fields.Y,
-                AccelGUI.Weight.Fields.X,
-                AccelGUI.Weight.Fields.Y,
-                AccelGUI.Cap.SensitivityCapX,
-                AccelGUI.Cap.SensitivityCapY,
-                AccelGUI.Offset.Field.Data,
-                AccelGUI.Acceleration.Field.Data,
-                AccelGUI.LimitOrExponent.Field.Data,
-                AccelGUI.Midpoint.Field.Data,
-                AccelGUI.Cap.VelocityGainCap);
-            AccelGUI.UpdateGraph();
+            AccelGUI.UpdateActiveSettingsFromFields();
         }
 
         #endregion Methods

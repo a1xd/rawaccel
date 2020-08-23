@@ -85,14 +85,35 @@ namespace grapher
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.graphsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scaleByDPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DPITextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.pollRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PollRateTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.ScaleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sensitivityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.velocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AccelerationChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.GainChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.MouseLabel = new System.Windows.Forms.Label();
+            this.ActiveValueTitle = new System.Windows.Forms.Label();
+            this.SensitivityActiveXLabel = new System.Windows.Forms.Label();
+            this.SensitivityActiveYLabel = new System.Windows.Forms.Label();
+            this.RotationActiveLabel = new System.Windows.Forms.Label();
+            this.AccelTypeActiveLabel = new System.Windows.Forms.Label();
+            this.AccelerationActiveLabel = new System.Windows.Forms.Label();
+            this.CapActiveXLabel = new System.Windows.Forms.Label();
+            this.WeightActiveXLabel = new System.Windows.Forms.Label();
+            this.WeightActiveYLabel = new System.Windows.Forms.Label();
+            this.CapActiveYLabel = new System.Windows.Forms.Label();
+            this.OffsetActiveLabel = new System.Windows.Forms.Label();
+            this.LimitExpActiveLabel = new System.Windows.Forms.Label();
+            this.MidpointActiveLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
@@ -110,7 +131,7 @@ namespace grapher
             this.AccelerationChart.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.AccelerationChart.Legends.Add(legend1);
-            this.AccelerationChart.Location = new System.Drawing.Point(240, 0);
+            this.AccelerationChart.Location = new System.Drawing.Point(333, 0);
             this.AccelerationChart.Name = "AccelerationChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -351,7 +372,7 @@ namespace grapher
             this.VelocityChart.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.VelocityChart.Legends.Add(legend2);
-            this.VelocityChart.Location = new System.Drawing.Point(240, 334);
+            this.VelocityChart.Location = new System.Drawing.Point(333, 334);
             this.VelocityChart.Name = "VelocityChart";
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -376,7 +397,7 @@ namespace grapher
             this.GainChart.ChartAreas.Add(chartArea3);
             legend3.Name = "Legend1";
             this.GainChart.Legends.Add(legend3);
-            this.GainChart.Location = new System.Drawing.Point(240, 647);
+            this.GainChart.Location = new System.Drawing.Point(333, 647);
             this.GainChart.Name = "GainChart";
             series5.ChartArea = "ChartArea1";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -398,10 +419,11 @@ namespace grapher
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.graphsToolStripMenuItem,
-            this.advancedToolStripMenuItem});
+            this.advancedToolStripMenuItem,
+            this.startupToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1693, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1786, 24);
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -409,7 +431,8 @@ namespace grapher
             // 
             this.graphsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.graphsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showVelocityGainToolStripMenuItem});
+            this.showVelocityGainToolStripMenuItem,
+            this.scaleByDPIToolStripMenuItem});
             this.graphsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.graphsToolStripMenuItem.Name = "graphsToolStripMenuItem";
             this.graphsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
@@ -418,8 +441,52 @@ namespace grapher
             // showVelocityGainToolStripMenuItem
             // 
             this.showVelocityGainToolStripMenuItem.Name = "showVelocityGainToolStripMenuItem";
-            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.showVelocityGainToolStripMenuItem.Text = "Show Velocity && Gain";
+            // 
+            // scaleByDPIToolStripMenuItem
+            // 
+            this.scaleByDPIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dPIToolStripMenuItem,
+            this.pollRateToolStripMenuItem,
+            this.ScaleMenuItem});
+            this.scaleByDPIToolStripMenuItem.Name = "scaleByDPIToolStripMenuItem";
+            this.scaleByDPIToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.scaleByDPIToolStripMenuItem.Text = "Scale by Mouse Settngs";
+            // 
+            // dPIToolStripMenuItem
+            // 
+            this.dPIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DPITextBox});
+            this.dPIToolStripMenuItem.Name = "dPIToolStripMenuItem";
+            this.dPIToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.dPIToolStripMenuItem.Text = "DPI";
+            // 
+            // DPITextBox
+            // 
+            this.DPITextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.DPITextBox.Name = "DPITextBox";
+            this.DPITextBox.Size = new System.Drawing.Size(100, 23);
+            // 
+            // pollRateToolStripMenuItem
+            // 
+            this.pollRateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.PollRateTextBox});
+            this.pollRateToolStripMenuItem.Name = "pollRateToolStripMenuItem";
+            this.pollRateToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.pollRateToolStripMenuItem.Text = "Poll Rate";
+            // 
+            // PollRateTextBox
+            // 
+            this.PollRateTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.PollRateTextBox.Name = "PollRateTextBox";
+            this.PollRateTextBox.Size = new System.Drawing.Size(100, 23);
+            // 
+            // ScaleMenuItem
+            // 
+            this.ScaleMenuItem.Name = "ScaleMenuItem";
+            this.ScaleMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.ScaleMenuItem.Text = "Re-scale by above";
             // 
             // advancedToolStripMenuItem
             // 
@@ -452,6 +519,23 @@ namespace grapher
             this.velocityGainToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.velocityGainToolStripMenuItem.Text = "Velocity Gain";
             // 
+            // startupToolStripMenuItem
+            // 
+            this.startupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AutoWriteMenuItem});
+            this.startupToolStripMenuItem.Name = "startupToolStripMenuItem";
+            this.startupToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.startupToolStripMenuItem.Text = "Startup";
+            // 
+            // AutoWriteMenuItem
+            // 
+            this.AutoWriteMenuItem.Checked = true;
+            this.AutoWriteMenuItem.CheckOnClick = true;
+            this.AutoWriteMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
+            this.AutoWriteMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.AutoWriteMenuItem.Text = "Apply Settings File on Startup";
+            // 
             // AccelerationChartY
             // 
             chartArea4.AxisX.Title = "Speed (counts/ms)";
@@ -460,7 +544,7 @@ namespace grapher
             this.AccelerationChartY.ChartAreas.Add(chartArea4);
             legend4.Name = "Legend1";
             this.AccelerationChartY.Legends.Add(legend4);
-            this.AccelerationChartY.Location = new System.Drawing.Point(969, 0);
+            this.AccelerationChartY.Location = new System.Drawing.Point(1062, 0);
             this.AccelerationChartY.Name = "AccelerationChartY";
             series7.ChartArea = "ChartArea1";
             series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -485,7 +569,7 @@ namespace grapher
             this.VelocityChartY.ChartAreas.Add(chartArea5);
             legend5.Name = "Legend1";
             this.VelocityChartY.Legends.Add(legend5);
-            this.VelocityChartY.Location = new System.Drawing.Point(970, 334);
+            this.VelocityChartY.Location = new System.Drawing.Point(1062, 334);
             this.VelocityChartY.Name = "VelocityChartY";
             series9.ChartArea = "ChartArea1";
             series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -510,7 +594,7 @@ namespace grapher
             this.GainChartY.ChartAreas.Add(chartArea6);
             legend6.Name = "Legend1";
             this.GainChartY.Legends.Add(legend6);
-            this.GainChartY.Location = new System.Drawing.Point(970, 647);
+            this.GainChartY.Location = new System.Drawing.Point(1062, 647);
             this.GainChartY.Name = "GainChartY";
             series11.ChartArea = "ChartArea1";
             series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -536,11 +620,141 @@ namespace grapher
             this.MouseLabel.TabIndex = 34;
             this.MouseLabel.Text = "Last (x, y): (x, y)";
             // 
+            // ActiveValueTitle
+            // 
+            this.ActiveValueTitle.AutoSize = true;
+            this.ActiveValueTitle.Location = new System.Drawing.Point(248, 30);
+            this.ActiveValueTitle.Name = "ActiveValueTitle";
+            this.ActiveValueTitle.Size = new System.Drawing.Size(67, 13);
+            this.ActiveValueTitle.TabIndex = 35;
+            this.ActiveValueTitle.Text = "Active Value";
+            // 
+            // SensitivityActiveXLabel
+            // 
+            this.SensitivityActiveXLabel.AutoSize = true;
+            this.SensitivityActiveXLabel.Location = new System.Drawing.Point(258, 49);
+            this.SensitivityActiveXLabel.Name = "SensitivityActiveXLabel";
+            this.SensitivityActiveXLabel.Size = new System.Drawing.Size(14, 13);
+            this.SensitivityActiveXLabel.TabIndex = 36;
+            this.SensitivityActiveXLabel.Text = "X";
+            // 
+            // SensitivityActiveYLabel
+            // 
+            this.SensitivityActiveYLabel.AutoSize = true;
+            this.SensitivityActiveYLabel.Location = new System.Drawing.Point(286, 50);
+            this.SensitivityActiveYLabel.Name = "SensitivityActiveYLabel";
+            this.SensitivityActiveYLabel.Size = new System.Drawing.Size(14, 13);
+            this.SensitivityActiveYLabel.TabIndex = 37;
+            this.SensitivityActiveYLabel.Text = "Y";
+            // 
+            // RotationActiveLabel
+            // 
+            this.RotationActiveLabel.AutoSize = true;
+            this.RotationActiveLabel.Location = new System.Drawing.Point(268, 75);
+            this.RotationActiveLabel.Name = "RotationActiveLabel";
+            this.RotationActiveLabel.Size = new System.Drawing.Size(13, 13);
+            this.RotationActiveLabel.TabIndex = 38;
+            this.RotationActiveLabel.Text = "0";
+            // 
+            // AccelTypeActiveLabel
+            // 
+            this.AccelTypeActiveLabel.AutoSize = true;
+            this.AccelTypeActiveLabel.Location = new System.Drawing.Point(258, 98);
+            this.AccelTypeActiveLabel.Name = "AccelTypeActiveLabel";
+            this.AccelTypeActiveLabel.Size = new System.Drawing.Size(41, 13);
+            this.AccelTypeActiveLabel.TabIndex = 39;
+            this.AccelTypeActiveLabel.Text = "Default";
+            // 
+            // AccelerationActiveLabel
+            // 
+            this.AccelerationActiveLabel.AutoSize = true;
+            this.AccelerationActiveLabel.Location = new System.Drawing.Point(268, 128);
+            this.AccelerationActiveLabel.Name = "AccelerationActiveLabel";
+            this.AccelerationActiveLabel.Size = new System.Drawing.Size(13, 13);
+            this.AccelerationActiveLabel.TabIndex = 40;
+            this.AccelerationActiveLabel.Text = "0";
+            // 
+            // CapActiveXLabel
+            // 
+            this.CapActiveXLabel.AutoSize = true;
+            this.CapActiveXLabel.Location = new System.Drawing.Point(259, 151);
+            this.CapActiveXLabel.Name = "CapActiveXLabel";
+            this.CapActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.CapActiveXLabel.TabIndex = 41;
+            this.CapActiveXLabel.Text = "0";
+            // 
+            // WeightActiveXLabel
+            // 
+            this.WeightActiveXLabel.AutoSize = true;
+            this.WeightActiveXLabel.Location = new System.Drawing.Point(259, 180);
+            this.WeightActiveXLabel.Name = "WeightActiveXLabel";
+            this.WeightActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.WeightActiveXLabel.TabIndex = 42;
+            this.WeightActiveXLabel.Text = "0";
+            // 
+            // WeightActiveYLabel
+            // 
+            this.WeightActiveYLabel.AutoSize = true;
+            this.WeightActiveYLabel.Location = new System.Drawing.Point(286, 180);
+            this.WeightActiveYLabel.Name = "WeightActiveYLabel";
+            this.WeightActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.WeightActiveYLabel.TabIndex = 43;
+            this.WeightActiveYLabel.Text = "0";
+            // 
+            // CapActiveYLabel
+            // 
+            this.CapActiveYLabel.AutoSize = true;
+            this.CapActiveYLabel.Location = new System.Drawing.Point(286, 151);
+            this.CapActiveYLabel.Name = "CapActiveYLabel";
+            this.CapActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.CapActiveYLabel.TabIndex = 44;
+            this.CapActiveYLabel.Text = "0";
+            // 
+            // OffsetActiveLabel
+            // 
+            this.OffsetActiveLabel.AutoSize = true;
+            this.OffsetActiveLabel.Location = new System.Drawing.Point(268, 206);
+            this.OffsetActiveLabel.Name = "OffsetActiveLabel";
+            this.OffsetActiveLabel.Size = new System.Drawing.Size(13, 13);
+            this.OffsetActiveLabel.TabIndex = 45;
+            this.OffsetActiveLabel.Text = "0";
+            // 
+            // LimitExpActiveLabel
+            // 
+            this.LimitExpActiveLabel.AutoSize = true;
+            this.LimitExpActiveLabel.Location = new System.Drawing.Point(268, 232);
+            this.LimitExpActiveLabel.Name = "LimitExpActiveLabel";
+            this.LimitExpActiveLabel.Size = new System.Drawing.Size(13, 13);
+            this.LimitExpActiveLabel.TabIndex = 46;
+            this.LimitExpActiveLabel.Text = "0";
+            // 
+            // MidpointActiveLabel
+            // 
+            this.MidpointActiveLabel.AutoSize = true;
+            this.MidpointActiveLabel.Location = new System.Drawing.Point(268, 255);
+            this.MidpointActiveLabel.Name = "MidpointActiveLabel";
+            this.MidpointActiveLabel.Size = new System.Drawing.Size(13, 13);
+            this.MidpointActiveLabel.TabIndex = 47;
+            this.MidpointActiveLabel.Text = "0";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1693, 958);
+            this.ClientSize = new System.Drawing.Size(1786, 958);
+            this.Controls.Add(this.MidpointActiveLabel);
+            this.Controls.Add(this.LimitExpActiveLabel);
+            this.Controls.Add(this.OffsetActiveLabel);
+            this.Controls.Add(this.CapActiveYLabel);
+            this.Controls.Add(this.WeightActiveYLabel);
+            this.Controls.Add(this.WeightActiveXLabel);
+            this.Controls.Add(this.CapActiveXLabel);
+            this.Controls.Add(this.AccelerationActiveLabel);
+            this.Controls.Add(this.AccelTypeActiveLabel);
+            this.Controls.Add(this.RotationActiveLabel);
+            this.Controls.Add(this.SensitivityActiveYLabel);
+            this.Controls.Add(this.SensitivityActiveXLabel);
+            this.Controls.Add(this.ActiveValueTitle);
             this.Controls.Add(this.MouseLabel);
             this.Controls.Add(this.GainChartY);
             this.Controls.Add(this.VelocityChartY);
@@ -632,6 +846,27 @@ namespace grapher
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart GainChartY;
         private System.Windows.Forms.Label MouseLabel;
+        private System.Windows.Forms.ToolStripMenuItem scaleByDPIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dPIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox DPITextBox;
+        private System.Windows.Forms.ToolStripMenuItem pollRateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox PollRateTextBox;
+        private System.Windows.Forms.ToolStripMenuItem ScaleMenuItem;
+        private System.Windows.Forms.Label ActiveValueTitle;
+        private System.Windows.Forms.Label SensitivityActiveXLabel;
+        private System.Windows.Forms.Label SensitivityActiveYLabel;
+        private System.Windows.Forms.Label RotationActiveLabel;
+        private System.Windows.Forms.Label AccelTypeActiveLabel;
+        private System.Windows.Forms.Label AccelerationActiveLabel;
+        private System.Windows.Forms.Label CapActiveXLabel;
+        private System.Windows.Forms.Label WeightActiveXLabel;
+        private System.Windows.Forms.Label WeightActiveYLabel;
+        private System.Windows.Forms.Label CapActiveYLabel;
+        private System.Windows.Forms.Label OffsetActiveLabel;
+        private System.Windows.Forms.Label LimitExpActiveLabel;
+        private System.Windows.Forms.Label MidpointActiveLabel;
+        private System.Windows.Forms.ToolStripMenuItem startupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AutoWriteMenuItem;
     }
 }
 

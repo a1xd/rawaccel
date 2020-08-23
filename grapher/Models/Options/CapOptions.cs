@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,9 @@ namespace grapher
 {
     public class CapOptions
     {
+
+        public const string GainCapFormatString = "0.##";
+
         public CapOptions(
             ToolStripMenuItem sensitivityCapCheck,
             ToolStripMenuItem velocityGainCapCheck,
@@ -30,13 +34,13 @@ namespace grapher
             EnableSensitivityCap();
         }
 
-        ToolStripMenuItem SensitivityCapCheck { get; }
+        public ToolStripMenuItem SensitivityCapCheck { get; }
 
-        ToolStripMenuItem VelocityGainCapCheck { get; }
+        public ToolStripMenuItem VelocityGainCapCheck { get; }
 
-        OptionXY CapOption { get; }
+        public OptionXY CapOption { get; }
 
-        OptionXY WeightOption { get; }
+        public OptionXY WeightOption { get; }
 
         public double SensitivityCapX { 
             get
@@ -81,6 +85,22 @@ namespace grapher
         }
 
         public bool IsSensitivityGain { get; private set; }
+
+        public void SetActiveValues(double gainCap, double sensCapX, double sensCapY, bool capGainEnabled)
+        {
+            if (capGainEnabled)
+            {
+                CapOption.ActiveValueLabels.X.FormatString = GainCapFormatString;
+                CapOption.ActiveValueLabels.X.Prefix = "Gain";
+                CapOption.SetActiveValues(gainCap, gainCap);
+            }
+            else
+            {
+                CapOption.ActiveValueLabels.X.FormatString = ActiveValueLabel.DefaultFormatString;
+                CapOption.ActiveValueLabels.X.Prefix = string.Empty;
+                CapOption.SetActiveValues(sensCapX, sensCapY);
+            }
+        }
 
         void OnSensitivityCapCheckClick(object sender, EventArgs e)
         {
