@@ -48,7 +48,7 @@ namespace rawaccel {
 	}
 
 
-	void write(mouse_modifier mod) {
+	void write(const mouse_modifier& mod) {
 		HANDLE ra_handle = INVALID_HANDLE_VALUE;
 
 		ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
@@ -62,12 +62,12 @@ namespace rawaccel {
 		BOOL success = DeviceIoControl(
 			ra_handle,
 			RA_WRITE,
-			&mod,                     // input buffer
-			sizeof(mouse_modifier),   // input buffer size
-			NULL,                     // output buffer
-			0,                        // output buffer size
-			&dummy,                   // bytes returned
-			NULL                      // overlapped structure
+			const_cast<mouse_modifier*>(&mod), // input buffer
+			sizeof(mouse_modifier),            // input buffer size
+			NULL,                              // output buffer
+			0,                                 // output buffer size
+			&dummy,                            // bytes returned
+			NULL                               // overlapped structure
 		);
 
 		CloseHandle(ra_handle);

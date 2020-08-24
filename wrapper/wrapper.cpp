@@ -2,8 +2,9 @@
 
 #include "wrapper.hpp"
 
-using namespace rawaccel;
-using namespace System;
+void replace(mouse_modifier* mod_ptr, const modifier_args& args) {
+	*mod_ptr = mouse_modifier(args);
+}
 
 Tuple<double, double>^ ManagedAccel::Accelerate(int x, int y, double time)
 {
@@ -11,7 +12,7 @@ Tuple<double, double>^ ManagedAccel::Accelerate(int x, int y, double time)
 		(double)x, 
 		(double)y
 	};
-	vec2d output = (*modifier_instance).modify_with_accel(input_vec2d, (milliseconds)time);
+	vec2d output = modifier_instance->modify_with_accel(input_vec2d, time);
 
 	return gcnew Tuple<double, double>(output.x, output.y);
 }
@@ -31,7 +32,7 @@ void ManagedAccel::UpdateAccel(
 	double midpoint,
 	double gain_cap)
 {
-	modifier_args args = modifier_args{};
+	modifier_args args{};
 	args.acc_fn_args.accel_mode = mode;
 	args.degrees = rotation;
 	args.sens.x = sensitivityX;
@@ -46,13 +47,9 @@ void ManagedAccel::UpdateAccel(
 	args.acc_fn_args.acc_args.exponent = lim_exp;
 	args.acc_fn_args.acc_args.midpoint = midpoint;
 	args.acc_fn_args.acc_args.gain_cap = gain_cap;
-	
-	mouse_modifier* temp_modifier = new mouse_modifier(args);
-	driverWriter->writeToDriver(temp_modifier);
-	delete temp_modifier;
 
-	ReadFromDriver();
-
+	replace(modifier_instance, args);
+	WriteToDriver();
 }
 
 double ManagedAccel::SensitivityX::get() { return modifier_instance->sensitivity.x; }
@@ -74,11 +71,10 @@ double ManagedAccel::PowerScale::get() { return modifier_instance->accel_fn.impl
 
 void ManagedAccel::WriteToDriver()
 {
-	driverWriter->writeToDriver(modifier_instance);
+	wrapper_io::writeToDriver(*modifier_instance);
 }
 
 void ManagedAccel::ReadFromDriver()
 {
-	delete modifier_instance;
-	modifier_instance = driverWriter->readFromDriver();
+	wrapper_io::readFromDriver(*modifier_instance);
 }

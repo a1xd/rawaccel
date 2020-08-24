@@ -1,43 +1,33 @@
 #pragma once
 
-#include <iostream>
-
 #include "wrapper_io.hpp"
 
-using namespace rawaccel;
 using namespace System;
 
 public ref class ManagedAccel
 {
-protected:
-	mouse_modifier* modifier_instance;
-    wrapper_io* driverWriter;
-public:
-	ManagedAccel(mouse_modifier* accel)
-		: modifier_instance(accel)
-	{
-        driverWriter = new wrapper_io();
-	}
+	mouse_modifier* const modifier_instance;
 
-    ManagedAccel(System::IntPtr args)
-    {
-        modifier_instance = new mouse_modifier(*reinterpret_cast<modifier_args*>(args.ToPointer()));
-        driverWriter = new wrapper_io();
-	}
+public:
+
+    ManagedAccel(System::IntPtr args) : 
+        modifier_instance(new mouse_modifier(*reinterpret_cast<modifier_args*>(args.ToPointer())))
+    {}
 
     // Empty constructor needed for serialization
-    ManagedAccel() {}
+    ManagedAccel() : modifier_instance(nullptr) {}
 
     virtual ~ManagedAccel()
     {
-        if (modifier_instance!= nullptr)
+        if (modifier_instance != nullptr)
         {
             delete modifier_instance;
         }
     }
+
     !ManagedAccel()
     {
-        if (modifier_instance!= nullptr)
+        if (modifier_instance != nullptr)
         {
             delete modifier_instance;
         }
@@ -60,10 +50,6 @@ public:
     property double Midpoint { double get(); }
     property double MinimumTime { double get(); }
     property double PowerScale { double get(); }
-    mouse_modifier* GetInstance()
-    {
-        return modifier_instance;
-    }
 
     Tuple<double, double>^ Accelerate(int x, int y, double time);
 
@@ -81,7 +67,6 @@ public:
         double lim_exp,
         double midpoint,
         double gain_cap);
-
 
     void WriteToDriver();
 

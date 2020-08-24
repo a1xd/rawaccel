@@ -2,7 +2,9 @@
 
 #include <rawaccel.hpp>
 
+using namespace rawaccel;
+
 struct wrapper_io {
-	void writeToDriver(rawaccel::mouse_modifier* modifier);
-	rawaccel::mouse_modifier* readFromDriver();
+	static void writeToDriver(const mouse_modifier& modifier);
+	static void readFromDriver(mouse_modifier& modifier);
 };
