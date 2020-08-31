@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Serialized;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -46,15 +47,15 @@ namespace grapher.Models.Calculations
 
         private int Increment { get; set; }
 
-        public void Calculate(AccelData data, ManagedAccel accel)
+        public void Calculate(AccelData data, ManagedAccel accel, DriverSettings settings)
         {
             ScaleByMouseSettings();
 
             data.Clear();
 
-            Calculate(data.Combined, accel, accel.SensitivityX, MagnitudesCombined);
-            Calculate(data.X, accel, accel.SensitivityX, MagnitudesX);
-            Calculate(data.Y, accel, accel.SensitivityY, MagnitudesY);
+            Calculate(data.Combined, accel, settings.sensitivity.x, MagnitudesCombined);
+            Calculate(data.X, accel, settings.sensitivity.x, MagnitudesX);
+            Calculate(data.Y, accel, settings.sensitivity.y, MagnitudesY);
         }
 
         public static void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)

@@ -7,25 +7,23 @@
 namespace rawaccel {
 
 	/// <summary> Struct to hold "natural" (vanishing difference) acceleration implementation. </summary>
-	struct accel_natural : accel_base {
-		double limit = 1;
-		double midpoint = 0;
+	struct natural_impl {
+		double rate;
+		double limit;
 
-		accel_natural(const accel_args& args) : accel_base(args) {
-			verify(args);
-
-			limit = args.limit - 1;
-			speed_coeff /= limit;
+		natural_impl(const accel_args& args) :
+			rate(args.accel), limit(args.limit - 1)
+		{
+			rate /= limit;
 		}
 
-		inline double accelerate(double speed) const {
+		inline double operator()(double speed) const {
 			// f(x) = k(1-e^(-mx))
-			return limit - (limit * exp(-speed_coeff * speed));
+			return limit - (limit * exp(-rate * speed));
 		}
 
-		void verify(const accel_args& args) const {
-			if (args.limit <= 1) bad_arg("limit must be greater than 1");
-		}
 	};
+
+	using accel_natural = additive_accel<natural_impl>;
 
 }

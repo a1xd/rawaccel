@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Serialized;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Logarithmic";
-            Index = 4;
+            Index = (int)AccelMode.logarithmic;
             ShowOptions = new bool[] { true, true, false, false }; 
             OptionNames = new string[] { Offset, Acceleration, string.Empty, string.Empty }; 
         }

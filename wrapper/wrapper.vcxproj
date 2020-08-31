@@ -68,7 +68,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="wrapper.hpp" />
     <ClInclude Include="wrapper_io.hpp" />
   </ItemGroup>
   <ItemGroup>

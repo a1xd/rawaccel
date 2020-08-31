@@ -26,8 +26,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-sigmoidgain.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-error.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-io.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-settings.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)tagged-union-single.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)x64-util.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)vec2.h" />
   </ItemGroup>

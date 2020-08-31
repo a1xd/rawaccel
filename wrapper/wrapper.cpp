@@ -1,80 +1,62 @@
 #pragma once
 
-#include "wrapper.hpp"
+#include <rawaccel.hpp>
 
-void replace(mouse_modifier* mod_ptr, const modifier_args& args) {
-	*mod_ptr = mouse_modifier(args);
-}
+#include "wrapper_io.hpp"
 
-Tuple<double, double>^ ManagedAccel::Accelerate(int x, int y, double time)
+using namespace System;
+
+public ref struct DriverInterop
 {
-	vec2d input_vec2d = {
-		(double)x, 
-		(double)y
-	};
-	vec2d output = modifier_instance->modify_with_accel(input_vec2d, time);
+    static void GetActiveSettings(IntPtr argsOut)
+    {
+        wrapper_io::readFromDriver(*reinterpret_cast<settings*>(argsOut.ToPointer()));
+    }
 
-	return gcnew Tuple<double, double>(output.x, output.y);
-}
+    static void SetActiveSettings(IntPtr argsIn)
+    {
+        wrapper_io::writeToDriver(*reinterpret_cast<settings*>(argsIn.ToPointer()));
+    }
+};
 
-void ManagedAccel::UpdateAccel(
-	int mode,
-	double rotation,
-	double sensitivityX,
-	double sensitivityY,
-	double weightX,
-	double weightY,
-	double capX,
-	double capY,
-	double offset,
-	double accel,
-	double lim_exp,
-	double midpoint,
-	double gain_cap)
+public ref class ManagedAccel
 {
-	modifier_args args{};
-	args.acc_fn_args.accel_mode = mode;
-	args.degrees = rotation;
-	args.sens.x = sensitivityX;
-	args.sens.y = sensitivityY;
-	args.acc_fn_args.acc_args.weight.x = weightX;
-	args.acc_fn_args.acc_args.weight.y = weightY;
-	args.acc_fn_args.cap.x = capX;
-	args.acc_fn_args.cap.y = capY;
-	args.acc_fn_args.acc_args.offset = offset;
-	args.acc_fn_args.acc_args.accel = accel;
-	args.acc_fn_args.acc_args.limit = lim_exp;
-	args.acc_fn_args.acc_args.exponent = lim_exp;
-	args.acc_fn_args.acc_args.midpoint = midpoint;
-	args.acc_fn_args.acc_args.gain_cap = gain_cap;
+    mouse_modifier* const modifier_instance = new mouse_modifier();
 
-	replace(modifier_instance, args);
-	WriteToDriver();
-}
+public:
+    virtual ~ManagedAccel()
+    {
+        delete modifier_instance;
+    }
 
-double ManagedAccel::SensitivityX::get() { return modifier_instance->sensitivity.x; }
-double ManagedAccel::SensitivityY::get() { return modifier_instance->sensitivity.y; }
-double ManagedAccel::Rotation::get() { return atan(modifier_instance->rotate.rot_vec.y / modifier_instance->rotate.rot_vec.x) * 180 / M_PI; }
-int ManagedAccel::Type::get() { return modifier_instance->accel_fn.accel.tag; }
-double ManagedAccel::Acceleration::get() { return modifier_instance->accel_fn.impl_args.accel; }
-double ManagedAccel::CapX::get() { return modifier_instance->accel_fn.clamp.x.hi; }
-double ManagedAccel::CapY::get() { return modifier_instance->accel_fn.clamp.y.hi; }
-double ManagedAccel::GainCap::get() { return modifier_instance->accel_fn.gain_cap.threshold; }
-bool ManagedAccel::GainCapEnabled::get() { return modifier_instance->accel_fn.gain_cap.cap_gain_enabled; }
-double ManagedAccel::WeightX::get() { return modifier_instance->accel_fn.impl_args.weight.x; }
-double ManagedAccel::WeightY::get() { return modifier_instance->accel_fn.impl_args.weight.y; }
-double ManagedAccel::Offset::get() { return modifier_instance->accel_fn.speed_offset; }
-double ManagedAccel::LimitExp::get() { return modifier_instance->accel_fn.impl_args.limit; }
-double ManagedAccel::Midpoint::get() { return modifier_instance->accel_fn.impl_args.midpoint; }
-double ManagedAccel::MinimumTime::get() { return modifier_instance->accel_fn.time_min; }
-double ManagedAccel::PowerScale::get() { return modifier_instance->accel_fn.impl_args.power_scale; }
+    !ManagedAccel()
+    {
+        delete modifier_instance;
+    }
 
-void ManagedAccel::WriteToDriver()
-{
-	wrapper_io::writeToDriver(*modifier_instance);
-}
+    Tuple<double, double>^ Accelerate(int x, int y, double time)
+    {
+        vec2d in_out_vec = {
+            (double)x,
+            (double)y
+        };
+        modifier_instance->modify(in_out_vec, time);
 
-void ManagedAccel::ReadFromDriver()
-{
-	wrapper_io::readFromDriver(*modifier_instance);
-}
+        return gcnew Tuple<double, double>(in_out_vec.x, in_out_vec.y);
+    }
+
+    void UpdateFromSettings(IntPtr argsIn)
+    {
+        *modifier_instance = { *reinterpret_cast<settings*>(argsIn.ToPointer()) };
+    }
+
+    static ManagedAccel^ GetActiveAccel()
+    {
+        settings args;
+        wrapper_io::readFromDriver(args);
+
+        auto active = gcnew ManagedAccel();
+        *active->modifier_instance = { args };
+        return active;
+    }
+};

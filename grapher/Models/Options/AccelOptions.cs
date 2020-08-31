@@ -16,7 +16,6 @@ namespace grapher
 
         public static readonly Dictionary<string, LayoutBase> AccelerationTypes = new List<LayoutBase>
         {
-            new DefaultLayout(),
             new LinearLayout(),
             new ClassicLayout(),
             new NaturalLayout(),
@@ -37,7 +36,7 @@ namespace grapher
         {
             AccelDropdown = accelDropdown;
             AccelDropdown.Items.Clear();
-            AccelDropdown.Items.AddRange(AccelerationTypes.Keys.Skip(1).ToArray());
+            AccelDropdown.Items.AddRange(AccelerationTypes.Keys.ToArray());
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
             if (options.Length > PossibleOptionsCount)
@@ -55,7 +54,7 @@ namespace grapher
             WriteButton = writeButton;
             ActiveValueLabel = activeValueLabel;
 
-            Layout("Default");
+            Layout("Off");
         }
 
         public Button WriteButton { get; }

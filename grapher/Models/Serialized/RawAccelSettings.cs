@@ -24,17 +24,16 @@ namespace grapher.Models.Serialized
         public RawAccelSettings() { }
 
         public RawAccelSettings(
-            ManagedAccel managedAccel,
+            DriverSettings accelSettings,
             GUISettings guiSettings)
         {
-            AccelerationSettings = new modifier_args(managedAccel);
+            AccelerationSettings = accelSettings;
             GUISettings = guiSettings;
         }
 
-
         public GUISettings GUISettings { get; set; }
 
-        public modifier_args AccelerationSettings { get; set; }
+        public DriverSettings AccelerationSettings { get; set; }
 
         public static RawAccelSettings Load()
         {
@@ -42,23 +41,19 @@ namespace grapher.Models.Serialized
         }
 
         public static RawAccelSettings Load(string file)
-        {
-            if (!Exists(file))
-            {
-                throw new Exception($"Settings file does not exist at {file}");
-            }
-
-            RawAccelSettings deserializedSettings;
+        {   
             try
             {
-               deserializedSettings = JsonConvert.DeserializeObject<RawAccelSettings>(File.ReadAllText(file), SerializerSettings);
+               return JsonConvert.DeserializeObject<RawAccelSettings>(File.ReadAllText(file), SerializerSettings);
             }
-            catch(Exception e)
+            catch (FileNotFoundException e)
             {
-                throw new Exception($"Settings file at {file} does not contain valid Raw Accel Settings.", e);
+                throw new FileNotFoundException($"Settings file does not exist at {file}", e);
             }
-
-            return deserializedSettings;
+            catch (JsonSerializationException e)
+            {
+                throw new JsonSerializationException($"Settings file at {file} does not contain valid Raw Accel Settings.", e);
+            }
         }
 
         public static bool Exists()

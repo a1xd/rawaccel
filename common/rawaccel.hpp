@@ -3,8 +3,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "rawaccel-settings.h"
 #include "x64-util.hpp"
-#include "tagged-union-single.h"
 
 #include "accel-linear.hpp"
 #include "accel-classic.hpp"
@@ -31,7 +31,7 @@ namespace rawaccel {
         /// </summary>
         /// <param name="input">Input vector to be rotated</param>
         /// <returns>2d vector of rotated input.</returns>
-        inline vec2d operator()(const vec2d& input) const {
+        inline vec2d apply(const vec2d& input) const {
             return {
                 input.x * rot_vec.x - input.y * rot_vec.y,
                 input.x * rot_vec.y + input.y * rot_vec.x
@@ -60,7 +60,7 @@ namespace rawaccel {
             return clampsd(scale, lo, hi);
         }
 
-        accel_scale_clamp(double cap) : accel_scale_clamp() {
+        accel_scale_clamp(double cap) {
             if (cap <= 0) {
                 // use default, effectively uncapped accel
                 return;
@@ -76,9 +76,53 @@ namespace rawaccel {
 
         accel_scale_clamp() = default;
     };
+    
+    template <typename Visitor, typename Variant>
+    inline auto visit_accel(Visitor vis, Variant&& var) {
+        switch (var.tag) {
+        case accel_mode::linear:      return vis(var.u.linear);
+        case accel_mode::classic:     return vis(var.u.classic);
+        case accel_mode::natural:     return vis(var.u.natural);
+        case accel_mode::logarithmic: return vis(var.u.logarithmic);
+        case accel_mode::sigmoid:     return vis(var.u.sigmoid);
+        case accel_mode::naturalgain: return vis(var.u.naturalgain);
+        case accel_mode::sigmoidgain: return vis(var.u.sigmoidgain);
+        case accel_mode::power:       return vis(var.u.power);
+        default:                      return vis(var.u.noaccel);
+        }
+    }
 
-    /// <summary> Tagged union to hold all accel implementations and allow "polymorphism" via a visitor call. </summary>
-    using accel_impl_t = tagged_union<accel_linear, accel_classic, accel_natural, accel_logarithmic, accel_sigmoid, accel_power, accel_naturalgain, accel_sigmoidgain, accel_noaccel>;
+    struct accel_variant {
+        accel_mode tag = accel_mode::noaccel;
+
+        union union_t {
+            accel_linear linear;
+            accel_classic classic;
+            accel_natural natural;
+            accel_logarithmic logarithmic;
+            accel_sigmoid sigmoid;
+            accel_naturalgain naturalgain;
+            accel_sigmoidgain sigmoidgain;
+            accel_power power;
+            accel_noaccel noaccel = {};
+        } u = {};
+
+        accel_variant(const accel_args& args, accel_mode mode) :
+            tag(mode)
+        {
+            visit_accel([&](auto& impl) {
+                impl = { args }; 
+            }, *this);
+        }
+
+        inline double apply(double speed) const {
+            return visit_accel([=](auto&& impl) {
+                return impl(speed);
+            }, *this);
+        }
+
+        accel_variant() = default;
+    };
 
     /// <summary> Struct to hold information about applying a gain cap. </summary>
     struct velocity_gain_cap {
@@ -92,18 +136,14 @@ namespace rawaccel {
         // <summary> The intercept for the line with above slope to give continuous velocity function </summary>
         double intercept = 0;
 
-        // <summary> Whether or not velocity gain cap is enabled </summary>
-        bool cap_gain_enabled = false;
-
         /// <summary>
         /// Initializes a velocity gain cap for a certain speed threshold
         /// by estimating the slope at the threshold and creating a line
         /// with that slope for output velocity calculations.
         /// </summary>
         /// <param name="speed"> The speed at which velocity gain cap will kick in </param>
-        /// <param name="offset"> The offset applied in accel calculations </param>
-        /// <param name="accel"> The accel implementation used in the containing accel_fn </param>
-        velocity_gain_cap(double speed, double offset, accel_impl_t accel)
+        /// <param name="accel"> The accel implementation used in the containing accel_variant </param>
+        velocity_gain_cap(double speed, const accel_variant& accel)
         {
             if (speed <= 0) return;
 
@@ -115,18 +155,9 @@ namespace rawaccel {
             // Return if by glitch or strange values the difference in points is 0.
             if (speed_diff == 0) return;
 
-            cap_gain_enabled = true;
-
             // Find the corresponding output velocities for the two points.
-            // Subtract offset for acceleration, like in accel_fn()
-			double out_first = accel.visit([=](auto&& impl) {
-                double accel_val = impl.accelerate(speed-offset);
-                return impl.scale(accel_val); 
-            }).x * speed;
-			double out_second = accel.visit([=](auto&& impl) {
-                double accel_val = impl.accelerate(speed_second-offset);
-                return impl.scale(accel_val); 
-            }).x * speed_second;
+            double out_first = accel.apply(speed) * speed;
+            double out_second = accel.apply(speed_second) * speed_second;
 
             // Calculate slope and intercept from two points.
             slope = (out_second - out_first) / speed_diff;
@@ -141,7 +172,7 @@ namespace rawaccel {
         /// </summary>
         /// <param name="speed"> Speed to be capped </param>
         /// <returns> Scale multiplier for input </returns>
-        inline double operator()(double speed) const {
+        inline double apply(double speed) const {
 			return  slope + intercept / speed;
         }
 
@@ -151,163 +182,94 @@ namespace rawaccel {
         /// <param name="speed"> Speed to check against threshold. </param>
         /// <returns> Whether gain cap should be applied. </returns>
         inline bool should_apply(double speed) const {
-            return cap_gain_enabled && speed > threshold;
+            return threshold > 0 && speed > threshold;
         }
 
         velocity_gain_cap() = default;
     };
 
-    struct accel_fn_args {
-        accel_args acc_args;
-        int accel_mode = accel_impl_t::id<accel_noaccel>;
-        milliseconds time_min = 0.4;
-        vec2d cap = { 0, 0 };
-    };
+    struct accelerator {
+        accel_variant accel;
+        velocity_gain_cap gain_cap;
+        accel_scale_clamp clamp;
 
-    /// <summary> Struct for holding acceleration application details. </summary>
-    struct accel_function {
+        accelerator(const accel_args& args, accel_mode mode) :
+            accel(args, mode), gain_cap(args.gain_cap, accel), clamp(args.scale_cap)
+        {}
 
-        /*
-        This value is ideally a few microseconds lower than
-        the user's mouse polling interval, though it should
-        not matter if the system is stable.
-        */
-        /// <summary> The minimum time period for one mouse movement. </summary>
-        milliseconds time_min = 0.4;
-
-        /// <summary> The offset past which acceleration is applied. </summary>
-        double speed_offset = 0;
-
-        /// <summary> The acceleration implementation (i.e. curve) </summary>
-        accel_impl_t accel;
-
-        /// <summary> The object which sets a min and max for the acceleration scale. </summary>
-        vec2<accel_scale_clamp> clamp;
-
-        velocity_gain_cap gain_cap = velocity_gain_cap();
-        
-        accel_args impl_args;
-
-        accel_function(const accel_fn_args& args) {
-            if (args.time_min <= 0) bad_arg("min time must be positive");
-            if (args.acc_args.offset < 0) bad_arg("offset must not be negative");
-
-            accel.tag = args.accel_mode;
-            accel.visit([&](auto& impl) { impl = { args.acc_args }; });
-            impl_args = args.acc_args;
-
-            time_min = args.time_min;
-            speed_offset = args.acc_args.offset;
-            clamp.x = accel_scale_clamp(args.cap.x);
-            clamp.y = accel_scale_clamp(args.cap.y);
-			gain_cap = velocity_gain_cap(args.acc_args.gain_cap, speed_offset, accel);
+        inline double apply(double speed) const {
+            if (gain_cap.should_apply(speed)) {
+                return clamp(gain_cap.apply(speed));
+            }
+            else return clamp(accel.apply(speed));
         }
 
-        /// <summary>
-        /// Applies weighted acceleration to given input for given time period.
-        /// </summary>
-        /// <param name="input">2d vector of {x, y} mouse movement to be accelerated</param>
-        /// <param name="time">Time period over which input movement was accumulated</param>
-        /// <returns></returns>
-        inline vec2d operator()(const vec2d& input, milliseconds time) const {
-            double mag = sqrtsd(input.x * input.x + input.y * input.y);
-            double time_clamped = clampsd(time, time_min, 100);
-            double raw_speed = mag / time_clamped;
-                
-            vec2d scale;
-            
-            // gain_cap needs raw speed for velocity line calculation
-            if (gain_cap.should_apply(raw_speed))
-            {
-                double gain_cap_scale = gain_cap(raw_speed);
-                scale = { gain_cap_scale, gain_cap_scale };
-            }
-            else
-            {
-                scale = accel.visit([=](auto&& impl) {
-                    double accel_val = impl.accelerate(maxsd(mag / time_clamped - speed_offset, 0));
-                    return impl.scale(accel_val);
-                    });
-            }
-
-            return {
-                input.x * clamp.x(scale.x),
-                input.y * clamp.y(scale.y)
-            };
-        }
-
-        accel_function() = default;
-    };
-
-    struct modifier_args {
-        double degrees = 0;
-        vec2d sens = { 1, 1 };
-        accel_fn_args acc_fn_args;
+        accelerator() = default;
     };
 
     /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
     struct mouse_modifier {
         bool apply_rotate = false;
         bool apply_accel = false;
+        bool combine_magnitudes = true;
         rotator rotate;
-        accel_function accel_fn;
+        vec2<accelerator> accels;
         vec2d sensitivity = { 1, 1 };
 
-        mouse_modifier(const modifier_args& args)
-            : accel_fn(args.acc_fn_args)
+        mouse_modifier(const settings& args) :
+            combine_magnitudes(args.combine_mags)
         {
-            apply_rotate = args.degrees != 0;
+            if (args.degrees_rotation != 0) {
+                rotate = rotator(args.degrees_rotation);
+                apply_rotate = true;
+            }
+            
+            if (args.sens.x != 0) sensitivity.x = args.sens.x;
+            if (args.sens.y != 0) sensitivity.y = args.sens.y;
 
-            if (apply_rotate) rotate = rotator(args.degrees);
-            else rotate = rotator();
-
-            apply_accel = args.acc_fn_args.accel_mode != 0 &&
-                args.acc_fn_args.accel_mode != accel_impl_t::id<accel_noaccel>;
-
-            if (args.sens.x == 0) sensitivity.x = 1;
-            else sensitivity.x = args.sens.x;
-
-            if (args.sens.y == 0) sensitivity.y = 1;
-            else sensitivity.y = args.sens.y;
-        }
-
-        /// <summary>
-        /// Applies modification without acceleration.
-        /// </summary>
-        /// <param name="input">Input to be modified.</param>
-        /// <returns>2d vector of modified input.</returns>
-        inline vec2d modify_without_accel(vec2d input)
-        {
-            if (apply_rotate)
-            {
-                input = rotate(input);
+            if ((combine_magnitudes && args.modes.x == accel_mode::noaccel) ||
+                (args.modes.x == accel_mode::noaccel &&
+                    args.modes.y == accel_mode::noaccel)) {
+                return;
             }
 
-            input.x *= sensitivity.x;
-            input.y *= sensitivity.y;
-
-            return input;
+            accels.x = accelerator(args.argsv.x, args.modes.x);
+            accels.y = accelerator(args.argsv.y, args.modes.y);
+            apply_accel = true;
         }
 
-        /// <summary>
-        /// Applies modification, including acceleration.
-        /// </summary>
-        /// <param name="input">Input to be modified</param>
-        /// <param name="time">Time period for determining acceleration.</param>
-        /// <returns>2d vector with modified input.</returns>
-        inline vec2d modify_with_accel(vec2d input, milliseconds time)
-        {
-            if (apply_rotate)
-            {
-                input = rotate(input);
+        void modify(vec2d& movement, milliseconds time) {
+            apply_rotation(movement);
+            apply_acceleration(movement, [=] { return time; });
+            apply_sensitivity(movement);
+        }
+
+        inline void apply_rotation(vec2d& movement) {
+            if (apply_rotate) movement = rotate.apply(movement);
+        }
+
+        template <typename TimeSupplier>
+        inline void apply_acceleration(vec2d& movement, TimeSupplier time_supp) {
+            if (apply_accel) {
+                milliseconds time = time_supp();
+
+                if (combine_magnitudes) {
+                    double mag = sqrtsd(movement.x * movement.x + movement.y * movement.y);
+                    double speed = mag / time;
+                    double scale = accels.x.apply(speed);
+                    movement.x *= scale;
+                    movement.y *= scale;
+                }
+                else {
+                    movement.x *= accels.x.apply(fabs(movement.x) / time);
+                    movement.y *= accels.y.apply(fabs(movement.y) / time);
+                }
             }
+        }
 
-			input = accel_fn(input, time);
-
-            input.x *= sensitivity.x;
-            input.y *= sensitivity.y;
-
-            return input;
+        inline void apply_sensitivity(vec2d& movement) {
+            movement.x *= sensitivity.x;
+            movement.y *= sensitivity.y;
         }
 
         mouse_modifier() = default;
