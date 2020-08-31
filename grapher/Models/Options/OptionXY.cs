@@ -62,7 +62,8 @@ namespace grapher
         public void SetName(string name)
         {
             Label.Text = name;
-            Label.Left = Convert.ToInt32((Fields.XField.Box.Left / 2.0) - (Label.Width / 2.0));
+            //Label.Left = Convert.ToInt32((Fields.XField.Box.Left / 2.0) - (Label.Width / 2.0));   //Centered
+            Label.Left = Convert.ToInt32(Fields.XField.Box.Left - Label.Width - 10);    //Right-aligned
         }
 
         public void SetActiveValues(double x, double y)
