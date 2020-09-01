@@ -9,8 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "installer", "installer\installer.vcxproj", "{896950D1-520A-420A-B6B1-73014B92A68C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "console", "console\console.vcxproj", "{AB7B3759-B85F-4067-8935-FB4539B41869}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common-install", "common-install\common-install.vcxitems", "{058D66C6-D88B-4FDB-B0E4-0A6FE7483B95}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uninstaller", "uninstaller\uninstaller.vcxproj", "{A4097FF6-A6F0-44E8-B8D0-538D0FB75936}"
@@ -27,7 +25,6 @@ Global
 		common\common.vcxitems*{60d6c942-ac20-4c05-a2be-54b5c966534d}*SharedItemsImports = 4
 		common-install\common-install.vcxitems*{896950d1-520a-420a-b6b1-73014b92a68c}*SharedItemsImports = 4
 		common-install\common-install.vcxitems*{a4097ff6-a6f0-44e8-b8d0-538d0fb75936}*SharedItemsImports = 4
-		common\common.vcxitems*{ab7b3759-b85f-4067-8935-fb4539b41869}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -43,10 +40,6 @@ Global
 		{896950D1-520A-420A-B6B1-73014B92A68C}.Debug|x64.Build.0 = Debug|x64
 		{896950D1-520A-420A-B6B1-73014B92A68C}.Release|x64.ActiveCfg = Release|x64
 		{896950D1-520A-420A-B6B1-73014B92A68C}.Release|x64.Build.0 = Release|x64
-		{AB7B3759-B85F-4067-8935-FB4539B41869}.Debug|x64.ActiveCfg = Debug|x64
-		{AB7B3759-B85F-4067-8935-FB4539B41869}.Debug|x64.Build.0 = Debug|x64
-		{AB7B3759-B85F-4067-8935-FB4539B41869}.Release|x64.ActiveCfg = Release|x64
-		{AB7B3759-B85F-4067-8935-FB4539B41869}.Release|x64.Build.0 = Release|x64
 		{A4097FF6-A6F0-44E8-B8D0-538D0FB75936}.Debug|x64.ActiveCfg = Debug|x64
 		{A4097FF6-A6F0-44E8-B8D0-538D0FB75936}.Debug|x64.Build.0 = Debug|x64
 		{A4097FF6-A6F0-44E8-B8D0-538D0FB75936}.Release|x64.ActiveCfg = Release|x64
