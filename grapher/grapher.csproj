@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Constants.cs" />
     <Compile Include="Layouts\NaturalGainLayout.cs" />
     <Compile Include="Layouts\SigmoidGainLayout.cs" />
     <Compile Include="Models\Calculations\AccelCalculator.cs" />

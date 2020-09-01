@@ -1,5 +1,4 @@
-﻿using grapher.Constants;
-using grapher.Models.Calculations;
+﻿using grapher.Models.Calculations;
 using grapher.Models.Charts;
 using System;
 using System.Collections.Generic;
@@ -41,9 +40,9 @@ namespace grapher
 
             SensitivityChart.SetTop(0);
             VelocityChart.SetHeight(SensitivityChart.Height);
-            VelocityChart.SetTop(SensitivityChart.Height + AccelGUIConstants.ChartSeparationVertical);
+            VelocityChart.SetTop(SensitivityChart.Height + Constants.ChartSeparationVertical);
             GainChart.SetHeight(SensitivityChart.Height);
-            GainChart.SetTop(VelocityChart.Top + VelocityChart.Height + AccelGUIConstants.ChartSeparationVertical);
+            GainChart.SetTop(VelocityChart.Top + VelocityChart.Height + Constants.ChartSeparationVertical);
 
             Rectangle screenRectangle = ContaingForm.RectangleToScreen(ContaingForm.ClientRectangle);
             FormBorderHeight = screenRectangle.Top - ContaingForm.Top;
@@ -154,10 +153,10 @@ namespace grapher
         {
             VelocityChart.Show();
             GainChart.Show();
-            ContaingForm.Height = SensitivityChart.Height + 
-                                    AccelGUIConstants.ChartSeparationVertical +
+            ContaingForm.Height = SensitivityChart.Height +
+                                    Constants.ChartSeparationVertical +
                                     VelocityChart.Height +
-                                    AccelGUIConstants.ChartSeparationVertical +
+                                    Constants.ChartSeparationVertical +
                                     GainChart.Height +
                                     FormBorderHeight;
         }

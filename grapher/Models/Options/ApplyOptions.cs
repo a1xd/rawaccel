@@ -31,6 +31,7 @@ namespace grapher.Models.Options
         #endregion Constructors
 
         #region Properties
+
         public ToolStripMenuItem WholeVectorMenuItem { get; }
 
         public ToolStripMenuItem ByComponentVectorMenuItem { get; }

@@ -11,13 +11,6 @@ namespace grapher
 {
     public class AccelOptions
     {
-        #region Constants
-
-        public const int PossibleOptionsCount = 4;
-        public const int PossibleOptionsXYCount = 2;
-
-        #endregion Constants
-
         #region Fields
 
         public static readonly Dictionary<string, LayoutBase> AccelerationTypes = new List<LayoutBase>
@@ -49,12 +42,12 @@ namespace grapher
             AccelDropdown.Items.AddRange(AccelerationTypes.Keys.ToArray());
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
-            if (options.Length > PossibleOptionsCount)
+            if (options.Length > Constants.PossibleOptionsCount)
             {
                 throw new Exception("Layout given too many options.");
             }
 
-            if (optionsXY.Length > PossibleOptionsXYCount)
+            if (optionsXY.Length > Constants.PossibleOptionsXYCount)
             {
                 throw new Exception("Layout given too many options.");
             }

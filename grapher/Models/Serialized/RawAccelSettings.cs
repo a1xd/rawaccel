@@ -13,16 +13,10 @@ namespace grapher.Models.Serialized
     [Serializable]
     public class RawAccelSettings
     {
-        #region Constants
-
-        public const string DefaultSettingsFileName = @"settings.json";
-
-        #endregion Constants
-
         #region Fields
 
         public static readonly string ExecutingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        public static readonly string DefaultSettingsFile = Path.Combine(ExecutingDirectory, DefaultSettingsFileName);
+        public static readonly string DefaultSettingsFile = Path.Combine(ExecutingDirectory, Constants.DefaultSettingsFileName);
         public static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
             MissingMemberHandling = MissingMemberHandling.Error,

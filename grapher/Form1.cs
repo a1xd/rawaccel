@@ -142,8 +142,8 @@ namespace grapher
                 weight);
 
             var accelCalculator = new AccelCalculator(
-                new Field(DPITextBox.TextBox, this, AccelCalculator.DefaultDPI),
-                new Field(PollRateTextBox.TextBox, this, AccelCalculator.DefaultPollRate));
+                new Field(DPITextBox.TextBox, this, Constants.DefaultDPI),
+                new Field(PollRateTextBox.TextBox, this, Constants.DefaultPollRate));
 
             var settings = new SettingsManager(
                 activeAccel,

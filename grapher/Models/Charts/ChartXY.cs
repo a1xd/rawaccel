@@ -15,12 +15,6 @@ namespace grapher
 {
     public class ChartXY
     {
-        #region Constants
-
-        public const int ChartSeparationHorizontal = 10;
-
-        #endregion Constants
-
         #region Constructors
 
         public ChartXY(Chart chartX, Chart chartY)
@@ -31,7 +25,7 @@ namespace grapher
             ChartY.Top = ChartX.Top;
             ChartY.Height = ChartX.Height;
             ChartY.Width = ChartX.Width;
-            ChartY.Left = ChartX.Left + ChartX.Width + ChartSeparationHorizontal;
+            ChartY.Left = ChartX.Left + ChartX.Width + Constants.ChartSeparationHorizontal;
 
             SetupChart(ChartX);
             SetupChart(ChartY);

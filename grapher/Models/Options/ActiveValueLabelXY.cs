@@ -10,8 +10,6 @@ namespace grapher.Models.Options
     {
         #region Constants
 
-        public const int ActiveLabelXYSeparation = 2;
-        public const string ShortenedFormatString = "0.###";
 
         #endregion Constants
 
@@ -25,11 +23,11 @@ namespace grapher.Models.Options
             Y = y;
 
             FullWidth = x.Width;
-            ShortenedWidth = (FullWidth - ActiveLabelXYSeparation) / 2;
+            ShortenedWidth = (FullWidth - Constants.ActiveLabelXYSeparation) / 2;
 
-            Y.Left = X.Left + ShortenedWidth + ActiveLabelXYSeparation;
+            Y.Left = X.Left + ShortenedWidth + Constants.ActiveLabelXYSeparation;
             Y.Width = ShortenedWidth;
-            Y.FormatString = ShortenedFormatString;
+            Y.FormatString = Constants.ShortenedFormatString;
 
             Combined = false;
             SetCombined();
@@ -72,7 +70,7 @@ namespace grapher.Models.Options
         {
             if (!Combined)
             {
-                X.FormatString = ActiveValueLabel.DefaultFormatString;
+                X.FormatString = Constants.DefaultActiveValueFormatString;
                 X.Width = FullWidth;
                 X.Prefix = string.Empty;
                 Y.Hide();
@@ -85,7 +83,7 @@ namespace grapher.Models.Options
         {
             if (Combined)
             {
-                X.FormatString = ShortenedFormatString;
+                X.FormatString = Constants.ShortenedFormatString;
                 X.Width = ShortenedWidth;
                 X.Prefix = "X";
                 Y.Prefix = "Y";
@@ -95,6 +93,6 @@ namespace grapher.Models.Options
             Combined = false;
         }
 
-        #region Methods
+        #endregion Methods
     }
 }

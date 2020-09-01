@@ -12,7 +12,6 @@ namespace grapher
     {
         #region Constants
 
-        public const string GainCapFormatString = "0.##";
 
         #endregion Constants
 
@@ -103,7 +102,7 @@ namespace grapher
         {
             if (capGainEnabled)
             {
-                CapOption.ActiveValueLabels.X.FormatString = GainCapFormatString;
+                CapOption.ActiveValueLabels.X.FormatString = Constants.GainCapFormatString;
                 CapOption.ActiveValueLabels.X.Prefix = "Gain";
                 CapOption.SetActiveValues(gainCap, gainCap);
                 SensitivityCapCheck.Checked = true;
@@ -111,7 +110,7 @@ namespace grapher
             }
             else
             {
-                CapOption.ActiveValueLabels.X.FormatString = ActiveValueLabel.DefaultFormatString;
+                CapOption.ActiveValueLabels.X.FormatString = Constants.DefaultActiveValueFormatString;
                 CapOption.ActiveValueLabels.X.Prefix = string.Empty;
                 CapOption.SetActiveValues(sensCapX, sensCapY);
                 SensitivityCapCheck.Checked = false;

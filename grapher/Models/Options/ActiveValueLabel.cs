@@ -12,8 +12,6 @@ namespace grapher.Models.Options
     {
         #region Constants
 
-        public const string DefaultFormatString = "0.######";
-        public static readonly Color ActiveValueFontColor = Color.FromArgb(255, 65, 65, 65);
 
         #endregion Constants
 
@@ -29,13 +27,13 @@ namespace grapher.Models.Options
         public ActiveValueLabel(Label valueLabel, Label centeringLabel)
         {
             ValueLabel = valueLabel;
-            ValueLabel.ForeColor = ActiveValueFontColor;
+            ValueLabel.ForeColor = Constants.ActiveValueFontColor;
             Left = centeringLabel.Left;
             Width = centeringLabel.Width;
             ValueLabel.AutoSize = false;
             ValueLabel.TextAlign = ContentAlignment.MiddleCenter;
 
-            FormatString = DefaultFormatString;
+            FormatString = Constants.DefaultActiveValueFormatString;
             Prefix = string.Empty;
         }
 

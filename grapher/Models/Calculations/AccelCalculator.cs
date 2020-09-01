@@ -1,5 +1,4 @@
-﻿using grapher.Constants;
-using grapher.Models.Serialized;
+﻿using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -179,9 +178,9 @@ namespace grapher.Models.Calculations
         public void ScaleByMouseSettings()
         {
             var dpiPollFactor = DPI.Data / PollRate.Data;
-            CombinedMaxVelocity = dpiPollFactor * AccelGUIConstants.MaxMultiplier;
-            Increment = (int) Math.Floor(CombinedMaxVelocity / AccelGUIConstants.Resolution);
-            XYMaxVelocity = CombinedMaxVelocity * AccelGUIConstants.XYToCombinedRatio;
+            CombinedMaxVelocity = dpiPollFactor * Constants.MaxMultiplier;
+            Increment = (int)Math.Floor(CombinedMaxVelocity / Constants.Resolution);
+            XYMaxVelocity = CombinedMaxVelocity * Constants.XYToCombinedRatio;
             MagnitudesCombined = GetMagnitudes();
             MagnitudesX = GetMagnitudesX();
             MagnitudesY = GetMagnitudesY();

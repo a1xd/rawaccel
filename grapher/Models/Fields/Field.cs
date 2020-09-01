@@ -10,12 +10,6 @@ namespace grapher
 {
     public class Field
     {
-        #region Constants
-
-        public const string DefaultFormatString = "0.#########";
-
-        #endregion Constants
-
         #region Enumerations
 
         public enum FieldState
@@ -39,7 +33,7 @@ namespace grapher
             DefaultData = defaultData;
             State = FieldState.Undefined;
             ContainingForm = containingForm;
-            FormatString = DefaultFormatString;
+            FormatString = Constants.DefaultFieldFormatString;
             box.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyDown);
             box.Leave += new System.EventHandler(FocusLeave);
 
