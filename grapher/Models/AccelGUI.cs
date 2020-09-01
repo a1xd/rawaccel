@@ -149,10 +149,10 @@ namespace grapher
                 Settings.ActiveAccel, 
                 Settings.RawAccelSettings.AccelerationSettings);
             AccelCharts.Bind();
-            UpdateActiveValueLabels();
+            UpdateShownActiveValues();
         }
 
-        public void UpdateActiveValueLabels()
+        public void UpdateShownActiveValues()
         {
             var settings = Settings.RawAccelSettings.AccelerationSettings;
             
@@ -165,7 +165,9 @@ namespace grapher
             LimitOrExponent.SetActiveValue(settings.args.x.limit); //exp, powerexp
             Midpoint.SetActiveValue(settings.args.x.midpoint);
             ApplyOptions.SetActive(settings.combineMagnitudes);
-            //Cap.SetActiveValues(Settings.ActiveAccel.GainCap, Settings.ActiveAccel.CapX, Settings.ActiveAccel.CapY, Settings.ActiveAccel.GainCapEnabled);
+            Cap.SetActiveValues(settings.args.x.gainCap, settings.args.x.scaleCap, settings.args.y.scaleCap, settings.args.x.gainCap > 0);
+
+            AccelCharts.RefreshXY(settings.combineMagnitudes);
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)

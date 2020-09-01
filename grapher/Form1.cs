@@ -41,8 +41,7 @@ namespace grapher
                                 new ChartXY(AccelerationChart, AccelerationChartY),
                                 new ChartXY(VelocityChart, VelocityChartY),
                                 new ChartXY(GainChart, GainChartY),
-                                showVelocityGainToolStripMenuItem,
-                                new CheckBox[] { sensXYLock, weightXYLock, capXYLock });
+                                showVelocityGainToolStripMenuItem);
 
             ActiveValueTitle.AutoSize = false;
             ActiveValueTitle.Left = LockXYLabel.Left + LockXYLabel.Width;
@@ -61,8 +60,7 @@ namespace grapher
                 new ActiveValueLabelXY(
                     new ActiveValueLabel(SensitivityActiveXLabel, ActiveValueTitle),
                     new ActiveValueLabel(SensitivityActiveYLabel, ActiveValueTitle)),
-                "Sensitivity",
-                accelCharts);
+                "Sensitivity");
 
             var rotation = new Option(
                 rotationBox,
@@ -82,8 +80,7 @@ namespace grapher
                 new ActiveValueLabelXY(
                     new ActiveValueLabel(WeightActiveXLabel, ActiveValueTitle),
                     new ActiveValueLabel(WeightActiveYLabel, ActiveValueTitle)),
-                "Weight",
-                accelCharts);
+                "Weight");
 
             var cap = new OptionXY(
                 capBoxX,
@@ -95,8 +92,7 @@ namespace grapher
                 new ActiveValueLabelXY(
                     new ActiveValueLabel(CapActiveXLabel, ActiveValueTitle),
                     new ActiveValueLabel(CapActiveYLabel, ActiveValueTitle)),
-                "Cap",
-                accelCharts);
+                "Cap");
 
             var offset = new Option(
                 offsetBox,

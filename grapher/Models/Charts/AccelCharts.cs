@@ -24,8 +24,7 @@ namespace grapher
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            ToolStripMenuItem enableVelocityAndGain,
-            ICollection<CheckBox> checkBoxesXY)
+            ToolStripMenuItem enableVelocityAndGain)
         {
             Estimated = new EstimatedPoints();
             EstimatedX = new EstimatedPoints();
@@ -37,7 +36,6 @@ namespace grapher
             VelocityChart = velocityChart;
             GainChart = gainChart;
             EnableVelocityAndGain = enableVelocityAndGain;
-            CheckBoxesXY = checkBoxesXY;
 
             SensitivityChart.SetPointBinds(Estimated.Sensitivity, EstimatedX.Sensitivity, EstimatedY.Sensitivity);
             VelocityChart.SetPointBinds(Estimated.Velocity, EstimatedX.Velocity, EstimatedY.Velocity);
@@ -78,8 +76,6 @@ namespace grapher
 
         private EstimatedPoints EstimatedY { get; }
 
-        private ICollection<CheckBox> CheckBoxesXY { get; }
-
         private bool Combined { get; set; }
 
         private int FormBorderHeight { get; }
@@ -119,9 +115,9 @@ namespace grapher
             }
         }
 
-        public void RefreshXY()
+        public void RefreshXY(bool isWhole)
         {
-            if (CheckBoxesXY.All(box => box.Checked))
+            if (isWhole)
             {
                 ShowCombined();
             }

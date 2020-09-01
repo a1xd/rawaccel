@@ -68,7 +68,7 @@ namespace grapher.Models.Options
         {
             if (ByComponentVectorMenuItem.Checked)
             {
-                EnableWholeApplication();
+                EnableByComponentApplication();
             }
         }
 

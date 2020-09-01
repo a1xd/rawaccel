@@ -13,14 +13,13 @@ namespace grapher
 
         public const string ShortenedFormatString = "0.###";
 
-        public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData, AccelCharts accelCharts)
+        public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData)
         {
             XField = new Field(xBox, containingForm, defaultData);
             YField = new Field(yBox, containingForm, defaultData);
             YField.FormatString = ShortenedFormatString;
             LockCheckBox = lockCheckBox;
             LockCheckBox.CheckedChanged += new System.EventHandler(CheckChanged);
-            AccelCharts = accelCharts;
 
             XField.Box.Width = (YField.Box.Left + YField.Box.Width - XField.Box.Left - DefaultSeparation) / 2;
             YField.Box.Width = XField.Box.Width;
@@ -59,8 +58,6 @@ namespace grapher
 
         public Field YField { get; }
 
-        private AccelCharts AccelCharts { get; }
-
         private bool Combined { get; set; }
 
         private int DefaultWidthX { get; }
@@ -79,8 +76,6 @@ namespace grapher
             {
                 SetSeparate();
             }
-
-            AccelCharts.RefreshXY();
         }
 
         public void SetCombined()
