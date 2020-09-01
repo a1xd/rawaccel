@@ -97,7 +97,7 @@ namespace grapher
                 State = FieldState.Typing;
             }
 
-            Box.Text = string.Empty;
+            Box.Text = Data.ToString();
         }
 
         public void SetToEntered()

@@ -191,7 +191,7 @@ namespace grapher
             // 
             // accelerationBox
             // 
-            this.accelerationBox.Location = new System.Drawing.Point(106, 125);
+            this.accelerationBox.Location = new System.Drawing.Point(105, 125);
             this.accelerationBox.Name = "accelerationBox";
             this.accelerationBox.Size = new System.Drawing.Size(69, 20);
             this.accelerationBox.TabIndex = 7;

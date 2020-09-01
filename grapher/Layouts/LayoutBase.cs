@@ -43,7 +43,7 @@ namespace grapher.Layouts
         public void Layout(Option[] options, OptionXY[] optionsXY, Button button)
         {
             // Relies on AccelOptions to keep lengths correct.
-            for (int i = 0; i< options.Length; i++)
+            for (int i = 0; i < options.Length; i++)
             {
                 if (ShowOptions[i])
                 {
