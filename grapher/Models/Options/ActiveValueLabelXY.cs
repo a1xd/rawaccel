@@ -8,8 +8,14 @@ namespace grapher.Models.Options
 {
     public class ActiveValueLabelXY
     {
+        #region Constants
+
         public const int ActiveLabelXYSeparation = 2;
         public const string ShortenedFormatString = "0.###";
+
+        #endregion Constants
+
+        #region Constructors
 
         public ActiveValueLabelXY(
             ActiveValueLabel x,
@@ -29,6 +35,10 @@ namespace grapher.Models.Options
             SetCombined();
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public ActiveValueLabel X { get; }
 
         public ActiveValueLabel Y { get; }
@@ -38,6 +48,10 @@ namespace grapher.Models.Options
         private int FullWidth { get; }
 
         private int ShortenedWidth { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void SetValues(double x, double y)
         {
@@ -80,5 +94,7 @@ namespace grapher.Models.Options
 
             Combined = false;
         }
+
+        #region Methods
     }
 }

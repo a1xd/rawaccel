@@ -10,8 +10,13 @@ namespace grapher
 {
     public class CapOptions
     {
+        #region Constants
 
         public const string GainCapFormatString = "0.##";
+
+        #endregion Constants
+
+        #region Constructors
 
         public CapOptions(
             ToolStripMenuItem sensitivityCapCheck,
@@ -34,6 +39,10 @@ namespace grapher
             EnableSensitivityCap();
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public ToolStripMenuItem SensitivityCapCheck { get; }
 
         public ToolStripMenuItem VelocityGainCapCheck { get; }
@@ -41,6 +50,8 @@ namespace grapher
         public OptionXY CapOption { get; }
 
         public OptionXY WeightOption { get; }
+
+        public bool IsSensitivityGain { get; private set; }
 
         public double SensitivityCapX { 
             get
@@ -84,7 +95,9 @@ namespace grapher
             }
         }
 
-        public bool IsSensitivityGain { get; private set; }
+        #endregion Properties
+
+        #region Methods
 
         public void SetActiveValues(double gainCap, double sensCapX, double sensCapY, bool capGainEnabled)
         {
@@ -157,5 +170,7 @@ namespace grapher
             WeightOption.Fields.LockCheckBox.Enabled = false;
             CapOption.SetName("Velocity Gain Cap");
         }
+
+        #endregion Methods
     }
 }

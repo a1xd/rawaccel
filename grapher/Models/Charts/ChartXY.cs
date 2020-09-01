@@ -15,11 +15,11 @@ namespace grapher
 {
     public class ChartXY
     {
-        #region Consts
+        #region Constants
 
         public const int ChartSeparationHorizontal = 10;
 
-        #endregion Consts
+        #endregion Constants
 
         #region Constructors
 

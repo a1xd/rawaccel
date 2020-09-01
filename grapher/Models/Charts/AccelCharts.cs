@@ -1,4 +1,5 @@
-﻿using grapher.Models.Calculations;
+﻿using grapher.Constants;
+using grapher.Models.Calculations;
 using grapher.Models.Charts;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,7 @@ namespace grapher
 {
     public class AccelCharts
     {
-        public const int ChartSeparationVertical = 10;
-
-        /// <summary> Needed to show full contents in form. Unsure why. </summary>
-        public const int FormHeightPadding = 35;
+        #region Constructors
 
         public AccelCharts(
             Form form,
@@ -43,9 +41,9 @@ namespace grapher
 
             SensitivityChart.SetTop(0);
             VelocityChart.SetHeight(SensitivityChart.Height);
-            VelocityChart.SetTop(SensitivityChart.Height + ChartSeparationVertical);
+            VelocityChart.SetTop(SensitivityChart.Height + AccelGUIConstants.ChartSeparationVertical);
             GainChart.SetHeight(SensitivityChart.Height);
-            GainChart.SetTop(VelocityChart.Top + VelocityChart.Height + ChartSeparationVertical);
+            GainChart.SetTop(VelocityChart.Top + VelocityChart.Height + AccelGUIConstants.ChartSeparationVertical);
 
             Rectangle screenRectangle = ContaingForm.RectangleToScreen(ContaingForm.ClientRectangle);
             FormBorderHeight = screenRectangle.Top - ContaingForm.Top;
@@ -57,6 +55,10 @@ namespace grapher
             Combined = false;
             ShowCombined();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Form ContaingForm { get; }
 
@@ -79,6 +81,10 @@ namespace grapher
         private bool Combined { get; set; }
 
         private int FormBorderHeight { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void MakeDots(int x, int y, double timeInMs)
         {
@@ -149,9 +155,9 @@ namespace grapher
             VelocityChart.Show();
             GainChart.Show();
             ContaingForm.Height = SensitivityChart.Height + 
-                                    ChartSeparationVertical +
+                                    AccelGUIConstants.ChartSeparationVertical +
                                     VelocityChart.Height +
-                                    ChartSeparationVertical +
+                                    AccelGUIConstants.ChartSeparationVertical +
                                     GainChart.Height +
                                     FormBorderHeight;
         }
@@ -195,5 +201,7 @@ namespace grapher
         {
             ContaingForm.Width = SensitivityChart.Left + SensitivityChart.Width;
         }
+
+        #endregion Methods
     }
 }

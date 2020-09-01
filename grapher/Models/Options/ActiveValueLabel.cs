@@ -10,11 +10,21 @@ namespace grapher.Models.Options
 {
     public class ActiveValueLabel
     {
+        #region Constants
+
         public const string DefaultFormatString = "0.######";
         public static readonly Color ActiveValueFontColor = Color.FromArgb(255, 65, 65, 65);
 
+        #endregion Constants
+
+        #region Fields
+
         private string _prefix;
         private string _value;
+
+        #endregion Fields
+
+        #region Constructors
 
         public ActiveValueLabel(Label valueLabel, Label centeringLabel)
         {
@@ -28,6 +38,10 @@ namespace grapher.Models.Options
             FormatString = DefaultFormatString;
             Prefix = string.Empty;
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Label ValueLabel { get; }
 
@@ -79,6 +93,10 @@ namespace grapher.Models.Options
             }
         }
 
+        #endregion Properties
+
+        #region Methods
+
         public void Hide()
         {
             ValueLabel.Hide();
@@ -103,5 +121,7 @@ namespace grapher.Models.Options
         {
             ValueLabel.Text = string.IsNullOrWhiteSpace(Prefix) ? Value: $"{Prefix}: {Value}";
         }
+
+        #endregion Methods
     }
 }

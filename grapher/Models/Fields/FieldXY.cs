@@ -9,9 +9,15 @@ namespace grapher
 {
     public class FieldXY
     {
+        #region Constants
+
         public const int DefaultSeparation = 4;
 
         public const string ShortenedFormatString = "0.###";
+
+        #endregion Constants
+
+        #region Constructors
 
         public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData)
         {
@@ -32,6 +38,11 @@ namespace grapher
             CombinedWidth = DefaultWidthX + DefaultWidthY + YField.Box.Left - (XField.Box.Left + DefaultWidthX);
             SetCombined();
         }
+
+        #endregion Constructors
+
+        #region Properties
+
         public double X
         {
             get => XField.Data;
@@ -65,6 +76,10 @@ namespace grapher
         private int DefaultWidthY { get; }
 
         private int CombinedWidth { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         private void CheckChanged(object sender, EventArgs e)
         {
@@ -126,5 +141,7 @@ namespace grapher
             XField.Box.Hide();
             YField.Box.Hide();
         }
+
+        #endregion Methods
     }
 }

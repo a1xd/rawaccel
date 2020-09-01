@@ -10,6 +10,8 @@ namespace grapher
 {
     public class Option
     {
+        #region Constructors
+
         public Option(
             Field field,
             Label label,
@@ -50,11 +52,19 @@ namespace grapher
             SetName(startingName);
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public Field Field { get; }
 
         public Label Label { get; }
 
         public ActiveValueLabel ActiveValueLabel { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void SetName(string name)
         {
@@ -93,5 +103,7 @@ namespace grapher
 
             Show();
         }
+
+        #endregion Methods
     }
 }

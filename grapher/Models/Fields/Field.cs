@@ -16,7 +16,7 @@ namespace grapher
 
         #endregion Constants
 
-        #region Enums
+        #region Enumerations
 
         public enum FieldState
         {
@@ -27,8 +27,7 @@ namespace grapher
             Unavailable,
         }
 
-        #endregion Enums
-
+        #endregion Enumerations
 
         #region Constructors
 

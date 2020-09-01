@@ -13,13 +13,24 @@ namespace grapher.Models.Serialized
     [Serializable]
     public class RawAccelSettings
     {
+        #region Constants
+
         public const string DefaultSettingsFileName = @"settings.json";
+
+        #endregion Constants
+
+        #region Fields
+
         public static readonly string ExecutingDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string DefaultSettingsFile = Path.Combine(ExecutingDirectory, DefaultSettingsFileName);
         public static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
             MissingMemberHandling = MissingMemberHandling.Error,
         };
+
+        #endregion Fields
+
+        #region Constructors
 
         public RawAccelSettings() { }
 
@@ -31,9 +42,17 @@ namespace grapher.Models.Serialized
             GUISettings = guiSettings;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public GUISettings GUISettings { get; set; }
 
         public DriverSettings AccelerationSettings { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public static RawAccelSettings Load()
         {
@@ -75,5 +94,7 @@ namespace grapher.Models.Serialized
         {
             File.WriteAllText(file, JsonConvert.SerializeObject(this, Formatting.Indented));
         }
+
+        #endregion Methods
     }
 }

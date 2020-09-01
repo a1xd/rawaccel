@@ -6,6 +6,8 @@ namespace grapher.Models.Serialized
 {
     public class SettingsManager
     {
+        #region Constructors
+
         public SettingsManager(
             ManagedAccel activeAccel,
             Field dpiField,
@@ -18,6 +20,10 @@ namespace grapher.Models.Serialized
             AutoWriteMenuItem = autoWrite;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public ManagedAccel ActiveAccel { get; }
 
         public RawAccelSettings RawAccelSettings { get; private set; }
@@ -27,6 +33,10 @@ namespace grapher.Models.Serialized
         private Field PollRateField { get; set; }
 
         private ToolStripMenuItem AutoWriteMenuItem { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void UpdateActiveSettings(DriverSettings settings)
         {
@@ -94,5 +104,7 @@ namespace grapher.Models.Serialized
                 });
             RawAccelSettings.Save();
         }
+
+        #endregion Methods
     }
 }

@@ -10,6 +10,8 @@ namespace grapher.Models.Options
 {
     public class ApplyOptions
     {
+        #region Constructors
+
         public ApplyOptions(
             ToolStripMenuItem wholeVectorMenuItem,
             ToolStripMenuItem byComponentMenuItem)
@@ -26,11 +28,18 @@ namespace grapher.Models.Options
             IsWhole = false;
         }
 
+        #endregion Constructors
+
+        #region Properties
         public ToolStripMenuItem WholeVectorMenuItem { get; }
 
         public ToolStripMenuItem ByComponentVectorMenuItem { get; }
 
         public bool IsWhole { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void SetActive(bool isWhole)
         {
@@ -81,5 +90,6 @@ namespace grapher.Models.Options
             IsWhole = false;
         }
 
+        #endregion Methods
     }
 }

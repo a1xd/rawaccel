@@ -17,7 +17,7 @@ namespace grapher
     public class AccelGUI
     {
 
-        #region constructors
+        #region Constructors
 
         public AccelGUI(
             RawAcceleration accelForm,
@@ -63,9 +63,9 @@ namespace grapher
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
         }
 
-        #endregion constructors
+        #endregion Constructors
 
-        #region properties
+        #region Properties
 
         public RawAcceleration AccelForm { get; }
 
@@ -101,9 +101,9 @@ namespace grapher
 
         public ToolStripMenuItem ScaleMenuItem { get; }
 
-        #endregion properties
+        #endregion Properties
 
-        #region methods
+        #region Methods
 
         public void UpdateActiveSettingsFromFields()
         {
@@ -174,7 +174,8 @@ namespace grapher
         {
             UpdateGraph();
         }
-        #endregion methods
+
+        #endregion Methods
     }
 
 }

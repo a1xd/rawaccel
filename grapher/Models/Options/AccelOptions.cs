@@ -11,8 +11,14 @@ namespace grapher
 {
     public class AccelOptions
     {
+        #region Constants
+
         public const int PossibleOptionsCount = 4;
         public const int PossibleOptionsXYCount = 2;
+
+        #endregion Constants
+
+        #region Fields
 
         public static readonly Dictionary<string, LayoutBase> AccelerationTypes = new List<LayoutBase>
         {
@@ -26,6 +32,10 @@ namespace grapher
             new SigmoidGainLayout(),
             new OffLayout()
         }.ToDictionary(k => k.Name);
+
+        #endregion Fields
+
+        #region Constructors
 
         public AccelOptions(
             ComboBox accelDropdown,
@@ -57,6 +67,10 @@ namespace grapher
             Layout("Off");
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public Button WriteButton { get; }
 
         public ComboBox AccelDropdown { get; }
@@ -68,6 +82,10 @@ namespace grapher
         public Option[] Options { get; }
 
         public OptionXY[] OptionsXY { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void SetActiveValue(int index)
         {
@@ -87,5 +105,7 @@ namespace grapher
             AccelerationIndex = accelerationType.Index;
             accelerationType.Layout(Options, OptionsXY, WriteButton);
         }
+
+        #endregion Methods
     }
 }
