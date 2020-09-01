@@ -2,6 +2,7 @@
 using grapher.Models.Mouse;
 using grapher.Models.Serialized;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -101,41 +102,64 @@ namespace grapher
 
         public void UpdateActiveSettingsFromFields()
         {
-            Settings.UpdateActiveSettings(
-                AccelerationOptions.AccelerationIndex, 
-                Rotation.Field.Data,
-                Sensitivity.Fields.X,
-                Sensitivity.Fields.Y,
-                Weight.Fields.X,
-                Weight.Fields.Y,
-                Cap.SensitivityCapX,
-                Cap.SensitivityCapY,
-                Offset.Field.Data,
-                Acceleration.Field.Data,
-                LimitOrExponent.Field.Data,
-                Midpoint.Field.Data,
-                Cap.VelocityGainCap);
+            Settings.UpdateActiveSettings(new DriverSettings
+            {
+                rotation = Rotation.Field.Data,
+                sensitivity = new Vec2<double>
+                {
+                    x = Sensitivity.Fields.X,
+                    y = Sensitivity.Fields.Y
+                },
+                combineMagnitudes = true,
+                modes = new Vec2<AccelMode>
+                {
+                    x = (AccelMode)AccelerationOptions.AccelerationIndex
+                },
+                args = new Vec2<AccelArgs>
+                {
+                    x = new AccelArgs
+                    {
+                        offset = Offset.Field.Data,
+                        weight = Weight.Fields.X,
+                        gainCap = Cap.VelocityGainCap,
+                        scaleCap = Cap.SensitivityCapX,
+                        accel = Acceleration.Field.Data,
+                        rate = Acceleration.Field.Data,
+                        powerScale = Acceleration.Field.Data,
+                        limit = LimitOrExponent.Field.Data,
+                        exponent = LimitOrExponent.Field.Data,
+                        powerExponent = LimitOrExponent.Field.Data,
+                        midpoint = Midpoint.Field.Data
+                    }
+                },
+                minimumTime = .4
+            });
             UpdateGraph();
         }
 
         public void UpdateGraph()
         {
-            AccelCalculator.Calculate(AccelCharts.AccelData, Settings.ActiveAccel);
+            AccelCalculator.Calculate(
+                AccelCharts.AccelData, 
+                Settings.ActiveAccel, 
+                Settings.RawAccelSettings.AccelerationSettings);
             AccelCharts.Bind();
             UpdateActiveValueLabels();
         }
 
         public void UpdateActiveValueLabels()
         {
-            Sensitivity.SetActiveValues(Settings.ActiveAccel.SensitivityX, Settings.ActiveAccel.SensitivityY);
-            Rotation.SetActiveValue(Settings.ActiveAccel.Rotation);
-            AccelerationOptions.SetActiveValue(Settings.ActiveAccel.Type);
-            Offset.SetActiveValue(Settings.ActiveAccel.Offset);
-            Acceleration.SetActiveValue(Settings.ActiveAccel.Acceleration);
-            Cap.SetActiveValues(Settings.ActiveAccel.GainCap, Settings.ActiveAccel.CapX, Settings.ActiveAccel.CapY, Settings.ActiveAccel.GainCapEnabled);
-            Weight.SetActiveValues(Settings.ActiveAccel.WeightX, Settings.ActiveAccel.WeightY);
-            LimitOrExponent.SetActiveValue(Settings.ActiveAccel.LimitExp);
-            Midpoint.SetActiveValue(Settings.ActiveAccel.Midpoint);
+            var settings = Settings.RawAccelSettings.AccelerationSettings;
+            
+            Sensitivity.SetActiveValues(settings.sensitivity.x, settings.sensitivity.y);
+            Rotation.SetActiveValue(settings.rotation);
+            AccelerationOptions.SetActiveValue((int)settings.modes.x);
+            Offset.SetActiveValue(settings.args.x.offset);
+            Weight.SetActiveValues(settings.args.x.weight, settings.args.x.weight);
+            Acceleration.SetActiveValue(settings.args.x.accel); // rate, powerscale
+            LimitOrExponent.SetActiveValue(settings.args.x.limit); //exp, powerexp
+            Midpoint.SetActiveValue(settings.args.x.midpoint);
+            //Cap.SetActiveValues(Settings.ActiveAccel.GainCap, Settings.ActiveAccel.CapX, Settings.ActiveAccel.CapY, Settings.ActiveAccel.GainCapEnabled);
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)

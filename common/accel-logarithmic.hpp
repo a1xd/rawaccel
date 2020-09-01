@@ -7,14 +7,16 @@
 namespace rawaccel {
 
 	/// <summary> Struct to hold logarithmic acceleration implementation. </summary>
-	struct accel_logarithmic : accel_base {
+	struct logarithmic_impl {
+		double accel;
 
-		using accel_base::accel_base;
+		logarithmic_impl(const accel_args& args) : accel(args.accel) {}
 
-		inline double accelerate(double speed) const {
+		inline double operator()(double speed) const {
 			//f(x) = log(m*x+1)
-			return log(speed_coeff * speed + 1);
+			return log(accel * speed + 1);
 		}
 	};
 
+	using accel_logarithmic = additive_accel<logarithmic_impl>;
 }

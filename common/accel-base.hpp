@@ -1,19 +1,5 @@
 #pragma once
 
-#include "vec2.h"
-
-void bad_arg(const char*);
-
-#ifndef _KERNEL_MODE
-
-#include "rawaccel-error.hpp"
-
-inline void bad_arg(const char* s) {
-    throw rawaccel::invalid_argument(s);
-}
-
-#endif
-
 namespace rawaccel {
     
     /// <summary> Struct to hold arguments for an acceleration function. </summary>
@@ -24,55 +10,48 @@ namespace rawaccel {
         double exponent = 2;
         double midpoint = 0;
         double power_scale = 1;
+        double power_exp = 0.05;
+        double weight = 1;
+        double rate = 0;
+        double scale_cap = 0;
         double gain_cap = 0;
-        vec2d weight = { 1, 1 };
     };
 
-    /// <summary>
-    /// Struct to hold common acceleration curve implementation details.
-    /// </summary>
-    struct accel_base {
+    template <typename Func>
+    struct accel_val_base {
+        double offset = 0;
+        double weight = 1;
+        Func fn;
 
-        /// <summary> Coefficients applied to acceleration per axis.</summary>
-        vec2d weight = { 1, 1 };
+        accel_val_base(const accel_args& args) : fn(args) {}
 
-        /// <summary> Generally, the acceleration ramp rate.</summary>
-        double speed_coeff = 0;
+    };
 
-        accel_base(const accel_args& args) {
-            verify(args);
+    template <typename Func>
+    struct additive_accel : accel_val_base<Func> {
 
-            speed_coeff = args.accel;
+        additive_accel(const accel_args& args) : accel_val_base(args) {
+            offset = args.offset;
             weight = args.weight;
         }
 
-        /// <summary> 
-        /// Default transformation of speed -> acceleration.
-        /// </summary>
-        inline double accelerate(double speed) const { 
-            return speed_coeff * speed; 
+        inline double operator()(double speed) const {
+            return 1 + fn(maxsd(speed - offset, 0)) * weight;
         }
 
-        /// <summary> 
-        /// Default transformation of acceleration -> mouse input multipliers.
-        /// </summary>
-        inline vec2d scale(double accel_val) const {
-            return {
-                weight.x * accel_val + 1,
-                weight.y * accel_val + 1
-            };
+    };
+
+    template <typename Func>
+    struct nonadditive_accel : accel_val_base<Func> {
+
+        nonadditive_accel(const accel_args& args) : accel_val_base(args) {
+            if (args.weight != 0) weight = args.weight;
         }
 
-        /// <summary>
-        /// Verifies arguments as valid. Errors if not.
-        /// </summary>
-        /// <param name="args">Arguments to verified.</param>
-        void verify(const accel_args& args) const {
-            if (args.accel < 0) bad_arg("accel can not be negative, use a negative weight to compensate");
-            if (args.gain_cap > 0 && weight.x != weight.y) bad_arg("weight x and y values must be equal with a gain cap");
+        inline double operator()(double speed) const {
+            return fn(speed) * weight;
         }
 
-        accel_base() = default;
     };
 
 }

@@ -5,7 +5,8 @@
 #define NOMINMAX
 #include <Windows.h>
 
-#include "rawaccel.hpp"
+#include "rawaccel-settings.h"
+#include "rawaccel-error.hpp"
 
 #define RA_READ CTL_CODE(0x8888, 0x888, METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
 #define RA_WRITE CTL_CODE(0x8888, 0x889, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -15,7 +16,7 @@
 
 namespace rawaccel {
 
-	mouse_modifier read() {
+	settings read() {
 		HANDLE ra_handle = INVALID_HANDLE_VALUE;
 
 		ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
@@ -24,7 +25,7 @@ namespace rawaccel {
 			throw install_error();
 		}
 
-		mouse_modifier mod;
+		settings args;
 		DWORD dummy;
 
 		BOOL success = DeviceIoControl(
@@ -32,8 +33,8 @@ namespace rawaccel {
 			RA_READ,
 			NULL,					  // input buffer
 			0,                        // input buffer size
-			&mod,                     // output buffer
-			sizeof(mouse_modifier),   // output buffer size
+			&args,                    // output buffer
+			sizeof(settings),         // output buffer size
 			&dummy,                   // bytes returned
 			NULL                      // overlapped structure
 		);
@@ -44,11 +45,11 @@ namespace rawaccel {
 			throw std::system_error(GetLastError(), std::system_category(), "DeviceIoControl failed");
 		}
 
-		return mod;
+		return args;
 	}
 
 
-	void write(mouse_modifier mod) {
+	void write(const settings& args) {
 		HANDLE ra_handle = INVALID_HANDLE_VALUE;
 
 		ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
@@ -62,12 +63,12 @@ namespace rawaccel {
 		BOOL success = DeviceIoControl(
 			ra_handle,
 			RA_WRITE,
-			&mod,                     // input buffer
-			sizeof(mouse_modifier),   // input buffer size
-			NULL,                     // output buffer
-			0,                        // output buffer size
-			&dummy,                   // bytes returned
-			NULL                      // overlapped structure
+			const_cast<settings*>(&args),      // input buffer
+			sizeof(settings),                  // input buffer size
+			NULL,                              // output buffer
+			0,                                 // output buffer size
+			&dummy,                            // bytes returned
+			NULL                               // overlapped structure
 		);
 
 		CloseHandle(ra_handle);

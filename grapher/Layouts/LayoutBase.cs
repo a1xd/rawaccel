@@ -26,7 +26,7 @@ namespace grapher.Layouts
 
         /// <summary>
         ///  Gets or sets mapping from acceleration type to identifying integer.
-        ///  Must match order in tagged_union in rawaccel.hpp (which is 1-indexed, meaning 0 is off.)
+        ///  Must match accel_mode defined in rawaccel-settings.h
         /// </summary>
         public int Index { get; internal set; }
 

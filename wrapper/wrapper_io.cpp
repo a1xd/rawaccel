@@ -3,16 +3,38 @@
 #include <rawaccel-io.hpp>
 #include "wrapper_io.hpp"
 
-void wrapper_io::writeToDriver(rawaccel::mouse_modifier* modifier)
+void wrapper_io::writeToDriver(const settings& args)
 {
-	rawaccel::write(*modifier);
+	try 
+	{
+		write(args);
+	}
+	catch (const cooldown_error&)
+	{
+		throw gcnew DriverWriteCDException();
+	}
+	catch (const install_error&)
+	{
+		throw gcnew DriverNotInstalledException();
+	}
+	catch (const std::system_error& e)
+	{
+		throw gcnew DriverIOException(gcnew String(e.what()));
+	}
 }
 
-rawaccel::mouse_modifier* wrapper_io::readFromDriver()
+void wrapper_io::readFromDriver(settings& args)
 {
-	rawaccel::mouse_modifier modifier = rawaccel::read();
-	rawaccel::mouse_modifier* mod_pnt = (rawaccel::mouse_modifier*)malloc(sizeof(rawaccel::mouse_modifier));
-	memcpy(mod_pnt, &modifier, sizeof(rawaccel::mouse_modifier));
-
-	return mod_pnt;
+	try
+	{
+		args = read();
+	}
+	catch (const install_error&)
+	{
+		throw gcnew DriverNotInstalledException();
+	}
+	catch (const std::system_error& e)
+	{
+		throw gcnew DriverIOException(gcnew String(e.what()));
+	}
 }

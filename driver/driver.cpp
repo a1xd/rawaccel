@@ -14,9 +14,10 @@ namespace ra = rawaccel;
 using milliseconds = double;
 
 struct {
+    counter_t last_write = 0;
+    ra::settings args;
     milliseconds tick_interval = 0; // set in DriverEntry
     ra::mouse_modifier modifier;
-    counter_t last_write = 0;
 } global;
 
 VOID
@@ -52,16 +53,12 @@ Arguments:
 
     if (!(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE)) {
         auto num_packets = InputDataEnd - InputDataStart;
-        
+          
         // if IO is backed up to the point where we get more than 1 packet here
         // then applying accel is pointless as we can't get an accurate timing
-        
-        bool local_apply_accel = num_packets == 1;
-        if (num_packets != 1) {
-            DebugPrint(("RA received %d packets\n", num_packets));
-        }
-        
-        vec2d local_carry = devExt->carry;
+        bool enable_accel = num_packets == 1;
+
+        vec2d carry = devExt->carry;
 
         auto it = InputDataStart;
         do {
@@ -70,39 +67,37 @@ Arguments:
                 static_cast<double>(it->LastY)
             };
 
-            if (global.modifier.apply_accel && local_apply_accel) {
-                counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
-                counter_t ticks = now - devExt->counter;
-                devExt->counter = now;
+            global.modifier.apply_rotation(input);
 
-                milliseconds time = ticks * global.tick_interval;
-                if (time < global.modifier.accel_fn.time_min) {
-                    DebugPrint(("RA time < min with %d ticks\n", ticks));
-                }
+            if (enable_accel) {
+                auto time_supplier = [=] {
+                    counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+                    counter_t ticks = now - devExt->counter;
+                    devExt->counter = now;
+                    milliseconds time = ticks * global.tick_interval;
+                    return clampsd(time, global.args.time_min, 100);
+                };
 
-                input = global.modifier.modify_with_accel(input, time);
-            }
-            else
-            {
-                input = global.modifier.modify_without_accel(input);
+                global.modifier.apply_acceleration(input, time_supplier);
             }
 
-            double result_x = input.x + local_carry.x;
-            double result_y = input.y + local_carry.y;
+            global.modifier.apply_sensitivity(input);
 
-            LONG out_x = static_cast<LONG>(result_x);
-            LONG out_y = static_cast<LONG>(result_y);
+            double carried_result_x = input.x + carry.x;
+            double carried_result_y = input.y + carry.y;
 
-            local_carry.x = result_x - out_x;
-            local_carry.y = result_y - out_y;
+            LONG out_x = static_cast<LONG>(carried_result_x);
+            LONG out_y = static_cast<LONG>(carried_result_y);
+
+            carry.x = carried_result_x - out_x;
+            carry.y = carried_result_y - out_y;
 
             it->LastX = out_x;
             it->LastY = out_y;
 
-            ++it;
-        } while (it < InputDataEnd);
+        } while (++it != InputDataEnd);
 
-        devExt->carry = local_carry;
+        devExt->carry = carry;
     }
 
     (*(PSERVICE_CALLBACK_ROUTINE)devExt->UpperConnectData.ClassService)(
@@ -154,7 +149,7 @@ Return Value:
 
     DebugPrint(("Ioctl received into filter control object.\n"));
 
-    if (InputBufferLength == sizeof(ra::mouse_modifier)) {
+    if (InputBufferLength == sizeof(ra::settings)) {
         constexpr milliseconds WRITE_COOLDOWN_TIME = 1000;
 
         counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
@@ -170,7 +165,7 @@ Return Value:
 
         status = WdfRequestRetrieveInputBuffer(
             Request,
-            sizeof(ra::mouse_modifier),
+            sizeof(ra::settings),
             &buffer,
             &size
         );
@@ -182,15 +177,16 @@ Return Value:
             return;
         }
 
-        global.modifier = *reinterpret_cast<ra::mouse_modifier*>(buffer);
+        global.args = *reinterpret_cast<ra::settings*>(buffer);
+        global.modifier = { global.args };
         global.last_write = now;
 
         WdfRequestComplete(Request, STATUS_SUCCESS);
     }
-    else if (OutputBufferLength == sizeof(ra::mouse_modifier)) {
+    else if (OutputBufferLength == sizeof(ra::settings)) {
         status = WdfRequestRetrieveOutputBuffer(
             Request,
-            sizeof(ra::mouse_modifier),
+            sizeof(ra::settings),
             &buffer,
             &size
         );
@@ -202,7 +198,7 @@ Return Value:
             return;
         }
 
-        *reinterpret_cast<ra::mouse_modifier*>(buffer) = global.modifier;
+        *reinterpret_cast<ra::settings*>(buffer) = global.args;
 
         WdfRequestComplete(Request, STATUS_SUCCESS);
     }

@@ -7,23 +7,20 @@
 namespace rawaccel {
 
 	/// <summary> Struct to hold "classic" (linear raised to power) acceleration implementation. </summary>
-	struct accel_classic : accel_base {
-		double exponent;
+	struct classic_impl {
+		double accel;
+		double power;
 
-		accel_classic(const accel_args& args) : accel_base(args) {
-			verify(args);
+		classic_impl(const accel_args& args) :
+			accel(args.accel), power(args.exponent - 1)
+		{}
 
-			exponent = args.exponent - 1;
-		}
-
-		inline double accelerate(double speed) const {
-			//f(x) = (mx)^k
-			return pow(speed_coeff * speed, exponent);
-		}
-
-		void verify(const accel_args& args) const {
-			if (args.exponent <= 1) bad_arg("exponent must be greater than 1");
+		inline double operator()(double speed) const {
+			//f(x) = (mx)^(k-1)
+			return pow(accel * speed, power);
 		}
 	};
+
+	using accel_classic = additive_accel<classic_impl>;
 	
 }

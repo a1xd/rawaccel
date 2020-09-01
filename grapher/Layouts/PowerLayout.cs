@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Serialized;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Power";
-            Index = 6;
+            Index = (int)AccelMode.power;
             ShowOptions = new bool[] { true, true, true, false }; 
             OptionNames = new string[] { Offset, Scale, Exponent, string.Empty }; 
         }
