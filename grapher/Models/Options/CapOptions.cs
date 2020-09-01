@@ -93,12 +93,16 @@ namespace grapher
                 CapOption.ActiveValueLabels.X.FormatString = GainCapFormatString;
                 CapOption.ActiveValueLabels.X.Prefix = "Gain";
                 CapOption.SetActiveValues(gainCap, gainCap);
+                SensitivityCapCheck.Checked = true;
+                VelocityGainCapCheck.Checked = false;
             }
             else
             {
                 CapOption.ActiveValueLabels.X.FormatString = ActiveValueLabel.DefaultFormatString;
                 CapOption.ActiveValueLabels.X.Prefix = string.Empty;
                 CapOption.SetActiveValues(sensCapX, sensCapY);
+                SensitivityCapCheck.Checked = false;
+                VelocityGainCapCheck.Checked = true;
             }
         }
 
@@ -122,7 +126,7 @@ namespace grapher
 
         void OnSensitivityCapCheckedChange(object sender, EventArgs e)
         {
-            if (SensitivityCapCheck.Checked == true)
+            if (SensitivityCapCheck.Checked)
             {
                 EnableSensitivityCap();
             }
@@ -130,7 +134,7 @@ namespace grapher
 
         void OnVelocityGainCapCheckedChange(object sender, EventArgs e)
         {
-            if (SensitivityCapCheck.Checked == true)
+            if (SensitivityCapCheck.Checked)
             {
                 EnableVelocityGainCap();
             }

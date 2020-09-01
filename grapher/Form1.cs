@@ -49,6 +49,8 @@ namespace grapher
             ActiveValueTitle.Width = AccelerationChart.Left - ActiveValueTitle.Left;
             ActiveValueTitle.TextAlign = ContentAlignment.MiddleCenter;
 
+            var applyOptions = new ApplyOptions(wholeVectorToolStripMenuItem, byVectorComponentToolStripMenuItem);
+
             var sensitivity = new OptionXY(
                 sensitivityBoxX,
                 sensitivityBoxY,
@@ -158,6 +160,7 @@ namespace grapher
                 accelCalculator,
                 accelCharts,
                 settings,
+                applyOptions,
                 accelerationOptions,
                 sensitivity,
                 rotation,

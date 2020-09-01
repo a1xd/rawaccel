@@ -1,5 +1,6 @@
 ﻿using grapher.Models.Calculations;
 using grapher.Models.Mouse;
+using grapher.Models.Options;
 using grapher.Models.Serialized;
 using System;
 using System.CodeDom;
@@ -23,6 +24,7 @@ namespace grapher
             AccelCalculator accelCalculator,
             AccelCharts accelCharts,
             SettingsManager settings,
+            ApplyOptions applyOptions,
             AccelOptions accelOptions,
             OptionXY sensitivity,
             Option rotation,
@@ -41,6 +43,7 @@ namespace grapher
             AccelCalculator = accelCalculator;
             AccelCharts = accelCharts;
             AccelerationOptions = accelOptions;
+            ApplyOptions = applyOptions;
             Sensitivity = sensitivity;
             Rotation = rotation;
             Weight = weight;
@@ -71,6 +74,8 @@ namespace grapher
         public AccelCharts AccelCharts { get; }
 
         public SettingsManager Settings { get; }
+
+        public ApplyOptions ApplyOptions { get; }
 
         public AccelOptions AccelerationOptions { get; }
 
@@ -110,7 +115,7 @@ namespace grapher
                     x = Sensitivity.Fields.X,
                     y = Sensitivity.Fields.Y
                 },
-                combineMagnitudes = true,
+                combineMagnitudes = ApplyOptions.IsWhole,
                 modes = new Vec2<AccelMode>
                 {
                     x = (AccelMode)AccelerationOptions.AccelerationIndex
@@ -159,6 +164,7 @@ namespace grapher
             Acceleration.SetActiveValue(settings.args.x.accel); // rate, powerscale
             LimitOrExponent.SetActiveValue(settings.args.x.limit); //exp, powerexp
             Midpoint.SetActiveValue(settings.args.x.midpoint);
+            ApplyOptions.SetActive(settings.combineMagnitudes);
             //Cap.SetActiveValues(Settings.ActiveAccel.GainCap, Settings.ActiveAccel.CapX, Settings.ActiveAccel.CapY, Settings.ActiveAccel.GainCapEnabled);
         }
 
