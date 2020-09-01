@@ -36,8 +36,7 @@ namespace grapher
             Option midpoint,
             Button writeButton,
             Label mouseMoveLabel,
-            ToolStripMenuItem scaleMenuItem,
-            ToolStripMenuItem autoWriteMenuItem)
+            ToolStripMenuItem scaleMenuItem)
         {
             AccelForm = accelForm;
             AccelCalculator = accelCalculator;
