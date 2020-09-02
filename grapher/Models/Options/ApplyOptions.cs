@@ -34,10 +34,9 @@ namespace grapher.Models.Options
             OptionSetY = optionSetY;
 
             ByComponentVectorXYLock.CheckedChanged += new System.EventHandler(OnByComponentXYLockChecked);
-            ByComponentVectorXYLock.Checked = false;
             ByComponentVectorXYLock.Checked = true;
 
-            IsWhole = false;
+            EnableWholeApplication();
         }
 
         #endregion Constructors
@@ -124,44 +123,60 @@ namespace grapher.Models.Options
 
         public void OnByComponentCheckedChange(object sender, EventArgs e)
         {
-            if (ByComponentVectorMenuItem.Checked)
-            {
-                EnableByComponentApplication();
-            }
+            EnableByComponentApplication();
         }
 
-        public void ShowWholeOptionSet()
+        public void ShowWholeSet()
+        {
+            OptionSetX.SetRegularMode();
+            OptionSetY.Hide();
+        }
+
+        public void ShowByComponentAsOneSet()
         {
             OptionSetX.SetTitleMode("X = Y");
             OptionSetY.Hide();
         }
 
-        public void ShowByComponentSets()
+        public void ShowByComponentAsTwoSets()
         {
             OptionSetX.SetTitleMode("X");
             OptionSetY.SetTitleMode("Y");
             OptionSetY.Show();
         }
 
-        private void OnByComponentXYLockChecked(object sender, EventArgs e)
-        { 
+        public void ShowByComponentSet()
+        {
             if (ByComponentVectorXYLock.Checked)
             {
-                ShowWholeOptionSet();
+                ShowByComponentAsOneSet();
             }
             else
             {
-                ShowByComponentSets();
+                ShowByComponentAsTwoSets();
+            }
+        }
+
+        private void OnByComponentXYLockChecked(object sender, EventArgs e)
+        {
+            if (!IsWhole)
+            {
+                ShowByComponentSet();
             }
         }
 
         public void EnableWholeApplication()
         {
             IsWhole = true;
+            ByComponentVectorXYLock.Hide();
+            ShowWholeSet();
         }
+
         public void EnableByComponentApplication()
         {
             IsWhole = false;
+            ByComponentVectorXYLock.Show();
+            ShowByComponentSet();
         }
 
         #endregion Methods

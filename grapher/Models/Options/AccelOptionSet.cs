@@ -34,6 +34,8 @@ namespace grapher.Models.Options
             AccelTypeOptions.ShowFullText();
 
             TitleLabel.Top = TopAnchor;
+            IsTitleMode = true;
+            SetRegularMode();
         }
 
         public int TopAnchor { get; }
@@ -71,11 +73,12 @@ namespace grapher.Models.Options
 
         public void SetTitleMode(string title)
         {
+            TitleLabel.Text = title;
+
             if (!IsTitleMode)
             {
                 IsTitleMode = true;
 
-                TitleLabel.Text = title;
                 AccelTypeOptions.Left = Acceleration.Field.Left;
                 AccelTypeOptions.Width = Acceleration.Field.Width;
                 AccelTypeOptions.ShowShortenedText();

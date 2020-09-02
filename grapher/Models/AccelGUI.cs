@@ -96,6 +96,7 @@ namespace grapher
 
         public void RefreshOnRead()
         {
+            AccelCharts.RefreshXY(Settings.RawAccelSettings.AccelerationSettings.combineMagnitudes);
             UpdateGraph();
             UpdateShownActiveValues();
         }
@@ -117,7 +118,6 @@ namespace grapher
             Rotation.SetActiveValue(settings.rotation);
             ApplyOptions.SetActiveValues(settings);
 
-            AccelCharts.RefreshXY(settings.combineMagnitudes);
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)
