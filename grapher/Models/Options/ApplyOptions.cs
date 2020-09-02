@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Serialized;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,10 @@ namespace grapher.Models.Options
 
         public ApplyOptions(
             ToolStripMenuItem wholeVectorMenuItem,
-            ToolStripMenuItem byComponentMenuItem)
+            ToolStripMenuItem byComponentMenuItem,
+            CheckBox byComponentVectorXYLock,
+            AccelOptionSet optionSetX,
+            AccelOptionSet optionSetY)
         {
             WholeVectorMenuItem = wholeVectorMenuItem;
             ByComponentVectorMenuItem = byComponentMenuItem;
@@ -24,6 +28,14 @@ namespace grapher.Models.Options
 
             WholeVectorMenuItem.CheckedChanged += new System.EventHandler(OnWholeCheckedChange);
             ByComponentVectorMenuItem.CheckedChanged += new System.EventHandler(OnByComponentCheckedChange);
+
+            ByComponentVectorXYLock = byComponentVectorXYLock;
+            OptionSetX = optionSetX;
+            OptionSetY = optionSetY;
+
+            ByComponentVectorXYLock.CheckedChanged += new System.EventHandler(OnByComponentXYLockChecked);
+            ByComponentVectorXYLock.Checked = false;
+            ByComponentVectorXYLock.Checked = true;
 
             IsWhole = false;
         }
@@ -36,16 +48,52 @@ namespace grapher.Models.Options
 
         public ToolStripMenuItem ByComponentVectorMenuItem { get; }
 
+        public CheckBox ByComponentVectorXYLock { get; }
+
+        public AccelOptionSet OptionSetX { get; }
+
+        public AccelOptionSet OptionSetY { get; }
+
         public bool IsWhole { get; private set; }
 
         #endregion Properties
 
         #region Methods
 
-        public void SetActive(bool isWhole)
+        public Vec2<AccelMode> GetModes()
         {
+            var xMode = (AccelMode)OptionSetX.AccelTypeOptions.AccelerationIndex;
+
+            return new Vec2<AccelMode>
+            {
+                x = xMode,
+                y = ByComponentVectorXYLock.Checked ? xMode : (AccelMode)OptionSetY.AccelTypeOptions.AccelerationIndex
+            };
+        }
+
+        public Vec2<AccelArgs> GetArgs()
+        {
+            var xArgs = OptionSetX.GenerateArgs();
+            
+            return new Vec2<AccelArgs>
+            {
+                x = xArgs,
+                y = ByComponentVectorXYLock.Checked ? xArgs : OptionSetY.GenerateArgs()
+            };
+
+        }
+
+        public void SetActiveValues(int xMode, int yMode, AccelArgs xArgs, AccelArgs yArgs, bool isWhole)
+        {
+            OptionSetX.SetActiveValues(xMode, xArgs);
+            OptionSetY.SetActiveValues(yMode, yArgs);
             WholeVectorMenuItem.Checked = isWhole;
             ByComponentVectorMenuItem.Checked = !isWhole;
+        }
+
+        public void SetActiveValues(DriverSettings settings)
+        {
+            SetActiveValues((int)settings.modes.x, (int)settings.modes.y, settings.args.x, settings.args.y, settings.combineMagnitudes);
         }
 
         public void OnWholeClicked(object sender, EventArgs e)
@@ -79,6 +127,31 @@ namespace grapher.Models.Options
             if (ByComponentVectorMenuItem.Checked)
             {
                 EnableByComponentApplication();
+            }
+        }
+
+        public void ShowWholeOptionSet()
+        {
+            OptionSetX.SetTitleMode("X = Y");
+            OptionSetY.Hide();
+        }
+
+        public void ShowByComponentSets()
+        {
+            OptionSetX.SetTitleMode("X");
+            OptionSetY.SetTitleMode("Y");
+            OptionSetY.Show();
+        }
+
+        private void OnByComponentXYLockChecked(object sender, EventArgs e)
+        { 
+            if (ByComponentVectorXYLock.Checked)
+            {
+                ShowWholeOptionSet();
+            }
+            else
+            {
+                ShowByComponentSets();
             }
         }
 

@@ -52,6 +52,7 @@ namespace grapher.Models
             TextBox midpointBoxX,
             TextBox midpointBoxY,
             CheckBox sensXYLock,
+            CheckBox byComponentXYLock,
             Label sensitivityLabel,
             Label rotationLabel,
             Label weightLabelX,
@@ -94,8 +95,6 @@ namespace grapher.Models
                                 new ChartXY(velocityChart, velocityChartY),
                                 new ChartXY(gainChart, gainChartY),
                                 showVelocityGainToolStripMenuItem);
-
-            var applyOptions = new ApplyOptions(wholeVectorToolStripMenuItem, byVectorComponentToolStripMenuItem);
 
             var sensitivity = new OptionXY(
                 sensitivityBoxX,
@@ -271,6 +270,13 @@ namespace grapher.Models
                 limitOrExponentY,
                 midpointY);
 
+            var applyOptions = new ApplyOptions(
+                wholeVectorToolStripMenuItem,
+                byVectorComponentToolStripMenuItem,
+                byComponentXYLock,
+                optionsSetX,
+                optionsSetY);
+
             var accelCalculator = new AccelCalculator(
                 new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI),
                 new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate));
@@ -289,8 +295,6 @@ namespace grapher.Models
                 applyOptions,
                 sensitivity,
                 rotation,
-                optionsSetX,
-                optionsSetY,
                 writeButton,
                 mouseLabel,
                 scaleMenuItem);

@@ -69,15 +69,16 @@ namespace grapher.Models.Options
             }
         }
 
-        public void SetTitleMode()
+        public void SetTitleMode(string title)
         {
             if (!IsTitleMode)
             {
                 IsTitleMode = true;
 
+                TitleLabel.Text = title;
                 AccelTypeOptions.Left = Acceleration.Field.Left;
                 AccelTypeOptions.Width = Acceleration.Field.Width;
-                AccelTypeOptions.ShowFullText();
+                AccelTypeOptions.ShowShortenedText();
                 DisplayTitle();
             }
         }
@@ -86,12 +87,6 @@ namespace grapher.Models.Options
         {
             TitleLabel.Hide();
             AccelTypeOptions.Hide();
-            Acceleration.Hide();
-            Cap.Hide();
-            Weight.Hide();
-            Offset.Hide();
-            LimitOrExponent.Hide();
-            Midpoint.Hide();
         }
 
         public void Show()
@@ -102,12 +97,6 @@ namespace grapher.Models.Options
             }
 
             AccelTypeOptions.Show();
-            Acceleration.Show();
-            Cap.Show();
-            Weight.Show();
-            Offset.Show();
-            LimitOrExponent.Show();
-            Midpoint.Show();
         }
 
         public void DisplayTitle()

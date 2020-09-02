@@ -27,8 +27,6 @@ namespace grapher
             ApplyOptions applyOptions,
             OptionXY sensitivity,
             Option rotation,
-            AccelOptionSet optionSetX,
-            AccelOptionSet optionSetY,
             Button writeButton,
             Label mouseMoveLabel,
             ToolStripMenuItem scaleMenuItem)
@@ -42,8 +40,6 @@ namespace grapher
             WriteButton = writeButton;
             ScaleMenuItem = scaleMenuItem;
             Settings = settings;
-            OptionSetX = optionSetX;
-            OptionSetY = optionSetY;
             Settings.Startup();
             RefreshOnRead();
 
@@ -70,10 +66,6 @@ namespace grapher
 
         public Option Rotation { get; }
 
-        public AccelOptionSet OptionSetX { get; }
-
-        public AccelOptionSet OptionSetY { get; }
-
         public Button WriteButton { get; }
 
         public MouseWatcher MouseWatcher { get; }
@@ -95,16 +87,8 @@ namespace grapher
                     y = Sensitivity.Fields.Y
                 },
                 combineMagnitudes = ApplyOptions.IsWhole,
-                modes = new Vec2<AccelMode>
-                {
-                    x = (AccelMode)OptionSetX.AccelTypeOptions.AccelerationIndex,
-                    y = (AccelMode)OptionSetY.AccelTypeOptions.AccelerationIndex
-                },
-                args = new Vec2<AccelArgs>
-                {
-                    x = OptionSetX.GenerateArgs(),
-                    y = OptionSetY.GenerateArgs()
-                },
+                modes = ApplyOptions.GetModes(),
+                args = ApplyOptions.GetArgs(),
                 minimumTime = .4
             });
             RefreshOnRead();
@@ -131,9 +115,7 @@ namespace grapher
 
             Sensitivity.SetActiveValues(settings.sensitivity.x, settings.sensitivity.y);
             Rotation.SetActiveValue(settings.rotation);
-            ApplyOptions.SetActive(settings.combineMagnitudes);
-            OptionSetX.SetActiveValues((int)settings.modes.x, settings.args.x);
-            OptionSetY.SetActiveValues((int)settings.modes.y, settings.args.y);
+            ApplyOptions.SetActiveValues(settings);
 
             AccelCharts.RefreshXY(settings.combineMagnitudes);
         }

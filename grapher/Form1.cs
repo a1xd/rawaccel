@@ -38,7 +38,7 @@ namespace grapher
             }
 
             ActiveValueTitle.AutoSize = false;
-            ActiveValueTitle.Left = LockXYLabel.Left + LockXYLabel.Width;
+            ActiveValueTitle.Left = accelerationBoxY.Left + accelerationBoxY.Width;
             ActiveValueTitle.Width = AccelerationChart.Left - ActiveValueTitle.Left;
             ActiveValueTitle.TextAlign = ContentAlignment.MiddleCenter;
 
@@ -79,6 +79,7 @@ namespace grapher
                 midpointBoxX,
                 midpointBoxY,
                 sensXYLock,
+                ByComponentXYLock,
                 sensitivityLabel,
                 rotationLabel,
                 weightLabelX,

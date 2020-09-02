@@ -62,7 +62,15 @@ namespace grapher
 
         public ComboBox AccelDropdown { get; }
 
-        public int AccelerationIndex { get; private set; }
+        public int AccelerationIndex
+        {
+            get
+            {
+                return AccelerationType.Index;
+            }
+        }
+
+        public LayoutBase AccelerationType { get; private set; }
 
         public ActiveValueLabel ActiveValueLabel { get; }
 
@@ -125,11 +133,17 @@ namespace grapher
         public void Hide()
         {
             AccelDropdown.Hide();
+            
+            foreach(var option in Options)
+            {
+                option.Hide();
+            }
         }
 
         public void Show()
         {
             AccelDropdown.Show();
+            Layout();
         }
 
         public void SetActiveValue(int index)
@@ -163,9 +177,13 @@ namespace grapher
 
         private void Layout(string type)
         {
-            var accelerationType = AccelerationTypes[type];
-            AccelerationIndex = accelerationType.Index;
-            accelerationType.Layout(Options, WriteButton);
+            AccelerationType = AccelerationTypes[type];
+            Layout();
+        }
+
+        private void Layout()
+        {
+            AccelerationType.Layout(Options, WriteButton);
         }
 
         #endregion Methods
