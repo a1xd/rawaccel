@@ -65,7 +65,8 @@
     <Compile Include="Models\Charts\EstimatedPoints.cs" />
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
-    <Compile Include="Models\Options\AccelOptions.cs" />
+    <Compile Include="Models\Options\AccelTypeOptions.cs" />
+    <Compile Include="Models\Options\AccelOptionSet.cs" />
     <Compile Include="Models\Options\ActiveValueLabel.cs" />
     <Compile Include="Models\Options\ActiveValueLabelXY.cs" />
     <Compile Include="Models\Options\ApplyOptions.cs" />

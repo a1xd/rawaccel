@@ -58,6 +58,54 @@ namespace grapher
 
         public FieldState PreviousState { get; private set; }
 
+        public int Top
+        {
+            get
+            {
+                return Box.Top;
+            } 
+            set
+            {
+                Box.Top = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return Box.Height;
+            } 
+            set
+            {
+                Box.Height = value;
+            }
+        }
+
+        public int Left
+        {
+            get
+            {
+                return Box.Left;
+            }
+            set
+            {
+                Box.Left = value;
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return Box.Width;
+            }
+            set
+            {
+                Box.Width = value;
+            }
+        }
+
         private double DefaultData { get; }
 
         #endregion Properties

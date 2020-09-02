@@ -20,14 +20,12 @@ namespace grapher
         public CapOptions(
             ToolStripMenuItem sensitivityCapCheck,
             ToolStripMenuItem velocityGainCapCheck,
-            OptionXY capOption,
-            OptionXY weightOption)
+            Option capOption)
         {
 
             SensitivityCapCheck = sensitivityCapCheck;
             VelocityGainCapCheck = velocityGainCapCheck;
             CapOption = capOption;
-            WeightOption = weightOption;
 
             SensitivityCapCheck.Click += new System.EventHandler(OnSensitivityCapCheckClick);
             VelocityGainCapCheck.Click += new System.EventHandler(OnVelocityGainCapCheckClick);
@@ -46,32 +44,16 @@ namespace grapher
 
         public ToolStripMenuItem VelocityGainCapCheck { get; }
 
-        public OptionXY CapOption { get; }
-
-        public OptionXY WeightOption { get; }
+        public Option CapOption { get; }
 
         public bool IsSensitivityGain { get; private set; }
 
-        public double SensitivityCapX { 
+        public double SensitivityCap { 
             get
             {
                 if (IsSensitivityGain)
                 {
-                    return CapOption.Fields.X;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-
-        public double SensitivityCapY { 
-            get
-            {
-                if (IsSensitivityGain)
-                {
-                    return CapOption.Fields.Y;
+                    return CapOption.Field.Data;
                 }
                 else
                 {
@@ -89,7 +71,7 @@ namespace grapher
                 }
                 else
                 {
-                    return CapOption.Fields.X;
+                    return CapOption.Field.Data;
                 }
             }
         }
@@ -98,21 +80,31 @@ namespace grapher
 
         #region Methods
 
-        public void SetActiveValues(double gainCap, double sensCapX, double sensCapY, bool capGainEnabled)
+        public void Hide()
+        {
+            CapOption.Hide();
+        }
+
+        public void Show()
+        {
+            CapOption.Show();
+        }
+
+        public void SetActiveValues(double gainCap, double sensCap, bool capGainEnabled)
         {
             if (capGainEnabled)
             {
-                CapOption.ActiveValueLabels.X.FormatString = Constants.GainCapFormatString;
-                CapOption.ActiveValueLabels.X.Prefix = "Gain";
-                CapOption.SetActiveValues(gainCap, gainCap);
+                CapOption.ActiveValueLabel.FormatString = Constants.GainCapFormatString;
+                CapOption.ActiveValueLabel.Prefix = "Gain";
+                CapOption.SetActiveValue(gainCap);
                 SensitivityCapCheck.Checked = true;
                 VelocityGainCapCheck.Checked = false;
             }
             else
             {
-                CapOption.ActiveValueLabels.X.FormatString = Constants.DefaultActiveValueFormatString;
-                CapOption.ActiveValueLabels.X.Prefix = string.Empty;
-                CapOption.SetActiveValues(sensCapX, sensCapY);
+                CapOption.ActiveValueLabel.FormatString = Constants.DefaultActiveValueFormatString;
+                CapOption.ActiveValueLabel.Prefix = string.Empty;
+                CapOption.SetActiveValue(sensCap);
                 SensitivityCapCheck.Checked = false;
                 VelocityGainCapCheck.Checked = true;
             }
@@ -155,18 +147,12 @@ namespace grapher
         void EnableSensitivityCap()
         {
             IsSensitivityGain = true;
-            CapOption.Fields.LockCheckBox.Enabled = true;
-            WeightOption.Fields.LockCheckBox.Enabled = true;
             CapOption.SetName("Sensitivity Cap");
         }
 
         void EnableVelocityGainCap()
         {
             IsSensitivityGain = false;
-            CapOption.Fields.LockCheckBox.Checked = true;
-            CapOption.Fields.LockCheckBox.Enabled = false;
-            WeightOption.Fields.LockCheckBox.Checked = true;
-            WeightOption.Fields.LockCheckBox.Enabled = false;
             CapOption.SetName("Velocity Gain Cap");
         }
 

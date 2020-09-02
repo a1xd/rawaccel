@@ -40,7 +40,7 @@ namespace grapher.Layouts
 
         internal bool ButtonEnabled { get; set; }
 
-        public void Layout(Option[] options, OptionXY[] optionsXY, Button button)
+        public void Layout(Option[] options, Button button)
         {
             // Relies on AccelOptions to keep lengths correct.
             for (int i = 0; i < options.Length; i++)
@@ -52,19 +52,6 @@ namespace grapher.Layouts
                 else
                 {
                     options[i].Hide();
-                }
-            }
-
-            // Relies on AccelOptions to keep lengths correct.
-            for (int i = 0; i< optionsXY.Length; i++)
-            {
-                if (ShowOptionsXY[i])
-                {
-                    optionsXY[i].Show();
-                }
-                else
-                {
-                    optionsXY[i].Hide();
                 }
             }
 

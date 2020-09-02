@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace grapher
 {
-    public class AccelOptions
+    public class AccelTypeOptions
     {
         #region Fields
 
@@ -30,10 +30,9 @@ namespace grapher
 
         #region Constructors
 
-        public AccelOptions(
+        public AccelTypeOptions(
             ComboBox accelDropdown,
             Option[] options,
-            OptionXY[] optionsXY,
             Button writeButton,
             ActiveValueLabel activeValueLabel)
         {
@@ -47,17 +46,12 @@ namespace grapher
                 throw new Exception("Layout given too many options.");
             }
 
-            if (optionsXY.Length > Constants.PossibleOptionsXYCount)
-            {
-                throw new Exception("Layout given too many options.");
-            }
-
             Options = options;
-            OptionsXY = optionsXY;
             WriteButton = writeButton;
             ActiveValueLabel = activeValueLabel;
 
             Layout("Off");
+            ShowingDefault = true;
         }
 
         #endregion Constructors
@@ -74,11 +68,69 @@ namespace grapher
 
         public Option[] Options { get; }
 
-        public OptionXY[] OptionsXY { get; }
+        public int Top 
+        {
+            get
+            {
+                return AccelDropdown.Top;
+            } 
+            set
+            {
+                AccelDropdown.Top = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return AccelDropdown.Height;
+            } 
+            set
+            {
+                AccelDropdown.Height = value;
+            }
+        }
+
+        public int Left
+        {
+            get
+            {
+                return AccelDropdown.Left;
+            } 
+            set
+            {
+                AccelDropdown.Left = value;
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return AccelDropdown.Width;
+            }
+            set
+            {
+                AccelDropdown.Width = value;
+            }
+        }
+
+        private bool ShowingDefault { get; set; }
 
         #endregion Properties
 
         #region Methods
+
+        public void Hide()
+        {
+            AccelDropdown.Hide();
+        }
+
+        public void Show()
+        {
+            AccelDropdown.Show();
+        }
 
         public void SetActiveValue(int index)
         {
@@ -86,17 +138,34 @@ namespace grapher
             ActiveValueLabel.SetValue(name);
         }
 
+        public void ShowFullText()
+        {
+            if (ShowingDefault)
+            {
+                AccelDropdown.Text = Constants.AccelDropDownDefaultFullText;
+            }
+        }
+
+        public void ShowShortenedText()
+        {
+            if (ShowingDefault)
+            {
+                AccelDropdown.Text = Constants.AccelDropDownDefaultShortText;
+            }
+        }
+
         private void OnIndexChanged(object sender, EventArgs e)
         {
             var accelerationTypeString = AccelDropdown.SelectedItem.ToString();
             Layout(accelerationTypeString);
+            ShowingDefault = false;
         }
 
         private void Layout(string type)
         {
             var accelerationType = AccelerationTypes[type];
             AccelerationIndex = accelerationType.Index;
-            accelerationType.Layout(Options, OptionsXY, WriteButton);
+            accelerationType.Layout(Options, WriteButton);
         }
 
         #endregion Methods

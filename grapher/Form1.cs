@@ -74,8 +74,6 @@ namespace grapher
                 limitBox,
                 midpointBox,
                 sensXYLock,
-                weightXYLock,
-                capXYLock,
                 sensitivityLabel,
                 rotationLabel,
                 weightLabel,

@@ -62,6 +62,47 @@ namespace grapher
 
         public ActiveValueLabel ActiveValueLabel { get; }
 
+        public int Top
+        { 
+            get 
+            {
+                return Field.Top;
+            }
+            set
+            {
+                Field.Top = value;
+                Label.Top = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return Field.Height;
+            }
+        }
+
+        public int Left
+        { 
+            get 
+            {
+                return Label.Left;
+            }
+            set
+            {
+                Label.Left = value;
+                Field.Left = value + Label.Width + Constants.OptionLabelBoxSeperation;
+            }
+        }
+        public int Width
+        {
+            get
+            {
+                return Field.Left + Field.Width - Label.Left;
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -70,7 +111,7 @@ namespace grapher
         {
             Label.Text = name;
             //Label.Left = Convert.ToInt32((Field.Box.Left / 2.0) - (Label.Width / 2.0));   //Centered
-            Label.Left = Convert.ToInt32(Field.Box.Left - Label.Width - 10);    //Right-aligned
+            Left = Label.Left;
         }
 
         public void SetActiveValue(double value)
@@ -102,6 +143,11 @@ namespace grapher
             SetName(name);
 
             Show();
+        }
+        
+        public void SnapTo(Option option)
+        {
+            Top = option.Top + option.Height + Constants.OptionVerticalSeperation;
         }
 
         #endregion Methods

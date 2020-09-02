@@ -25,15 +25,10 @@ namespace grapher
             AccelCharts accelCharts,
             SettingsManager settings,
             ApplyOptions applyOptions,
-            AccelOptions accelOptions,
             OptionXY sensitivity,
             Option rotation,
-            OptionXY weight,
-            CapOptions cap,
-            Option offset,
-            Option acceleration,
-            Option limtOrExp,
-            Option midpoint,
+            AccelOptionSet optionSetX,
+            AccelOptionSet optionSetY,
             Button writeButton,
             Label mouseMoveLabel,
             ToolStripMenuItem scaleMenuItem)
@@ -41,21 +36,14 @@ namespace grapher
             AccelForm = accelForm;
             AccelCalculator = accelCalculator;
             AccelCharts = accelCharts;
-            AccelerationOptions = accelOptions;
             ApplyOptions = applyOptions;
             Sensitivity = sensitivity;
             Rotation = rotation;
-            Weight = weight;
-            Cap = cap;
-            Offset = offset;
-            Acceleration = acceleration;
-            LimitOrExponent = limtOrExp;
-            Midpoint = midpoint;
             WriteButton = writeButton;
             ScaleMenuItem = scaleMenuItem;
             Settings = settings;
             Settings.Startup();
-            UpdateGraph();
+            RefreshOnRead();
 
             MouseWatcher = new MouseWatcher(AccelForm, mouseMoveLabel, AccelCharts);
 
@@ -76,23 +64,13 @@ namespace grapher
 
         public ApplyOptions ApplyOptions { get; }
 
-        public AccelOptions AccelerationOptions { get; }
-
         public OptionXY Sensitivity { get; }
 
         public Option Rotation { get; }
 
-        public OptionXY Weight { get; }
+        public AccelOptionSet OptionSetX { get; }
 
-        public CapOptions Cap { get; }
-
-        public Option Offset { get; }
-
-        public Option Acceleration { get; }
-
-        public Option LimitOrExponent { get; }
-
-        public Option Midpoint { get; }
+        public AccelOptionSet OptionSetY { get; }
 
         public Button WriteButton { get; }
 
@@ -117,28 +95,23 @@ namespace grapher
                 combineMagnitudes = ApplyOptions.IsWhole,
                 modes = new Vec2<AccelMode>
                 {
-                    x = (AccelMode)AccelerationOptions.AccelerationIndex
+                    x = (AccelMode)OptionSetX.AccelTypeOptions.AccelerationIndex,
+                    y = (AccelMode)OptionSetY.AccelTypeOptions.AccelerationIndex
                 },
                 args = new Vec2<AccelArgs>
                 {
-                    x = new AccelArgs
-                    {
-                        offset = Offset.Field.Data,
-                        weight = Weight.Fields.X,
-                        gainCap = Cap.VelocityGainCap,
-                        scaleCap = Cap.SensitivityCapX,
-                        accel = Acceleration.Field.Data,
-                        rate = Acceleration.Field.Data,
-                        powerScale = Acceleration.Field.Data,
-                        limit = LimitOrExponent.Field.Data,
-                        exponent = LimitOrExponent.Field.Data,
-                        powerExponent = LimitOrExponent.Field.Data,
-                        midpoint = Midpoint.Field.Data
-                    }
+                    x = OptionSetX.GenerateArgs(),
+                    y = OptionSetY.GenerateArgs()
                 },
                 minimumTime = .4
             });
+            RefreshOnRead();
+        }
+
+        public void RefreshOnRead()
+        {
             UpdateGraph();
+            UpdateShownActiveValues();
         }
 
         public void UpdateGraph()
@@ -148,23 +121,17 @@ namespace grapher
                 Settings.ActiveAccel, 
                 Settings.RawAccelSettings.AccelerationSettings);
             AccelCharts.Bind();
-            UpdateShownActiveValues();
         }
 
         public void UpdateShownActiveValues()
         {
             var settings = Settings.RawAccelSettings.AccelerationSettings;
-            
+
             Sensitivity.SetActiveValues(settings.sensitivity.x, settings.sensitivity.y);
             Rotation.SetActiveValue(settings.rotation);
-            AccelerationOptions.SetActiveValue((int)settings.modes.x);
-            Offset.SetActiveValue(settings.args.x.offset);
-            Weight.SetActiveValues(settings.args.x.weight, settings.args.x.weight);
-            Acceleration.SetActiveValue(settings.args.x.accel); // rate, powerscale
-            LimitOrExponent.SetActiveValue(settings.args.x.limit); //exp, powerexp
-            Midpoint.SetActiveValue(settings.args.x.midpoint);
             ApplyOptions.SetActive(settings.combineMagnitudes);
-            Cap.SetActiveValues(settings.args.x.gainCap, settings.args.x.scaleCap, settings.args.y.scaleCap, settings.args.x.gainCap > 0);
+            OptionSetX.SetActiveValues((int)settings.modes.x, settings.args.x);
+            OptionSetY.SetActiveValues((int)settings.modes.y, settings.args.y);
 
             AccelCharts.RefreshXY(settings.combineMagnitudes);
         }

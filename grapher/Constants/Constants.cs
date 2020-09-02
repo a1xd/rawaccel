@@ -54,7 +54,7 @@ namespace grapher
         public const int PossibleOptionsCount = 4;
 
         /// <summary> Possible x/y options to display in a layout. </summary>
-        public const int PossibleOptionsXYCount = 2;
+        public const int PossibleOptionsXYCount = 0;
 
         /// <summary> Horizontal separation between charts, in pixels. </summary>
         public const int ChartSeparationHorizontal = 10;
@@ -62,8 +62,20 @@ namespace grapher
         /// <summary> Default horizontal separation between x and y fields, in pixels. </summary>
         public const int DefaultFieldSeparation = 4;
 
+        /// <summary> Default horizontal separation between an option's label and box, in pixels. </summary>
+        public const int OptionLabelBoxSeperation = 10;
+
+        /// <summary> Default horizontal separation between an option's label and box, in pixels. </summary>
+        public const int OptionVerticalSeperation = 4;
+
         /// <summary> Format string for shortened x and y fields. </summary>
         public const string ShortenedFieldFormatString = "0.###";
+
+        /// <summary> Format string for shortened x and y dropdowns. </summary>
+        public const string AccelDropDownDefaultFullText = "Acceleration Type";
+
+        /// <summary> Format string for default dropdowns. </summary>
+        public const string AccelDropDownDefaultShortText = "Accel Type";
         #endregion Constants
 
         #region ReadOnly

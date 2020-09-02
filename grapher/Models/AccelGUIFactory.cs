@@ -24,7 +24,8 @@ namespace grapher.Models
             Chart velocityChartY,
             Chart gainChart,
             Chart gainChartY,
-            ComboBox accelTypeDrop,
+            ComboBox accelTypeDropX,
+            ComboBox accelTypeDropY,
             Button writeButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem wholeVectorToolStripMenuItem,
@@ -42,21 +43,31 @@ namespace grapher.Models
             TextBox weightBoxY,
             TextBox capBoxX,
             TextBox capBoxY,
-            TextBox offsetBox,
-            TextBox accelerationBox,
-            TextBox limitBox,
-            TextBox midpointBox,
+            TextBox offsetBoxX,
+            TextBox offsetBoxY,
+            TextBox accelerationBoxX,
+            TextBox accelerationBoxY,
+            TextBox limitBoxX,
+            TextBox limitBoxY,
+            TextBox midpointBoxX,
+            TextBox midpointBoxY,
             CheckBox sensXYLock,
             CheckBox weightXYLock,
             CheckBox capXYLock,
             Label sensitivityLabel,
             Label rotationLabel,
-            Label weightLabel,
-            Label capLabel,
-            Label offsetLabel,
-            Label constantOneLabel,
-            Label constantTwoLabel,
-            Label constantThreeLabel,
+            Label weightLabelX,
+            Label weightLabelY,
+            Label capLabelX,
+            Label capLabelY,
+            Label offsetLabelX,
+            Label offsetLabelY,
+            Label constantOneLabelX,
+            Label constantOneLabelY,
+            Label constantTwoLabelX,
+            Label constantTwoLabelY,
+            Label constantThreeLabelX,
+            Label constantThreeLabelY,
             Label activeValueTitle,
             Label sensitivityActiveXLabel,
             Label sensitivityActiveYLabel,
@@ -65,11 +76,17 @@ namespace grapher.Models
             Label weightActiveYLabel,
             Label capActiveXLabel,
             Label capActiveYLabel,
-            Label offsetActiveLabel,
-            Label accelerationActiveLabel,
-            Label limitExpActiveLabel,
-            Label midpointActiveLabel,
+            Label offsetActiveLabelX,
+            Label offsetActiveLabelY,
+            Label accelerationActiveLabelX,
+            Label accelerationActiveLabelY,
+            Label limitExpActiveLabelX,
+            Label limitExpActiveLabelY,
+            Label midpointActiveLabelX,
+            Label midpointActiveLabelY,
             Label accelTypeActiveLabel,
+            Label optionSetXTitle,
+            Label optionSetYTitle,
             Label mouseLabel)
         {
             var accelCharts = new AccelCharts(
@@ -101,76 +118,142 @@ namespace grapher.Models
                 new ActiveValueLabel(rotationActiveLabel, activeValueTitle),
                 "Rotation");
 
-            var weight = new OptionXY(
+            var weightX = new Option(
                 weightBoxX,
-                weightBoxY,
-                weightXYLock,
                 form,
                 1,
-                weightLabel,
-                new ActiveValueLabelXY(
-                    new ActiveValueLabel(weightActiveXLabel, activeValueTitle),
-                    new ActiveValueLabel(weightActiveYLabel, activeValueTitle)),
+                weightLabelX,
+                new ActiveValueLabel(weightActiveXLabel, activeValueTitle),
                 "Weight");
 
-            var cap = new OptionXY(
+            var weightY = new Option(
+                weightBoxY,
+                form,
+                1,
+                weightLabelY,
+                new ActiveValueLabel(weightActiveYLabel, activeValueTitle),
+                "Weight");
+
+            var capX = new Option(
                 capBoxX,
-                capBoxY,
-                capXYLock,
                 form,
                 0,
-                capLabel,
-                new ActiveValueLabelXY(
-                    new ActiveValueLabel(capActiveXLabel, activeValueTitle),
-                    new ActiveValueLabel(capActiveYLabel, activeValueTitle)),
+                capLabelX,
+                new ActiveValueLabel(capActiveXLabel, activeValueTitle),
                 "Cap");
 
-            var offset = new Option(
-                offsetBox,
+            var capY = new Option(
+                capBoxY,
                 form,
                 0,
-                offsetLabel,
-                new ActiveValueLabel(offsetActiveLabel, activeValueTitle),
+                capLabelY,
+                new ActiveValueLabel(capActiveYLabel, activeValueTitle),
+                "Cap");
+
+            var offsetX = new Option(
+                offsetBoxX,
+                form,
+                0,
+                offsetLabelX,
+                new ActiveValueLabel(offsetActiveLabelX, activeValueTitle),
+                "Offset");
+
+            var offsetY = new Option(
+                offsetBoxY,
+                form,
+                0,
+                offsetLabelY,
+                new ActiveValueLabel(offsetActiveLabelY, activeValueTitle),
                 "Offset");
 
             // The name and layout of these options is handled by AccelerationOptions object.
-            var acceleration = new Option(
-                new Field(accelerationBox, form, 0),
-                constantOneLabel,
-                new ActiveValueLabel(accelerationActiveLabel, activeValueTitle));
+            var accelerationX = new Option(
+                new Field(accelerationBoxX, form, 0),
+                constantOneLabelX,
+                new ActiveValueLabel(accelerationActiveLabelX, activeValueTitle));
 
-            var limitOrExponent = new Option(
-                new Field(limitBox, form, 2),
-                constantTwoLabel,
-                new ActiveValueLabel(limitExpActiveLabel, activeValueTitle));
+            var accelerationY = new Option(
+                new Field(accelerationBoxY, form, 0),
+                constantOneLabelY,
+                new ActiveValueLabel(accelerationActiveLabelY, activeValueTitle));
 
-            var midpoint = new Option(
-                new Field(midpointBox, form, 0),
-                constantThreeLabel,
-                new ActiveValueLabel(midpointActiveLabel, activeValueTitle));
+            var limitOrExponentX = new Option(
+                new Field(limitBoxX, form, 2),
+                constantTwoLabelX,
+                new ActiveValueLabel(limitExpActiveLabelX, activeValueTitle));
 
-            var accelerationOptions = new AccelOptions(
-                accelTypeDrop,
+            var limitOrExponentY = new Option(
+                new Field(limitBoxY, form, 2),
+                constantTwoLabelY,
+                new ActiveValueLabel(limitExpActiveLabelY, activeValueTitle));
+
+            var midpointX = new Option(
+                new Field(midpointBoxX, form, 0),
+                constantThreeLabelX,
+                new ActiveValueLabel(midpointActiveLabelX, activeValueTitle));
+
+            var midpointY = new Option(
+                new Field(midpointBoxY, form, 0),
+                constantThreeLabelY,
+                new ActiveValueLabel(midpointActiveLabelY, activeValueTitle));
+
+            var accelerationOptionsX = new AccelTypeOptions(
+                accelTypeDropX,
                 new Option[]
                 {
-                    offset,
-                    acceleration,
-                    limitOrExponent,
-                    midpoint,
-                },
-                new OptionXY[]
-                {
-                    weight,
-                    cap,
+                    offsetX,
+                    accelerationX,
+                    limitOrExponentX,
+                    midpointX,
+                    capX,
+                    weightX
                 },
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabel, activeValueTitle));
 
-            var capOptions = new CapOptions(
+            var accelerationOptionsY = new AccelTypeOptions(
+                accelTypeDropY,
+                new Option[]
+                {
+                    offsetY,
+                    accelerationY,
+                    limitOrExponentY,
+                    midpointY,
+                    capY,
+                    weightY
+                },
+                writeButton,
+                new ActiveValueLabel(accelTypeActiveLabel, activeValueTitle));
+
+            var capOptionsX = new CapOptions(
                 sensitivityToolStripMenuItem,
                 velocityGainToolStripMenuItem,
-                cap,
-                weight);
+                capX);
+
+            var capOptionsY = new CapOptions(
+                sensitivityToolStripMenuItem,
+                velocityGainToolStripMenuItem,
+                capY);
+
+            var optionsSetX = new AccelOptionSet(
+                optionSetXTitle,
+                accelerationOptionsX,
+                accelerationX,
+                capOptionsX,
+                weightX,
+                offsetX,
+                limitOrExponentX,
+                midpointX);
+
+            var optionsSetY = new AccelOptionSet(
+                optionSetYTitle,
+                accelerationOptionsY,
+                accelerationY,
+                capOptionsY,
+                weightY,
+                offsetY,
+                limitOrExponentY,
+                midpointY);
 
             var accelCalculator = new AccelCalculator(
                 new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI),
@@ -188,15 +271,10 @@ namespace grapher.Models
                 accelCharts,
                 settings,
                 applyOptions,
-                accelerationOptions,
                 sensitivity,
                 rotation,
-                weight,
-                capOptions,
-                offset,
-                acceleration,
-                limitOrExponent,
-                midpoint,
+                optionsSetX,
+                optionsSetY,
                 writeButton,
                 mouseLabel,
                 scaleMenuItem);
