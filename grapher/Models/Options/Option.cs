@@ -150,6 +150,11 @@ namespace grapher
             Top = option.Top + option.Height + Constants.OptionVerticalSeperation;
         }
 
+        public void SnapTo(CapOptions option)
+        {
+            Top = option.Top + option.Height + Constants.OptionVerticalSeperation;
+        }
+
         #endregion Methods
     }
 }

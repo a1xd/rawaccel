@@ -42,6 +42,8 @@ namespace grapher
             WriteButton = writeButton;
             ScaleMenuItem = scaleMenuItem;
             Settings = settings;
+            OptionSetX = optionSetX;
+            OptionSetY = optionSetY;
             Settings.Startup();
             RefreshOnRead();
 

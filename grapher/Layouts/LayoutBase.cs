@@ -15,12 +15,14 @@ namespace grapher.Layouts
         public const string Limit = "Limit";
         public const string Midpoint = "Midpoint";
         public const string Offset = "Offset";
+        public const string Cap = "Cap";
+        public const string Weight = "Weight";
 
         public LayoutBase()
         {
-            ShowOptions = new bool[] { false, false, false, false };
+            ShowOptions = new bool[] { false, false, false, false, true, true };
             ShowOptionsXY = new bool[] { true, true };
-            OptionNames = new string[] { string.Empty, string.Empty, string.Empty, string.Empty };
+            OptionNames = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
             ButtonEnabled = true;
         }
 

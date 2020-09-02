@@ -52,8 +52,6 @@ namespace grapher.Models
             TextBox midpointBoxX,
             TextBox midpointBoxY,
             CheckBox sensXYLock,
-            CheckBox weightXYLock,
-            CheckBox capXYLock,
             Label sensitivityLabel,
             Label rotationLabel,
             Label weightLabelX,
@@ -84,7 +82,8 @@ namespace grapher.Models
             Label limitExpActiveLabelY,
             Label midpointActiveLabelX,
             Label midpointActiveLabelY,
-            Label accelTypeActiveLabel,
+            Label accelTypeActiveLabelX,
+            Label accelTypeActiveLabelY,
             Label optionSetXTitle,
             Label optionSetYTitle,
             Label mouseLabel)
@@ -209,7 +208,7 @@ namespace grapher.Models
                     weightX
                 },
                 writeButton,
-                new ActiveValueLabel(accelTypeActiveLabel, activeValueTitle));
+                new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitle));
 
             var accelerationOptionsY = new AccelTypeOptions(
                 accelTypeDropY,
@@ -223,7 +222,7 @@ namespace grapher.Models
                     weightY
                 },
                 writeButton,
-                new ActiveValueLabel(accelTypeActiveLabel, activeValueTitle));
+                new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitle));
 
             var capOptionsX = new CapOptions(
                 sensitivityToolStripMenuItem,

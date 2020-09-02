@@ -76,6 +76,27 @@ namespace grapher
             }
         }
 
+        public int Top
+        { 
+            get 
+            {
+                return CapOption.Top;
+            }
+            set
+            {
+                CapOption.Top = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return CapOption.Height;
+            }
+        }
+
+
         #endregion Properties
 
         #region Methods
@@ -89,6 +110,12 @@ namespace grapher
         {
             CapOption.Show();
         }
+
+        public void SnapTo(Option option)
+        {
+            Top = option.Top + option.Height + Constants.OptionVerticalSeperation;
+        }
+
 
         public void SetActiveValues(double gainCap, double sensCap, bool capGainEnabled)
         {

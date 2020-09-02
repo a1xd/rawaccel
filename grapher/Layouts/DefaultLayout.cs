@@ -16,8 +16,8 @@ namespace grapher.Layouts
         {
             Name = "Default";
             Index = (int)AccelMode.noaccel;
-            ShowOptions = new bool[] { true, true, true, true }; 
-            OptionNames = new string[] { Offset, Acceleration, $"{Limit}\\{Exponent}", Midpoint };
+            ShowOptions = new bool[] { true, true, true, true, true }; 
+            OptionNames = new string[] { Offset, Acceleration, $"{Limit}\\{Exponent}", Midpoint, Cap, Weight };
             ButtonEnabled = false;
         }
     }

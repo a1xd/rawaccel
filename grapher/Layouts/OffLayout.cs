@@ -14,9 +14,8 @@ namespace grapher.Layouts
         {
             Name = "Off";
             Index = (int)AccelMode.noaccel;
-            ShowOptions = new bool[] { false, false, false, false }; 
-            OptionNames = new string[] { string.Empty, string.Empty, string.Empty, string.Empty };
-            ShowOptionsXY = new bool[] { false, false }; 
+            ShowOptions = new bool[] { false, false, false, false, false, false }; 
+            OptionNames = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
             ButtonEnabled = true;
         }
     }

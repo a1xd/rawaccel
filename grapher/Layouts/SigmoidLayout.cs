@@ -14,8 +14,8 @@ namespace grapher.Layouts
         {
             Name = "Sigmoid";
             Index = (int)AccelMode.sigmoid;
-            ShowOptions = new bool[] { true, true, true, true }; 
-            OptionNames = new string[] { Offset, Acceleration, Limit, Midpoint }; 
+            ShowOptions = new bool[] { true, true, true, true, false, true }; 
+            OptionNames = new string[] { Offset, Acceleration, Limit, Midpoint, string.Empty, Weight  }; 
         }
     }
 }

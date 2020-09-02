@@ -14,8 +14,8 @@ namespace grapher.Layouts
         {
             Name = "Logarithmic";
             Index = (int)AccelMode.logarithmic;
-            ShowOptions = new bool[] { true, true, false, false }; 
-            OptionNames = new string[] { Offset, Acceleration, string.Empty, string.Empty }; 
+            ShowOptions = new bool[] { true, true, false, false, true, true }; 
+            OptionNames = new string[] { Offset, Acceleration, string.Empty, string.Empty, Cap, Weight }; 
         }
     }
 }

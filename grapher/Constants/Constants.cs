@@ -51,7 +51,7 @@ namespace grapher
         public const string DefaultFieldFormatString = "0.#########";
 
         /// <summary> Possible options to display in a layout. </summary>
-        public const int PossibleOptionsCount = 4;
+        public const int PossibleOptionsCount = 6;
 
         /// <summary> Possible x/y options to display in a layout. </summary>
         public const int PossibleOptionsXYCount = 0;

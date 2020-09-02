@@ -14,8 +14,8 @@ namespace grapher.Layouts
         {
             Name = "Classic";
             Index = (int)AccelMode.classic;
-            ShowOptions = new bool[] { true, true, true, false }; 
-            OptionNames = new string[] { Offset, Acceleration, Exponent, string.Empty }; 
+            ShowOptions = new bool[] { true, true, true, false, true, true }; 
+            OptionNames = new string[] { Offset, Acceleration, Exponent, string.Empty, Cap, Weight }; 
         }
     }
 }

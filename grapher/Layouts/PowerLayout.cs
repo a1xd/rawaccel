@@ -14,8 +14,8 @@ namespace grapher.Layouts
         {
             Name = "Power";
             Index = (int)AccelMode.power;
-            ShowOptions = new bool[] { true, true, true, false }; 
-            OptionNames = new string[] { Offset, Scale, Exponent, string.Empty }; 
+            ShowOptions = new bool[] { true, true, true, false, true, true }; 
+            OptionNames = new string[] { Offset, Scale, Exponent, string.Empty, Cap, Weight  }; 
         }
     }
 }
