@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace grapher.Models.Serialized
 {
@@ -37,6 +38,7 @@ namespace grapher.Models.Serialized
     {
         private static readonly IntPtr UnmanagedSettingsHandle = 
             Marshal.AllocHGlobal(Marshal.SizeOf<DriverSettings>());
+        private static object UnmanagedSettingsLock = new object();
 
         public double rotation;
         public bool combineMagnitudes;
@@ -51,21 +53,32 @@ namespace grapher.Models.Serialized
             return Marshal.PtrToStructure<DriverSettings>(UnmanagedSettingsHandle);
         }
 
-        public static void SetActive(DriverSettings settings)
+        public static void SetActive(DriverSettings settings, Action<IntPtr> unmanagedActionBefore = null)
         {
-            Marshal.StructureToPtr(settings, UnmanagedSettingsHandle, false);
-            DriverInterop.SetActiveSettings(UnmanagedSettingsHandle);
+            new Thread(() =>
+            {
+                lock (UnmanagedSettingsLock)
+                {
+                    Marshal.StructureToPtr(settings, UnmanagedSettingsHandle, false);
+                    unmanagedActionBefore?.Invoke(UnmanagedSettingsHandle);
+                    DriverInterop.SetActiveSettings(UnmanagedSettingsHandle);
+                }
+            }).Start();
+
         }
 
-        public void SendToDriver()
+        public void SendToDriver(Action<IntPtr> unmanagedActionBefore = null)
         {
-            SetActive(this);
+            SetActive(this, unmanagedActionBefore);
         }
 
-        public void SendToDriverAndUpdate(ManagedAccel accel)
+        public void SendToDriverAndUpdate(ManagedAccel accel, Action betweenAccelAndWrite = null)
         {
-            SendToDriver();
-            accel.UpdateFromSettings(UnmanagedSettingsHandle);
+            SendToDriver(settingsHandle =>
+            {
+                accel.UpdateFromSettings(settingsHandle);
+                betweenAccelAndWrite?.Invoke();
+            });
         }
 
         public bool verify()

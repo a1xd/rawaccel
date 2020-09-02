@@ -14,7 +14,6 @@ namespace ra = rawaccel;
 using milliseconds = double;
 
 struct {
-    counter_t last_write = 0;
     ra::settings args;
     milliseconds tick_interval = 0; // set in DriverEntry
     ra::mouse_modifier modifier;
@@ -150,18 +149,10 @@ Return Value:
     DebugPrint(("Ioctl received into filter control object.\n"));
 
     if (InputBufferLength == sizeof(ra::settings)) {
-        constexpr milliseconds WRITE_COOLDOWN_TIME = 1000;
-
-        counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
-        counter_t ticks = now - global.last_write;
-        milliseconds time = ticks * global.tick_interval;
-
-        if (global.last_write > 0 && time < WRITE_COOLDOWN_TIME) {
-            DebugPrint(("RA write on cooldown\n"));
-            // status maps to win32 error code 170: ERROR_BUSY 
-            WdfRequestComplete(Request, STATUS_ENCOUNTERED_WRITE_IN_PROGRESS);
-            return;
-        }
+        // 1 second wait
+        LARGE_INTEGER interval;
+        interval.QuadPart = -10000000;
+        KeDelayExecutionThread(KernelMode, FALSE, &interval);
 
         status = WdfRequestRetrieveInputBuffer(
             Request,
@@ -179,7 +170,6 @@ Return Value:
 
         global.args = *reinterpret_cast<ra::settings*>(buffer);
         global.modifier = { global.args };
-        global.last_write = now;
 
         WdfRequestComplete(Request, STATUS_SUCCESS);
     }

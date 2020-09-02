@@ -17,5 +17,3 @@ public:
 };
 
 public ref struct DriverNotInstalledException : public DriverIOException {};
-
-public ref struct DriverWriteCDException : public DriverIOException {};
