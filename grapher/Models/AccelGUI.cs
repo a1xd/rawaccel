@@ -102,7 +102,7 @@ namespace grapher
 
         public void UpdateActiveSettingsFromFields()
         {
-            Settings.UpdateActiveSettings(new DriverSettings
+            var settings = new DriverSettings
             {
                 rotation = Rotation.Field.Data,
                 sensitivity = new Vec2<double>
@@ -133,8 +133,16 @@ namespace grapher
                     }
                 },
                 minimumTime = .4
+            };
+
+            Settings.UpdateActiveSettings(settings, () =>
+            {
+                AccelForm.Invoke((MethodInvoker)delegate
+                {
+                    UpdateGraph();
+                });
             });
-            UpdateGraph();
+            
         }
 
         public void UpdateGraph()

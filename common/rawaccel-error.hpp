@@ -21,9 +21,4 @@ namespace rawaccel {
 		install_error() : io_error("rawaccel is not installed") {}
 	};
 
-	class cooldown_error : public io_error {
-	public:
-		cooldown_error() : io_error("write is on cooldown") {}
-	};
-
 }
