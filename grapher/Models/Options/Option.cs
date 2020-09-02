@@ -15,11 +15,17 @@ namespace grapher
         public Option(
             Field field,
             Label label,
-            ActiveValueLabel activeValueLabel)
+            ActiveValueLabel activeValueLabel,
+            int left)
         {
             Field = field;
             Label = label;
             ActiveValueLabel = activeValueLabel;
+            Left = left;
+
+            label.AutoSize = false;
+            label.Width = Field.Left - left - Constants.OptionLabelBoxSeperation;
+            label.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
         }
 
         public Option(
@@ -27,11 +33,13 @@ namespace grapher
             Form containingForm,
             double defaultData,
             Label label,
+            int left,
             ActiveValueLabel activeValueLabel)
             : this(
                   new Field(box, containingForm, defaultData), 
                   label,
-                  activeValueLabel)
+                  activeValueLabel,
+                  left)
         {
         }
 
@@ -40,6 +48,7 @@ namespace grapher
             Form containingForm,
             double defaultData,
             Label label,
+            int left,
             ActiveValueLabel activeValueLabel,
             string startingName)
             : this(
@@ -47,6 +56,7 @@ namespace grapher
                   containingForm,
                   defaultData,
                   label,
+                  left,
                   activeValueLabel)
         {
             SetName(startingName);
@@ -89,10 +99,9 @@ namespace grapher
             {
                 return Label.Left;
             }
-            set
+            private set
             {
                 Label.Left = value;
-                Field.Left = value + Label.Width + Constants.OptionLabelBoxSeperation;
             }
         }
         public int Width
@@ -111,7 +120,6 @@ namespace grapher
         {
             Label.Text = name;
             //Label.Left = Convert.ToInt32((Field.Box.Left / 2.0) - (Label.Width / 2.0));   //Centered
-            Left = Label.Left;
         }
 
         public void SetActiveValue(double value)

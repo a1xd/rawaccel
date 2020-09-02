@@ -12,6 +12,7 @@ namespace grapher.Models.Options
     {
         public AccelOptionSet(
             Label titleLabel,
+            int topAnchor,
             AccelTypeOptions accelTypeOptions,
             Option acceleration,
             CapOptions cap,
@@ -21,6 +22,7 @@ namespace grapher.Models.Options
             Option midpoint)
         {
             TitleLabel = titleLabel;
+            TopAnchor = topAnchor;
             AccelTypeOptions = accelTypeOptions;
             Acceleration = acceleration;
             Cap = cap;
@@ -158,7 +160,7 @@ namespace grapher.Models.Options
         private void SetOptionsTop(int top)
         {
             AccelTypeOptions.Top = top;
-            Acceleration.Top = AccelTypeOptions.Top+ AccelTypeOptions.Height + Constants.OptionVerticalSeperation;
+            Acceleration.Top = AccelTypeOptions.Top + AccelTypeOptions.Height + Constants.OptionVerticalSeperation;
             Cap.SnapTo(Acceleration);
             Weight.SnapTo(Cap);
             Offset.SnapTo(Weight);
