@@ -18,8 +18,9 @@ namespace rawaccel {
 				return 0;
 			}
 
+			double base_speed = speed + offset;
 			double scaled_speed = rate * speed;
-			return limit * (((exp(-scaled_speed) - 1) / scaled_speed) + 1);
+			return limit * (((exp(-scaled_speed) - 1) / (base_speed * rate) ) + 1 - offset / base_speed);
 		}
 		
 	};

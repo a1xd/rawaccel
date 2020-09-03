@@ -10,16 +10,18 @@ namespace rawaccel {
 	struct natural_impl {
 		double rate;
 		double limit;
+		double offset;
 
 		natural_impl(const accel_args& args) :
-			rate(args.accel), limit(args.limit - 1)
+			rate(args.accel), limit(args.limit - 1), offset(args.offset)
 		{
 			rate /= limit;
 		}
 
 		inline double operator()(double speed) const {
 			// f(x) = k(1-e^(-mx))
-			return limit - (limit * exp(-rate * speed));
+			double base_speed = speed + offset;
+			return limit * (1 - ((exp(-rate * speed) * speed + offset) / base_speed));
 		}
 
 	};

@@ -10,14 +10,20 @@ namespace rawaccel {
 	struct classic_impl {
 		double accel;
 		double power;
+		double power_inc;
+		double offset;
+		double multiplicative_const;
 
 		classic_impl(const accel_args& args) :
-			accel(args.accel), power(args.exponent - 1)
-		{}
+			accel(args.accel), power(args.exponent - 1), offset(args.offset) {
+			multiplicative_const = pow(accel, power);
+			power_inc = power + 1;
+		}
 
 		inline double operator()(double speed) const {
 			//f(x) = (mx)^(k-1)
-			return pow(accel * speed, power);
+			double base_speed = speed + offset;
+			return multiplicative_const * pow(speed, power_inc) / base_speed;
 		}
 	};
 
