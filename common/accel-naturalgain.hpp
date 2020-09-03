@@ -13,6 +13,11 @@ namespace rawaccel {
 
 		inline double operator()(double speed) const {
 			// f(x) = k((e^(-mx)-1)/mx + 1)
+			if (speed <= 0)
+			{
+				return 0;
+			}
+
 			double scaled_speed = rate * speed;
 			return limit * (((exp(-scaled_speed) - 1) / scaled_speed) + 1);
 		}

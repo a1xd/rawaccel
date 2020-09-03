@@ -36,7 +36,8 @@ namespace rawaccel {
         }
 
         inline double operator()(double speed) const {
-            return 1 + fn(maxsd(speed - offset, 0)) * weight;
+            double offset_speed = speed - offset;
+            return offset_speed > 0 ? 1 + fn(offset_speed) * weight : 1;
         }
 
     };
