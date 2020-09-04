@@ -16,6 +16,9 @@ namespace rawaccel {
 			//f(x) = log(m*x+1)
 			return log(accel * speed + 1);
 		}
+		
+		// incorrect but this style is slated for removal
+		inline double legacy_offset(double speed) const { return operator()(speed); }
 	};
 
 	using accel_logarithmic = additive_accel<logarithmic_impl>;

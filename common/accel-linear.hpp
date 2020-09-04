@@ -21,6 +21,9 @@ namespace rawaccel {
 			return accel * base_speed - subtractive_const + divisive_const / base_speed;
 		}
 
+		inline double legacy_offset(double speed) const {
+			return accel * speed;
+		}
 	};
 
 	using accel_linear = additive_accel<linear_impl>;

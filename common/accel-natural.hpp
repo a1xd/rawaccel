@@ -24,6 +24,10 @@ namespace rawaccel {
 			return limit * (1 - ((exp(-rate * speed) * speed + offset) / base_speed));
 		}
 
+		inline double legacy_offset(double speed) const {
+			return limit - (limit * exp(-rate * speed));
+		}
+
 	};
 
 	using accel_natural = additive_accel<natural_impl>;

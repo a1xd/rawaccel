@@ -25,6 +25,10 @@ namespace rawaccel {
 			double base_speed = speed + offset;
 			return multiplicative_const * pow(speed, power_inc) / base_speed;
 		}
+
+		inline double legacy_offset(double speed) const {
+			return pow(accel * speed, power);
+		}
 	};
 
 	using accel_classic = additive_accel<classic_impl>;

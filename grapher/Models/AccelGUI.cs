@@ -120,6 +120,7 @@ namespace grapher
                     x = new AccelArgs
                     {
                         offset = Offset.Field.Data,
+                        legacy_offset = 0,
                         weight = Weight.Fields.X,
                         gainCap = Cap.VelocityGainCap,
                         scaleCap = Cap.SensitivityCapX,

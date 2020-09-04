@@ -26,6 +26,7 @@ namespace rawaccel {
 			return limit * ((log(additive_constant+exp(scaled_speed)) - integration_constant)/scaled_speed);
 		}
 
+		inline double legacy_offset(double speed) const { return operator()(speed); }
 	};
 
 	using accel_sigmoidgain = additive_accel<sigmoidgain_impl>;

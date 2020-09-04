@@ -13,6 +13,7 @@ namespace grapher.Models.Serialized
     public struct AccelArgs
     {
         public double offset;
+        public double legacy_offset;
         public double accel;
         public double limit;
         public double exponent;
