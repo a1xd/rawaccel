@@ -38,12 +38,10 @@ namespace grapher.Models.Serialized
 
         #region Methods
 
-        public void UpdateActiveSettings(DriverSettings settings)
+        public void UpdateActiveSettings(DriverSettings settings, Action afterAccelSettingsUpdate = null)
         {
-            try
+            settings.SendToDriverAndUpdate(ActiveAccel, () =>
             {
-                settings.SendToDriverAndUpdate(ActiveAccel);
-
                 RawAccelSettings.AccelerationSettings = settings;
                 RawAccelSettings.GUISettings = new GUISettings
                 {
@@ -53,23 +51,15 @@ namespace grapher.Models.Serialized
                 };
 
                 RawAccelSettings.Save();
-            }
-            catch (DriverWriteCDException)
-            {
-                Console.WriteLine("write on cooldown");
-            }
+
+                afterAccelSettingsUpdate?.Invoke();
+            });
         }
 
         public void UpdateActiveAccelFromFileSettings(DriverSettings settings)
         {
-            try
-            {
-                settings.SendToDriverAndUpdate(ActiveAccel);
-            }
-            catch (DriverWriteCDException)
-            {
-                Console.WriteLine("write on cd during file init");
-            }
+            settings.SendToDriverAndUpdate(ActiveAccel);
+
             DpiField.SetToEntered(RawAccelSettings.GUISettings.DPI);
             PollRateField.SetToEntered(RawAccelSettings.GUISettings.PollRate);
             AutoWriteMenuItem.Checked = RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup;

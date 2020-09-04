@@ -74,10 +74,7 @@ namespace rawaccel {
 		CloseHandle(ra_handle);
 
 		if (!success) {
-			if (auto err = GetLastError(); err != ERROR_BUSY) {
-				throw std::system_error(err, std::system_category(), "DeviceIoControl failed");
-			}
-			throw cooldown_error();
+			throw std::system_error(GetLastError(), std::system_category(), "DeviceIoControl failed");
 		}
 	}
 

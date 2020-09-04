@@ -17,7 +17,7 @@ namespace grapher.Models.Options
             Option acceleration,
             CapOptions cap,
             Option weight,
-            Option offset,
+            OffsetOptions offset,
             Option limitOrExp,
             Option midpoint)
         {
@@ -50,7 +50,7 @@ namespace grapher.Models.Options
 
         public Option Weight { get; }
 
-        public Option Offset { get; }
+        public OffsetOptions Offset { get; }
 
         public Option LimitOrExponent { get; }
 
@@ -126,7 +126,8 @@ namespace grapher.Models.Options
             args.limit = LimitOrExponent.Field.Data;
             args.exponent = LimitOrExponent.Field.Data;
             args.powerExponent = LimitOrExponent.Field.Data;
-            args.offset = Offset.Field.Data;
+            args.offset = Offset.Offset;
+            args.legacy_offset = Offset.LegacyOffset;
             args.midpoint = Midpoint.Field.Data;
             args.weight = Weight.Field.Data;
         }
@@ -143,7 +144,7 @@ namespace grapher.Models.Options
             AccelTypeOptions.SetActiveValue(mode);
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0);
-            Offset.SetActiveValue(args.offset);
+            Offset.SetActiveValue(args.offset, args.legacy_offset);
             Acceleration.SetActiveValue(args.accel);
             LimitOrExponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
@@ -155,8 +156,8 @@ namespace grapher.Models.Options
             Acceleration.Top = AccelTypeOptions.Top + AccelTypeOptions.Height + Constants.OptionVerticalSeperation;
             Cap.SnapTo(Acceleration);
             Weight.SnapTo(Cap);
-            Offset.SnapTo(Weight);
-            LimitOrExponent.SnapTo(Offset);
+            Offset.OffsetOption.SnapTo(Weight);
+            LimitOrExponent.SnapTo(Offset.OffsetOption);
             Midpoint.SnapTo(LimitOrExponent);
         }
     }

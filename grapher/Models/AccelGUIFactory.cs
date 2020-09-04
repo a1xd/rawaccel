@@ -30,8 +30,10 @@ namespace grapher.Models
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem wholeVectorToolStripMenuItem,
             ToolStripMenuItem byVectorComponentToolStripMenuItem,
-            ToolStripMenuItem sensitivityToolStripMenuItem,
-            ToolStripMenuItem velocityGainToolStripMenuItem,
+            ToolStripMenuItem velocityGainCapToolStripMenuItem,
+            ToolStripMenuItem legacyCapToolStripMenuItem,
+            ToolStripMenuItem gainOffsetToolStripMenuItem,
+            ToolStripMenuItem legacyOffsetToolStripMenuItem,
             ToolStripMenuItem autoWriteMenuItem,
             ToolStripMenuItem scaleMenuItem,
             ToolStripTextBox dpiTextBox,
@@ -173,6 +175,16 @@ namespace grapher.Models
                 new ActiveValueLabel(offsetActiveLabelY, activeValueTitle),
                 "Offset");
 
+            var offsetOptionsX = new OffsetOptions(
+                gainOffsetToolStripMenuItem,
+                legacyOffsetToolStripMenuItem,
+                offsetX);
+
+            var offsetOptionsY = new OffsetOptions(
+                gainOffsetToolStripMenuItem,
+                legacyOffsetToolStripMenuItem,
+                offsetY);
+
             // The name and layout of these options is handled by AccelerationOptions object.
             var accelerationX = new Option(
                 new Field(accelerationBoxX, form, 0),
@@ -239,13 +251,13 @@ namespace grapher.Models
                 new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitle));
 
             var capOptionsX = new CapOptions(
-                sensitivityToolStripMenuItem,
-                velocityGainToolStripMenuItem,
+                velocityGainCapToolStripMenuItem,
+                legacyCapToolStripMenuItem,
                 capX);
 
             var capOptionsY = new CapOptions(
-                sensitivityToolStripMenuItem,
-                velocityGainToolStripMenuItem,
+                velocityGainCapToolStripMenuItem,
+                legacyCapToolStripMenuItem,
                 capY);
 
             var optionsSetX = new AccelOptionSet(
@@ -255,9 +267,9 @@ namespace grapher.Models
                 accelerationX,
                 capOptionsX,
                 weightX,
-                offsetX,
+                offsetOptionsX,
                 limitOrExponentX,
-                midpointX); ;
+                midpointX); 
 
             var optionsSetY = new AccelOptionSet(
                 optionSetYTitle,
@@ -266,7 +278,7 @@ namespace grapher.Models
                 accelerationY,
                 capOptionsY,
                 weightY,
-                offsetY,
+                offsetOptionsY,
                 limitOrExponentY,
                 midpointY);
 

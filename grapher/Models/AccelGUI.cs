@@ -78,7 +78,7 @@ namespace grapher
 
         public void UpdateActiveSettingsFromFields()
         {
-            Settings.UpdateActiveSettings(new DriverSettings
+            var settings = new DriverSettings
             {
                 rotation = Rotation.Field.Data,
                 sensitivity = new Vec2<double>
@@ -90,6 +90,14 @@ namespace grapher
                 modes = ApplyOptions.GetModes(),
                 args = ApplyOptions.GetArgs(),
                 minimumTime = .4
+            };
+
+            Settings.UpdateActiveSettings(settings, () =>
+            {
+                AccelForm.Invoke((MethodInvoker)delegate
+                {
+                    UpdateGraph();
+                });
             });
             RefreshOnRead();
         }
@@ -117,7 +125,6 @@ namespace grapher
             Sensitivity.SetActiveValues(settings.sensitivity.x, settings.sensitivity.y);
             Rotation.SetActiveValue(settings.rotation);
             ApplyOptions.SetActiveValues(settings);
-
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)

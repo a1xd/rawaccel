@@ -9,10 +9,6 @@ void wrapper_io::writeToDriver(const settings& args)
 	{
 		write(args);
 	}
-	catch (const cooldown_error&)
-	{
-		throw gcnew DriverWriteCDException();
-	}
 	catch (const install_error&)
 	{
 		throw gcnew DriverNotInstalledException();

@@ -57,8 +57,10 @@ namespace grapher
                 showVelocityGainToolStripMenuItem,
                 wholeVectorToolStripMenuItem,
                 byVectorComponentToolStripMenuItem,
-                sensitivityToolStripMenuItem,
-                velocityGainToolStripMenuItem,
+                gainCapToolStripMenuItem,
+                legacyCapToolStripMenuItem,
+                gainOffsetToolStripMenuItem,
+                legacyOffsetToolStripMenuItem,
                 AutoWriteMenuItem,
                 scaleByDPIToolStripMenuItem,
                 DPITextBox,
@@ -115,7 +117,6 @@ namespace grapher
                 OptionSetXTitle,
                 OptionSetYTitle,
                 MouseLabel);
-
         }
 
         #endregion Constructor

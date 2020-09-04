@@ -18,29 +18,29 @@ namespace grapher
         #region Constructors
 
         public CapOptions(
-            ToolStripMenuItem sensitivityCapCheck,
             ToolStripMenuItem velocityGainCapCheck,
+            ToolStripMenuItem legacyCapCheck,
             Option capOption)
         {
 
-            SensitivityCapCheck = sensitivityCapCheck;
             VelocityGainCapCheck = velocityGainCapCheck;
+            LegacyCapCheck = legacyCapCheck;
             CapOption = capOption;
 
-            SensitivityCapCheck.Click += new System.EventHandler(OnSensitivityCapCheckClick);
+            LegacyCapCheck.Click += new System.EventHandler(OnSensitivityCapCheckClick);
             VelocityGainCapCheck.Click += new System.EventHandler(OnVelocityGainCapCheckClick);
 
-            SensitivityCapCheck.CheckedChanged += new System.EventHandler(OnSensitivityCapCheckedChange);
+            LegacyCapCheck.CheckedChanged += new System.EventHandler(OnSensitivityCapCheckedChange);
             VelocityGainCapCheck.CheckedChanged += new System.EventHandler(OnVelocityGainCapCheckedChange);
 
-            EnableSensitivityCap();
+            EnableVelocityGainCap();
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public ToolStripMenuItem SensitivityCapCheck { get; }
+        public ToolStripMenuItem LegacyCapCheck { get; }
 
         public ToolStripMenuItem VelocityGainCapCheck { get; }
 
@@ -124,7 +124,7 @@ namespace grapher
                 CapOption.ActiveValueLabel.FormatString = Constants.GainCapFormatString;
                 CapOption.ActiveValueLabel.Prefix = "Gain";
                 CapOption.SetActiveValue(gainCap);
-                SensitivityCapCheck.Checked = true;
+                LegacyCapCheck.Checked = true;
                 VelocityGainCapCheck.Checked = false;
             }
             else
@@ -132,17 +132,17 @@ namespace grapher
                 CapOption.ActiveValueLabel.FormatString = Constants.DefaultActiveValueFormatString;
                 CapOption.ActiveValueLabel.Prefix = string.Empty;
                 CapOption.SetActiveValue(sensCap);
-                SensitivityCapCheck.Checked = false;
+                LegacyCapCheck.Checked = false;
                 VelocityGainCapCheck.Checked = true;
             }
         }
 
         void OnSensitivityCapCheckClick(object sender, EventArgs e)
         {
-            if (!SensitivityCapCheck.Checked)
+            if (!LegacyCapCheck.Checked)
             {
                 VelocityGainCapCheck.Checked = false;
-                SensitivityCapCheck.Checked = true;
+                LegacyCapCheck.Checked = true;
             }
         }
 
@@ -151,13 +151,13 @@ namespace grapher
             if (!VelocityGainCapCheck.Checked)
             {
                 VelocityGainCapCheck.Checked = true;
-                SensitivityCapCheck.Checked = false;
+                LegacyCapCheck.Checked = false;
             }
         }
 
         void OnSensitivityCapCheckedChange(object sender, EventArgs e)
         {
-            if (SensitivityCapCheck.Checked)
+            if (LegacyCapCheck.Checked == true)
             {
                 EnableSensitivityCap();
             }
@@ -165,7 +165,7 @@ namespace grapher
 
         void OnVelocityGainCapCheckedChange(object sender, EventArgs e)
         {
-            if (SensitivityCapCheck.Checked)
+            if (LegacyCapCheck.Checked == true)
             {
                 EnableVelocityGainCap();
             }
