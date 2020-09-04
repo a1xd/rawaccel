@@ -14,27 +14,27 @@ namespace grapher
         public const string GainCapFormatString = "0.##";
 
         public CapOptions(
-            ToolStripMenuItem sensitivityCapCheck,
             ToolStripMenuItem velocityGainCapCheck,
+            ToolStripMenuItem legacyCapCheck,
             OptionXY capOption,
             OptionXY weightOption)
         {
 
-            SensitivityCapCheck = sensitivityCapCheck;
             VelocityGainCapCheck = velocityGainCapCheck;
+            LegacyCapCheck = legacyCapCheck;
             CapOption = capOption;
             WeightOption = weightOption;
 
-            SensitivityCapCheck.Click += new System.EventHandler(OnSensitivityCapCheckClick);
+            LegacyCapCheck.Click += new System.EventHandler(OnSensitivityCapCheckClick);
             VelocityGainCapCheck.Click += new System.EventHandler(OnVelocityGainCapCheckClick);
 
-            SensitivityCapCheck.CheckedChanged += new System.EventHandler(OnSensitivityCapCheckedChange);
+            LegacyCapCheck.CheckedChanged += new System.EventHandler(OnSensitivityCapCheckedChange);
             VelocityGainCapCheck.CheckedChanged += new System.EventHandler(OnVelocityGainCapCheckedChange);
 
-            EnableSensitivityCap();
+            EnableVelocityGainCap();
         }
 
-        public ToolStripMenuItem SensitivityCapCheck { get; }
+        public ToolStripMenuItem LegacyCapCheck { get; }
 
         public ToolStripMenuItem VelocityGainCapCheck { get; }
 
@@ -104,10 +104,10 @@ namespace grapher
 
         void OnSensitivityCapCheckClick(object sender, EventArgs e)
         {
-            if (!SensitivityCapCheck.Checked)
+            if (!LegacyCapCheck.Checked)
             {
                 VelocityGainCapCheck.Checked = false;
-                SensitivityCapCheck.Checked = true;
+                LegacyCapCheck.Checked = true;
             }
         }
 
@@ -116,13 +116,13 @@ namespace grapher
             if (!VelocityGainCapCheck.Checked)
             {
                 VelocityGainCapCheck.Checked = true;
-                SensitivityCapCheck.Checked = false;
+                LegacyCapCheck.Checked = false;
             }
         }
 
         void OnSensitivityCapCheckedChange(object sender, EventArgs e)
         {
-            if (SensitivityCapCheck.Checked == true)
+            if (LegacyCapCheck.Checked == true)
             {
                 EnableSensitivityCap();
             }
@@ -130,7 +130,7 @@ namespace grapher
 
         void OnVelocityGainCapCheckedChange(object sender, EventArgs e)
         {
-            if (SensitivityCapCheck.Checked == true)
+            if (LegacyCapCheck.Checked == true)
             {
                 EnableVelocityGainCap();
             }

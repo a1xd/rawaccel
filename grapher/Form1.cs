@@ -104,6 +104,11 @@ namespace grapher
                 new ActiveValueLabel(OffsetActiveLabel, ActiveValueTitle),
                 "Offset");
 
+            var offsetOptions = new OffsetOptions(
+                gainOffsetToolStripMenuItem,
+                legacyOffsetToolStripMenuItem,
+                offset);
+
             // The name and layout of these options is handled by AccelerationOptions object.
             var acceleration = new Option(
                 new Field(accelerationBox, this, 0),
@@ -138,8 +143,8 @@ namespace grapher
                 new ActiveValueLabel(AccelTypeActiveLabel, ActiveValueTitle));
 
             var capOptions = new CapOptions(
-                sensitivityToolStripMenuItem,
-                velocityGainToolStripMenuItem,
+                gainCapToolStripMenuItem,
+                legacyCapToolStripMenuItem,
                 cap,
                 weight);
 
@@ -163,7 +168,7 @@ namespace grapher
                 rotation,
                 weight,
                 capOptions,
-                offset,
+                offsetOptions,
                 acceleration,
                 limitOrExponent,
                 midpoint,

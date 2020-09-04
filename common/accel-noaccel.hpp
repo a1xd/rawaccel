@@ -12,6 +12,7 @@ namespace rawaccel {
 
 		inline double operator()(double) const { return 1; }
 		
+		inline double legacy_offset(double speed) const { return operator()(speed); }
 	};
 
 }
