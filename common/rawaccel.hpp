@@ -10,10 +10,8 @@
 #include "accel-classic.hpp"
 #include "accel-natural.hpp"
 #include "accel-naturalgain.hpp"
-#include "accel-logarithmic.hpp"
-#include "accel-sigmoid.hpp"
-#include "accel-sigmoidgain.hpp"
 #include "accel-power.hpp"
+#include "accel-sigmoidgain.hpp"
 #include "accel-noaccel.hpp"
 
 namespace rawaccel {
@@ -83,8 +81,6 @@ namespace rawaccel {
         case accel_mode::linear:      return vis(var.u.linear);
         case accel_mode::classic:     return vis(var.u.classic);
         case accel_mode::natural:     return vis(var.u.natural);
-        case accel_mode::logarithmic: return vis(var.u.logarithmic);
-        case accel_mode::sigmoid:     return vis(var.u.sigmoid);
         case accel_mode::naturalgain: return vis(var.u.naturalgain);
         case accel_mode::sigmoidgain: return vis(var.u.sigmoidgain);
         case accel_mode::power:       return vis(var.u.power);
@@ -99,8 +95,6 @@ namespace rawaccel {
             accel_linear linear;
             accel_classic classic;
             accel_natural natural;
-            accel_logarithmic logarithmic;
-            accel_sigmoid sigmoid;
             accel_naturalgain naturalgain;
             accel_sigmoidgain sigmoidgain;
             accel_power power;

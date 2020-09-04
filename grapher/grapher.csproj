@@ -84,11 +84,9 @@
     <Compile Include="Layouts\DefaultLayout.cs" />
     <Compile Include="Layouts\LayoutBase.cs" />
     <Compile Include="Layouts\LinearLayout.cs" />
-    <Compile Include="Layouts\LogLayout.cs" />
     <Compile Include="Layouts\NaturalLayout.cs" />
     <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
-    <Compile Include="Layouts\SigmoidLayout.cs" />
     <Compile Include="Models\Options\OffsetOptions.cs" />
     <Compile Include="Models\Options\Option.cs" />
     <Compile Include="Models\Options\OptionXY.cs" />

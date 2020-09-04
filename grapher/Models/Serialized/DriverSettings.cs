@@ -8,7 +8,7 @@ namespace grapher.Models.Serialized
 
     public enum AccelMode
     {
-        linear, classic, natural, logarithmic, sigmoid, naturalgain, sigmoidgain, power, noaccel
+        linear, classic, natural, naturalgain, sigmoidgain, power, noaccel
     }
 
     #endregion Enumerations
