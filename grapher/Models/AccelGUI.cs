@@ -1,5 +1,6 @@
 ﻿using grapher.Models.Calculations;
 using grapher.Models.Mouse;
+using grapher.Models.Options;
 using grapher.Models.Serialized;
 using System;
 using System.CodeDom;
@@ -28,7 +29,7 @@ namespace grapher
             Option rotation,
             OptionXY weight,
             CapOptions cap,
-            Option offset,
+            OffsetOptions offset,
             Option acceleration,
             Option limtOrExp,
             Option midpoint,
@@ -82,7 +83,7 @@ namespace grapher
 
         public CapOptions Cap { get; }
 
-        public Option Offset { get; }
+        public OffsetOptions Offset { get; }
 
         public Option Acceleration { get; }
 
@@ -119,8 +120,8 @@ namespace grapher
                 {
                     x = new AccelArgs
                     {
-                        offset = Offset.Field.Data,
-                        legacy_offset = 0,
+                        offset = Offset.Offset,
+                        legacy_offset = Offset.LegacyOffset,
                         weight = Weight.Fields.X,
                         gainCap = Cap.VelocityGainCap,
                         scaleCap = Cap.SensitivityCapX,
@@ -163,7 +164,7 @@ namespace grapher
             Sensitivity.SetActiveValues(settings.sensitivity.x, settings.sensitivity.y);
             Rotation.SetActiveValue(settings.rotation);
             AccelerationOptions.SetActiveValue((int)settings.modes.x);
-            Offset.SetActiveValue(settings.args.x.offset);
+            Offset.SetActiveValue(settings.args.x.offset, settings.args.y.offset);
             Weight.SetActiveValues(settings.args.x.weight, settings.args.x.weight);
             Acceleration.SetActiveValue(settings.args.x.accel); // rate, powerscale
             LimitOrExponent.SetActiveValue(settings.args.x.limit); //exp, powerexp

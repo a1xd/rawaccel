@@ -93,8 +93,8 @@ namespace grapher
             this.ScaleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sensitivityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.velocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gainCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.legacyCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AccelerationChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -114,6 +114,9 @@ namespace grapher
             this.OffsetActiveLabel = new System.Windows.Forms.Label();
             this.LimitExpActiveLabel = new System.Windows.Forms.Label();
             this.MidpointActiveLabel = new System.Windows.Forms.Label();
+            this.offsetStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gainOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.legacyOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
@@ -491,7 +494,8 @@ namespace grapher
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.capStyleToolStripMenuItem});
+            this.capStyleToolStripMenuItem,
+            this.offsetStyleToolStripMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
@@ -499,25 +503,25 @@ namespace grapher
             // capStyleToolStripMenuItem
             // 
             this.capStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sensitivityToolStripMenuItem,
-            this.velocityGainToolStripMenuItem});
+            this.gainCapToolStripMenuItem,
+            this.legacyCapToolStripMenuItem});
             this.capStyleToolStripMenuItem.Name = "capStyleToolStripMenuItem";
-            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.capStyleToolStripMenuItem.Text = "Cap Style";
             // 
-            // sensitivityToolStripMenuItem
+            // gainCapToolStripMenuItem
             // 
-            this.sensitivityToolStripMenuItem.Checked = true;
-            this.sensitivityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sensitivityToolStripMenuItem.Name = "sensitivityToolStripMenuItem";
-            this.sensitivityToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.sensitivityToolStripMenuItem.Text = "Sensitivity";
+            this.gainCapToolStripMenuItem.Checked = true;
+            this.gainCapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainCapToolStripMenuItem.Name = "gainCapToolStripMenuItem";
+            this.gainCapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gainCapToolStripMenuItem.Text = "Gain (Default)";
             // 
-            // velocityGainToolStripMenuItem
+            // legacyCapToolStripMenuItem
             // 
-            this.velocityGainToolStripMenuItem.Name = "velocityGainToolStripMenuItem";
-            this.velocityGainToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.velocityGainToolStripMenuItem.Text = "Velocity Gain";
+            this.legacyCapToolStripMenuItem.Name = "legacyCapToolStripMenuItem";
+            this.legacyCapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.legacyCapToolStripMenuItem.Text = "Legacy";
             // 
             // startupToolStripMenuItem
             // 
@@ -737,6 +741,27 @@ namespace grapher
             this.MidpointActiveLabel.TabIndex = 47;
             this.MidpointActiveLabel.Text = "0";
             // 
+            // offsetStyleToolStripMenuItem
+            // 
+            this.offsetStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gainOffsetToolStripMenuItem,
+            this.legacyOffsetToolStripMenuItem});
+            this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
+            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.offsetStyleToolStripMenuItem.Text = "Offset Style";
+            // 
+            // gainOffsetToolStripMenuItem
+            // 
+            this.gainOffsetToolStripMenuItem.Name = "gainOffsetToolStripMenuItem";
+            this.gainOffsetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gainOffsetToolStripMenuItem.Text = "Gain (Default)";
+            // 
+            // legacyOffsetToolStripMenuItem
+            // 
+            this.legacyOffsetToolStripMenuItem.Name = "legacyOffsetToolStripMenuItem";
+            this.legacyOffsetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.legacyOffsetToolStripMenuItem.Text = "Legacy";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -840,8 +865,8 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem showVelocityGainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem capStyleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sensitivityToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem velocityGainToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gainCapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem legacyCapToolStripMenuItem;
         private System.Windows.Forms.DataVisualization.Charting.Chart AccelerationChartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart GainChartY;
@@ -867,6 +892,9 @@ namespace grapher
         private System.Windows.Forms.Label MidpointActiveLabel;
         private System.Windows.Forms.ToolStripMenuItem startupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AutoWriteMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem offsetStyleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gainOffsetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
     }
 }
 
