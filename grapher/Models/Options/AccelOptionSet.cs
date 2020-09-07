@@ -13,25 +13,13 @@ namespace grapher.Models.Options
         public AccelOptionSet(
             Label titleLabel,
             int topAnchor,
-            AccelTypeOptions accelTypeOptions,
-            Option acceleration,
-            CapOptions cap,
-            Option weight,
-            OffsetOptions offset,
-            Option limitOrExp,
-            Option midpoint)
+            AccelTypeOptions accelTypeOptions)
         {
             TitleLabel = titleLabel;
             TopAnchor = topAnchor;
-            AccelTypeOptions = accelTypeOptions;
-            Acceleration = acceleration;
-            Cap = cap;
-            Weight = weight;
-            Offset = offset;
-            LimitOrExponent = limitOrExp;
-            Midpoint = midpoint;
+            Options = accelTypeOptions;
 
-            AccelTypeOptions.ShowFullText();
+            Options.ShowFull();
 
             TitleLabel.Top = TopAnchor;
             IsTitleMode = true;
@@ -42,19 +30,8 @@ namespace grapher.Models.Options
 
         public Label TitleLabel { get; }
 
-        public AccelTypeOptions AccelTypeOptions { get; }
+        public AccelTypeOptions Options { get; }
 
-        public Option Acceleration { get; }
-
-        public CapOptions Cap { get; }
-
-        public Option Weight { get; }
-
-        public OffsetOptions Offset { get; }
-
-        public Option LimitOrExponent { get; }
-
-        public Option Midpoint { get; }
 
         public bool IsTitleMode { get; private set; }
 
@@ -65,9 +42,7 @@ namespace grapher.Models.Options
                 IsTitleMode = false;
 
                 HideTitle();
-                AccelTypeOptions.Left = Acceleration.Left;
-                AccelTypeOptions.Width = Acceleration.Width;
-                AccelTypeOptions.ShowFullText();
+                Options.ShowFull();
             }
         }
 
@@ -79,9 +54,7 @@ namespace grapher.Models.Options
             {
                 IsTitleMode = true;
 
-                AccelTypeOptions.Left = Acceleration.Field.Left;
-                AccelTypeOptions.Width = Acceleration.Field.Width;
-                AccelTypeOptions.ShowShortenedText();
+                Options.ShowShortened();
                 DisplayTitle();
             }
         }
@@ -89,7 +62,7 @@ namespace grapher.Models.Options
         public void Hide()
         {
             TitleLabel.Hide();
-            AccelTypeOptions.Hide();
+            Options.Hide();
         }
 
         public void Show()
@@ -99,66 +72,36 @@ namespace grapher.Models.Options
                 TitleLabel.Show();
             }
 
-            AccelTypeOptions.Show();
+            Options.Show();
         }
 
         public void DisplayTitle()
         {
             TitleLabel.Show();
 
-            SetOptionsTop(TitleLabel.Top + TitleLabel.Height + Constants.OptionVerticalSeperation);
+            Options.Top = TitleLabel.Top + TitleLabel.Height + Constants.OptionVerticalSeperation;
         }
 
         public void HideTitle()
         {
             TitleLabel.Hide();
 
-            SetOptionsTop(TopAnchor);
+            Options.Top = TopAnchor;
         }
 
         public void SetArgs(ref AccelArgs args)
         {
-            args.accel = Acceleration.Field.Data;
-            args.rate = Acceleration.Field.Data;
-            args.powerScale = Acceleration.Field.Data;
-            args.gainCap = Cap.VelocityGainCap;
-            args.scaleCap = Cap.SensitivityCap;
-            args.limit = LimitOrExponent.Field.Data;
-            args.exponent = LimitOrExponent.Field.Data;
-            args.powerExponent = LimitOrExponent.Field.Data;
-            args.offset = Offset.Offset;
-            args.legacy_offset = Offset.LegacyOffset;
-            args.midpoint = Midpoint.Field.Data;
-            args.weight = Weight.Field.Data;
+            Options.SetArgs(ref args);
         }
 
         public AccelArgs GenerateArgs()
         {
-            AccelArgs args = new AccelArgs();
-            SetArgs(ref args);
-            return args;
+            return Options.GenerateArgs();
         }
 
         public void SetActiveValues(int mode, AccelArgs args)
         {
-            AccelTypeOptions.SetActiveValue(mode);
-            Weight.SetActiveValue(args.weight);
-            Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0);
-            Offset.SetActiveValue(args.offset, args.legacy_offset);
-            Acceleration.SetActiveValue(args.accel);
-            LimitOrExponent.SetActiveValue(args.exponent);
-            Midpoint.SetActiveValue(args.midpoint);
-        }
-
-        private void SetOptionsTop(int top)
-        {
-            AccelTypeOptions.Top = top;
-            Acceleration.Top = AccelTypeOptions.Top + AccelTypeOptions.Height + Constants.OptionVerticalSeperation;
-            Cap.SnapTo(Acceleration);
-            Weight.SnapTo(Cap);
-            Offset.OffsetOption.SnapTo(Weight);
-            LimitOrExponent.SnapTo(Offset.OffsetOption);
-            Midpoint.SnapTo(LimitOrExponent);
+            Options.SetActiveValues(mode, args);
         }
     }
 }

@@ -61,12 +61,12 @@ namespace grapher.Models.Options
 
         public Vec2<AccelMode> GetModes()
         {
-            var xMode = (AccelMode)OptionSetX.AccelTypeOptions.AccelerationIndex;
+            var xMode = (AccelMode)OptionSetX.Options.AccelerationIndex;
 
             return new Vec2<AccelMode>
             {
                 x = xMode,
-                y = ByComponentVectorXYLock.Checked ? xMode : (AccelMode)OptionSetY.AccelTypeOptions.AccelerationIndex
+                y = ByComponentVectorXYLock.Checked ? xMode : (AccelMode)OptionSetY.Options.AccelerationIndex
             };
         }
 

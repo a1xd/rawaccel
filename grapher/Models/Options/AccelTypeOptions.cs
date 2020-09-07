@@ -1,5 +1,6 @@
 ﻿using grapher.Layouts;
 using grapher.Models.Options;
+using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,12 @@ namespace grapher
 
         public AccelTypeOptions(
             ComboBox accelDropdown,
-            Option[] options,
+            Option acceleration,
+            CapOptions cap,
+            Option weight,
+            OffsetOptions offset,
+            Option limitOrExponent,
+            Option midpoint,
             Button writeButton,
             ActiveValueLabel activeValueLabel)
         {
@@ -39,14 +45,24 @@ namespace grapher
             AccelDropdown.Items.AddRange(AccelerationTypes.Keys.ToArray());
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
-            if (options.Length > Constants.PossibleOptionsCount)
-            {
-                throw new Exception("Layout given too many options.");
-            }
-
-            Options = options;
+            Acceleration = acceleration;
+            Cap = cap;
+            Weight = weight;
+            Offset = offset;
+            LimitOrExponent = limitOrExponent;
+            Midpoint = midpoint;
             WriteButton = writeButton;
             ActiveValueLabel = activeValueLabel;
+
+            Options = new List<OptionBase>
+            {
+                Acceleration,
+                Cap,
+                Offset,
+                Weight,
+                LimitOrExponent,
+                Midpoint,
+            };
 
             Layout("Off");
             ShowingDefault = true;
@@ -72,7 +88,19 @@ namespace grapher
 
         public ActiveValueLabel ActiveValueLabel { get; }
 
-        public Option[] Options { get; }
+        public Option Acceleration { get; }
+
+        public CapOptions Cap { get; }
+
+        public Option Weight { get; }
+
+        public OffsetOptions Offset { get; }
+
+        public Option LimitOrExponent { get; }
+
+        public Option Midpoint { get; }
+
+        private IEnumerable<OptionBase> Options { get; }
 
         public int Top 
         {
@@ -83,6 +111,7 @@ namespace grapher
             set
             {
                 AccelDropdown.Top = value;
+                Layout(value + AccelDropdown.Height + Constants.OptionVerticalSeperation);
             }
         }
 
@@ -131,11 +160,13 @@ namespace grapher
         public void Hide()
         {
             AccelDropdown.Hide();
-            
-            foreach(var option in Options)
-            {
-                option.Hide();
-            }
+
+            Acceleration.Hide();
+            Cap.Hide();
+            Weight.Hide();
+            Offset.Hide();
+            LimitOrExponent.Hide();
+            Midpoint.Hide();
         }
 
         public void Show()
@@ -144,26 +175,62 @@ namespace grapher
             Layout();
         }
 
-        public void SetActiveValue(int index)
+        public void SetActiveValues(int index, AccelArgs args)
         {
             var name = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value.Name;
             ActiveValueLabel.SetValue(name);
+
+            Weight.SetActiveValue(args.weight);
+            Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0);
+            Offset.SetActiveValue(args.offset, args.legacy_offset);
+            Acceleration.SetActiveValue(args.accel);
+            LimitOrExponent.SetActiveValue(args.exponent);
+            Midpoint.SetActiveValue(args.midpoint);
         }
 
-        public void ShowFullText()
+        public void ShowFull()
         {
             if (ShowingDefault)
             {
                 AccelDropdown.Text = Constants.AccelDropDownDefaultFullText;
             }
+
+            Left = Acceleration.Left;
+            Width = Acceleration.Width;
         }
 
-        public void ShowShortenedText()
+        public void ShowShortened()
         {
             if (ShowingDefault)
             {
                 AccelDropdown.Text = Constants.AccelDropDownDefaultShortText;
             }
+
+            Left = Acceleration.Field.Left;
+            Width = Acceleration.Field.Width;
+        }
+
+        public void SetArgs(ref AccelArgs args)
+        {
+            args.accel = Acceleration.Field.Data;
+            args.rate = Acceleration.Field.Data;
+            args.powerScale = Acceleration.Field.Data;
+            args.gainCap = Cap.VelocityGainCap;
+            args.scaleCap = Cap.SensitivityCap;
+            args.limit = LimitOrExponent.Field.Data;
+            args.exponent = LimitOrExponent.Field.Data;
+            args.powerExponent = LimitOrExponent.Field.Data;
+            args.offset = Offset.Offset;
+            args.legacy_offset = Offset.LegacyOffset;
+            args.midpoint = Midpoint.Field.Data;
+            args.weight = Weight.Field.Data;
+        }
+
+        public AccelArgs GenerateArgs()
+        {
+            AccelArgs args = new AccelArgs();
+            SetArgs(ref args);
+            return args;
         }
 
         private void OnIndexChanged(object sender, EventArgs e)
@@ -179,9 +246,22 @@ namespace grapher
             Layout();
         }
 
-        private void Layout()
+        private void Layout(int top = -1)
         {
-            AccelerationType.Layout(Options, WriteButton);
+            if (top < 0)
+            {
+                top = Acceleration.Top;
+            }
+
+            AccelerationType.Layout(
+                Acceleration,
+                Cap,
+                Weight,
+                Offset,
+                LimitOrExponent,
+                Midpoint,
+                WriteButton,
+                top);
         }
 
         #endregion Methods

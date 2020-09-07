@@ -14,8 +14,13 @@ namespace grapher.Layouts
         {
             Name = "SigmoidGain";
             Index = (int)AccelMode.sigmoidgain;
-            ShowOptions = new bool[] { true, true, true, true, false, true }; 
-            OptionNames = new string[] { Offset, Acceleration, Limit, Midpoint, string.Empty, Weight  }; 
+
+            AccelLayout = new OptionLayout(true, Acceleration);
+            CapLayout = new OptionLayout(false, string.Empty);
+            WeightLayout = new OptionLayout(false, string.Empty);
+            OffsetLayout = new OptionLayout(true, Offset);
+            LimExpLayout = new OptionLayout(true, Limit);
+            MidpointLayout = new OptionLayout(true, Midpoint);
         }
     }
 }

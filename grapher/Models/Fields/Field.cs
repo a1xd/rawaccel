@@ -23,13 +23,19 @@ namespace grapher
 
         #endregion Enumerations
 
+        #region Fields
+
+        private double _data;
+
+        #endregion Fields
+
         #region Constructors
 
         public Field(TextBox box, Form containingForm, double defaultData)
         {
             DefaultText = DecimalString(defaultData);
             Box = box;
-            Data = defaultData;
+            _data = defaultData;
             DefaultData = defaultData;
             State = FieldState.Undefined;
             ContainingForm = containingForm;
@@ -48,8 +54,6 @@ namespace grapher
 
         private Form ContainingForm { get; }
 
-        public double Data { get; private set; }
-
         public string FormatString { get; set; }
 
         public string DefaultText { get; }
@@ -57,6 +61,20 @@ namespace grapher
         public FieldState State { get; private set; }
 
         public FieldState PreviousState { get; private set; }
+
+        public double Data {
+            get 
+            {
+                if (Box.Visible)
+                {
+                    return _data;
+                }
+                else
+                {
+                    return DefaultData;
+                }
+            } 
+        }
 
         public int Top
         {
@@ -122,7 +140,7 @@ namespace grapher
                 PreviousState = FieldState.Default;
             }
 
-            Data = DefaultData;
+            _data = DefaultData;
             Box.Text = DefaultText;
             ContainingForm.ActiveControl = null;
         }
@@ -159,7 +177,7 @@ namespace grapher
         {
             SetToEntered();
 
-            Data = value;
+            _data = value;
             Box.Text = DecimalString(Data);
         }
 
@@ -238,7 +256,7 @@ namespace grapher
         {
             try
             {
-                Data = Convert.ToDouble(Box.Text);
+                _data = Convert.ToDouble(Box.Text);
             }
             catch
             {

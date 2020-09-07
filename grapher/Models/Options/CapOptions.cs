@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace grapher
 {
-    public class CapOptions
+    public class CapOptions : OptionBase
     {
         #region Constants
 
@@ -76,7 +76,7 @@ namespace grapher
             }
         }
 
-        public int Top
+        public override int Top
         { 
             get 
             {
@@ -88,7 +88,7 @@ namespace grapher
             }
         }
 
-        public int Height
+        public override int Height
         {
             get
             {
@@ -96,12 +96,39 @@ namespace grapher
             }
         }
 
+        public override int Left
+        { 
+            get 
+            {
+                return CapOption.Left;
+            }
+            set
+            {
+                CapOption.Left = value;
+            }
+        }
+
+        public override int Width
+        {
+            get
+            {
+                return CapOption.Width;
+            }
+        }
+
+        public override bool Visible
+        {
+            get
+            {
+                return CapOption.Visible;
+            }
+        }
 
         #endregion Properties
 
         #region Methods
 
-        public void Hide()
+        public override void Hide()
         {
             CapOption.Hide();
         }
@@ -109,6 +136,11 @@ namespace grapher
         public void Show()
         {
             CapOption.Show();
+        }
+
+        public override void Show(string name)
+        {
+            CapOption.Show(name);
         }
 
         public void SnapTo(Option option)

@@ -14,8 +14,13 @@ namespace grapher.Layouts
         {
             Name = "Power";
             Index = (int)AccelMode.power;
-            ShowOptions = new bool[] { true, true, true, false, true, true }; 
-            OptionNames = new string[] { Offset, Scale, Exponent, string.Empty, Cap, Weight  }; 
+
+            AccelLayout = new OptionLayout(true, Acceleration);
+            CapLayout = new OptionLayout(true, Cap);
+            WeightLayout = new OptionLayout(true, Weight);
+            OffsetLayout = new OptionLayout(true, Offset);
+            LimExpLayout = new OptionLayout(true, Limit);
+            MidpointLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

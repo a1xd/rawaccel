@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,13 @@ namespace grapher.Layouts
 
         public LayoutBase()
         {
-            ShowOptions = new bool[] { false, false, false, false, true, true };
-            ShowOptionsXY = new bool[] { true, true };
-            OptionNames = new string[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
+            AccelLayout = new OptionLayout(false, string.Empty);
+            CapLayout = new OptionLayout(false, string.Empty);
+            WeightLayout = new OptionLayout(false, string.Empty);
+            OffsetLayout = new OptionLayout(false, string.Empty);
+            LimExpLayout = new OptionLayout(false, string.Empty);
+            MidpointLayout = new OptionLayout(false, string.Empty);
+
             ButtonEnabled = true;
         }
 
@@ -34,30 +39,75 @@ namespace grapher.Layouts
 
         public string Name { get; internal set; }
 
-        internal bool[] ShowOptions { get; set; }
+        protected bool ButtonEnabled { get; set; }
 
-        internal bool[] ShowOptionsXY { get; set; }
+        protected OptionLayout AccelLayout { get; set; }
 
-        internal string[] OptionNames { get; set; }
+        protected OptionLayout CapLayout { get; set; }
 
-        internal bool ButtonEnabled { get; set; }
+        protected OptionLayout WeightLayout { get; set; }
 
-        public void Layout(Option[] options, Button button)
+        protected OptionLayout OffsetLayout { get; set; }
+
+        protected OptionLayout LimExpLayout { get; set; }
+
+        protected OptionLayout MidpointLayout { get; set; }
+
+        public void Layout(
+            IOption accelOption,
+            IOption capOption,
+            IOption weightOption,
+            IOption offsetOption,
+            IOption limExpOption,
+            IOption midpointOption,
+            Button button,
+            int top)
         {
-            // Relies on AccelOptions to keep lengths correct.
-            for (int i = 0; i < options.Length; i++)
-            {
-                if (ShowOptions[i])
-                {
-                    options[i].Show(OptionNames[i]);
-                }
-                else
-                {
-                    options[i].Hide();
-                }
-            }
+            AccelLayout.Layout(accelOption);
+            CapLayout.Layout(capOption);
+            WeightLayout.Layout(weightOption);
+            OffsetLayout.Layout(offsetOption);
+            LimExpLayout.Layout(limExpOption);
+            MidpointLayout.Layout(midpointOption);
 
             button.Enabled = ButtonEnabled;
+
+            IOption previous = null;
+            foreach (var option in new IOption[] { accelOption, capOption, weightOption, offsetOption, limExpOption, midpointOption})
+            {
+                if (option.Visible)
+                {
+                    if (previous != null)
+                    {
+                        option.SnapTo(previous);
+                    }
+                    else
+                    {
+                        option.Top = top;
+                    }
+
+                    previous = option;
+                }
+            }
+        }
+
+        public void Layout(
+            IOption accelOption,
+            IOption capOption,
+            IOption weightOption,
+            IOption offsetOption,
+            IOption limExpOption,
+            IOption midpointOption,
+            Button button)
+        {
+            Layout(accelOption,
+                capOption,
+                weightOption,
+                offsetOption,
+                limExpOption,
+                midpointOption,
+                button,
+                accelOption.Top);
         }
     }
 }

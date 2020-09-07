@@ -14,8 +14,13 @@ namespace grapher.Layouts
         {
             Name = "NaturalGain";
             Index = (int)AccelMode.naturalgain;
-            ShowOptions = new bool[] { true, true, true, false, false, true }; 
-            OptionNames = new string[] { Offset, Acceleration, Limit, string.Empty, string.Empty, Weight}; 
+
+            AccelLayout = new OptionLayout(true, Acceleration);
+            CapLayout = new OptionLayout(false, string.Empty);
+            WeightLayout = new OptionLayout(false, string.Empty);
+            OffsetLayout = new OptionLayout(true, Offset);
+            LimExpLayout = new OptionLayout(true, Limit);
+            MidpointLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

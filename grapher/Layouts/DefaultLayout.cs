@@ -16,9 +16,14 @@ namespace grapher.Layouts
         {
             Name = "Default";
             Index = (int)AccelMode.noaccel;
-            ShowOptions = new bool[] { true, true, true, true, true }; 
-            OptionNames = new string[] { Offset, Acceleration, $"{Limit}\\{Exponent}", Midpoint, Cap, Weight };
             ButtonEnabled = false;
+
+            AccelLayout = new OptionLayout(true, Acceleration);
+            CapLayout = new OptionLayout(true, Cap);
+            WeightLayout = new OptionLayout(true, Weight);
+            OffsetLayout = new OptionLayout(true, Offset);
+            LimExpLayout = new OptionLayout(true, $"{Limit}\\{Exponent}");
+            MidpointLayout = new OptionLayout(true, Midpoint);
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace grapher
 {
-    public class Option
+    public class Option : OptionBase
     {
         #region Constructors
 
@@ -72,7 +72,7 @@ namespace grapher
 
         public ActiveValueLabel ActiveValueLabel { get; }
 
-        public int Top
+        public override int Top
         { 
             get 
             {
@@ -85,7 +85,7 @@ namespace grapher
             }
         }
 
-        public int Height
+        public override int Height
         {
             get
             {
@@ -93,22 +93,30 @@ namespace grapher
             }
         }
 
-        public int Left
+        public override int Left
         { 
             get 
             {
                 return Label.Left;
             }
-            private set
+            set
             {
                 Label.Left = value;
             }
         }
-        public int Width
+        public override int Width
         {
             get
             {
                 return Field.Left + Field.Width - Label.Left;
+            }
+        }
+
+        public override bool Visible
+        {
+            get
+            {
+                return Field.Box.Visible;
             }
         }
 
@@ -127,7 +135,7 @@ namespace grapher
             ActiveValueLabel.SetValue(value);
         }
 
-        public void Hide()
+        public override void Hide()
         {
             Field.Box.Hide();
             Label.Hide();
@@ -146,23 +154,13 @@ namespace grapher
             ActiveValueLabel.SetValue(value);
         }
 
-        public void Show(string name)
+        public override void Show(string name)
         {
             SetName(name);
 
             Show();
         }
         
-        public void SnapTo(Option option)
-        {
-            Top = option.Top + option.Height + Constants.OptionVerticalSeperation;
-        }
-
-        public void SnapTo(CapOptions option)
-        {
-            Top = option.Top + option.Height + Constants.OptionVerticalSeperation;
-        }
-
         #endregion Methods
     }
 }

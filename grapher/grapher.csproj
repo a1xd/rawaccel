@@ -87,8 +87,11 @@
     <Compile Include="Layouts\NaturalLayout.cs" />
     <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
+    <Compile Include="Models\Options\IOption.cs" />
     <Compile Include="Models\Options\OffsetOptions.cs" />
     <Compile Include="Models\Options\Option.cs" />
+    <Compile Include="Layouts\OptionLayout.cs" />
+    <Compile Include="Models\Options\OptionBase.cs" />
     <Compile Include="Models\Options\OptionXY.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
     <Compile Include="Models\Serialized\DriverSettings.cs" />

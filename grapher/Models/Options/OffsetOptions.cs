@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace grapher.Models.Options
 {
-    public class OffsetOptions
+    public class OffsetOptions : OptionBase
     {
         public OffsetOptions(
             ToolStripMenuItem velocityGainOffsetCheck,
@@ -63,6 +63,69 @@ namespace grapher.Models.Options
                     return OffsetOption.Field.Data;
                 }
             }
+        }
+
+        public override int Top
+        {
+            get
+            {
+                return OffsetOption.Top;
+            }
+            set
+            {
+                OffsetOption.Top = value;
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                return OffsetOption.Height;
+            }
+        }
+
+        public override int Left
+        {
+            get
+            {
+                return OffsetOption.Left;
+            }
+            set
+            {
+                OffsetOption.Left = value;
+            }
+        }
+
+        public override int Width
+        {
+            get
+            {
+                return OffsetOption.Width;
+            }
+        }
+
+        public override bool Visible
+        {
+            get
+            {
+                return OffsetOption.Visible;
+            }
+        }
+
+        public override void Hide()
+        {
+            OffsetOption.Hide();
+        }
+
+        public void Show()
+        {
+            OffsetOption.Show();
+        }
+
+        public override void Show(string name)
+        {
+            OffsetOption.Show(name);
         }
 
         public void SetActiveValue(double offset, double legacyOffset)

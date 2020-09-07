@@ -185,7 +185,6 @@ namespace grapher.Models
                 legacyOffsetToolStripMenuItem,
                 offsetY);
 
-            // The name and layout of these options is handled by AccelerationOptions object.
             var accelerationX = new Option(
                 new Field(accelerationBoxX, form, 0),
                 constantOneLabelX,
@@ -222,34 +221,6 @@ namespace grapher.Models
                 new ActiveValueLabel(midpointActiveLabelY, activeValueTitle),
                 optionSetYLeft);
 
-            var accelerationOptionsX = new AccelTypeOptions(
-                accelTypeDropX,
-                new Option[]
-                {
-                    offsetX,
-                    accelerationX,
-                    limitOrExponentX,
-                    midpointX,
-                    capX,
-                    weightX
-                },
-                writeButton,
-                new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitle));
-
-            var accelerationOptionsY = new AccelTypeOptions(
-                accelTypeDropY,
-                new Option[]
-                {
-                    offsetY,
-                    accelerationY,
-                    limitOrExponentY,
-                    midpointY,
-                    capY,
-                    weightY
-                },
-                writeButton,
-                new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitle));
-
             var capOptionsX = new CapOptions(
                 velocityGainCapToolStripMenuItem,
                 legacyCapToolStripMenuItem,
@@ -260,27 +231,37 @@ namespace grapher.Models
                 legacyCapToolStripMenuItem,
                 capY);
 
-            var optionsSetX = new AccelOptionSet(
-                optionSetXTitle,
-                rotationBox.Top + rotationBox.Height + Constants.OptionVerticalSeperation,
-                accelerationOptionsX,
+            var accelerationOptionsX = new AccelTypeOptions(
+                accelTypeDropX,
                 accelerationX,
                 capOptionsX,
                 weightX,
                 offsetOptionsX,
                 limitOrExponentX,
-                midpointX); 
+                midpointX,
+                writeButton,
+                new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitle));
 
-            var optionsSetY = new AccelOptionSet(
-                optionSetYTitle,
-                rotationBox.Top + rotationBox.Height + Constants.OptionVerticalSeperation,
-                accelerationOptionsY,
+            var accelerationOptionsY = new AccelTypeOptions(
+                accelTypeDropY,
                 accelerationY,
                 capOptionsY,
                 weightY,
                 offsetOptionsY,
                 limitOrExponentY,
-                midpointY);
+                midpointY,
+                writeButton,
+                new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitle));
+
+            var optionsSetX = new AccelOptionSet(
+                optionSetXTitle,
+                rotationBox.Top + rotationBox.Height + Constants.OptionVerticalSeperation,
+                accelerationOptionsX);
+
+            var optionsSetY = new AccelOptionSet(
+                optionSetYTitle,
+                rotationBox.Top + rotationBox.Height + Constants.OptionVerticalSeperation,
+                accelerationOptionsY);
 
             var applyOptions = new ApplyOptions(
                 wholeVectorToolStripMenuItem,
