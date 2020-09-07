@@ -116,7 +116,7 @@ namespace grapher.Models.Options
             SetOptionsTop(TopAnchor);
         }
 
-        public void SetArgs(AccelArgs args)
+        public void SetArgs(ref AccelArgs args)
         {
             args.accel = Acceleration.Field.Data;
             args.rate = Acceleration.Field.Data;
@@ -135,7 +135,7 @@ namespace grapher.Models.Options
         public AccelArgs GenerateArgs()
         {
             AccelArgs args = new AccelArgs();
-            SetArgs(args);
+            SetArgs(ref args);
             return args;
         }
 
