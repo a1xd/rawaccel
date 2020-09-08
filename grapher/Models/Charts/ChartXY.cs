@@ -21,6 +21,9 @@ namespace grapher
             SetupChart(ChartX);
             SetupChart(ChartY);
 
+            Combined = false;
+            SetCombined();
+
             Widened = false;
             SetWidened();
         }
@@ -71,6 +74,8 @@ namespace grapher
         public bool Combined { get; private set; }
 
         public bool Widened { get; private set; }
+
+        public bool Visible { get; private set; }
 
         private PointData CombinedPointData { get; set; }
 
@@ -167,7 +172,7 @@ namespace grapher
         {
             if (Combined)
             {
-                if (ChartX.Visible)
+                if (Visible)
                 {
                     ChartY.Show();
                 }
@@ -206,17 +211,26 @@ namespace grapher
 
         public void Hide()
         {
-            ChartX.Hide();
-            ChartY.Hide();
+            if (Visible)
+            {
+                ChartX.Hide();
+                ChartY.Hide();
+                Visible = false;
+            }
         }
 
         public void Show()
         {
-            ChartX.Show();
-
-            if (!Combined)
+            if (!Visible)
             {
-                ChartY.Show();
+                ChartX.Show();
+
+                if (!Combined)
+                {
+                    ChartY.Show();
+                }
+
+                Visible = true;
             }
         }
 

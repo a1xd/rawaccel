@@ -1,5 +1,6 @@
 ﻿using grapher.Models.Calculations;
 using grapher.Models.Charts;
+using grapher.Models.Serialized;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -51,6 +52,7 @@ namespace grapher
             EnableLastValue.CheckedChanged += new System.EventHandler(OnEnableLastMouseMoveCheckStateChange);
 
             HideVelocityAndGain();
+            SensitivityChart.Show();
             Combined = false;
             ShowCombined();
         }
@@ -127,9 +129,9 @@ namespace grapher
             }
         }
 
-        public void RefreshXY(bool isWhole)
+        public void ShowActive(DriverSettings driverSettings)
         {
-            if (isWhole)
+            if (driverSettings.combineMagnitudes)
             {
                 ShowCombined();
             }
