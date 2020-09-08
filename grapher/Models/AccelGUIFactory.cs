@@ -91,9 +91,9 @@ namespace grapher.Models
         {
             var accelCharts = new AccelCharts(
                                 form,
-                                new ChartXY(accelerationChart, accelerationChartY),
-                                new ChartXY(velocityChart, velocityChartY),
-                                new ChartXY(gainChart, gainChartY),
+                                new ChartXY(accelerationChart, accelerationChartY, Constants.SensitivityChartTitle),
+                                new ChartXY(velocityChart, velocityChartY, Constants.VelocityChartTitle),
+                                new ChartXY(gainChart, gainChartY, Constants.GainChartTitle),
                                 showVelocityGainToolStripMenuItem,
                                 showLastMouseMoveMenuItem,
                                 writeButton);

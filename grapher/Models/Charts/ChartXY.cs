@@ -8,10 +8,11 @@ namespace grapher
     {
         #region Constructors
 
-        public ChartXY(Chart chartX, Chart chartY)
+        public ChartXY(Chart chartX, Chart chartY, string title)
         {
             ChartX = chartX;
             ChartY = chartY;
+            Title = title;
 
             ChartY.Top = ChartX.Top;
             ChartY.Height = ChartX.Height;
@@ -77,6 +78,8 @@ namespace grapher
 
         public bool Visible { get; private set; }
 
+        public string Title { get; }
+
         private PointData CombinedPointData { get; set; }
 
         private PointData XPointData { get; set; }
@@ -110,6 +113,8 @@ namespace grapher
 
             chart.Series[1].Points.Clear();
             chart.Series[1].Points.AddXY(0, 0);
+
+            chart.Titles[0].Font = new System.Drawing.Font(chart.Titles[0].Font.Name, 9.0f, System.Drawing.FontStyle.Italic);
         }
 
         public static void DrawPoint(Chart chart, PointData point)
@@ -165,6 +170,7 @@ namespace grapher
             {
                 ChartY.Hide();
                 Combined = true;
+                ChartX.Titles[0].Text = Title;
             }
         }
 
@@ -176,6 +182,9 @@ namespace grapher
                 {
                     ChartY.Show();
                 }
+
+                ChartX.Titles[0].Text = SetComponentTitle(Constants.XComponent);
+                ChartY.Titles[0].Text = SetComponentTitle(Constants.YComponent);
 
                 Combined = false;
             }
@@ -246,6 +255,10 @@ namespace grapher
             ChartY.Height = height;
         }
 
+        private string SetComponentTitle(string component)
+        {
+            return $"{Title} : {component}";
+        }
         #endregion Methods
     }
 }

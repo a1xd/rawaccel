@@ -89,6 +89,21 @@ namespace grapher
         /// <summary> Default text to be displayed on write button. </summary>
         public const string WriteButtonDelayText = "Delay";
 
+        /// <summary> Title of sensitivity chart. </summary>
+        public const string SensitivityChartTitle = "Sensitivity";
+
+        /// <summary> Title of velocity chart. </summary>
+        public const string VelocityChartTitle = "Velocity";
+
+        /// <summary> Title of gain chart. </summary>
+        public const string GainChartTitle = "Gain";
+
+        /// <summary> Text for x component. </summary>
+        public const string XComponent = "X";
+        
+        /// <summary> Text for y component. </summary>
+        public const string YComponent = "Y";
+
         /// <summary> Default name of settings file. </summary>
         public const string DefaultSettingsFileName = @"settings.json";
 
