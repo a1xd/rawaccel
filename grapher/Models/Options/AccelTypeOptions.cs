@@ -52,6 +52,7 @@ namespace grapher
             WriteButton = writeButton;
             AccelTypeActiveValue = accelTypeActiveValue;
 
+            AccelTypeActiveValue.Left = AccelDropdown.Left + AccelDropdown.Width;
             AccelTypeActiveValue.Height = AccelDropdown.Height;
 
             Layout("Off");
@@ -121,7 +122,6 @@ namespace grapher
             set
             {
                 AccelDropdown.Left = value;
-                AccelTypeActiveValue.Left = AccelDropdown.Left + Width;
             }
         }
 
@@ -134,7 +134,6 @@ namespace grapher
             set
             {
                 AccelDropdown.Width = value;
-                AccelTypeActiveValue.Left = Left + AccelDropdown.Width;
             }
         }
 
