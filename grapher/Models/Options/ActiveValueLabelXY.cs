@@ -22,10 +22,7 @@ namespace grapher.Models.Options
             X = x;
             Y = y;
 
-            FullWidth = x.Width;
-            ShortenedWidth = (FullWidth - Constants.ActiveLabelXYSeparation) / 2;
-
-            Y.Left = X.Left + ShortenedWidth + Constants.ActiveLabelXYSeparation;
+            Align(x.Width);
             Y.Width = ShortenedWidth;
             Y.FormatString = Constants.ShortenedFormatString;
 
@@ -42,6 +39,19 @@ namespace grapher.Models.Options
         public ActiveValueLabel Y { get; }
 
         public bool Combined { get; private set; }
+
+        public int Left
+        {
+            get
+            {
+                return X.Left;
+            }
+            set
+            {
+                X.Left = value;
+                SetYLeft();
+            }
+        }
 
         private int FullWidth { get; set; }
 
@@ -112,8 +122,13 @@ namespace grapher.Models.Options
             FullWidth = width;
             ShortenedWidth = (FullWidth - Constants.ActiveLabelXYSeparation) / 2;
 
-            Y.Left = X.Left + ShortenedWidth + Constants.ActiveLabelXYSeparation;
+            SetYLeft();
             Y.Width = ShortenedWidth;
+        }
+
+        private void SetYLeft()
+        {
+            Y.Left = X.Left + ShortenedWidth + Constants.ActiveLabelXYSeparation;
         }
 
         #endregion Methods

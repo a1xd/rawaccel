@@ -163,7 +163,10 @@ namespace grapher.Models.Options
 
         public void OnByComponentCheckedChange(object sender, EventArgs e)
         {
-            EnableByComponentApplication();
+            if (ByComponentVectorMenuItem.Checked)
+            {
+                EnableByComponentApplication();
+            }
         }
 
         public void ShowWholeSet()

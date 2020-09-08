@@ -155,6 +155,7 @@ namespace grapher
         public override void Hide()
         {
             AccelDropdown.Hide();
+            AccelTypeActiveValue.Hide();
 
             Acceleration.Hide();
             Cap.Hide();

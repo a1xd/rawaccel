@@ -61,13 +61,21 @@ namespace grapher
 
         public Field YField { get; }
 
+        public int CombinedWidth { get; }
+
+        public int Left {
+            get
+            {
+                return XField.Left;
+            }
+        }
+
         private bool Combined { get; set; }
 
         private int DefaultWidthX { get; }
 
         private int DefaultWidthY { get; }
 
-        private int CombinedWidth { get; }
 
         #endregion Properties
 

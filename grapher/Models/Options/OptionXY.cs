@@ -16,6 +16,7 @@ namespace grapher
             Fields = fields;
             Label = label;
             ActiveValueLabels = activeValueLabels;
+            ActiveValueLabels.Left = fields.CombinedWidth + fields.Left;
         }
 
         public OptionXY(
