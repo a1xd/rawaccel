@@ -35,6 +35,14 @@ namespace grapher
             MouseWatcher = new MouseWatcher(AccelForm, mouseMoveLabel, AccelCharts);
 
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
+            WriteButton.Click += new System.EventHandler(OnWriteButtonClick);
+
+            ButtonTimer = new Timer();
+            ButtonTimer.Enabled = true;
+            ButtonTimer.Interval = Convert.ToInt32(ManagedAccel.WriteDelay);
+            ButtonTimer.Tick += new System.EventHandler(OnButtonTimerTick);
+
+            SetWriteButtonDefault();
         }
 
         #endregion Constructors
@@ -52,6 +60,8 @@ namespace grapher
         public ApplyOptions ApplyOptions { get; }
 
         public Button WriteButton { get; }
+
+        public Timer ButtonTimer { get; }
 
         public MouseWatcher MouseWatcher { get; }
 
@@ -81,6 +91,7 @@ namespace grapher
             {
                 AccelForm.Invoke((MethodInvoker)delegate
                 {
+                    WriteButtonDelay();
                     UpdateGraph();
                 });
             });
@@ -111,6 +122,35 @@ namespace grapher
         private void OnScaleMenuItemClick(object sender, EventArgs e)
         {
             UpdateGraph();
+        }
+
+        private void OnWriteButtonClick(object sender, EventArgs e)
+        {
+            UpdateActiveSettingsFromFields();
+        }
+
+        private void OnButtonTimerTick(object sender, EventArgs e)
+        {
+            ButtonTimer.Stop();
+            SetWriteButtonDefault();
+        }
+
+        private void WriteButtonDelay()
+        {
+            SetWriteButtonDelay();
+            ButtonTimer.Start();
+        }
+
+        private void SetWriteButtonDefault()
+        {
+            WriteButton.Text = Constants.WriteButtonDefaultText;
+            WriteButton.Enabled = true;
+        }
+
+        private void SetWriteButtonDelay()
+        {
+            WriteButton.Enabled = false;
+            WriteButton.Text = $"{Constants.WriteButtonDelayText} : {ButtonTimer.Interval} ms";
         }
 
         #endregion Methods

@@ -141,16 +141,11 @@ namespace grapher
 
         }
 
-        private void writeButton_Click(object sender, EventArgs e)
-        {
-            AccelGUI.UpdateActiveSettingsFromFields();
-        }
-
-        #endregion Methods
-
         private void RawAcceleration_Paint(object sender, PaintEventArgs e)
         {
             AccelGUI.AccelCharts.DrawPoints();
         }
+
+        #endregion Method
     }
 }

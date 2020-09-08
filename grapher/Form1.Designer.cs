@@ -330,7 +330,6 @@ namespace grapher
             this.writeButton.TabIndex = 21;
             this.writeButton.Text = "Write To Driver";
             this.writeButton.UseVisualStyleBackColor = true;
-            this.writeButton.Click += new System.EventHandler(this.writeButton_Click);
             // 
             // sensitivityBoxY
             // 

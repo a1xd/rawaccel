@@ -80,6 +80,12 @@ namespace grapher
         /// <summary> Format string for default dropdowns. </summary>
         public const string AccelDropDownDefaultShortText = "Accel Type";
 
+        /// <summary> Default text to be displayed on write button. </summary>
+        public const string WriteButtonDefaultText = "Write To Driver";
+
+        /// <summary> Default text to be displayed on write button. </summary>
+        public const string WriteButtonDelayText = "Delay";
+
         /// <summary> Default name of settings file. </summary>
         public const string DefaultSettingsFileName = @"settings.json";
 
