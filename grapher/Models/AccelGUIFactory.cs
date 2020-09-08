@@ -55,6 +55,7 @@ namespace grapher.Models
             TextBox midpointBoxY,
             CheckBox sensXYLock,
             CheckBox byComponentXYLock,
+            Label lockXYLabel,
             Label sensitivityLabel,
             Label rotationLabel,
             Label weightLabelX,
@@ -70,6 +71,7 @@ namespace grapher.Models
             Label constantThreeLabelX,
             Label constantThreeLabelY,
             Label activeValueTitle,
+            Label activeValueTitleY,
             Label sensitivityActiveXLabel,
             Label sensitivityActiveYLabel,
             Label rotationActiveLabel,
@@ -255,11 +257,13 @@ namespace grapher.Models
 
             var optionsSetX = new AccelOptionSet(
                 optionSetXTitle,
+                activeValueTitle,
                 rotationBox.Top + rotationBox.Height + Constants.OptionVerticalSeperation,
                 accelerationOptionsX);
 
             var optionsSetY = new AccelOptionSet(
                 optionSetYTitle,
+                activeValueTitleY,
                 rotationBox.Top + rotationBox.Height + Constants.OptionVerticalSeperation,
                 accelerationOptionsY);
 
@@ -269,6 +273,9 @@ namespace grapher.Models
                 byComponentXYLock,
                 optionsSetX,
                 optionsSetY,
+                sensitivity,
+                rotation,
+                lockXYLabel,
                 accelCharts);
 
             var accelCalculator = new AccelCalculator(
@@ -287,8 +294,6 @@ namespace grapher.Models
                 accelCharts,
                 settings,
                 applyOptions,
-                sensitivity,
-                rotation,
                 writeButton,
                 mouseLabel,
                 scaleMenuItem);

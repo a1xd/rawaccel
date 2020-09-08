@@ -144,6 +144,11 @@ namespace grapher.Models.Options
             }
         }
 
+        public override void AlignActiveValues(int width)
+        {
+            OffsetOption.AlignActiveValues(width);
+        }
+
         public void OnVelocityGainOffsetClick(object sender, EventArgs e)
         {
             if (!VelocityGainOffsetCheck.Checked)

@@ -25,8 +25,6 @@ namespace grapher
             AccelCharts accelCharts,
             SettingsManager settings,
             ApplyOptions applyOptions,
-            OptionXY sensitivity,
-            Option rotation,
             Button writeButton,
             Label mouseMoveLabel,
             ToolStripMenuItem scaleMenuItem)
@@ -35,8 +33,6 @@ namespace grapher
             AccelCalculator = accelCalculator;
             AccelCharts = accelCharts;
             ApplyOptions = applyOptions;
-            Sensitivity = sensitivity;
-            Rotation = rotation;
             WriteButton = writeButton;
             ScaleMenuItem = scaleMenuItem;
             Settings = settings;
@@ -62,10 +58,6 @@ namespace grapher
 
         public ApplyOptions ApplyOptions { get; }
 
-        public OptionXY Sensitivity { get; }
-
-        public Option Rotation { get; }
-
         public Button WriteButton { get; }
 
         public MouseWatcher MouseWatcher { get; }
@@ -80,11 +72,11 @@ namespace grapher
         {
             var settings = new DriverSettings
             {
-                rotation = Rotation.Field.Data,
+                rotation = ApplyOptions.Rotation.Field.Data,
                 sensitivity = new Vec2<double>
                 {
-                    x = Sensitivity.Fields.X,
-                    y = Sensitivity.Fields.Y
+                    x = ApplyOptions.Sensitivity.Fields.X,
+                    y = ApplyOptions.Sensitivity.Fields.Y
                 },
                 combineMagnitudes = ApplyOptions.IsWhole,
                 modes = ApplyOptions.GetModes(),
@@ -120,11 +112,7 @@ namespace grapher
 
         public void UpdateShownActiveValues()
         {
-            var settings = Settings.RawAccelSettings.AccelerationSettings;
-
-            Sensitivity.SetActiveValues(settings.sensitivity.x, settings.sensitivity.y);
-            Rotation.SetActiveValue(settings.rotation);
-            ApplyOptions.SetActiveValues(settings);
+            ApplyOptions.SetActiveValues(Settings.RawAccelSettings.AccelerationSettings);
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)

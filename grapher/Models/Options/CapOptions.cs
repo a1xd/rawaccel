@@ -173,6 +173,11 @@ namespace grapher
             }
         }
 
+        public override void AlignActiveValues(int width)
+        {
+            CapOption.AlignActiveValues(width);
+        }
+
         void OnSensitivityCapCheckClick(object sender, EventArgs e)
         {
             if (!LegacyCapCheck.Checked)

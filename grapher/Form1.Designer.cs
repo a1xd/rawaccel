@@ -1131,7 +1131,6 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem offsetStyleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gainOffsetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.Label ActiveValueTitleY;
     }
 }

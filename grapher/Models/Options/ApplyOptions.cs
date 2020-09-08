@@ -1,6 +1,7 @@
 ﻿using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,9 @@ namespace grapher.Models.Options
             CheckBox byComponentVectorXYLock,
             AccelOptionSet optionSetX,
             AccelOptionSet optionSetY,
+            OptionXY sensitivity,
+            Option rotation,
+            Label lockXYLabel,
             AccelCharts accelCharts)
         {
             WholeVectorMenuItem = wholeVectorMenuItem;
@@ -33,7 +37,13 @@ namespace grapher.Models.Options
             ByComponentVectorXYLock = byComponentVectorXYLock;
             OptionSetX = optionSetX;
             OptionSetY = optionSetY;
+            Sensitivity = sensitivity;
+            Rotation = rotation;
+            LockXYLabel = lockXYLabel;
             AccelCharts = accelCharts;
+
+            LockXYLabel.AutoSize = false;
+            LockXYLabel.TextAlign = ContentAlignment.MiddleCenter;
 
             ByComponentVectorXYLock.CheckedChanged += new System.EventHandler(OnByComponentXYLockChecked);
             ByComponentVectorXYLock.Checked = true;
@@ -55,7 +65,15 @@ namespace grapher.Models.Options
 
         public AccelOptionSet OptionSetY { get; }
 
+        public OptionXY Sensitivity { get; }
+
+        public Option Rotation { get; }
+
         public AccelCharts AccelCharts { get; }
+
+        public Label ActiveValueTitleY { get; }
+
+        public Label LockXYLabel { get; }
 
         public bool IsWhole { get; private set; }
 
@@ -86,8 +104,18 @@ namespace grapher.Models.Options
 
         }
 
-        public void SetActiveValues(int xMode, int yMode, AccelArgs xArgs, AccelArgs yArgs, bool isWhole)
+        public void SetActiveValues(
+            double xSens,
+            double ySens,
+            double rotation,
+            int xMode,
+            int yMode,
+            AccelArgs xArgs,
+            AccelArgs yArgs,
+            bool isWhole)
         {
+            Sensitivity.SetActiveValues(xSens, ySens);
+            Rotation.SetActiveValue(rotation);
             OptionSetX.SetActiveValues(xMode, xArgs);
             OptionSetY.SetActiveValues(yMode, yArgs);
             WholeVectorMenuItem.Checked = isWhole;
@@ -96,7 +124,15 @@ namespace grapher.Models.Options
 
         public void SetActiveValues(DriverSettings settings)
         {
-            SetActiveValues((int)settings.modes.x, (int)settings.modes.y, settings.args.x, settings.args.y, settings.combineMagnitudes);
+            SetActiveValues(
+                settings.sensitivity.x,
+                settings.sensitivity.x,
+                settings.rotation,
+                (int)settings.modes.x,
+                (int)settings.modes.y,
+                settings.args.x,
+                settings.args.y,
+                settings.combineMagnitudes);
         }
 
         public void OnWholeClicked(object sender, EventArgs e)
@@ -135,6 +171,7 @@ namespace grapher.Models.Options
             OptionSetX.SetRegularMode();
             OptionSetY.Hide();
             AccelCharts.SetWidened();
+            SetActiveTitlesWhole();
         }
 
         public void ShowByComponentAsOneSet()
@@ -184,6 +221,19 @@ namespace grapher.Models.Options
             IsWhole = false;
             ByComponentVectorXYLock.Show();
             ShowByComponentSet();
+        }
+
+        private void SetActiveTitlesWhole()
+        {
+            OptionSetX.ActiveValuesTitle.Left = OptionSetX.Options.Left + OptionSetX.Options.Width;
+            LockXYLabel.Width = (AccelCharts.SensitivityChart.Left - OptionSetX.ActiveValuesTitle.Left) / 2;
+            OptionSetX.ActiveValuesTitle.Width = LockXYLabel.Width;
+            LockXYLabel.Left = OptionSetX.ActiveValuesTitle.Left + OptionSetX.ActiveValuesTitle.Width;
+            Sensitivity.Fields.LockCheckBox.Left = LockXYLabel.Left + LockXYLabel.Width / 2 - Sensitivity.Fields.LockCheckBox.Width / 2;
+            ByComponentVectorXYLock.Left = Sensitivity.Fields.LockCheckBox.Left;
+            OptionSetX.AlignActiveValuesByTitle();
+            Sensitivity.AlignActiveValues(OptionSetX.ActiveValuesTitle.Width);
+            Rotation.AlignActiveValues(OptionSetX.ActiveValuesTitle.Width);
         }
 
         #endregion Methods

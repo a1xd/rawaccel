@@ -37,11 +37,6 @@ namespace grapher
                 throw;
             }
 
-            ActiveValueTitle.AutoSize = false;
-            ActiveValueTitle.Left = accelerationBoxY.Left + accelerationBoxY.Width;
-            ActiveValueTitle.Width = AccelerationChart.Left - ActiveValueTitle.Left;
-            ActiveValueTitle.TextAlign = ContentAlignment.MiddleCenter;
-
             AccelGUI = AccelGUIFactory.Construct(
                 this,
                 activeAccel,
@@ -82,6 +77,7 @@ namespace grapher
                 midpointBoxY,
                 sensXYLock,
                 ByComponentXYLock,
+                LockXYLabel,
                 sensitivityLabel,
                 rotationLabel,
                 weightLabelX,
@@ -97,6 +93,7 @@ namespace grapher
                 constantThreeLabelX,
                 constantThreeLabelY,
                 ActiveValueTitle,
+                ActiveValueTitleY,
                 SensitivityActiveXLabel,
                 SensitivityActiveYLabel,
                 RotationActiveLabel,

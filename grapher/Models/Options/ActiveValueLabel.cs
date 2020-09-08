@@ -91,6 +91,18 @@ namespace grapher.Models.Options
             }
         }
 
+        public int Top
+        {
+            get
+            {
+                return ValueLabel.Top;
+            }
+            set
+            {
+                ValueLabel.Top = value;
+            }
+        }
+
         #endregion Properties
 
         #region Methods

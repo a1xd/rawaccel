@@ -54,10 +54,10 @@ namespace grapher
         public const int DropDownLeftSeparation = 10;
 
         /// <summary> Width of charts when widened </summary>
-        public const int WideChartWidth = 810;
+        public const int WideChartWidth = 723;
 
         /// <summary> Width of charts when widened </summary>
-        public const int WideChartLeft = 270;
+        public const int WideChartLeft = 333;
 
         /// <summary> Width of charts when narrowed </summary>
         public const int NarrowChartWidth = 698;

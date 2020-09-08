@@ -29,6 +29,8 @@ namespace grapher.Models.Options
 
         public abstract void Hide();
 
+        public abstract void AlignActiveValues(int width);
+
         public virtual void SnapTo(IOption option)
         {
             Top = option.Beneath;

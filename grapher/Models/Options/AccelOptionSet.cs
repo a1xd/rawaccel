@@ -1,6 +1,7 @@
 ﻿using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,24 +12,31 @@ namespace grapher.Models.Options
     public class AccelOptionSet
     {
         public AccelOptionSet(
-            Label titleLabel,
+            Label title,
+            Label activeValuesTitle,
             int topAnchor,
             AccelTypeOptions accelTypeOptions)
         {
-            TitleLabel = titleLabel;
+            OptionsTitle = title;
+            ActiveValuesTitle = activeValuesTitle;
             TopAnchor = topAnchor;
             Options = accelTypeOptions;
 
+            ActiveValuesTitle.AutoSize = false;
+            ActiveValuesTitle.TextAlign = ContentAlignment.MiddleCenter;
+
             Options.ShowFull();
 
-            TitleLabel.Top = TopAnchor;
+            OptionsTitle.Top = TopAnchor;
             IsTitleMode = true;
             SetRegularMode();
         }
 
         public int TopAnchor { get; }
 
-        public Label TitleLabel { get; }
+        public Label OptionsTitle { get; }
+
+        public Label ActiveValuesTitle { get; }
 
         public AccelTypeOptions Options { get; }
 
@@ -48,7 +56,7 @@ namespace grapher.Models.Options
 
         public void SetTitleMode(string title)
         {
-            TitleLabel.Text = title;
+            OptionsTitle.Text = title;
 
             if (!IsTitleMode)
             {
@@ -61,7 +69,8 @@ namespace grapher.Models.Options
 
         public void Hide()
         {
-            TitleLabel.Hide();
+            OptionsTitle.Hide();
+            ActiveValuesTitle.Hide();
             Options.Hide();
         }
 
@@ -69,22 +78,23 @@ namespace grapher.Models.Options
         {
             if (IsTitleMode)
             {
-                TitleLabel.Show();
+                OptionsTitle.Show();
             }
 
+            ActiveValuesTitle.Show();
             Options.Show();
         }
 
         public void DisplayTitle()
         {
-            TitleLabel.Show();
+            OptionsTitle.Show();
 
-            Options.Top = TitleLabel.Top + TitleLabel.Height + Constants.OptionVerticalSeperation;
+            Options.Top = OptionsTitle.Top + OptionsTitle.Height + Constants.OptionVerticalSeperation;
         }
 
         public void HideTitle()
         {
-            TitleLabel.Hide();
+            OptionsTitle.Hide();
 
             Options.Top = TopAnchor;
         }
@@ -102,6 +112,11 @@ namespace grapher.Models.Options
         public void SetActiveValues(int mode, AccelArgs args)
         {
             Options.SetActiveValues(mode, args);
+        }
+
+        public void AlignActiveValuesByTitle()
+        {
+            Options.AlignActiveValues(ActiveValuesTitle.Width);
         }
     }
 }

@@ -43,9 +43,9 @@ namespace grapher.Models.Options
 
         public bool Combined { get; private set; }
 
-        private int FullWidth { get; }
+        private int FullWidth { get; set; }
 
-        private int ShortenedWidth { get; }
+        private int ShortenedWidth { get; set; }
 
         #endregion Properties
 
@@ -91,6 +91,29 @@ namespace grapher.Models.Options
             }
 
             Combined = false;
+        }
+
+        public void AlignActiveValues(int width)
+        {
+            Align(width);
+
+            if (Combined)
+            {
+                X.Width = FullWidth;
+            }
+            else
+            {
+                X.Width = ShortenedWidth;
+            }
+        }
+
+        private void Align (int width)
+        {
+            FullWidth = width;
+            ShortenedWidth = (FullWidth - Constants.ActiveLabelXYSeparation) / 2;
+
+            Y.Left = X.Left + ShortenedWidth + Constants.ActiveLabelXYSeparation;
+            Y.Width = ShortenedWidth;
         }
 
         #endregion Methods

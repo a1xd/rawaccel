@@ -26,6 +26,8 @@ namespace grapher
             label.AutoSize = false;
             label.Width = Field.Left - left - Constants.OptionLabelBoxSeperation;
             label.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+
+            ActiveValueLabel.Left = Field.Left + Field.Width;
         }
 
         public Option(
@@ -82,6 +84,7 @@ namespace grapher
             {
                 Field.Top = value;
                 Label.Top = value;
+                ActiveValueLabel.Top = value;
             }
         }
 
@@ -163,7 +166,12 @@ namespace grapher
 
             Show();
         }
-        
+
+        public override void AlignActiveValues(int width)
+        {
+            ActiveValueLabel.Width = width;
+        }
+
         #endregion Methods
     }
 }

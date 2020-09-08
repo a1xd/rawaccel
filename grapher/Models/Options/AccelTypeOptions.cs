@@ -38,7 +38,7 @@ namespace grapher
             Option limitOrExponent,
             Option midpoint,
             Button writeButton,
-            ActiveValueLabel activeValueLabel)
+            ActiveValueLabel accelTypeActiveValue)
         {
             AccelDropdown = accelDropdown;
             AccelDropdown.Items.Clear();
@@ -52,17 +52,7 @@ namespace grapher
             LimitOrExponent = limitOrExponent;
             Midpoint = midpoint;
             WriteButton = writeButton;
-            ActiveValueLabel = activeValueLabel;
-
-            Options = new List<OptionBase>
-            {
-                Acceleration,
-                Cap,
-                Offset,
-                Weight,
-                LimitOrExponent,
-                Midpoint,
-            };
+            AccelTypeActiveValue = accelTypeActiveValue;
 
             Layout("Off");
             ShowingDefault = true;
@@ -86,7 +76,7 @@ namespace grapher
 
         public LayoutBase AccelerationType { get; private set; }
 
-        public ActiveValueLabel ActiveValueLabel { get; }
+        public ActiveValueLabel AccelTypeActiveValue { get; }
 
         public Option Acceleration { get; }
 
@@ -100,8 +90,6 @@ namespace grapher
 
         public Option Midpoint { get; }
 
-        private IEnumerable<OptionBase> Options { get; }
-
         public override int Top 
         {
             get
@@ -111,6 +99,7 @@ namespace grapher
             set
             {
                 AccelDropdown.Top = value;
+                AccelTypeActiveValue.Top = value;
                 Layout(value + AccelDropdown.Height + Constants.OptionVerticalSeperation);
             }
         }
@@ -132,6 +121,7 @@ namespace grapher
             set
             {
                 AccelDropdown.Left = value;
+                AccelTypeActiveValue.Left = AccelDropdown.Left + Width;
             }
         }
 
@@ -144,6 +134,7 @@ namespace grapher
             set
             {
                 AccelDropdown.Width = value;
+                AccelTypeActiveValue.Left = Left + AccelDropdown.Width;
             }
         }
 
@@ -187,7 +178,7 @@ namespace grapher
         public void SetActiveValues(int index, AccelArgs args)
         {
             var name = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value.Name;
-            ActiveValueLabel.SetValue(name);
+            AccelTypeActiveValue.SetValue(name);
 
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0);
@@ -240,6 +231,18 @@ namespace grapher
             AccelArgs args = new AccelArgs();
             SetArgs(ref args);
             return args;
+        }
+
+        public override void AlignActiveValues(int width)
+        {
+            AccelTypeActiveValue.Width = width;
+
+            Acceleration.AlignActiveValues(width);
+            Cap.AlignActiveValues(width);
+            Offset.AlignActiveValues(width);
+            Weight.AlignActiveValues(width);
+            LimitOrExponent.AlignActiveValues(width);
+            Midpoint.AlignActiveValues(width);
         }
 
         private void OnIndexChanged(object sender, EventArgs e)

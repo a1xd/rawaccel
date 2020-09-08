@@ -77,6 +77,11 @@ namespace grapher
             ActiveValueLabels.SetValues(x, y);
         }
 
+        public void AlignActiveValues(int width)
+        {
+            ActiveValueLabels.AlignActiveValues(width);
+        }
+
         public void Hide()
         {
             Fields.Hide();
