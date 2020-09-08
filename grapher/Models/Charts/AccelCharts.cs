@@ -16,6 +16,7 @@ namespace grapher
             ChartXY velocityChart,
             ChartXY gainChart,
             ToolStripMenuItem enableVelocityAndGain,
+            ToolStripMenuItem enableLastMouseMove,
             Button writeButton)
         {
             Estimated = new EstimatedPoints();
@@ -28,6 +29,7 @@ namespace grapher
             VelocityChart = velocityChart;
             GainChart = gainChart;
             EnableVelocityAndGain = enableVelocityAndGain;
+            EnableLastValue = enableLastMouseMove;
             WriteButton = writeButton;
 
             SensitivityChart.SetPointBinds(Estimated.Sensitivity, EstimatedX.Sensitivity, EstimatedY.Sensitivity);
@@ -44,7 +46,9 @@ namespace grapher
             FormBorderHeight = screenRectangle.Top - ContaingForm.Top;
 
             EnableVelocityAndGain.Click += new System.EventHandler(OnEnableClick);
-            EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableCheckStateChange);
+            EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableVelocityGainCheckStateChange);
+
+            EnableLastValue.CheckedChanged += new System.EventHandler(OnEnableLastMouseMoveCheckStateChange);
 
             HideVelocityAndGain();
             Combined = false;
@@ -64,6 +68,8 @@ namespace grapher
         public ChartXY GainChart { get; }
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
+
+        private ToolStripMenuItem EnableLastValue { get; }
 
         private Button WriteButton { get; }
 
@@ -95,11 +101,14 @@ namespace grapher
             }
         }
 
-        public void DrawPoints()
+        public void DrawLastMovement()
         {
-            SensitivityChart.DrawPoints();
-            VelocityChart.DrawPoints();
-            GainChart.DrawPoints();
+            if (EnableLastValue.Checked)
+            {
+                SensitivityChart.DrawLastMovementValue();
+                VelocityChart.DrawLastMovementValue();
+                GainChart.DrawLastMovementValue();
+            }
         }
 
         public void Bind()
@@ -153,7 +162,7 @@ namespace grapher
             EnableVelocityAndGain.Checked = !EnableVelocityAndGain.Checked;
         }
 
-        private void OnEnableCheckStateChange(object sender, EventArgs e)
+        private void OnEnableVelocityGainCheckStateChange(object sender, EventArgs e)
         {
             if (EnableVelocityAndGain.Checked)
             {
@@ -162,6 +171,16 @@ namespace grapher
             else
             {
                 HideVelocityAndGain();
+            }
+        }
+
+        private void OnEnableLastMouseMoveCheckStateChange(object sender, EventArgs e)
+        {
+            if (!EnableLastValue.Checked)
+            {
+                SensitivityChart.ClearLastValue();
+                VelocityChart.ClearLastValue();
+                GainChart.ClearLastValue();
             }
         }
 

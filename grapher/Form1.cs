@@ -50,6 +50,7 @@ namespace grapher
                 accelTypeDropY,
                 writeButton,
                 showVelocityGainToolStripMenuItem,
+                showLastMouseMoveToolStripMenuItem,
                 wholeVectorToolStripMenuItem,
                 byVectorComponentToolStripMenuItem,
                 gainCapToolStripMenuItem,
@@ -143,7 +144,7 @@ namespace grapher
 
         private void RawAcceleration_Paint(object sender, PaintEventArgs e)
         {
-            AccelGUI.AccelCharts.DrawPoints();
+            AccelGUI.AccelCharts.DrawLastMovement();
         }
 
         #endregion Method

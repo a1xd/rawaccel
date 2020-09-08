@@ -23,6 +23,7 @@ namespace grapher.Models
             ComboBox accelTypeDropY,
             Button writeButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
+            ToolStripMenuItem showLastMouseMoveMenuItem,
             ToolStripMenuItem wholeVectorToolStripMenuItem,
             ToolStripMenuItem byVectorComponentToolStripMenuItem,
             ToolStripMenuItem velocityGainCapToolStripMenuItem,
@@ -94,6 +95,7 @@ namespace grapher.Models
                                 new ChartXY(velocityChart, velocityChartY),
                                 new ChartXY(gainChart, gainChartY),
                                 showVelocityGainToolStripMenuItem,
+                                showLastMouseMoveMenuItem,
                                 writeButton);
 
             var sensitivity = new OptionXY(

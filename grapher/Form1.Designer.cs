@@ -138,6 +138,7 @@ namespace grapher
             this.OptionSetYTitle = new System.Windows.Forms.Label();
             this.AccelTypeActiveLabelY = new System.Windows.Forms.Label();
             this.ActiveValueTitleY = new System.Windows.Forms.Label();
+            this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
@@ -433,7 +434,8 @@ namespace grapher
             this.graphsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.graphsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showVelocityGainToolStripMenuItem,
-            this.scaleByDPIToolStripMenuItem});
+            this.scaleByDPIToolStripMenuItem,
+            this.showLastMouseMoveToolStripMenuItem});
             this.graphsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.graphsToolStripMenuItem.Name = "graphsToolStripMenuItem";
             this.graphsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
@@ -442,7 +444,7 @@ namespace grapher
             // showVelocityGainToolStripMenuItem
             // 
             this.showVelocityGainToolStripMenuItem.Name = "showVelocityGainToolStripMenuItem";
-            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.showVelocityGainToolStripMenuItem.Text = "Show Velocity && Gain";
             // 
             // scaleByDPIToolStripMenuItem
@@ -452,7 +454,7 @@ namespace grapher
             this.pollRateToolStripMenuItem,
             this.ScaleMenuItem});
             this.scaleByDPIToolStripMenuItem.Name = "scaleByDPIToolStripMenuItem";
-            this.scaleByDPIToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.scaleByDPIToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.scaleByDPIToolStripMenuItem.Text = "Scale by Mouse Settngs";
             // 
             // dPIToolStripMenuItem
@@ -505,7 +507,7 @@ namespace grapher
             this.gainCapToolStripMenuItem,
             this.legacyCapToolStripMenuItem});
             this.capStyleToolStripMenuItem.Name = "capStyleToolStripMenuItem";
-            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.capStyleToolStripMenuItem.Text = "Cap Style";
             // 
             // gainCapToolStripMenuItem
@@ -528,7 +530,7 @@ namespace grapher
             this.gainOffsetToolStripMenuItem,
             this.legacyOffsetToolStripMenuItem});
             this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
-            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.offsetStyleToolStripMenuItem.Text = "Offset Style";
             // 
             // gainOffsetToolStripMenuItem
@@ -549,7 +551,7 @@ namespace grapher
             this.wholeVectorToolStripMenuItem,
             this.byVectorComponentToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem1.Text = "Application Style";
             // 
             // wholeVectorToolStripMenuItem
@@ -959,6 +961,15 @@ namespace grapher
             this.ActiveValueTitleY.TabIndex = 67;
             this.ActiveValueTitleY.Text = "Active";
             // 
+            // showLastMouseMoveToolStripMenuItem
+            // 
+            this.showLastMouseMoveToolStripMenuItem.Checked = true;
+            this.showLastMouseMoveToolStripMenuItem.CheckOnClick = true;
+            this.showLastMouseMoveToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showLastMouseMoveToolStripMenuItem.Name = "showLastMouseMoveToolStripMenuItem";
+            this.showLastMouseMoveToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.showLastMouseMoveToolStripMenuItem.Text = "Show Last Mouse Move";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1131,6 +1142,7 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem gainOffsetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
         private System.Windows.Forms.Label ActiveValueTitleY;
+        private System.Windows.Forms.ToolStripMenuItem showLastMouseMoveToolStripMenuItem;
     }
 }
 

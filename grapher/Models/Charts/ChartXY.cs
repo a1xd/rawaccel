@@ -124,7 +124,7 @@ namespace grapher
             YPointData = y;
         }
 
-        public void DrawPoints()
+        public void DrawLastMovementValue()
         {
             if(Combined)
             {
@@ -135,6 +135,12 @@ namespace grapher
                 DrawPoint(ChartX, XPointData);
                 DrawPoint(ChartY, YPointData);
             }
+        }
+
+        public void ClearLastValue()
+        {
+            ChartX.Series[1].Points.Clear();
+            ChartY.Series[1].Points.Clear();
         }
 
         public void Bind(IDictionary data)
