@@ -284,7 +284,8 @@ namespace grapher.Models
                 activeAccel,
                 accelCalculator.DPI,
                 accelCalculator.PollRate,
-                autoWriteMenuItem);
+                autoWriteMenuItem,
+                showLastMouseMoveMenuItem);
 
             return new AccelGUI(
                 form,

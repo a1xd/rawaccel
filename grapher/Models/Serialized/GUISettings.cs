@@ -30,6 +30,9 @@ namespace grapher.Models.Serialized
         [JsonProperty(Order = 3)]
         public int PollRate { get; set; }
 
+        [JsonProperty(Order = 4)]
+        public bool ShowLastMouseMove { get; set; }
+
         #endregion Properties
     }
 }

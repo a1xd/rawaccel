@@ -12,12 +12,14 @@ namespace grapher.Models.Serialized
             ManagedAccel activeAccel,
             Field dpiField,
             Field pollRateField,
-            ToolStripMenuItem autoWrite)
+            ToolStripMenuItem autoWrite,
+            ToolStripMenuItem showLastMouseMove)
         {
             ActiveAccel = activeAccel;
             DpiField = dpiField;
             PollRateField = pollRateField;
             AutoWriteMenuItem = autoWrite;
+            ShowLastMouseMoveMenuItem = showLastMouseMove;
         }
 
         #endregion Constructors
@@ -34,6 +36,8 @@ namespace grapher.Models.Serialized
 
         private ToolStripMenuItem AutoWriteMenuItem { get; set; }
 
+        private ToolStripMenuItem ShowLastMouseMoveMenuItem { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -47,7 +51,8 @@ namespace grapher.Models.Serialized
                 {
                     AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
                     DPI = (int)DpiField.Data,
-                    PollRate = (int)PollRateField.Data
+                    PollRate = (int)PollRateField.Data,
+                    ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
                 };
 
                 RawAccelSettings.Save();
@@ -63,6 +68,7 @@ namespace grapher.Models.Serialized
             DpiField.SetToEntered(RawAccelSettings.GUISettings.DPI);
             PollRateField.SetToEntered(RawAccelSettings.GUISettings.PollRate);
             AutoWriteMenuItem.Checked = RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup;
+            ShowLastMouseMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowLastMouseMove;
         }
 
         public void Startup()
@@ -90,7 +96,8 @@ namespace grapher.Models.Serialized
                 {
                     AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
                     DPI = (int)DpiField.Data,
-                    PollRate = (int)PollRateField.Data
+                    PollRate = (int)PollRateField.Data,
+                    ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
                 });
             RawAccelSettings.Save();
         }
