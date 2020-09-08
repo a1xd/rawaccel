@@ -51,13 +51,16 @@ namespace grapher
         /// <summary> Width of charts when widened </summary>
         public const int WideChartWidth = 723;
 
-        /// <summary> Width of charts when widened </summary>
+        /// <summary> Left placement of charts when widened </summary>
         public const int WideChartLeft = 333;
 
         /// <summary> Width of charts when narrowed </summary>
         public const int NarrowChartWidth = 698;
 
+        /// <summary> Left placement of charts when narrowed </summary>
         public const int NarrowChartLeft = 482;
+
+        public const int WriteButtonVerticalOffset = 50;
 
         /// <summary> Format string for shortened x and y textboxes. </summary>
         public const string ShortenedFormatString = "0.###";

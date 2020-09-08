@@ -37,12 +37,8 @@ namespace grapher
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
             WriteButton.Click += new System.EventHandler(OnWriteButtonClick);
 
-            ButtonTimer = new Timer();
-            ButtonTimer.Enabled = true;
-            ButtonTimer.Interval = Convert.ToInt32(ManagedAccel.WriteDelay);
-            ButtonTimer.Tick += new System.EventHandler(OnButtonTimerTick);
-
-            SetWriteButtonDefault();
+            ButtonTimer = SetupButtonTimer();
+            SetupWriteButton();
         }
 
         #endregion Constructors
@@ -119,6 +115,33 @@ namespace grapher
             ApplyOptions.SetActiveValues(Settings.RawAccelSettings.AccelerationSettings);
         }
 
+        private Timer SetupButtonTimer()
+        {
+            Timer buttonTimer = new Timer();
+            buttonTimer.Enabled = true;
+            buttonTimer.Interval = Convert.ToInt32(ManagedAccel.WriteDelay);
+            buttonTimer.Tick += new System.EventHandler(OnButtonTimerTick);
+            return buttonTimer;
+        }
+
+        private void SetupWriteButton()
+        {
+            WriteButton.Top = AccelCharts.SensitivityChart.Top + AccelCharts.SensitivityChart.Height - Constants.WriteButtonVerticalOffset;
+            SetWriteButtonDefault();
+        }
+
+        private void SetWriteButtonDefault()
+        {
+            WriteButton.Text = Constants.WriteButtonDefaultText;
+            WriteButton.Enabled = true;
+        }
+
+        private void SetWriteButtonDelay()
+        {
+            WriteButton.Enabled = false;
+            WriteButton.Text = $"{Constants.WriteButtonDelayText} : {ButtonTimer.Interval} ms";
+        }
+
         private void OnScaleMenuItemClick(object sender, EventArgs e)
         {
             UpdateGraph();
@@ -139,18 +162,6 @@ namespace grapher
         {
             SetWriteButtonDelay();
             ButtonTimer.Start();
-        }
-
-        private void SetWriteButtonDefault()
-        {
-            WriteButton.Text = Constants.WriteButtonDefaultText;
-            WriteButton.Enabled = true;
-        }
-
-        private void SetWriteButtonDelay()
-        {
-            WriteButton.Enabled = false;
-            WriteButton.Text = $"{Constants.WriteButtonDelayText} : {ButtonTimer.Interval} ms";
         }
 
         #endregion Methods
