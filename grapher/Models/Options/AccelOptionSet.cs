@@ -109,9 +109,9 @@ namespace grapher.Models.Options
             Options.SetActiveValues(mode, args);
         }
 
-        public void AlignActiveValuesByTitle()
+        public void AlignActiveValues()
         {
-            Options.AlignActiveValues(ActiveValuesTitle.Width);
+            Options.AlignActiveValues();
         }
     }
 }

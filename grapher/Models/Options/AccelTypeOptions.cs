@@ -52,6 +52,8 @@ namespace grapher
             WriteButton = writeButton;
             AccelTypeActiveValue = accelTypeActiveValue;
 
+            AccelTypeActiveValue.Height = AccelDropdown.Height;
+
             Layout("Off");
             ShowingDefault = true;
         }
@@ -166,6 +168,7 @@ namespace grapher
         public void Show()
         {
             AccelDropdown.Show();
+            AccelTypeActiveValue.Show();
             Layout();
         }
 
@@ -232,16 +235,15 @@ namespace grapher
             return args;
         }
 
-        public override void AlignActiveValues(int width)
+        public override void AlignActiveValues()
         {
-            AccelTypeActiveValue.Width = width;
-
-            Acceleration.AlignActiveValues(width);
-            Cap.AlignActiveValues(width);
-            Offset.AlignActiveValues(width);
-            Weight.AlignActiveValues(width);
-            LimitOrExponent.AlignActiveValues(width);
-            Midpoint.AlignActiveValues(width);
+            AccelTypeActiveValue.Align();
+            Acceleration.AlignActiveValues();
+            Cap.AlignActiveValues();
+            Offset.AlignActiveValues();
+            Weight.AlignActiveValues();
+            LimitOrExponent.AlignActiveValues();
+            Midpoint.AlignActiveValues();
         }
 
         private void OnIndexChanged(object sender, EventArgs e)

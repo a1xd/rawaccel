@@ -64,6 +64,50 @@ namespace grapher
             {
                 return XField.Left;
             }
+            set
+            {
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return CombinedWidth;
+            }
+            set
+            {
+            }
+        }
+
+        public int Top
+        {
+            get
+            {
+                return XField.Top;
+            }
+            set
+            {
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return XField.Height;
+            }
+            set
+            {
+            }
+        }
+
+        public bool Visible
+        {
+            get
+            {
+                return XField.Box.Visible;
+            }
         }
 
         private bool Combined { get; set; }

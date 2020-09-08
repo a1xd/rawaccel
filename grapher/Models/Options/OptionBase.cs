@@ -23,7 +23,7 @@
 
         public abstract void Hide();
 
-        public abstract void AlignActiveValues(int width);
+        public abstract void AlignActiveValues();
 
         public virtual void SnapTo(IOption option)
         {

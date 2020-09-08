@@ -169,9 +169,9 @@ namespace grapher
             }
         }
 
-        public override void AlignActiveValues(int width)
+        public override void AlignActiveValues()
         {
-            CapOption.AlignActiveValues(width);
+            CapOption.AlignActiveValues();
         }
 
         void OnSensitivityCapCheckClick(object sender, EventArgs e)

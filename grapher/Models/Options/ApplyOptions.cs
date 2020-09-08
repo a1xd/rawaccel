@@ -43,6 +43,8 @@ namespace grapher.Models.Options
             ByComponentVectorXYLock.CheckedChanged += new System.EventHandler(OnByComponentXYLockChecked);
             ByComponentVectorXYLock.Checked = true;
 
+            Rotation.SnapTo(Sensitivity);
+
             EnableWholeApplication();
         }
 
@@ -229,9 +231,15 @@ namespace grapher.Models.Options
             LockXYLabel.Left = OptionSetX.ActiveValuesTitle.Left + OptionSetX.ActiveValuesTitle.Width;
             Sensitivity.Fields.LockCheckBox.Left = LockXYLabel.Left + LockXYLabel.Width / 2 - Sensitivity.Fields.LockCheckBox.Width / 2;
             ByComponentVectorXYLock.Left = Sensitivity.Fields.LockCheckBox.Left;
-            OptionSetX.AlignActiveValuesByTitle();
-            Sensitivity.AlignActiveValues(OptionSetX.ActiveValuesTitle.Width);
-            Rotation.AlignActiveValues(OptionSetX.ActiveValuesTitle.Width);
+            AlignActiveValues();
+        }
+
+        private void AlignActiveValues()
+        {
+            OptionSetX.AlignActiveValues();
+            OptionSetY.AlignActiveValues();
+            Sensitivity.AlignActiveValues();
+            Rotation.AlignActiveValues();
         }
 
         #endregion Methods

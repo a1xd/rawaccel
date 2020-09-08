@@ -22,11 +22,12 @@ namespace grapher.Models.Options
         public ActiveValueLabel(Label valueLabel, Label centeringLabel)
         {
             ValueLabel = valueLabel;
-            ValueLabel.ForeColor = Constants.ActiveValueFontColor;
-            Left = centeringLabel.Left;
-            Width = centeringLabel.Width;
             ValueLabel.AutoSize = false;
             ValueLabel.TextAlign = ContentAlignment.MiddleCenter;
+            ValueLabel.ForeColor = Constants.ActiveValueFontColor;
+
+            CenteringLabel = centeringLabel;
+            Align();
 
             FormatString = Constants.DefaultActiveValueFormatString;
             Prefix = string.Empty;
@@ -98,6 +99,21 @@ namespace grapher.Models.Options
             }
         }
 
+        public int Height
+        {
+            get 
+            {
+                return ValueLabel.Height;
+            }
+
+            set
+            {
+                ValueLabel.Height = value;
+            }
+        }
+
+        public Label CenteringLabel { get; }
+
         #endregion Properties
 
         #region Methods
@@ -125,6 +141,12 @@ namespace grapher.Models.Options
         public void RefreshText()
         {
             ValueLabel.Text = string.IsNullOrWhiteSpace(Prefix) ? Value: $"{Prefix}: {Value}";
+        }
+
+        public void Align()
+        {
+            Left = CenteringLabel.Left;
+            Width = CenteringLabel.Width;
         }
 
         #endregion Methods

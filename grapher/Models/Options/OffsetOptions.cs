@@ -140,9 +140,9 @@ namespace grapher.Models.Options
             }
         }
 
-        public override void AlignActiveValues(int width)
+        public override void AlignActiveValues()
         {
-            OffsetOption.AlignActiveValues(width);
+            OffsetOption.AlignActiveValues();
         }
 
         public void OnVelocityGainOffsetClick(object sender, EventArgs e)

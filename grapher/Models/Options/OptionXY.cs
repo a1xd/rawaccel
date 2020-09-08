@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace grapher
 {
-    public class OptionXY
+    public class OptionXY : OptionBase
     {
         #region Constructors
         public OptionXY(FieldXY fields, Label label, ActiveValueLabelXY activeValueLabels)
@@ -58,6 +58,57 @@ namespace grapher
 
         public ActiveValueLabelXY ActiveValueLabels { get; }
 
+        public override int Top
+        {
+            get
+            {
+                return Fields.Top;
+            }
+            set
+            {
+                Fields.Top = value;
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                return Fields.Height;
+            }
+        }
+
+        public override int Left
+        {
+            get
+            {
+                return Fields.Left;
+            }
+            set
+            {
+                Fields.Left = value;
+            }
+        }
+
+        public override int Width 
+        {
+            get
+            {
+                return Fields.Width;
+            }
+            set
+            {
+                Fields.Width = value;
+            }
+        }
+
+        public override bool Visible
+        {
+            get
+            {
+                return Fields.Visible;
+            }
+        }
         #endregion Properties
 
         #region Methods
@@ -74,12 +125,12 @@ namespace grapher
             ActiveValueLabels.SetValues(x, y);
         }
 
-        public void AlignActiveValues(int width)
+        public override void AlignActiveValues()
         {
-            ActiveValueLabels.AlignActiveValues(width);
+            ActiveValueLabels.AlignActiveValues();
         }
 
-        public void Hide()
+        public override void Hide()
         {
             Fields.Hide();
             Fields.LockCheckBox.Hide();
@@ -93,7 +144,7 @@ namespace grapher
             Label.Show();
         }
 
-        public void Show(string name)
+        public override void Show(string name)
         {
             SetName(name);
 

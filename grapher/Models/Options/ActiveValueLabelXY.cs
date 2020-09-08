@@ -47,6 +47,19 @@
             }
         }
 
+        public int Height
+        {
+            get
+            {
+                return X.Height;
+            }
+            set
+            {
+                X.Height = value;
+                Y.Height = value;
+            }
+        }
+
         private int FullWidth { get; set; }
 
         private int ShortenedWidth { get; set; }
@@ -97,9 +110,9 @@
             Combined = false;
         }
 
-        public void AlignActiveValues(int width)
+        public void AlignActiveValues()
         {
-            Align(width);
+            Align(X.CenteringLabel.Width);
 
             if (Combined)
             {

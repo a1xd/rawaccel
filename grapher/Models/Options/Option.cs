@@ -19,10 +19,12 @@ namespace grapher
             Left = left;
 
             label.AutoSize = false;
-            label.Width = Field.Left - left - Constants.OptionLabelBoxSeperation;
             label.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            label.Width = Field.Left - left - Constants.OptionLabelBoxSeperation;
+            label.Height = Field.Height;
 
             ActiveValueLabel.Left = Field.Left + Field.Width;
+            ActiveValueLabel.Height = Field.Height;
         }
 
         public Option(
@@ -162,9 +164,9 @@ namespace grapher
             Show();
         }
 
-        public override void AlignActiveValues(int width)
+        public override void AlignActiveValues()
         {
-            ActiveValueLabel.Width = width;
+            ActiveValueLabel.Align();
         }
 
         #endregion Methods
