@@ -179,6 +179,7 @@ namespace grapher.Models.Options
             OptionSetX.SetTitleMode("X = Y");
             OptionSetY.Hide();
             AccelCharts.SetWidened();
+            SetActiveTitlesByComponents();
         }
 
         public void ShowByComponentAsTwoSets()
@@ -231,6 +232,13 @@ namespace grapher.Models.Options
             LockXYLabel.Left = OptionSetX.ActiveValuesTitle.Left + OptionSetX.ActiveValuesTitle.Width;
             Sensitivity.Fields.LockCheckBox.Left = LockXYLabel.Left + LockXYLabel.Width / 2 - Sensitivity.Fields.LockCheckBox.Width / 2;
             ByComponentVectorXYLock.Left = Sensitivity.Fields.LockCheckBox.Left;
+            AlignActiveValues();
+        }
+
+        private void SetActiveTitlesByComponents()
+        {
+            OptionSetY.ActiveValuesTitle.Left = OptionSetY.Options.Left + OptionSetY.Options.Width;
+            OptionSetY.ActiveValuesTitle.Width = Constants.NarrowChartLeft - OptionSetY.ActiveValuesTitle.Left;
             AlignActiveValues();
         }
 
