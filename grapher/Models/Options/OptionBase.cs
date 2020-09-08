@@ -14,7 +14,14 @@ namespace grapher.Models.Options
         
         public abstract int Left { get; set; }
 
-        public abstract int Width { get; }
+        public abstract int Width { get; set; }
+
+        public int Beneath { 
+            get
+            {
+                return Top + Height + Constants.OptionVerticalSeperation;
+            }
+        }
 
         public abstract bool Visible { get; }
 
@@ -24,7 +31,7 @@ namespace grapher.Models.Options
 
         public virtual void SnapTo(IOption option)
         {
-            Top = option.Top + option.Height + Constants.OptionVerticalSeperation;
+            Top = option.Beneath;
         }
     }
 }

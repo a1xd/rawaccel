@@ -103,6 +103,10 @@ namespace grapher.Models.Options
             {
                 return OffsetOption.Width;
             }
+            set
+            {
+                OffsetOption.Width = value;
+            }
         }
 
         public override bool Visible

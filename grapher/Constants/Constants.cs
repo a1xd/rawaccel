@@ -11,18 +11,6 @@ namespace grapher
     {
         #region Constants
 
-        /// <summary> Vertical separation between charts, in pixels. </summary>
-        public const int ChartSeparationVertical = 10;
-
-        /// <summary> Default name of settings file. </summary>
-        public const string DefaultSettingsFileName = @"settings.json";
-
-        /// <summary> Needed to show full contents in form. Unsure why. </summary>
-        public const int FormHeightPadding = 35;
-
-        /// <summary> Format string for gain cap active value label. </summary>
-        public const string GainCapFormatString = "0.##";
-
         /// <summary> DPI by which charts are scaled if none is set by user. </summary>
         public const int DefaultDPI = 1200;
 
@@ -38,23 +26,17 @@ namespace grapher
         /// <summary> Ratio of max (X, Y) used in "by component" calulations to those used in "whole vector" calculations. </summary>
         public const double XYToCombinedRatio = 1.4;
 
-        /// <summary> Separation between X and Y active value labels, in pixels. </summary>
-        public const int ActiveLabelXYSeparation = 2;
-
-        /// <summary> Format string for shortened x and y textboxes. </summary>
-        public const string ShortenedFormatString = "0.###";
-
-        /// <summary> Format string for default active value labels. </summary>
-        public const string DefaultActiveValueFormatString = "0.######";
-
-        /// <summary> Format string for default textboxes. </summary>
-        public const string DefaultFieldFormatString = "0.#########";
-
         /// <summary> Possible options to display in a layout. </summary>
         public const int PossibleOptionsCount = 6;
 
-        /// <summary> Possible x/y options to display in a layout. </summary>
-        public const int PossibleOptionsXYCount = 0;
+        /// <summary> Separation between X and Y active value labels, in pixels. </summary>
+        public const int ActiveLabelXYSeparation = 2;
+
+        /// <summary> Vertical separation between charts, in pixels. </summary>
+        public const int ChartSeparationVertical = 10;
+
+        /// <summary> Needed to show full contents in form. Unsure why. </summary>
+        public const int FormHeightPadding = 35;
 
         /// <summary> Horizontal separation between charts, in pixels. </summary>
         public const int ChartSeparationHorizontal = 10;
@@ -68,14 +50,33 @@ namespace grapher
         /// <summary> Default horizontal separation between an option's label and box, in pixels. </summary>
         public const int OptionVerticalSeperation = 4;
 
+        /// <summary> Horizonatl separation between left side of single dropdown and left side of labels beneath dropdown </summary>
+        public const int DropDownLeftSeparation = 10;
+
+        /// <summary> Format string for shortened x and y textboxes. </summary>
+        public const string ShortenedFormatString = "0.###";
+
+        /// <summary> Format string for default active value labels. </summary>
+        public const string DefaultActiveValueFormatString = "0.######";
+
+        /// <summary> Format string for default textboxes. </summary>
+        public const string DefaultFieldFormatString = "0.#########";
+
         /// <summary> Format string for shortened x and y fields. </summary>
         public const string ShortenedFieldFormatString = "0.###";
+
+        /// <summary> Format string for gain cap active value label. </summary>
+        public const string GainCapFormatString = "0.##";
 
         /// <summary> Format string for shortened x and y dropdowns. </summary>
         public const string AccelDropDownDefaultFullText = "Acceleration Type";
 
         /// <summary> Format string for default dropdowns. </summary>
         public const string AccelDropDownDefaultShortText = "Accel Type";
+
+        /// <summary> Default name of settings file. </summary>
+        public const string DefaultSettingsFileName = @"settings.json";
+
         #endregion Constants
 
         #region ReadOnly

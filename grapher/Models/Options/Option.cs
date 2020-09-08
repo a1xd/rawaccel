@@ -110,6 +110,10 @@ namespace grapher
             {
                 return Field.Left + Field.Width - Label.Left;
             }
+            set
+            {
+                Field.Width = value;
+            }
         }
 
         public override bool Visible

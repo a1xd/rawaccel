@@ -15,6 +15,8 @@ namespace grapher.Models.Options
         int Left { get; }
 
         int Width { get; }
+
+        int Beneath { get;  }
         
         bool Visible { get; }
 

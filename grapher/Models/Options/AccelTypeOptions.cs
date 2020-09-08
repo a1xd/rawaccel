@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace grapher
 {
-    public class AccelTypeOptions
+    public class AccelTypeOptions : OptionBase
     {
         #region Fields
 
@@ -102,7 +102,7 @@ namespace grapher
 
         private IEnumerable<OptionBase> Options { get; }
 
-        public int Top 
+        public override int Top 
         {
             get
             {
@@ -115,19 +115,15 @@ namespace grapher
             }
         }
 
-        public int Height
+        public override int Height
         {
             get
             {
                 return AccelDropdown.Height;
             } 
-            set
-            {
-                AccelDropdown.Height = value;
-            }
         }
 
-        public int Left
+        public override int Left
         {
             get
             {
@@ -139,7 +135,7 @@ namespace grapher
             }
         }
 
-        public int Width
+        public override int Width
         {
             get
             {
@@ -151,13 +147,21 @@ namespace grapher
             }
         }
 
+        public override bool Visible
+        {
+            get
+            {
+                return AccelDropdown.Visible;
+            }
+        }
+
         private bool ShowingDefault { get; set; }
 
         #endregion Properties
 
         #region Methods
 
-        public void Hide()
+        public override void Hide()
         {
             AccelDropdown.Hide();
 
@@ -173,6 +177,11 @@ namespace grapher
         {
             AccelDropdown.Show();
             Layout();
+        }
+
+        public override void Show(string name)
+        {
+            Show();
         }
 
         public void SetActiveValues(int index, AccelArgs args)
@@ -195,8 +204,8 @@ namespace grapher
                 AccelDropdown.Text = Constants.AccelDropDownDefaultFullText;
             }
 
-            Left = Acceleration.Left;
-            Width = Acceleration.Width;
+            Left = Acceleration.Left + Constants.DropDownLeftSeparation;
+            Width = Acceleration.Width - Constants.DropDownLeftSeparation;
         }
 
         public void ShowShortened()
@@ -236,14 +245,14 @@ namespace grapher
         private void OnIndexChanged(object sender, EventArgs e)
         {
             var accelerationTypeString = AccelDropdown.SelectedItem.ToString();
-            Layout(accelerationTypeString);
+            Layout(accelerationTypeString, Beneath);
             ShowingDefault = false;
         }
 
-        private void Layout(string type)
+        private void Layout(string type, int top = -1)
         {
             AccelerationType = AccelerationTypes[type];
-            Layout();
+            Layout(top);
         }
 
         private void Layout(int top = -1)

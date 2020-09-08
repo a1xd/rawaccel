@@ -114,6 +114,10 @@ namespace grapher
             {
                 return CapOption.Width;
             }
+            set
+            {
+                CapOption.Width = value;
+            }
         }
 
         public override bool Visible
