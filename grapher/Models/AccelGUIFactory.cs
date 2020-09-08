@@ -268,7 +268,8 @@ namespace grapher.Models
                 byVectorComponentToolStripMenuItem,
                 byComponentXYLock,
                 optionsSetX,
-                optionsSetY);
+                optionsSetY,
+                accelCharts);
 
             var accelCalculator = new AccelCalculator(
                 new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI),

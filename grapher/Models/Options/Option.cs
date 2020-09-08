@@ -112,7 +112,6 @@ namespace grapher
             }
             set
             {
-                Field.Width = value;
             }
         }
 

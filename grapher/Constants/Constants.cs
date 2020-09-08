@@ -50,8 +50,19 @@ namespace grapher
         /// <summary> Default horizontal separation between an option's label and box, in pixels. </summary>
         public const int OptionVerticalSeperation = 4;
 
-        /// <summary> Horizonatl separation between left side of single dropdown and left side of labels beneath dropdown </summary>
+        /// <summary> Horizontal separation between left side of single dropdown and left side of labels beneath dropdown </summary>
         public const int DropDownLeftSeparation = 10;
+
+        /// <summary> Width of charts when widened </summary>
+        public const int WideChartWidth = 810;
+
+        /// <summary> Width of charts when widened </summary>
+        public const int WideChartLeft = 270;
+
+        /// <summary> Width of charts when narrowed </summary>
+        public const int NarrowChartWidth = 698;
+
+        public const int NarrowChartLeft = 482;
 
         /// <summary> Format string for shortened x and y textboxes. </summary>
         public const string ShortenedFormatString = "0.###";

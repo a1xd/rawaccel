@@ -132,6 +132,22 @@ namespace grapher
             }
         }
 
+        public void SetWidened()
+        {
+            SensitivityChart.SetWidened();
+            VelocityChart.SetWidened();
+            GainChart.SetWidened();
+            UpdateFormWidth();
+        }
+
+        public void SetNarrowed()
+        {
+            SensitivityChart.SetNarrowed();
+            VelocityChart.SetNarrowed();
+            GainChart.SetNarrowed();
+            UpdateFormWidth();
+        }
+
         private void OnEnableClick(object sender, EventArgs e)
         {
             EnableVelocityAndGain.Checked = !EnableVelocityAndGain.Checked;

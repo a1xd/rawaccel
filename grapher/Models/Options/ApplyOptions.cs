@@ -18,7 +18,8 @@ namespace grapher.Models.Options
             ToolStripMenuItem byComponentMenuItem,
             CheckBox byComponentVectorXYLock,
             AccelOptionSet optionSetX,
-            AccelOptionSet optionSetY)
+            AccelOptionSet optionSetY,
+            AccelCharts accelCharts)
         {
             WholeVectorMenuItem = wholeVectorMenuItem;
             ByComponentVectorMenuItem = byComponentMenuItem;
@@ -32,6 +33,7 @@ namespace grapher.Models.Options
             ByComponentVectorXYLock = byComponentVectorXYLock;
             OptionSetX = optionSetX;
             OptionSetY = optionSetY;
+            AccelCharts = accelCharts;
 
             ByComponentVectorXYLock.CheckedChanged += new System.EventHandler(OnByComponentXYLockChecked);
             ByComponentVectorXYLock.Checked = true;
@@ -52,6 +54,8 @@ namespace grapher.Models.Options
         public AccelOptionSet OptionSetX { get; }
 
         public AccelOptionSet OptionSetY { get; }
+
+        public AccelCharts AccelCharts { get; }
 
         public bool IsWhole { get; private set; }
 
@@ -130,12 +134,14 @@ namespace grapher.Models.Options
         {
             OptionSetX.SetRegularMode();
             OptionSetY.Hide();
+            AccelCharts.SetWidened();
         }
 
         public void ShowByComponentAsOneSet()
         {
             OptionSetX.SetTitleMode("X = Y");
             OptionSetY.Hide();
+            AccelCharts.SetWidened();
         }
 
         public void ShowByComponentAsTwoSets()
@@ -143,6 +149,7 @@ namespace grapher.Models.Options
             OptionSetX.SetTitleMode("X");
             OptionSetY.SetTitleMode("Y");
             OptionSetY.Show();
+            AccelCharts.SetNarrowed();
         }
 
         public void ShowByComponentSet()
