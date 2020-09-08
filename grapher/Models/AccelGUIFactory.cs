@@ -93,7 +93,8 @@ namespace grapher.Models
                                 new ChartXY(accelerationChart, accelerationChartY),
                                 new ChartXY(velocityChart, velocityChartY),
                                 new ChartXY(gainChart, gainChartY),
-                                showVelocityGainToolStripMenuItem);
+                                showVelocityGainToolStripMenuItem,
+                                writeButton);
 
             var sensitivity = new OptionXY(
                 sensitivityBoxX,

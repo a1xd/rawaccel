@@ -15,7 +15,8 @@ namespace grapher
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            ToolStripMenuItem enableVelocityAndGain)
+            ToolStripMenuItem enableVelocityAndGain,
+            Button writeButton)
         {
             Estimated = new EstimatedPoints();
             EstimatedX = new EstimatedPoints();
@@ -27,6 +28,7 @@ namespace grapher
             VelocityChart = velocityChart;
             GainChart = gainChart;
             EnableVelocityAndGain = enableVelocityAndGain;
+            WriteButton = writeButton;
 
             SensitivityChart.SetPointBinds(Estimated.Sensitivity, EstimatedX.Sensitivity, EstimatedY.Sensitivity);
             VelocityChart.SetPointBinds(Estimated.Velocity, EstimatedX.Velocity, EstimatedY.Velocity);
@@ -62,6 +64,8 @@ namespace grapher
         public ChartXY GainChart { get; }
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
+
+        private Button WriteButton { get; }
 
         public AccelData AccelData { get; }
 
@@ -132,6 +136,7 @@ namespace grapher
             VelocityChart.SetWidened();
             GainChart.SetWidened();
             UpdateFormWidth();
+            AlignWriteButton();
         }
 
         public void SetNarrowed()
@@ -140,6 +145,7 @@ namespace grapher
             VelocityChart.SetNarrowed();
             GainChart.SetNarrowed();
             UpdateFormWidth();
+            AlignWriteButton();
         }
 
         private void OnEnableClick(object sender, EventArgs e)
@@ -209,6 +215,11 @@ namespace grapher
         private void UpdateFormWidth()
         {
             ContaingForm.Width = SensitivityChart.Left + SensitivityChart.Width;
+        }
+
+        private void AlignWriteButton()
+        {
+            WriteButton.Left = SensitivityChart.Left / 2 - WriteButton.Width / 2;
         }
 
         #endregion Methods
