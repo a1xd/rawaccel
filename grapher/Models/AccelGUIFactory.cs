@@ -70,7 +70,7 @@ namespace grapher.Models
             Label constantTwoLabelY,
             Label constantThreeLabelX,
             Label constantThreeLabelY,
-            Label activeValueTitle,
+            Label activeValueTitleX,
             Label activeValueTitleY,
             Label sensitivityActiveXLabel,
             Label sensitivityActiveYLabel,
@@ -108,8 +108,8 @@ namespace grapher.Models
                 1,
                 sensitivityLabel,
                 new ActiveValueLabelXY(
-                    new ActiveValueLabel(sensitivityActiveXLabel, activeValueTitle),
-                    new ActiveValueLabel(sensitivityActiveYLabel, activeValueTitle)),
+                    new ActiveValueLabel(sensitivityActiveXLabel, activeValueTitleX),
+                    new ActiveValueLabel(sensitivityActiveYLabel, activeValueTitleX)),
                 "Sensitivity");
 
             var rotation = new Option(
@@ -118,7 +118,7 @@ namespace grapher.Models
                 0,
                 rotationLabel,
                 0,
-                new ActiveValueLabel(rotationActiveLabel, activeValueTitle),
+                new ActiveValueLabel(rotationActiveLabel, activeValueTitleX),
                 "Rotation");
 
             var optionSetYLeft = rotation.Left + rotation.Width;
@@ -129,7 +129,7 @@ namespace grapher.Models
                 1,
                 weightLabelX,
                 0,
-                new ActiveValueLabel(weightActiveXLabel, activeValueTitle),
+                new ActiveValueLabel(weightActiveXLabel, activeValueTitleX),
                 "Weight");
 
             var weightY = new Option(
@@ -138,7 +138,7 @@ namespace grapher.Models
                 1,
                 weightLabelY,
                 optionSetYLeft,
-                new ActiveValueLabel(weightActiveYLabel, activeValueTitle),
+                new ActiveValueLabel(weightActiveYLabel, activeValueTitleY),
                 "Weight");
 
             var capX = new Option(
@@ -147,7 +147,7 @@ namespace grapher.Models
                 0,
                 capLabelX,
                 0,
-                new ActiveValueLabel(capActiveXLabel, activeValueTitle),
+                new ActiveValueLabel(capActiveXLabel, activeValueTitleX),
                 "Cap");
 
             var capY = new Option(
@@ -156,7 +156,7 @@ namespace grapher.Models
                 0,
                 capLabelY,
                 optionSetYLeft,
-                new ActiveValueLabel(capActiveYLabel, activeValueTitle),
+                new ActiveValueLabel(capActiveYLabel, activeValueTitleY),
                 "Cap");
 
             var offsetX = new Option(
@@ -165,7 +165,7 @@ namespace grapher.Models
                 0,
                 offsetLabelX,
                 0,
-                new ActiveValueLabel(offsetActiveLabelX, activeValueTitle),
+                new ActiveValueLabel(offsetActiveLabelX, activeValueTitleX),
                 "Offset");
 
             var offsetY = new Option(
@@ -174,7 +174,7 @@ namespace grapher.Models
                 0,
                 offsetLabelY,
                 optionSetYLeft,
-                new ActiveValueLabel(offsetActiveLabelY, activeValueTitle),
+                new ActiveValueLabel(offsetActiveLabelY, activeValueTitleY),
                 "Offset");
 
             var offsetOptionsX = new OffsetOptions(
@@ -190,37 +190,37 @@ namespace grapher.Models
             var accelerationX = new Option(
                 new Field(accelerationBoxX, form, 0),
                 constantOneLabelX,
-                new ActiveValueLabel(accelerationActiveLabelX, activeValueTitle),
+                new ActiveValueLabel(accelerationActiveLabelX, activeValueTitleX),
                 0);
 
             var accelerationY = new Option(
                 new Field(accelerationBoxY, form, 0),
                 constantOneLabelY,
-                new ActiveValueLabel(accelerationActiveLabelY, activeValueTitle),
+                new ActiveValueLabel(accelerationActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
             var limitOrExponentX = new Option(
                 new Field(limitBoxX, form, 2),
                 constantTwoLabelX,
-                new ActiveValueLabel(limitExpActiveLabelX, activeValueTitle),
+                new ActiveValueLabel(limitExpActiveLabelX, activeValueTitleX),
                 0);
 
             var limitOrExponentY = new Option(
                 new Field(limitBoxY, form, 2),
                 constantTwoLabelY,
-                new ActiveValueLabel(limitExpActiveLabelY, activeValueTitle),
+                new ActiveValueLabel(limitExpActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
             var midpointX = new Option(
                 new Field(midpointBoxX, form, 0),
                 constantThreeLabelX,
-                new ActiveValueLabel(midpointActiveLabelX, activeValueTitle),
+                new ActiveValueLabel(midpointActiveLabelX, activeValueTitleY),
                 0);
 
             var midpointY = new Option(
                 new Field(midpointBoxY, form, 0),
                 constantThreeLabelY,
-                new ActiveValueLabel(midpointActiveLabelY, activeValueTitle),
+                new ActiveValueLabel(midpointActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
             var capOptionsX = new CapOptions(
@@ -242,7 +242,7 @@ namespace grapher.Models
                 limitOrExponentX,
                 midpointX,
                 writeButton,
-                new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitle));
+                new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitleX));
 
             var accelerationOptionsY = new AccelTypeOptions(
                 accelTypeDropY,
@@ -253,11 +253,11 @@ namespace grapher.Models
                 limitOrExponentY,
                 midpointY,
                 writeButton,
-                new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitle));
+                new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitleY));
 
             var optionsSetX = new AccelOptionSet(
                 optionSetXTitle,
-                activeValueTitle,
+                activeValueTitleX,
                 rotationBox.Top + rotationBox.Height + Constants.OptionVerticalSeperation,
                 accelerationOptionsX);
 
