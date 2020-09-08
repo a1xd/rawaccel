@@ -1,33 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace grapher.Models.Options
 {
     public class ActiveValueLabel
     {
-        public const string DefaultFormatString = "0.######";
-        public static readonly Color ActiveValueFontColor = Color.FromArgb(255, 65, 65, 65);
+        #region Constants
+
+
+        #endregion Constants
+
+        #region Fields
 
         private string _prefix;
         private string _value;
 
+        #endregion Fields
+
+        #region Constructors
+
         public ActiveValueLabel(Label valueLabel, Label centeringLabel)
         {
             ValueLabel = valueLabel;
-            ValueLabel.ForeColor = ActiveValueFontColor;
-            Left = centeringLabel.Left;
-            Width = centeringLabel.Width;
             ValueLabel.AutoSize = false;
             ValueLabel.TextAlign = ContentAlignment.MiddleCenter;
+            ValueLabel.ForeColor = Constants.ActiveValueFontColor;
 
-            FormatString = DefaultFormatString;
+            CenteringLabel = centeringLabel;
+            Align();
+
+            FormatString = Constants.DefaultActiveValueFormatString;
             Prefix = string.Empty;
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Label ValueLabel { get; }
 
@@ -79,6 +87,37 @@ namespace grapher.Models.Options
             }
         }
 
+        public int Top
+        {
+            get
+            {
+                return ValueLabel.Top;
+            }
+            set
+            {
+                ValueLabel.Top = value;
+            }
+        }
+
+        public int Height
+        {
+            get 
+            {
+                return ValueLabel.Height;
+            }
+
+            set
+            {
+                ValueLabel.Height = value;
+            }
+        }
+
+        public Label CenteringLabel { get; }
+
+        #endregion Properties
+
+        #region Methods
+
         public void Hide()
         {
             ValueLabel.Hide();
@@ -103,5 +142,13 @@ namespace grapher.Models.Options
         {
             ValueLabel.Text = string.IsNullOrWhiteSpace(Prefix) ? Value: $"{Prefix}: {Value}";
         }
+
+        public void Align()
+        {
+            Left = CenteringLabel.Left;
+            Width = CenteringLabel.Width;
+        }
+
+        #endregion Methods
     }
 }

@@ -1,11 +1,4 @@
 ﻿using grapher.Models.Serialized;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 
 namespace grapher.Layouts
 {
@@ -16,9 +9,14 @@ namespace grapher.Layouts
         {
             Name = "Default";
             Index = (int)AccelMode.noaccel;
-            ShowOptions = new bool[] { true, true, true, true }; 
-            OptionNames = new string[] { Offset, Acceleration, $"{Limit}\\{Exponent}", Midpoint };
             ButtonEnabled = false;
+
+            AccelLayout = new OptionLayout(true, Acceleration);
+            CapLayout = new OptionLayout(true, Cap);
+            WeightLayout = new OptionLayout(true, Weight);
+            OffsetLayout = new OptionLayout(true, Offset);
+            LimExpLayout = new OptionLayout(true, $"{Limit}\\{Exponent}");
+            MidpointLayout = new OptionLayout(true, Midpoint);
         }
     }
 }

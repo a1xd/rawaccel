@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace grapher.Models.Options
 {
-    public class OffsetOptions
+    public class OffsetOptions : OptionBase
     {
         public OffsetOptions(
             ToolStripMenuItem velocityGainOffsetCheck,
@@ -65,6 +61,73 @@ namespace grapher.Models.Options
             }
         }
 
+        public override int Top
+        {
+            get
+            {
+                return OffsetOption.Top;
+            }
+            set
+            {
+                OffsetOption.Top = value;
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                return OffsetOption.Height;
+            }
+        }
+
+        public override int Left
+        {
+            get
+            {
+                return OffsetOption.Left;
+            }
+            set
+            {
+                OffsetOption.Left = value;
+            }
+        }
+
+        public override int Width
+        {
+            get
+            {
+                return OffsetOption.Width;
+            }
+            set
+            {
+                OffsetOption.Width = value;
+            }
+        }
+
+        public override bool Visible
+        {
+            get
+            {
+                return OffsetOption.Visible;
+            }
+        }
+
+        public override void Hide()
+        {
+            OffsetOption.Hide();
+        }
+
+        public void Show()
+        {
+            OffsetOption.Show();
+        }
+
+        public override void Show(string name)
+        {
+            OffsetOption.Show(name);
+        }
+
         public void SetActiveValue(double offset, double legacyOffset)
         {
             if (offset > 0)
@@ -75,6 +138,11 @@ namespace grapher.Models.Options
             {
                 OffsetOption.SetActiveValue(legacyOffset);
             }
+        }
+
+        public override void AlignActiveValues()
+        {
+            OffsetOption.AlignActiveValues();
         }
 
         public void OnVelocityGainOffsetClick(object sender, EventArgs e)

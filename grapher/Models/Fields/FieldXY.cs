@@ -1,38 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace grapher
 {
     public class FieldXY
     {
-        public const int DefaultSeparation = 4;
+        #region Constructors
 
-        public const string ShortenedFormatString = "0.###";
-
-        public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData, AccelCharts accelCharts)
+        public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData)
         {
             XField = new Field(xBox, containingForm, defaultData);
             YField = new Field(yBox, containingForm, defaultData);
-            YField.FormatString = ShortenedFormatString;
+            YField.FormatString = Constants.ShortenedFormatString;
             LockCheckBox = lockCheckBox;
             LockCheckBox.CheckedChanged += new System.EventHandler(CheckChanged);
-            AccelCharts = accelCharts;
 
-            XField.Box.Width = (YField.Box.Left + YField.Box.Width - XField.Box.Left - DefaultSeparation) / 2;
+            XField.Box.Width = (YField.Box.Left + YField.Box.Width - XField.Box.Left - Constants.DefaultFieldSeparation) / 2;
             YField.Box.Width = XField.Box.Width;
 
             DefaultWidthX = XField.Box.Width;
             DefaultWidthY = YField.Box.Width;
 
-            YField.Box.Left = XField.Box.Left + XField.Box.Width + DefaultSeparation;
+            YField.Box.Left = XField.Box.Left + XField.Box.Width + Constants.DefaultFieldSeparation;
 
             CombinedWidth = DefaultWidthX + DefaultWidthY + YField.Box.Left - (XField.Box.Left + DefaultWidthX);
             SetCombined();
         }
+
+        #endregion Constructors
+
+        #region Properties
+
         public double X
         {
             get => XField.Data;
@@ -59,7 +57,58 @@ namespace grapher
 
         public Field YField { get; }
 
-        private AccelCharts AccelCharts { get; }
+        public int CombinedWidth { get; }
+
+        public int Left {
+            get
+            {
+                return XField.Left;
+            }
+            set
+            {
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return CombinedWidth;
+            }
+            set
+            {
+            }
+        }
+
+        public int Top
+        {
+            get
+            {
+                return XField.Top;
+            }
+            set
+            {
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return XField.Height;
+            }
+            set
+            {
+            }
+        }
+
+        public bool Visible
+        {
+            get
+            {
+                return XField.Box.Visible;
+            }
+        }
 
         private bool Combined { get; set; }
 
@@ -67,7 +116,10 @@ namespace grapher
 
         private int DefaultWidthY { get; }
 
-        private int CombinedWidth { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         private void CheckChanged(object sender, EventArgs e)
         {
@@ -79,8 +131,6 @@ namespace grapher
             {
                 SetSeparate();
             }
-
-            AccelCharts.RefreshXY();
         }
 
         public void SetCombined()
@@ -89,7 +139,7 @@ namespace grapher
             YField.SetToUnavailable();
             YField.Box.Hide();
             XField.Box.Width = CombinedWidth;
-            XField.FormatString = Field.DefaultFormatString;
+            XField.FormatString = Constants.DefaultFieldFormatString;
         }
 
         public void SetSeparate()
@@ -99,7 +149,7 @@ namespace grapher
             XField.Box.Width = DefaultWidthX;
             YField.Box.Width = DefaultWidthY;
 
-            XField.FormatString = ShortenedFormatString;
+            XField.FormatString = Constants.ShortenedFormatString;
 
             if (XField.State == Field.FieldState.Default)
             {
@@ -131,5 +181,7 @@ namespace grapher
             XField.Box.Hide();
             YField.Box.Hide();
         }
+
+        #endregion Methods
     }
 }

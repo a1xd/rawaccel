@@ -1,25 +1,24 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace grapher.Models.Serialized
 {
     [Serializable]
     public class RawAccelSettings
     {
-        public const string DefaultSettingsFileName = @"settings.json";
+        #region Fields
+
         public static readonly string ExecutingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        public static readonly string DefaultSettingsFile = Path.Combine(ExecutingDirectory, DefaultSettingsFileName);
+        public static readonly string DefaultSettingsFile = Path.Combine(ExecutingDirectory, Constants.DefaultSettingsFileName);
         public static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
             MissingMemberHandling = MissingMemberHandling.Error,
         };
+
+        #endregion Fields
+
+        #region Constructors
 
         public RawAccelSettings() { }
 
@@ -31,9 +30,17 @@ namespace grapher.Models.Serialized
             GUISettings = guiSettings;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public GUISettings GUISettings { get; set; }
 
         public DriverSettings AccelerationSettings { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public static RawAccelSettings Load()
         {
@@ -75,5 +82,7 @@ namespace grapher.Models.Serialized
         {
             File.WriteAllText(file, JsonConvert.SerializeObject(this, Formatting.Indented));
         }
+
+        #endregion Methods
     }
 }

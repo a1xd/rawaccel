@@ -55,30 +55,28 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.accelTypeDrop = new System.Windows.Forms.ComboBox();
+            this.accelTypeDropX = new System.Windows.Forms.ComboBox();
             this.sensitivityBoxX = new System.Windows.Forms.TextBox();
             this.sensitivityLabel = new System.Windows.Forms.Label();
             this.rotationBox = new System.Windows.Forms.TextBox();
             this.rotationLabel = new System.Windows.Forms.Label();
-            this.accelerationBox = new System.Windows.Forms.TextBox();
-            this.constantOneLabel = new System.Windows.Forms.Label();
+            this.accelerationBoxX = new System.Windows.Forms.TextBox();
+            this.constantOneLabelX = new System.Windows.Forms.Label();
             this.capBoxX = new System.Windows.Forms.TextBox();
-            this.capLabel = new System.Windows.Forms.Label();
-            this.weightBoxFirst = new System.Windows.Forms.TextBox();
-            this.weightLabel = new System.Windows.Forms.Label();
-            this.weightBoxSecond = new System.Windows.Forms.TextBox();
-            this.limitBox = new System.Windows.Forms.TextBox();
-            this.constantTwoLabel = new System.Windows.Forms.Label();
-            this.midpointBox = new System.Windows.Forms.TextBox();
-            this.constantThreeLabel = new System.Windows.Forms.Label();
-            this.offsetBox = new System.Windows.Forms.TextBox();
-            this.offsetLabel = new System.Windows.Forms.Label();
+            this.capLabelX = new System.Windows.Forms.Label();
+            this.weightBoxX = new System.Windows.Forms.TextBox();
+            this.weightLabelX = new System.Windows.Forms.Label();
+            this.weightBoxY = new System.Windows.Forms.TextBox();
+            this.limitBoxX = new System.Windows.Forms.TextBox();
+            this.constantTwoLabelX = new System.Windows.Forms.Label();
+            this.midpointBoxX = new System.Windows.Forms.TextBox();
+            this.constantThreeLabelX = new System.Windows.Forms.Label();
+            this.offsetBoxX = new System.Windows.Forms.TextBox();
+            this.offsetLabelX = new System.Windows.Forms.Label();
             this.writeButton = new System.Windows.Forms.Button();
             this.sensitivityBoxY = new System.Windows.Forms.TextBox();
             this.capBoxY = new System.Windows.Forms.TextBox();
             this.sensXYLock = new System.Windows.Forms.CheckBox();
-            this.capXYLock = new System.Windows.Forms.CheckBox();
-            this.weightXYLock = new System.Windows.Forms.CheckBox();
             this.LockXYLabel = new System.Windows.Forms.Label();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -95,6 +93,12 @@ namespace grapher
             this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gainCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.legacyCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.offsetStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gainOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.legacyOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.wholeVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.byVectorComponentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AccelerationChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -105,18 +109,36 @@ namespace grapher
             this.SensitivityActiveXLabel = new System.Windows.Forms.Label();
             this.SensitivityActiveYLabel = new System.Windows.Forms.Label();
             this.RotationActiveLabel = new System.Windows.Forms.Label();
-            this.AccelTypeActiveLabel = new System.Windows.Forms.Label();
-            this.AccelerationActiveLabel = new System.Windows.Forms.Label();
+            this.AccelTypeActiveLabelX = new System.Windows.Forms.Label();
+            this.AccelerationActiveLabelX = new System.Windows.Forms.Label();
             this.CapActiveXLabel = new System.Windows.Forms.Label();
             this.WeightActiveXLabel = new System.Windows.Forms.Label();
             this.WeightActiveYLabel = new System.Windows.Forms.Label();
             this.CapActiveYLabel = new System.Windows.Forms.Label();
-            this.OffsetActiveLabel = new System.Windows.Forms.Label();
-            this.LimitExpActiveLabel = new System.Windows.Forms.Label();
-            this.MidpointActiveLabel = new System.Windows.Forms.Label();
-            this.offsetStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gainOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.legacyOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OffsetActiveXLabel = new System.Windows.Forms.Label();
+            this.LimitExpActiveXLabel = new System.Windows.Forms.Label();
+            this.MidpointActiveXLabel = new System.Windows.Forms.Label();
+            this.accelerationBoxY = new System.Windows.Forms.TextBox();
+            this.offsetBoxY = new System.Windows.Forms.TextBox();
+            this.limitBoxY = new System.Windows.Forms.TextBox();
+            this.midpointBoxY = new System.Windows.Forms.TextBox();
+            this.accelTypeDropY = new System.Windows.Forms.ComboBox();
+            this.AccelerationActiveLabelY = new System.Windows.Forms.Label();
+            this.OffsetActiveYLabel = new System.Windows.Forms.Label();
+            this.LimitExpActiveYLabel = new System.Windows.Forms.Label();
+            this.MidpointActiveYLabel = new System.Windows.Forms.Label();
+            this.ByComponentXYLock = new System.Windows.Forms.CheckBox();
+            this.constantOneLabelY = new System.Windows.Forms.Label();
+            this.capLabelY = new System.Windows.Forms.Label();
+            this.weightLabelY = new System.Windows.Forms.Label();
+            this.offsetLabelY = new System.Windows.Forms.Label();
+            this.constantTwoLabelY = new System.Windows.Forms.Label();
+            this.constantThreeLabelY = new System.Windows.Forms.Label();
+            this.OptionSetXTitle = new System.Windows.Forms.Label();
+            this.OptionSetYTitle = new System.Windows.Forms.Label();
+            this.AccelTypeActiveLabelY = new System.Windows.Forms.Label();
+            this.ActiveValueTitleY = new System.Windows.Forms.Label();
+            this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
@@ -134,7 +156,7 @@ namespace grapher
             this.AccelerationChart.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.AccelerationChart.Legends.Add(legend1);
-            this.AccelerationChart.Location = new System.Drawing.Point(333, 0);
+            this.AccelerationChart.Location = new System.Drawing.Point(482, 0);
             this.AccelerationChart.Name = "AccelerationChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -147,24 +169,24 @@ namespace grapher
             series2.Name = "LastAccelVal";
             this.AccelerationChart.Series.Add(series1);
             this.AccelerationChart.Series.Add(series2);
-            this.AccelerationChart.Size = new System.Drawing.Size(723, 328);
+            this.AccelerationChart.Size = new System.Drawing.Size(698, 328);
             this.AccelerationChart.TabIndex = 0;
-            this.AccelerationChart.Text = "chart1";
+            this.AccelerationChart.Text = "Sensitivity";
             // 
-            // accelTypeDrop
+            // accelTypeDropX
             // 
-            this.accelTypeDrop.FormattingEnabled = true;
-            this.accelTypeDrop.Location = new System.Drawing.Point(24, 98);
-            this.accelTypeDrop.Name = "accelTypeDrop";
-            this.accelTypeDrop.Size = new System.Drawing.Size(151, 21);
-            this.accelTypeDrop.TabIndex = 2;
-            this.accelTypeDrop.Text = "Acceleration Type";
+            this.accelTypeDropX.FormattingEnabled = true;
+            this.accelTypeDropX.Location = new System.Drawing.Point(105, 110);
+            this.accelTypeDropX.Name = "accelTypeDropX";
+            this.accelTypeDropX.Size = new System.Drawing.Size(76, 21);
+            this.accelTypeDropX.TabIndex = 2;
+            this.accelTypeDropX.Text = "Accel Type";
             // 
             // sensitivityBoxX
             // 
             this.sensitivityBoxX.Location = new System.Drawing.Point(105, 46);
             this.sensitivityBoxX.Name = "sensitivityBoxX";
-            this.sensitivityBoxX.Size = new System.Drawing.Size(32, 20);
+            this.sensitivityBoxX.Size = new System.Drawing.Size(34, 20);
             this.sensitivityBoxX.TabIndex = 3;
             // 
             // sensitivityLabel
@@ -180,7 +202,7 @@ namespace grapher
             // 
             this.rotationBox.Location = new System.Drawing.Point(105, 72);
             this.rotationBox.Name = "rotationBox";
-            this.rotationBox.Size = new System.Drawing.Size(70, 20);
+            this.rotationBox.Size = new System.Drawing.Size(76, 20);
             this.rotationBox.TabIndex = 5;
             // 
             // rotationLabel
@@ -192,137 +214,136 @@ namespace grapher
             this.rotationLabel.TabIndex = 6;
             this.rotationLabel.Text = "Rotation";
             // 
-            // accelerationBox
+            // accelerationBoxX
             // 
-            this.accelerationBox.Location = new System.Drawing.Point(105, 125);
-            this.accelerationBox.Name = "accelerationBox";
-            this.accelerationBox.Size = new System.Drawing.Size(69, 20);
-            this.accelerationBox.TabIndex = 7;
+            this.accelerationBoxX.Location = new System.Drawing.Point(105, 137);
+            this.accelerationBoxX.Name = "accelerationBoxX";
+            this.accelerationBoxX.Size = new System.Drawing.Size(76, 20);
+            this.accelerationBoxX.TabIndex = 7;
             // 
-            // constantOneLabel
+            // constantOneLabelX
             // 
-            this.constantOneLabel.AutoSize = true;
-            this.constantOneLabel.Location = new System.Drawing.Point(24, 128);
-            this.constantOneLabel.Name = "constantOneLabel";
-            this.constantOneLabel.Size = new System.Drawing.Size(66, 13);
-            this.constantOneLabel.TabIndex = 9;
-            this.constantOneLabel.Text = "Acceleration";
-            this.constantOneLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.constantOneLabelX.AutoSize = true;
+            this.constantOneLabelX.Location = new System.Drawing.Point(24, 140);
+            this.constantOneLabelX.Name = "constantOneLabelX";
+            this.constantOneLabelX.Size = new System.Drawing.Size(66, 13);
+            this.constantOneLabelX.TabIndex = 9;
+            this.constantOneLabelX.Text = "Acceleration";
+            this.constantOneLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // capBoxX
             // 
-            this.capBoxX.Location = new System.Drawing.Point(105, 151);
+            this.capBoxX.Location = new System.Drawing.Point(105, 163);
             this.capBoxX.Name = "capBoxX";
-            this.capBoxX.Size = new System.Drawing.Size(32, 20);
+            this.capBoxX.Size = new System.Drawing.Size(76, 20);
             this.capBoxX.TabIndex = 10;
             // 
-            // capLabel
+            // capLabelX
             // 
-            this.capLabel.AutoSize = true;
-            this.capLabel.Location = new System.Drawing.Point(34, 155);
-            this.capLabel.Name = "capLabel";
-            this.capLabel.Size = new System.Drawing.Size(26, 13);
-            this.capLabel.TabIndex = 11;
-            this.capLabel.Text = "Cap";
-            this.capLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.capLabelX.AutoSize = true;
+            this.capLabelX.Location = new System.Drawing.Point(43, 166);
+            this.capLabelX.Name = "capLabelX";
+            this.capLabelX.Size = new System.Drawing.Size(26, 13);
+            this.capLabelX.TabIndex = 11;
+            this.capLabelX.Text = "Cap";
+            this.capLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // weightBoxFirst
+            // weightBoxX
             // 
-            this.weightBoxFirst.Location = new System.Drawing.Point(105, 177);
-            this.weightBoxFirst.Name = "weightBoxFirst";
-            this.weightBoxFirst.Size = new System.Drawing.Size(32, 20);
-            this.weightBoxFirst.TabIndex = 12;
+            this.weightBoxX.Location = new System.Drawing.Point(105, 189);
+            this.weightBoxX.Name = "weightBoxX";
+            this.weightBoxX.Size = new System.Drawing.Size(76, 20);
+            this.weightBoxX.TabIndex = 12;
             // 
-            // weightLabel
+            // weightLabelX
             // 
-            this.weightLabel.AutoSize = true;
-            this.weightLabel.Location = new System.Drawing.Point(34, 180);
-            this.weightLabel.Name = "weightLabel";
-            this.weightLabel.Size = new System.Drawing.Size(41, 13);
-            this.weightLabel.TabIndex = 13;
-            this.weightLabel.Text = "Weight";
-            this.weightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.weightLabelX.AutoSize = true;
+            this.weightLabelX.Location = new System.Drawing.Point(40, 192);
+            this.weightLabelX.Name = "weightLabelX";
+            this.weightLabelX.Size = new System.Drawing.Size(41, 13);
+            this.weightLabelX.TabIndex = 13;
+            this.weightLabelX.Text = "Weight";
+            this.weightLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // weightBoxSecond
+            // weightBoxY
             // 
-            this.weightBoxSecond.Location = new System.Drawing.Point(144, 177);
-            this.weightBoxSecond.Name = "weightBoxSecond";
-            this.weightBoxSecond.Size = new System.Drawing.Size(31, 20);
-            this.weightBoxSecond.TabIndex = 14;
+            this.weightBoxY.Location = new System.Drawing.Point(331, 189);
+            this.weightBoxY.Name = "weightBoxY";
+            this.weightBoxY.Size = new System.Drawing.Size(76, 20);
+            this.weightBoxY.TabIndex = 14;
             // 
-            // limitBox
+            // limitBoxX
             // 
-            this.limitBox.Location = new System.Drawing.Point(105, 229);
-            this.limitBox.Name = "limitBox";
-            this.limitBox.Size = new System.Drawing.Size(70, 20);
-            this.limitBox.TabIndex = 15;
+            this.limitBoxX.Location = new System.Drawing.Point(105, 241);
+            this.limitBoxX.Name = "limitBoxX";
+            this.limitBoxX.Size = new System.Drawing.Size(76, 20);
+            this.limitBoxX.TabIndex = 15;
             // 
-            // constantTwoLabel
+            // constantTwoLabelX
             // 
-            this.constantTwoLabel.AutoSize = true;
-            this.constantTwoLabel.Location = new System.Drawing.Point(24, 232);
-            this.constantTwoLabel.Name = "constantTwoLabel";
-            this.constantTwoLabel.Size = new System.Drawing.Size(78, 13);
-            this.constantTwoLabel.TabIndex = 16;
-            this.constantTwoLabel.Text = "Limit/Exponent";
-            this.constantTwoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.constantTwoLabelX.AutoSize = true;
+            this.constantTwoLabelX.Location = new System.Drawing.Point(24, 244);
+            this.constantTwoLabelX.Name = "constantTwoLabelX";
+            this.constantTwoLabelX.Size = new System.Drawing.Size(78, 13);
+            this.constantTwoLabelX.TabIndex = 16;
+            this.constantTwoLabelX.Text = "Limit/Exponent";
+            this.constantTwoLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // midpointBox
+            // midpointBoxX
             // 
-            this.midpointBox.Location = new System.Drawing.Point(105, 255);
-            this.midpointBox.Name = "midpointBox";
-            this.midpointBox.Size = new System.Drawing.Size(70, 20);
-            this.midpointBox.TabIndex = 17;
+            this.midpointBoxX.Location = new System.Drawing.Point(105, 267);
+            this.midpointBoxX.Name = "midpointBoxX";
+            this.midpointBoxX.Size = new System.Drawing.Size(76, 20);
+            this.midpointBoxX.TabIndex = 17;
             // 
-            // constantThreeLabel
+            // constantThreeLabelX
             // 
-            this.constantThreeLabel.AutoSize = true;
-            this.constantThreeLabel.Location = new System.Drawing.Point(31, 258);
-            this.constantThreeLabel.Name = "constantThreeLabel";
-            this.constantThreeLabel.Size = new System.Drawing.Size(47, 13);
-            this.constantThreeLabel.TabIndex = 18;
-            this.constantThreeLabel.Text = "Midpoint";
-            this.constantThreeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.constantThreeLabelX.AutoSize = true;
+            this.constantThreeLabelX.Location = new System.Drawing.Point(34, 270);
+            this.constantThreeLabelX.Name = "constantThreeLabelX";
+            this.constantThreeLabelX.Size = new System.Drawing.Size(47, 13);
+            this.constantThreeLabelX.TabIndex = 18;
+            this.constantThreeLabelX.Text = "Midpoint";
+            this.constantThreeLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // offsetBox
+            // offsetBoxX
             // 
-            this.offsetBox.Location = new System.Drawing.Point(105, 203);
-            this.offsetBox.Name = "offsetBox";
-            this.offsetBox.Size = new System.Drawing.Size(70, 20);
-            this.offsetBox.TabIndex = 19;
+            this.offsetBoxX.Location = new System.Drawing.Point(105, 215);
+            this.offsetBoxX.Name = "offsetBoxX";
+            this.offsetBoxX.Size = new System.Drawing.Size(76, 20);
+            this.offsetBoxX.TabIndex = 19;
             // 
-            // offsetLabel
+            // offsetLabelX
             // 
-            this.offsetLabel.AutoSize = true;
-            this.offsetLabel.Location = new System.Drawing.Point(34, 206);
-            this.offsetLabel.Name = "offsetLabel";
-            this.offsetLabel.Size = new System.Drawing.Size(35, 13);
-            this.offsetLabel.TabIndex = 20;
-            this.offsetLabel.Text = "Offset";
-            this.offsetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.offsetLabelX.AutoSize = true;
+            this.offsetLabelX.Location = new System.Drawing.Point(43, 218);
+            this.offsetLabelX.Name = "offsetLabelX";
+            this.offsetLabelX.Size = new System.Drawing.Size(35, 13);
+            this.offsetLabelX.TabIndex = 20;
+            this.offsetLabelX.Text = "Offset";
+            this.offsetLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // writeButton
             // 
-            this.writeButton.Location = new System.Drawing.Point(57, 281);
+            this.writeButton.Location = new System.Drawing.Point(153, 293);
             this.writeButton.Name = "writeButton";
             this.writeButton.Size = new System.Drawing.Size(102, 23);
             this.writeButton.TabIndex = 21;
             this.writeButton.Text = "Write To Driver";
             this.writeButton.UseVisualStyleBackColor = true;
-            this.writeButton.Click += new System.EventHandler(this.writeButton_Click);
             // 
             // sensitivityBoxY
             // 
-            this.sensitivityBoxY.Location = new System.Drawing.Point(143, 46);
+            this.sensitivityBoxY.Location = new System.Drawing.Point(147, 46);
             this.sensitivityBoxY.Name = "sensitivityBoxY";
-            this.sensitivityBoxY.Size = new System.Drawing.Size(32, 20);
+            this.sensitivityBoxY.Size = new System.Drawing.Size(34, 20);
             this.sensitivityBoxY.TabIndex = 22;
             // 
             // capBoxY
             // 
-            this.capBoxY.Location = new System.Drawing.Point(144, 151);
+            this.capBoxY.Location = new System.Drawing.Point(331, 163);
             this.capBoxY.Name = "capBoxY";
-            this.capBoxY.Size = new System.Drawing.Size(31, 20);
+            this.capBoxY.Size = new System.Drawing.Size(76, 20);
             this.capBoxY.TabIndex = 23;
             // 
             // sensXYLock
@@ -330,38 +351,16 @@ namespace grapher
             this.sensXYLock.AutoSize = true;
             this.sensXYLock.Checked = true;
             this.sensXYLock.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sensXYLock.Location = new System.Drawing.Point(198, 49);
+            this.sensXYLock.Location = new System.Drawing.Point(282, 46);
             this.sensXYLock.Name = "sensXYLock";
             this.sensXYLock.Size = new System.Drawing.Size(15, 14);
             this.sensXYLock.TabIndex = 24;
             this.sensXYLock.UseVisualStyleBackColor = true;
             // 
-            // capXYLock
-            // 
-            this.capXYLock.AutoSize = true;
-            this.capXYLock.Checked = true;
-            this.capXYLock.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.capXYLock.Location = new System.Drawing.Point(198, 154);
-            this.capXYLock.Name = "capXYLock";
-            this.capXYLock.Size = new System.Drawing.Size(15, 14);
-            this.capXYLock.TabIndex = 25;
-            this.capXYLock.UseVisualStyleBackColor = true;
-            // 
-            // weightXYLock
-            // 
-            this.weightXYLock.AutoSize = true;
-            this.weightXYLock.Checked = true;
-            this.weightXYLock.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.weightXYLock.Location = new System.Drawing.Point(198, 180);
-            this.weightXYLock.Name = "weightXYLock";
-            this.weightXYLock.Size = new System.Drawing.Size(15, 14);
-            this.weightXYLock.TabIndex = 26;
-            this.weightXYLock.UseVisualStyleBackColor = true;
-            // 
             // LockXYLabel
             // 
             this.LockXYLabel.AutoSize = true;
-            this.LockXYLabel.Location = new System.Drawing.Point(174, 30);
+            this.LockXYLabel.Location = new System.Drawing.Point(255, 30);
             this.LockXYLabel.Name = "LockXYLabel";
             this.LockXYLabel.Size = new System.Drawing.Size(60, 13);
             this.LockXYLabel.TabIndex = 27;
@@ -375,7 +374,7 @@ namespace grapher
             this.VelocityChart.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.VelocityChart.Legends.Add(legend2);
-            this.VelocityChart.Location = new System.Drawing.Point(333, 334);
+            this.VelocityChart.Location = new System.Drawing.Point(482, 334);
             this.VelocityChart.Name = "VelocityChart";
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -388,7 +387,7 @@ namespace grapher
             series4.Name = "LastVelocityVal";
             this.VelocityChart.Series.Add(series3);
             this.VelocityChart.Series.Add(series4);
-            this.VelocityChart.Size = new System.Drawing.Size(723, 307);
+            this.VelocityChart.Size = new System.Drawing.Size(698, 307);
             this.VelocityChart.TabIndex = 28;
             this.VelocityChart.Text = "chart1";
             // 
@@ -400,7 +399,7 @@ namespace grapher
             this.GainChart.ChartAreas.Add(chartArea3);
             legend3.Name = "Legend1";
             this.GainChart.Legends.Add(legend3);
-            this.GainChart.Location = new System.Drawing.Point(333, 647);
+            this.GainChart.Location = new System.Drawing.Point(482, 647);
             this.GainChart.Name = "GainChart";
             series5.ChartArea = "ChartArea1";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -413,7 +412,7 @@ namespace grapher
             series6.Name = "LastGainVal";
             this.GainChart.Series.Add(series5);
             this.GainChart.Series.Add(series6);
-            this.GainChart.Size = new System.Drawing.Size(723, 309);
+            this.GainChart.Size = new System.Drawing.Size(698, 309);
             this.GainChart.TabIndex = 29;
             this.GainChart.Text = "chart1";
             // 
@@ -426,7 +425,7 @@ namespace grapher
             this.startupToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1786, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1884, 24);
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -435,7 +434,8 @@ namespace grapher
             this.graphsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.graphsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showVelocityGainToolStripMenuItem,
-            this.scaleByDPIToolStripMenuItem});
+            this.scaleByDPIToolStripMenuItem,
+            this.showLastMouseMoveToolStripMenuItem});
             this.graphsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.graphsToolStripMenuItem.Name = "graphsToolStripMenuItem";
             this.graphsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
@@ -444,7 +444,7 @@ namespace grapher
             // showVelocityGainToolStripMenuItem
             // 
             this.showVelocityGainToolStripMenuItem.Name = "showVelocityGainToolStripMenuItem";
-            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.showVelocityGainToolStripMenuItem.Text = "Show Velocity && Gain";
             // 
             // scaleByDPIToolStripMenuItem
@@ -454,7 +454,7 @@ namespace grapher
             this.pollRateToolStripMenuItem,
             this.ScaleMenuItem});
             this.scaleByDPIToolStripMenuItem.Name = "scaleByDPIToolStripMenuItem";
-            this.scaleByDPIToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.scaleByDPIToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.scaleByDPIToolStripMenuItem.Text = "Scale by Mouse Settngs";
             // 
             // dPIToolStripMenuItem
@@ -495,7 +495,8 @@ namespace grapher
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.capStyleToolStripMenuItem,
-            this.offsetStyleToolStripMenuItem});
+            this.offsetStyleToolStripMenuItem,
+            this.toolStripMenuItem1});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
@@ -514,14 +515,59 @@ namespace grapher
             this.gainCapToolStripMenuItem.Checked = true;
             this.gainCapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.gainCapToolStripMenuItem.Name = "gainCapToolStripMenuItem";
-            this.gainCapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gainCapToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.gainCapToolStripMenuItem.Text = "Gain (Default)";
             // 
             // legacyCapToolStripMenuItem
             // 
             this.legacyCapToolStripMenuItem.Name = "legacyCapToolStripMenuItem";
-            this.legacyCapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.legacyCapToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.legacyCapToolStripMenuItem.Text = "Legacy";
+            // 
+            // offsetStyleToolStripMenuItem
+            // 
+            this.offsetStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gainOffsetToolStripMenuItem,
+            this.legacyOffsetToolStripMenuItem});
+            this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
+            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.offsetStyleToolStripMenuItem.Text = "Offset Style";
+            // 
+            // gainOffsetToolStripMenuItem
+            // 
+            this.gainOffsetToolStripMenuItem.Name = "gainOffsetToolStripMenuItem";
+            this.gainOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.gainOffsetToolStripMenuItem.Text = "Gain (Default)";
+            // 
+            // legacyOffsetToolStripMenuItem
+            // 
+            this.legacyOffsetToolStripMenuItem.Name = "legacyOffsetToolStripMenuItem";
+            this.legacyOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.legacyOffsetToolStripMenuItem.Text = "Legacy";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.wholeVectorToolStripMenuItem,
+            this.byVectorComponentToolStripMenuItem});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "Application Style";
+            // 
+            // wholeVectorToolStripMenuItem
+            // 
+            this.wholeVectorToolStripMenuItem.Checked = true;
+            this.wholeVectorToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.wholeVectorToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.wholeVectorToolStripMenuItem.Name = "wholeVectorToolStripMenuItem";
+            this.wholeVectorToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.wholeVectorToolStripMenuItem.Text = "Whole";
+            // 
+            // byVectorComponentToolStripMenuItem
+            // 
+            this.byVectorComponentToolStripMenuItem.Name = "byVectorComponentToolStripMenuItem";
+            this.byVectorComponentToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.byVectorComponentToolStripMenuItem.Text = "By Component";
             // 
             // startupToolStripMenuItem
             // 
@@ -548,7 +594,7 @@ namespace grapher
             this.AccelerationChartY.ChartAreas.Add(chartArea4);
             legend4.Name = "Legend1";
             this.AccelerationChartY.Legends.Add(legend4);
-            this.AccelerationChartY.Location = new System.Drawing.Point(1062, 0);
+            this.AccelerationChartY.Location = new System.Drawing.Point(1186, 0);
             this.AccelerationChartY.Name = "AccelerationChartY";
             series7.ChartArea = "ChartArea1";
             series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -561,7 +607,7 @@ namespace grapher
             series8.Name = "LastAccelVal";
             this.AccelerationChartY.Series.Add(series7);
             this.AccelerationChartY.Series.Add(series8);
-            this.AccelerationChartY.Size = new System.Drawing.Size(723, 328);
+            this.AccelerationChartY.Size = new System.Drawing.Size(698, 328);
             this.AccelerationChartY.TabIndex = 31;
             this.AccelerationChartY.Text = "chart1";
             // 
@@ -573,7 +619,7 @@ namespace grapher
             this.VelocityChartY.ChartAreas.Add(chartArea5);
             legend5.Name = "Legend1";
             this.VelocityChartY.Legends.Add(legend5);
-            this.VelocityChartY.Location = new System.Drawing.Point(1062, 334);
+            this.VelocityChartY.Location = new System.Drawing.Point(1186, 334);
             this.VelocityChartY.Name = "VelocityChartY";
             series9.ChartArea = "ChartArea1";
             series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -586,7 +632,7 @@ namespace grapher
             series10.Name = "LastVelocityVal";
             this.VelocityChartY.Series.Add(series9);
             this.VelocityChartY.Series.Add(series10);
-            this.VelocityChartY.Size = new System.Drawing.Size(723, 307);
+            this.VelocityChartY.Size = new System.Drawing.Size(698, 307);
             this.VelocityChartY.TabIndex = 32;
             this.VelocityChartY.Text = "chart1";
             // 
@@ -598,7 +644,7 @@ namespace grapher
             this.GainChartY.ChartAreas.Add(chartArea6);
             legend6.Name = "Legend1";
             this.GainChartY.Legends.Add(legend6);
-            this.GainChartY.Location = new System.Drawing.Point(1062, 647);
+            this.GainChartY.Location = new System.Drawing.Point(1186, 647);
             this.GainChartY.Name = "GainChartY";
             series11.ChartArea = "ChartArea1";
             series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -611,7 +657,7 @@ namespace grapher
             series12.Name = "LastGainVal";
             this.GainChartY.Series.Add(series11);
             this.GainChartY.Series.Add(series12);
-            this.GainChartY.Size = new System.Drawing.Size(723, 309);
+            this.GainChartY.Size = new System.Drawing.Size(698, 309);
             this.GainChartY.TabIndex = 33;
             this.GainChartY.Text = "chart1";
             // 
@@ -627,16 +673,16 @@ namespace grapher
             // ActiveValueTitle
             // 
             this.ActiveValueTitle.AutoSize = true;
-            this.ActiveValueTitle.Location = new System.Drawing.Point(248, 30);
+            this.ActiveValueTitle.Location = new System.Drawing.Point(187, 30);
             this.ActiveValueTitle.Name = "ActiveValueTitle";
-            this.ActiveValueTitle.Size = new System.Drawing.Size(67, 13);
+            this.ActiveValueTitle.Size = new System.Drawing.Size(37, 13);
             this.ActiveValueTitle.TabIndex = 35;
-            this.ActiveValueTitle.Text = "Active Value";
+            this.ActiveValueTitle.Text = "Active";
             // 
             // SensitivityActiveXLabel
             // 
             this.SensitivityActiveXLabel.AutoSize = true;
-            this.SensitivityActiveXLabel.Location = new System.Drawing.Point(258, 49);
+            this.SensitivityActiveXLabel.Location = new System.Drawing.Point(187, 49);
             this.SensitivityActiveXLabel.Name = "SensitivityActiveXLabel";
             this.SensitivityActiveXLabel.Size = new System.Drawing.Size(14, 13);
             this.SensitivityActiveXLabel.TabIndex = 36;
@@ -645,7 +691,7 @@ namespace grapher
             // SensitivityActiveYLabel
             // 
             this.SensitivityActiveYLabel.AutoSize = true;
-            this.SensitivityActiveYLabel.Location = new System.Drawing.Point(286, 50);
+            this.SensitivityActiveYLabel.Location = new System.Drawing.Point(216, 49);
             this.SensitivityActiveYLabel.Name = "SensitivityActiveYLabel";
             this.SensitivityActiveYLabel.Size = new System.Drawing.Size(14, 13);
             this.SensitivityActiveYLabel.TabIndex = 37;
@@ -654,34 +700,34 @@ namespace grapher
             // RotationActiveLabel
             // 
             this.RotationActiveLabel.AutoSize = true;
-            this.RotationActiveLabel.Location = new System.Drawing.Point(268, 75);
+            this.RotationActiveLabel.Location = new System.Drawing.Point(196, 75);
             this.RotationActiveLabel.Name = "RotationActiveLabel";
             this.RotationActiveLabel.Size = new System.Drawing.Size(13, 13);
             this.RotationActiveLabel.TabIndex = 38;
             this.RotationActiveLabel.Text = "0";
             // 
-            // AccelTypeActiveLabel
+            // AccelTypeActiveLabelX
             // 
-            this.AccelTypeActiveLabel.AutoSize = true;
-            this.AccelTypeActiveLabel.Location = new System.Drawing.Point(258, 98);
-            this.AccelTypeActiveLabel.Name = "AccelTypeActiveLabel";
-            this.AccelTypeActiveLabel.Size = new System.Drawing.Size(41, 13);
-            this.AccelTypeActiveLabel.TabIndex = 39;
-            this.AccelTypeActiveLabel.Text = "Default";
+            this.AccelTypeActiveLabelX.AutoSize = true;
+            this.AccelTypeActiveLabelX.Location = new System.Drawing.Point(196, 113);
+            this.AccelTypeActiveLabelX.Name = "AccelTypeActiveLabelX";
+            this.AccelTypeActiveLabelX.Size = new System.Drawing.Size(66, 13);
+            this.AccelTypeActiveLabelX.TabIndex = 39;
+            this.AccelTypeActiveLabelX.Text = "SigmoidGain";
             // 
-            // AccelerationActiveLabel
+            // AccelerationActiveLabelX
             // 
-            this.AccelerationActiveLabel.AutoSize = true;
-            this.AccelerationActiveLabel.Location = new System.Drawing.Point(268, 128);
-            this.AccelerationActiveLabel.Name = "AccelerationActiveLabel";
-            this.AccelerationActiveLabel.Size = new System.Drawing.Size(13, 13);
-            this.AccelerationActiveLabel.TabIndex = 40;
-            this.AccelerationActiveLabel.Text = "0";
+            this.AccelerationActiveLabelX.AutoSize = true;
+            this.AccelerationActiveLabelX.Location = new System.Drawing.Point(196, 140);
+            this.AccelerationActiveLabelX.Name = "AccelerationActiveLabelX";
+            this.AccelerationActiveLabelX.Size = new System.Drawing.Size(13, 13);
+            this.AccelerationActiveLabelX.TabIndex = 40;
+            this.AccelerationActiveLabelX.Text = "0";
             // 
             // CapActiveXLabel
             // 
             this.CapActiveXLabel.AutoSize = true;
-            this.CapActiveXLabel.Location = new System.Drawing.Point(259, 151);
+            this.CapActiveXLabel.Location = new System.Drawing.Point(196, 166);
             this.CapActiveXLabel.Name = "CapActiveXLabel";
             this.CapActiveXLabel.Size = new System.Drawing.Size(13, 13);
             this.CapActiveXLabel.TabIndex = 41;
@@ -690,7 +736,7 @@ namespace grapher
             // WeightActiveXLabel
             // 
             this.WeightActiveXLabel.AutoSize = true;
-            this.WeightActiveXLabel.Location = new System.Drawing.Point(259, 180);
+            this.WeightActiveXLabel.Location = new System.Drawing.Point(196, 192);
             this.WeightActiveXLabel.Name = "WeightActiveXLabel";
             this.WeightActiveXLabel.Size = new System.Drawing.Size(13, 13);
             this.WeightActiveXLabel.TabIndex = 42;
@@ -699,7 +745,7 @@ namespace grapher
             // WeightActiveYLabel
             // 
             this.WeightActiveYLabel.AutoSize = true;
-            this.WeightActiveYLabel.Location = new System.Drawing.Point(286, 180);
+            this.WeightActiveYLabel.Location = new System.Drawing.Point(413, 192);
             this.WeightActiveYLabel.Name = "WeightActiveYLabel";
             this.WeightActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.WeightActiveYLabel.TabIndex = 43;
@@ -708,74 +754,256 @@ namespace grapher
             // CapActiveYLabel
             // 
             this.CapActiveYLabel.AutoSize = true;
-            this.CapActiveYLabel.Location = new System.Drawing.Point(286, 151);
+            this.CapActiveYLabel.Location = new System.Drawing.Point(413, 166);
             this.CapActiveYLabel.Name = "CapActiveYLabel";
             this.CapActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.CapActiveYLabel.TabIndex = 44;
             this.CapActiveYLabel.Text = "0";
             // 
-            // OffsetActiveLabel
+            // OffsetActiveXLabel
             // 
-            this.OffsetActiveLabel.AutoSize = true;
-            this.OffsetActiveLabel.Location = new System.Drawing.Point(268, 206);
-            this.OffsetActiveLabel.Name = "OffsetActiveLabel";
-            this.OffsetActiveLabel.Size = new System.Drawing.Size(13, 13);
-            this.OffsetActiveLabel.TabIndex = 45;
-            this.OffsetActiveLabel.Text = "0";
+            this.OffsetActiveXLabel.AutoSize = true;
+            this.OffsetActiveXLabel.Location = new System.Drawing.Point(196, 218);
+            this.OffsetActiveXLabel.Name = "OffsetActiveXLabel";
+            this.OffsetActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.OffsetActiveXLabel.TabIndex = 45;
+            this.OffsetActiveXLabel.Text = "0";
             // 
-            // LimitExpActiveLabel
+            // LimitExpActiveXLabel
             // 
-            this.LimitExpActiveLabel.AutoSize = true;
-            this.LimitExpActiveLabel.Location = new System.Drawing.Point(268, 232);
-            this.LimitExpActiveLabel.Name = "LimitExpActiveLabel";
-            this.LimitExpActiveLabel.Size = new System.Drawing.Size(13, 13);
-            this.LimitExpActiveLabel.TabIndex = 46;
-            this.LimitExpActiveLabel.Text = "0";
+            this.LimitExpActiveXLabel.AutoSize = true;
+            this.LimitExpActiveXLabel.Location = new System.Drawing.Point(196, 244);
+            this.LimitExpActiveXLabel.Name = "LimitExpActiveXLabel";
+            this.LimitExpActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.LimitExpActiveXLabel.TabIndex = 46;
+            this.LimitExpActiveXLabel.Text = "0";
             // 
-            // MidpointActiveLabel
+            // MidpointActiveXLabel
             // 
-            this.MidpointActiveLabel.AutoSize = true;
-            this.MidpointActiveLabel.Location = new System.Drawing.Point(268, 255);
-            this.MidpointActiveLabel.Name = "MidpointActiveLabel";
-            this.MidpointActiveLabel.Size = new System.Drawing.Size(13, 13);
-            this.MidpointActiveLabel.TabIndex = 47;
-            this.MidpointActiveLabel.Text = "0";
+            this.MidpointActiveXLabel.AutoSize = true;
+            this.MidpointActiveXLabel.Location = new System.Drawing.Point(196, 270);
+            this.MidpointActiveXLabel.Name = "MidpointActiveXLabel";
+            this.MidpointActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.MidpointActiveXLabel.TabIndex = 47;
+            this.MidpointActiveXLabel.Text = "0";
             // 
-            // offsetStyleToolStripMenuItem
+            // accelerationBoxY
             // 
-            this.offsetStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gainOffsetToolStripMenuItem,
-            this.legacyOffsetToolStripMenuItem});
-            this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
-            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.offsetStyleToolStripMenuItem.Text = "Offset Style";
+            this.accelerationBoxY.Location = new System.Drawing.Point(331, 137);
+            this.accelerationBoxY.Name = "accelerationBoxY";
+            this.accelerationBoxY.Size = new System.Drawing.Size(76, 20);
+            this.accelerationBoxY.TabIndex = 48;
             // 
-            // gainOffsetToolStripMenuItem
+            // offsetBoxY
             // 
-            this.gainOffsetToolStripMenuItem.Name = "gainOffsetToolStripMenuItem";
-            this.gainOffsetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.gainOffsetToolStripMenuItem.Text = "Gain (Default)";
+            this.offsetBoxY.Location = new System.Drawing.Point(331, 215);
+            this.offsetBoxY.Name = "offsetBoxY";
+            this.offsetBoxY.Size = new System.Drawing.Size(76, 20);
+            this.offsetBoxY.TabIndex = 49;
             // 
-            // legacyOffsetToolStripMenuItem
+            // limitBoxY
             // 
-            this.legacyOffsetToolStripMenuItem.Name = "legacyOffsetToolStripMenuItem";
-            this.legacyOffsetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.legacyOffsetToolStripMenuItem.Text = "Legacy";
+            this.limitBoxY.Location = new System.Drawing.Point(331, 241);
+            this.limitBoxY.Name = "limitBoxY";
+            this.limitBoxY.Size = new System.Drawing.Size(76, 20);
+            this.limitBoxY.TabIndex = 50;
+            // 
+            // midpointBoxY
+            // 
+            this.midpointBoxY.Location = new System.Drawing.Point(331, 267);
+            this.midpointBoxY.Name = "midpointBoxY";
+            this.midpointBoxY.Size = new System.Drawing.Size(76, 20);
+            this.midpointBoxY.TabIndex = 51;
+            // 
+            // accelTypeDropY
+            // 
+            this.accelTypeDropY.FormattingEnabled = true;
+            this.accelTypeDropY.Location = new System.Drawing.Point(331, 110);
+            this.accelTypeDropY.Name = "accelTypeDropY";
+            this.accelTypeDropY.Size = new System.Drawing.Size(76, 21);
+            this.accelTypeDropY.TabIndex = 52;
+            this.accelTypeDropY.Text = "Accel Type";
+            // 
+            // AccelerationActiveLabelY
+            // 
+            this.AccelerationActiveLabelY.AutoSize = true;
+            this.AccelerationActiveLabelY.Location = new System.Drawing.Point(413, 140);
+            this.AccelerationActiveLabelY.Name = "AccelerationActiveLabelY";
+            this.AccelerationActiveLabelY.Size = new System.Drawing.Size(13, 13);
+            this.AccelerationActiveLabelY.TabIndex = 53;
+            this.AccelerationActiveLabelY.Text = "0";
+            // 
+            // OffsetActiveYLabel
+            // 
+            this.OffsetActiveYLabel.AutoSize = true;
+            this.OffsetActiveYLabel.Location = new System.Drawing.Point(413, 218);
+            this.OffsetActiveYLabel.Name = "OffsetActiveYLabel";
+            this.OffsetActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.OffsetActiveYLabel.TabIndex = 54;
+            this.OffsetActiveYLabel.Text = "0";
+            // 
+            // LimitExpActiveYLabel
+            // 
+            this.LimitExpActiveYLabel.AutoSize = true;
+            this.LimitExpActiveYLabel.Location = new System.Drawing.Point(413, 244);
+            this.LimitExpActiveYLabel.Name = "LimitExpActiveYLabel";
+            this.LimitExpActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.LimitExpActiveYLabel.TabIndex = 55;
+            this.LimitExpActiveYLabel.Text = "0";
+            // 
+            // MidpointActiveYLabel
+            // 
+            this.MidpointActiveYLabel.AutoSize = true;
+            this.MidpointActiveYLabel.Location = new System.Drawing.Point(413, 270);
+            this.MidpointActiveYLabel.Name = "MidpointActiveYLabel";
+            this.MidpointActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.MidpointActiveYLabel.TabIndex = 56;
+            this.MidpointActiveYLabel.Text = "0";
+            // 
+            // ByComponentXYLock
+            // 
+            this.ByComponentXYLock.AutoSize = true;
+            this.ByComponentXYLock.Checked = true;
+            this.ByComponentXYLock.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ByComponentXYLock.Location = new System.Drawing.Point(282, 93);
+            this.ByComponentXYLock.Name = "ByComponentXYLock";
+            this.ByComponentXYLock.Size = new System.Drawing.Size(15, 14);
+            this.ByComponentXYLock.TabIndex = 57;
+            this.ByComponentXYLock.UseVisualStyleBackColor = true;
+            // 
+            // constantOneLabelY
+            // 
+            this.constantOneLabelY.AutoSize = true;
+            this.constantOneLabelY.Location = new System.Drawing.Point(258, 140);
+            this.constantOneLabelY.Name = "constantOneLabelY";
+            this.constantOneLabelY.Size = new System.Drawing.Size(66, 13);
+            this.constantOneLabelY.TabIndex = 58;
+            this.constantOneLabelY.Text = "Acceleration";
+            // 
+            // capLabelY
+            // 
+            this.capLabelY.AutoSize = true;
+            this.capLabelY.Location = new System.Drawing.Point(279, 166);
+            this.capLabelY.Name = "capLabelY";
+            this.capLabelY.Size = new System.Drawing.Size(26, 13);
+            this.capLabelY.TabIndex = 59;
+            this.capLabelY.Text = "Cap";
+            // 
+            // weightLabelY
+            // 
+            this.weightLabelY.AutoSize = true;
+            this.weightLabelY.Location = new System.Drawing.Point(264, 192);
+            this.weightLabelY.Name = "weightLabelY";
+            this.weightLabelY.Size = new System.Drawing.Size(41, 13);
+            this.weightLabelY.TabIndex = 60;
+            this.weightLabelY.Text = "Weight";
+            // 
+            // offsetLabelY
+            // 
+            this.offsetLabelY.AutoSize = true;
+            this.offsetLabelY.Location = new System.Drawing.Point(270, 218);
+            this.offsetLabelY.Name = "offsetLabelY";
+            this.offsetLabelY.Size = new System.Drawing.Size(35, 13);
+            this.offsetLabelY.TabIndex = 61;
+            this.offsetLabelY.Text = "Offset";
+            // 
+            // constantTwoLabelY
+            // 
+            this.constantTwoLabelY.AutoSize = true;
+            this.constantTwoLabelY.Location = new System.Drawing.Point(264, 244);
+            this.constantTwoLabelY.Name = "constantTwoLabelY";
+            this.constantTwoLabelY.Size = new System.Drawing.Size(51, 13);
+            this.constantTwoLabelY.TabIndex = 62;
+            this.constantTwoLabelY.Text = "Limit/Exp";
+            // 
+            // constantThreeLabelY
+            // 
+            this.constantThreeLabelY.AutoSize = true;
+            this.constantThreeLabelY.Location = new System.Drawing.Point(264, 270);
+            this.constantThreeLabelY.Name = "constantThreeLabelY";
+            this.constantThreeLabelY.Size = new System.Drawing.Size(47, 13);
+            this.constantThreeLabelY.TabIndex = 63;
+            this.constantThreeLabelY.Text = "Midpoint";
+            // 
+            // OptionSetXTitle
+            // 
+            this.OptionSetXTitle.AutoSize = true;
+            this.OptionSetXTitle.Location = new System.Drawing.Point(142, 94);
+            this.OptionSetXTitle.Name = "OptionSetXTitle";
+            this.OptionSetXTitle.Size = new System.Drawing.Size(14, 13);
+            this.OptionSetXTitle.TabIndex = 64;
+            this.OptionSetXTitle.Text = "X";
+            // 
+            // OptionSetYTitle
+            // 
+            this.OptionSetYTitle.AutoSize = true;
+            this.OptionSetYTitle.Location = new System.Drawing.Point(359, 94);
+            this.OptionSetYTitle.Name = "OptionSetYTitle";
+            this.OptionSetYTitle.Size = new System.Drawing.Size(14, 13);
+            this.OptionSetYTitle.TabIndex = 65;
+            this.OptionSetYTitle.Text = "Y";
+            // 
+            // AccelTypeActiveLabelY
+            // 
+            this.AccelTypeActiveLabelY.AutoSize = true;
+            this.AccelTypeActiveLabelY.Location = new System.Drawing.Point(413, 113);
+            this.AccelTypeActiveLabelY.Name = "AccelTypeActiveLabelY";
+            this.AccelTypeActiveLabelY.Size = new System.Drawing.Size(66, 13);
+            this.AccelTypeActiveLabelY.TabIndex = 66;
+            this.AccelTypeActiveLabelY.Text = "SigmoidGain";
+            // 
+            // ActiveValueTitleY
+            // 
+            this.ActiveValueTitleY.AutoSize = true;
+            this.ActiveValueTitleY.Location = new System.Drawing.Point(428, 30);
+            this.ActiveValueTitleY.Name = "ActiveValueTitleY";
+            this.ActiveValueTitleY.Size = new System.Drawing.Size(37, 13);
+            this.ActiveValueTitleY.TabIndex = 67;
+            this.ActiveValueTitleY.Text = "Active";
+            // 
+            // showLastMouseMoveToolStripMenuItem
+            // 
+            this.showLastMouseMoveToolStripMenuItem.Checked = true;
+            this.showLastMouseMoveToolStripMenuItem.CheckOnClick = true;
+            this.showLastMouseMoveToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showLastMouseMoveToolStripMenuItem.Name = "showLastMouseMoveToolStripMenuItem";
+            this.showLastMouseMoveToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.showLastMouseMoveToolStripMenuItem.Text = "Show Last Mouse Move";
             // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1786, 958);
-            this.Controls.Add(this.MidpointActiveLabel);
-            this.Controls.Add(this.LimitExpActiveLabel);
-            this.Controls.Add(this.OffsetActiveLabel);
+            this.ClientSize = new System.Drawing.Size(1884, 956);
+            this.Controls.Add(this.ActiveValueTitleY);
+            this.Controls.Add(this.AccelTypeActiveLabelY);
+            this.Controls.Add(this.OptionSetYTitle);
+            this.Controls.Add(this.OptionSetXTitle);
+            this.Controls.Add(this.constantThreeLabelY);
+            this.Controls.Add(this.constantTwoLabelY);
+            this.Controls.Add(this.offsetLabelY);
+            this.Controls.Add(this.weightLabelY);
+            this.Controls.Add(this.capLabelY);
+            this.Controls.Add(this.constantOneLabelY);
+            this.Controls.Add(this.ByComponentXYLock);
+            this.Controls.Add(this.MidpointActiveYLabel);
+            this.Controls.Add(this.LimitExpActiveYLabel);
+            this.Controls.Add(this.OffsetActiveYLabel);
+            this.Controls.Add(this.AccelerationActiveLabelY);
+            this.Controls.Add(this.accelTypeDropY);
+            this.Controls.Add(this.midpointBoxY);
+            this.Controls.Add(this.limitBoxY);
+            this.Controls.Add(this.offsetBoxY);
+            this.Controls.Add(this.accelerationBoxY);
+            this.Controls.Add(this.MidpointActiveXLabel);
+            this.Controls.Add(this.LimitExpActiveXLabel);
+            this.Controls.Add(this.OffsetActiveXLabel);
             this.Controls.Add(this.CapActiveYLabel);
             this.Controls.Add(this.WeightActiveYLabel);
             this.Controls.Add(this.WeightActiveXLabel);
             this.Controls.Add(this.CapActiveXLabel);
-            this.Controls.Add(this.AccelerationActiveLabel);
-            this.Controls.Add(this.AccelTypeActiveLabel);
+            this.Controls.Add(this.AccelerationActiveLabelX);
+            this.Controls.Add(this.AccelTypeActiveLabelX);
             this.Controls.Add(this.RotationActiveLabel);
             this.Controls.Add(this.SensitivityActiveYLabel);
             this.Controls.Add(this.SensitivityActiveXLabel);
@@ -787,30 +1015,28 @@ namespace grapher
             this.Controls.Add(this.GainChart);
             this.Controls.Add(this.VelocityChart);
             this.Controls.Add(this.LockXYLabel);
-            this.Controls.Add(this.weightXYLock);
-            this.Controls.Add(this.capXYLock);
             this.Controls.Add(this.sensXYLock);
             this.Controls.Add(this.capBoxY);
             this.Controls.Add(this.sensitivityBoxY);
             this.Controls.Add(this.writeButton);
-            this.Controls.Add(this.offsetLabel);
-            this.Controls.Add(this.offsetBox);
-            this.Controls.Add(this.constantThreeLabel);
-            this.Controls.Add(this.midpointBox);
-            this.Controls.Add(this.constantTwoLabel);
-            this.Controls.Add(this.limitBox);
-            this.Controls.Add(this.weightBoxSecond);
-            this.Controls.Add(this.weightLabel);
-            this.Controls.Add(this.weightBoxFirst);
-            this.Controls.Add(this.capLabel);
+            this.Controls.Add(this.offsetLabelX);
+            this.Controls.Add(this.offsetBoxX);
+            this.Controls.Add(this.constantThreeLabelX);
+            this.Controls.Add(this.midpointBoxX);
+            this.Controls.Add(this.constantTwoLabelX);
+            this.Controls.Add(this.limitBoxX);
+            this.Controls.Add(this.weightBoxY);
+            this.Controls.Add(this.weightLabelX);
+            this.Controls.Add(this.weightBoxX);
+            this.Controls.Add(this.capLabelX);
             this.Controls.Add(this.capBoxX);
-            this.Controls.Add(this.constantOneLabel);
-            this.Controls.Add(this.accelerationBox);
+            this.Controls.Add(this.constantOneLabelX);
+            this.Controls.Add(this.accelerationBoxX);
             this.Controls.Add(this.rotationLabel);
             this.Controls.Add(this.rotationBox);
             this.Controls.Add(this.sensitivityLabel);
             this.Controls.Add(this.sensitivityBoxX);
-            this.Controls.Add(this.accelTypeDrop);
+            this.Controls.Add(this.accelTypeDropX);
             this.Controls.Add(this.AccelerationChart);
             this.Controls.Add(this.menuStrip1);
             this.Name = "RawAcceleration";
@@ -833,30 +1059,28 @@ namespace grapher
         #endregion
 
         private System.Windows.Forms.DataVisualization.Charting.Chart AccelerationChart;
-        private System.Windows.Forms.ComboBox accelTypeDrop;
+        private System.Windows.Forms.ComboBox accelTypeDropX;
         private System.Windows.Forms.TextBox sensitivityBoxX;
         private System.Windows.Forms.Label sensitivityLabel;
         private System.Windows.Forms.TextBox rotationBox;
         private System.Windows.Forms.Label rotationLabel;
-        private System.Windows.Forms.TextBox accelerationBox;
-        private System.Windows.Forms.Label constantOneLabel;
+        private System.Windows.Forms.TextBox accelerationBoxX;
+        private System.Windows.Forms.Label constantOneLabelX;
         private System.Windows.Forms.TextBox capBoxX;
-        private System.Windows.Forms.Label capLabel;
-        private System.Windows.Forms.TextBox weightBoxFirst;
-        private System.Windows.Forms.Label weightLabel;
-        private System.Windows.Forms.TextBox weightBoxSecond;
-        private System.Windows.Forms.TextBox limitBox;
-        private System.Windows.Forms.Label constantTwoLabel;
-        private System.Windows.Forms.TextBox midpointBox;
-        private System.Windows.Forms.Label constantThreeLabel;
-        private System.Windows.Forms.TextBox offsetBox;
-        private System.Windows.Forms.Label offsetLabel;
+        private System.Windows.Forms.Label capLabelX;
+        private System.Windows.Forms.TextBox weightBoxX;
+        private System.Windows.Forms.Label weightLabelX;
+        private System.Windows.Forms.TextBox weightBoxY;
+        private System.Windows.Forms.TextBox limitBoxX;
+        private System.Windows.Forms.Label constantTwoLabelX;
+        private System.Windows.Forms.TextBox midpointBoxX;
+        private System.Windows.Forms.Label constantThreeLabelX;
+        private System.Windows.Forms.TextBox offsetBoxX;
+        private System.Windows.Forms.Label offsetLabelX;
         private System.Windows.Forms.Button writeButton;
         private System.Windows.Forms.TextBox sensitivityBoxY;
         private System.Windows.Forms.TextBox capBoxY;
         private System.Windows.Forms.CheckBox sensXYLock;
-        private System.Windows.Forms.CheckBox capXYLock;
-        private System.Windows.Forms.CheckBox weightXYLock;
         private System.Windows.Forms.Label LockXYLabel;
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChart;
         private System.Windows.Forms.DataVisualization.Charting.Chart GainChart;
@@ -881,20 +1105,44 @@ namespace grapher
         private System.Windows.Forms.Label SensitivityActiveXLabel;
         private System.Windows.Forms.Label SensitivityActiveYLabel;
         private System.Windows.Forms.Label RotationActiveLabel;
-        private System.Windows.Forms.Label AccelTypeActiveLabel;
-        private System.Windows.Forms.Label AccelerationActiveLabel;
+        private System.Windows.Forms.Label AccelTypeActiveLabelX;
+        private System.Windows.Forms.Label AccelerationActiveLabelX;
         private System.Windows.Forms.Label CapActiveXLabel;
         private System.Windows.Forms.Label WeightActiveXLabel;
         private System.Windows.Forms.Label WeightActiveYLabel;
         private System.Windows.Forms.Label CapActiveYLabel;
-        private System.Windows.Forms.Label OffsetActiveLabel;
-        private System.Windows.Forms.Label LimitExpActiveLabel;
-        private System.Windows.Forms.Label MidpointActiveLabel;
+        private System.Windows.Forms.Label OffsetActiveXLabel;
+        private System.Windows.Forms.Label LimitExpActiveXLabel;
+        private System.Windows.Forms.Label MidpointActiveXLabel;
         private System.Windows.Forms.ToolStripMenuItem startupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AutoWriteMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem wholeVectorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem byVectorComponentToolStripMenuItem;
+        private System.Windows.Forms.TextBox accelerationBoxY;
+        private System.Windows.Forms.TextBox offsetBoxY;
+        private System.Windows.Forms.TextBox limitBoxY;
+        private System.Windows.Forms.TextBox midpointBoxY;
+        private System.Windows.Forms.ComboBox accelTypeDropY;
+        private System.Windows.Forms.Label AccelerationActiveLabelY;
+        private System.Windows.Forms.Label OffsetActiveYLabel;
+        private System.Windows.Forms.Label LimitExpActiveYLabel;
+        private System.Windows.Forms.Label MidpointActiveYLabel;
+        private System.Windows.Forms.CheckBox ByComponentXYLock;
+        private System.Windows.Forms.Label constantOneLabelY;
+        private System.Windows.Forms.Label capLabelY;
+        private System.Windows.Forms.Label weightLabelY;
+        private System.Windows.Forms.Label offsetLabelY;
+        private System.Windows.Forms.Label constantTwoLabelY;
+        private System.Windows.Forms.Label constantThreeLabelY;
+        private System.Windows.Forms.Label OptionSetXTitle;
+        private System.Windows.Forms.Label OptionSetYTitle;
+        private System.Windows.Forms.Label AccelTypeActiveLabelY;
         private System.Windows.Forms.ToolStripMenuItem offsetStyleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gainOffsetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
+        private System.Windows.Forms.Label ActiveValueTitleY;
+        private System.Windows.Forms.ToolStripMenuItem showLastMouseMoveToolStripMenuItem;
     }
 }
 

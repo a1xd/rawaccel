@@ -1,9 +1,4 @@
 ﻿using grapher.Models.Serialized;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace grapher.Layouts
 {
@@ -14,8 +9,13 @@ namespace grapher.Layouts
         {
             Name = "Power";
             Index = (int)AccelMode.power;
-            ShowOptions = new bool[] { true, true, true, false }; 
-            OptionNames = new string[] { Offset, Scale, Exponent, string.Empty }; 
+
+            AccelLayout = new OptionLayout(true, Acceleration);
+            CapLayout = new OptionLayout(true, Cap);
+            WeightLayout = new OptionLayout(true, Weight);
+            OffsetLayout = new OptionLayout(true, Offset);
+            LimExpLayout = new OptionLayout(true, Limit);
+            MidpointLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

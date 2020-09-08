@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace grapher.Models.Options
+﻿namespace grapher.Models.Options
 {
     public class ActiveValueLabelXY
     {
-        public const int ActiveLabelXYSeparation = 2;
-        public const string ShortenedFormatString = "0.###";
+        #region Constants
+
+
+        #endregion Constants
+
+        #region Constructors
 
         public ActiveValueLabelXY(
             ActiveValueLabel x,
@@ -18,16 +16,17 @@ namespace grapher.Models.Options
             X = x;
             Y = y;
 
-            FullWidth = x.Width;
-            ShortenedWidth = (FullWidth - ActiveLabelXYSeparation) / 2;
-
-            Y.Left = X.Left + ShortenedWidth + ActiveLabelXYSeparation;
+            Align(x.Width);
             Y.Width = ShortenedWidth;
-            Y.FormatString = ShortenedFormatString;
+            Y.FormatString = Constants.ShortenedFormatString;
 
             Combined = false;
             SetCombined();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public ActiveValueLabel X { get; }
 
@@ -35,9 +34,39 @@ namespace grapher.Models.Options
 
         public bool Combined { get; private set; }
 
-        private int FullWidth { get; }
+        public int Left
+        {
+            get
+            {
+                return X.Left;
+            }
+            set
+            {
+                X.Left = value;
+                SetYLeft();
+            }
+        }
 
-        private int ShortenedWidth { get; }
+        public int Height
+        {
+            get
+            {
+                return X.Height;
+            }
+            set
+            {
+                X.Height = value;
+                Y.Height = value;
+            }
+        }
+
+        private int FullWidth { get; set; }
+
+        private int ShortenedWidth { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void SetValues(double x, double y)
         {
@@ -58,7 +87,7 @@ namespace grapher.Models.Options
         {
             if (!Combined)
             {
-                X.FormatString = ActiveValueLabel.DefaultFormatString;
+                X.FormatString = Constants.DefaultActiveValueFormatString;
                 X.Width = FullWidth;
                 X.Prefix = string.Empty;
                 Y.Hide();
@@ -71,7 +100,7 @@ namespace grapher.Models.Options
         {
             if (Combined)
             {
-                X.FormatString = ShortenedFormatString;
+                X.FormatString = Constants.ShortenedFormatString;
                 X.Width = ShortenedWidth;
                 X.Prefix = "X";
                 Y.Prefix = "Y";
@@ -80,5 +109,35 @@ namespace grapher.Models.Options
 
             Combined = false;
         }
+
+        public void AlignActiveValues()
+        {
+            Align(X.CenteringLabel.Width);
+
+            if (Combined)
+            {
+                X.Width = FullWidth;
+            }
+            else
+            {
+                X.Width = ShortenedWidth;
+            }
+        }
+
+        private void Align (int width)
+        {
+            FullWidth = width;
+            ShortenedWidth = (FullWidth - Constants.ActiveLabelXYSeparation) / 2;
+
+            SetYLeft();
+            Y.Width = ShortenedWidth;
+        }
+
+        private void SetYLeft()
+        {
+            Y.Left = X.Left + ShortenedWidth + Constants.ActiveLabelXYSeparation;
+        }
+
+        #endregion Methods
     }
 }

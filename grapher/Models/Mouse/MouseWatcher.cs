@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace grapher.Models.Mouse
 {
     public class MouseWatcher
     {
+        #region External
         /// <summary>
         /// Enumeration containing HID usage page flags.
         /// </summary>
@@ -677,6 +673,10 @@ namespace grapher.Models.Mouse
         [DllImport("user32.dll")]
         public static extern int GetRawInputData(IntPtr hRawInput, RawInputCommand uiCommand, out RawInput pData, ref int pcbSize, int cbSizeHeader);
 
+        #endregion External
+
+        #region Constructors
+
         public MouseWatcher(Form containingForm, Label display, AccelCharts accelCharts)
         {
             ContainingForm = containingForm;
@@ -695,6 +695,10 @@ namespace grapher.Models.Mouse
             PollTime = 1;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         private Form ContainingForm { get; }
 
         private Label Display { get; }
@@ -702,6 +706,10 @@ namespace grapher.Models.Mouse
         private AccelCharts AccelCharts { get; }
 
         private double PollTime { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void OnMouseMove(int x, int y, double timeInMs)
         {
@@ -723,5 +731,7 @@ namespace grapher.Models.Mouse
             }
 
         }
+
+        #endregion Methods
     }
 }

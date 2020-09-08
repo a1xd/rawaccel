@@ -24,6 +24,8 @@ public ref class ManagedAccel
     mouse_modifier* const modifier_instance = new mouse_modifier();
 
 public:
+    static initonly double WriteDelay = -10000000 / -10000.0;
+
     virtual ~ManagedAccel()
     {
         delete modifier_instance;

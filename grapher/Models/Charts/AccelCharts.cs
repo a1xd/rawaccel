@@ -1,23 +1,15 @@
 ﻿using grapher.Models.Calculations;
 using grapher.Models.Charts;
+using grapher.Models.Serialized;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 
 namespace grapher
 {
     public class AccelCharts
     {
-        public const int ChartSeparationVertical = 10;
-
-        /// <summary> Needed to show full contents in form. Unsure why. </summary>
-        public const int FormHeightPadding = 35;
+        #region Constructors
 
         public AccelCharts(
             Form form,
@@ -25,7 +17,8 @@ namespace grapher
             ChartXY velocityChart,
             ChartXY gainChart,
             ToolStripMenuItem enableVelocityAndGain,
-            ICollection<CheckBox> checkBoxesXY)
+            ToolStripMenuItem enableLastMouseMove,
+            Button writeButton)
         {
             Estimated = new EstimatedPoints();
             EstimatedX = new EstimatedPoints();
@@ -37,7 +30,8 @@ namespace grapher
             VelocityChart = velocityChart;
             GainChart = gainChart;
             EnableVelocityAndGain = enableVelocityAndGain;
-            CheckBoxesXY = checkBoxesXY;
+            EnableLastValue = enableLastMouseMove;
+            WriteButton = writeButton;
 
             SensitivityChart.SetPointBinds(Estimated.Sensitivity, EstimatedX.Sensitivity, EstimatedY.Sensitivity);
             VelocityChart.SetPointBinds(Estimated.Velocity, EstimatedX.Velocity, EstimatedY.Velocity);
@@ -45,20 +39,27 @@ namespace grapher
 
             SensitivityChart.SetTop(0);
             VelocityChart.SetHeight(SensitivityChart.Height);
-            VelocityChart.SetTop(SensitivityChart.Height + ChartSeparationVertical);
+            VelocityChart.SetTop(SensitivityChart.Height + Constants.ChartSeparationVertical);
             GainChart.SetHeight(SensitivityChart.Height);
-            GainChart.SetTop(VelocityChart.Top + VelocityChart.Height + ChartSeparationVertical);
+            GainChart.SetTop(VelocityChart.Top + VelocityChart.Height + Constants.ChartSeparationVertical);
 
             Rectangle screenRectangle = ContaingForm.RectangleToScreen(ContaingForm.ClientRectangle);
             FormBorderHeight = screenRectangle.Top - ContaingForm.Top;
 
             EnableVelocityAndGain.Click += new System.EventHandler(OnEnableClick);
-            EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableCheckStateChange);
+            EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableVelocityGainCheckStateChange);
+
+            EnableLastValue.CheckedChanged += new System.EventHandler(OnEnableLastMouseMoveCheckStateChange);
 
             HideVelocityAndGain();
+            SensitivityChart.Show();
             Combined = false;
             ShowCombined();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Form ContaingForm { get; }
 
@@ -70,6 +71,10 @@ namespace grapher
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
 
+        private ToolStripMenuItem EnableLastValue { get; }
+
+        private Button WriteButton { get; }
+
         public AccelData AccelData { get; }
 
         private EstimatedPoints Estimated { get; }
@@ -78,11 +83,13 @@ namespace grapher
 
         private EstimatedPoints EstimatedY { get; }
 
-        private ICollection<CheckBox> CheckBoxesXY { get; }
-
         private bool Combined { get; set; }
 
         private int FormBorderHeight { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void MakeDots(int x, int y, double timeInMs)
         {
@@ -96,11 +103,14 @@ namespace grapher
             }
         }
 
-        public void DrawPoints()
+        public void DrawLastMovement()
         {
-            SensitivityChart.DrawPoints();
-            VelocityChart.DrawPoints();
-            GainChart.DrawPoints();
+            if (EnableLastValue.Checked)
+            {
+                SensitivityChart.DrawLastMovementValue();
+                VelocityChart.DrawLastMovementValue();
+                GainChart.DrawLastMovementValue();
+            }
         }
 
         public void Bind()
@@ -119,9 +129,9 @@ namespace grapher
             }
         }
 
-        public void RefreshXY()
+        public void ShowActive(DriverSettings driverSettings)
         {
-            if (CheckBoxesXY.All(box => box.Checked))
+            if (driverSettings.combineMagnitudes)
             {
                 ShowCombined();
             }
@@ -131,12 +141,30 @@ namespace grapher
             }
         }
 
+        public void SetWidened()
+        {
+            SensitivityChart.SetWidened();
+            VelocityChart.SetWidened();
+            GainChart.SetWidened();
+            UpdateFormWidth();
+            AlignWriteButton();
+        }
+
+        public void SetNarrowed()
+        {
+            SensitivityChart.SetNarrowed();
+            VelocityChart.SetNarrowed();
+            GainChart.SetNarrowed();
+            UpdateFormWidth();
+            AlignWriteButton();
+        }
+
         private void OnEnableClick(object sender, EventArgs e)
         {
             EnableVelocityAndGain.Checked = !EnableVelocityAndGain.Checked;
         }
 
-        private void OnEnableCheckStateChange(object sender, EventArgs e)
+        private void OnEnableVelocityGainCheckStateChange(object sender, EventArgs e)
         {
             if (EnableVelocityAndGain.Checked)
             {
@@ -148,14 +176,24 @@ namespace grapher
             }
         }
 
+        private void OnEnableLastMouseMoveCheckStateChange(object sender, EventArgs e)
+        {
+            if (!EnableLastValue.Checked)
+            {
+                SensitivityChart.ClearLastValue();
+                VelocityChart.ClearLastValue();
+                GainChart.ClearLastValue();
+            }
+        }
+
         private void ShowVelocityAndGain()
         {
             VelocityChart.Show();
             GainChart.Show();
-            ContaingForm.Height = SensitivityChart.Height + 
-                                    ChartSeparationVertical +
+            ContaingForm.Height = SensitivityChart.Height +
+                                    Constants.ChartSeparationVertical +
                                     VelocityChart.Height +
-                                    ChartSeparationVertical +
+                                    Constants.ChartSeparationVertical +
                                     GainChart.Height +
                                     FormBorderHeight;
         }
@@ -199,5 +237,12 @@ namespace grapher
         {
             ContaingForm.Width = SensitivityChart.Left + SensitivityChart.Width;
         }
+
+        private void AlignWriteButton()
+        {
+            WriteButton.Left = SensitivityChart.Left / 2 - WriteButton.Width / 2;
+        }
+
+        #endregion Methods
     }
 }

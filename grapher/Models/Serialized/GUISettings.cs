@@ -1,17 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace grapher.Models.Serialized
 {
     [Serializable]
     public class GUISettings
     {
+        #region Constructors
+
         public GUISettings() {}
 
         public GUISettings(bool autoWrite, int dpi, int pollRate)
@@ -21,6 +17,10 @@ namespace grapher.Models.Serialized
             PollRate = pollRate;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         [JsonProperty(Order = 1)]
         public bool AutoWriteToDriverOnStartup { get; set; }
 
@@ -29,5 +29,10 @@ namespace grapher.Models.Serialized
 
         [JsonProperty(Order = 3)]
         public int PollRate { get; set; }
+
+        [JsonProperty(Order = 4)]
+        public bool ShowLastMouseMove { get; set; }
+
+        #endregion Properties
     }
 }

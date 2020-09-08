@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace grapher
 {
     public class Field
     {
-        #region Constants
-
-        public const string DefaultFormatString = "0.#########";
-
-        #endregion Constants
-
-        #region Enums
+        #region Enumerations
 
         public enum FieldState
         {
@@ -27,8 +17,13 @@ namespace grapher
             Unavailable,
         }
 
-        #endregion Enums
+        #endregion Enumerations
 
+        #region Fields
+
+        private double _data;
+
+        #endregion Fields
 
         #region Constructors
 
@@ -36,11 +31,11 @@ namespace grapher
         {
             DefaultText = DecimalString(defaultData);
             Box = box;
-            Data = defaultData;
+            _data = defaultData;
             DefaultData = defaultData;
             State = FieldState.Undefined;
             ContainingForm = containingForm;
-            FormatString = DefaultFormatString;
+            FormatString = Constants.DefaultFieldFormatString;
             box.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyDown);
             box.Leave += new System.EventHandler(FocusLeave);
 
@@ -55,8 +50,6 @@ namespace grapher
 
         private Form ContainingForm { get; }
 
-        public double Data { get; private set; }
-
         public string FormatString { get; set; }
 
         public string DefaultText { get; }
@@ -64,6 +57,68 @@ namespace grapher
         public FieldState State { get; private set; }
 
         public FieldState PreviousState { get; private set; }
+
+        public double Data {
+            get 
+            {
+                if (Box.Visible)
+                {
+                    return _data;
+                }
+                else
+                {
+                    return DefaultData;
+                }
+            } 
+        }
+
+        public int Top
+        {
+            get
+            {
+                return Box.Top;
+            } 
+            set
+            {
+                Box.Top = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return Box.Height;
+            } 
+            set
+            {
+                Box.Height = value;
+            }
+        }
+
+        public int Left
+        {
+            get
+            {
+                return Box.Left;
+            }
+            set
+            {
+                Box.Left = value;
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return Box.Width;
+            }
+            set
+            {
+                Box.Width = value;
+            }
+        }
 
         private double DefaultData { get; }
 
@@ -81,7 +136,7 @@ namespace grapher
                 PreviousState = FieldState.Default;
             }
 
-            Data = DefaultData;
+            _data = DefaultData;
             Box.Text = DefaultText;
             ContainingForm.ActiveControl = null;
         }
@@ -118,7 +173,7 @@ namespace grapher
         {
             SetToEntered();
 
-            Data = value;
+            _data = value;
             Box.Text = DecimalString(Data);
         }
 
@@ -197,7 +252,7 @@ namespace grapher
         {
             try
             {
-                Data = Convert.ToDouble(Box.Text);
+                _data = Convert.ToDouble(Box.Text);
             }
             catch
             {

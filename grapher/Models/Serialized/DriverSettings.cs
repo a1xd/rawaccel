@@ -4,10 +4,16 @@ using System.Threading;
 
 namespace grapher.Models.Serialized
 {
+    #region Enumerations
+
     public enum AccelMode
     {
-        linear, classic, natural, logarithmic, sigmoid, naturalgain, sigmoidgain, power, noaccel
+        linear, classic, natural, naturalgain, sigmoidgain, power, noaccel
     }
+
+    #endregion Enumerations
+
+    #region Structs
 
     [StructLayout(LayoutKind.Sequential)]
     public struct AccelArgs
@@ -33,10 +39,14 @@ namespace grapher.Models.Serialized
         public T y;
     }
 
+    #endregion Structs
+
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
     public class DriverSettings
     {
+        #region Fields
+
         private static readonly IntPtr UnmanagedSettingsHandle = 
             Marshal.AllocHGlobal(Marshal.SizeOf<DriverSettings>());
         private static object UnmanagedSettingsLock = new object();
@@ -47,6 +57,10 @@ namespace grapher.Models.Serialized
         public Vec2<AccelArgs> args;
         public Vec2<double> sensitivity;
         public double minimumTime;
+
+        #endregion Fields
+
+        #region Methods
 
         public static DriverSettings GetActive()
         {
@@ -97,5 +111,7 @@ namespace grapher.Models.Serialized
             */
             return true;
         }
+
+        #endregion Methods
     }
 }

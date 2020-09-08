@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace grapher.Models.Calculations
 {
     public class AccelChartData
     {
+        #region Constructors
+
         public AccelChartData()
         {
             AccelPoints = new SortedDictionary<double, double>();
@@ -16,6 +16,10 @@ namespace grapher.Models.Calculations
             OrderedVelocityPointsList = new List<double>();
             OutVelocityToPoints = new Dictionary<double, (double, double, double)>();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public SortedDictionary<double, double> AccelPoints { get; }
 
@@ -26,6 +30,10 @@ namespace grapher.Models.Calculations
         public List<double> OrderedVelocityPointsList { get; }
 
         public Dictionary<double, (double, double, double)> OutVelocityToPoints { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void Clear()
         {
@@ -57,5 +65,7 @@ namespace grapher.Models.Calculations
                 return values;
             }
         }
+
+        #endregion Methods
     }
 }

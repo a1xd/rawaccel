@@ -3,19 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace grapher.Models.Calculations
 {
     public class AccelCalculator
     {
-        public const int DefaultDPI = 1200;
-        public const int DefaultPollRate = 1000;
-        public const int Resolution = 100;
-        public const double MaxMultiplier = 85;
-        public const double XYToCombinedRatio = 1.3;
+        #region Structs
 
         public struct MagnitudeData
         {
@@ -24,12 +17,19 @@ namespace grapher.Models.Calculations
             public int y;
         }
 
+        #endregion Structs
+
+        #region Constructors
 
         public AccelCalculator(Field dpi, Field pollRate)
         {
             DPI = dpi;
             PollRate = pollRate;
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public ReadOnlyCollection<MagnitudeData> MagnitudesCombined { get; private set; }
 
@@ -46,6 +46,10 @@ namespace grapher.Models.Calculations
         private double XYMaxVelocity { get; set; }
 
         private int Increment { get; set; }
+
+        #endregion Fields
+
+        #region Methods
 
         public void Calculate(AccelData data, ManagedAccel accel, DriverSettings settings)
         {
@@ -171,12 +175,14 @@ namespace grapher.Models.Calculations
         public void ScaleByMouseSettings()
         {
             var dpiPollFactor = DPI.Data / PollRate.Data;
-            CombinedMaxVelocity = dpiPollFactor * MaxMultiplier;
-            Increment = (int) Math.Floor(CombinedMaxVelocity / Resolution);
-            XYMaxVelocity = CombinedMaxVelocity * 1.5;
+            CombinedMaxVelocity = dpiPollFactor * Constants.MaxMultiplier;
+            Increment = (int)Math.Floor(CombinedMaxVelocity / Constants.Resolution);
+            XYMaxVelocity = CombinedMaxVelocity * Constants.XYToCombinedRatio;
             MagnitudesCombined = GetMagnitudes();
             MagnitudesX = GetMagnitudesX();
             MagnitudesY = GetMagnitudesY();
         }
+
+        #endregion Methods
     }
 }

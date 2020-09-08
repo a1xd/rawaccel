@@ -1,26 +1,11 @@
-﻿using grapher.Models.Charts;
-using grapher.Models.Mouse;
-using System;
+﻿using grapher.Models.Mouse;
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using static grapher.AccelCharts;
 
 namespace grapher
 {
     public class ChartXY
     {
-        #region Consts
-
-        public const int ChartSeparationHorizontal = 10;
-
-        #endregion Consts
-
         #region Constructors
 
         public ChartXY(Chart chartX, Chart chartY)
@@ -31,10 +16,16 @@ namespace grapher
             ChartY.Top = ChartX.Top;
             ChartY.Height = ChartX.Height;
             ChartY.Width = ChartX.Width;
-            ChartY.Left = ChartX.Left + ChartX.Width + ChartSeparationHorizontal;
+            ChartY.Left = ChartX.Left + ChartX.Width + Constants.ChartSeparationHorizontal;
 
             SetupChart(ChartX);
             SetupChart(ChartY);
+
+            Combined = false;
+            SetCombined();
+
+            Widened = false;
+            SetWidened();
         }
 
         #endregion Constructors
@@ -81,6 +72,10 @@ namespace grapher
         }
 
         public bool Combined { get; private set; }
+
+        public bool Widened { get; private set; }
+
+        public bool Visible { get; private set; }
 
         private PointData CombinedPointData { get; set; }
 
@@ -134,7 +129,7 @@ namespace grapher
             YPointData = y;
         }
 
-        public void DrawPoints()
+        public void DrawLastMovementValue()
         {
             if(Combined)
             {
@@ -145,6 +140,12 @@ namespace grapher
                 DrawPoint(ChartX, XPointData);
                 DrawPoint(ChartY, YPointData);
             }
+        }
+
+        public void ClearLastValue()
+        {
+            ChartX.Series[1].Points.Clear();
+            ChartY.Series[1].Points.Clear();
         }
 
         public void Bind(IDictionary data)
@@ -171,7 +172,7 @@ namespace grapher
         {
             if (Combined)
             {
-                if (ChartX.Visible)
+                if (Visible)
                 {
                     ChartY.Show();
                 }
@@ -180,19 +181,56 @@ namespace grapher
             }
         }
 
+        public void SetWidened()
+        {
+            if (!Widened)
+            {
+                ChartX.Width = Constants.WideChartWidth;
+                ChartY.Width = Constants.WideChartWidth;
+
+                ChartX.Left = Constants.WideChartLeft;
+                ChartY.Left = ChartX.Left + ChartX.Width + Constants.ChartSeparationHorizontal;
+
+                Widened = true;
+            }
+        }
+
+        public void SetNarrowed()
+        {
+            if (Widened)
+            {
+                ChartX.Width = Constants.NarrowChartWidth;
+                ChartY.Width = Constants.NarrowChartWidth;
+
+                ChartX.Left = Constants.NarrowChartLeft;
+                ChartY.Left = ChartX.Left + ChartX.Width + Constants.ChartSeparationHorizontal;
+
+                Widened = false;
+            }
+        }
+
         public void Hide()
         {
-            ChartX.Hide();
-            ChartY.Hide();
+            if (Visible)
+            {
+                ChartX.Hide();
+                ChartY.Hide();
+                Visible = false;
+            }
         }
 
         public void Show()
         {
-            ChartX.Show();
-
-            if (!Combined)
+            if (!Visible)
             {
-                ChartY.Show();
+                ChartX.Show();
+
+                if (!Combined)
+                {
+                    ChartY.Show();
+                }
+
+                Visible = true;
             }
         }
 

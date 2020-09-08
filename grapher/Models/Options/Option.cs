@@ -1,23 +1,30 @@
 ﻿using grapher.Models.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace grapher
 {
-    public class Option
+    public class Option : OptionBase
     {
+        #region Constructors
+
         public Option(
             Field field,
             Label label,
-            ActiveValueLabel activeValueLabel)
+            ActiveValueLabel activeValueLabel,
+            int left)
         {
             Field = field;
             Label = label;
             ActiveValueLabel = activeValueLabel;
+            Left = left;
+
+            label.AutoSize = false;
+            label.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            label.Width = Field.Left - left - Constants.OptionLabelBoxSeperation;
+            label.Height = Field.Height;
+
+            ActiveValueLabel.Left = Field.Left + Field.Width;
+            ActiveValueLabel.Height = Field.Height;
         }
 
         public Option(
@@ -25,11 +32,13 @@ namespace grapher
             Form containingForm,
             double defaultData,
             Label label,
+            int left,
             ActiveValueLabel activeValueLabel)
             : this(
                   new Field(box, containingForm, defaultData), 
                   label,
-                  activeValueLabel)
+                  activeValueLabel,
+                  left)
         {
         }
 
@@ -38,6 +47,7 @@ namespace grapher
             Form containingForm,
             double defaultData,
             Label label,
+            int left,
             ActiveValueLabel activeValueLabel,
             string startingName)
             : this(
@@ -45,10 +55,15 @@ namespace grapher
                   containingForm,
                   defaultData,
                   label,
+                  left,
                   activeValueLabel)
         {
             SetName(startingName);
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Field Field { get; }
 
@@ -56,11 +71,66 @@ namespace grapher
 
         public ActiveValueLabel ActiveValueLabel { get; }
 
+        public override int Top
+        { 
+            get 
+            {
+                return Field.Top;
+            }
+            set
+            {
+                Field.Top = value;
+                Label.Top = value;
+                ActiveValueLabel.Top = value;
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                return Field.Height;
+            }
+        }
+
+        public override int Left
+        { 
+            get 
+            {
+                return Label.Left;
+            }
+            set
+            {
+                Label.Left = value;
+            }
+        }
+        public override int Width
+        {
+            get
+            {
+                return Field.Left + Field.Width - Label.Left;
+            }
+            set
+            {
+            }
+        }
+
+        public override bool Visible
+        {
+            get
+            {
+                return Field.Box.Visible;
+            }
+        }
+
+        #endregion Properties
+
+        #region Methods
+
         public void SetName(string name)
         {
             Label.Text = name;
             //Label.Left = Convert.ToInt32((Field.Box.Left / 2.0) - (Label.Width / 2.0));   //Centered
-            Label.Left = Convert.ToInt32(Field.Box.Left - Label.Width - 10);    //Right-aligned
         }
 
         public void SetActiveValue(double value)
@@ -68,7 +138,7 @@ namespace grapher
             ActiveValueLabel.SetValue(value);
         }
 
-        public void Hide()
+        public override void Hide()
         {
             Field.Box.Hide();
             Label.Hide();
@@ -87,11 +157,18 @@ namespace grapher
             ActiveValueLabel.SetValue(value);
         }
 
-        public void Show(string name)
+        public override void Show(string name)
         {
             SetName(name);
 
             Show();
         }
+
+        public override void AlignActiveValues()
+        {
+            ActiveValueLabel.Align();
+        }
+
+        #endregion Methods
     }
 }

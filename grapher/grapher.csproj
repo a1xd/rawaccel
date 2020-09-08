@@ -53,8 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Constants.cs" />
     <Compile Include="Layouts\NaturalGainLayout.cs" />
     <Compile Include="Layouts\SigmoidGainLayout.cs" />
+    <Compile Include="Models\AccelGUIFactory.cs" />
     <Compile Include="Models\Calculations\AccelCalculator.cs" />
     <Compile Include="Models\Calculations\AccelChartData.cs" />
     <Compile Include="Models\Calculations\AccelData.cs" />
@@ -63,9 +65,11 @@
     <Compile Include="Models\Charts\EstimatedPoints.cs" />
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
-    <Compile Include="Models\Options\AccelOptions.cs" />
+    <Compile Include="Models\Options\AccelTypeOptions.cs" />
+    <Compile Include="Models\Options\AccelOptionSet.cs" />
     <Compile Include="Models\Options\ActiveValueLabel.cs" />
     <Compile Include="Models\Options\ActiveValueLabelXY.cs" />
+    <Compile Include="Models\Options\ApplyOptions.cs" />
     <Compile Include="Models\Options\CapOptions.cs" />
     <Compile Include="Models\Charts\ChartXY.cs" />
     <Compile Include="Models\Fields\Field.cs" />
@@ -80,13 +84,14 @@
     <Compile Include="Layouts\DefaultLayout.cs" />
     <Compile Include="Layouts\LayoutBase.cs" />
     <Compile Include="Layouts\LinearLayout.cs" />
-    <Compile Include="Layouts\LogLayout.cs" />
     <Compile Include="Layouts\NaturalLayout.cs" />
     <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
-    <Compile Include="Layouts\SigmoidLayout.cs" />
+    <Compile Include="Models\Options\IOption.cs" />
     <Compile Include="Models\Options\OffsetOptions.cs" />
     <Compile Include="Models\Options\Option.cs" />
+    <Compile Include="Layouts\OptionLayout.cs" />
+    <Compile Include="Models\Options\OptionBase.cs" />
     <Compile Include="Models\Options\OptionXY.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
     <Compile Include="Models\Serialized\DriverSettings.cs" />

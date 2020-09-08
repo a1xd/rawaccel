@@ -1,19 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace grapher.Models.Mouse
 {
     public class PointData
     {
+        #region Constructors
+
         public PointData()
         {
             Lock = new Object();
             X = new double[] { 0 };
             Y = new double[] { 0 };
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public Object Lock { get; }
 
@@ -29,6 +31,10 @@ namespace grapher.Models.Mouse
             }
         }
 
+        #endregion Properties
+
+        #region Methods
+
         public void Get(out double[] x, out double[] y)
         {
             lock(Lock)
@@ -37,5 +43,7 @@ namespace grapher.Models.Mouse
                 y = Y;
             }
         }
+
+        #endregion Methods
     }
 }

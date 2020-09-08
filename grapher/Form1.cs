@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using grapher.Models.Calculations;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
+using grapher.Models;
 
 namespace grapher
 {
@@ -36,146 +37,84 @@ namespace grapher
                 throw;
             }
 
-            var accelCharts = new AccelCharts(
-                                this,
-                                new ChartXY(AccelerationChart, AccelerationChartY),
-                                new ChartXY(VelocityChart, VelocityChartY),
-                                new ChartXY(GainChart, GainChartY),
-                                showVelocityGainToolStripMenuItem,
-                                new CheckBox[] { sensXYLock, weightXYLock, capXYLock });
-
-            ActiveValueTitle.AutoSize = false;
-            ActiveValueTitle.Left = LockXYLabel.Left + LockXYLabel.Width;
-            ActiveValueTitle.Width = AccelerationChart.Left - ActiveValueTitle.Left;
-            ActiveValueTitle.TextAlign = ContentAlignment.MiddleCenter;
-
-            var sensitivity = new OptionXY(
-                sensitivityBoxX,
-                sensitivityBoxY,
-                sensXYLock,
+            AccelGUI = AccelGUIFactory.Construct(
                 this,
-                1,
-                sensitivityLabel,
-                new ActiveValueLabelXY(
-                    new ActiveValueLabel(SensitivityActiveXLabel, ActiveValueTitle),
-                    new ActiveValueLabel(SensitivityActiveYLabel, ActiveValueTitle)),
-                "Sensitivity",
-                accelCharts);
-
-            var rotation = new Option(
-                rotationBox,
-                this,
-                0,
-                rotationLabel,
-                new ActiveValueLabel(RotationActiveLabel, ActiveValueTitle),
-                "Rotation");
-
-            var weight = new OptionXY(
-                weightBoxFirst,
-                weightBoxSecond,
-                weightXYLock,
-                this,
-                1,
-                weightLabel,
-                new ActiveValueLabelXY(
-                    new ActiveValueLabel(WeightActiveXLabel, ActiveValueTitle),
-                    new ActiveValueLabel(WeightActiveYLabel, ActiveValueTitle)),
-                "Weight",
-                accelCharts);
-
-            var cap = new OptionXY(
-                capBoxX,
-                capBoxY,
-                capXYLock,
-                this,
-                0,
-                capLabel,
-                new ActiveValueLabelXY(
-                    new ActiveValueLabel(CapActiveXLabel, ActiveValueTitle),
-                    new ActiveValueLabel(CapActiveYLabel, ActiveValueTitle)),
-                "Cap",
-                accelCharts);
-
-            var offset = new Option(
-                offsetBox,
-                this,
-                0,
-                offsetLabel,
-                new ActiveValueLabel(OffsetActiveLabel, ActiveValueTitle),
-                "Offset");
-
-            var offsetOptions = new OffsetOptions(
-                gainOffsetToolStripMenuItem,
-                legacyOffsetToolStripMenuItem,
-                offset);
-
-            // The name and layout of these options is handled by AccelerationOptions object.
-            var acceleration = new Option(
-                new Field(accelerationBox, this, 0),
-                constantOneLabel,
-                new ActiveValueLabel(AccelerationActiveLabel, ActiveValueTitle));
-
-            var limitOrExponent = new Option(
-                new Field(limitBox, this, 2),
-                constantTwoLabel,
-                new ActiveValueLabel(LimitExpActiveLabel, ActiveValueTitle));
-
-            var midpoint = new Option(
-                new Field(midpointBox, this, 0),
-                constantThreeLabel,
-                new ActiveValueLabel(MidpointActiveLabel, ActiveValueTitle));
-
-            var accelerationOptions = new AccelOptions(
-                accelTypeDrop,
-                new Option[]
-                {
-                    offset,
-                    acceleration,
-                    limitOrExponent,
-                    midpoint,
-                },
-                new OptionXY[]
-                {
-                    weight,
-                    cap,
-                },
+                activeAccel,
+                AccelerationChart,
+                AccelerationChartY,
+                VelocityChart,
+                VelocityChartY,
+                GainChart,
+                GainChartY,
+                accelTypeDropX,
+                accelTypeDropY,
                 writeButton,
-                new ActiveValueLabel(AccelTypeActiveLabel, ActiveValueTitle));
-
-            var capOptions = new CapOptions(
+                showVelocityGainToolStripMenuItem,
+                showLastMouseMoveToolStripMenuItem,
+                wholeVectorToolStripMenuItem,
+                byVectorComponentToolStripMenuItem,
                 gainCapToolStripMenuItem,
                 legacyCapToolStripMenuItem,
-                cap,
-                weight);
-
-            var accelCalculator = new AccelCalculator(
-                new Field(DPITextBox.TextBox, this, AccelCalculator.DefaultDPI),
-                new Field(PollRateTextBox.TextBox, this, AccelCalculator.DefaultPollRate));
-
-            var settings = new SettingsManager(
-                activeAccel,
-                accelCalculator.DPI,
-                accelCalculator.PollRate,
-                AutoWriteMenuItem);
-
-            AccelGUI = new AccelGUI(
-                this,
-                accelCalculator,
-                accelCharts,
-                settings,
-                accelerationOptions,
-                sensitivity,
-                rotation,
-                weight,
-                capOptions,
-                offsetOptions,
-                acceleration,
-                limitOrExponent,
-                midpoint,
-                writeButton,
-                MouseLabel,
-                ScaleMenuItem,
-                AutoWriteMenuItem);
+                gainOffsetToolStripMenuItem,
+                legacyOffsetToolStripMenuItem,
+                AutoWriteMenuItem,
+                scaleByDPIToolStripMenuItem,
+                DPITextBox,
+                PollRateTextBox,
+                sensitivityBoxX,
+                sensitivityBoxY,
+                rotationBox,
+                weightBoxX,
+                weightBoxY,
+                capBoxX,
+                capBoxY,
+                offsetBoxX,
+                offsetBoxY,
+                accelerationBoxX,
+                accelerationBoxY,
+                limitBoxX,
+                limitBoxY,
+                midpointBoxX,
+                midpointBoxY,
+                sensXYLock,
+                ByComponentXYLock,
+                LockXYLabel,
+                sensitivityLabel,
+                rotationLabel,
+                weightLabelX,
+                weightLabelY,
+                capLabelX,
+                capLabelY,
+                offsetLabelX,
+                offsetLabelY,
+                constantOneLabelX,
+                constantOneLabelY,
+                constantTwoLabelX,
+                constantTwoLabelY,
+                constantThreeLabelX,
+                constantThreeLabelY,
+                ActiveValueTitle,
+                ActiveValueTitleY,
+                SensitivityActiveXLabel,
+                SensitivityActiveYLabel,
+                RotationActiveLabel,
+                WeightActiveXLabel,
+                WeightActiveYLabel,
+                CapActiveXLabel,
+                CapActiveYLabel,
+                OffsetActiveXLabel,
+                OffsetActiveYLabel,
+                AccelerationActiveLabelX,
+                AccelerationActiveLabelY,
+                LimitExpActiveXLabel,
+                LimitExpActiveYLabel,
+                MidpointActiveXLabel,
+                MidpointActiveYLabel,
+                AccelTypeActiveLabelX,
+                AccelTypeActiveLabelY,
+                OptionSetXTitle,
+                OptionSetYTitle,
+                MouseLabel);
         }
 
         #endregion Constructor
@@ -203,16 +142,11 @@ namespace grapher
 
         }
 
-        private void writeButton_Click(object sender, EventArgs e)
-        {
-            AccelGUI.UpdateActiveSettingsFromFields();
-        }
-
-        #endregion Methods
-
         private void RawAcceleration_Paint(object sender, PaintEventArgs e)
         {
-            AccelGUI.AccelCharts.DrawPoints();
+            AccelGUI.AccelCharts.DrawLastMovement();
         }
+
+        #endregion Method
     }
 }

@@ -1,15 +1,11 @@
 ﻿using grapher.Models.Charts;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static grapher.AccelCharts;
 
 namespace grapher.Models.Calculations
 {
     public class AccelData
     {
+        #region Constructors
 
         public AccelData(
             EstimatedPoints combined,
@@ -25,6 +21,10 @@ namespace grapher.Models.Calculations
             EstimatedY = y;
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         public AccelChartData Combined { get; }
 
         public AccelChartData X { get; }
@@ -36,6 +36,10 @@ namespace grapher.Models.Calculations
         private EstimatedPoints EstimatedX { get; }
 
         private EstimatedPoints EstimatedY { get; }
+
+        #endregion Properties
+
+        #region Methods
 
         public void Clear()
         {
@@ -70,5 +74,6 @@ namespace grapher.Models.Calculations
             EstimatedY.Gain.Set(inYVelocity, yGain);
         }
 
+        #endregion Methods
     }
 }
