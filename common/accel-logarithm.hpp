@@ -18,7 +18,6 @@ namespace rawaccel {
 		}
 
 		inline double operator()(double speed) const {
-			//f(x) = k/(1+e^(-m(c-x)))
 			double scaled_speed = rate * speed + 1;
 			double base_speed = speed + offset;
 
