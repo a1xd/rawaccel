@@ -212,7 +212,7 @@ namespace grapher.Models
             var midpointX = new Option(
                 new Field(midpointBoxX, form, 0),
                 constantThreeLabelX,
-                new ActiveValueLabel(midpointActiveLabelX, activeValueTitleY),
+                new ActiveValueLabel(midpointActiveLabelX, activeValueTitleX),
                 0);
 
             var midpointY = new Option(
