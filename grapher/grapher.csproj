@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Layouts\LogarithmLayout.cs" />
     <Compile Include="Layouts\NaturalGainLayout.cs" />
     <Compile Include="Layouts\SigmoidGainLayout.cs" />
     <Compile Include="Models\AccelGUIFactory.cs" />
@@ -130,6 +131,9 @@
       <Project>{28a3656f-a1de-405c-b547-191c32ec555f}</Project>
       <Name>wrapper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ReadMe\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
