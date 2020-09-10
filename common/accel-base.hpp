@@ -40,7 +40,7 @@ namespace rawaccel {
 
         inline double operator()(double speed) const {
             double offset_speed = speed - offset;
-            return offset_speed > 0 ? ( legacy_offset ? 1 + fn.legacy_offset(offset_speed) * weight : 1 + fn(offset_speed) ) : 1;
+            return offset_speed > 0 ? ( legacy_offset ? 1 + fn.legacy_offset(offset_speed) * weight : 1 + fn(offset_speed) * weight) : 1;
         }
     };
 
