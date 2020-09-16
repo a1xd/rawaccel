@@ -128,7 +128,7 @@ namespace grapher
 
         private void SetupWriteButton()
         {
-            WriteButton.Top = AccelCharts.SensitivityChart.Top + AccelCharts.SensitivityChart.Height - Constants.WriteButtonVerticalOffset;
+            WriteButton.Top = AccelCharts.Top + AccelCharts.TopChartHeight - Constants.WriteButtonVerticalOffset;
             SetWriteButtonDefault();
         }
 

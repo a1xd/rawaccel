@@ -227,7 +227,7 @@ namespace grapher.Models.Options
         private void SetActiveTitlesWhole()
         {
             OptionSetX.ActiveValuesTitle.Left = OptionSetX.Options.Left + OptionSetX.Options.Width;
-            LockXYLabel.Width = (AccelCharts.SensitivityChart.Left - OptionSetX.ActiveValuesTitle.Left) / 2;
+            LockXYLabel.Width = (AccelCharts.Left - OptionSetX.ActiveValuesTitle.Left) / 2;
             OptionSetX.ActiveValuesTitle.Width = LockXYLabel.Width;
             LockXYLabel.Left = OptionSetX.ActiveValuesTitle.Left + OptionSetX.ActiveValuesTitle.Width;
             Sensitivity.Fields.LockCheckBox.Left = LockXYLabel.Left + LockXYLabel.Width / 2 - Sensitivity.Fields.LockCheckBox.Width / 2;
