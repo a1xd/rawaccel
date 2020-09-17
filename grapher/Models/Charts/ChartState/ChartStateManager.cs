@@ -41,23 +41,29 @@ namespace grapher.Models.Charts.ChartState
 
         private XYTwoGraphState XYTwoGraphState { get; }
 
+
         public ChartState DetermineState(DriverSettings settings)
         {
+            ChartState chartState;
+
             if (settings.combineMagnitudes)
             {
                 if (settings.sensitivity.x != settings.sensitivity.y)
                 {
-                    return XYOneGraphState;
+                    chartState = XYOneGraphState;
                 }
                 else
                 {
-                    return CombinedState;
+                    chartState = CombinedState;
                 }
             }
             else
             {
-                return XYTwoGraphState;
+                chartState = XYTwoGraphState;
             }
+
+            chartState.Settings = settings;
+            return chartState;
         }
 
         public ChartState InitialState()

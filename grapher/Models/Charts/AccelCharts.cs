@@ -42,9 +42,9 @@ namespace grapher
 
             EnableLastValue.CheckedChanged += new System.EventHandler(OnEnableLastMouseMoveCheckStateChange);
 
-            HideVelocityAndGain();
             ChartState = ChartStateManager.InitialState();
             ChartState.Activate();
+            HideVelocityAndGain();
         }
 
         #endregion Constructors

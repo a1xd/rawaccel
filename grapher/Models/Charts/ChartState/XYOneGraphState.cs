@@ -16,5 +16,23 @@ namespace grapher.Models.Charts.ChartState
                   accelData)
         { }
 
+        public override void Activate()
+        {
+            SensitivityChart.SetSeparate();
+            VelocityChart.SetSeparate();
+            GainChart.SetSeparate();
+        }
+
+        public override void MakeDots(int x, int y, double timeInMs)
+        {
+            AccelData.CalculateDotsXY(x, y, timeInMs);
+        }
+
+        public override void Bind()
+        {
+            SensitivityChart.BindXY(AccelData.X.AccelPoints, AccelData.Y.AccelPoints);
+            VelocityChart.BindXY(AccelData.X.VelocityPoints, AccelData.Y.VelocityPoints);
+            GainChart.BindXY(AccelData.X.GainPoints, AccelData.Y.GainPoints);
+        }
     }
 }

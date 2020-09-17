@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace grapher.Models.Charts.ChartState
         public ChartXY GainChart { get; }
 
         public AccelData AccelData { get; }
+
+        public virtual DriverSettings Settings { get; set; }
 
         public abstract void MakeDots(int x, int y, double timeInMs);
 

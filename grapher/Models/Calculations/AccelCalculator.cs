@@ -49,6 +49,10 @@ namespace grapher.Models.Calculations
         
         private double MeasurementTime { get; set; }
 
+        private (double, double) RotationVector { get; set; } 
+
+        private (double, double) Sensitivity { get; set; }
+
         #endregion Fields
 
         #region Methods
@@ -59,19 +63,44 @@ namespace grapher.Models.Calculations
 
             data.Clear();
 
-            Calculate(data.Combined, accel, settings.sensitivity.x, MagnitudesCombined);
+            Calculate(data.Combined, accel, settings.sensitivity.x, MagnitudesCombined, true, settings);
             Calculate(data.X, accel, settings.sensitivity.x, MagnitudesX);
             Calculate(data.Y, accel, settings.sensitivity.y, MagnitudesY);
         }
 
-        public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
+        public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData, bool strip = false, DriverSettings settings = null)
         {
             double lastInputMagnitude = 0;
             double lastOutputMagnitude = 0;
 
+            bool stripSens = strip && ShouldStripSens(ref settings);
+            bool stripRot = strip && ShouldStripRot(ref settings);
+
+            if(stripSens)
+            {
+                Sensitivity = GetSens(ref settings);
+            }
+
+            if (stripRot)
+            {
+                RotationVector = GetRotVector(ref settings);
+            }
+
             foreach (var magnitudeDatum in magnitudeData)
             {
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
+                var outputX = output.Item1;
+                var outputY = output.Item2;
+
+                if (stripSens)
+                {
+                    (outputX, outputY) = StripThisSens(outputX, outputY);
+                }
+
+                if (stripRot)
+                {
+                    (outputX, outputY) = StripThisRot(outputX, outputY);
+                }
 
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
                 var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
@@ -173,6 +202,30 @@ namespace grapher.Models.Calculations
         {
             return Magnitude(x, y) / time;
         }
+
+        public static bool ShouldStripSens(ref DriverSettings settings) =>
+            settings.sensitivity.x != settings.sensitivity.y;
+
+        public static bool ShouldStripRot(ref DriverSettings settings) =>
+            settings.rotation > 0;
+
+        public static (double, double) GetSens(ref DriverSettings settings) =>
+            (settings.sensitivity.x, settings.sensitivity.y);
+
+        public static (double, double) GetRotVector(ref DriverSettings settings) =>
+            (Math.Cos(settings.rotation), Math.Sin(settings.rotation));
+
+        public static (double, double) StripSens(double outputX, double outputY, double sensitivityX, double sensitivityY) =>
+            (outputX / sensitivityX, outputY / sensitivityY);
+
+        public (double, double) StripRot(double outputX, double outputY, double rotX, double rotY) =>
+            (outputX * rotX + outputY * rotY, outputX * rotY - outputY * rotX);
+
+        public (double, double) StripThisSens(double outputX, double outputY) =>
+            StripSens(outputX, outputY, Sensitivity.Item1, Sensitivity.Item2);
+
+        public (double, double) StripThisRot(double outputX, double outputY) =>
+            StripRot(outputX, outputY, RotationVector.Item1, RotationVector.Item2);
 
         public void ScaleByMouseSettings()
         {
