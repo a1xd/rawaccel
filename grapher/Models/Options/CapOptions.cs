@@ -156,16 +156,16 @@ namespace grapher
                 CapOption.ActiveValueLabel.FormatString = Constants.GainCapFormatString;
                 CapOption.ActiveValueLabel.Prefix = "Gain";
                 CapOption.SetActiveValue(gainCap);
-                LegacyCapCheck.Checked = true;
-                VelocityGainCapCheck.Checked = false;
+                LegacyCapCheck.Checked = false;
+                VelocityGainCapCheck.Checked = true;
             }
             else
             {
                 CapOption.ActiveValueLabel.FormatString = Constants.DefaultActiveValueFormatString;
                 CapOption.ActiveValueLabel.Prefix = string.Empty;
                 CapOption.SetActiveValue(sensCap);
-                LegacyCapCheck.Checked = false;
-                VelocityGainCapCheck.Checked = true;
+                LegacyCapCheck.Checked = true;
+                VelocityGainCapCheck.Checked = false;
             }
         }
 
