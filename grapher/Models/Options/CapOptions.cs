@@ -194,7 +194,7 @@ namespace grapher
 
         void OnSensitivityCapCheckedChange(object sender, EventArgs e)
         {
-            if (LegacyCapCheck.Checked == true)
+            if (LegacyCapCheck.Checked)
             {
                 EnableSensitivityCap();
             }
@@ -202,7 +202,7 @@ namespace grapher
 
         void OnVelocityGainCapCheckedChange(object sender, EventArgs e)
         {
-            if (LegacyCapCheck.Checked == true)
+            if (VelocityGainCapCheck.Checked)
             {
                 EnableVelocityGainCap();
             }
