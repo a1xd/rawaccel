@@ -46,6 +46,8 @@ namespace grapher.Models.Calculations
         private double XYMaxVelocity { get; set; }
 
         private int Increment { get; set; }
+        
+        private double MeasurementTime { get; set; }
 
         #endregion Fields
 
@@ -62,14 +64,14 @@ namespace grapher.Models.Calculations
             Calculate(data.Y, accel, settings.sensitivity.y, MagnitudesY);
         }
 
-        public static void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
+        public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
         {
             double lastInputMagnitude = 0;
             double lastOutputMagnitude = 0;
 
             foreach (var magnitudeDatum in magnitudeData)
             {
-                var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, 1);
+                var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
 
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
                 var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
@@ -176,7 +178,9 @@ namespace grapher.Models.Calculations
         {
             var dpiPollFactor = DPI.Data / PollRate.Data;
             CombinedMaxVelocity = dpiPollFactor * Constants.MaxMultiplier;
-            Increment = (int)Math.Floor(CombinedMaxVelocity / Constants.Resolution);
+            var ratio = CombinedMaxVelocity / Constants.Resolution;
+            Increment = ratio > 1 ? (int) Math.Floor(ratio) : 1;
+            MeasurementTime = Increment == 1 ? 1 / ratio : 1;
             XYMaxVelocity = CombinedMaxVelocity * Constants.XYToCombinedRatio;
             MagnitudesCombined = GetMagnitudes();
             MagnitudesX = GetMagnitudesX();
