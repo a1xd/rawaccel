@@ -43,7 +43,12 @@ namespace grapher.Models.Charts.ChartState
 
         public abstract void Activate();
 
-        public abstract void Calculate();
+        public abstract void Calculate(ManagedAccel accel, DriverSettings settings);
+        public virtual void SetUpCalculate(DriverSettings settings)
+        {
+            Data.Clear();
+            Calculator.ScaleByMouseSettings();
+        }
 
         public void DrawLastMovement()
         {

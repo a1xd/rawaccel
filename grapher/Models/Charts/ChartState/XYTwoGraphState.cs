@@ -66,5 +66,11 @@ namespace grapher.Models.Charts.ChartState
             VelocityChart.BindXY(Data.X.VelocityPoints, Data.Y.VelocityPoints);
             GainChart.BindXY(Data.X.GainPoints, Data.Y.GainPoints);
         }
+
+        public override void Calculate(ManagedAccel accel, DriverSettings settings)
+        {
+            Calculator.Calculate(Data.X, accel, settings.sensitivity.x, Calculator.MagnitudesX);
+            Calculator.Calculate(Data.Y, accel, settings.sensitivity.y, Calculator.MagnitudesY);
+        }
     }
 }

@@ -102,8 +102,7 @@ namespace grapher
 
         public void UpdateGraph()
         {
-            AccelCalculator.Calculate(
-                AccelCharts.AccelData, 
+            AccelCharts.Calculate(
                 Settings.ActiveAccel, 
                 Settings.RawAccelSettings.AccelerationSettings);
             AccelCharts.Bind();

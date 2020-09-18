@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Serialized;
 
 namespace grapher.Models.Charts.ChartState
 {
@@ -35,6 +36,11 @@ namespace grapher.Models.Charts.ChartState
             SensitivityChart.Bind(Data.Combined.AccelPoints);
             VelocityChart.Bind(Data.Combined.VelocityPoints);
             GainChart.Bind(Data.Combined.GainPoints);
+        }
+
+        public override void Calculate(ManagedAccel accel, DriverSettings settings)
+        {
+            Calculator.Calculate(Data.Combined, accel, settings.sensitivity.x, Calculator.MagnitudesCombined, true, settings);
         }
     }
 }

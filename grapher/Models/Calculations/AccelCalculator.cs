@@ -57,17 +57,6 @@ namespace grapher.Models.Calculations
 
         #region Methods
 
-        public void Calculate(AccelData data, ManagedAccel accel, DriverSettings settings)
-        {
-            ScaleByMouseSettings();
-
-            data.Clear();
-
-            Calculate(data.Combined, accel, settings.sensitivity.x, MagnitudesCombined, true, settings);
-            Calculate(data.X, accel, settings.sensitivity.x, MagnitudesX);
-            Calculate(data.Y, accel, settings.sensitivity.y, MagnitudesY);
-        }
-
         public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData, bool strip = false, DriverSettings settings = null)
         {
             double lastInputMagnitude = 0;

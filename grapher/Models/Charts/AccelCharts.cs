@@ -142,6 +142,12 @@ namespace grapher
             AlignWriteButton();
         }
 
+        public void Calculate(ManagedAccel accel, DriverSettings settings)
+        {
+            ChartState.SetUpCalculate(settings);
+            ChartState.Calculate(accel, settings);
+        }
+
         private static void SetupCharts(
             ChartXY sensitivityChart,
             ChartXY velocityChart,
