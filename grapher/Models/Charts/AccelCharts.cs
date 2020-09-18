@@ -19,14 +19,15 @@ namespace grapher
             ChartXY gainChart,
             ToolStripMenuItem enableVelocityAndGain,
             ToolStripMenuItem enableLastMouseMove,
-            Button writeButton)
+            Button writeButton,
+            AccelCalculator accelCalculator)
         {
             var estimated = new EstimatedPoints();
             var estimatedX = new EstimatedPoints();
             var estimatedY = new EstimatedPoints();
             SetupCharts(sensitivityChart, velocityChart, gainChart, estimated, estimatedX, estimatedY);
             var accelData = new AccelData(estimated, estimatedX, estimatedY);
-            ChartStateManager = new ChartStateManager(sensitivityChart, velocityChart, gainChart, accelData);
+            ChartStateManager = new ChartStateManager(sensitivityChart, velocityChart, gainChart, accelData, accelCalculator);
 
             ContainingForm = form;
             EnableVelocityAndGain = enableVelocityAndGain;
@@ -63,7 +64,7 @@ namespace grapher
         {
             get
             {
-                return ChartState.AccelData;
+                return ChartState.Data;
             }
         }
 

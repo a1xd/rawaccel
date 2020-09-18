@@ -12,12 +12,14 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData)
+            AccelData accelData,
+            AccelCalculator accelCalculator)
             : base(
                   sensitivityChart,
                   velocityChart,
                   gainChart,
-                  accelData)
+                  accelData,
+                  accelCalculator)
         { }
 
         public override DriverSettings Settings
@@ -55,14 +57,14 @@ namespace grapher.Models.Charts.ChartState
                 (xCalc, yCalc) = AccelCalculator.StripSens(xCalc, yCalc, Sensitivity.Item1, Sensitivity.Item2);
             }
 
-            AccelData.CalculateDotsXY((int)Math.Round(xCalc), (int)Math.Round(yCalc), timeInMs);
+            Data.CalculateDotsXY((int)Math.Round(xCalc), (int)Math.Round(yCalc), timeInMs);
         }
 
         public override void Bind()
         {
-            SensitivityChart.BindXY(AccelData.X.AccelPoints, AccelData.Y.AccelPoints);
-            VelocityChart.BindXY(AccelData.X.VelocityPoints, AccelData.Y.VelocityPoints);
-            GainChart.BindXY(AccelData.X.GainPoints, AccelData.Y.GainPoints);
+            SensitivityChart.BindXY(Data.X.AccelPoints, Data.Y.AccelPoints);
+            VelocityChart.BindXY(Data.X.VelocityPoints, Data.Y.VelocityPoints);
+            GainChart.BindXY(Data.X.GainPoints, Data.Y.GainPoints);
         }
     }
 }

@@ -15,12 +15,14 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData)
+            AccelData accelData,
+            AccelCalculator calculator)
         {
             SensitivityChart = sensitivityChart;
             VelocityChart = velocityChart;
             GainChart = gainChart;
-            AccelData = accelData;
+            Data = accelData;
+            Calculator = calculator;
         }
 
         public ChartXY SensitivityChart { get; }
@@ -29,7 +31,9 @@ namespace grapher.Models.Charts.ChartState
 
         public ChartXY GainChart { get; }
 
-        public AccelData AccelData { get; }
+        public AccelData Data { get; }
+
+        public AccelCalculator Calculator { get; }
 
         public virtual DriverSettings Settings { get; set; }
 
@@ -38,6 +42,8 @@ namespace grapher.Models.Charts.ChartState
         public abstract void Bind();
 
         public abstract void Activate();
+
+        public abstract void Calculate();
 
         public void DrawLastMovement()
         {

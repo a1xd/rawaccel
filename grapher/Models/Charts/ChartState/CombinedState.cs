@@ -8,12 +8,14 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData)
+            AccelData accelData,
+            AccelCalculator accelCalculator)
             : base(
                   sensitivityChart,
                   velocityChart,
                   gainChart,
-                  accelData)
+                  accelData,
+                  accelCalculator)
         { }
 
         public override void Activate()
@@ -25,14 +27,14 @@ namespace grapher.Models.Charts.ChartState
 
         public override void MakeDots(int x, int y, double timeInMs)
         {
-            AccelData.CalculateDots(x, y, timeInMs);
+            Data.CalculateDots(x, y, timeInMs);
         }
 
         public override void Bind()
         {
-            SensitivityChart.Bind(AccelData.Combined.AccelPoints);
-            VelocityChart.Bind(AccelData.Combined.VelocityPoints);
-            GainChart.Bind(AccelData.Combined.GainPoints);
+            SensitivityChart.Bind(Data.Combined.AccelPoints);
+            VelocityChart.Bind(Data.Combined.VelocityPoints);
+            GainChart.Bind(Data.Combined.GainPoints);
         }
     }
 }

@@ -14,25 +14,29 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChat,
-            AccelData accelData)
+            AccelData accelData,
+            AccelCalculator accelCalculator)
         {
             CombinedState = new CombinedState(
                 sensitivityChart,
                 velocityChart,
                 gainChat,
-                accelData);
+                accelData,
+                accelCalculator);
 
             XYOneGraphState = new XYOneGraphState(
                 sensitivityChart,
                 velocityChart,
                 gainChat,
-                accelData);
+                accelData,
+                accelCalculator);
 
             XYTwoGraphState = new XYTwoGraphState(
                 sensitivityChart,
                 velocityChart,
                 gainChat,
-                accelData);
+                accelData,
+                accelCalculator);
         }
 
         private CombinedState CombinedState { get; }

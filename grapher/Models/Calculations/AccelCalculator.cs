@@ -97,11 +97,6 @@ namespace grapher.Models.Calculations
                     (outputX, outputY) = StripThisSens(outputX, outputY);
                 }
 
-                if (stripRot)
-                {
-                    (outputX, outputY) = StripThisRot(outputX, outputY);
-                }
-
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
                 var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
 
