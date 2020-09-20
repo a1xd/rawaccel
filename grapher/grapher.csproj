@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Layouts\ExperimentOneLayout.cs" />
     <Compile Include="Layouts\LogarithmLayout.cs" />
     <Compile Include="Layouts\NaturalGainLayout.cs" />
     <Compile Include="Layouts\SigmoidGainLayout.cs" />
