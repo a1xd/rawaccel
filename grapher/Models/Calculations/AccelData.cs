@@ -60,8 +60,8 @@ namespace grapher.Models.Calculations
 
         public void CalculateDotsXY(int x, int y, double timeInMs)
         {
-            var outX = Math.Abs(x);
-            var outY = Math.Abs(y);
+            var outX = Math.Abs(x) / timeInMs;
+            var outY = Math.Abs(y) / timeInMs;
 
             (var inXVelocity, var xSensitivity, var xGain) = X.FindPointValuesFromOut(outX);
             EstimatedX.Velocity.Set(inXVelocity, outX);

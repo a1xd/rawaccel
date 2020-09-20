@@ -57,35 +57,14 @@ namespace grapher.Models.Calculations
 
         #region Methods
 
-        public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData, bool strip = false, DriverSettings settings = null)
+        public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
         {
             double lastInputMagnitude = 0;
             double lastOutputMagnitude = 0;
 
-            bool stripSens = strip && ShouldStripSens(ref settings);
-            bool stripRot = strip && ShouldStripRot(ref settings);
-
-            if(stripSens)
-            {
-                Sensitivity = GetSens(ref settings);
-            }
-
-            if (stripRot)
-            {
-                RotationVector = GetRotVector(ref settings);
-            }
-
             foreach (var magnitudeDatum in magnitudeData)
             {
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
-                var outputX = output.Item1;
-                var outputY = output.Item2;
-
-                if (stripSens)
-                {
-                    (outputX, outputY) = StripThisSens(outputX, outputY);
-                }
-
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
                 var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
 
@@ -113,6 +92,37 @@ namespace grapher.Models.Calculations
             }
 
             data.OrderedVelocityPointsList.AddRange(data.VelocityPoints.Values.ToList());
+        }
+
+        public void CalculateCombinedDiffSens(AccelData data, ManagedAccel accel, DriverSettings settings, ICollection<MagnitudeData> magnitudeData)
+        {
+            double lastInputMagnitudeX = 0;
+            double lastOutputMagnitudeX = 0;
+            double lastInputMagnitudeY = 0;
+            double lastOutputMagnitudeY = 0;
+
+            Sensitivity = GetSens(ref settings);
+
+            foreach (var magnitudeDatum in magnitudeData)
+            {
+                var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
+                var outputWithoutSens = StripThisSens(output.Item1, output.Item2);
+                var magnitudeWithoutSens = Magnitude(outputWithoutSens.Item1, outputWithoutSens.Item2);
+
+                var ratio = magnitudeDatum.magnitude > 0 ? magnitudeWithoutSens / magnitudeDatum.magnitude : 1;
+
+                if (!data.Combined.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.Combined.AccelPoints.Add(magnitudeDatum.magnitude, ratio);
+                }
+
+                var xRatio = magnitudeDatum.x > 0 ? output.Item1 / magnitudeDatum.x : settings.sensitivity.x * ratio;
+
+                if (!data.X.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+
+                }
+            }
         }
 
         public ReadOnlyCollection<MagnitudeData> GetMagnitudes()
