@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Layouts\LogarithmLayout.cs" />
     <Compile Include="Layouts\NaturalGainLayout.cs" />
     <Compile Include="Layouts\SigmoidGainLayout.cs" />
     <Compile Include="Models\AccelGUIFactory.cs" />
@@ -62,7 +63,12 @@
     <Compile Include="Models\Calculations\AccelData.cs" />
     <Compile Include="Models\Charts\AccelCharts.cs" />
     <Compile Include="Models\AccelGUI.cs" />
+    <Compile Include="Models\Charts\ChartState\ChartState.cs" />
+    <Compile Include="Models\Charts\ChartState\ChartStateManager.cs" />
+    <Compile Include="Models\Charts\ChartState\CombinedState.cs" />
     <Compile Include="Models\Charts\EstimatedPoints.cs" />
+    <Compile Include="Models\Charts\ChartState\XYOneGraphState.cs" />
+    <Compile Include="Models\Charts\ChartState\XYTwoGraphState.cs" />
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
     <Compile Include="Models\Options\AccelTypeOptions.cs" />
@@ -130,6 +136,10 @@
       <Project>{28a3656f-a1de-405c-b547-191c32ec555f}</Project>
       <Name>wrapper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Icon\" />
+    <Folder Include="ReadMe\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

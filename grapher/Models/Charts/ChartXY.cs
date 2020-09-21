@@ -8,10 +8,11 @@ namespace grapher
     {
         #region Constructors
 
-        public ChartXY(Chart chartX, Chart chartY)
+        public ChartXY(Chart chartX, Chart chartY, string title)
         {
             ChartX = chartX;
             ChartY = chartY;
+            Title = title;
 
             ChartY.Top = ChartX.Top;
             ChartY.Height = ChartX.Height;
@@ -77,6 +78,8 @@ namespace grapher
 
         public bool Visible { get; private set; }
 
+        public string Title { get; }
+
         private PointData CombinedPointData { get; set; }
 
         private PointData XPointData { get; set; }
@@ -110,14 +113,21 @@ namespace grapher
 
             chart.Series[1].Points.Clear();
             chart.Series[1].Points.AddXY(0, 0);
+
+            chart.Titles[0].Font = new System.Drawing.Font(chart.Titles[0].Font.Name, 9.0f, System.Drawing.FontStyle.Italic);
         }
 
-        public static void DrawPoint(Chart chart, PointData point)
+        public static void DrawPoint(Chart chart, PointData pointOne, PointData pointTwo = null)
         {
             if (chart.Visible)
             {
-                point.Get(out var x, out var y);
+                pointOne.Get(out var x, out var y);
                 chart.Series[1].Points.DataBindXY(x, y);
+                if (pointTwo != null)
+                {
+                    pointTwo.Get(out x, out y);
+                    chart.Series[3].Points.DataBindXY(x, y);
+                }
                 chart.Update();
             }
         }
@@ -129,11 +139,18 @@ namespace grapher
             YPointData = y;
         }
 
-        public void DrawLastMovementValue()
+        public void DrawLastMovementValue(bool twoDotsPerGraph = false)
         {
             if(Combined)
             {
-                DrawPoint(ChartX, CombinedPointData);
+                if (twoDotsPerGraph)
+                {
+                    DrawPoint(ChartX, XPointData, YPointData);
+                }
+                else
+                {
+                    DrawPoint(ChartX, CombinedPointData);
+                }
             }
             else
             {
@@ -159,12 +176,19 @@ namespace grapher
             ChartY.Series[0].Points.DataBindXY(dataY.Keys, dataY.Values);
         }
 
+        public void BindXYCombined(IDictionary dataX, IDictionary dataY)
+        {
+            ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
+            ChartX.Series[2].Points.DataBindXY(dataY.Keys, dataY.Values);
+        }
+
         public void SetCombined()
         {
             if (!Combined)
             {
                 ChartY.Hide();
                 Combined = true;
+                ChartX.Titles[0].Text = Title;
             }
         }
 
@@ -176,6 +200,9 @@ namespace grapher
                 {
                     ChartY.Show();
                 }
+
+                ChartX.Titles[0].Text = SetComponentTitle(Constants.XComponent);
+                ChartY.Titles[0].Text = SetComponentTitle(Constants.YComponent);
 
                 Combined = false;
             }
@@ -246,6 +273,10 @@ namespace grapher
             ChartY.Height = height;
         }
 
+        private string SetComponentTitle(string component)
+        {
+            return $"{Title} : {component}";
+        }
         #endregion Methods
     }
 }

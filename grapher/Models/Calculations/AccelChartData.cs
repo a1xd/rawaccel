@@ -52,18 +52,37 @@ namespace grapher.Models.Calculations
             }
             else
             {
-                var velIdx = OrderedVelocityPointsList.BinarySearch(outVelocityValue);
-
-                if (velIdx < 0)
-                {
-                    velIdx = ~velIdx;
-                }
+                var velIdx = GetVelocityIndex(outVelocityValue);
 
                 velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
                 values = (VelocityPoints.ElementAt(velIdx).Key, AccelPoints.ElementAt(velIdx).Value, GainPoints.ElementAt(velIdx).Value);
                 OutVelocityToPoints.Add(outVelocityValue, values);
                 return values;
             }
+        }
+
+        public (double, double, double) ValuesAtIndex(int index)
+        {
+            return (AccelPoints.ElementAt(index).Value, VelocityPoints.ElementAt(index).Value, GainPoints.ElementAt(index).Value);
+        }
+
+        public (double, double, double) ValuesAtInVelocity(double inVelocity)
+        {
+            return (AccelPoints[inVelocity], VelocityPoints[inVelocity], GainPoints[inVelocity]);
+        }
+
+        public int GetVelocityIndex(double outVelocityValue)
+        {
+            var velIdx = OrderedVelocityPointsList.BinarySearch(outVelocityValue);
+
+            if (velIdx < 0)
+            {
+                velIdx = ~velIdx;
+            }
+
+            velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
+
+            return velIdx;
         }
 
         #endregion Methods

@@ -89,14 +89,19 @@ namespace grapher.Models
             Label optionSetYTitle,
             Label mouseLabel)
         {
+            var accelCalculator = new AccelCalculator(
+                new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI),
+                new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate));
+
             var accelCharts = new AccelCharts(
                                 form,
-                                new ChartXY(accelerationChart, accelerationChartY),
-                                new ChartXY(velocityChart, velocityChartY),
-                                new ChartXY(gainChart, gainChartY),
+                                new ChartXY(accelerationChart, accelerationChartY, Constants.SensitivityChartTitle),
+                                new ChartXY(velocityChart, velocityChartY, Constants.VelocityChartTitle),
+                                new ChartXY(gainChart, gainChartY, Constants.GainChartTitle),
                                 showVelocityGainToolStripMenuItem,
                                 showLastMouseMoveMenuItem,
-                                writeButton);
+                                writeButton,
+                                accelCalculator);
 
             var sensitivity = new OptionXY(
                 sensitivityBoxX,
@@ -212,7 +217,7 @@ namespace grapher.Models
             var midpointX = new Option(
                 new Field(midpointBoxX, form, 0),
                 constantThreeLabelX,
-                new ActiveValueLabel(midpointActiveLabelX, activeValueTitleY),
+                new ActiveValueLabel(midpointActiveLabelX, activeValueTitleX),
                 0);
 
             var midpointY = new Option(
@@ -275,10 +280,6 @@ namespace grapher.Models
                 rotation,
                 lockXYLabel,
                 accelCharts);
-
-            var accelCalculator = new AccelCalculator(
-                new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI),
-                new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate));
 
             var settings = new SettingsManager(
                 activeAccel,

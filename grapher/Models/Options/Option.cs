@@ -119,7 +119,7 @@ namespace grapher
         {
             get
             {
-                return Field.Box.Visible;
+                return Field.Box.Enabled;
             }
         }
 
@@ -140,14 +140,14 @@ namespace grapher
 
         public override void Hide()
         {
-            Field.Box.Hide();
+            Field.Hide();
             Label.Hide();
             ActiveValueLabel.Hide();
         }
 
         public void Show()
         {
-            Field.Box.Show();
+            Field.Show();
             Label.Show();
             ActiveValueLabel.Show();
         }

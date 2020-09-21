@@ -2,19 +2,19 @@
 
 namespace grapher.Layouts
 {
-    public class PowerLayout : LayoutBase
+    public class LogarithmLayout : LayoutBase
     {
-        public PowerLayout()
+        public LogarithmLayout ()
             : base()
         {
-            Name = "Power";
-            Index = (int)AccelMode.power;
+            Name = "Logarithm";
+            Index = (int)AccelMode.logarithm;
 
-            AccelLayout = new OptionLayout(true, Acceleration);
+            AccelLayout = new OptionLayout(true, Scale);
             CapLayout = new OptionLayout(true, Cap);
             WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(true, Offset);
-            LimExpLayout = new OptionLayout(true, Exponent);
+            LimExpLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
         }
     }

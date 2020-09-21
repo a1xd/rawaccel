@@ -106,7 +106,7 @@ namespace grapher
         {
             get
             {
-                return XField.Box.Visible;
+                return XField.Box.Enabled;
             }
         }
 
@@ -137,7 +137,7 @@ namespace grapher
         {
             Combined = true;
             YField.SetToUnavailable();
-            YField.Box.Hide();
+            YField.Hide();
             XField.Box.Width = CombinedWidth;
             XField.FormatString = Constants.DefaultFieldFormatString;
         }
@@ -160,26 +160,26 @@ namespace grapher
                 YField.SetToEntered(XField.Data);
             }
 
-            if (XField.Box.Visible)
+            if (XField.Box.Enabled)
             {
-                YField.Box.Show();
+                YField.Show();
             }
         }
 
         public void Show()
         {
-            XField.Box.Show();
+            XField.Show();
 
             if (!Combined)
             {
-                YField.Box.Show();
+                YField.Show();
             }
         }
 
         public void Hide()
         {
-            XField.Box.Hide();
-            YField.Box.Hide();
+            XField.Hide();
+            YField.Hide();
         }
 
         #endregion Methods

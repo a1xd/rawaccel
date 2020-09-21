@@ -18,6 +18,7 @@ namespace grapher
             new ClassicLayout(),
             new NaturalLayout(),
             new PowerLayout(),
+            new LogarithmLayout(),
             new NaturalGainLayout(),
             new SigmoidGainLayout(),
             new OffLayout()

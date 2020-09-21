@@ -12,7 +12,7 @@ namespace grapher.Layouts
 
             AccelLayout = new OptionLayout(true, Acceleration);
             CapLayout = new OptionLayout(true, Cap);
-            WeightLayout = new OptionLayout(false, string.Empty);
+            WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(true, Offset);
             LimExpLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);

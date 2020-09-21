@@ -61,7 +61,7 @@ namespace grapher
         public double Data {
             get 
             {
-                if (Box.Visible)
+                if (Box.Enabled)
                 {
                     return _data;
                 }
@@ -125,6 +125,18 @@ namespace grapher
         #endregion Properties
 
         #region Methods
+
+        public void Hide()
+        {
+            Box.Hide();
+            Box.Enabled = false;
+        }
+
+        public void Show()
+        {
+            Box.Show();
+            Box.Enabled = true;
+        }
 
         public void SetToDefault()
         {
