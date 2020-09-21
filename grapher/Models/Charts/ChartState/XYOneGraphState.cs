@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Serialized;
 
 namespace grapher.Models.Charts.ChartState
 {
@@ -27,7 +28,7 @@ namespace grapher.Models.Charts.ChartState
 
         public override void MakeDots(int x, int y, double timeInMs)
         {
-            Data.CalculateDotsXY(x, y, timeInMs);
+            Data.CalculateDotsCombinedDiffSens(x, y, timeInMs);
         }
 
         public override void Bind()
@@ -35,6 +36,11 @@ namespace grapher.Models.Charts.ChartState
             SensitivityChart.BindXY(Data.X.AccelPoints, Data.Y.AccelPoints);
             VelocityChart.BindXY(Data.X.VelocityPoints, Data.Y.VelocityPoints);
             GainChart.BindXY(Data.X.GainPoints, Data.Y.GainPoints);
+        }
+
+        public override void Calculate(ManagedAccel accel, DriverSettings settings)
+        {
+            Calculator.CalculateCombinedDiffSens(Data, accel, settings, Calculator.MagnitudesCombined);
         }
     }
 }

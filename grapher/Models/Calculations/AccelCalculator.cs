@@ -96,9 +96,8 @@ namespace grapher.Models.Calculations
 
         public void CalculateCombinedDiffSens(AccelData data, ManagedAccel accel, DriverSettings settings, ICollection<MagnitudeData> magnitudeData)
         {
-            double lastInputMagnitudeX = 0;
+            double lastInputMagnitude = 0;
             double lastOutputMagnitudeX = 0;
-            double lastInputMagnitudeY = 0;
             double lastOutputMagnitudeY = 0;
 
             Sensitivity = GetSens(ref settings);
@@ -116,13 +115,54 @@ namespace grapher.Models.Calculations
                     data.Combined.AccelPoints.Add(magnitudeDatum.magnitude, ratio);
                 }
 
-                var xRatio = magnitudeDatum.x > 0 ? output.Item1 / magnitudeDatum.x : settings.sensitivity.x * ratio;
+                var xRatio = settings.sensitivity.x * ratio;
+                var yRatio = settings.sensitivity.y * ratio;
 
                 if (!data.X.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
-
+                    data.X.AccelPoints.Add(magnitudeDatum.magnitude, xRatio);
                 }
+
+                if (!data.Y.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.Y.AccelPoints.Add(magnitudeDatum.magnitude, yRatio);
+                }
+
+                var xOut = xRatio * magnitudeDatum.magnitude;
+                var yOut = yRatio * magnitudeDatum.magnitude;
+
+                var inDiff = magnitudeDatum.magnitude - lastInputMagnitude;
+                var xOutDiff = xOut - lastOutputMagnitudeX;
+                var yOutDiff = yOut - lastOutputMagnitudeY;
+                var xSlope = inDiff > 0 ? xOutDiff / inDiff : settings.sensitivity.x;
+                var ySlope = inDiff > 0 ? yOutDiff / inDiff : settings.sensitivity.y;
+
+                if (!data.X.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.X.VelocityPoints.Add(magnitudeDatum.magnitude, xOut);
+                }
+
+                if (!data.Y.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.Y.VelocityPoints.Add(magnitudeDatum.magnitude, yOut);
+                }
+
+                if (!data.X.GainPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.X.GainPoints.Add(magnitudeDatum.magnitude, xSlope);
+                }
+
+                if (!data.Y.GainPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.Y.GainPoints.Add(magnitudeDatum.magnitude, ySlope);
+                }
+
+                lastInputMagnitude = magnitudeDatum.magnitude;
+                lastOutputMagnitudeX = xOutDiff;
+                lastOutputMagnitudeY = yOutDiff;
             }
+
+            data.Combined.OrderedVelocityPointsList.AddRange(data.Combined.VelocityPoints.Values.ToList());
         }
 
         public ReadOnlyCollection<MagnitudeData> GetMagnitudes()
