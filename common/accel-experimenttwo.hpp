@@ -37,7 +37,12 @@ namespace rawaccel {
 
 		inline int map(double speed)
 		{
-			return speed > 0 ? (int)floor(200*log10(speed)+402) : 0;
+			int index = speed > 0 ? (int)floor(200*log10(speed)+402) : 0;
+
+			if (index < 0) return 0;
+			if (index > 1200) return 1200;
+
+			return index;
 		}
 
 		inline double fill(double* lookup)
