@@ -110,9 +110,9 @@ namespace grapher.Models.Calculations
 
                 var ratio = magnitudeDatum.magnitude > 0 ? magnitudeWithoutSens / magnitudeDatum.magnitude : 1;
 
-                if (!data.Combined.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.Combined.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
-                    data.Combined.AccelPoints.Add(magnitudeDatum.magnitude, ratio);
+                    data.Combined.VelocityPoints.Add(magnitudeDatum.magnitude, magnitudeWithoutSens);
                 }
 
                 var xRatio = settings.sensitivity.x * ratio;
@@ -158,8 +158,8 @@ namespace grapher.Models.Calculations
                 }
 
                 lastInputMagnitude = magnitudeDatum.magnitude;
-                lastOutputMagnitudeX = xOutDiff;
-                lastOutputMagnitudeY = yOutDiff;
+                lastOutputMagnitudeX = xOut;
+                lastOutputMagnitudeY = yOut;
             }
 
             data.Combined.OrderedVelocityPointsList.AddRange(data.Combined.VelocityPoints.Values.ToList());

@@ -63,7 +63,7 @@ namespace grapher.Models.Calculations
 
         public (double, double, double) ValuesAtIndex(int index)
         {
-            return (VelocityPoints.ElementAt(index).Value, AccelPoints.ElementAt(index).Value, GainPoints.ElementAt(index).Value);
+            return (AccelPoints.ElementAt(index).Value, VelocityPoints.ElementAt(index).Value, GainPoints.ElementAt(index).Value);
         }
 
         public int GetVelocityIndex(double outVelocityValue)
@@ -74,6 +74,8 @@ namespace grapher.Models.Calculations
             {
                 velIdx = ~velIdx;
             }
+
+            velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
 
             return velIdx;
         }

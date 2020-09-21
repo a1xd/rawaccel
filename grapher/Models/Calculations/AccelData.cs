@@ -1,6 +1,8 @@
 ﻿using grapher.Models.Charts;
+using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace grapher.Models.Calculations
 {
@@ -20,6 +22,8 @@ namespace grapher.Models.Calculations
             Estimated = combined;
             EstimatedX = x;
             EstimatedY = y;
+
+            OutVelocityToPoints = new Dictionary<double, (double, double, double, double, double, double, double)>();
         }
 
         #endregion Constructors
@@ -49,6 +53,7 @@ namespace grapher.Models.Calculations
             Combined.Clear();
             X.Clear();
             Y.Clear();
+            OutVelocityToPoints.Clear();
         }
 
         public void CalculateDots(int x, int y, double timeInMs)
@@ -77,9 +82,10 @@ namespace grapher.Models.Calculations
             EstimatedY.Gain.Set(inYVelocity, yGain);
         }
 
-        public void CalculateDotsCombinedDiffSens(int x, int y, double timeInMs)
+        public void CalculateDotsCombinedDiffSens(int x, int y, double timeInMs, DriverSettings settings)
         {
-            var outVelocity = AccelCalculator.Velocity(x, y, timeInMs);
+            (var xStripped, var yStripped) = AccelCalculator.StripSens(x, y, settings.sensitivity.x, settings.sensitivity.y);
+            var outVelocity = AccelCalculator.Velocity(xStripped, yStripped, timeInMs);
 
             if (OutVelocityToPoints.TryGetValue(outVelocity, out var points))
             {
@@ -93,9 +99,9 @@ namespace grapher.Models.Calculations
             else
             {
                 var index = Combined.GetVelocityIndex(outVelocity);
-                var inVelocity = Combined.VelocityPoints[index];
-                var xPoints = X.FindPointValuesFromOut(outVelocity);
-                var yPoints = Y.FindPointValuesFromOut(outVelocity);
+                var inVelocity = Combined.VelocityPoints.ElementAt(index).Value;
+                var xPoints = X.ValuesAtIndex(index);
+                var yPoints = Y.ValuesAtIndex(index);
                 OutVelocityToPoints.Add(outVelocity, (inVelocity, xPoints.Item1, xPoints.Item2, xPoints.Item3, yPoints.Item1, yPoints.Item2, yPoints.Item3));
                 EstimatedX.Sensitivity.Set(inVelocity, xPoints.Item1);
                 EstimatedX.Velocity.Set(inVelocity, xPoints.Item2);

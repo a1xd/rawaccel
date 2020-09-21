@@ -98,6 +98,7 @@ namespace grapher
 
         private ChartStateManager ChartStateManager { get; }
 
+
         #endregion Properties
 
         #region Methods

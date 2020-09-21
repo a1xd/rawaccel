@@ -96,8 +96,8 @@ namespace grapher
 
         public void RefreshOnRead()
         {
-            UpdateGraph();
             UpdateShownActiveValues();
+            UpdateGraph();
         }
 
         public void UpdateGraph()

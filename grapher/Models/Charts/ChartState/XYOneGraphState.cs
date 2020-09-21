@@ -17,25 +17,27 @@ namespace grapher.Models.Charts.ChartState
                   gainChart,
                   accelData,
                   accelCalculator)
-        { }
+        {
+            TwoDotsPerGraph = true;
+        }
 
         public override void Activate()
         {
-            SensitivityChart.SetSeparate();
-            VelocityChart.SetSeparate();
-            GainChart.SetSeparate();
+            SensitivityChart.SetCombined();
+            VelocityChart.SetCombined();
+            GainChart.SetCombined();
         }
 
         public override void MakeDots(int x, int y, double timeInMs)
         {
-            Data.CalculateDotsCombinedDiffSens(x, y, timeInMs);
+            Data.CalculateDotsCombinedDiffSens(x, y, timeInMs, Settings);
         }
 
         public override void Bind()
         {
-            SensitivityChart.BindXY(Data.X.AccelPoints, Data.Y.AccelPoints);
-            VelocityChart.BindXY(Data.X.VelocityPoints, Data.Y.VelocityPoints);
-            GainChart.BindXY(Data.X.GainPoints, Data.Y.GainPoints);
+            SensitivityChart.BindXYCombined(Data.X.AccelPoints, Data.Y.AccelPoints);
+            VelocityChart.BindXYCombined(Data.X.VelocityPoints, Data.Y.VelocityPoints);
+            GainChart.BindXYCombined(Data.X.GainPoints, Data.Y.GainPoints);
         }
 
         public override void Calculate(ManagedAccel accel, DriverSettings settings)

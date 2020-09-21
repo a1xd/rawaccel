@@ -23,6 +23,7 @@ namespace grapher.Models.Charts.ChartState
             GainChart = gainChart;
             Data = accelData;
             Calculator = calculator;
+            TwoDotsPerGraph = false;
         }
 
         public ChartXY SensitivityChart { get; }
@@ -37,6 +38,8 @@ namespace grapher.Models.Charts.ChartState
 
         public virtual DriverSettings Settings { get; set; }
 
+        internal bool TwoDotsPerGraph { get; set; }
+
         public abstract void MakeDots(int x, int y, double timeInMs);
 
         public abstract void Bind();
@@ -44,6 +47,7 @@ namespace grapher.Models.Charts.ChartState
         public abstract void Activate();
 
         public abstract void Calculate(ManagedAccel accel, DriverSettings settings);
+
         public virtual void SetUpCalculate(DriverSettings settings)
         {
             Data.Clear();
@@ -52,9 +56,9 @@ namespace grapher.Models.Charts.ChartState
 
         public void DrawLastMovement()
         {
-            SensitivityChart.DrawLastMovementValue();
-            VelocityChart.DrawLastMovementValue();
-            GainChart.DrawLastMovementValue();
+            SensitivityChart.DrawLastMovementValue(TwoDotsPerGraph);
+            VelocityChart.DrawLastMovementValue(TwoDotsPerGraph);
+            GainChart.DrawLastMovementValue(TwoDotsPerGraph);
         }
 
         public void SetWidened()
