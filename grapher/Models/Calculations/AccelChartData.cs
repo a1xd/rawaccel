@@ -66,6 +66,11 @@ namespace grapher.Models.Calculations
             return (AccelPoints.ElementAt(index).Value, VelocityPoints.ElementAt(index).Value, GainPoints.ElementAt(index).Value);
         }
 
+        public (double, double, double) ValuesAtInVelocity(double inVelocity)
+        {
+            return (AccelPoints[inVelocity], VelocityPoints[inVelocity], GainPoints[inVelocity]);
+        }
+
         public int GetVelocityIndex(double outVelocityValue)
         {
             var velIdx = OrderedVelocityPointsList.BinarySearch(outVelocityValue);

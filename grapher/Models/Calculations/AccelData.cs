@@ -99,7 +99,7 @@ namespace grapher.Models.Calculations
             else
             {
                 var index = Combined.GetVelocityIndex(outVelocity);
-                var inVelocity = Combined.VelocityPoints.ElementAt(index).Value;
+                var inVelocity = Combined.VelocityPoints.ElementAt(index).Key;
                 var xPoints = X.ValuesAtIndex(index);
                 var yPoints = Y.ValuesAtIndex(index);
                 OutVelocityToPoints.Add(outVelocity, (inVelocity, xPoints.Item1, xPoints.Item2, xPoints.Item3, yPoints.Item1, yPoints.Item2, yPoints.Item3));
