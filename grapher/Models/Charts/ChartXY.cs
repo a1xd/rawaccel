@@ -117,12 +117,17 @@ namespace grapher
             chart.Titles[0].Font = new System.Drawing.Font(chart.Titles[0].Font.Name, 9.0f, System.Drawing.FontStyle.Italic);
         }
 
-        public static void DrawPoint(Chart chart, PointData point)
+        public static void DrawPoint(Chart chart, PointData pointOne, PointData pointTwo = null)
         {
             if (chart.Visible)
             {
-                point.Get(out var x, out var y);
+                pointOne.Get(out var x, out var y);
                 chart.Series[1].Points.DataBindXY(x, y);
+                if (pointTwo != null)
+                {
+                    pointTwo.Get(out x, out y);
+                    chart.Series[3].Points.DataBindXY(x, y);
+                }
                 chart.Update();
             }
         }
@@ -134,11 +139,18 @@ namespace grapher
             YPointData = y;
         }
 
-        public void DrawLastMovementValue()
+        public void DrawLastMovementValue(bool twoDotsPerGraph = false)
         {
             if(Combined)
             {
-                DrawPoint(ChartX, CombinedPointData);
+                if (twoDotsPerGraph)
+                {
+                    DrawPoint(ChartX, XPointData, YPointData);
+                }
+                else
+                {
+                    DrawPoint(ChartX, CombinedPointData);
+                }
             }
             else
             {
@@ -162,6 +174,12 @@ namespace grapher
         {
             ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
             ChartY.Series[0].Points.DataBindXY(dataY.Keys, dataY.Values);
+        }
+
+        public void BindXYCombined(IDictionary dataX, IDictionary dataY)
+        {
+            ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
+            ChartX.Series[2].Points.DataBindXY(dataY.Keys, dataY.Values);
         }
 
         public void SetCombined()

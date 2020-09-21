@@ -89,6 +89,10 @@ namespace grapher.Models
             Label optionSetYTitle,
             Label mouseLabel)
         {
+            var accelCalculator = new AccelCalculator(
+                new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI),
+                new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate));
+
             var accelCharts = new AccelCharts(
                                 form,
                                 new ChartXY(accelerationChart, accelerationChartY, Constants.SensitivityChartTitle),
@@ -96,7 +100,8 @@ namespace grapher.Models
                                 new ChartXY(gainChart, gainChartY, Constants.GainChartTitle),
                                 showVelocityGainToolStripMenuItem,
                                 showLastMouseMoveMenuItem,
-                                writeButton);
+                                writeButton,
+                                accelCalculator);
 
             var sensitivity = new OptionXY(
                 sensitivityBoxX,
@@ -275,10 +280,6 @@ namespace grapher.Models
                 rotation,
                 lockXYLabel,
                 accelCharts);
-
-            var accelCalculator = new AccelCalculator(
-                new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI),
-                new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate));
 
             var settings = new SettingsManager(
                 activeAccel,

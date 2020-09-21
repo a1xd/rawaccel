@@ -96,14 +96,13 @@ namespace grapher
 
         public void RefreshOnRead()
         {
-            UpdateGraph();
             UpdateShownActiveValues();
+            UpdateGraph();
         }
 
         public void UpdateGraph()
         {
-            AccelCalculator.Calculate(
-                AccelCharts.AccelData, 
+            AccelCharts.Calculate(
                 Settings.ActiveAccel, 
                 Settings.RawAccelSettings.AccelerationSettings);
             AccelCharts.Bind();
@@ -128,7 +127,7 @@ namespace grapher
 
         private void SetupWriteButton()
         {
-            WriteButton.Top = AccelCharts.SensitivityChart.Top + AccelCharts.SensitivityChart.Height - Constants.WriteButtonVerticalOffset;
+            WriteButton.Top = AccelCharts.Top + AccelCharts.TopChartHeight - Constants.WriteButtonVerticalOffset;
             SetWriteButtonDefault();
         }
 

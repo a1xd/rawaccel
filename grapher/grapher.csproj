@@ -64,7 +64,12 @@
     <Compile Include="Models\Calculations\AccelData.cs" />
     <Compile Include="Models\Charts\AccelCharts.cs" />
     <Compile Include="Models\AccelGUI.cs" />
+    <Compile Include="Models\Charts\ChartState\ChartState.cs" />
+    <Compile Include="Models\Charts\ChartState\ChartStateManager.cs" />
+    <Compile Include="Models\Charts\ChartState\CombinedState.cs" />
     <Compile Include="Models\Charts\EstimatedPoints.cs" />
+    <Compile Include="Models\Charts\ChartState\XYOneGraphState.cs" />
+    <Compile Include="Models\Charts\ChartState\XYTwoGraphState.cs" />
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
     <Compile Include="Models\Options\AccelTypeOptions.cs" />
@@ -134,6 +139,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Icon\" />
     <Folder Include="ReadMe\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

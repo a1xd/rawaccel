@@ -49,20 +49,13 @@ namespace grapher.Models.Calculations
         
         private double MeasurementTime { get; set; }
 
+        private (double, double) RotationVector { get; set; } 
+
+        private (double, double) Sensitivity { get; set; }
+
         #endregion Fields
 
         #region Methods
-
-        public void Calculate(AccelData data, ManagedAccel accel, DriverSettings settings)
-        {
-            ScaleByMouseSettings();
-
-            data.Clear();
-
-            Calculate(data.Combined, accel, settings.sensitivity.x, MagnitudesCombined);
-            Calculate(data.X, accel, settings.sensitivity.x, MagnitudesX);
-            Calculate(data.Y, accel, settings.sensitivity.y, MagnitudesY);
-        }
 
         public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
         {
@@ -72,7 +65,6 @@ namespace grapher.Models.Calculations
             foreach (var magnitudeDatum in magnitudeData)
             {
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
-
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
 
                 var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
@@ -101,6 +93,77 @@ namespace grapher.Models.Calculations
             }
 
             data.OrderedVelocityPointsList.AddRange(data.VelocityPoints.Values.ToList());
+        }
+
+        public void CalculateCombinedDiffSens(AccelData data, ManagedAccel accel, DriverSettings settings, ICollection<MagnitudeData> magnitudeData)
+        {
+            double lastInputMagnitude = 0;
+            double lastOutputMagnitudeX = 0;
+            double lastOutputMagnitudeY = 0;
+
+            Sensitivity = GetSens(ref settings);
+
+            foreach (var magnitudeDatum in magnitudeData)
+            {
+                var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
+                var outputWithoutSens = StripThisSens(output.Item1, output.Item2);
+                var magnitudeWithoutSens = Magnitude(outputWithoutSens.Item1, outputWithoutSens.Item2);
+
+                var ratio = magnitudeDatum.magnitude > 0 ? magnitudeWithoutSens / magnitudeDatum.magnitude : 1;
+
+                if (!data.Combined.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.Combined.VelocityPoints.Add(magnitudeDatum.magnitude, magnitudeWithoutSens);
+                }
+
+                var xRatio = settings.sensitivity.x * ratio;
+                var yRatio = settings.sensitivity.y * ratio;
+
+                if (!data.X.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.X.AccelPoints.Add(magnitudeDatum.magnitude, xRatio);
+                }
+
+                if (!data.Y.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.Y.AccelPoints.Add(magnitudeDatum.magnitude, yRatio);
+                }
+
+                var xOut = xRatio * magnitudeDatum.magnitude;
+                var yOut = yRatio * magnitudeDatum.magnitude;
+
+                var inDiff = magnitudeDatum.magnitude - lastInputMagnitude;
+                var xOutDiff = xOut - lastOutputMagnitudeX;
+                var yOutDiff = yOut - lastOutputMagnitudeY;
+                var xSlope = inDiff > 0 ? xOutDiff / inDiff : settings.sensitivity.x;
+                var ySlope = inDiff > 0 ? yOutDiff / inDiff : settings.sensitivity.y;
+
+                if (!data.X.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.X.VelocityPoints.Add(magnitudeDatum.magnitude, xOut);
+                }
+
+                if (!data.Y.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.Y.VelocityPoints.Add(magnitudeDatum.magnitude, yOut);
+                }
+
+                if (!data.X.GainPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.X.GainPoints.Add(magnitudeDatum.magnitude, xSlope);
+                }
+
+                if (!data.Y.GainPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.Y.GainPoints.Add(magnitudeDatum.magnitude, ySlope);
+                }
+
+                lastInputMagnitude = magnitudeDatum.magnitude;
+                lastOutputMagnitudeX = xOut;
+                lastOutputMagnitudeY = yOut;
+            }
+
+            data.Combined.OrderedVelocityPointsList.AddRange(data.Combined.VelocityPoints.Values.ToList());
         }
 
         public ReadOnlyCollection<MagnitudeData> GetMagnitudes()
@@ -174,6 +237,30 @@ namespace grapher.Models.Calculations
         {
             return Magnitude(x, y) / time;
         }
+
+        public static bool ShouldStripSens(ref DriverSettings settings) =>
+            settings.sensitivity.x != settings.sensitivity.y;
+
+        public static bool ShouldStripRot(ref DriverSettings settings) =>
+            settings.rotation > 0;
+
+        public static (double, double) GetSens(ref DriverSettings settings) =>
+            (settings.sensitivity.x, settings.sensitivity.y);
+
+        public static (double, double) GetRotVector(ref DriverSettings settings) =>
+            (Math.Cos(settings.rotation), Math.Sin(settings.rotation));
+
+        public static (double, double) StripSens(double outputX, double outputY, double sensitivityX, double sensitivityY) =>
+            (outputX / sensitivityX, outputY / sensitivityY);
+
+        public (double, double) StripRot(double outputX, double outputY, double rotX, double rotY) =>
+            (outputX * rotX + outputY * rotY, outputX * rotY - outputY * rotX);
+
+        public (double, double) StripThisSens(double outputX, double outputY) =>
+            StripSens(outputX, outputY, Sensitivity.Item1, Sensitivity.Item2);
+
+        public (double, double) StripThisRot(double outputX, double outputY) =>
+            StripRot(outputX, outputY, RotationVector.Item1, RotationVector.Item2);
 
         public void ScaleByMouseSettings()
         {

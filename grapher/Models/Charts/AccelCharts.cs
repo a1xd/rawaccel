@@ -1,5 +1,6 @@
 ﻿using grapher.Models.Calculations;
 using grapher.Models.Charts;
+using grapher.Models.Charts.ChartState;
 using grapher.Models.Serialized;
 using System;
 using System.Drawing;
@@ -18,56 +19,40 @@ namespace grapher
             ChartXY gainChart,
             ToolStripMenuItem enableVelocityAndGain,
             ToolStripMenuItem enableLastMouseMove,
-            Button writeButton)
+            Button writeButton,
+            AccelCalculator accelCalculator)
         {
-            Estimated = new EstimatedPoints();
-            EstimatedX = new EstimatedPoints();
-            EstimatedY = new EstimatedPoints();
-            AccelData = new AccelData(Estimated, EstimatedX, EstimatedY);
+            var estimated = new EstimatedPoints();
+            var estimatedX = new EstimatedPoints();
+            var estimatedY = new EstimatedPoints();
+            SetupCharts(sensitivityChart, velocityChart, gainChart, estimated, estimatedX, estimatedY);
+            var accelData = new AccelData(estimated, estimatedX, estimatedY);
+            ChartStateManager = new ChartStateManager(sensitivityChart, velocityChart, gainChart, accelData, accelCalculator);
 
-            ContaingForm = form;
-            SensitivityChart = sensitivityChart;
-            VelocityChart = velocityChart;
-            GainChart = gainChart;
+            ContainingForm = form;
             EnableVelocityAndGain = enableVelocityAndGain;
             EnableLastValue = enableLastMouseMove;
             WriteButton = writeButton;
 
-            SensitivityChart.SetPointBinds(Estimated.Sensitivity, EstimatedX.Sensitivity, EstimatedY.Sensitivity);
-            VelocityChart.SetPointBinds(Estimated.Velocity, EstimatedX.Velocity, EstimatedY.Velocity);
-            GainChart.SetPointBinds(Estimated.Gain, EstimatedX.Gain, EstimatedY.Gain);
 
-            SensitivityChart.SetTop(0);
-            VelocityChart.SetHeight(SensitivityChart.Height);
-            VelocityChart.SetTop(SensitivityChart.Height + Constants.ChartSeparationVertical);
-            GainChart.SetHeight(SensitivityChart.Height);
-            GainChart.SetTop(VelocityChart.Top + VelocityChart.Height + Constants.ChartSeparationVertical);
-
-            Rectangle screenRectangle = ContaingForm.RectangleToScreen(ContaingForm.ClientRectangle);
-            FormBorderHeight = screenRectangle.Top - ContaingForm.Top;
+            Rectangle screenRectangle = ContainingForm.RectangleToScreen(ContainingForm.ClientRectangle);
+            FormBorderHeight = screenRectangle.Top - ContainingForm.Top;
 
             EnableVelocityAndGain.Click += new System.EventHandler(OnEnableClick);
             EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableVelocityGainCheckStateChange);
 
             EnableLastValue.CheckedChanged += new System.EventHandler(OnEnableLastMouseMoveCheckStateChange);
 
+            ChartState = ChartStateManager.InitialState();
+            ChartState.Activate();
             HideVelocityAndGain();
-            SensitivityChart.Show();
-            Combined = false;
-            ShowCombined();
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public Form ContaingForm { get; }
-
-        public ChartXY SensitivityChart { get; }
-
-        public ChartXY VelocityChart { get; }
-
-        public ChartXY GainChart { get; }
+        public Form ContainingForm { get; }
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
 
@@ -75,17 +60,44 @@ namespace grapher
 
         private Button WriteButton { get; }
 
-        public AccelData AccelData { get; }
+        public AccelData AccelData
+        {
+            get
+            {
+                return ChartState.Data;
+            }
+        }
 
-        private EstimatedPoints Estimated { get; }
+        public int Left
+        {
+            get
+            {
+                return ChartState.SensitivityChart.Left;
+            }
+        }
 
-        private EstimatedPoints EstimatedX { get; }
+        public int Top
+        {
+            get
+            {
+                return ChartState.SensitivityChart.Top;
+            }
+        }
 
-        private EstimatedPoints EstimatedY { get; }
-
-        private bool Combined { get; set; }
+        public int TopChartHeight
+        {
+            get
+            {
+                return ChartState.SensitivityChart.Height;
+            }
+        }
 
         private int FormBorderHeight { get; }
+
+        private ChartState ChartState { get; set; }
+
+        private ChartStateManager ChartStateManager { get; }
+
 
         #endregion Properties
 
@@ -93,70 +105,69 @@ namespace grapher
 
         public void MakeDots(int x, int y, double timeInMs)
         {
-            if (Combined)
-            {
-                AccelData.CalculateDots(x, y, timeInMs);
-            }
-            else
-            {
-                AccelData.CalculateDotsXY(x, y, timeInMs);
-            }
+            ChartState.MakeDots(x, y, timeInMs);
         }
 
         public void DrawLastMovement()
         {
             if (EnableLastValue.Checked)
             {
-                SensitivityChart.DrawLastMovementValue();
-                VelocityChart.DrawLastMovementValue();
-                GainChart.DrawLastMovementValue();
+                ChartState.DrawLastMovement();
             }
         }
 
         public void Bind()
         {
-            if (Combined)
-            {
-                SensitivityChart.Bind(AccelData.Combined.AccelPoints);
-                VelocityChart.Bind(AccelData.Combined.VelocityPoints);
-                GainChart.Bind(AccelData.Combined.GainPoints);
-            }
-            else
-            {
-                SensitivityChart.BindXY(AccelData.X.AccelPoints, AccelData.Y.AccelPoints);
-                VelocityChart.BindXY(AccelData.X.VelocityPoints, AccelData.Y.VelocityPoints);
-                GainChart.BindXY(AccelData.X.GainPoints, AccelData.Y.GainPoints);
-            }
+            ChartState.Bind();
         }
 
         public void ShowActive(DriverSettings driverSettings)
         {
-            if (driverSettings.combineMagnitudes)
-            {
-                ShowCombined();
-            }
-            else
-            {
-                ShowXandYSeparate();
-            }
+            ChartState = ChartStateManager.DetermineState(driverSettings);
+            ChartState.Activate();
+            UpdateFormWidth();
+            Bind();
         }
 
         public void SetWidened()
         {
-            SensitivityChart.SetWidened();
-            VelocityChart.SetWidened();
-            GainChart.SetWidened();
+            ChartState.SetWidened();
             UpdateFormWidth();
             AlignWriteButton();
         }
 
         public void SetNarrowed()
         {
-            SensitivityChart.SetNarrowed();
-            VelocityChart.SetNarrowed();
-            GainChart.SetNarrowed();
+            ChartState.SetNarrowed();
             UpdateFormWidth();
             AlignWriteButton();
+        }
+
+        public void Calculate(ManagedAccel accel, DriverSettings settings)
+        {
+            ChartState.SetUpCalculate(settings);
+            ChartState.Calculate(accel, settings);
+        }
+
+        private static void SetupCharts(
+            ChartXY sensitivityChart,
+            ChartXY velocityChart,
+            ChartXY gainChart,
+            EstimatedPoints estimated,
+            EstimatedPoints estimatedX,
+            EstimatedPoints estimatedY)
+        {
+            sensitivityChart.SetPointBinds(estimated.Sensitivity, estimatedX.Sensitivity, estimatedY.Sensitivity);
+            velocityChart.SetPointBinds(estimated.Velocity, estimatedX.Velocity, estimatedY.Velocity);
+            gainChart.SetPointBinds(estimated.Gain, estimatedX.Gain, estimatedY.Gain);
+
+            sensitivityChart.SetTop(0);
+            velocityChart.SetHeight(sensitivityChart.Height);
+            velocityChart.SetTop(sensitivityChart.Height + Constants.ChartSeparationVertical);
+            gainChart.SetHeight(sensitivityChart.Height);
+            gainChart.SetTop(velocityChart.Top + velocityChart.Height + Constants.ChartSeparationVertical);
+
+            sensitivityChart.Show();
         }
 
         private void OnEnableClick(object sender, EventArgs e)
@@ -180,67 +191,28 @@ namespace grapher
         {
             if (!EnableLastValue.Checked)
             {
-                SensitivityChart.ClearLastValue();
-                VelocityChart.ClearLastValue();
-                GainChart.ClearLastValue();
+                ChartState.ClearLastValue();
             }
         }
 
         private void ShowVelocityAndGain()
         {
-            VelocityChart.Show();
-            GainChart.Show();
-            ContaingForm.Height = SensitivityChart.Height +
-                                    Constants.ChartSeparationVertical +
-                                    VelocityChart.Height +
-                                    Constants.ChartSeparationVertical +
-                                    GainChart.Height +
-                                    FormBorderHeight;
+            ChartState.ShowVelocityAndGain(ContainingForm, FormBorderHeight);
         }
 
         private void HideVelocityAndGain()
         {
-            VelocityChart.Hide();
-            GainChart.Hide();
-            ContaingForm.Height = SensitivityChart.Height + FormBorderHeight;
-        }
-
-        private void ShowXandYSeparate()
-        {
-            if (Combined)
-            {
-                Combined = false;
-
-                SensitivityChart.SetSeparate();
-                VelocityChart.SetSeparate();
-                GainChart.SetSeparate();
-                UpdateFormWidth();
-                Bind();
-            }
-        }
-
-        private void ShowCombined()
-        {
-            if (!Combined)
-            {
-                Combined = true;
-
-                SensitivityChart.SetCombined();
-                VelocityChart.SetCombined();
-                GainChart.SetCombined();
-                UpdateFormWidth();
-                Bind();
-            }
+            ChartState.HideVelocityAndGain(ContainingForm, FormBorderHeight);
         }
 
         private void UpdateFormWidth()
         {
-            ContaingForm.Width = SensitivityChart.Left + SensitivityChart.Width;
+            ContainingForm.Width = ChartState.SensitivityChart.Left + ChartState.SensitivityChart.Width;
         }
 
         private void AlignWriteButton()
         {
-            WriteButton.Left = SensitivityChart.Left / 2 - WriteButton.Width / 2;
+            WriteButton.Left = ChartState.SensitivityChart.Left / 2 - WriteButton.Width / 2;
         }
 
         #endregion Methods
