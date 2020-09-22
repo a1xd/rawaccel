@@ -682,6 +682,7 @@ namespace grapher.Models.Mouse
             ContainingForm = containingForm;
             Display = display;
             AccelCharts = accelCharts;
+            MouseData = new MouseData();
 
             RAWINPUTDEVICE device = new RAWINPUTDEVICE();
             device.WindowHandle = ContainingForm.Handle;
@@ -704,6 +705,8 @@ namespace grapher.Models.Mouse
         private Label Display { get; }
 
         private AccelCharts AccelCharts { get; }
+
+        private MouseData MouseData { get; }
 
         private double PollTime { get; }
 

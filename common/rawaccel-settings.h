@@ -6,7 +6,7 @@
 namespace rawaccel {
 
     enum class accel_mode {
-        linear, classic, natural, naturalgain, sigmoidgain, power, logarithm, experimentone, noaccel
+        linear, classic, natural, naturalgain, sigmoidgain, power, logarithm, motivity, noaccel
     };
 
     struct settings {

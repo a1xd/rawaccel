@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace grapher.Layouts
 {
-    public class ExperimentOneLayout : LayoutBase
+    public class MotivityLayout : LayoutBase
     {
-         public ExperimentOneLayout()
+         public MotivityLayout()
             : base()
         {
-            Name = "Experiment 1";
-            Index = (int)AccelMode.experimentone;
+            Name = "Motivity";
+            Index = (int)AccelMode.motivity;
             LogarithmicCharts = true;
 
             AccelLayout = new OptionLayout(true, Acceleration);

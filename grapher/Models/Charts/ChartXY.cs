@@ -128,7 +128,6 @@ namespace grapher
                     pointTwo.Get(out x, out y);
                     chart.Series[3].Points.DataBindXY(x, y);
                 }
-                chart.Update();
             }
         }
 

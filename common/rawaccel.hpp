@@ -13,7 +13,7 @@
 #include "accel-naturalgain.hpp"
 #include "accel-power.hpp"
 #include "accel-sigmoidgain.hpp"
-#include "accel-experimenttwo.hpp"
+#include "accel-motivity.hpp"
 #include "accel-noaccel.hpp"
 
 namespace rawaccel {
@@ -87,7 +87,7 @@ namespace rawaccel {
         case accel_mode::sigmoidgain: return vis(var.u.sigmoidgain);
         case accel_mode::power:       return vis(var.u.power);
         case accel_mode::logarithm:   return vis(var.u.logarithm);
-        case accel_mode::experimentone:   return vis(var.u.experimentone);
+        case accel_mode::motivity:   return vis(var.u.motivity);
         default:                      return vis(var.u.noaccel);
         }
     }
@@ -105,7 +105,7 @@ namespace rawaccel {
             accel_sigmoidgain sigmoidgain;
             accel_power power;
             accel_logarithm logarithm;
-            accel_experimentone experimentone;
+            accel_motivity motivity;
             accel_noaccel noaccel = {};
         } u = {};
 
@@ -116,15 +116,15 @@ namespace rawaccel {
                 impl = { args }; 
             }, *this);
 
-            if (lookup && tag == accel_mode::experimentone) {
-                u.experimentone.fn.fill(lookup);
+            if (lookup && tag == accel_mode::motivity) {
+                u.motivity.fn.fill(lookup);
             }
 
         }
 
         inline double apply(double speed) const {
-            if (lookup && tag == accel_mode::experimentone) {
-                return u.experimentone.fn.apply(lookup, speed);
+            if (lookup && tag == accel_mode::motivity) {
+                return u.motivity.fn.apply(lookup, speed);
             }
 
             return visit_accel([=](auto&& impl) {

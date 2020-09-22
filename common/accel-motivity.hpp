@@ -16,13 +16,13 @@ namespace rawaccel {
 	};
 
 	/// <summary> Struct to hold sigmoid (s-shaped) gain implementation. </summary>
-	struct experimenttwo_impl {
+	struct motivity_impl {
 		double rate;
 		double limit;
 		double midpoint;
 		double subtractive_constant;
 
-		experimenttwo_impl(const accel_args& args) :
+		motivity_impl(const accel_args& args) :
 			rate(pow(10,args.rate)), limit(2*log10(args.limit)), midpoint(log10(args.midpoint))
 		{
 			subtractive_constant = limit / 2;
@@ -84,6 +84,6 @@ namespace rawaccel {
 		}
 	};
 
-	using accel_experimentone = nonadditive_accel<experimenttwo_impl>;
+	using accel_motivity = nonadditive_accel<motivity_impl>;
 
 }
