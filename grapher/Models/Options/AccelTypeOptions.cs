@@ -21,6 +21,7 @@ namespace grapher
             new LogarithmLayout(),
             new NaturalGainLayout(),
             new SigmoidGainLayout(),
+            new ExperimentOneLayout(),
             new OffLayout()
         }.ToDictionary(k => k.Name);
 

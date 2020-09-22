@@ -66,6 +66,7 @@ namespace grapher.Models.Calculations
             {
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
+
                 var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
 
                 var inDiff = magnitudeDatum.magnitude - lastInputMagnitude;
