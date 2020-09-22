@@ -183,6 +183,7 @@ namespace grapher
         {
             AccelerationType = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value;
             AccelTypeActiveValue.SetValue(AccelerationType.Name);
+            AccelDropdown.SelectedIndex = AccelerationType.Index;
 
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0 || args.scaleCap <= 0);
@@ -191,7 +192,7 @@ namespace grapher
             LimitOrExponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
 
-            Layout();
+            //Layout();
         }
 
         public void ShowFull()

@@ -5,11 +5,6 @@ namespace grapher.Models.Options
 {
     public class ActiveValueLabel
     {
-        #region Constants
-
-
-        #endregion Constants
-
         #region Fields
 
         private string _prefix;

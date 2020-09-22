@@ -781,9 +781,9 @@ namespace grapher
             this.ActiveValueTitle.AutoSize = true;
             this.ActiveValueTitle.Location = new System.Drawing.Point(187, 30);
             this.ActiveValueTitle.Name = "ActiveValueTitle";
-            this.ActiveValueTitle.Size = new System.Drawing.Size(37, 13);
+            this.ActiveValueTitle.Size = new System.Drawing.Size(41, 13);
             this.ActiveValueTitle.TabIndex = 35;
-            this.ActiveValueTitle.Text = "Active";
+            this.ActiveValueTitle.Text = "Current";
             // 
             // SensitivityActiveXLabel
             // 
@@ -1063,9 +1063,9 @@ namespace grapher
             this.ActiveValueTitleY.AutoSize = true;
             this.ActiveValueTitleY.Location = new System.Drawing.Point(428, 30);
             this.ActiveValueTitleY.Name = "ActiveValueTitleY";
-            this.ActiveValueTitleY.Size = new System.Drawing.Size(37, 13);
+            this.ActiveValueTitleY.Size = new System.Drawing.Size(41, 13);
             this.ActiveValueTitleY.TabIndex = 67;
-            this.ActiveValueTitleY.Text = "Active";
+            this.ActiveValueTitleY.Text = "Current";
             // 
             // RawAcceleration
             // 
