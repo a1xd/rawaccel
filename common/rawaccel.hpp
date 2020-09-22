@@ -13,7 +13,7 @@
 #include "accel-naturalgain.hpp"
 #include "accel-power.hpp"
 #include "accel-sigmoidgain.hpp"
-#include "accel-experimentone.hpp"
+#include "accel-experimenttwo.hpp"
 #include "accel-noaccel.hpp"
 
 namespace rawaccel {
@@ -93,6 +93,8 @@ namespace rawaccel {
     }
 
     struct accel_variant {
+        si_pair* lookup;
+
         accel_mode tag = accel_mode::noaccel;
 
         union union_t {
@@ -107,15 +109,24 @@ namespace rawaccel {
             accel_noaccel noaccel = {};
         } u = {};
 
-        accel_variant(const accel_args& args, accel_mode mode) :
-            tag(mode)
+        accel_variant(const accel_args& args, accel_mode mode, si_pair* lut = nullptr) :
+            tag(mode), lookup(lut)
         {
             visit_accel([&](auto& impl) {
                 impl = { args }; 
             }, *this);
+
+            if (lookup && tag == accel_mode::experimentone) {
+                u.experimentone.fn.fill(lookup);
+            }
+
         }
 
         inline double apply(double speed) const {
+            if (lookup && tag == accel_mode::experimentone) {
+                return u.experimentone.fn.apply(lookup, speed);
+            }
+
             return visit_accel([=](auto&& impl) {
                 return impl(speed);
             }, *this);
@@ -193,8 +204,8 @@ namespace rawaccel {
         velocity_gain_cap gain_cap;
         accel_scale_clamp clamp;
 
-        accelerator(const accel_args& args, accel_mode mode) :
-            accel(args, mode), gain_cap(args.gain_cap, accel), clamp(args.scale_cap)
+        accelerator(const accel_args& args, accel_mode mode, si_pair* lut = nullptr) :
+            accel(args, mode, lut), gain_cap(args.gain_cap, accel), clamp(args.scale_cap)
         {}
 
         inline double apply(double speed) const {
@@ -216,7 +227,7 @@ namespace rawaccel {
         vec2<accelerator> accels;
         vec2d sensitivity = { 1, 1 };
 
-        mouse_modifier(const settings& args) :
+        mouse_modifier(const settings& args, vec2<si_pair*> luts = {}) :
             combine_magnitudes(args.combine_mags)
         {
             if (args.degrees_rotation != 0) {
@@ -233,8 +244,8 @@ namespace rawaccel {
                 return;
             }
 
-            accels.x = accelerator(args.argsv.x, args.modes.x);
-            accels.y = accelerator(args.argsv.y, args.modes.y);
+            accels.x = accelerator(args.argsv.x, args.modes.x, luts.x);
+            accels.y = accelerator(args.argsv.y, args.modes.y, luts.y);
             apply_accel = true;
         }
 
