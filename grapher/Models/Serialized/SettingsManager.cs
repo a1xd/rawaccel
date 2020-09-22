@@ -13,13 +13,15 @@ namespace grapher.Models.Serialized
             Field dpiField,
             Field pollRateField,
             ToolStripMenuItem autoWrite,
-            ToolStripMenuItem showLastMouseMove)
+            ToolStripMenuItem showLastMouseMove,
+            ToolStripMenuItem showVelocityAndGain)
         {
             ActiveAccel = activeAccel;
             DpiField = dpiField;
             PollRateField = pollRateField;
             AutoWriteMenuItem = autoWrite;
             ShowLastMouseMoveMenuItem = showLastMouseMove;
+            ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
         }
 
         #endregion Constructors
@@ -38,6 +40,8 @@ namespace grapher.Models.Serialized
 
         private ToolStripMenuItem ShowLastMouseMoveMenuItem { get; set; }
 
+        private ToolStripMenuItem ShowVelocityAndGainMoveMenuItem { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -53,6 +57,7 @@ namespace grapher.Models.Serialized
                     DPI = (int)DpiField.Data,
                     PollRate = (int)PollRateField.Data,
                     ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
+                    ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
                 };
 
                 RawAccelSettings.Save();
@@ -69,6 +74,7 @@ namespace grapher.Models.Serialized
             PollRateField.SetToEntered(RawAccelSettings.GUISettings.PollRate);
             AutoWriteMenuItem.Checked = RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup;
             ShowLastMouseMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowLastMouseMove;
+            ShowVelocityAndGainMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowVelocityAndGain;
         }
 
         public void Startup()
