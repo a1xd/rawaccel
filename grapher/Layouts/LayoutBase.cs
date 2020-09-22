@@ -58,30 +58,32 @@ namespace grapher.Layouts
             Button button,
             int top)
         {
-            AccelLayout.Layout(accelOption);
-            CapLayout.Layout(capOption);
-            WeightLayout.Layout(weightOption);
-            OffsetLayout.Layout(offsetOption);
-            LimExpLayout.Layout(limExpOption);
-            MidpointLayout.Layout(midpointOption);
-
             button.Enabled = ButtonEnabled;
 
             IOption previous = null;
-            foreach (var option in new IOption[] { accelOption, capOption, weightOption, offsetOption, limExpOption, midpointOption})
+
+            foreach (var option in new (OptionLayout, IOption)[] {
+                (AccelLayout, accelOption),
+                (CapLayout, capOption),
+                (WeightLayout, weightOption),
+                (OffsetLayout, offsetOption),
+                (LimExpLayout, limExpOption),
+                (MidpointLayout, midpointOption)})
             {
-                if (option.Visible)
+                option.Item1.Layout(option.Item2);
+
+                if (option.Item2.Visible)
                 {
                     if (previous != null)
                     {
-                        option.SnapTo(previous);
+                        option.Item2.SnapTo(previous);
                     }
                     else
                     {
-                        option.Top = top;
+                        option.Item2.Top = top;
                     }
 
-                    previous = option;
+                    previous = option.Item2;
                 }
             }
         }
