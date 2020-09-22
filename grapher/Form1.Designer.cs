@@ -166,7 +166,7 @@ namespace grapher
             // 
             // AccelerationChart
             // 
-            chartArea1.AxisX.Title = "Speed (counts/ms)";
+            chartArea1.AxisX.Title = "Input Speed (counts/ms)";
             chartArea1.AxisY.Title = "Ratio of Output to Input";
             chartArea1.Name = "ChartArea1";
             this.AccelerationChart.ChartAreas.Add(chartArea1);
@@ -400,7 +400,7 @@ namespace grapher
             // 
             // VelocityChart
             // 
-            chartArea2.AxisX.Title = "Speed (count/ms)";
+            chartArea2.AxisX.Title = "Input Speed (count/ms)";
             chartArea2.AxisY.Title = "Output Speed (counts/ms)";
             chartArea2.Name = "ChartArea1";
             this.VelocityChart.ChartAreas.Add(chartArea2);
@@ -441,7 +441,7 @@ namespace grapher
             // 
             // GainChart
             // 
-            chartArea3.AxisX.Title = "Speed (counts/ms)";
+            chartArea3.AxisX.Title = "Input Speed (counts/ms)";
             chartArea3.AxisY.Title = "Slope of Velocity Chart";
             chartArea3.Name = "ChartArea1";
             this.GainChart.ChartAreas.Add(chartArea3);
@@ -580,7 +580,7 @@ namespace grapher
             this.gainCapToolStripMenuItem,
             this.legacyCapToolStripMenuItem});
             this.capStyleToolStripMenuItem.Name = "capStyleToolStripMenuItem";
-            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.capStyleToolStripMenuItem.Text = "Cap Style";
             // 
             // gainCapToolStripMenuItem
@@ -603,7 +603,7 @@ namespace grapher
             this.gainOffsetToolStripMenuItem,
             this.legacyOffsetToolStripMenuItem});
             this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
-            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.offsetStyleToolStripMenuItem.Text = "Offset Style";
             // 
             // gainOffsetToolStripMenuItem
@@ -624,7 +624,7 @@ namespace grapher
             this.wholeVectorToolStripMenuItem,
             this.byVectorComponentToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 22);
             this.toolStripMenuItem1.Text = "Application Style";
             // 
             // wholeVectorToolStripMenuItem
@@ -661,7 +661,7 @@ namespace grapher
             // 
             // AccelerationChartY
             // 
-            chartArea4.AxisX.Title = "Speed (counts/ms)";
+            chartArea4.AxisX.Title = "Input Speed (counts/ms)";
             chartArea4.AxisY.Title = "Ratio of Output to Input)";
             chartArea4.Name = "ChartArea1";
             this.AccelerationChartY.ChartAreas.Add(chartArea4);
@@ -697,7 +697,7 @@ namespace grapher
             // 
             // VelocityChartY
             // 
-            chartArea5.AxisX.Title = "Speed (count/ms)";
+            chartArea5.AxisX.Title = "Input Speed (count/ms)";
             chartArea5.AxisY.Title = "Output Speed (counts/ms)";
             chartArea5.Name = "ChartArea1";
             this.VelocityChartY.ChartAreas.Add(chartArea5);
@@ -733,7 +733,7 @@ namespace grapher
             // 
             // GainChartY
             // 
-            chartArea6.AxisX.Title = "Speed (counts/ms)";
+            chartArea6.AxisX.Title = "Input Speed (counts/ms)";
             chartArea6.AxisY.Title = "Slope of Velocity Chart";
             chartArea6.Name = "ChartArea1";
             this.GainChartY.ChartAreas.Add(chartArea6);

@@ -134,18 +134,22 @@ namespace grapher
 
         public static void SetLogarithmic(Chart chart)
         {
+            /*
             chart.ChartAreas[0].AxisX.Minimum = 0.001;
             chart.ChartAreas[0].AxisX.Maximum = 3500;
             chart.ChartAreas[0].AxisY.Minimum = 0.001;
             chart.ChartAreas[0].AxisY.Maximum = 10;
             chart.ChartAreas[0].AxisX.IsLogarithmic = true;
             chart.ChartAreas[0].AxisY.IsLogarithmic = true;
+            */
         }
 
         public static void SetStandard(Chart chart)
         {
+            /*
             chart.ChartAreas[0].AxisX.IsLogarithmic = false;
             chart.ChartAreas[0].AxisY.IsLogarithmic = false;
+            */
         }
 
         public void SetPointBinds(PointData combined, PointData x, PointData y)
