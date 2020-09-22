@@ -10,6 +10,7 @@ namespace grapher.Layouts
             Name = "Off";
             Index = (int)AccelMode.noaccel;
             ButtonEnabled = true;
+            LogarithmicCharts = false;
 
             AccelLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, string.Empty);

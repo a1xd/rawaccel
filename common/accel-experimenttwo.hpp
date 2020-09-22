@@ -76,7 +76,7 @@ namespace rawaccel {
 					output += gain * 0.001;
 				}
 
-				intercept = gain * lookup_speed - output;
+				intercept = output - gain * lookup_speed;
 
 				lookup[i] = { gain, intercept };
 			}

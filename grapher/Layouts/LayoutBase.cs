@@ -25,15 +25,18 @@ namespace grapher.Layouts
             MidpointLayout = new OptionLayout(false, string.Empty);
 
             ButtonEnabled = true;
+            LogarithmicCharts = false;
         }
 
         /// <summary>
         ///  Gets or sets mapping from acceleration type to identifying integer.
         ///  Must match accel_mode defined in rawaccel-settings.h
         /// </summary>
-        public int Index { get; internal set; }
+        public int Index { get; protected set; }
 
-        public string Name { get; internal set; }
+        public string Name { get; protected set; }
+
+        public bool LogarithmicCharts { get; protected set; }
 
         protected bool ButtonEnabled { get; set; }
 

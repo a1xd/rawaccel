@@ -100,5 +100,29 @@ namespace grapher.Models.Charts.ChartState
             GainChart.Hide();
             form.Height = SensitivityChart.Height + borderHeight;
         }
+
+        public void SetLogarithmic(bool x, bool y)
+        {
+            if (x)
+            {
+                ChartXY.SetLogarithmic(SensitivityChart.ChartX);
+                ChartXY.SetLogarithmic(GainChart.ChartX);
+            }
+            else
+            {
+                ChartXY.SetStandard(SensitivityChart.ChartX);
+                ChartXY.SetStandard(GainChart.ChartX);
+            }
+
+            if (y)
+            {
+                ChartXY.SetLogarithmic(SensitivityChart.ChartY);
+                ChartXY.SetLogarithmic(GainChart.ChartY);
+            }
+            {
+                ChartXY.SetStandard(SensitivityChart.ChartY);
+                ChartXY.SetStandard(GainChart.ChartY);
+            }
+        }
     }
 }

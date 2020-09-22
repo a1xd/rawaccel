@@ -64,6 +64,7 @@ namespace grapher
         #endregion Constructors
 
         #region Properties
+        public AccelCharts AccelCharts { get; }
 
         public Button WriteButton { get; }
 
@@ -180,8 +181,8 @@ namespace grapher
 
         public void SetActiveValues(int index, AccelArgs args)
         {
-            var name = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value.Name;
-            AccelTypeActiveValue.SetValue(name);
+            AccelerationType = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value;
+            AccelTypeActiveValue.SetValue(AccelerationType.Name);
 
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0);
@@ -189,6 +190,8 @@ namespace grapher
             Acceleration.SetActiveValue(args.accel);
             LimitOrExponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
+
+            Layout();
         }
 
         public void ShowFull()

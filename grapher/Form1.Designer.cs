@@ -580,7 +580,7 @@ namespace grapher
             this.gainCapToolStripMenuItem,
             this.legacyCapToolStripMenuItem});
             this.capStyleToolStripMenuItem.Name = "capStyleToolStripMenuItem";
-            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.capStyleToolStripMenuItem.Text = "Cap Style";
             // 
             // gainCapToolStripMenuItem
@@ -603,7 +603,7 @@ namespace grapher
             this.gainOffsetToolStripMenuItem,
             this.legacyOffsetToolStripMenuItem});
             this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
-            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.offsetStyleToolStripMenuItem.Text = "Offset Style";
             // 
             // gainOffsetToolStripMenuItem
@@ -624,7 +624,7 @@ namespace grapher
             this.wholeVectorToolStripMenuItem,
             this.byVectorComponentToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem1.Text = "Application Style";
             // 
             // wholeVectorToolStripMenuItem

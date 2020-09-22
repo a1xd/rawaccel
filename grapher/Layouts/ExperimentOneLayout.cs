@@ -14,6 +14,7 @@ namespace grapher.Layouts
         {
             Name = "Experiment 1";
             Index = (int)AccelMode.experimentone;
+            LogarithmicCharts = true;
 
             AccelLayout = new OptionLayout(true, Acceleration);
             CapLayout = new OptionLayout(false, string.Empty);

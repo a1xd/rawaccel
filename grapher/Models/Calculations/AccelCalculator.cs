@@ -64,6 +64,11 @@ namespace grapher.Models.Calculations
 
             foreach (var magnitudeDatum in magnitudeData)
             {
+                if (magnitudeDatum.magnitude <=0)
+                {
+                    continue;
+                }
+
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
 

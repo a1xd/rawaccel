@@ -9,6 +9,7 @@ namespace grapher.Layouts
         {
             Name = "Linear";
             Index = (int)AccelMode.linear;
+            LogarithmicCharts = false;
 
             AccelLayout = new OptionLayout(true, Acceleration);
             CapLayout = new OptionLayout(true, Cap);

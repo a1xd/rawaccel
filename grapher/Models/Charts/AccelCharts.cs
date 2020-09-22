@@ -149,6 +149,11 @@ namespace grapher
             ChartState.Calculate(accel, settings);
         }
 
+        public void SetLogarithmic(bool x, bool y)
+        {
+            ChartState.SetLogarithmic(x, y);
+        }
+
         private static void SetupCharts(
             ChartXY sensitivityChart,
             ChartXY velocityChart,

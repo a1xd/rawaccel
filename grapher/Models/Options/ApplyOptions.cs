@@ -130,6 +130,10 @@ namespace grapher.Models.Options
                 settings.args.x,
                 settings.args.y,
                 settings.combineMagnitudes);
+
+            AccelCharts.SetLogarithmic(
+                OptionSetX.Options.AccelerationType.LogarithmicCharts,
+                OptionSetY.Options.AccelerationType.LogarithmicCharts);
         }
 
         public void OnWholeClicked(object sender, EventArgs e)

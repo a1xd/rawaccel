@@ -9,8 +9,8 @@ namespace grapher.Models.Mouse
         public PointData()
         {
             Lock = new Object();
-            X = new double[] { 0 };
-            Y = new double[] { 0 };
+            X = new double[] { 0.01 };
+            Y = new double[] { 0.01 };
         }
 
         #endregion Constructors

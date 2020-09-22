@@ -54,7 +54,6 @@ namespace grapher.Models.Calculations
             {
                 var velIdx = GetVelocityIndex(outVelocityValue);
 
-                velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
                 values = (VelocityPoints.ElementAt(velIdx).Key, AccelPoints.ElementAt(velIdx).Value, GainPoints.ElementAt(velIdx).Value);
                 OutVelocityToPoints.Add(outVelocityValue, values);
                 return values;
@@ -81,6 +80,7 @@ namespace grapher.Models.Calculations
             }
 
             velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
+            velIdx = Math.Max(velIdx, 0);
 
             return velIdx;
         }

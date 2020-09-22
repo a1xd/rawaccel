@@ -9,6 +9,7 @@ namespace grapher.Layouts
         {
             Name = "SigmoidGain";
             Index = (int)AccelMode.sigmoidgain;
+            LogarithmicCharts = false;
 
             AccelLayout = new OptionLayout(true, Acceleration);
             CapLayout = new OptionLayout(false, string.Empty);
