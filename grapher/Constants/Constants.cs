@@ -60,7 +60,7 @@ namespace grapher
         /// <summary> Left placement of charts when narrowed </summary>
         public const int NarrowChartLeft = 482;
 
-        public const int WriteButtonVerticalOffset = 50;
+        public const int WriteButtonVerticalOffset = 80;
 
         /// <summary> Format string for shortened x and y textboxes. </summary>
         public const string ShortenedFormatString = "0.###";
@@ -84,7 +84,7 @@ namespace grapher
         public const string AccelDropDownDefaultShortText = "Accel Type";
 
         /// <summary> Default text to be displayed on write button. </summary>
-        public const string WriteButtonDefaultText = "Write To Driver";
+        public const string WriteButtonDefaultText = "Apply";
 
         /// <summary> Default text to be displayed on write button. </summary>
         public const string WriteButtonDelayText = "Delay";

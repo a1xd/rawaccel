@@ -191,8 +191,6 @@ namespace grapher
             Acceleration.SetActiveValue(args.accel);
             LimitOrExponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
-
-            //Layout();
         }
 
         public void ShowFull()

@@ -357,11 +357,11 @@ namespace grapher
             // 
             // writeButton
             // 
-            this.writeButton.Location = new System.Drawing.Point(153, 293);
+            this.writeButton.Location = new System.Drawing.Point(154, 270);
             this.writeButton.Name = "writeButton";
-            this.writeButton.Size = new System.Drawing.Size(102, 23);
+            this.writeButton.Size = new System.Drawing.Size(76, 23);
             this.writeButton.TabIndex = 21;
-            this.writeButton.Text = "Write To Driver";
+            this.writeButton.Text = "Apply";
             this.writeButton.UseVisualStyleBackColor = true;
             // 
             // sensitivityBoxY
@@ -497,8 +497,8 @@ namespace grapher
             // 
             this.graphsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.graphsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showVelocityGainToolStripMenuItem,
             this.scaleByDPIToolStripMenuItem,
+            this.showVelocityGainToolStripMenuItem,
             this.showLastMouseMoveToolStripMenuItem});
             this.graphsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.graphsToolStripMenuItem.Name = "graphsToolStripMenuItem";
@@ -526,7 +526,7 @@ namespace grapher
             this.dPIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DPITextBox});
             this.dPIToolStripMenuItem.Name = "dPIToolStripMenuItem";
-            this.dPIToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.dPIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.dPIToolStripMenuItem.Text = "DPI";
             // 
             // DPITextBox
@@ -540,7 +540,7 @@ namespace grapher
             this.pollRateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PollRateTextBox});
             this.pollRateToolStripMenuItem.Name = "pollRateToolStripMenuItem";
-            this.pollRateToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.pollRateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pollRateToolStripMenuItem.Text = "Poll Rate";
             // 
             // PollRateTextBox
@@ -552,7 +552,7 @@ namespace grapher
             // ScaleMenuItem
             // 
             this.ScaleMenuItem.Name = "ScaleMenuItem";
-            this.ScaleMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.ScaleMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ScaleMenuItem.Text = "Re-scale by above";
             // 
             // showLastMouseMoveToolStripMenuItem
