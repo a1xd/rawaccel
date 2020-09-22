@@ -185,7 +185,7 @@ namespace grapher
             AccelTypeActiveValue.SetValue(AccelerationType.Name);
 
             Weight.SetActiveValue(args.weight);
-            Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0);
+            Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0 || args.scaleCap <= 0);
             Offset.SetActiveValue(args.offset, args.legacy_offset);
             Acceleration.SetActiveValue(args.accel);
             LimitOrExponent.SetActiveValue(args.exponent);
