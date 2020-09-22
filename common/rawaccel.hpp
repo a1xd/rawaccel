@@ -12,7 +12,6 @@
 #include "accel-natural.hpp"
 #include "accel-naturalgain.hpp"
 #include "accel-power.hpp"
-#include "accel-sigmoidgain.hpp"
 #include "accel-motivity.hpp"
 #include "accel-noaccel.hpp"
 
@@ -84,10 +83,9 @@ namespace rawaccel {
         case accel_mode::classic:     return vis(var.u.classic);
         case accel_mode::natural:     return vis(var.u.natural);
         case accel_mode::naturalgain: return vis(var.u.naturalgain);
-        case accel_mode::sigmoidgain: return vis(var.u.sigmoidgain);
         case accel_mode::power:       return vis(var.u.power);
         case accel_mode::logarithm:   return vis(var.u.logarithm);
-        case accel_mode::motivity:   return vis(var.u.motivity);
+        case accel_mode::motivity:    return vis(var.u.motivity);
         default:                      return vis(var.u.noaccel);
         }
     }
@@ -102,7 +100,6 @@ namespace rawaccel {
             accel_classic classic;
             accel_natural natural;
             accel_naturalgain naturalgain;
-            accel_sigmoidgain sigmoidgain;
             accel_power power;
             accel_logarithm logarithm;
             accel_motivity motivity;

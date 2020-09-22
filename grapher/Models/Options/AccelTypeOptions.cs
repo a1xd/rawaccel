@@ -17,10 +17,9 @@ namespace grapher
             new LinearLayout(),
             new ClassicLayout(),
             new NaturalLayout(),
+            new NaturalGainLayout(),
             new PowerLayout(),
             new LogarithmLayout(),
-            new NaturalGainLayout(),
-            new SigmoidGainLayout(),
             new MotivityLayout(),
             new OffLayout()
         }.ToDictionary(k => k.Name);

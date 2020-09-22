@@ -98,13 +98,13 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.graphsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scaleByDPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DPITextBox = new System.Windows.Forms.ToolStripTextBox();
             this.pollRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PollRateTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.ScaleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -505,12 +505,6 @@ namespace grapher
             this.graphsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.graphsToolStripMenuItem.Text = "Charts";
             // 
-            // showVelocityGainToolStripMenuItem
-            // 
-            this.showVelocityGainToolStripMenuItem.Name = "showVelocityGainToolStripMenuItem";
-            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.showVelocityGainToolStripMenuItem.Text = "Show Velocity && Gain";
-            // 
             // scaleByDPIToolStripMenuItem
             // 
             this.scaleByDPIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -526,7 +520,7 @@ namespace grapher
             this.dPIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DPITextBox});
             this.dPIToolStripMenuItem.Name = "dPIToolStripMenuItem";
-            this.dPIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.dPIToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.dPIToolStripMenuItem.Text = "DPI";
             // 
             // DPITextBox
@@ -540,7 +534,7 @@ namespace grapher
             this.pollRateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PollRateTextBox});
             this.pollRateToolStripMenuItem.Name = "pollRateToolStripMenuItem";
-            this.pollRateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pollRateToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.pollRateToolStripMenuItem.Text = "Poll Rate";
             // 
             // PollRateTextBox
@@ -552,8 +546,14 @@ namespace grapher
             // ScaleMenuItem
             // 
             this.ScaleMenuItem.Name = "ScaleMenuItem";
-            this.ScaleMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ScaleMenuItem.Size = new System.Drawing.Size(169, 22);
             this.ScaleMenuItem.Text = "Re-scale by above";
+            // 
+            // showVelocityGainToolStripMenuItem
+            // 
+            this.showVelocityGainToolStripMenuItem.Name = "showVelocityGainToolStripMenuItem";
+            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.showVelocityGainToolStripMenuItem.Text = "Show Velocity && Gain";
             // 
             // showLastMouseMoveToolStripMenuItem
             // 

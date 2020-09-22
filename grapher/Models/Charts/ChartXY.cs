@@ -211,16 +211,26 @@ namespace grapher
 
         public void SetMinMax(double min, double max)
         {
-            ChartX.ChartAreas[0].AxisY.Minimum = min;
-            ChartX.ChartAreas[0].AxisY.Maximum = max;
+            if (min < max)
+            {
+                ChartX.ChartAreas[0].AxisY.Minimum = min;
+                ChartX.ChartAreas[0].AxisY.Maximum = max;
+            }
         }
 
         public void SetMinMaxXY(double minX, double maxX, double minY, double maxY)
         {
-            ChartX.ChartAreas[0].AxisY.Minimum = minX;
-            ChartX.ChartAreas[0].AxisY.Maximum = maxX;
-            ChartY.ChartAreas[0].AxisY.Minimum = minY;
-            ChartY.ChartAreas[0].AxisY.Maximum = maxY;
+            if (minX < maxX)
+            {
+                ChartX.ChartAreas[0].AxisY.Minimum = minX;
+                ChartX.ChartAreas[0].AxisY.Maximum = maxX;
+            }
+
+            if (minY < maxY)
+            {
+                ChartY.ChartAreas[0].AxisY.Minimum = minY;
+                ChartY.ChartAreas[0].AxisY.Maximum = maxY;
+            }
         }
 
         public void SetCombined()

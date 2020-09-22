@@ -24,7 +24,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-naturalgain.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-noaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-power.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)accel-sigmoidgain.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-error.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-io.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-settings.h" />
