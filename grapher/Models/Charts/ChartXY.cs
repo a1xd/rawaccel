@@ -100,6 +100,9 @@ namespace grapher
             chart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
             chart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
 
+            chart.ChartAreas[0].AxisX.LabelStyle.Format = "0.##";
+            chart.ChartAreas[0].AxisY.LabelStyle.Format = "0.##";
+
             chart.ChartAreas[0].CursorY.Interval = 0.001;
 
             chart.ChartAreas[0].CursorX.AutoScroll = true;
@@ -187,18 +190,37 @@ namespace grapher
         public void Bind(IDictionary data)
         {
             ChartX.Series[0].Points.DataBindXY(data.Keys, data.Values);
+            ChartX.Series[2].IsVisibleInLegend = false;
+            ChartX.Series[2].Points.Clear();
         }
 
         public void BindXY(IDictionary dataX, IDictionary dataY)
         {
             ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
             ChartY.Series[0].Points.DataBindXY(dataY.Keys, dataY.Values);
+            ChartX.Series[2].IsVisibleInLegend = false;
+            ChartX.Series[2].Points.Clear();
         }
 
         public void BindXYCombined(IDictionary dataX, IDictionary dataY)
         {
             ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
             ChartX.Series[2].Points.DataBindXY(dataY.Keys, dataY.Values);
+            ChartX.Series[2].IsVisibleInLegend = true;
+        }
+
+        public void SetMinMax(double min, double max)
+        {
+            ChartX.ChartAreas[0].AxisY.Minimum = min;
+            ChartX.ChartAreas[0].AxisY.Maximum = max;
+        }
+
+        public void SetMinMaxXY(double minX, double maxX, double minY, double maxY)
+        {
+            ChartX.ChartAreas[0].AxisY.Minimum = minX;
+            ChartX.ChartAreas[0].AxisY.Maximum = maxX;
+            ChartY.ChartAreas[0].AxisY.Minimum = minY;
+            ChartY.ChartAreas[0].AxisY.Maximum = maxY;
         }
 
         public void SetCombined()

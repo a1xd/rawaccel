@@ -23,6 +23,14 @@ namespace grapher.Models.Calculations
 
         public SortedDictionary<double, double> AccelPoints { get; }
 
+        public double MaxAccel { get; set; }
+
+        public double MinAccel { get; set; }
+
+        public double MaxGain { get; set; }
+
+        public double MinGain { get; set; }
+
         public SortedDictionary<double, double> VelocityPoints { get; }
 
         public SortedDictionary<double, double> GainPoints { get; }
