@@ -98,13 +98,13 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.graphsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scaleByDPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DPITextBox = new System.Windows.Forms.ToolStripTextBox();
             this.pollRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PollRateTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.ScaleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -166,7 +166,7 @@ namespace grapher
             // 
             // AccelerationChart
             // 
-            chartArea1.AxisX.Title = "Speed (counts/ms)";
+            chartArea1.AxisX.Title = "Input Speed (counts/ms)";
             chartArea1.AxisY.Title = "Ratio of Output to Input";
             chartArea1.Name = "ChartArea1";
             this.AccelerationChart.ChartAreas.Add(chartArea1);
@@ -357,11 +357,11 @@ namespace grapher
             // 
             // writeButton
             // 
-            this.writeButton.Location = new System.Drawing.Point(153, 293);
+            this.writeButton.Location = new System.Drawing.Point(154, 270);
             this.writeButton.Name = "writeButton";
-            this.writeButton.Size = new System.Drawing.Size(102, 23);
+            this.writeButton.Size = new System.Drawing.Size(76, 23);
             this.writeButton.TabIndex = 21;
-            this.writeButton.Text = "Write To Driver";
+            this.writeButton.Text = "Apply";
             this.writeButton.UseVisualStyleBackColor = true;
             // 
             // sensitivityBoxY
@@ -400,7 +400,7 @@ namespace grapher
             // 
             // VelocityChart
             // 
-            chartArea2.AxisX.Title = "Speed (count/ms)";
+            chartArea2.AxisX.Title = "Input Speed (count/ms)";
             chartArea2.AxisY.Title = "Output Speed (counts/ms)";
             chartArea2.Name = "ChartArea1";
             this.VelocityChart.ChartAreas.Add(chartArea2);
@@ -441,7 +441,7 @@ namespace grapher
             // 
             // GainChart
             // 
-            chartArea3.AxisX.Title = "Speed (counts/ms)";
+            chartArea3.AxisX.Title = "Input Speed (counts/ms)";
             chartArea3.AxisY.Title = "Slope of Velocity Chart";
             chartArea3.Name = "ChartArea1";
             this.GainChart.ChartAreas.Add(chartArea3);
@@ -497,19 +497,13 @@ namespace grapher
             // 
             this.graphsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.graphsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showVelocityGainToolStripMenuItem,
             this.scaleByDPIToolStripMenuItem,
+            this.showVelocityGainToolStripMenuItem,
             this.showLastMouseMoveToolStripMenuItem});
             this.graphsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.graphsToolStripMenuItem.Name = "graphsToolStripMenuItem";
             this.graphsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.graphsToolStripMenuItem.Text = "Charts";
-            // 
-            // showVelocityGainToolStripMenuItem
-            // 
-            this.showVelocityGainToolStripMenuItem.Name = "showVelocityGainToolStripMenuItem";
-            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.showVelocityGainToolStripMenuItem.Text = "Show Velocity && Gain";
             // 
             // scaleByDPIToolStripMenuItem
             // 
@@ -554,6 +548,12 @@ namespace grapher
             this.ScaleMenuItem.Name = "ScaleMenuItem";
             this.ScaleMenuItem.Size = new System.Drawing.Size(169, 22);
             this.ScaleMenuItem.Text = "Re-scale by above";
+            // 
+            // showVelocityGainToolStripMenuItem
+            // 
+            this.showVelocityGainToolStripMenuItem.Name = "showVelocityGainToolStripMenuItem";
+            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.showVelocityGainToolStripMenuItem.Text = "Show Velocity && Gain";
             // 
             // showLastMouseMoveToolStripMenuItem
             // 
@@ -661,7 +661,7 @@ namespace grapher
             // 
             // AccelerationChartY
             // 
-            chartArea4.AxisX.Title = "Speed (counts/ms)";
+            chartArea4.AxisX.Title = "Input Speed (counts/ms)";
             chartArea4.AxisY.Title = "Ratio of Output to Input)";
             chartArea4.Name = "ChartArea1";
             this.AccelerationChartY.ChartAreas.Add(chartArea4);
@@ -697,7 +697,7 @@ namespace grapher
             // 
             // VelocityChartY
             // 
-            chartArea5.AxisX.Title = "Speed (count/ms)";
+            chartArea5.AxisX.Title = "Input Speed (count/ms)";
             chartArea5.AxisY.Title = "Output Speed (counts/ms)";
             chartArea5.Name = "ChartArea1";
             this.VelocityChartY.ChartAreas.Add(chartArea5);
@@ -733,7 +733,7 @@ namespace grapher
             // 
             // GainChartY
             // 
-            chartArea6.AxisX.Title = "Speed (counts/ms)";
+            chartArea6.AxisX.Title = "Input Speed (counts/ms)";
             chartArea6.AxisY.Title = "Slope of Velocity Chart";
             chartArea6.Name = "ChartArea1";
             this.GainChartY.ChartAreas.Add(chartArea6);
@@ -781,9 +781,9 @@ namespace grapher
             this.ActiveValueTitle.AutoSize = true;
             this.ActiveValueTitle.Location = new System.Drawing.Point(187, 30);
             this.ActiveValueTitle.Name = "ActiveValueTitle";
-            this.ActiveValueTitle.Size = new System.Drawing.Size(37, 13);
+            this.ActiveValueTitle.Size = new System.Drawing.Size(41, 13);
             this.ActiveValueTitle.TabIndex = 35;
-            this.ActiveValueTitle.Text = "Active";
+            this.ActiveValueTitle.Text = "Current";
             // 
             // SensitivityActiveXLabel
             // 
@@ -1063,9 +1063,9 @@ namespace grapher
             this.ActiveValueTitleY.AutoSize = true;
             this.ActiveValueTitleY.Location = new System.Drawing.Point(428, 30);
             this.ActiveValueTitleY.Name = "ActiveValueTitleY";
-            this.ActiveValueTitleY.Size = new System.Drawing.Size(37, 13);
+            this.ActiveValueTitleY.Size = new System.Drawing.Size(41, 13);
             this.ActiveValueTitleY.TabIndex = 67;
-            this.ActiveValueTitleY.Text = "Active";
+            this.ActiveValueTitleY.Text = "Current";
             // 
             // RawAcceleration
             // 

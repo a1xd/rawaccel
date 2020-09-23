@@ -12,7 +12,7 @@
 #include "accel-natural.hpp"
 #include "accel-naturalgain.hpp"
 #include "accel-power.hpp"
-#include "accel-sigmoidgain.hpp"
+#include "accel-motivity.hpp"
 #include "accel-noaccel.hpp"
 
 namespace rawaccel {
@@ -83,14 +83,16 @@ namespace rawaccel {
         case accel_mode::classic:     return vis(var.u.classic);
         case accel_mode::natural:     return vis(var.u.natural);
         case accel_mode::naturalgain: return vis(var.u.naturalgain);
-        case accel_mode::sigmoidgain: return vis(var.u.sigmoidgain);
         case accel_mode::power:       return vis(var.u.power);
         case accel_mode::logarithm:   return vis(var.u.logarithm);
+        case accel_mode::motivity:    return vis(var.u.motivity);
         default:                      return vis(var.u.noaccel);
         }
     }
 
     struct accel_variant {
+        si_pair* lookup;
+
         accel_mode tag = accel_mode::noaccel;
 
         union union_t {
@@ -98,21 +100,30 @@ namespace rawaccel {
             accel_classic classic;
             accel_natural natural;
             accel_naturalgain naturalgain;
-            accel_sigmoidgain sigmoidgain;
             accel_power power;
             accel_logarithm logarithm;
+            accel_motivity motivity;
             accel_noaccel noaccel = {};
         } u = {};
 
-        accel_variant(const accel_args& args, accel_mode mode) :
-            tag(mode)
+        accel_variant(const accel_args& args, accel_mode mode, si_pair* lut = nullptr) :
+            tag(mode), lookup(lut)
         {
             visit_accel([&](auto& impl) {
                 impl = { args }; 
             }, *this);
+
+            if (lookup && tag == accel_mode::motivity) {
+                u.motivity.fn.fill(lookup);
+            }
+
         }
 
         inline double apply(double speed) const {
+            if (lookup && tag == accel_mode::motivity) {
+                return u.motivity.fn.apply(lookup, speed);
+            }
+
             return visit_accel([=](auto&& impl) {
                 return impl(speed);
             }, *this);
@@ -190,8 +201,8 @@ namespace rawaccel {
         velocity_gain_cap gain_cap;
         accel_scale_clamp clamp;
 
-        accelerator(const accel_args& args, accel_mode mode) :
-            accel(args, mode), gain_cap(args.gain_cap, accel), clamp(args.scale_cap)
+        accelerator(const accel_args& args, accel_mode mode, si_pair* lut = nullptr) :
+            accel(args, mode, lut), gain_cap(args.gain_cap, accel), clamp(args.scale_cap)
         {}
 
         inline double apply(double speed) const {
@@ -213,7 +224,7 @@ namespace rawaccel {
         vec2<accelerator> accels;
         vec2d sensitivity = { 1, 1 };
 
-        mouse_modifier(const settings& args) :
+        mouse_modifier(const settings& args, vec2<si_pair*> luts = {}) :
             combine_magnitudes(args.combine_mags)
         {
             if (args.degrees_rotation != 0) {
@@ -230,8 +241,8 @@ namespace rawaccel {
                 return;
             }
 
-            accels.x = accelerator(args.argsv.x, args.modes.x);
-            accels.y = accelerator(args.argsv.y, args.modes.y);
+            accels.x = accelerator(args.argsv.x, args.modes.x, luts.x);
+            accels.y = accelerator(args.argsv.y, args.modes.y, luts.y);
             apply_accel = true;
         }
 

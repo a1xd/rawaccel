@@ -24,6 +24,7 @@ namespace grapher.Models.Options
 
             OptionsTitle.Top = TopAnchor;
             IsTitleMode = true;
+            Hidden = false;
             SetRegularMode();
         }
 
@@ -35,8 +36,9 @@ namespace grapher.Models.Options
 
         public AccelTypeOptions Options { get; }
 
-
         public bool IsTitleMode { get; private set; }
+
+        private bool Hidden { get; set; }
 
         public void SetRegularMode()
         {
@@ -67,6 +69,7 @@ namespace grapher.Models.Options
             OptionsTitle.Hide();
             ActiveValuesTitle.Hide();
             Options.Hide();
+            Hidden = true;
         }
 
         public void Show()
@@ -78,6 +81,7 @@ namespace grapher.Models.Options
 
             ActiveValuesTitle.Show();
             Options.Show();
+            Hidden = false;
         }
 
         public void DisplayTitle()
@@ -106,7 +110,10 @@ namespace grapher.Models.Options
 
         public void SetActiveValues(int mode, AccelArgs args)
         {
-            Options.SetActiveValues(mode, args);
+            if (!Hidden)
+            {
+                Options.SetActiveValues(mode, args);
+            }
         }
 
         public void AlignActiveValues()

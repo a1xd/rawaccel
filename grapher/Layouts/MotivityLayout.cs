@@ -1,20 +1,26 @@
 ﻿using grapher.Models.Serialized;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace grapher.Layouts
 {
-    public class SigmoidGainLayout : LayoutBase
+    public class MotivityLayout : LayoutBase
     {
-        public SigmoidGainLayout()
+         public MotivityLayout()
             : base()
         {
-            Name = "SigmoidGain";
-            Index = (int)AccelMode.sigmoidgain;
+            Name = "Motivity";
+            Index = (int)AccelMode.motivity;
+            LogarithmicCharts = true;
 
             AccelLayout = new OptionLayout(true, Acceleration);
             CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(false, string.Empty);
-            LimExpLayout = new OptionLayout(true, Limit);
+            LimExpLayout = new OptionLayout(true, Motility);
             MidpointLayout = new OptionLayout(true, Midpoint);
         }
     }

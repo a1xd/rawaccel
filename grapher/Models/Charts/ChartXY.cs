@@ -100,6 +100,9 @@ namespace grapher
             chart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
             chart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
 
+            chart.ChartAreas[0].AxisX.LabelStyle.Format = "0.##";
+            chart.ChartAreas[0].AxisY.LabelStyle.Format = "0.##";
+
             chart.ChartAreas[0].CursorY.Interval = 0.001;
 
             chart.ChartAreas[0].CursorX.AutoScroll = true;
@@ -128,8 +131,27 @@ namespace grapher
                     pointTwo.Get(out x, out y);
                     chart.Series[3].Points.DataBindXY(x, y);
                 }
-                chart.Update();
             }
+        }
+
+        public static void SetLogarithmic(Chart chart)
+        {
+            /*
+            chart.ChartAreas[0].AxisX.Minimum = 0.001;
+            chart.ChartAreas[0].AxisX.Maximum = 3500;
+            chart.ChartAreas[0].AxisY.Minimum = 0.001;
+            chart.ChartAreas[0].AxisY.Maximum = 10;
+            chart.ChartAreas[0].AxisX.IsLogarithmic = true;
+            chart.ChartAreas[0].AxisY.IsLogarithmic = true;
+            */
+        }
+
+        public static void SetStandard(Chart chart)
+        {
+            /*
+            chart.ChartAreas[0].AxisX.IsLogarithmic = false;
+            chart.ChartAreas[0].AxisY.IsLogarithmic = false;
+            */
         }
 
         public void SetPointBinds(PointData combined, PointData x, PointData y)
@@ -168,18 +190,47 @@ namespace grapher
         public void Bind(IDictionary data)
         {
             ChartX.Series[0].Points.DataBindXY(data.Keys, data.Values);
+            ChartX.Series[2].IsVisibleInLegend = false;
+            ChartX.Series[2].Points.Clear();
         }
 
         public void BindXY(IDictionary dataX, IDictionary dataY)
         {
             ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
             ChartY.Series[0].Points.DataBindXY(dataY.Keys, dataY.Values);
+            ChartX.Series[2].IsVisibleInLegend = false;
+            ChartX.Series[2].Points.Clear();
         }
 
         public void BindXYCombined(IDictionary dataX, IDictionary dataY)
         {
             ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
             ChartX.Series[2].Points.DataBindXY(dataY.Keys, dataY.Values);
+            ChartX.Series[2].IsVisibleInLegend = true;
+        }
+
+        public void SetMinMax(double min, double max)
+        {
+            if (min < max)
+            {
+                ChartX.ChartAreas[0].AxisY.Minimum = min;
+                ChartX.ChartAreas[0].AxisY.Maximum = max;
+            }
+        }
+
+        public void SetMinMaxXY(double minX, double maxX, double minY, double maxY)
+        {
+            if (minX < maxX)
+            {
+                ChartX.ChartAreas[0].AxisY.Minimum = minX;
+                ChartX.ChartAreas[0].AxisY.Maximum = maxX;
+            }
+
+            if (minY < maxY)
+            {
+                ChartY.ChartAreas[0].AxisY.Minimum = minY;
+                ChartY.ChartAreas[0].AxisY.Maximum = maxY;
+            }
         }
 
         public void SetCombined()

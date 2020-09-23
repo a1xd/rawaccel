@@ -33,6 +33,9 @@ namespace grapher.Models.Serialized
         [JsonProperty(Order = 4)]
         public bool ShowLastMouseMove { get; set; }
 
+        [JsonProperty(Order = 4)]
+        public bool ShowVelocityAndGain { get; set; }
+
         #endregion Properties
     }
 }

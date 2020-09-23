@@ -2,15 +2,15 @@
 
 namespace grapher.Models.Mouse
 {
-    public class PointData
+    public class MouseData
     {
         #region Constructors
 
-        public PointData()
+        public MouseData()
         {
             Lock = new Object();
-            X = new double[] { 0.01 };
-            Y = new double[] { 0.01 };
+            X = 0;
+            Y = 0;
         }
 
         #endregion Constructors
@@ -19,15 +19,15 @@ namespace grapher.Models.Mouse
 
         public Object Lock { get; }
 
-        private double[] X { get; set; }
-        private double[] Y { get; set; }
+        private int X { get; set; }
+        private int Y { get; set; }
 
-        public void Set(double x, double y)
+        public void Set(int x, int y)
         {
-            lock(Lock)
+            lock (Lock)
             {
-                X[0] = x;
-                Y[0] = y;
+                X = x;
+                Y = y;
             }
         }
 
@@ -35,9 +35,9 @@ namespace grapher.Models.Mouse
 
         #region Methods
 
-        public void Get(out double[] x, out double[] y)
+        public void Get(out int x, out int y)
         {
-            lock(Lock)
+            lock (Lock)
             {
                 x = X;
                 y = Y;

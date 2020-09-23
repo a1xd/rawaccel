@@ -9,6 +9,7 @@ namespace grapher.Layouts
         {
             Name = "NaturalGain";
             Index = (int)AccelMode.naturalgain;
+            LogarithmicCharts = false;
 
             AccelLayout = new OptionLayout(true, Acceleration);
             CapLayout = new OptionLayout(false, string.Empty);

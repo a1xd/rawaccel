@@ -36,6 +36,8 @@ namespace grapher.Models.Charts.ChartState
             SensitivityChart.Bind(Data.Combined.AccelPoints);
             VelocityChart.Bind(Data.Combined.VelocityPoints);
             GainChart.Bind(Data.Combined.GainPoints);
+            SensitivityChart.SetMinMax(Data.Combined.MinAccel, Data.Combined.MaxAccel);
+            GainChart.SetMinMax(Data.Combined.MinGain, Data.Combined.MaxGain);
         }
 
         public override void Calculate(ManagedAccel accel, DriverSettings settings)

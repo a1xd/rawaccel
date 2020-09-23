@@ -54,9 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Layouts\MotivityLayout.cs" />
     <Compile Include="Layouts\LogarithmLayout.cs" />
     <Compile Include="Layouts\NaturalGainLayout.cs" />
-    <Compile Include="Layouts\SigmoidGainLayout.cs" />
     <Compile Include="Models\AccelGUIFactory.cs" />
     <Compile Include="Models\Calculations\AccelCalculator.cs" />
     <Compile Include="Models\Calculations\AccelChartData.cs" />
@@ -69,6 +69,7 @@
     <Compile Include="Models\Charts\EstimatedPoints.cs" />
     <Compile Include="Models\Charts\ChartState\XYOneGraphState.cs" />
     <Compile Include="Models\Charts\ChartState\XYTwoGraphState.cs" />
+    <Compile Include="Models\Mouse\MouseData.cs" />
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
     <Compile Include="Models\Options\AccelTypeOptions.cs" />

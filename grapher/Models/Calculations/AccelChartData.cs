@@ -23,6 +23,14 @@ namespace grapher.Models.Calculations
 
         public SortedDictionary<double, double> AccelPoints { get; }
 
+        public double MaxAccel { get; set; }
+
+        public double MinAccel { get; set; }
+
+        public double MaxGain { get; set; }
+
+        public double MinGain { get; set; }
+
         public SortedDictionary<double, double> VelocityPoints { get; }
 
         public SortedDictionary<double, double> GainPoints { get; }
@@ -54,7 +62,6 @@ namespace grapher.Models.Calculations
             {
                 var velIdx = GetVelocityIndex(outVelocityValue);
 
-                velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
                 values = (VelocityPoints.ElementAt(velIdx).Key, AccelPoints.ElementAt(velIdx).Value, GainPoints.ElementAt(velIdx).Value);
                 OutVelocityToPoints.Add(outVelocityValue, values);
                 return values;
@@ -81,6 +88,7 @@ namespace grapher.Models.Calculations
             }
 
             velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
+            velIdx = Math.Max(velIdx, 0);
 
             return velIdx;
         }

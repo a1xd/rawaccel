@@ -62,15 +62,46 @@ namespace grapher.Models.Calculations
             double lastInputMagnitude = 0;
             double lastOutputMagnitude = 0;
 
+            double maxRatio = 0.0;
+            double minRatio = Double.MaxValue;
+            double maxSlope = 0.0;
+            double minSlope = Double.MaxValue;
+
             foreach (var magnitudeDatum in magnitudeData)
             {
+                if (magnitudeDatum.magnitude <=0)
+                {
+                    continue;
+                }
+
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
+
                 var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
+                
+                if (ratio > maxRatio)
+                {
+                    maxRatio = ratio;
+                }
+
+                if (ratio < minRatio)
+                {
+                    minRatio = ratio;
+                }
 
                 var inDiff = magnitudeDatum.magnitude - lastInputMagnitude;
                 var outDiff = outMagnitude - lastOutputMagnitude;
                 var slope = inDiff > 0 ? outDiff / inDiff : starter;
+
+                if (slope > maxSlope)
+                {
+                    maxSlope = slope;
+                }
+
+                if (slope < minSlope)
+                {
+                    minSlope = slope;
+                }
 
                 if (!data.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
@@ -92,6 +123,10 @@ namespace grapher.Models.Calculations
             }
 
             data.OrderedVelocityPointsList.AddRange(data.VelocityPoints.Values.ToList());
+            data.MaxAccel = maxRatio;
+            data.MinAccel = minRatio;
+            data.MaxGain = maxSlope;
+            data.MinGain = minSlope;
         }
 
         public void CalculateCombinedDiffSens(AccelData data, ManagedAccel accel, DriverSettings settings, ICollection<MagnitudeData> magnitudeData)
@@ -99,6 +134,12 @@ namespace grapher.Models.Calculations
             double lastInputMagnitude = 0;
             double lastOutputMagnitudeX = 0;
             double lastOutputMagnitudeY = 0;
+
+            double maxRatio = 0.0;
+            double minRatio = Double.MaxValue;
+            double maxSlope = 0.0;
+            double minSlope = Double.MaxValue;
+
 
             Sensitivity = GetSens(ref settings);
 
@@ -118,6 +159,26 @@ namespace grapher.Models.Calculations
                 var xRatio = settings.sensitivity.x * ratio;
                 var yRatio = settings.sensitivity.y * ratio;
 
+                if (xRatio > maxRatio)
+                {
+                    maxRatio = xRatio;
+                }
+
+                if (xRatio < minRatio)
+                {
+                    minRatio = xRatio;
+                }
+
+                if (yRatio > maxRatio)
+                {
+                    maxRatio = yRatio;
+                }
+
+                if (yRatio < minRatio)
+                {
+                    minRatio = yRatio;
+                }
+
                 if (!data.X.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
                     data.X.AccelPoints.Add(magnitudeDatum.magnitude, xRatio);
@@ -136,6 +197,26 @@ namespace grapher.Models.Calculations
                 var yOutDiff = yOut - lastOutputMagnitudeY;
                 var xSlope = inDiff > 0 ? xOutDiff / inDiff : settings.sensitivity.x;
                 var ySlope = inDiff > 0 ? yOutDiff / inDiff : settings.sensitivity.y;
+
+                if (xSlope > maxSlope)
+                {
+                    maxSlope = xSlope;
+                }
+
+                if (xSlope < minSlope)
+                {
+                    minSlope = xSlope;
+                }
+
+                if (ySlope > maxSlope)
+                {
+                    maxSlope = ySlope;
+                }
+
+                if (ySlope < minSlope)
+                {
+                    minSlope = ySlope;
+                }
 
                 if (!data.X.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
@@ -163,6 +244,10 @@ namespace grapher.Models.Calculations
             }
 
             data.Combined.OrderedVelocityPointsList.AddRange(data.Combined.VelocityPoints.Values.ToList());
+            data.Combined.MaxAccel = maxRatio;
+            data.Combined.MinAccel = minRatio;
+            data.Combined.MaxGain = maxSlope;
+            data.Combined.MinGain = minSlope;
         }
 
         public ReadOnlyCollection<MagnitudeData> GetMagnitudes()

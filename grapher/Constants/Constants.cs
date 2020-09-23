@@ -21,9 +21,6 @@ namespace grapher
         /// <summary> Ratio of max (X, Y) used in "by component" calulations to those used in "whole vector" calculations. </summary>
         public const double XYToCombinedRatio = 1.4;
 
-        /// <summary> Possible options to display in a layout. </summary>
-        public const int PossibleOptionsCount = 6;
-
         /// <summary> Separation between X and Y active value labels, in pixels. </summary>
         public const int ActiveLabelXYSeparation = 2;
 
@@ -60,7 +57,8 @@ namespace grapher
         /// <summary> Left placement of charts when narrowed </summary>
         public const int NarrowChartLeft = 482;
 
-        public const int WriteButtonVerticalOffset = 50;
+        /// <summary> Vertical placement of write button above bottom of sensitivity graph </summary>
+        public const int WriteButtonVerticalOffset = 80;
 
         /// <summary> Format string for shortened x and y textboxes. </summary>
         public const string ShortenedFormatString = "0.###";
@@ -84,7 +82,7 @@ namespace grapher
         public const string AccelDropDownDefaultShortText = "Accel Type";
 
         /// <summary> Default text to be displayed on write button. </summary>
-        public const string WriteButtonDefaultText = "Write To Driver";
+        public const string WriteButtonDefaultText = "Apply";
 
         /// <summary> Default text to be displayed on write button. </summary>
         public const string WriteButtonDelayText = "Delay";

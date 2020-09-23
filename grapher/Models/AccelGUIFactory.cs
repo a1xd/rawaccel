@@ -286,7 +286,8 @@ namespace grapher.Models
                 accelCalculator.DPI,
                 accelCalculator.PollRate,
                 autoWriteMenuItem,
-                showLastMouseMoveMenuItem);
+                showLastMouseMoveMenuItem,
+                showVelocityGainToolStripMenuItem);
 
             return new AccelGUI(
                 form,

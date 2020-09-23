@@ -17,10 +17,10 @@ namespace grapher
             new LinearLayout(),
             new ClassicLayout(),
             new NaturalLayout(),
+            new NaturalGainLayout(),
             new PowerLayout(),
             new LogarithmLayout(),
-            new NaturalGainLayout(),
-            new SigmoidGainLayout(),
+            new MotivityLayout(),
             new OffLayout()
         }.ToDictionary(k => k.Name);
 
@@ -63,6 +63,7 @@ namespace grapher
         #endregion Constructors
 
         #region Properties
+        public AccelCharts AccelCharts { get; }
 
         public Button WriteButton { get; }
 
@@ -179,11 +180,12 @@ namespace grapher
 
         public void SetActiveValues(int index, AccelArgs args)
         {
-            var name = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value.Name;
-            AccelTypeActiveValue.SetValue(name);
+            AccelerationType = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value;
+            AccelTypeActiveValue.SetValue(AccelerationType.Name);
+            AccelDropdown.SelectedIndex = AccelerationType.Index;
 
             Weight.SetActiveValue(args.weight);
-            Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0);
+            Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0 || args.scaleCap <= 0);
             Offset.SetActiveValue(args.offset, args.legacy_offset);
             Acceleration.SetActiveValue(args.accel);
             LimitOrExponent.SetActiveValue(args.exponent);
