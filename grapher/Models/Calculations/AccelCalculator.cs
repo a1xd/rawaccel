@@ -125,8 +125,8 @@ namespace grapher.Models.Calculations
             data.OrderedVelocityPointsList.AddRange(data.VelocityPoints.Values.ToList());
             data.MaxAccel = maxRatio;
             data.MinAccel = minRatio;
-            data.MaxGain = maxRatio;
-            data.MinGain = minRatio;
+            data.MaxGain = maxSlope;
+            data.MinGain = minSlope;
         }
 
         public void CalculateCombinedDiffSens(AccelData data, ManagedAccel accel, DriverSettings settings, ICollection<MagnitudeData> magnitudeData)
