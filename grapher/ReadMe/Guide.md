@@ -1,7 +1,7 @@
 # Raw Accel Guide
 
 ## Philosophy
-The Raw Accel driver and GUI's workings and exposed parameters are based on our understanding of mouse acceleration. Our understanding includes the concepts of "gain", "whole vs by component", and "anisotropy." For clarity, we will outline this understanding here.
+The Raw Accel driver and GUI's workings and exposed parameters are based on our understanding of mouse acceleration. Our understanding includes the concepts of "gain", "whole vs by component", and "anisotropy." For clarity, we will outline this understanding here. Those uninterested can skip to Features below.
 
 ### Measurements from Input Speed
 Raw Accel, like any mouse modification program, works by acting on a passed in (x,y) input and passing back out an (x,y) output. The GUI program creates charts by feeding a set of (x,y) inputs to the driver code to receive a set of (x,y) outputs. The following measurements, available as charts in Raw Accel, are then found from the outputs:
@@ -57,6 +57,9 @@ See "Horizontal and Vertical" in the philosophy section to understand what these
 ### Last Mouse Move
 The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calculations are slightly slow but build up a cache, so shaking your mouse around on GUI start should make the points display fast and smoothly. This feature can be turned off in the "Charts" menu.
 
+### Scale by DPI and Poll Rate
+This option does not scale your acceleration curve in any way. Rather, it scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI and Poll Rate.
+
 ## Acceleration Styles
 [To be added: pictures of the styles, typical settings]
 
@@ -72,8 +75,8 @@ This is the style found in CS:GO and Source Engine games. The user can set a rat
 ### Natural & NaturalGain
 Natural is a style found in the game Diabotical. It features a concave curve which starts at 1 and approaches some maximum sensitivity. This style is unique and useful but causes an ugly dip in the gain graph. For this reason we have created the NaturalGain style, which recreates the Natural style shape in the gain graph without any dips. We recommend users use the NaturalGain style instead of the Natural style; on switch some small tweaks may be needed since for any particular settings the NaturalGain is slightly slower to ramp up than the Natural style. NaturalGain is another excellent choice for new users.
 
-### SigmoidGain
-A sigmoid curve is an s-shaped curve. SigmoidGain creates an s-shaped curve from 1 to some maximum gain in the gain graph, allowing a user to set the maximum gain, the midpoint of the s, and how fast the s ramps up (similarly to the Natural styles.) At one point there was a Sigmoid style but we removed it because it caused an awful dip in the gain graph.
+### Motivity
+This curve looks like an "S" with the top half bigger than the bottom. Mathematically it's a "Sigmoid function on a log-log plot". A user can set the "midpoint" of the S, the "acceleration" (i.e. slantedness) of the S, and the "motivity". "Motivity" sets min and max sensitivity, where the maximum is just "motility", and the minimum is "1/motility." (Sensitivity is 1 at the midpoint.) This curve is calculated and stored in a lookup table before applying acceleration, which makes the gain graph look a little funny.  This is one author's favorite curve, and an excellent choice for power users and new users who don't mind playing with the settings a little.
 
 ### Logarithm
 [Sidiouth needs to write this]

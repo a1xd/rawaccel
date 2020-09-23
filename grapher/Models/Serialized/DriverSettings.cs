@@ -70,6 +70,7 @@ namespace grapher.Models.Serialized
 
         public static void SetActive(DriverSettings settings, Action<IntPtr> unmanagedActionBefore = null)
         {
+            ManualResetEvent sync = new ManualResetEvent(false);
             new Thread(() =>
             {
                 lock (UnmanagedSettingsLock)
@@ -78,8 +79,10 @@ namespace grapher.Models.Serialized
                     unmanagedActionBefore?.Invoke(UnmanagedSettingsHandle);
                     DriverInterop.SetActiveSettings(UnmanagedSettingsHandle);
                 }
+                sync.Set();
             }).Start();
 
+            sync.WaitOne();
         }
 
         public void SendToDriver(Action<IntPtr> unmanagedActionBefore = null)
