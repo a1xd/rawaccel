@@ -17,5 +17,5 @@ For an overview of everything Raw Accel has to offer, please see the guide (guid
 simon - Driver & Acceleration Logic  
 \_m00se\_ - GUI, Gain features, Acceleration types  
 Sidiouth  - Primary tester and sounding board  
-TauntyAmordillo - Originator of the ideas behind the Natural, Natural Gain, and Motivity types  
+TauntyAmordillo - Originator of the alternate curve ideas (Natural and Motivity types)  
 Kovaak - Brought us together
