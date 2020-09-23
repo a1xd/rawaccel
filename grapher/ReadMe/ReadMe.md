@@ -12,3 +12,10 @@ Development of Raw Accel is ongoing at https://github.com/a1xd/rawaccel. Being a
 
 ## Further Help
 For an overview of everything Raw Accel has to offer, please see the guide (guide.md). For a list of frequently asked questions, please see the FAQ (FAQ.md).
+
+## Credits
+simon - Driver & Acceleration Logic  
+\_m00se\_ - GUI, Gain features, Acceleration types  
+Sidiouth  - Primary tester and sounding board  
+TauntyAmordillo - Originator of the ideas behind the Natural, Natural Gain, and Motivity types  
+Kovaak - Brought us together
