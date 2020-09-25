@@ -67,6 +67,10 @@ namespace grapher.Models.Calculations
             double maxSlope = 0.0;
             double minSlope = Double.MaxValue;
 
+            double log = -2;
+            int index = 0;
+            int logIndex = 0;
+
             foreach (var magnitudeDatum in magnitudeData)
             {
                 if (magnitudeDatum.magnitude <=0)
@@ -76,6 +80,22 @@ namespace grapher.Models.Calculations
 
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
+
+                if (!data.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                {
+                    data.VelocityPoints.Add(magnitudeDatum.magnitude, outMagnitude);
+                }
+                else
+                {
+                    continue;
+                }
+
+                while (Math.Pow(10,log) < outMagnitude)
+                {
+                    data.LogToIndex[logIndex] = index;
+                    log += 0.01;
+                    logIndex++;
+                }
 
                 var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
                 
@@ -108,11 +128,6 @@ namespace grapher.Models.Calculations
                     data.AccelPoints.Add(magnitudeDatum.magnitude, ratio);
                 }
 
-                if (!data.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
-                {
-                    data.VelocityPoints.Add(magnitudeDatum.magnitude, outMagnitude);
-                }
-
                 if (!data.GainPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
                     data.GainPoints.Add(magnitudeDatum.magnitude, slope);
@@ -120,9 +135,18 @@ namespace grapher.Models.Calculations
 
                 lastInputMagnitude = magnitudeDatum.magnitude;
                 lastOutputMagnitude = outMagnitude;
+                index += 1;
             }
 
-            data.OrderedVelocityPointsList.AddRange(data.VelocityPoints.Values.ToList());
+            index--;
+
+            while (log <= 4.0)
+            {
+                data.LogToIndex[logIndex] = index;
+                log += 0.01;
+                logIndex++;
+            }
+
             data.MaxAccel = maxRatio;
             data.MinAccel = minRatio;
             data.MaxGain = maxSlope;
@@ -143,6 +167,10 @@ namespace grapher.Models.Calculations
 
             Sensitivity = GetSens(ref settings);
 
+            double log = -2;
+            int index = 0;
+            int logIndex = 0;
+
             foreach (var magnitudeDatum in magnitudeData)
             {
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
@@ -154,6 +182,17 @@ namespace grapher.Models.Calculations
                 if (!data.Combined.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
                     data.Combined.VelocityPoints.Add(magnitudeDatum.magnitude, magnitudeWithoutSens);
+                }
+                else
+                {
+                    continue;
+                }
+
+                while (Math.Pow(10,log) < magnitudeWithoutSens)
+                {
+                    data.Combined.LogToIndex[logIndex] = index;
+                    log += 0.01;
+                    logIndex++;
                 }
 
                 var xRatio = settings.sensitivity.x * ratio;
@@ -241,9 +280,18 @@ namespace grapher.Models.Calculations
                 lastInputMagnitude = magnitudeDatum.magnitude;
                 lastOutputMagnitudeX = xOut;
                 lastOutputMagnitudeY = yOut;
+                index += 1;
             }
 
-            data.Combined.OrderedVelocityPointsList.AddRange(data.Combined.VelocityPoints.Values.ToList());
+            index--;
+
+            while (log <= 4.0)
+            {
+                data.Combined.LogToIndex[logIndex] = index;
+                log += 0.01;
+                logIndex++;
+            }
+
             data.Combined.MaxAccel = maxRatio;
             data.Combined.MinAccel = minRatio;
             data.Combined.MaxGain = maxSlope;

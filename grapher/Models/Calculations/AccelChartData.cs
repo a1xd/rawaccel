@@ -13,8 +13,8 @@ namespace grapher.Models.Calculations
             AccelPoints = new SortedDictionary<double, double>();
             VelocityPoints = new SortedDictionary<double, double>();
             GainPoints = new SortedDictionary<double, double>();
-            OrderedVelocityPointsList = new List<double>();
             OutVelocityToPoints = new Dictionary<double, (double, double, double)>();
+            LogToIndex = new int[601];
         }
 
         #endregion Constructors
@@ -35,7 +35,7 @@ namespace grapher.Models.Calculations
 
         public SortedDictionary<double, double> GainPoints { get; }
 
-        public List<double> OrderedVelocityPointsList { get; }
+        public int[] LogToIndex { get; }
 
         public Dictionary<double, (double, double, double)> OutVelocityToPoints { get; }
 
@@ -48,8 +48,8 @@ namespace grapher.Models.Calculations
             AccelPoints.Clear();
             VelocityPoints.Clear();
             GainPoints.Clear();
-            OrderedVelocityPointsList.Clear();
             OutVelocityToPoints.Clear();
+            Array.Clear(LogToIndex, 0, LogToIndex.Length);
         }
 
         public (double, double, double) FindPointValuesFromOut(double outVelocityValue)
@@ -80,15 +80,21 @@ namespace grapher.Models.Calculations
 
         public int GetVelocityIndex(double outVelocityValue)
         {
-            var velIdx = OrderedVelocityPointsList.BinarySearch(outVelocityValue);
-
-            if (velIdx < 0)
+            var log = Math.Log10(outVelocityValue);
+            if (log < -2)
             {
-                velIdx = ~velIdx;
+                log = -2;
+            }
+            else if (log > 4)
+            {
+                log = 4;
+            }
+            else
+            {
+                log = log * 100 + 200;
             }
 
-            velIdx = Math.Min(velIdx, VelocityPoints.Count - 1);
-            velIdx = Math.Max(velIdx, 0);
+            var velIdx = LogToIndex[(int)log];
 
             return velIdx;
         }
