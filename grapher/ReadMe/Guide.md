@@ -63,10 +63,10 @@ See "Horizontal and Vertical" in the philosophy section to understand what these
 The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calculations are slightly slow but build up a cache, so shaking your mouse around on GUI start should make the points display fast and smoothly. This feature can be turned off in the "Charts" menu.
 
 ### Scale by DPI and Poll Rate
-This option does not scale your acceleration curve in any way. Rather, it scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI and Poll Rate.
+This option does not scale your acceleration curve in any way. Rather, it scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI and Poll Rate. The poll rate is also used to determine the Last Mouse Move points and therefore should be set for accuracy in that measurement.
 
 ## Acceleration Styles
-[To be added: pictures of the styles, typical settings]
+The examples of various types below show some typical settings, without a cap or offset, for a mouse at 1200 DPI and 1000 hz.
 
 ### Linear
 This is simplest style used by most; it is simply a line rising at a given rate. This is a good choice for new users.
@@ -77,7 +77,7 @@ This is the style found in Quake 3, Quake Live, and countless inspired followers
 ![ClassicExample](\images\classic_example.png)
 
 ### Power
-This is the style found in CS:GO and Source Engine games. The user can set a rate by which the speed is multplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1.). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set rate to 1000/(in-game fps).
+This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1.). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps).
 ![PowerExample](\images\power_example.png)
 
 ### Natural & NaturalGain
