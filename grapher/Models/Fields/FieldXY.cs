@@ -121,6 +121,32 @@ namespace grapher
 
         #region Methods
 
+        public void SetActive(double x, double y)
+        {
+            XField.SetNewDefault(x);
+            YField.SetNewDefault(y);
+            XField.SetToDefault();
+
+            if (x != y)
+            {
+                LockCheckBox.Checked = false;
+
+                if (Combined)
+                {
+                    SetSeparate();
+                }
+            }
+            else
+            {
+                LockCheckBox.Checked = true;
+
+                if (!Combined)
+                {
+                    SetCombined();
+                }
+            }
+        }
+
         private void CheckChanged(object sender, EventArgs e)
         {
             if (LockCheckBox.CheckState == CheckState.Checked)

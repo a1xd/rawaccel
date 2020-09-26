@@ -123,6 +123,8 @@ namespace grapher
         public void SetActiveValues(double x, double y)
         {
             ActiveValueLabels.SetValues(x, y);
+            Fields.SetActive(x, y);
+            
         }
 
         public override void AlignActiveValues()

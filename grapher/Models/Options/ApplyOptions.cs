@@ -123,7 +123,7 @@ namespace grapher.Models.Options
         {
             SetActiveValues(
                 settings.sensitivity.x,
-                settings.sensitivity.x,
+                settings.sensitivity.y,
                 settings.rotation,
                 (int)settings.modes.x,
                 (int)settings.modes.y,
