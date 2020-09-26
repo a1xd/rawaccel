@@ -20,7 +20,7 @@ namespace grapher.Layouts
             CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(false, string.Empty);
-            LimExpLayout = new OptionLayout(true, Motility);
+            LimExpLayout = new OptionLayout(true, Motivity);
             MidpointLayout = new OptionLayout(true, Midpoint);
         }
     }

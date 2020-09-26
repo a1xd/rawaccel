@@ -10,7 +10,7 @@ namespace grapher.Layouts
         public const string Exponent = "Exponent";
         public const string Limit = "Limit";
         public const string Midpoint = "Midpoint";
-        public const string Motility = "Motility";
+        public const string Motivity = "Motivity";
         public const string Offset = "Offset";
         public const string Cap = "Cap";
         public const string Weight = "Weight";

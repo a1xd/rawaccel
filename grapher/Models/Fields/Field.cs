@@ -52,7 +52,7 @@ namespace grapher
 
         public string FormatString { get; set; }
 
-        public string DefaultText { get; }
+        public string DefaultText { get; set; }
 
         public FieldState State { get; private set; }
 
@@ -120,7 +120,7 @@ namespace grapher
             }
         }
 
-        private double DefaultData { get; }
+        private double DefaultData { get; set; }
 
         #endregion Properties
 
@@ -136,6 +136,12 @@ namespace grapher
         {
             Box.Show();
             Box.Enabled = true;
+        }
+
+        public void SetNewDefault(double newDefault)
+        {
+            DefaultData = newDefault;
+            DefaultText = DecimalString(newDefault);
         }
 
         public void SetToDefault()

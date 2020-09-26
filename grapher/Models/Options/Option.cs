@@ -136,6 +136,8 @@ namespace grapher
         public void SetActiveValue(double value)
         {
             ActiveValueLabel.SetValue(value);
+            Field.SetNewDefault(value);
+            Field.SetToDefault();
         }
 
         public override void Hide()

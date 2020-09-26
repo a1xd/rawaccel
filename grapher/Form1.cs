@@ -144,7 +144,7 @@ namespace grapher
 
         private void RawAcceleration_Paint(object sender, PaintEventArgs e)
         {
-            AccelGUI.AccelCharts.DrawLastMovement();
+            //AccelGUI.AccelCharts.DrawLastMovement();
         }
 
         #endregion Method

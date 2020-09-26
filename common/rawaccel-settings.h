@@ -4,6 +4,9 @@
 #include "accel-base.hpp"
 
 namespace rawaccel {
+    using milliseconds = double;
+
+    inline constexpr milliseconds WRITE_DELAY = 1000;
 
     enum class accel_mode {
         linear, classic, natural, naturalgain, power, logarithm, motivity, noaccel
@@ -15,7 +18,7 @@ namespace rawaccel {
         vec2<accel_mode> modes = { accel_mode::noaccel, accel_mode::noaccel };
         vec2<accel_args> argsv;
         vec2d sens = { 1, 1 };
-        double time_min = 0.4;
+        milliseconds time_min = 0.4;
     };
 
 }

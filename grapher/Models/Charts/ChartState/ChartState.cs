@@ -48,6 +48,13 @@ namespace grapher.Models.Charts.ChartState
 
         public abstract void Calculate(ManagedAccel accel, DriverSettings settings);
 
+        public void Redraw()
+        {
+            SensitivityChart.Update();
+            VelocityChart.Update();
+            GainChart.Update();
+        }
+
         public virtual void SetUpCalculate(DriverSettings settings)
         {
             Data.Clear();

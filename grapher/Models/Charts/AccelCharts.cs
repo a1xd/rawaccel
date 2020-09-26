@@ -143,6 +143,11 @@ namespace grapher
             AlignWriteButton();
         }
 
+        public void Redraw()
+        {
+            ChartState.Redraw();
+        }
+
         public void Calculate(ManagedAccel accel, DriverSettings settings)
         {
             ChartState.SetUpCalculate(settings);
