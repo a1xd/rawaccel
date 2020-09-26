@@ -49,6 +49,7 @@ public ref struct DriverSettings
     Vec2<AccelMode> modes;
     Vec2<AccelArgs> args;
     Vec2<double> sensitivity;
+    [NonSerialized]
     double minimumTime;
 };
 
