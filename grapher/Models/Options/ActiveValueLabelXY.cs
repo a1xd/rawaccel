@@ -1,4 +1,6 @@
-﻿namespace grapher.Models.Options
+﻿using System.Drawing;
+
+namespace grapher.Models.Options
 {
     public class ActiveValueLabelXY
     {
@@ -20,6 +22,14 @@
             Y.Width = ShortenedWidth;
             Y.FormatString = Constants.ShortenedFormatString;
 
+            X.ValueLabel.Margin = new System.Windows.Forms.Padding(0);
+            Y.ValueLabel.Margin = new System.Windows.Forms.Padding(0);
+            X.ValueLabel.UseCompatibleTextRendering = true;
+            Y.ValueLabel.UseCompatibleTextRendering = true;
+            DefaultFont = X.ValueLabel.Font;
+            ShortenedFont = new Font(DefaultFont.FontFamily, (float)7.75);
+            Y.ValueLabel.Font = ShortenedFont;
+
             Combined = false;
             SetCombined();
         }
@@ -31,6 +41,10 @@
         public ActiveValueLabel X { get; }
 
         public ActiveValueLabel Y { get; }
+
+        public Font DefaultFont { get; }
+
+        public Font ShortenedFont { get; }
 
         public bool Combined { get; private set; }
 
@@ -90,6 +104,7 @@
                 X.FormatString = Constants.DefaultActiveValueFormatString;
                 X.Width = FullWidth;
                 X.Prefix = string.Empty;
+                X.ValueLabel.Font = DefaultFont;
                 Y.Hide();
             }
 
@@ -103,6 +118,7 @@
                 X.FormatString = Constants.ShortenedFormatString;
                 X.Width = ShortenedWidth;
                 X.Prefix = "X";
+                X.ValueLabel.Font = ShortenedFont;
                 Y.Prefix = "Y";
                 Y.Show();
             }
@@ -127,7 +143,7 @@
         private void Align (int width)
         {
             FullWidth = width;
-            ShortenedWidth = (FullWidth - Constants.ActiveLabelXYSeparation) / 2;
+            ShortenedWidth = FullWidth / 2;
 
             SetYLeft();
             Y.Width = ShortenedWidth;

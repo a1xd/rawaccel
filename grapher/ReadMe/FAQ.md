@@ -1,0 +1,18 @@
+# Raw Accel: Frequently Asked Questions
+See the Guide to understand all options and features in-depth.
+
+## What are the differences between Raw Accel and InterAccel?
+- The sensitivity and prescale fields in InterAccel are not present in Raw Accel. See the next question for helping converting your InterAccel settings to Raw Accel.
+- Separate x and y prescale values, which no one should have, are not supported in Raw Accel. For something similar but better, check out the "By Component" section of the guide.
+- Raw Accel uses a new kind of cap by default. See the guide for more information on this It takes a value in counts/ms instead of max desired sensitivity. The old style is available for those who want it. See the next question for converting the old to new style.
+- There are many new features and curve types available. See the guide for information on all of these.
+
+## How do I convert InterAccel settings to Raw Accel?
+![ConvertExample](\images\interaccel_to_rawaccel.png)
+See the guide to understand more about the Gain Cap option and other new features!
+
+## Does this driver work with AntiCheat?
+Yes. That is one of the fundamental goals of this driver. It is fully signed and has a one-second delay on write, so it cannot be used to cheat and should be considered safe by AntiCheat programs. However, we can never guarantee that the humans in control over AntiCheat code make the right decisions. So far it is working in FaceIT, Valorant, and Diabotical matches.
+
+## I don't understand something, or have some other question.
+Read the guide to see if it answers your question. If not, join our [Discord](https://discord.gg/7pQh8zH) and ask.
