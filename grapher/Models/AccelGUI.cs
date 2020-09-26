@@ -19,7 +19,7 @@ namespace grapher
             SettingsManager settings,
             ApplyOptions applyOptions,
             Button writeButton,
-            Label mouseMoveLabel,
+            MouseWatcher mouseWatcher,
             ToolStripMenuItem scaleMenuItem)
         {
             AccelForm = accelForm;
@@ -32,7 +32,7 @@ namespace grapher
             Settings.Startup();
             RefreshOnRead();
 
-            MouseWatcher = new MouseWatcher(AccelForm, mouseMoveLabel, AccelCharts);
+            MouseWatcher = mouseWatcher;
 
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
             WriteButton.Click += new System.EventHandler(OnWriteButtonClick);

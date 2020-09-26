@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
 using System.Windows.Forms;
@@ -289,6 +290,8 @@ namespace grapher.Models
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem);
 
+            var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, accelCalculator.PollRate);
+
             return new AccelGUI(
                 form,
                 accelCalculator,
@@ -296,7 +299,7 @@ namespace grapher.Models
                 settings,
                 applyOptions,
                 writeButton,
-                mouseLabel,
+                mouseWatcher,
                 scaleMenuItem);
         }
 
