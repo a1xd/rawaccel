@@ -73,7 +73,7 @@ namespace grapher.Models.Calculations
 
             foreach (var magnitudeDatum in magnitudeData)
             {
-                if (magnitudeDatum.magnitude <=0)
+                if (magnitudeDatum.magnitude <= 0)
                 {
                     continue;
                 }
@@ -97,7 +97,7 @@ namespace grapher.Models.Calculations
                     logIndex++;
                 }
 
-                var ratio = magnitudeDatum.magnitude > 0 ? outMagnitude / magnitudeDatum.magnitude : starter;
+                var ratio = outMagnitude / magnitudeDatum.magnitude;
                 
                 if (ratio > maxRatio)
                 {
@@ -173,11 +173,16 @@ namespace grapher.Models.Calculations
 
             foreach (var magnitudeDatum in magnitudeData)
             {
+                if (magnitudeDatum.magnitude <= 0)
+                {
+                    continue;
+                }
+
                 var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
                 var outputWithoutSens = StripThisSens(output.Item1, output.Item2);
                 var magnitudeWithoutSens = Magnitude(outputWithoutSens.Item1, outputWithoutSens.Item2);
 
-                var ratio = magnitudeDatum.magnitude > 0 ? magnitudeWithoutSens / magnitudeDatum.magnitude : 1;
+                var ratio = magnitudeWithoutSens / magnitudeDatum.magnitude;
 
                 if (!data.Combined.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
                 {
