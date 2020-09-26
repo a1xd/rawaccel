@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace grapher.Models.Serialized
 {
@@ -46,35 +47,39 @@ namespace grapher.Models.Serialized
 
         #region Methods
 
-        public void UpdateActiveSettings(DriverSettings settings, Action afterAccelSettingsUpdate = null)
+        public void UpdateActiveSettings(DriverSettings settings)
         {
-            settings.SendToDriverAndUpdate(ActiveAccel, () =>
+            ActiveAccel.UpdateFromSettings(settings);
+            SendToDriver(settings);
+
+            RawAccelSettings.AccelerationSettings = settings;
+            RawAccelSettings.GUISettings = new GUISettings
             {
-                RawAccelSettings.AccelerationSettings = settings;
-                RawAccelSettings.GUISettings = new GUISettings
-                {
-                    AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
-                    DPI = (int)DpiField.Data,
-                    PollRate = (int)PollRateField.Data,
-                    ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
-                    ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
-                };
+                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
+                DPI = (int)DpiField.Data,
+                PollRate = (int)PollRateField.Data,
+                ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
+                ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
+            };
 
-                RawAccelSettings.Save();
-
-                afterAccelSettingsUpdate?.Invoke();
-            });
+            RawAccelSettings.Save();
         }
 
         public void UpdateActiveAccelFromFileSettings(DriverSettings settings)
-        {
-            settings.SendToDriverAndUpdate(ActiveAccel);
+        { 
+            ActiveAccel.UpdateFromSettings(settings);
+            SendToDriver(settings);
 
             DpiField.SetToEntered(RawAccelSettings.GUISettings.DPI);
             PollRateField.SetToEntered(RawAccelSettings.GUISettings.PollRate);
             AutoWriteMenuItem.Checked = RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup;
             ShowLastMouseMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowLastMouseMove;
             ShowVelocityAndGainMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowVelocityAndGain;
+        }
+
+        public static void SendToDriver(DriverSettings settings)
+        {
+            new Thread(() => DriverInterop.SetActiveSettings(settings)).Start();
         }
 
         public void Startup()
@@ -97,7 +102,7 @@ namespace grapher.Models.Serialized
             }
 
             RawAccelSettings = new RawAccelSettings(
-                DriverSettings.GetActive(),
+                DriverInterop.GetActiveSettings(),
                 new GUISettings
                 {
                     AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,

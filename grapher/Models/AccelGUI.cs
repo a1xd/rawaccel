@@ -83,14 +83,8 @@ namespace grapher
                 minimumTime = .4
             };
 
-            Settings.UpdateActiveSettings(settings, () =>
-            {
-                AccelForm.Invoke((MethodInvoker)delegate
-                {
-                    WriteButtonDelay();
-                    UpdateGraph();
-                });
-            });
+            WriteButtonDelay();
+            Settings.UpdateActiveSettings(settings);
             RefreshOnRead();
         }
 
