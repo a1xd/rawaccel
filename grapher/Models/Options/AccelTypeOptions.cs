@@ -19,7 +19,6 @@ namespace grapher
             new NaturalLayout(),
             new NaturalGainLayout(),
             new PowerLayout(),
-            new LogarithmLayout(),
             new MotivityLayout(),
             new OffLayout()
         }.ToDictionary(k => k.Name);

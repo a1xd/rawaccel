@@ -9,7 +9,7 @@ namespace rawaccel {
     inline constexpr milliseconds WRITE_DELAY = 1000;
 
     enum class accel_mode {
-        linear, classic, natural, naturalgain, power, logarithm, motivity, noaccel
+        linear, classic, natural, naturalgain, power, motivity, noaccel
     };
 
     struct settings {

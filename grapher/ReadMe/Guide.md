@@ -89,10 +89,5 @@ Natural is a style found in the game Diabotical. It features a concave curve whi
 This curve looks like an "S" with the top half bigger than the bottom. Mathematically it's a "Sigmoid function on a log-log plot". A user can set the "midpoint" of the S, the "acceleration" (i.e. slantedness) of the S, and the "motivity". "Motivity" sets min and max sensitivity, where the maximum is just "motivity", and the minimum is "1/motivity." (Sensitivity is 1 at the midpoint.) This curve is calculated and stored in a lookup table before applying acceleration, which makes the gain graph look a little funny.  This is one author's favorite curve, and an excellent choice for power users and new users who don't mind playing with the settings a little.
 ![MotivityExample](\images\motivity_example.png)
 
-### Logarithm
-Not a big difference between this and power in terms of shape.
-![LogarithmExample](\images\logarithm_example.png)
-
-
 ## Further Help
 Further help and frequently asked questions can be found in the FAQ.

@@ -11,7 +11,7 @@ using namespace System::Runtime::InteropServices;
 
 public enum class AccelMode
 {
-    linear, classic, natural, naturalgain, power, logarithm, motivity, noaccel
+    linear, classic, natural, naturalgain, power, motivity, noaccel
 };
 
 [StructLayout(LayoutKind::Sequential)]

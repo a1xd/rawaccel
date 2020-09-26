@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Layouts\MotivityLayout.cs" />
-    <Compile Include="Layouts\LogarithmLayout.cs" />
     <Compile Include="Layouts\NaturalGainLayout.cs" />
     <Compile Include="Models\AccelGUIFactory.cs" />
     <Compile Include="Models\Calculations\AccelCalculator.cs" />
