@@ -716,8 +716,14 @@ namespace grapher.Models.Mouse
 
         public void OnMouseMove(int x, int y, double timeInMs)
         {
-            Display.Text = $"Last (x, y): ({x}, {y})";
+            MouseData.Set(x,y);
             AccelCharts.MakeDots(x, y, timeInMs);
+        }
+
+        public void UpdateLastMove()
+        {
+            MouseData.Get(out var x, out var y);
+            Display.Text = $"Last (x, y): ({x}, {y})";
         }
 
         public void ReadMouseMove(Message message)

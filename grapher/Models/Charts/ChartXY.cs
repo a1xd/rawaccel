@@ -154,6 +154,15 @@ namespace grapher
             */
         }
 
+        public void Update()
+        {
+            ChartX.Update();
+            if (ChartY.Visible)
+            {
+                ChartY.Update();
+            }
+        }
+
         public void SetPointBinds(PointData combined, PointData x, PointData y)
         {
             CombinedPointData = combined;

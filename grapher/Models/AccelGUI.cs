@@ -38,6 +38,7 @@ namespace grapher
             WriteButton.Click += new System.EventHandler(OnWriteButtonClick);
 
             ButtonTimer = SetupButtonTimer();
+            ChartRefresh = SetupChartTimer();
             SetupWriteButton();
         }
 
@@ -62,6 +63,8 @@ namespace grapher
         public MouseWatcher MouseWatcher { get; }
 
         public ToolStripMenuItem ScaleMenuItem { get; }
+
+        private Timer ChartRefresh { get; }
 
         #endregion Properties
 
@@ -108,6 +111,15 @@ namespace grapher
 
             AccelCharts.ShowActive(settings);
             ApplyOptions.SetActiveValues(settings);
+        }
+
+        private Timer SetupChartTimer()
+        {
+            Timer chartTimer = new Timer();
+            chartTimer.Enabled = true;
+            chartTimer.Interval = 10;
+            chartTimer.Tick += new System.EventHandler(OnChartTimerTick);
+            return chartTimer;
         }
 
         private Timer SetupButtonTimer()
@@ -157,6 +169,13 @@ namespace grapher
         {
             SetWriteButtonDelay();
             ButtonTimer.Start();
+        }
+
+        private void OnChartTimerTick(object sender, EventArgs e)
+        {
+            AccelCharts.DrawLastMovement();
+            MouseWatcher.UpdateLastMove();
+            AccelCharts.Redraw();
         }
 
         #endregion Methods
