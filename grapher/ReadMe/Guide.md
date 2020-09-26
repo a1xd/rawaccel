@@ -62,7 +62,7 @@ Weight is primarily a quick and dirty way to test a new curve. It also can be gi
 See "Horizontal and Vertical" in the philosophy section to understand what these do.
 
 ### Last Mouse Move
-The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calculations are slightly slow but build up a cache, so shaking your mouse around on GUI start should make the points display fast and smoothly. This feature can be turned off in the "Charts" menu.
+The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calulations should be fast and your graph responsive, but it comes at the cost of higher CPU usage due to needing to refresh the graph often. This feature can be turned off in the "Charts" menu.
 
 ### Scale by DPI and Poll Rate
 This option does not scale your acceleration curve in any way. Rather, it scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI and Poll Rate. The poll rate is also used to determine the Last Mouse Move points and therefore should be set for accuracy in that measurement.
