@@ -222,8 +222,8 @@ namespace grapher
         {
             if (min < max)
             {
-                ChartX.ChartAreas[0].AxisY.Minimum = min;
-                ChartX.ChartAreas[0].AxisY.Maximum = max;
+                ChartX.ChartAreas[0].AxisY.Minimum = min * 0.95;
+                ChartX.ChartAreas[0].AxisY.Maximum = max * 1.05;
             }
         }
 
@@ -231,14 +231,14 @@ namespace grapher
         {
             if (minX < maxX)
             {
-                ChartX.ChartAreas[0].AxisY.Minimum = minX;
-                ChartX.ChartAreas[0].AxisY.Maximum = maxX;
+                ChartX.ChartAreas[0].AxisY.Minimum = minX * 0.95;
+                ChartX.ChartAreas[0].AxisY.Maximum = maxX  * 1.05;
             }
 
             if (minY < maxY)
             {
-                ChartY.ChartAreas[0].AxisY.Minimum = minY;
-                ChartY.ChartAreas[0].AxisY.Maximum = maxY;
+                ChartY.ChartAreas[0].AxisY.Minimum = minY  * 0.95;
+                ChartY.ChartAreas[0].AxisY.Maximum = maxY * 1.05;
             }
         }
 

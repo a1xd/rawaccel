@@ -175,7 +175,6 @@ namespace grapher
         {
             AccelCharts.DrawLastMovement();
             MouseWatcher.UpdateLastMove();
-            AccelCharts.Redraw();
         }
 
         #endregion Methods

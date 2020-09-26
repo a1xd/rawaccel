@@ -14,7 +14,7 @@ namespace grapher.Models.Calculations
             VelocityPoints = new SortedDictionary<double, double>();
             GainPoints = new SortedDictionary<double, double>();
             OutVelocityToPoints = new Dictionary<double, (double, double, double)>();
-            LogToIndex = new int[601];
+            LogToIndex = new int[701];
         }
 
         #endregion Constructors
@@ -85,14 +85,12 @@ namespace grapher.Models.Calculations
             {
                 log = -2;
             }
-            else if (log > 4)
+            else if (log > 5)
             {
-                log = 4;
+                log = 5;
             }
-            else
-            {
-                log = log * 100 + 200;
-            }
+
+            log = log * 100 + 200;
 
             var velIdx = LogToIndex[(int)log];
 

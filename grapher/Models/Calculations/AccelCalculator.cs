@@ -90,7 +90,7 @@ namespace grapher.Models.Calculations
                     continue;
                 }
 
-                while (Math.Pow(10,log) < outMagnitude)
+                while (Math.Pow(10,log) < outMagnitude && logIndex < data.LogToIndex.Length)
                 {
                     data.LogToIndex[logIndex] = index;
                     log += 0.01;
@@ -140,7 +140,7 @@ namespace grapher.Models.Calculations
 
             index--;
 
-            while (log <= 4.0)
+            while (log <= 5.0)
             {
                 data.LogToIndex[logIndex] = index;
                 log += 0.01;
@@ -193,7 +193,7 @@ namespace grapher.Models.Calculations
                     continue;
                 }
 
-                while (Math.Pow(10,log) < magnitudeWithoutSens)
+                while (Math.Pow(10,log) < magnitudeWithoutSens && logIndex < data.Combined.LogToIndex.Length)
                 {
                     data.Combined.LogToIndex[logIndex] = index;
                     log += 0.01;
@@ -290,7 +290,7 @@ namespace grapher.Models.Calculations
 
             index--;
 
-            while (log <= 4.0)
+            while (log <= 5.0)
             {
                 data.Combined.LogToIndex[logIndex] = index;
                 log += 0.01;
