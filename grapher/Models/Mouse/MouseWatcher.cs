@@ -677,11 +677,12 @@ namespace grapher.Models.Mouse
 
         #region Constructors
 
-        public MouseWatcher(Form containingForm, Label display, AccelCharts accelCharts)
+        public MouseWatcher(Form containingForm, Label display, AccelCharts accelCharts, Field pollRate)
         {
             ContainingForm = containingForm;
             Display = display;
             AccelCharts = accelCharts;
+            PollRateField = pollRate;
             MouseData = new MouseData();
 
             RAWINPUTDEVICE device = new RAWINPUTDEVICE();
@@ -694,6 +695,7 @@ namespace grapher.Models.Mouse
             devices[0] = device;
             RegisterRawInputDevices(devices, 1, Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
             PollTime = 1;
+            PollRate = 1000;
         }
 
         #endregion Constructors
@@ -706,9 +708,13 @@ namespace grapher.Models.Mouse
 
         private AccelCharts AccelCharts { get; }
 
+        private Field PollRateField { get; set; }
+
         private MouseData MouseData { get; }
 
-        private double PollTime { get; }
+        private double PollRate { get; set; }
+
+        private double PollTime { get; set; }
 
         #endregion Properties
 
@@ -733,6 +739,12 @@ namespace grapher.Models.Mouse
             int size = Marshal.SizeOf(typeof(RawInput));
 
             outSize = GetRawInputData((IntPtr)message.LParam, RawInputCommand.Input, out rawInput, ref size, Marshal.SizeOf(typeof(RAWINPUTHEADER)));
+
+            if (PollRateField.Data != PollRate)
+            {
+                PollRate = PollRateField.Data;
+                PollTime = 1000 / PollRate;
+            }
 
             if (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0)
             {

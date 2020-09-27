@@ -5,6 +5,8 @@ Run "installer.exe" in the release directory to install the raw accel driver. Re
 
 Run "uninstaller.exe" in the release directory to uninstall the driver. Restart for the uninstallation to take effect.
 
+Run "grapher.exe" when the driver is installed in order to run the Raw Accel GUI.
+
 ## Philosophy
 The Raw Accel driver and GUI's workings and exposed parameters are based on our understanding of mouse acceleration. Our understanding includes the concepts of "gain", "whole vs by component", and "anisotropy." For clarity, we will outline this understanding here. Those uninterested can skip to Features below.
 
@@ -60,13 +62,13 @@ Weight is primarily a quick and dirty way to test a new curve. It also can be gi
 See "Horizontal and Vertical" in the philosophy section to understand what these do.
 
 ### Last Mouse Move
-The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calculations are slightly slow but build up a cache, so shaking your mouse around on GUI start should make the points display fast and smoothly. This feature can be turned off in the "Charts" menu.
+The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calulations should be fast and your graph responsive, but it comes at the cost of higher CPU usage due to needing to refresh the graph often. This feature can be turned off in the "Charts" menu.
 
 ### Scale by DPI and Poll Rate
-This option does not scale your acceleration curve in any way. Rather, it scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI and Poll Rate.
+This option does not scale your acceleration curve in any way. Rather, it scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI and Poll Rate. The poll rate is also used to determine the Last Mouse Move points and therefore should be set for accuracy in that measurement.
 
 ## Acceleration Styles
-[To be added: pictures of the styles, typical settings]
+The examples of various types below show some typical settings, without a cap or offset, for a mouse at 1200 DPI and 1000 hz.
 
 ### Linear
 This is simplest style used by most; it is simply a line rising at a given rate. This is a good choice for new users.
@@ -77,7 +79,7 @@ This is the style found in Quake 3, Quake Live, and countless inspired followers
 ![ClassicExample](\images\classic_example.png)
 
 ### Power
-This is the style found in CS:GO and Source Engine games. The user can set a rate by which the speed is multplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1.). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set rate to 1000/(in-game fps).
+This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1.). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps).
 ![PowerExample](\images\power_example.png)
 
 ### Natural & NaturalGain
@@ -88,11 +90,6 @@ Natural is a style found in the game Diabotical. It features a concave curve whi
 ### Motivity
 This curve looks like an "S" with the top half bigger than the bottom. Mathematically it's a "Sigmoid function on a log-log plot". A user can set the "midpoint" of the S, the "acceleration" (i.e. slantedness) of the S, and the "motivity". "Motivity" sets min and max sensitivity, where the maximum is just "motivity", and the minimum is "1/motivity." (Sensitivity is 1 at the midpoint.) This curve is calculated and stored in a lookup table before applying acceleration, which makes the gain graph look a little funny.  This is one author's favorite curve, and an excellent choice for power users and new users who don't mind playing with the settings a little.
 ![MotivityExample](\images\motivity_example.png)
-
-### Logarithm
-Not a big difference between this and power in terms of shape.
-![LogarithmExample](\images\logarithm_example.png)
-
 
 ## Further Help
 Further help and frequently asked questions can be found in the FAQ.

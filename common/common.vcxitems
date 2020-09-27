@@ -19,7 +19,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-experimentone.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-motivity.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-linear.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)accel-logarithm.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-natural.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-naturalgain.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-noaccel.hpp" />

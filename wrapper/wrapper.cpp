@@ -11,7 +11,7 @@ using namespace System::Runtime::InteropServices;
 
 public enum class AccelMode
 {
-    linear, classic, natural, naturalgain, power, logarithm, motivity, noaccel
+    linear, classic, natural, naturalgain, power, motivity, noaccel
 };
 
 [StructLayout(LayoutKind::Sequential)]
@@ -49,6 +49,7 @@ public ref struct DriverSettings
     Vec2<AccelMode> modes;
     Vec2<AccelArgs> args;
     Vec2<double> sensitivity;
+    [NonSerialized]
     double minimumTime;
 };
 

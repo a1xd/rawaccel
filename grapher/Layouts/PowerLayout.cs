@@ -11,7 +11,7 @@ namespace grapher.Layouts
             Index = (int)AccelMode.power;
             LogarithmicCharts = false;
 
-            AccelLayout = new OptionLayout(true, Acceleration);
+            AccelLayout = new OptionLayout(true, Scale);
             CapLayout = new OptionLayout(true, Cap);
             WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(true, Offset);
