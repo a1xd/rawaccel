@@ -45,6 +45,10 @@ namespace grapher.Models.Charts.ChartState
             SensitivityChart.SetSeparate();
             VelocityChart.SetSeparate();
             GainChart.SetSeparate();
+
+            SensitivityChart.ClearSecondDots();
+            VelocityChart.ClearSecondDots();
+            GainChart.ClearSecondDots();
         }
 
         public override void MakeDots(int x, int y, double timeInMs)
