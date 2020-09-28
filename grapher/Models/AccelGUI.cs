@@ -3,6 +3,7 @@ using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace grapher
@@ -72,6 +73,8 @@ namespace grapher
 
         public void UpdateActiveSettingsFromFields()
         {
+            var driverSettings = Settings.RawAccelSettings.AccelerationSettings;
+
             var settings = new DriverSettings
             {
                 rotation = ApplyOptions.Rotation.Field.Data,
@@ -82,13 +85,20 @@ namespace grapher
                 },
                 combineMagnitudes = ApplyOptions.IsWhole,
                 modes = ApplyOptions.GetModes(),
-                args = ApplyOptions.GetArgs(),
-                minimumTime = .4
+                args = ApplyOptions.GetUpdatedArgs(ref driverSettings.args),
+                minimumTime = driverSettings.minimumTime
             };
 
             WriteButtonDelay();
-            Settings.UpdateActiveSettings(settings);
-            RefreshOnRead();
+            SettingsErrors errors = Settings.TryUpdateActiveSettings(settings);
+            if (errors.Empty())
+            {
+                RefreshOnRead();
+            }
+            else
+            {
+                WriteButton.Text = "bad args";
+            }
         }
 
         public void RefreshOnRead()
@@ -126,7 +136,7 @@ namespace grapher
         {
             Timer buttonTimer = new Timer();
             buttonTimer.Enabled = true;
-            buttonTimer.Interval = Convert.ToInt32(ManagedAccel.WriteDelay);
+            buttonTimer.Interval = Convert.ToInt32(DriverInterop.WriteDelayMs);
             buttonTimer.Tick += new System.EventHandler(OnButtonTimerTick);
             return buttonTimer;
         }
@@ -141,12 +151,14 @@ namespace grapher
         {
             WriteButton.Text = Constants.WriteButtonDefaultText;
             WriteButton.Enabled = true;
+            WriteButton.Update();
         }
 
         private void SetWriteButtonDelay()
         {
             WriteButton.Enabled = false;
             WriteButton.Text = $"{Constants.WriteButtonDelayText} : {ButtonTimer.Interval} ms";
+            WriteButton.Update();
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)

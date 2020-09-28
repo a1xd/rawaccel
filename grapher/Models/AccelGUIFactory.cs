@@ -46,8 +46,12 @@ namespace grapher.Models
             TextBox offsetBoxY,
             TextBox accelerationBoxX,
             TextBox accelerationBoxY,
+            TextBox scaleBoxX,
+            TextBox scaleBoxY,
             TextBox limitBoxX,
             TextBox limitBoxY,
+            TextBox expBoxX,
+            TextBox expBoxY,
             TextBox midpointBoxX,
             TextBox midpointBoxY,
             CheckBox sensXYLock,
@@ -63,8 +67,12 @@ namespace grapher.Models
             Label offsetLabelY,
             Label constantOneLabelX,
             Label constantOneLabelY,
-            Label constantTwoLabelX,
-            Label constantTwoLabelY,
+            Label scaleLabelX,
+            Label scaleLabelY,
+            Label limitLabelX,
+            Label limitLabelY,
+            Label expLabelX,
+            Label expLabelY,
             Label constantThreeLabelX,
             Label constantThreeLabelY,
             Label activeValueTitleX,
@@ -80,8 +88,12 @@ namespace grapher.Models
             Label offsetActiveLabelY,
             Label accelerationActiveLabelX,
             Label accelerationActiveLabelY,
-            Label limitExpActiveLabelX,
-            Label limitExpActiveLabelY,
+            Label scaleActiveLabelX,
+            Label scaleActiveLabelY,
+            Label limitActiveLabelX,
+            Label limitActiveLabelY,
+            Label expActiveLabelX,
+            Label expActiveLabelY,
             Label midpointActiveLabelX,
             Label midpointActiveLabelY,
             Label accelTypeActiveLabelX,
@@ -203,16 +215,40 @@ namespace grapher.Models
                 new ActiveValueLabel(accelerationActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
-            var limitOrExponentX = new Option(
-                new Field(limitBoxX, form, 2),
-                constantTwoLabelX,
-                new ActiveValueLabel(limitExpActiveLabelX, activeValueTitleX),
+            var scaleX = new Option(
+                new Field(scaleBoxX, form, 0),
+                scaleLabelX,
+                new ActiveValueLabel(scaleActiveLabelX, activeValueTitleX),
                 0);
 
-            var limitOrExponentY = new Option(
+            var scaleY = new Option(
+                new Field(scaleBoxY, form, 0),
+                scaleLabelY,
+                new ActiveValueLabel(scaleActiveLabelY, activeValueTitleY),
+                optionSetYLeft);
+
+            var limitX = new Option(
+                new Field(limitBoxX, form, 2),
+                limitLabelX,
+                new ActiveValueLabel(limitActiveLabelX, activeValueTitleX),
+                0);
+
+            var limitY = new Option(
                 new Field(limitBoxY, form, 2),
-                constantTwoLabelY,
-                new ActiveValueLabel(limitExpActiveLabelY, activeValueTitleY),
+                limitLabelY,
+                new ActiveValueLabel(limitActiveLabelY, activeValueTitleY),
+                optionSetYLeft);
+
+            var exponentX = new Option(
+                new Field(expBoxX, form, 2),
+                expLabelX,
+                new ActiveValueLabel(expActiveLabelX, activeValueTitleX),
+                0);
+
+            var exponentY = new Option(
+                new Field(expBoxY, form, 2),
+                expLabelY,
+                new ActiveValueLabel(expActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
             var midpointX = new Option(
@@ -240,10 +276,12 @@ namespace grapher.Models
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,
                 accelerationX,
+                scaleX,
                 capOptionsX,
                 weightX,
                 offsetOptionsX,
-                limitOrExponentX,
+                limitX,
+                exponentX,
                 midpointX,
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitleX));
@@ -251,10 +289,12 @@ namespace grapher.Models
             var accelerationOptionsY = new AccelTypeOptions(
                 accelTypeDropY,
                 accelerationY,
+                scaleY,
                 capOptionsY,
                 weightY,
                 offsetOptionsY,
-                limitOrExponentY,
+                limitY,
+                exponentY,
                 midpointY,
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitleY));

@@ -23,7 +23,7 @@ namespace rawaccel {
 		double subtractive_constant;
 
 		motivity_impl(const accel_args& args) :
-			rate(pow(10,args.rate)), limit(2*log10(args.limit)), midpoint(log10(args.midpoint))
+			rate(pow(10,args.accel)), limit(2*log10(args.limit)), midpoint(log10(args.midpoint))
 		{
 			subtractive_constant = limit / 2;
 		}

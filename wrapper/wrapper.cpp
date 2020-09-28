@@ -9,29 +9,33 @@
 using namespace System;
 using namespace System::Runtime::InteropServices;
 
+using namespace Newtonsoft::Json;
+
+[JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class AccelMode
 {
     linear, classic, natural, naturalgain, power, motivity, noaccel
 };
 
+[JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential)]
 public value struct AccelArgs
 {
     double offset;
-    double legacy_offset;
-    double accel;
+    [MarshalAs(UnmanagedType::U1)]
+    bool legacyOffset;
+    double acceleration;
+    double scale;
     double limit;
     double exponent;
     double midpoint;
-    double powerScale;
-    double powerExponent;
     double weight;
-    double rate;
     double scaleCap;
     double gainCap;
 };
 
 generic <typename T>
+[JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential)]
 public value struct Vec2
 {
@@ -39,18 +43,35 @@ public value struct Vec2
     T y;
 };
 
-[Serializable]
+[JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential)]
 public ref struct DriverSettings
 {
+    literal String^ Key = "Driver settings";
+
+    [JsonProperty("Degrees of rotation")]
     double rotation;
+
+    [JsonProperty("Use x as whole/combined accel")]
     [MarshalAs(UnmanagedType::U1)]
     bool combineMagnitudes;
+
+    [JsonProperty("Accel modes")]
     Vec2<AccelMode> modes;
+
+    [JsonProperty("Accel parameters")]
     Vec2<AccelArgs> args;
+
+    [JsonProperty("Sensitivity")]
     Vec2<double> sensitivity;
-    [NonSerialized]
+    
+    [JsonProperty(Required = Required::Default)]
     double minimumTime;
+
+    bool ShouldSerializeminimumTime() 
+    { 
+        return minimumTime > 0 && minimumTime != DEFAULT_TIME_MIN;
+    }
 };
 
 
@@ -102,14 +123,62 @@ void update_modifier(mouse_modifier& mod, DriverSettings^ managed, vec2<si_pair*
     });
 }
 
+using error_list_t = Collections::Generic::List<String^>;
+
+error_list_t^ get_accel_errors(AccelMode mode, AccelArgs^ args)
+{
+    accel_mode m = (accel_mode)mode;
+
+    auto is_mode = [m](auto... modes) { return ((m == modes) || ...); };
+    
+    using am = accel_mode;
+
+    auto error_list = gcnew error_list_t();
+    
+    if (args->acceleration > 1 && is_mode(am::natural, am::naturalgain))
+        error_list->Add("acceleration can not be greater than 1");
+    else if (args->acceleration < 0)
+        error_list->Add("acceleration can not be negative, use a negative weight to compensate");
+    
+    if (args->scale <= 0)
+        error_list->Add("scale must be positive");
+
+    if (args->exponent <= 1 && is_mode(am::classic))
+        error_list->Add("exponent must be greater than 1");
+    else if (args->exponent <= 0)
+        error_list->Add("exponent must be positive");
+
+    if (args->limit <= 1)
+        error_list->Add("limit must be greater than 1");
+
+    if (args->midpoint <= 0)
+        error_list->Add("midpoint must be positive");
+
+    return error_list;
+}
+
+public ref class SettingsErrors
+{
+public:
+    error_list_t^ x;
+    error_list_t^ y;
+
+    bool Empty()
+    {
+        return x->Count == 0 && y->Count == 0;
+    }
+};
+
 public ref struct DriverInterop
 {
+    literal double WriteDelayMs = WRITE_DELAY;
+
     static DriverSettings^ GetActiveSettings()
     {
         return get_active();
     }
 
-    static void SetActiveSettings(DriverSettings^ args)
+    static void Write(DriverSettings^ args)
     {
         set_active(args);
     }
@@ -119,22 +188,21 @@ public ref struct DriverInterop
         return get_default();
     }
 
-    using error_list_t = Collections::Generic::List<String^>;
-
-    static error_list_t^ GetErrors(AccelArgs^ args)
+    static SettingsErrors^ GetSettingsErrors(DriverSettings^ args)
     {
-        auto error_list = gcnew error_list_t();
+        auto errors = gcnew SettingsErrors();
 
-        if (args->accel < 0 || args->rate < 0)
-                error_list->Add("accel can not be negative, use a negative weight to compensate");
-        if (args->rate > 1) error_list->Add("rate can not be greater than 1");
-        if (args->exponent <= 1) error_list->Add("exponent must be greater than 1");
-        if (args->limit <= 1) error_list->Add("limit must be greater than 1");
-        if (args->powerScale <= 0) error_list->Add("scale must be positive");
-        if (args->powerExponent <= 0) error_list->Add("exponent must be positive");
-        if (args->midpoint < 0) error_list->Add("midpoint must not be negative");
-        
-        return error_list;
+        errors->x = get_accel_errors(args->modes.x, args->args.x);
+
+        if (args->combineMagnitudes) errors->y = gcnew error_list_t();
+        else errors->y = get_accel_errors(args->modes.y, args->args.y);
+
+        return errors;
+    }
+
+    static error_list_t^ GetAccelErrors(AccelMode mode, AccelArgs^ args)
+    {
+        return get_accel_errors(mode, args);
     }
 };
 
@@ -150,7 +218,6 @@ public ref class ManagedAccel
 #endif
 
 public:
-    static initonly double WriteDelay = WRITE_DELAY;
 
     virtual ~ManagedAccel()
     {

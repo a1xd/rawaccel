@@ -13,10 +13,12 @@ namespace grapher.Layouts
             LogarithmicCharts = false;
 
             AccelLayout = new OptionLayout(true, Acceleration);
+            ScaleLayout = new OptionLayout(true, Scale);
             CapLayout = new OptionLayout(true, Cap);
             WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(true, Offset);
-            LimExpLayout = new OptionLayout(true, $"{Limit}\\{Exponent}");
+            LimitLayout = new OptionLayout(true, Limit);
+            ExponentLayout = new OptionLayout(true, Exponent);
             MidpointLayout = new OptionLayout(true, Midpoint);
         }
     }

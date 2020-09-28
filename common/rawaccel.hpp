@@ -16,8 +16,6 @@
 
 namespace rawaccel {
 
-    using milliseconds = double;
-
     /// <summary> Struct to hold vector rotation details. </summary>
     struct rotator {
 

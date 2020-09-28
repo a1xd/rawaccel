@@ -151,9 +151,8 @@ Return Value:
     DebugPrint(("Ioctl received into filter control object.\n"));
 
     if (InputBufferLength == sizeof(ra::settings)) {
-        // 1 second wait
         LARGE_INTEGER interval;
-        interval.QuadPart = -10000000;
+        interval.QuadPart = static_cast<LONGLONG>(ra::WRITE_DELAY) * -10000;
         KeDelayExecutionThread(KernelMode, FALSE, &interval);
 
         status = WdfRequestRetrieveInputBuffer(
@@ -172,7 +171,7 @@ Return Value:
 
         ra::settings new_settings = *reinterpret_cast<ra::settings*>(buffer);
 
-        if (new_settings.time_min <= 0 || _isnanf(new_settings.time_min)) {
+        if (new_settings.time_min <= 0 || _isnanf(static_cast<float>(new_settings.time_min))) {
             new_settings.time_min = ra::settings{}.time_min;
         }
 

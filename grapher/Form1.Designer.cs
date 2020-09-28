@@ -84,7 +84,7 @@ namespace grapher
             this.weightLabelX = new System.Windows.Forms.Label();
             this.weightBoxY = new System.Windows.Forms.TextBox();
             this.limitBoxX = new System.Windows.Forms.TextBox();
-            this.constantTwoLabelX = new System.Windows.Forms.Label();
+            this.limitLabelX = new System.Windows.Forms.Label();
             this.midpointBoxX = new System.Windows.Forms.TextBox();
             this.constantThreeLabelX = new System.Windows.Forms.Label();
             this.offsetBoxX = new System.Windows.Forms.TextBox();
@@ -133,7 +133,7 @@ namespace grapher
             this.WeightActiveYLabel = new System.Windows.Forms.Label();
             this.CapActiveYLabel = new System.Windows.Forms.Label();
             this.OffsetActiveXLabel = new System.Windows.Forms.Label();
-            this.LimitExpActiveXLabel = new System.Windows.Forms.Label();
+            this.LimitActiveXLabel = new System.Windows.Forms.Label();
             this.MidpointActiveXLabel = new System.Windows.Forms.Label();
             this.accelerationBoxY = new System.Windows.Forms.TextBox();
             this.offsetBoxY = new System.Windows.Forms.TextBox();
@@ -142,19 +142,31 @@ namespace grapher
             this.accelTypeDropY = new System.Windows.Forms.ComboBox();
             this.AccelerationActiveLabelY = new System.Windows.Forms.Label();
             this.OffsetActiveYLabel = new System.Windows.Forms.Label();
-            this.LimitExpActiveYLabel = new System.Windows.Forms.Label();
+            this.LimitActiveYLabel = new System.Windows.Forms.Label();
             this.MidpointActiveYLabel = new System.Windows.Forms.Label();
             this.ByComponentXYLock = new System.Windows.Forms.CheckBox();
             this.constantOneLabelY = new System.Windows.Forms.Label();
             this.capLabelY = new System.Windows.Forms.Label();
             this.weightLabelY = new System.Windows.Forms.Label();
             this.offsetLabelY = new System.Windows.Forms.Label();
-            this.constantTwoLabelY = new System.Windows.Forms.Label();
+            this.limitLabelY = new System.Windows.Forms.Label();
             this.constantThreeLabelY = new System.Windows.Forms.Label();
             this.OptionSetXTitle = new System.Windows.Forms.Label();
             this.OptionSetYTitle = new System.Windows.Forms.Label();
             this.AccelTypeActiveLabelY = new System.Windows.Forms.Label();
             this.ActiveValueTitleY = new System.Windows.Forms.Label();
+            this.expLabelY = new System.Windows.Forms.Label();
+            this.ExpActiveYLabel = new System.Windows.Forms.Label();
+            this.expBoxY = new System.Windows.Forms.TextBox();
+            this.ExpActiveXLabel = new System.Windows.Forms.Label();
+            this.expLabelX = new System.Windows.Forms.Label();
+            this.expBoxX = new System.Windows.Forms.TextBox();
+            this.scaleLabelY = new System.Windows.Forms.Label();
+            this.ScaleActiveYLabel = new System.Windows.Forms.Label();
+            this.scaleBoxY = new System.Windows.Forms.TextBox();
+            this.ScaleActiveXLabel = new System.Windows.Forms.Label();
+            this.scaleLabelX = new System.Windows.Forms.Label();
+            this.scaleBoxX = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
@@ -311,19 +323,19 @@ namespace grapher
             this.limitBoxX.Size = new System.Drawing.Size(76, 20);
             this.limitBoxX.TabIndex = 9;
             // 
-            // constantTwoLabelX
+            // limitLabelX
             // 
-            this.constantTwoLabelX.AutoSize = true;
-            this.constantTwoLabelX.Location = new System.Drawing.Point(24, 244);
-            this.constantTwoLabelX.Name = "constantTwoLabelX";
-            this.constantTwoLabelX.Size = new System.Drawing.Size(78, 13);
-            this.constantTwoLabelX.TabIndex = 16;
-            this.constantTwoLabelX.Text = "Limit/Exponent";
-            this.constantTwoLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.limitLabelX.AutoSize = true;
+            this.limitLabelX.Location = new System.Drawing.Point(24, 244);
+            this.limitLabelX.Name = "limitLabelX";
+            this.limitLabelX.Size = new System.Drawing.Size(28, 13);
+            this.limitLabelX.TabIndex = 16;
+            this.limitLabelX.Text = "Limit";
+            this.limitLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // midpointBoxX
             // 
-            this.midpointBoxX.Location = new System.Drawing.Point(105, 267);
+            this.midpointBoxX.Location = new System.Drawing.Point(105, 297);
             this.midpointBoxX.Name = "midpointBoxX";
             this.midpointBoxX.Size = new System.Drawing.Size(76, 20);
             this.midpointBoxX.TabIndex = 10;
@@ -331,7 +343,7 @@ namespace grapher
             // constantThreeLabelX
             // 
             this.constantThreeLabelX.AutoSize = true;
-            this.constantThreeLabelX.Location = new System.Drawing.Point(34, 270);
+            this.constantThreeLabelX.Location = new System.Drawing.Point(34, 300);
             this.constantThreeLabelX.Name = "constantThreeLabelX";
             this.constantThreeLabelX.Size = new System.Drawing.Size(47, 13);
             this.constantThreeLabelX.TabIndex = 18;
@@ -357,9 +369,10 @@ namespace grapher
             // 
             // writeButton
             // 
-            this.writeButton.Location = new System.Drawing.Point(154, 270);
+            this.writeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.writeButton.Location = new System.Drawing.Point(177, 359);
             this.writeButton.Name = "writeButton";
-            this.writeButton.Size = new System.Drawing.Size(76, 23);
+            this.writeButton.Size = new System.Drawing.Size(128, 40);
             this.writeButton.TabIndex = 19;
             this.writeButton.Text = "Apply";
             this.writeButton.UseVisualStyleBackColor = true;
@@ -875,19 +888,19 @@ namespace grapher
             this.OffsetActiveXLabel.TabIndex = 45;
             this.OffsetActiveXLabel.Text = "0";
             // 
-            // LimitExpActiveXLabel
+            // LimitActiveXLabel
             // 
-            this.LimitExpActiveXLabel.AutoSize = true;
-            this.LimitExpActiveXLabel.Location = new System.Drawing.Point(196, 244);
-            this.LimitExpActiveXLabel.Name = "LimitExpActiveXLabel";
-            this.LimitExpActiveXLabel.Size = new System.Drawing.Size(13, 13);
-            this.LimitExpActiveXLabel.TabIndex = 46;
-            this.LimitExpActiveXLabel.Text = "0";
+            this.LimitActiveXLabel.AutoSize = true;
+            this.LimitActiveXLabel.Location = new System.Drawing.Point(196, 244);
+            this.LimitActiveXLabel.Name = "LimitActiveXLabel";
+            this.LimitActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.LimitActiveXLabel.TabIndex = 46;
+            this.LimitActiveXLabel.Text = "0";
             // 
             // MidpointActiveXLabel
             // 
             this.MidpointActiveXLabel.AutoSize = true;
-            this.MidpointActiveXLabel.Location = new System.Drawing.Point(196, 270);
+            this.MidpointActiveXLabel.Location = new System.Drawing.Point(196, 300);
             this.MidpointActiveXLabel.Name = "MidpointActiveXLabel";
             this.MidpointActiveXLabel.Size = new System.Drawing.Size(13, 13);
             this.MidpointActiveXLabel.TabIndex = 47;
@@ -916,7 +929,7 @@ namespace grapher
             // 
             // midpointBoxY
             // 
-            this.midpointBoxY.Location = new System.Drawing.Point(331, 267);
+            this.midpointBoxY.Location = new System.Drawing.Point(331, 297);
             this.midpointBoxY.Name = "midpointBoxY";
             this.midpointBoxY.Size = new System.Drawing.Size(76, 20);
             this.midpointBoxY.TabIndex = 18;
@@ -948,19 +961,19 @@ namespace grapher
             this.OffsetActiveYLabel.TabIndex = 54;
             this.OffsetActiveYLabel.Text = "0";
             // 
-            // LimitExpActiveYLabel
+            // LimitActiveYLabel
             // 
-            this.LimitExpActiveYLabel.AutoSize = true;
-            this.LimitExpActiveYLabel.Location = new System.Drawing.Point(413, 244);
-            this.LimitExpActiveYLabel.Name = "LimitExpActiveYLabel";
-            this.LimitExpActiveYLabel.Size = new System.Drawing.Size(13, 13);
-            this.LimitExpActiveYLabel.TabIndex = 55;
-            this.LimitExpActiveYLabel.Text = "0";
+            this.LimitActiveYLabel.AutoSize = true;
+            this.LimitActiveYLabel.Location = new System.Drawing.Point(413, 244);
+            this.LimitActiveYLabel.Name = "LimitActiveYLabel";
+            this.LimitActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.LimitActiveYLabel.TabIndex = 55;
+            this.LimitActiveYLabel.Text = "0";
             // 
             // MidpointActiveYLabel
             // 
             this.MidpointActiveYLabel.AutoSize = true;
-            this.MidpointActiveYLabel.Location = new System.Drawing.Point(413, 270);
+            this.MidpointActiveYLabel.Location = new System.Drawing.Point(413, 300);
             this.MidpointActiveYLabel.Name = "MidpointActiveYLabel";
             this.MidpointActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.MidpointActiveYLabel.TabIndex = 56;
@@ -1013,19 +1026,19 @@ namespace grapher
             this.offsetLabelY.TabIndex = 61;
             this.offsetLabelY.Text = "Offset";
             // 
-            // constantTwoLabelY
+            // limitLabelY
             // 
-            this.constantTwoLabelY.AutoSize = true;
-            this.constantTwoLabelY.Location = new System.Drawing.Point(264, 244);
-            this.constantTwoLabelY.Name = "constantTwoLabelY";
-            this.constantTwoLabelY.Size = new System.Drawing.Size(51, 13);
-            this.constantTwoLabelY.TabIndex = 62;
-            this.constantTwoLabelY.Text = "Limit/Exp";
+            this.limitLabelY.AutoSize = true;
+            this.limitLabelY.Location = new System.Drawing.Point(264, 244);
+            this.limitLabelY.Name = "limitLabelY";
+            this.limitLabelY.Size = new System.Drawing.Size(28, 13);
+            this.limitLabelY.TabIndex = 62;
+            this.limitLabelY.Text = "Limit";
             // 
             // constantThreeLabelY
             // 
             this.constantThreeLabelY.AutoSize = true;
-            this.constantThreeLabelY.Location = new System.Drawing.Point(264, 270);
+            this.constantThreeLabelY.Location = new System.Drawing.Point(264, 300);
             this.constantThreeLabelY.Name = "constantThreeLabelY";
             this.constantThreeLabelY.Size = new System.Drawing.Size(47, 13);
             this.constantThreeLabelY.TabIndex = 63;
@@ -1067,24 +1080,138 @@ namespace grapher
             this.ActiveValueTitleY.TabIndex = 67;
             this.ActiveValueTitleY.Text = "Current";
             // 
+            // expLabelY
+            // 
+            this.expLabelY.AutoSize = true;
+            this.expLabelY.Location = new System.Drawing.Point(264, 273);
+            this.expLabelY.Name = "expLabelY";
+            this.expLabelY.Size = new System.Drawing.Size(52, 13);
+            this.expLabelY.TabIndex = 73;
+            this.expLabelY.Text = "Exponent";
+            // 
+            // ExpActiveYLabel
+            // 
+            this.ExpActiveYLabel.AutoSize = true;
+            this.ExpActiveYLabel.Location = new System.Drawing.Point(413, 273);
+            this.ExpActiveYLabel.Name = "ExpActiveYLabel";
+            this.ExpActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.ExpActiveYLabel.TabIndex = 72;
+            this.ExpActiveYLabel.Text = "0";
+            // 
+            // expBoxY
+            // 
+            this.expBoxY.Location = new System.Drawing.Point(331, 270);
+            this.expBoxY.Name = "expBoxY";
+            this.expBoxY.Size = new System.Drawing.Size(76, 20);
+            this.expBoxY.TabIndex = 71;
+            // 
+            // ExpActiveXLabel
+            // 
+            this.ExpActiveXLabel.AutoSize = true;
+            this.ExpActiveXLabel.Location = new System.Drawing.Point(196, 273);
+            this.ExpActiveXLabel.Name = "ExpActiveXLabel";
+            this.ExpActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.ExpActiveXLabel.TabIndex = 70;
+            this.ExpActiveXLabel.Text = "0";
+            // 
+            // expLabelX
+            // 
+            this.expLabelX.AutoSize = true;
+            this.expLabelX.Location = new System.Drawing.Point(24, 273);
+            this.expLabelX.Name = "expLabelX";
+            this.expLabelX.Size = new System.Drawing.Size(52, 13);
+            this.expLabelX.TabIndex = 69;
+            this.expLabelX.Text = "Exponent";
+            this.expLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // expBoxX
+            // 
+            this.expBoxX.Location = new System.Drawing.Point(105, 270);
+            this.expBoxX.Name = "expBoxX";
+            this.expBoxX.Size = new System.Drawing.Size(76, 20);
+            this.expBoxX.TabIndex = 68;
+            // 
+            // scaleLabelY
+            // 
+            this.scaleLabelY.AutoSize = true;
+            this.scaleLabelY.Location = new System.Drawing.Point(264, 330);
+            this.scaleLabelY.Name = "scaleLabelY";
+            this.scaleLabelY.Size = new System.Drawing.Size(34, 13);
+            this.scaleLabelY.TabIndex = 79;
+            this.scaleLabelY.Text = "Scale";
+            // 
+            // ScaleActiveYLabel
+            // 
+            this.ScaleActiveYLabel.AutoSize = true;
+            this.ScaleActiveYLabel.Location = new System.Drawing.Point(413, 330);
+            this.ScaleActiveYLabel.Name = "ScaleActiveYLabel";
+            this.ScaleActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.ScaleActiveYLabel.TabIndex = 78;
+            this.ScaleActiveYLabel.Text = "0";
+            // 
+            // scaleBoxY
+            // 
+            this.scaleBoxY.Location = new System.Drawing.Point(331, 327);
+            this.scaleBoxY.Name = "scaleBoxY";
+            this.scaleBoxY.Size = new System.Drawing.Size(76, 20);
+            this.scaleBoxY.TabIndex = 77;
+            // 
+            // ScaleActiveXLabel
+            // 
+            this.ScaleActiveXLabel.AutoSize = true;
+            this.ScaleActiveXLabel.Location = new System.Drawing.Point(196, 330);
+            this.ScaleActiveXLabel.Name = "ScaleActiveXLabel";
+            this.ScaleActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.ScaleActiveXLabel.TabIndex = 76;
+            this.ScaleActiveXLabel.Text = "0";
+            // 
+            // scaleLabelX
+            // 
+            this.scaleLabelX.AutoSize = true;
+            this.scaleLabelX.Location = new System.Drawing.Point(34, 330);
+            this.scaleLabelX.Name = "scaleLabelX";
+            this.scaleLabelX.Size = new System.Drawing.Size(34, 13);
+            this.scaleLabelX.TabIndex = 75;
+            this.scaleLabelX.Text = "Scale";
+            this.scaleLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // scaleBoxX
+            // 
+            this.scaleBoxX.Location = new System.Drawing.Point(105, 327);
+            this.scaleBoxX.Name = "scaleBoxX";
+            this.scaleBoxX.Size = new System.Drawing.Size(76, 20);
+            this.scaleBoxX.TabIndex = 74;
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1884, 956);
+            this.Controls.Add(this.scaleLabelY);
+            this.Controls.Add(this.ScaleActiveYLabel);
+            this.Controls.Add(this.scaleBoxY);
+            this.Controls.Add(this.ScaleActiveXLabel);
+            this.Controls.Add(this.scaleLabelX);
+            this.Controls.Add(this.scaleBoxX);
+            this.Controls.Add(this.expLabelY);
+            this.Controls.Add(this.ExpActiveYLabel);
+            this.Controls.Add(this.expBoxY);
+            this.Controls.Add(this.ExpActiveXLabel);
+            this.Controls.Add(this.expLabelX);
+            this.Controls.Add(this.expBoxX);
             this.Controls.Add(this.ActiveValueTitleY);
             this.Controls.Add(this.AccelTypeActiveLabelY);
             this.Controls.Add(this.OptionSetYTitle);
             this.Controls.Add(this.OptionSetXTitle);
             this.Controls.Add(this.constantThreeLabelY);
-            this.Controls.Add(this.constantTwoLabelY);
+            this.Controls.Add(this.limitLabelY);
             this.Controls.Add(this.offsetLabelY);
             this.Controls.Add(this.weightLabelY);
             this.Controls.Add(this.capLabelY);
             this.Controls.Add(this.constantOneLabelY);
             this.Controls.Add(this.ByComponentXYLock);
             this.Controls.Add(this.MidpointActiveYLabel);
-            this.Controls.Add(this.LimitExpActiveYLabel);
+            this.Controls.Add(this.LimitActiveYLabel);
             this.Controls.Add(this.OffsetActiveYLabel);
             this.Controls.Add(this.AccelerationActiveLabelY);
             this.Controls.Add(this.accelTypeDropY);
@@ -1093,7 +1220,7 @@ namespace grapher
             this.Controls.Add(this.offsetBoxY);
             this.Controls.Add(this.accelerationBoxY);
             this.Controls.Add(this.MidpointActiveXLabel);
-            this.Controls.Add(this.LimitExpActiveXLabel);
+            this.Controls.Add(this.LimitActiveXLabel);
             this.Controls.Add(this.OffsetActiveXLabel);
             this.Controls.Add(this.CapActiveYLabel);
             this.Controls.Add(this.WeightActiveYLabel);
@@ -1120,7 +1247,7 @@ namespace grapher
             this.Controls.Add(this.offsetBoxX);
             this.Controls.Add(this.constantThreeLabelX);
             this.Controls.Add(this.midpointBoxX);
-            this.Controls.Add(this.constantTwoLabelX);
+            this.Controls.Add(this.limitLabelX);
             this.Controls.Add(this.limitBoxX);
             this.Controls.Add(this.weightBoxY);
             this.Controls.Add(this.weightLabelX);
@@ -1170,7 +1297,7 @@ namespace grapher
         private System.Windows.Forms.Label weightLabelX;
         private System.Windows.Forms.TextBox weightBoxY;
         private System.Windows.Forms.TextBox limitBoxX;
-        private System.Windows.Forms.Label constantTwoLabelX;
+        private System.Windows.Forms.Label limitLabelX;
         private System.Windows.Forms.TextBox midpointBoxX;
         private System.Windows.Forms.Label constantThreeLabelX;
         private System.Windows.Forms.TextBox offsetBoxX;
@@ -1210,7 +1337,7 @@ namespace grapher
         private System.Windows.Forms.Label WeightActiveYLabel;
         private System.Windows.Forms.Label CapActiveYLabel;
         private System.Windows.Forms.Label OffsetActiveXLabel;
-        private System.Windows.Forms.Label LimitExpActiveXLabel;
+        private System.Windows.Forms.Label LimitActiveXLabel;
         private System.Windows.Forms.Label MidpointActiveXLabel;
         private System.Windows.Forms.ToolStripMenuItem startupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AutoWriteMenuItem;
@@ -1224,14 +1351,14 @@ namespace grapher
         private System.Windows.Forms.ComboBox accelTypeDropY;
         private System.Windows.Forms.Label AccelerationActiveLabelY;
         private System.Windows.Forms.Label OffsetActiveYLabel;
-        private System.Windows.Forms.Label LimitExpActiveYLabel;
+        private System.Windows.Forms.Label LimitActiveYLabel;
         private System.Windows.Forms.Label MidpointActiveYLabel;
         private System.Windows.Forms.CheckBox ByComponentXYLock;
         private System.Windows.Forms.Label constantOneLabelY;
         private System.Windows.Forms.Label capLabelY;
         private System.Windows.Forms.Label weightLabelY;
         private System.Windows.Forms.Label offsetLabelY;
-        private System.Windows.Forms.Label constantTwoLabelY;
+        private System.Windows.Forms.Label limitLabelY;
         private System.Windows.Forms.Label constantThreeLabelY;
         private System.Windows.Forms.Label OptionSetXTitle;
         private System.Windows.Forms.Label OptionSetYTitle;
@@ -1241,6 +1368,18 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
         private System.Windows.Forms.Label ActiveValueTitleY;
         private System.Windows.Forms.ToolStripMenuItem showLastMouseMoveToolStripMenuItem;
+        private System.Windows.Forms.Label expLabelY;
+        private System.Windows.Forms.Label ExpActiveYLabel;
+        private System.Windows.Forms.TextBox expBoxY;
+        private System.Windows.Forms.Label ExpActiveXLabel;
+        private System.Windows.Forms.Label expLabelX;
+        private System.Windows.Forms.TextBox expBoxX;
+        private System.Windows.Forms.Label scaleLabelY;
+        private System.Windows.Forms.Label ScaleActiveYLabel;
+        private System.Windows.Forms.TextBox scaleBoxY;
+        private System.Windows.Forms.Label ScaleActiveXLabel;
+        private System.Windows.Forms.Label scaleLabelX;
+        private System.Windows.Forms.TextBox scaleBoxX;
     }
 }
 
