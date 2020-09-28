@@ -14,10 +14,15 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uninstaller", "uninstaller\uninstaller.vcxproj", "{A4097FF6-A6F0-44E8-B8D0-538D0FB75936}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wrapper", "wrapper\wrapper.vcxproj", "{28A3656F-A1DE-405C-B547-191C32EC555F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0695A19E-8B14-4DE7-AADF-97E5912B197C} = {0695A19E-8B14-4DE7-AADF-97E5912B197C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "grapher", "grapher\grapher.csproj", "{EF67F71F-ABF5-4760-B50D-D1B9836DF01C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "writer", "writer\writer.csproj", "{28ACF254-E4EF-4A0E-9761-0FE22048D6FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wrapper-deps", "wrapper-deps\wrapper-deps.csproj", "{0695A19E-8B14-4DE7-AADF-97E5912B197C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -35,7 +40,6 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{60D6C942-AC20-4C05-A2BE-54B5C966534D}.Debug|x64.ActiveCfg = Debug|x64
 		{60D6C942-AC20-4C05-A2BE-54B5C966534D}.Debug|x64.Build.0 = Debug|x64
-		{60D6C942-AC20-4C05-A2BE-54B5C966534D}.Debug|x64.Deploy.0 = Debug|x64
 		{60D6C942-AC20-4C05-A2BE-54B5C966534D}.Release|x64.ActiveCfg = Release|x64
 		{60D6C942-AC20-4C05-A2BE-54B5C966534D}.Release|x64.Build.0 = Release|x64
 		{896950D1-520A-420A-B6B1-73014B92A68C}.Debug|x64.ActiveCfg = Debug|x64
@@ -58,6 +62,10 @@ Global
 		{28ACF254-E4EF-4A0E-9761-0FE22048D6FD}.Debug|x64.Build.0 = Debug|x64
 		{28ACF254-E4EF-4A0E-9761-0FE22048D6FD}.Release|x64.ActiveCfg = Release|x64
 		{28ACF254-E4EF-4A0E-9761-0FE22048D6FD}.Release|x64.Build.0 = Release|x64
+		{0695A19E-8B14-4DE7-AADF-97E5912B197C}.Debug|x64.ActiveCfg = Debug|x64
+		{0695A19E-8B14-4DE7-AADF-97E5912B197C}.Debug|x64.Build.0 = Debug|x64
+		{0695A19E-8B14-4DE7-AADF-97E5912B197C}.Release|x64.ActiveCfg = Release|x64
+		{0695A19E-8B14-4DE7-AADF-97E5912B197C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

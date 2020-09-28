@@ -66,6 +66,10 @@
     <Link>
       <AdditionalDependencies />
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)signed\$(TargetFileName)" &amp; 
+copy /Y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)signed\Newtonsoft.Json.dll"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="wrapper_io.hpp" />
@@ -75,7 +79,9 @@
     <ClCompile Include="wrapper_io.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
