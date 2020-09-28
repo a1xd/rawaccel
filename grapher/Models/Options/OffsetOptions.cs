@@ -31,33 +31,11 @@ namespace grapher.Models.Options
 
         public bool IsLegacy { get; private set; }
 
-        public double LegacyOffset 
-        { 
-            get
-            {
-                if (IsLegacy)
-                {
-                    return OffsetOption.Field.Data;
-                }
-                else
-                {
-                    return 0;
-                }
-            } 
-        }
-
         public double Offset
         {
             get
             {
-                if (IsLegacy)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return OffsetOption.Field.Data;
-                }
+                return OffsetOption.Field.Data;
             }
         }
 
@@ -131,6 +109,9 @@ namespace grapher.Models.Options
         public void SetActiveValue(double offset, bool legacy)
         {
             OffsetOption.SetActiveValue(offset);
+
+            VelocityGainOffsetCheck.Checked = !legacy;
+            LegacyOffsetCheck.Checked = legacy;
         }
 
         public override void AlignActiveValues()
