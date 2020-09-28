@@ -11,11 +11,13 @@ namespace grapher.Layouts
             Index = (int)AccelMode.power;
             LogarithmicCharts = false;
 
-            AccelLayout = new OptionLayout(true, Scale);
+            AccelLayout = new OptionLayout(false, string.Empty);
+            ScaleLayout = new OptionLayout(true, Scale);
             CapLayout = new OptionLayout(true, Cap);
             WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(true, Offset);
-            LimExpLayout = new OptionLayout(true, Exponent);
+            LimitLayout = new OptionLayout(false, string.Empty);
+            ExponentLayout = new OptionLayout(true, Exponent);
             MidpointLayout = new OptionLayout(false, string.Empty);
         }
     }

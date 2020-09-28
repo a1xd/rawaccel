@@ -17,10 +17,12 @@ namespace grapher.Layouts
             LogarithmicCharts = true;
 
             AccelLayout = new OptionLayout(true, Acceleration);
+            ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(false, string.Empty);
-            LimExpLayout = new OptionLayout(true, Motivity);
+            LimitLayout = new OptionLayout(true, Motivity);
+            ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(true, Midpoint);
         }
     }

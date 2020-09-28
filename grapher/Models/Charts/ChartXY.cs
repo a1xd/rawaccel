@@ -154,6 +154,11 @@ namespace grapher
             */
         }
 
+        public void ClearSecondDots()
+        {
+            ChartX.Series[3].Points.Clear();
+        }
+
         public void Update()
         {
             ChartX.Update();
