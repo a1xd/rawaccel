@@ -3,7 +3,6 @@ using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace grapher
@@ -97,7 +96,7 @@ namespace grapher
             }
             else
             {
-                WriteButton.Text = "bad args";
+                throw new Exception($"Bad arguments: \n {SettingsManager.ErrorStringFrom(errors)}");
             }
         }
 
