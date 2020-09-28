@@ -210,6 +210,7 @@ namespace grapher
             this.AccelerationChart.Series.Add(series4);
             this.AccelerationChart.Size = new System.Drawing.Size(698, 328);
             this.AccelerationChart.TabIndex = 0;
+            this.AccelerationChart.TabStop = false;
             this.AccelerationChart.Text = "Sensitivity";
             title1.DockedToChartArea = "ChartArea1";
             title1.IsDockedInsideChartArea = false;
@@ -223,7 +224,7 @@ namespace grapher
             this.accelTypeDropX.Location = new System.Drawing.Point(105, 110);
             this.accelTypeDropX.Name = "accelTypeDropX";
             this.accelTypeDropX.Size = new System.Drawing.Size(76, 21);
-            this.accelTypeDropX.TabIndex = 2;
+            this.accelTypeDropX.TabIndex = 4;
             this.accelTypeDropX.Text = "Accel Type";
             // 
             // sensitivityBoxX
@@ -231,7 +232,7 @@ namespace grapher
             this.sensitivityBoxX.Location = new System.Drawing.Point(105, 46);
             this.sensitivityBoxX.Name = "sensitivityBoxX";
             this.sensitivityBoxX.Size = new System.Drawing.Size(34, 20);
-            this.sensitivityBoxX.TabIndex = 3;
+            this.sensitivityBoxX.TabIndex = 0;
             // 
             // sensitivityLabel
             // 
@@ -247,7 +248,7 @@ namespace grapher
             this.rotationBox.Location = new System.Drawing.Point(105, 72);
             this.rotationBox.Name = "rotationBox";
             this.rotationBox.Size = new System.Drawing.Size(76, 20);
-            this.rotationBox.TabIndex = 5;
+            this.rotationBox.TabIndex = 3;
             // 
             // rotationLabel
             // 
@@ -263,7 +264,7 @@ namespace grapher
             this.accelerationBoxX.Location = new System.Drawing.Point(105, 137);
             this.accelerationBoxX.Name = "accelerationBoxX";
             this.accelerationBoxX.Size = new System.Drawing.Size(76, 20);
-            this.accelerationBoxX.TabIndex = 7;
+            this.accelerationBoxX.TabIndex = 5;
             // 
             // constantOneLabelX
             // 
@@ -280,7 +281,7 @@ namespace grapher
             this.capBoxX.Location = new System.Drawing.Point(105, 163);
             this.capBoxX.Name = "capBoxX";
             this.capBoxX.Size = new System.Drawing.Size(76, 20);
-            this.capBoxX.TabIndex = 10;
+            this.capBoxX.TabIndex = 7;
             // 
             // capLabelX
             // 
@@ -297,7 +298,7 @@ namespace grapher
             this.weightBoxX.Location = new System.Drawing.Point(105, 189);
             this.weightBoxX.Name = "weightBoxX";
             this.weightBoxX.Size = new System.Drawing.Size(76, 20);
-            this.weightBoxX.TabIndex = 12;
+            this.weightBoxX.TabIndex = 8;
             // 
             // weightLabelX
             // 
@@ -314,14 +315,14 @@ namespace grapher
             this.weightBoxY.Location = new System.Drawing.Point(331, 189);
             this.weightBoxY.Name = "weightBoxY";
             this.weightBoxY.Size = new System.Drawing.Size(76, 20);
-            this.weightBoxY.TabIndex = 14;
+            this.weightBoxY.TabIndex = 18;
             // 
             // limitBoxX
             // 
             this.limitBoxX.Location = new System.Drawing.Point(105, 241);
             this.limitBoxX.Name = "limitBoxX";
             this.limitBoxX.Size = new System.Drawing.Size(76, 20);
-            this.limitBoxX.TabIndex = 15;
+            this.limitBoxX.TabIndex = 10;
             // 
             // limitLabelX
             // 
@@ -338,7 +339,7 @@ namespace grapher
             this.midpointBoxX.Location = new System.Drawing.Point(105, 297);
             this.midpointBoxX.Name = "midpointBoxX";
             this.midpointBoxX.Size = new System.Drawing.Size(76, 20);
-            this.midpointBoxX.TabIndex = 17;
+            this.midpointBoxX.TabIndex = 12;
             // 
             // constantThreeLabelX
             // 
@@ -355,7 +356,7 @@ namespace grapher
             this.offsetBoxX.Location = new System.Drawing.Point(105, 215);
             this.offsetBoxX.Name = "offsetBoxX";
             this.offsetBoxX.Size = new System.Drawing.Size(76, 20);
-            this.offsetBoxX.TabIndex = 19;
+            this.offsetBoxX.TabIndex = 9;
             // 
             // offsetLabelX
             // 
@@ -373,7 +374,7 @@ namespace grapher
             this.writeButton.Location = new System.Drawing.Point(177, 359);
             this.writeButton.Name = "writeButton";
             this.writeButton.Size = new System.Drawing.Size(128, 40);
-            this.writeButton.TabIndex = 21;
+            this.writeButton.TabIndex = 23;
             this.writeButton.Text = "Apply";
             this.writeButton.UseVisualStyleBackColor = true;
             // 
@@ -382,14 +383,14 @@ namespace grapher
             this.sensitivityBoxY.Location = new System.Drawing.Point(147, 46);
             this.sensitivityBoxY.Name = "sensitivityBoxY";
             this.sensitivityBoxY.Size = new System.Drawing.Size(34, 20);
-            this.sensitivityBoxY.TabIndex = 22;
+            this.sensitivityBoxY.TabIndex = 1;
             // 
             // capBoxY
             // 
             this.capBoxY.Location = new System.Drawing.Point(331, 163);
             this.capBoxY.Name = "capBoxY";
             this.capBoxY.Size = new System.Drawing.Size(76, 20);
-            this.capBoxY.TabIndex = 23;
+            this.capBoxY.TabIndex = 17;
             // 
             // sensXYLock
             // 
@@ -399,7 +400,7 @@ namespace grapher
             this.sensXYLock.Location = new System.Drawing.Point(282, 46);
             this.sensXYLock.Name = "sensXYLock";
             this.sensXYLock.Size = new System.Drawing.Size(15, 14);
-            this.sensXYLock.TabIndex = 24;
+            this.sensXYLock.TabIndex = 2;
             this.sensXYLock.UseVisualStyleBackColor = true;
             // 
             // LockXYLabel
@@ -445,6 +446,7 @@ namespace grapher
             this.VelocityChart.Series.Add(series8);
             this.VelocityChart.Size = new System.Drawing.Size(698, 307);
             this.VelocityChart.TabIndex = 28;
+            this.VelocityChart.TabStop = false;
             this.VelocityChart.Text = "chart1";
             title2.DockedToChartArea = "ChartArea1";
             title2.IsDockedInsideChartArea = false;
@@ -486,6 +488,7 @@ namespace grapher
             this.GainChart.Series.Add(series12);
             this.GainChart.Size = new System.Drawing.Size(698, 309);
             this.GainChart.TabIndex = 29;
+            this.GainChart.TabStop = false;
             this.GainChart.Text = "chart1";
             title3.DockedToChartArea = "ChartArea1";
             title3.IsDockedInsideChartArea = false;
@@ -701,6 +704,7 @@ namespace grapher
             this.AccelerationChartY.Series.Add(series15);
             this.AccelerationChartY.Size = new System.Drawing.Size(698, 328);
             this.AccelerationChartY.TabIndex = 31;
+            this.AccelerationChartY.TabStop = false;
             this.AccelerationChartY.Text = "chart1";
             title4.DockedToChartArea = "ChartArea1";
             title4.IsDockedInsideChartArea = false;
@@ -737,6 +741,7 @@ namespace grapher
             this.VelocityChartY.Series.Add(series18);
             this.VelocityChartY.Size = new System.Drawing.Size(698, 307);
             this.VelocityChartY.TabIndex = 32;
+            this.VelocityChartY.TabStop = false;
             this.VelocityChartY.Text = "chart1";
             title5.DockedToChartArea = "ChartArea1";
             title5.IsDockedInsideChartArea = false;
@@ -773,6 +778,7 @@ namespace grapher
             this.GainChartY.Series.Add(series21);
             this.GainChartY.Size = new System.Drawing.Size(698, 309);
             this.GainChartY.TabIndex = 33;
+            this.GainChartY.TabStop = false;
             this.GainChartY.Text = "chart1";
             title6.DockedToChartArea = "ChartArea1";
             title6.IsDockedInsideChartArea = false;
@@ -911,28 +917,28 @@ namespace grapher
             this.accelerationBoxY.Location = new System.Drawing.Point(331, 137);
             this.accelerationBoxY.Name = "accelerationBoxY";
             this.accelerationBoxY.Size = new System.Drawing.Size(76, 20);
-            this.accelerationBoxY.TabIndex = 48;
+            this.accelerationBoxY.TabIndex = 15;
             // 
             // offsetBoxY
             // 
             this.offsetBoxY.Location = new System.Drawing.Point(331, 215);
             this.offsetBoxY.Name = "offsetBoxY";
             this.offsetBoxY.Size = new System.Drawing.Size(76, 20);
-            this.offsetBoxY.TabIndex = 49;
+            this.offsetBoxY.TabIndex = 19;
             // 
             // limitBoxY
             // 
             this.limitBoxY.Location = new System.Drawing.Point(331, 241);
             this.limitBoxY.Name = "limitBoxY";
             this.limitBoxY.Size = new System.Drawing.Size(76, 20);
-            this.limitBoxY.TabIndex = 50;
+            this.limitBoxY.TabIndex = 20;
             // 
             // midpointBoxY
             // 
             this.midpointBoxY.Location = new System.Drawing.Point(331, 297);
             this.midpointBoxY.Name = "midpointBoxY";
             this.midpointBoxY.Size = new System.Drawing.Size(76, 20);
-            this.midpointBoxY.TabIndex = 51;
+            this.midpointBoxY.TabIndex = 22;
             // 
             // accelTypeDropY
             // 
@@ -940,7 +946,7 @@ namespace grapher
             this.accelTypeDropY.Location = new System.Drawing.Point(331, 110);
             this.accelTypeDropY.Name = "accelTypeDropY";
             this.accelTypeDropY.Size = new System.Drawing.Size(76, 21);
-            this.accelTypeDropY.TabIndex = 52;
+            this.accelTypeDropY.TabIndex = 14;
             this.accelTypeDropY.Text = "Accel Type";
             // 
             // AccelerationActiveLabelY
@@ -987,7 +993,7 @@ namespace grapher
             this.ByComponentXYLock.Location = new System.Drawing.Point(282, 93);
             this.ByComponentXYLock.Name = "ByComponentXYLock";
             this.ByComponentXYLock.Size = new System.Drawing.Size(15, 14);
-            this.ByComponentXYLock.TabIndex = 57;
+            this.ByComponentXYLock.TabIndex = 13;
             this.ByComponentXYLock.UseVisualStyleBackColor = true;
             // 
             // constantOneLabelY
@@ -1103,7 +1109,7 @@ namespace grapher
             this.expBoxY.Location = new System.Drawing.Point(331, 270);
             this.expBoxY.Name = "expBoxY";
             this.expBoxY.Size = new System.Drawing.Size(76, 20);
-            this.expBoxY.TabIndex = 71;
+            this.expBoxY.TabIndex = 21;
             // 
             // ExpActiveXLabel
             // 
@@ -1129,7 +1135,7 @@ namespace grapher
             this.expBoxX.Location = new System.Drawing.Point(105, 270);
             this.expBoxX.Name = "expBoxX";
             this.expBoxX.Size = new System.Drawing.Size(76, 20);
-            this.expBoxX.TabIndex = 68;
+            this.expBoxX.TabIndex = 11;
             // 
             // scaleLabelY
             // 
@@ -1154,7 +1160,7 @@ namespace grapher
             this.scaleBoxY.Location = new System.Drawing.Point(331, 327);
             this.scaleBoxY.Name = "scaleBoxY";
             this.scaleBoxY.Size = new System.Drawing.Size(76, 20);
-            this.scaleBoxY.TabIndex = 77;
+            this.scaleBoxY.TabIndex = 16;
             // 
             // ScaleActiveXLabel
             // 
@@ -1180,7 +1186,7 @@ namespace grapher
             this.scaleBoxX.Location = new System.Drawing.Point(105, 327);
             this.scaleBoxX.Name = "scaleBoxX";
             this.scaleBoxX.Size = new System.Drawing.Size(76, 20);
-            this.scaleBoxX.TabIndex = 74;
+            this.scaleBoxX.TabIndex = 6;
             // 
             // RawAcceleration
             // 

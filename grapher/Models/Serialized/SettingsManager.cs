@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 using System.Threading;
+using System.Text;
 
 namespace grapher.Models.Serialized
 {
@@ -46,6 +47,34 @@ namespace grapher.Models.Serialized
         #endregion Properties
 
         #region Methods
+
+        public static string ErrorStringFrom(SettingsErrors errors)
+        {
+            StringBuilder builder = new StringBuilder();
+            bool yPresent = errors.y?.Count > 0;
+
+            if (yPresent)
+            {
+                builder.AppendLine("\nx:");
+            }
+
+            foreach (var error in errors.x)
+            {
+                builder.AppendLine(error);
+            }
+
+            if (yPresent)
+            {
+                builder.AppendLine("\ny:");
+
+                foreach (var error in errors.y)
+                {
+                    builder.AppendLine(error);
+                }
+            }
+
+            return builder.ToString();
+        }
 
         public SettingsErrors TryUpdateActiveSettings(DriverSettings settings)
         {

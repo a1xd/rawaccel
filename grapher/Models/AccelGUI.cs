@@ -3,7 +3,6 @@ using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace grapher
@@ -97,7 +96,7 @@ namespace grapher
             }
             else
             {
-                WriteButton.Text = "bad args";
+                throw new Exception($"Bad arguments: \n {SettingsManager.ErrorStringFrom(errors)}");
             }
         }
 
@@ -151,12 +150,14 @@ namespace grapher
         {
             WriteButton.Text = Constants.WriteButtonDefaultText;
             WriteButton.Enabled = true;
+            WriteButton.Update();
         }
 
         private void SetWriteButtonDelay()
         {
             WriteButton.Enabled = false;
             WriteButton.Text = $"{Constants.WriteButtonDelayText} : {ButtonTimer.Interval} ms";
+            WriteButton.Update();
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)
