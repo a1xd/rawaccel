@@ -32,8 +32,9 @@ namespace grapher
             {
                 activeAccel = ManagedAccel.GetActiveAccel();
             }
-            catch (DriverNotInstalledException)
+            catch (DriverNotInstalledException ex)
             {
+                MessageBox.Show($"Driver not installed.\n\n {ex.ToString()}");
                 throw;
             }
 
