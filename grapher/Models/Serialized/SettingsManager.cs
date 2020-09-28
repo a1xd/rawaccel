@@ -47,28 +47,31 @@ namespace grapher.Models.Serialized
 
         #region Methods
 
-        public void UpdateActiveSettings(DriverSettings settings)
+        public SettingsErrors TryUpdateActiveSettings(DriverSettings settings)
         {
-            ActiveAccel.UpdateFromSettings(settings);
-            SendToDriver(settings);
+            var errors = TryUpdateAccel(settings);
 
-            RawAccelSettings.AccelerationSettings = settings;
-            RawAccelSettings.GUISettings = new GUISettings
+            if (errors.Empty())
             {
-                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
-                DPI = (int)DpiField.Data,
-                PollRate = (int)PollRateField.Data,
-                ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
-                ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
-            };
+                RawAccelSettings.AccelerationSettings = settings;
+                RawAccelSettings.GUISettings = new GUISettings
+                {
+                    AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
+                    DPI = (int)DpiField.Data,
+                    PollRate = (int)PollRateField.Data,
+                    ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
+                    ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
+                };
 
-            RawAccelSettings.Save();
+                RawAccelSettings.Save();
+            }
+
+            return errors;
         }
 
         public void UpdateActiveAccelFromFileSettings(DriverSettings settings)
-        { 
-            ActiveAccel.UpdateFromSettings(settings);
-            SendToDriver(settings);
+        {
+            TryUpdateAccel(settings);
 
             DpiField.SetToEntered(RawAccelSettings.GUISettings.DPI);
             PollRateField.SetToEntered(RawAccelSettings.GUISettings.PollRate);
@@ -77,9 +80,23 @@ namespace grapher.Models.Serialized
             ShowVelocityAndGainMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowVelocityAndGain;
         }
 
+        public SettingsErrors TryUpdateAccel(DriverSettings settings)
+        {
+            var errors = SendToDriverSafe(settings);
+            if (errors.Empty()) ActiveAccel.UpdateFromSettings(settings);
+            return errors;
+        }
+
         public static void SendToDriver(DriverSettings settings)
         {
-            new Thread(() => DriverInterop.SetActiveSettings(settings)).Start();
+            new Thread(() => DriverInterop.Write(settings)).Start();
+        }
+
+        public static SettingsErrors SendToDriverSafe(DriverSettings settings)
+        {
+            var errors = DriverInterop.GetSettingsErrors(settings);
+            if (errors.Empty()) SendToDriver(settings);
+            return errors;
         }
 
         public void Startup()
@@ -95,7 +112,7 @@ namespace grapher.Models.Serialized
                     }
                     return;
                 }
-                catch (JsonSerializationException e)
+                catch (JsonException e)
                 {
                     Console.WriteLine($"bad settings: {e}");
                 }

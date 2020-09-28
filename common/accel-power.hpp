@@ -12,7 +12,7 @@ namespace rawaccel {
 		double exponent;
 
 		power_impl(const accel_args& args) :
-			scale(args.power_scale), exponent(args.power_exp)
+			scale(args.scale), exponent(args.exponent)
 		{}
 
 		inline double operator()(double speed) const {

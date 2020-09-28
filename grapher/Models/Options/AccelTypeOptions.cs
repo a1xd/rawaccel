@@ -30,10 +30,12 @@ namespace grapher
         public AccelTypeOptions(
             ComboBox accelDropdown,
             Option acceleration,
+            Option scale,
             CapOptions cap,
             Option weight,
             OffsetOptions offset,
-            Option limitOrExponent,
+            Option limit,
+            Option exponent,
             Option midpoint,
             Button writeButton,
             ActiveValueLabel accelTypeActiveValue)
@@ -44,10 +46,12 @@ namespace grapher
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
             Acceleration = acceleration;
+            Scale = scale;
             Cap = cap;
             Weight = weight;
             Offset = offset;
-            LimitOrExponent = limitOrExponent;
+            Limit = limit;
+            Exponent = exponent;
             Midpoint = midpoint;
             WriteButton = writeButton;
             AccelTypeActiveValue = accelTypeActiveValue;
@@ -82,13 +86,17 @@ namespace grapher
 
         public Option Acceleration { get; }
 
+        public Option Scale { get; }
+
         public CapOptions Cap { get; }
 
         public Option Weight { get; }
 
         public OffsetOptions Offset { get; }
 
-        public Option LimitOrExponent { get; }
+        public Option Limit { get; }
+
+        public Option Exponent { get; }
 
         public Option Midpoint { get; }
 
@@ -158,10 +166,12 @@ namespace grapher
             AccelTypeActiveValue.Hide();
 
             Acceleration.Hide();
+            Scale.Hide();
             Cap.Hide();
             Weight.Hide();
             Offset.Hide();
-            LimitOrExponent.Hide();
+            Limit.Hide();
+            Exponent.Hide();
             Midpoint.Hide();
         }
 
@@ -185,9 +195,11 @@ namespace grapher
 
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0 || args.scaleCap <= 0);
-            Offset.SetActiveValue(args.offset, args.legacy_offset);
-            Acceleration.SetActiveValue(args.accel);
-            LimitOrExponent.SetActiveValue(args.exponent);
+            Offset.SetActiveValue(args.offset, args.legacyOffset);
+            Acceleration.SetActiveValue(args.acceleration);
+            Scale.SetActiveValue(args.scale);
+            Limit.SetActiveValue(args.limit);
+            Exponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
         }
 
@@ -213,26 +225,24 @@ namespace grapher
             Width = Acceleration.Field.Width;
         }
 
-        public void SetArgs(ref AccelArgs args)
+        public void SetArgs(ref AccelArgs args, ref /*readonly*/ AccelArgs last)
         {
-            args.accel = Acceleration.Field.Data;
-            args.rate = Acceleration.Field.Data;
-            args.powerScale = Acceleration.Field.Data;
+            args.acceleration = Acceleration.Visible ? Acceleration.Field.Data : last.acceleration;
+            args.scale = Scale.Visible ? Scale.Field.Data : last.scale;
             args.gainCap = Cap.VelocityGainCap;
             args.scaleCap = Cap.SensitivityCap;
-            args.limit = LimitOrExponent.Field.Data;
-            args.exponent = LimitOrExponent.Field.Data;
-            args.powerExponent = LimitOrExponent.Field.Data;
+            args.limit = Limit.Visible ? Limit.Field.Data : last.limit;
+            args.exponent = Exponent.Visible ? Exponent.Field.Data : last.exponent;
             args.offset = Offset.Offset;
-            args.legacy_offset = Offset.LegacyOffset;
-            args.midpoint = Midpoint.Field.Data;
-            args.weight = Weight.Field.Data;
+            args.legacyOffset = Offset.IsLegacy;
+            args.midpoint = Midpoint.Visible ? Midpoint.Field.Data : last.midpoint;
+            args.weight = Weight.Visible ? Weight.Field.Data : last.weight;
         }
 
-        public AccelArgs GenerateArgs()
+        public AccelArgs GenerateArgs(ref /*readonly*/ AccelArgs last)
         {
             AccelArgs args = new AccelArgs();
-            SetArgs(ref args);
+            SetArgs(ref args, ref last);
             return args;
         }
 
@@ -240,10 +250,12 @@ namespace grapher
         {
             AccelTypeActiveValue.Align();
             Acceleration.AlignActiveValues();
+            Scale.AlignActiveValues();
             Cap.AlignActiveValues();
             Offset.AlignActiveValues();
             Weight.AlignActiveValues();
-            LimitOrExponent.AlignActiveValues();
+            Limit.AlignActiveValues();
+            Exponent.AlignActiveValues();
             Midpoint.AlignActiveValues();
         }
 
@@ -269,10 +281,12 @@ namespace grapher
 
             AccelerationType.Layout(
                 Acceleration,
+                Scale,
                 Cap,
                 Weight,
                 Offset,
-                LimitOrExponent,
+                Limit,
+                Exponent,
                 Midpoint,
                 WriteButton,
                 top);

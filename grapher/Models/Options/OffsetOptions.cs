@@ -128,16 +128,9 @@ namespace grapher.Models.Options
             OffsetOption.Show(name);
         }
 
-        public void SetActiveValue(double offset, double legacyOffset)
+        public void SetActiveValue(double offset, bool legacy)
         {
-            if (offset > 0)
-            {
-                OffsetOption.SetActiveValue(offset);
-            }
-            else
-            {
-                OffsetOption.SetActiveValue(legacyOffset);
-            }
+            OffsetOption.SetActiveValue(offset);
         }
 
         public override void AlignActiveValues()

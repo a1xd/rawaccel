@@ -18,10 +18,12 @@ namespace grapher.Layouts
         public LayoutBase()
         {
             AccelLayout = new OptionLayout(false, string.Empty);
+            ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(false, string.Empty);
             OffsetLayout = new OptionLayout(false, string.Empty);
-            LimExpLayout = new OptionLayout(false, string.Empty);
+            LimitLayout = new OptionLayout(false, string.Empty);
+            ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
 
             ButtonEnabled = true;
@@ -42,22 +44,28 @@ namespace grapher.Layouts
 
         protected OptionLayout AccelLayout { get; set; }
 
+        protected OptionLayout ScaleLayout { get; set; }
+
         protected OptionLayout CapLayout { get; set; }
 
         protected OptionLayout WeightLayout { get; set; }
 
         protected OptionLayout OffsetLayout { get; set; }
 
-        protected OptionLayout LimExpLayout { get; set; }
+        protected OptionLayout LimitLayout { get; set; }
+
+        protected OptionLayout ExponentLayout { get; set; }
 
         protected OptionLayout MidpointLayout { get; set; }
 
         public void Layout(
             IOption accelOption,
+            IOption scaleOption,
             IOption capOption,
             IOption weightOption,
             IOption offsetOption,
-            IOption limExpOption,
+            IOption limitOption,
+            IOption expOption,
             IOption midpointOption,
             Button button,
             int top)
@@ -68,10 +76,12 @@ namespace grapher.Layouts
 
             foreach (var option in new (OptionLayout, IOption)[] {
                 (AccelLayout, accelOption),
+                (ScaleLayout, scaleOption),
                 (CapLayout, capOption),
                 (WeightLayout, weightOption),
                 (OffsetLayout, offsetOption),
-                (LimExpLayout, limExpOption),
+                (LimitLayout, limitOption),
+                (ExponentLayout, expOption),
                 (MidpointLayout, midpointOption)})
             {
                 option.Item1.Layout(option.Item2);
@@ -94,18 +104,22 @@ namespace grapher.Layouts
 
         public void Layout(
             IOption accelOption,
+            IOption scaleOption,
             IOption capOption,
             IOption weightOption,
             IOption offsetOption,
-            IOption limExpOption,
+            IOption limitOption,
+            IOption expOption,
             IOption midpointOption,
             Button button)
         {
             Layout(accelOption,
+                scaleOption,
                 capOption,
                 weightOption,
                 offsetOption,
-                limExpOption,
+                limitOption,
+                expOption,
                 midpointOption,
                 button,
                 accelOption.Top);

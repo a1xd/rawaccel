@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace grapher.Models.Serialized
 {
@@ -13,9 +15,8 @@ namespace grapher.Models.Serialized
         public static readonly string DefaultSettingsFile = Path.Combine(ExecutingDirectory, Constants.DefaultSettingsFileName);
         public static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
-            MissingMemberHandling = MissingMemberHandling.Error,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
         };
-
         #endregion Fields
 
         #region Constructors
@@ -33,9 +34,10 @@ namespace grapher.Models.Serialized
         #endregion Constructors
 
         #region Properties
-
+        [JsonProperty(Required = Required.Always)]
         public GUISettings GUISettings { get; set; }
 
+        [JsonProperty(DriverSettings.Key, Required = Required.Always)]
         public DriverSettings AccelerationSettings { get; set; }
 
         #endregion Properties
@@ -51,15 +53,17 @@ namespace grapher.Models.Serialized
         {   
             try
             {
-               return JsonConvert.DeserializeObject<RawAccelSettings>(File.ReadAllText(file), SerializerSettings);
+                var settings = JsonConvert.DeserializeObject<RawAccelSettings>(File.ReadAllText(file), SerializerSettings);
+                if (settings is null) throw new JsonException($"{file} contains invalid JSON");
+                return settings;
             }
             catch (FileNotFoundException e)
             {
                 throw new FileNotFoundException($"Settings file does not exist at {file}", e);
             }
-            catch (JsonSerializationException e)
+            catch (JsonException e)
             {
-                throw new JsonSerializationException($"Settings file at {file} does not contain valid Raw Accel Settings.", e);
+                throw new JsonException($"Settings file at {file} does not contain valid Raw Accel Settings.", e);
             }
         }
 
@@ -80,7 +84,16 @@ namespace grapher.Models.Serialized
 
         public void Save(string file)
         {
-            File.WriteAllText(file, JsonConvert.SerializeObject(this, Formatting.Indented));
+            JObject thisJO = JObject.FromObject(this);
+            AddComments(thisJO);
+            File.WriteAllText(file, thisJO.ToString(Formatting.Indented));
+        }
+
+        private void AddComments(JObject thisJO)
+        {
+            string modes = string.Join(" | ", Enum.GetNames(typeof(AccelMode)));
+            ((JObject)thisJO[DriverSettings.Key])
+                .AddFirst(new JProperty("### Mode Types ###", modes));
         }
 
         #endregion Methods
