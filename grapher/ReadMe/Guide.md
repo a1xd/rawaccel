@@ -1,11 +1,11 @@
 # Raw Accel Guide
 
 ## Installation
-Run "installer.exe" in the release directory to install the raw accel driver. Restart your computer for the installation to take effect.  
+Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.  
 
-Run "uninstaller.exe" in the release directory to uninstall the driver. Restart for the uninstallation to take effect.
+Run `uninstaller.exe` in the release directory to uninstall the driver. Restart for the uninstallation to take effect.
 
-Run "grapher.exe" when the driver is installed in order to run the Raw Accel GUI.
+Run `rawaccel.exe` when the driver is installed in order to run the Raw Accel GUI.
 
 ## Philosophy
 The Raw Accel driver and GUI's workings and exposed parameters are based on our understanding of mouse acceleration. Our understanding includes the concepts of "gain", "whole vs by component", and "anisotropy." For clarity, we will outline this understanding here. Those uninterested can skip to Features below.

@@ -8,6 +8,7 @@ See the Guide to understand all options and features in-depth.
 - There are many new features and curve types available. See the guide for information on all of these.
 
 ## How do I convert InterAccel settings to Raw Accel?
+For a quick 'n dirty conversion, drop your InterAccel settings or profile into Raw Accel's directory and run `converter.exe`. For GUI differences see the image below:
 ![ConvertExample](\images\interaccel_to_rawaccel.png)
 See the guide to understand more about the Gain Cap option and other new features!
 
@@ -21,7 +22,7 @@ Instructions for these are in the beginning of the guide.
 No. Once settings are passed to the driver by the GUI, they stay in use until the computer is shut down.
 
 ## Does the GUI need to be run every time I start my PC?
-Yes. The driver itself does not store your settings. To enable them on PC start, run the GUI, or run "writer.exe settings.json".
+Yes. The driver itself does not store your settings. To enable them on PC start, run the GUI, or run `writer.exe settings.json`.
 
 ## I don't understand something, or have some other question.
 Read the guide to see if it answers your question. If not, join our [Discord](https://discord.gg/7pQh8zH) and ask.
