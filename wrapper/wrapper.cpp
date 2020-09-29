@@ -82,13 +82,12 @@ void as_native(DriverSettings^ managed_args, NativeSettingsFunc fn)
     if (Marshal::SizeOf(managed_args) != sizeof(settings))
         throw gcnew InvalidOperationException("setting sizes differ");
 #endif
-    IntPtr unmanagedHandle = Marshal::AllocHGlobal(sizeof(settings));
-    Marshal::StructureToPtr(managed_args, unmanagedHandle, false);
-    fn(*reinterpret_cast<settings*>(unmanagedHandle.ToPointer()));
+    settings args;
+    Marshal::StructureToPtr(managed_args, (IntPtr)&args, false);
+    fn(args);
     if constexpr (!std::is_invocable_v<NativeSettingsFunc, const settings&>) {
-        Marshal::PtrToStructure(unmanagedHandle, managed_args);
+        Marshal::PtrToStructure((IntPtr)&args, managed_args);
     }
-    Marshal::FreeHGlobal(unmanagedHandle);
 }
 
 DriverSettings^ get_default()
