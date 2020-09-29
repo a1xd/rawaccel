@@ -1271,7 +1271,7 @@ namespace grapher
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RawAcceleration";
-            this.Text = "Raw Acceleration Graph";
+            this.Text = "Raw Accel";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.RawAcceleration_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).EndInit();

@@ -30,6 +30,7 @@ public value struct AccelArgs
     double exponent;
     double midpoint;
     double weight;
+    [JsonProperty("legacyCap")]
     double scaleCap;
     double gainCap;
 };
@@ -82,13 +83,12 @@ void as_native(DriverSettings^ managed_args, NativeSettingsFunc fn)
     if (Marshal::SizeOf(managed_args) != sizeof(settings))
         throw gcnew InvalidOperationException("setting sizes differ");
 #endif
-    IntPtr unmanagedHandle = Marshal::AllocHGlobal(sizeof(settings));
-    Marshal::StructureToPtr(managed_args, unmanagedHandle, false);
-    fn(*reinterpret_cast<settings*>(unmanagedHandle.ToPointer()));
+    settings args;
+    Marshal::StructureToPtr(managed_args, (IntPtr)&args, false);
+    fn(args);
     if constexpr (!std::is_invocable_v<NativeSettingsFunc, const settings&>) {
-        Marshal::PtrToStructure(unmanagedHandle, managed_args);
+        Marshal::PtrToStructure((IntPtr)&args, managed_args);
     }
-    Marshal::FreeHGlobal(unmanagedHandle);
 }
 
 DriverSettings^ get_default()
@@ -137,9 +137,12 @@ error_list_t^ get_accel_errors(AccelMode mode, AccelArgs^ args)
     
     if (args->acceleration > 1 && is_mode(am::natural, am::naturalgain))
         error_list->Add("acceleration can not be greater than 1");
-    else if (args->acceleration < 0)
-        error_list->Add("acceleration can not be negative, use a negative weight to compensate");
-    
+    else if (args->acceleration < 0) {
+        bool additive = m < am::power;
+        if (additive) error_list->Add("acceleration can not be negative, use a negative weight to compensate");
+        else error_list->Add("acceleration can not be negative");
+    }
+        
     if (args->scale <= 0)
         error_list->Add("scale must be positive");
 
@@ -172,6 +175,7 @@ public:
 public ref struct DriverInterop
 {
     literal double WriteDelayMs = WRITE_DELAY;
+    static initonly AccelArgs^ DefaultArgs = get_default()->args.x;
 
     static DriverSettings^ GetActiveSettings()
     {
