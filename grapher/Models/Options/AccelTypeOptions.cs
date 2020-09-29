@@ -225,24 +225,25 @@ namespace grapher
             Width = Acceleration.Field.Width;
         }
 
-        public void SetArgs(ref AccelArgs args, ref /*readonly*/ AccelArgs last)
+        public void SetArgs(ref AccelArgs args)
         {
-            args.acceleration = Acceleration.Visible ? Acceleration.Field.Data : last.acceleration;
-            args.scale = Scale.Visible ? Scale.Field.Data : last.scale;
-            args.gainCap = Cap.Visible ? Cap.VelocityGainCap : 0.0;
-            args.scaleCap = Cap.Visible ? Cap.SensitivityCap : 0.0;
-            args.limit = Limit.Visible ? Limit.Field.Data : last.limit;
-            args.exponent = Exponent.Visible ? Exponent.Field.Data : last.exponent;
-            args.offset = Offset.Visible ? Offset.Offset : 0.0;
+            AccelArgs defaults = (AccelArgs)DriverInterop.DefaultArgs;
+            args.acceleration = Acceleration.Visible ? Acceleration.Field.Data : defaults.acceleration;
+            args.scale = Scale.Visible ? Scale.Field.Data : defaults.scale;
+            args.gainCap = Cap.Visible ? Cap.VelocityGainCap : defaults.gainCap;
+            args.scaleCap = Cap.Visible ? Cap.SensitivityCap : defaults.scaleCap;
+            args.limit = Limit.Visible ? Limit.Field.Data : defaults.limit;
+            args.exponent = Exponent.Visible ? Exponent.Field.Data : defaults.exponent;
+            args.offset = Offset.Visible ? Offset.Offset : defaults.offset;
             args.legacyOffset = Offset.IsLegacy;
-            args.midpoint = Midpoint.Visible ? Midpoint.Field.Data : last.midpoint;
-            args.weight = Weight.Visible ? Weight.Field.Data : last.weight;
+            args.midpoint = Midpoint.Visible ? Midpoint.Field.Data : defaults.midpoint;
+            args.weight = Weight.Visible ? Weight.Field.Data : defaults.weight;
         }
 
-        public AccelArgs GenerateArgs(ref /*readonly*/ AccelArgs last)
+        public AccelArgs GenerateArgs()
         {
             AccelArgs args = new AccelArgs();
-            SetArgs(ref args, ref last);
+            SetArgs(ref args);
             return args;
         }
 

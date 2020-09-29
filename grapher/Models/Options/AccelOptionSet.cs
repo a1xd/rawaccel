@@ -98,14 +98,14 @@ namespace grapher.Models.Options
             Options.Top = TopAnchor;
         }
 
-        public void SetArgs(ref AccelArgs args, ref /*readonly*/ AccelArgs last)
+        public void SetArgs(ref AccelArgs args)
         {
-            Options.SetArgs(ref args, ref last);
+            Options.SetArgs(ref args);
         }
 
-        public AccelArgs GenerateArgs(ref /*readonly*/ AccelArgs last)
+        public AccelArgs GenerateArgs()
         {
-            return Options.GenerateArgs(ref last);
+            return Options.GenerateArgs();
         }
 
         public void SetActiveValues(int mode, AccelArgs args)
