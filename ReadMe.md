@@ -8,7 +8,7 @@ Raw Accel is a Windows 10 64-bit driver which allows for the acceleration of mou
 
 ## Getting Help
 
-For an overview of everything Raw Accel has to offer, please see the [guide](doc/guide.md). For questions, see the [FAQ](doc/FAQ.md) first.
+For an overview of everything Raw Accel has to offer, please see the [guide](doc/Guide.md). For questions, see the [FAQ](doc/FAQ.md) first.
 
 ## Development
 
