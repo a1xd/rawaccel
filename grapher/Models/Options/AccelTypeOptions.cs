@@ -229,11 +229,11 @@ namespace grapher
         {
             args.acceleration = Acceleration.Visible ? Acceleration.Field.Data : last.acceleration;
             args.scale = Scale.Visible ? Scale.Field.Data : last.scale;
-            args.gainCap = Cap.VelocityGainCap;
-            args.scaleCap = Cap.SensitivityCap;
+            args.gainCap = Cap.Visible ? Cap.VelocityGainCap : 0.0;
+            args.scaleCap = Cap.Visible ? Cap.SensitivityCap : 0.0;
             args.limit = Limit.Visible ? Limit.Field.Data : last.limit;
             args.exponent = Exponent.Visible ? Exponent.Field.Data : last.exponent;
-            args.offset = Offset.Offset;
+            args.offset = Offset.Visible ? Offset.Offset : 0.0;
             args.legacyOffset = Offset.IsLegacy;
             args.midpoint = Midpoint.Visible ? Midpoint.Field.Data : last.midpoint;
             args.weight = Weight.Visible ? Weight.Field.Data : last.weight;
