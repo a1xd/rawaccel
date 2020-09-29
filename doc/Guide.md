@@ -29,7 +29,7 @@ and I move my mouse to create an input of (30,40) at a poll rate of 1000 hz.
 
 Then our input speed is sqrt(30^2 + 40^2) = 50 counts/ms. Our accelerated sensitivity is calculated to be (1 + 0.1 \* 50) * 0.5 = 1.5 \* 0.5 = 0.75. So our output velocity is 0.75 \* 50  = 37.5. If I run the previous calculations with input speed 49.9 I get output velocity 37.40005, so our gain is about (37.5-37.40005)/(50-49.9) = 0.9995. Here is a picture of the charts in Raw Accel showing the same thing:
 
-![SensVelocityGainExample](\images\accel_readme_example.png)
+![SensVelocityGainExample](images/accel_readme_example.png)
 
 ### Horizontal and Vertical
 If you wish, horizontal and vertical components of a mouse movement can be treated completely separately in Raw Accel. In the above example, they are not treated separately; rather they are "combined" by using the magnitude if the input vector: *sqrt(30^2 + 40^2) = 50 counts/ms*. This is called "Whole" application because the whole speed of the input is used. Application styles include:
@@ -72,24 +72,24 @@ The examples of various types below show some typical settings, without a cap or
 
 ### Linear
 This is simplest style used by most; it is simply a line rising at a given rate. This is a good choice for new users.
-![LinearExample](\images\linear_example.png)
+![LinearExample](images/linear_example.png)
 
 ### Classic
 This is the style found in Quake 3, Quake Live, and countless inspired followers, including the InterAccel program. It mulplies the speed by a given rate and then raises the product to a given exponent. Any particular linear style curve can be replicated in classic style with an exponent of 2.
-![ClassicExample](\images\classic_example.png)
+![ClassicExample](images/classic_example.png)
 
 ### Power
 This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1.). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps).
-![PowerExample](\images\power_example.png)
+![PowerExample](images/power_example.png)
 
 ### Natural & NaturalGain
 Natural is a style found in the game Diabotical. It features a concave curve which starts at 1 and approaches some maximum sensitivity. This style is unique and useful but causes an ugly dip in the gain graph. For this reason we have created the NaturalGain style, which recreates the Natural style shape in the gain graph without any dips. We recommend users use the NaturalGain style instead of the Natural style; on switch some small tweaks may be needed since for any particular settings the NaturalGain is slightly slower to ramp up than the Natural style. NaturalGain is another excellent choice for new users.
-![NaturalExample](\images\natural_example.png)
-![NaturalGainExample](\images\natural_gain_example.png)
+![NaturalExample](images/natural_example.png)
+![NaturalGainExample](images/natural_gain_example.png)
 
 ### Motivity
-This curve looks like an "S" with the top half bigger than the bottom. Mathematically it's a "Sigmoid function on a log-log plot". A user can set the "midpoint" of the S, the "acceleration" (i.e. slantedness) of the S, and the "motivity". "Motivity" sets min and max sensitivity, where the maximum is just "motivity", and the minimum is "1/motivity." (Sensitivity is 1 at the midpoint.) This curve is calculated and stored in a lookup table before applying acceleration, which makes the gain graph look a little funny.  This is one author's favorite curve, and an excellent choice for power users and new users who don't mind playing with the settings a little.
-![MotivityExample](\images\motivity_example.png)
+This curve looks like an "S" with the top half bigger than the bottom. Mathematically it's a "Sigmoid function on a log-log plot". A user can set the "midpoint" of the S, the "acceleration" (i.e. slantedness) of the S, and the "motivity". "Motivity" sets min and max sensitivity, where the maximum is just "motivity", and the minimum is "1/motivity." (Gain is 1 at the midpoint.) This curve is calculated and stored in a lookup table before applying acceleration, which makes the gain graph look a little funny.  This is one author's favorite curve, and an excellent choice for power users and new users who don't mind playing with the settings a little.
+![MotivityExample](images/motivity_example.png)
 
 ## Further Help
 Further help and frequently asked questions can be found in the FAQ.
