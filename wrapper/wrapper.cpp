@@ -30,6 +30,7 @@ public value struct AccelArgs
     double exponent;
     double midpoint;
     double weight;
+    [JsonProperty("legacyCap")]
     double scaleCap;
     double gainCap;
 };
