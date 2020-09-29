@@ -48,7 +48,7 @@ namespace rawaccel {
     struct nonadditive_accel : accel_val_base<Func> {
 
         nonadditive_accel(const accel_args& args) : accel_val_base(args) {
-            if (args.weight != 0) weight = args.weight;
+            if (args.weight > 0) weight = args.weight;
         }
 
         inline double operator()(double speed) const {

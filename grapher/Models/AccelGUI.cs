@@ -84,7 +84,7 @@ namespace grapher
                 },
                 combineMagnitudes = ApplyOptions.IsWhole,
                 modes = ApplyOptions.GetModes(),
-                args = ApplyOptions.GetUpdatedArgs(ref driverSettings.args),
+                args = ApplyOptions.GetArgs(),
                 minimumTime = driverSettings.minimumTime
             };
 

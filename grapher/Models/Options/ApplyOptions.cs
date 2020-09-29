@@ -89,14 +89,14 @@ namespace grapher.Models.Options
             };
         }
 
-        public Vec2<AccelArgs> GetUpdatedArgs(ref /*readonly*/ Vec2<AccelArgs> last)
+        public Vec2<AccelArgs> GetArgs()
         {
-            var xArgs = OptionSetX.GenerateArgs(ref last.x);
+            var xArgs = OptionSetX.GenerateArgs();
             
             return new Vec2<AccelArgs>
             {
                 x = xArgs,
-                y = ByComponentVectorXYLock.Checked ? xArgs : OptionSetY.GenerateArgs(ref last.y)
+                y = ByComponentVectorXYLock.Checked ? xArgs : OptionSetY.GenerateArgs()
             };
 
         }
