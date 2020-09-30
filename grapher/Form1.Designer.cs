@@ -529,7 +529,7 @@ namespace grapher
             this.ScaleMenuItem});
             this.scaleByDPIToolStripMenuItem.Name = "scaleByDPIToolStripMenuItem";
             this.scaleByDPIToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.scaleByDPIToolStripMenuItem.Text = "Scale by Mouse Settngs";
+            this.scaleByDPIToolStripMenuItem.Text = "Scale by Mouse Settings";
             // 
             // dPIToolStripMenuItem
             // 
