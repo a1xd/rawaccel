@@ -135,8 +135,10 @@ error_list_t^ get_accel_errors(AccelMode mode, AccelArgs^ args)
 
     auto error_list = gcnew error_list_t();
     
-    if (args->acceleration > 1 && is_mode(am::natural, am::naturalgain))
-        error_list->Add("acceleration can not be greater than 1");
+    if (args->acceleration > 10 && is_mode(am::natural, am::naturalgain))
+        error_list->Add("acceleration can not be greater than 10");
+    else if (args->acceleration == 0 && is_mode(am::naturalgain))
+        error_list->Add("acceleration must be positive");
     else if (args->acceleration < 0) {
         bool additive = m < am::power;
         if (additive) error_list->Add("acceleration can not be negative, use a negative weight to compensate");
