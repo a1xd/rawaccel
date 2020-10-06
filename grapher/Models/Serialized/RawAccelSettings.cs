@@ -44,17 +44,36 @@ namespace grapher.Models.Serialized
 
         #region Methods
 
-        public static RawAccelSettings Load()
+        public static RawAccelSettings Load(Func<GUISettings> DefaultGUISettingsSupplier)
         {
-            return Load(DefaultSettingsFile);
+            return Load(DefaultSettingsFile, DefaultGUISettingsSupplier);
         }
 
-        public static RawAccelSettings Load(string file)
+        public static RawAccelSettings Load(string file, Func<GUISettings> DefaultGUISettingsSupplier)
         {   
             try
             {
-                var settings = JsonConvert.DeserializeObject<RawAccelSettings>(File.ReadAllText(file), SerializerSettings);
-                if (settings is null) throw new JsonException($"{file} contains invalid JSON");
+                RawAccelSettings settings = null;
+
+                JObject jo = JObject.Parse(File.ReadAllText(file));
+                if (jo.ContainsKey(DriverSettings.Key))
+                {
+                    settings = jo.ToObject<RawAccelSettings>(JsonSerializer.Create(SerializerSettings));
+                }
+                else
+                {
+                    settings = new RawAccelSettings
+                    {
+                        AccelerationSettings = jo.ToObject<DriverSettings>(),
+                        GUISettings = DefaultGUISettingsSupplier()
+                    };
+                }
+
+                if (settings is null || settings.AccelerationSettings is null)
+                {
+                    throw new JsonException($"{file} contains invalid JSON");
+                }
+
                 return settings;
             }
             catch (FileNotFoundException e)

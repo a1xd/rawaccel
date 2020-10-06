@@ -83,15 +83,7 @@ namespace grapher.Models.Serialized
             if (errors.Empty())
             {
                 RawAccelSettings.AccelerationSettings = settings;
-                RawAccelSettings.GUISettings = new GUISettings
-                {
-                    AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
-                    DPI = (int)DpiField.Data,
-                    PollRate = (int)PollRateField.Data,
-                    ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
-                    ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
-                };
-
+                RawAccelSettings.GUISettings = MakeGUISettingsFromFields();
                 RawAccelSettings.Save();
             }
 
@@ -128,13 +120,25 @@ namespace grapher.Models.Serialized
             return errors;
         }
 
+        public GUISettings MakeGUISettingsFromFields()
+        {
+            return new GUISettings
+            {
+                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
+                DPI = (int)DpiField.Data,
+                PollRate = (int)PollRateField.Data,
+                ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
+                ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked
+            };
+        }
+
         public void Startup()
         {
             if (RawAccelSettings.Exists())
             {
                 try
                 {
-                    RawAccelSettings = RawAccelSettings.Load();
+                    RawAccelSettings = RawAccelSettings.Load(() => MakeGUISettingsFromFields());
                     if (RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup)
                     {
                         UpdateActiveAccelFromFileSettings(RawAccelSettings.AccelerationSettings);
@@ -149,13 +153,7 @@ namespace grapher.Models.Serialized
 
             RawAccelSettings = new RawAccelSettings(
                 DriverInterop.GetActiveSettings(),
-                new GUISettings
-                {
-                    AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
-                    DPI = (int)DpiField.Data,
-                    PollRate = (int)PollRateField.Data,
-                    ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
-                });
+                MakeGUISettingsFromFields());
             RawAccelSettings.Save();
         }
 
