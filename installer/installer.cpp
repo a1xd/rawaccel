@@ -76,7 +76,10 @@ int main() {
 
         std::cout << "Install complete, change will take effect after restart.\n";
     }
-    catch (std::exception e) {
+    catch (const std::system_error& e) {
+        std::cerr << "Error: " << e.what() << ' ' << e.code() << '\n';
+    }
+    catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << '\n';
     }
 
