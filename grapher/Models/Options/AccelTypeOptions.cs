@@ -227,7 +227,7 @@ namespace grapher
 
         public void SetArgs(ref AccelArgs args)
         {
-            AccelArgs defaults = (AccelArgs)DriverInterop.DefaultArgs;
+            AccelArgs defaults = DriverInterop.DefaultSettings.args.x;
             args.acceleration = Acceleration.Visible ? Acceleration.Field.Data : defaults.acceleration;
             args.scale = Scale.Visible ? Scale.Field.Data : defaults.scale;
             args.gainCap = Cap.Visible ? Cap.VelocityGainCap : defaults.gainCap;

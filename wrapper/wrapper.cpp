@@ -177,7 +177,7 @@ public:
 public ref struct DriverInterop
 {
     literal double WriteDelayMs = WRITE_DELAY;
-    static initonly AccelArgs^ DefaultArgs = get_default()->args.x;
+    static initonly DriverSettings^ DefaultSettings = get_default();
 
     static DriverSettings^ GetActiveSettings()
     {
