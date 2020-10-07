@@ -114,9 +114,10 @@ namespace grapher.Models.Options
             Sensitivity.SetActiveValues(xSens, ySens);
             Rotation.SetActiveValue(rotation);
             OptionSetX.SetActiveValues(xMode, xArgs);
-            OptionSetY.SetActiveValues(yMode, yArgs);
             WholeVectorMenuItem.Checked = isWhole;
             ByComponentVectorMenuItem.Checked = !isWhole;
+            ByComponentVectorXYLock.Checked = xArgs.Equals(yArgs);
+            OptionSetY.SetActiveValues(yMode, yArgs);
         }
 
         public void SetActiveValues(DriverSettings settings)
