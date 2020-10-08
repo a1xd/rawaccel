@@ -13,7 +13,7 @@ namespace grapher
         #region Constructors
 
         public AccelCharts(
-            Form form,
+            RawAcceleration form,
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
@@ -34,10 +34,6 @@ namespace grapher
             EnableLastValue = enableLastMouseMove;
             WriteButton = writeButton;
 
-
-            Rectangle screenRectangle = ContainingForm.RectangleToScreen(ContainingForm.ClientRectangle);
-            FormBorderHeight = screenRectangle.Top - ContainingForm.Top;
-
             EnableVelocityAndGain.Click += new System.EventHandler(OnEnableClick);
             EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableVelocityGainCheckStateChange);
 
@@ -52,7 +48,7 @@ namespace grapher
 
         #region Properties
 
-        public Form ContainingForm { get; }
+        public RawAcceleration ContainingForm { get; }
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
 
@@ -125,23 +121,9 @@ namespace grapher
         {
             ChartState = ChartStateManager.DetermineState(driverSettings);
             ChartState.Activate();
-            UpdateFormWidth();
             Bind();
         }
 
-        public void SetWidened()
-        {
-            ChartState.SetWidened();
-            UpdateFormWidth();
-            //AlignWriteButton();
-        }
-
-        public void SetNarrowed()
-        {
-            ChartState.SetNarrowed();
-            UpdateFormWidth();
-            //AlignWriteButton();
-        }
 
         public void Redraw()
         {
@@ -176,8 +158,6 @@ namespace grapher
             velocityChart.SetTop(sensitivityChart.Height + Constants.ChartSeparationVertical);
             gainChart.SetHeight(sensitivityChart.Height);
             gainChart.SetTop(velocityChart.Top + velocityChart.Height + Constants.ChartSeparationVertical);
-
-            sensitivityChart.Show();
         }
 
         private void OnEnableClick(object sender, EventArgs e)
@@ -187,6 +167,7 @@ namespace grapher
 
         private void OnEnableVelocityGainCheckStateChange(object sender, EventArgs e)
         {
+            ContainingForm.ResetAutoScroll();
             if (EnableVelocityAndGain.Checked)
             {
                 ShowVelocityAndGain();
@@ -207,17 +188,12 @@ namespace grapher
 
         private void ShowVelocityAndGain()
         {
-            ChartState.ShowVelocityAndGain(ContainingForm, FormBorderHeight);
+            ChartState.ShowVelocityAndGain();
         }
 
         private void HideVelocityAndGain()
         {
-            ChartState.HideVelocityAndGain(ContainingForm, FormBorderHeight);
-        }
-
-        private void UpdateFormWidth()
-        {
-            ContainingForm.Width = ChartState.SensitivityChart.Left + ChartState.SensitivityChart.Width;
+            ChartState.HideVelocityAndGain();
         }
 
         private void AlignWriteButton()

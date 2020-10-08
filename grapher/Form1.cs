@@ -155,11 +155,35 @@ namespace grapher
 
         }
 
+        public void ResetAutoScroll()
+        {
+            panel2.AutoScrollPosition = Constants.Origin;
+        }
+
+        public void DoResize()
+        {
+            ResetAutoScroll();
+
+            var wa = Screen.PrimaryScreen.WorkingArea;
+            var pref2 = panel2.GetPreferredSize(Constants.MaxSize);
+
+            Size = new Size
+            {
+                Width = Math.Min(wa.Width - Location.X, panel1.Size.Width + pref2.Width),
+                Height = Math.Min(wa.Height - Location.Y, pref2.Height + 48)
+            };
+        }
+
         private void RawAcceleration_Paint(object sender, PaintEventArgs e)
         {
             //AccelGUI.AccelCharts.DrawLastMovement();
         }
 
         #endregion Method
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

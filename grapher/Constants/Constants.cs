@@ -115,6 +115,9 @@ namespace grapher
         /// <summary> Color of font in active value labels. </summary>
         public static readonly Color ActiveValueFontColor = Color.FromArgb(255, 65, 65, 65);
 
+        public static readonly Point Origin = new Point(0);
+        public static readonly Size MaxSize = new Size(9999, 9999);
+
         #endregion ReadOnly
     }
 }

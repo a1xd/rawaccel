@@ -35,6 +35,7 @@ namespace grapher
             Settings = settings;
             Settings.Startup();
             RefreshOnRead(Settings.RawAccelSettings.AccelerationSettings);
+            AccelForm.DoResize();
 
             DefaultButtonFont = WriteButton.Font;
             SmallButtonFont = new Font(WriteButton.Font.Name, WriteButton.Font.Size * 0.666f);
@@ -151,6 +152,7 @@ namespace grapher
 
         public void UpdateShownActiveValues(DriverSettings args)
         {
+            AccelForm.ResetAutoScroll();
             AccelCharts.ShowActive(args);
             ApplyOptions.SetActiveValues(args);
         }
