@@ -846,9 +846,9 @@ namespace grapher
             this.sensitivityLabel.AutoSize = true;
             this.sensitivityLabel.Location = new System.Drawing.Point(25, 52);
             this.sensitivityLabel.Name = "sensitivityLabel";
-            this.sensitivityLabel.Size = new System.Drawing.Size(54, 13);
+            this.sensitivityLabel.Size = new System.Drawing.Size(75, 13);
             this.sensitivityLabel.TabIndex = 85;
-            this.sensitivityLabel.Text = "Sensitivity";
+            this.sensitivityLabel.Text = "Sens Multiplier";
             // 
             // sensitivityBoxX
             // 

@@ -126,7 +126,7 @@ namespace grapher.Models
                 new ActiveValueLabelXY(
                     new ActiveValueLabel(sensitivityActiveXLabel, activeValueTitleX),
                     new ActiveValueLabel(sensitivityActiveYLabel, activeValueTitleX)),
-                "Sensitivity");
+                "Sens Multiplier");
 
             var rotation = new Option(
                 rotationBox,
