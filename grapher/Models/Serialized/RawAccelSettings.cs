@@ -115,6 +115,18 @@ namespace grapher.Models.Serialized
                 .AddFirst(new JProperty("### Mode Types ###", modes));
         }
 
+        public bool IsDefaultEquivalent()
+        {
+            bool wholeOrNoY = AccelerationSettings.combineMagnitudes ||
+                AccelerationSettings.modes.y == AccelMode.noaccel;
+
+            return AccelerationSettings.sensitivity.x == 1 &&
+                AccelerationSettings.sensitivity.y == 1 &&
+                AccelerationSettings.rotation == 0 &&
+                AccelerationSettings.modes.x == AccelMode.noaccel &&
+                wholeOrNoY;
+        }
+
         #endregion Methods
     }
 }

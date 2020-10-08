@@ -116,8 +116,6 @@ namespace grapher
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.wholeVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byVectorComponentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.startupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AccelerationChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.GainChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -167,6 +165,7 @@ namespace grapher
             this.ScaleActiveXLabel = new System.Windows.Forms.Label();
             this.scaleLabelX = new System.Windows.Forms.Label();
             this.scaleBoxX = new System.Windows.Forms.TextBox();
+            this.toggleButton = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
@@ -371,9 +370,9 @@ namespace grapher
             // writeButton
             // 
             this.writeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.writeButton.Location = new System.Drawing.Point(177, 359);
+            this.writeButton.Location = new System.Drawing.Point(103, 377);
             this.writeButton.Name = "writeButton";
-            this.writeButton.Size = new System.Drawing.Size(128, 40);
+            this.writeButton.Size = new System.Drawing.Size(92, 35);
             this.writeButton.TabIndex = 23;
             this.writeButton.Text = "Apply";
             this.writeButton.UseVisualStyleBackColor = true;
@@ -501,8 +500,7 @@ namespace grapher
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.graphsToolStripMenuItem,
-            this.advancedToolStripMenuItem,
-            this.startupToolStripMenuItem});
+            this.advancedToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1884, 24);
@@ -528,7 +526,7 @@ namespace grapher
             this.pollRateToolStripMenuItem,
             this.ScaleMenuItem});
             this.scaleByDPIToolStripMenuItem.Name = "scaleByDPIToolStripMenuItem";
-            this.scaleByDPIToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.scaleByDPIToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.scaleByDPIToolStripMenuItem.Text = "Scale by Mouse Settings";
             // 
             // dPIToolStripMenuItem
@@ -568,7 +566,7 @@ namespace grapher
             // showVelocityGainToolStripMenuItem
             // 
             this.showVelocityGainToolStripMenuItem.Name = "showVelocityGainToolStripMenuItem";
-            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.showVelocityGainToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.showVelocityGainToolStripMenuItem.Text = "Show Velocity && Gain";
             // 
             // showLastMouseMoveToolStripMenuItem
@@ -577,7 +575,7 @@ namespace grapher
             this.showLastMouseMoveToolStripMenuItem.CheckOnClick = true;
             this.showLastMouseMoveToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showLastMouseMoveToolStripMenuItem.Name = "showLastMouseMoveToolStripMenuItem";
-            this.showLastMouseMoveToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.showLastMouseMoveToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.showLastMouseMoveToolStripMenuItem.Text = "Show Last Mouse Move";
             // 
             // advancedToolStripMenuItem
@@ -657,23 +655,6 @@ namespace grapher
             this.byVectorComponentToolStripMenuItem.Name = "byVectorComponentToolStripMenuItem";
             this.byVectorComponentToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.byVectorComponentToolStripMenuItem.Text = "By Component";
-            // 
-            // startupToolStripMenuItem
-            // 
-            this.startupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AutoWriteMenuItem});
-            this.startupToolStripMenuItem.Name = "startupToolStripMenuItem";
-            this.startupToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            this.startupToolStripMenuItem.Text = "Startup";
-            // 
-            // AutoWriteMenuItem
-            // 
-            this.AutoWriteMenuItem.Checked = true;
-            this.AutoWriteMenuItem.CheckOnClick = true;
-            this.AutoWriteMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
-            this.AutoWriteMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.AutoWriteMenuItem.Text = "Apply Settings File on Startup";
             // 
             // AccelerationChartY
             // 
@@ -1188,11 +1169,21 @@ namespace grapher
             this.scaleBoxX.Size = new System.Drawing.Size(76, 20);
             this.scaleBoxX.TabIndex = 6;
             // 
+            // toggleButton
+            // 
+            this.toggleButton.Location = new System.Drawing.Point(223, 384);
+            this.toggleButton.Name = "toggleButton";
+            this.toggleButton.Size = new System.Drawing.Size(104, 24);
+            this.toggleButton.TabIndex = 24;
+            this.toggleButton.Text = "toggle";
+            this.toggleButton.UseVisualStyleBackColor = true;
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1884, 956);
+            this.Controls.Add(this.toggleButton);
             this.Controls.Add(this.scaleLabelY);
             this.Controls.Add(this.ScaleActiveYLabel);
             this.Controls.Add(this.scaleBoxY);
@@ -1308,7 +1299,6 @@ namespace grapher
         private System.Windows.Forms.Label constantThreeLabelX;
         private System.Windows.Forms.TextBox offsetBoxX;
         private System.Windows.Forms.Label offsetLabelX;
-        private System.Windows.Forms.Button writeButton;
         private System.Windows.Forms.TextBox sensitivityBoxY;
         private System.Windows.Forms.TextBox capBoxY;
         private System.Windows.Forms.CheckBox sensXYLock;
@@ -1345,8 +1335,6 @@ namespace grapher
         private System.Windows.Forms.Label OffsetActiveXLabel;
         private System.Windows.Forms.Label LimitActiveXLabel;
         private System.Windows.Forms.Label MidpointActiveXLabel;
-        private System.Windows.Forms.ToolStripMenuItem startupToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem AutoWriteMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem wholeVectorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem byVectorComponentToolStripMenuItem;
@@ -1386,6 +1374,8 @@ namespace grapher
         private System.Windows.Forms.Label ScaleActiveXLabel;
         private System.Windows.Forms.Label scaleLabelX;
         private System.Windows.Forms.TextBox scaleBoxX;
+        private System.Windows.Forms.CheckBox toggleButton;
+        private System.Windows.Forms.Button writeButton;
     }
 }
 

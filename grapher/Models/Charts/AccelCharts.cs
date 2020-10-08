@@ -133,14 +133,14 @@ namespace grapher
         {
             ChartState.SetWidened();
             UpdateFormWidth();
-            AlignWriteButton();
+            //AlignWriteButton();
         }
 
         public void SetNarrowed()
         {
             ChartState.SetNarrowed();
             UpdateFormWidth();
-            AlignWriteButton();
+            //AlignWriteButton();
         }
 
         public void Redraw()
