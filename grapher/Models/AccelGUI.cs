@@ -98,7 +98,7 @@ namespace grapher
         private void SaveGUISettingsOnClose(Object sender, FormClosingEventArgs e)
         {
             var guiSettings = Settings.MakeGUISettingsFromFields();
-            if (!Settings.RawAccelSettings.GUISettings.ValueEquals(guiSettings))
+            if (!Settings.RawAccelSettings.GUISettings.Equals(guiSettings))
             {
                 Settings.RawAccelSettings.GUISettings = guiSettings;
                 Settings.RawAccelSettings.Save();

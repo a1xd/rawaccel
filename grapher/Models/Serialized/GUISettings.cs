@@ -31,12 +31,32 @@ namespace grapher.Models.Serialized
 
         #region Methods
 
-        public bool ValueEquals(GUISettings other)
+        public override bool Equals(object obj)
+        {
+            var other = obj as GUISettings;
+
+            if (other == null)
+            {
+                return false;
+            }
+
+            return Equals(other);
+        }
+
+        public bool Equals(GUISettings other)
         {
             return DPI == other.DPI &&
                 PollRate == other.PollRate &&
                 ShowLastMouseMove == other.ShowLastMouseMove &&
                 ShowVelocityAndGain == other.ShowVelocityAndGain;
+        }
+
+        public override int GetHashCode()
+        {
+            return DPI.GetHashCode() ^
+                PollRate.GetHashCode() ^
+                ShowLastMouseMove.GetHashCode() ^
+                ShowVelocityAndGain.GetHashCode();
         }
 
         #endregion Methods
