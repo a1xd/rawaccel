@@ -169,8 +169,7 @@ namespace grapher
         private void SetupButtons()
         {
             WriteButton.Top = AccelCharts.Top + AccelCharts.TopChartHeight - Constants.ButtonVerticalOffset;
-            SetWriteButtonDefault();
-
+            
             ToggleButton.Appearance = Appearance.Button;
             ToggleButton.FlatStyle = FlatStyle.System;
             ToggleButton.TextAlign = ContentAlignment.MiddleCenter;
@@ -179,6 +178,7 @@ namespace grapher
 
             RefreshToggleStateFromNewSettings();
             SetToggleButtonDefault();
+            SetWriteButtonDefault();
         }
 
         private void RefreshToggleStateFromNewSettings()
@@ -191,7 +191,7 @@ namespace grapher
         {
             WriteButton.Font = DefaultButtonFont;
             WriteButton.Text = Constants.WriteButtonDefaultText;
-            WriteButton.Enabled = true;
+            WriteButton.Enabled = ToggleButton.Checked || !ToggleButton.Enabled;
             WriteButton.Update();
         }
 
@@ -230,8 +230,8 @@ namespace grapher
         private void OnButtonTimerTick(object sender, EventArgs e)
         {
             ButtonTimer.Stop();
-            SetWriteButtonDefault();
             SetToggleButtonDefault();
+            SetWriteButtonDefault();
         }
 
         private void StartButtonTimer()
