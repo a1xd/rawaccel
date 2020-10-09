@@ -58,7 +58,9 @@ namespace grapher
         public const int NarrowChartLeft = 482;
 
         /// <summary> Vertical placement of write button above bottom of sensitivity graph </summary>
-        public const int WriteButtonVerticalOffset = 80;
+        public const int ButtonVerticalOffset = 60;
+
+        public const float SmallButtonSizeFactor = 0.666f;
 
         /// <summary> Format string for shortened x and y textboxes. </summary>
         public const string ShortenedFormatString = "0.###";
@@ -84,9 +86,12 @@ namespace grapher
         /// <summary> Default text to be displayed on write button. </summary>
         public const string WriteButtonDefaultText = "Apply";
 
-        /// <summary> Default text to be displayed on write button. </summary>
-        public const string WriteButtonDelayText = "Delay";
+        /// <summary> Default text to be displayed on toggle button. </summary>
+        public const string ToggleButtonDefaultText = "Toggle";
 
+        /// <summary> Default text to be displayed on button delay. </summary>
+        public const string ButtonDelayText = "Delay";
+        
         /// <summary> Title of sensitivity chart. </summary>
         public const string SensitivityChartTitle = "Sensitivity";
 
@@ -111,6 +116,9 @@ namespace grapher
 
         /// <summary> Color of font in active value labels. </summary>
         public static readonly Color ActiveValueFontColor = Color.FromArgb(255, 65, 65, 65);
+
+        public static readonly Point Origin = new Point(0);
+        public static readonly Size MaxSize = new Size(9999, 9999);
 
         #endregion ReadOnly
     }

@@ -1,7 +1,9 @@
 # Raw Accel Guide
 
 ## Installation
-Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.  
+
+Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
+* If you encounter a `VCRUNTIME` related system error, [download and install the latest version from Microsoft.](https://aka.ms/vs/16/release/vc_redist.x64.exe)
 
 Run `uninstaller.exe` in the release directory to uninstall the driver. Restart for the uninstallation to take effect.
 

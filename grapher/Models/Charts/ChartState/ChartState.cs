@@ -68,20 +68,6 @@ namespace grapher.Models.Charts.ChartState
             GainChart.DrawLastMovementValue(TwoDotsPerGraph);
         }
 
-        public void SetWidened()
-        {
-            SensitivityChart.SetWidened();
-            VelocityChart.SetWidened();
-            GainChart.SetWidened();
-        }
-
-        public void SetNarrowed()
-        {
-            SensitivityChart.SetNarrowed();
-            VelocityChart.SetNarrowed();
-            GainChart.SetNarrowed();
-        }
-
         public void ClearLastValue()
         {
             SensitivityChart.ClearLastValue();
@@ -89,23 +75,16 @@ namespace grapher.Models.Charts.ChartState
             GainChart.ClearLastValue();
         }
 
-        public void ShowVelocityAndGain(Form form, int borderHeight)
+        public void ShowVelocityAndGain()
         {
             VelocityChart.Show();
             GainChart.Show();
-            form.Height = SensitivityChart.Height +
-                                    Constants.ChartSeparationVertical +
-                                    VelocityChart.Height +
-                                    Constants.ChartSeparationVertical +
-                                    GainChart.Height +
-                                    borderHeight;
         }
 
-        public void HideVelocityAndGain(Form form, int borderHeight)
+        public void HideVelocityAndGain()
         {
             VelocityChart.Hide();
             GainChart.Hide();
-            form.Height = SensitivityChart.Height + borderHeight;
         }
 
         public void SetLogarithmic(bool x, bool y)

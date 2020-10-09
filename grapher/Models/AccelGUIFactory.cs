@@ -23,6 +23,7 @@ namespace grapher.Models
             ComboBox accelTypeDropX,
             ComboBox accelTypeDropY,
             Button writeButton,
+            ButtonBase toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem showLastMouseMoveMenuItem,
             ToolStripMenuItem wholeVectorToolStripMenuItem,
@@ -31,7 +32,6 @@ namespace grapher.Models
             ToolStripMenuItem legacyCapToolStripMenuItem,
             ToolStripMenuItem gainOffsetToolStripMenuItem,
             ToolStripMenuItem legacyOffsetToolStripMenuItem,
-            ToolStripMenuItem autoWriteMenuItem,
             ToolStripMenuItem scaleMenuItem,
             ToolStripTextBox dpiTextBox,
             ToolStripTextBox pollRateTextBox,
@@ -126,7 +126,7 @@ namespace grapher.Models
                 new ActiveValueLabelXY(
                     new ActiveValueLabel(sensitivityActiveXLabel, activeValueTitleX),
                     new ActiveValueLabel(sensitivityActiveYLabel, activeValueTitleX)),
-                "Sensitivity");
+                "Sens Multiplier");
 
             var rotation = new Option(
                 rotationBox,
@@ -326,7 +326,6 @@ namespace grapher.Models
                 activeAccel,
                 accelCalculator.DPI,
                 accelCalculator.PollRate,
-                autoWriteMenuItem,
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem);
 
@@ -339,6 +338,7 @@ namespace grapher.Models
                 settings,
                 applyOptions,
                 writeButton,
+                toggleButton,
                 mouseWatcher,
                 scaleMenuItem);
         }

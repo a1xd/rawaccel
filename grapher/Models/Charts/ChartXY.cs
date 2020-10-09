@@ -24,9 +24,7 @@ namespace grapher
 
             Combined = false;
             SetCombined();
-
-            Widened = false;
-            SetWidened();
+            Visible = true;
         }
 
         #endregion Constructors
@@ -72,11 +70,9 @@ namespace grapher
             }
         }
 
-        public bool Combined { get; private set; }
+        public bool Combined { get; set; }
 
-        public bool Widened { get; private set; }
-
-        public bool Visible { get; private set; }
+        public bool Visible { get; set; }
 
         public string Title { get; }
 
@@ -273,36 +269,10 @@ namespace grapher
             }
         }
 
-        public void SetWidened()
-        {
-            if (!Widened)
-            {
-                ChartX.Width = Constants.WideChartWidth;
-                ChartY.Width = Constants.WideChartWidth;
-
-                ChartX.Left = Constants.WideChartLeft;
-                ChartY.Left = ChartX.Left + ChartX.Width + Constants.ChartSeparationHorizontal;
-
-                Widened = true;
-            }
-        }
-
-        public void SetNarrowed()
-        {
-            if (Widened)
-            {
-                ChartX.Width = Constants.NarrowChartWidth;
-                ChartY.Width = Constants.NarrowChartWidth;
-
-                ChartX.Left = Constants.NarrowChartLeft;
-                ChartY.Left = ChartX.Left + ChartX.Width + Constants.ChartSeparationHorizontal;
-
-                Widened = false;
-            }
-        }
 
         public void Hide()
         {
+
             if (Visible)
             {
                 ChartX.Hide();

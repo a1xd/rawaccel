@@ -44,17 +44,36 @@ namespace grapher.Models.Serialized
 
         #region Methods
 
-        public static RawAccelSettings Load()
+        public static RawAccelSettings Load(Func<GUISettings> DefaultGUISettingsSupplier)
         {
-            return Load(DefaultSettingsFile);
+            return Load(DefaultSettingsFile, DefaultGUISettingsSupplier);
         }
 
-        public static RawAccelSettings Load(string file)
+        public static RawAccelSettings Load(string file, Func<GUISettings> DefaultGUISettingsSupplier)
         {   
             try
             {
-                var settings = JsonConvert.DeserializeObject<RawAccelSettings>(File.ReadAllText(file), SerializerSettings);
-                if (settings is null) throw new JsonException($"{file} contains invalid JSON");
+                RawAccelSettings settings = null;
+
+                JObject settingsJObject = JObject.Parse(File.ReadAllText(file));
+                if (settingsJObject.ContainsKey(DriverSettings.Key))
+                {
+                    settings = settingsJObject.ToObject<RawAccelSettings>(JsonSerializer.Create(SerializerSettings));
+                }
+                else
+                {
+                    settings = new RawAccelSettings
+                    {
+                        AccelerationSettings = settingsJObject.ToObject<DriverSettings>(),
+                        GUISettings = DefaultGUISettingsSupplier()
+                    };
+                }
+
+                if (settings is null || settings.AccelerationSettings is null)
+                {
+                    throw new JsonException($"{file} contains invalid JSON");
+                }
+
                 return settings;
             }
             catch (FileNotFoundException e)
@@ -94,6 +113,18 @@ namespace grapher.Models.Serialized
             string modes = string.Join(" | ", Enum.GetNames(typeof(AccelMode)));
             ((JObject)thisJO[DriverSettings.Key])
                 .AddFirst(new JProperty("### Mode Types ###", modes));
+        }
+
+        public bool IsDefaultEquivalent()
+        {
+            bool wholeOrNoY = AccelerationSettings.combineMagnitudes ||
+                AccelerationSettings.modes.y == AccelMode.noaccel;
+
+            return AccelerationSettings.sensitivity.x == 1 &&
+                AccelerationSettings.sensitivity.y == 1 &&
+                AccelerationSettings.rotation == 0 &&
+                AccelerationSettings.modes.x == AccelMode.noaccel &&
+                wholeOrNoY;
         }
 
         #endregion Methods

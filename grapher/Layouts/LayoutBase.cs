@@ -26,7 +26,6 @@ namespace grapher.Layouts
             ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
 
-            ButtonEnabled = true;
             LogarithmicCharts = false;
         }
 
@@ -39,8 +38,6 @@ namespace grapher.Layouts
         public string Name { get; protected set; }
 
         public bool LogarithmicCharts { get; protected set; }
-
-        protected bool ButtonEnabled { get; set; }
 
         protected OptionLayout AccelLayout { get; set; }
 
@@ -70,7 +67,6 @@ namespace grapher.Layouts
             Button button,
             int top)
         {
-            button.Enabled = ButtonEnabled;
 
             IOption previous = null;
 

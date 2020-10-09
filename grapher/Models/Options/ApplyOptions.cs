@@ -175,16 +175,14 @@ namespace grapher.Models.Options
         {
             OptionSetX.SetRegularMode();
             OptionSetY.Hide();
-            AccelCharts.SetWidened();
-            SetActiveTitlesWhole();
+            //SetActiveTitlesWhole();
         }
 
         public void ShowByComponentAsOneSet()
         {
             OptionSetX.SetTitleMode("X = Y");
             OptionSetY.Hide();
-            AccelCharts.SetWidened();
-            SetActiveTitlesByComponents();
+            //SetActiveTitlesByComponents();
         }
 
         public void ShowByComponentAsTwoSets()
@@ -192,7 +190,6 @@ namespace grapher.Models.Options
             OptionSetX.SetTitleMode("X");
             OptionSetY.SetTitleMode("Y");
             OptionSetY.Show();
-            AccelCharts.SetNarrowed();
         }
 
         public void ShowByComponentSet()

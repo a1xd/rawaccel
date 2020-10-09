@@ -50,6 +50,7 @@ namespace grapher
                 accelTypeDropX,
                 accelTypeDropY,
                 writeButton,
+                toggleButton,
                 showVelocityGainToolStripMenuItem,
                 showLastMouseMoveToolStripMenuItem,
                 wholeVectorToolStripMenuItem,
@@ -58,7 +59,6 @@ namespace grapher
                 legacyCapToolStripMenuItem,
                 gainOffsetToolStripMenuItem,
                 legacyOffsetToolStripMenuItem,
-                AutoWriteMenuItem,
                 ScaleMenuItem,
                 DPITextBox,
                 PollRateTextBox,
@@ -155,11 +155,35 @@ namespace grapher
 
         }
 
+        public void ResetAutoScroll()
+        {
+            chartsPanel.AutoScrollPosition = Constants.Origin;
+        }
+
+        public void DoResize()
+        {
+            ResetAutoScroll();
+
+            var workingArea = Screen.PrimaryScreen.WorkingArea;
+            var chartsPreferredSize = chartsPanel.GetPreferredSize(Constants.MaxSize);
+
+            Size = new Size
+            {
+                Width = Math.Min(workingArea.Width - Location.X, optionsPanel.Size.Width + chartsPreferredSize.Width),
+                Height = Math.Min(workingArea.Height - Location.Y, chartsPreferredSize.Height + 48)
+            };
+        }
+
         private void RawAcceleration_Paint(object sender, PaintEventArgs e)
         {
             //AccelGUI.AccelCharts.DrawLastMovement();
         }
 
         #endregion Method
+
+        private void optionsPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

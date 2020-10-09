@@ -63,7 +63,7 @@ public ref struct DriverSettings
     [JsonProperty("Accel parameters")]
     Vec2<AccelArgs> args;
 
-    [JsonProperty("Sensitivity")]
+    [JsonProperty("Sensitivity multipliers")]
     Vec2<double> sensitivity;
     
     [JsonProperty(Required = Required::Default)]
@@ -177,7 +177,7 @@ public:
 public ref struct DriverInterop
 {
     literal double WriteDelayMs = WRITE_DELAY;
-    static initonly AccelArgs^ DefaultArgs = get_default()->args.x;
+    static initonly DriverSettings^ DefaultSettings = get_default();
 
     static DriverSettings^ GetActiveSettings()
     {
