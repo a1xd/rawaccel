@@ -60,6 +60,8 @@ namespace grapher
         /// <summary> Vertical placement of write button above bottom of sensitivity graph </summary>
         public const int ButtonVerticalOffset = 60;
 
+        public const float SmallButtonSizeFactor = 0.666f;
+
         /// <summary> Format string for shortened x and y textboxes. </summary>
         public const string ShortenedFormatString = "0.###";
 
@@ -89,7 +91,7 @@ namespace grapher
 
         /// <summary> Default text to be displayed on button delay. </summary>
         public const string ButtonDelayText = "Delay";
-
+        
         /// <summary> Title of sensitivity chart. </summary>
         public const string SensitivityChartTitle = "Sensitivity";
 

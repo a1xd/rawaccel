@@ -38,7 +38,7 @@ namespace grapher
             AccelForm.DoResize();
 
             DefaultButtonFont = WriteButton.Font;
-            SmallButtonFont = new Font(WriteButton.Font.Name, WriteButton.Font.Size * 0.666f);
+            SmallButtonFont = new Font(WriteButton.Font.Name, WriteButton.Font.Size * Constants.SmallButtonSizeFactor);
 
             MouseWatcher = mouseWatcher;
 
