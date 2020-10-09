@@ -84,10 +84,10 @@ namespace grapher
         /// <summary> Default text to be displayed on write button. </summary>
         public const string WriteButtonDefaultText = "Apply";
 
-        /// <summary> Default text to be displayed on write button. </summary>
+        /// <summary> Default text to be displayed on toggle button. </summary>
         public const string ToggleButtonDefaultText = "Toggle";
 
-        /// <summary> Default text to be displayed on write button. </summary>
+        /// <summary> Default text to be displayed on button delay. </summary>
         public const string ButtonDelayText = "Delay";
 
         /// <summary> Title of sensitivity chart. </summary>

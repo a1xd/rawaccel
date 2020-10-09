@@ -55,16 +55,16 @@ namespace grapher.Models.Serialized
             {
                 RawAccelSettings settings = null;
 
-                JObject jo = JObject.Parse(File.ReadAllText(file));
-                if (jo.ContainsKey(DriverSettings.Key))
+                JObject settingsJObject = JObject.Parse(File.ReadAllText(file));
+                if (settingsJObject.ContainsKey(DriverSettings.Key))
                 {
-                    settings = jo.ToObject<RawAccelSettings>(JsonSerializer.Create(SerializerSettings));
+                    settings = settingsJObject.ToObject<RawAccelSettings>(JsonSerializer.Create(SerializerSettings));
                 }
                 else
                 {
                     settings = new RawAccelSettings
                     {
-                        AccelerationSettings = jo.ToObject<DriverSettings>(),
+                        AccelerationSettings = settingsJObject.ToObject<DriverSettings>(),
                         GUISettings = DefaultGUISettingsSupplier()
                     };
                 }

@@ -157,20 +157,20 @@ namespace grapher
 
         public void ResetAutoScroll()
         {
-            panel2.AutoScrollPosition = Constants.Origin;
+            chartsPanel.AutoScrollPosition = Constants.Origin;
         }
 
         public void DoResize()
         {
             ResetAutoScroll();
 
-            var wa = Screen.PrimaryScreen.WorkingArea;
-            var pref2 = panel2.GetPreferredSize(Constants.MaxSize);
+            var workingArea = Screen.PrimaryScreen.WorkingArea;
+            var chartsPreferredSize = chartsPanel.GetPreferredSize(Constants.MaxSize);
 
             Size = new Size
             {
-                Width = Math.Min(wa.Width - Location.X, panel1.Size.Width + pref2.Width),
-                Height = Math.Min(wa.Height - Location.Y, pref2.Height + 48)
+                Width = Math.Min(workingArea.Width - Location.X, optionsPanel.Size.Width + chartsPreferredSize.Width),
+                Height = Math.Min(workingArea.Height - Location.Y, chartsPreferredSize.Height + 48)
             };
         }
 
@@ -181,7 +181,7 @@ namespace grapher
 
         #endregion Method
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void optionsPanel_Paint(object sender, PaintEventArgs e)
         {
 
         }
