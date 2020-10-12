@@ -112,7 +112,7 @@ ra::accel_args convert_natural(const ia_settings_t& ia_settings) {
     double prescale = get("Pre-ScaleX").value_or(1);
 
     ra::accel_args args;
-    args.limit = 1 + std::abs(cap - sens);
+    args.limit = 1 + std::abs(cap - sens) / sens;
     args.accel = accel * prescale / sens;
     return args;
 }
@@ -134,11 +134,13 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
     args.legacy_offset = legacy;
     args.offset = offset;
     
-    if (legacy || cap <= 1) {
-        args.scale_cap = cap;
+    double cap_converted = cap / sens;
+
+    if (legacy || cap_converted <= 1) {
+        args.scale_cap = cap_converted;
     }
     else {
-        double b = (cap - 1) / power;
+        double b = (cap_converted - 1) / power;
         double e = 1 / (power - 1);
         args.gain_cap = offset + (1 / accel) * std::pow(b, e);
     }
@@ -153,8 +155,8 @@ bool try_convert(const ia_settings_t& ia_settings) {
 
     ra_settings.degrees_rotation = get("Angle", "AngleAdjustment").value_or(0);
     ra_settings.sens = {
-        get("Post-ScaleX").value_or(1),
-        get("Post-ScaleY").value_or(1)
+        get("Post-ScaleX").value_or(1) * get("Pre-ScaleX").value_or(1),
+        get("Post-ScaleY").value_or(1) * get("Pre-ScaleY").value_or(1)
     };
 
     double mode = get("AccelMode").value_or(IA_QL);
