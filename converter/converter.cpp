@@ -129,7 +129,9 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
 
     ra::accel_args args;
 
-    args.accel = accel * prescale / sens;
+    double accel_b = std::pow(accel * prescale, power - 1) / sens;
+    double accel_e = 1 / (power - 1);
+    args.accel = std::pow(accel_b, accel_e);
     args.exponent = power;
     args.legacy_offset = legacy;
     args.offset = offset;
