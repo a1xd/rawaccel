@@ -1,7 +1,7 @@
 #pragma once
 
 namespace rawaccel {
-    
+
     /// <summary> Struct to hold arguments for an acceleration function. </summary>
     struct accel_args {
         double offset = 0;
@@ -31,16 +31,16 @@ namespace rawaccel {
     struct additive_accel : accel_val_base<Func> {
 
         additive_accel(const accel_args& args) : accel_val_base(args) {
-            legacy_offset = args.legacy_offset;
-            offset = args.offset;
-            weight = args.weight;
+            this->legacy_offset = args.legacy_offset;
+            this->offset = args.offset;
+            this->weight = args.weight;
         }
 
         inline double operator()(double speed) const {
-            double offset_speed = speed - offset;
+            double offset_speed = speed - this->offset;
             if (offset_speed <= 0) return 1;
-            if (legacy_offset) return 1 + fn.legacy_offset(offset_speed) * weight;
-            return 1 + fn(offset_speed) * weight;
+            if (this->legacy_offset) return 1 + this->fn.legacy_offset(offset_speed) * this->weight;
+            return 1 + this->fn(offset_speed) * this->weight;
         }
     };
 
@@ -48,11 +48,11 @@ namespace rawaccel {
     struct nonadditive_accel : accel_val_base<Func> {
 
         nonadditive_accel(const accel_args& args) : accel_val_base(args) {
-            if (args.weight > 0) weight = args.weight;
+            if (args.weight > 0) this->weight = args.weight;
         }
 
         inline double operator()(double speed) const {
-            return fn(speed) * weight;
+            return this->fn(speed) * this->weight;
         }
 
     };
