@@ -133,10 +133,10 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
     double offset = get("Offset").value_or(0);
 
     ra::accel_args args;
-
-    double accel_b = std::pow(accel * prescale, power - 1) / sens;
-    double accel_e = 1 / (power - 1);
-    args.accel = std::pow(accel_b, accel_e);
+    double powm1 = power - 1;
+    double rpowm1 = 1 / powm1;
+    double accel_b = std::pow(accel * prescale, powm1) / sens;
+    args.accel = std::pow(accel_b, rpowm1);
     args.exponent = power;
     args.legacy_offset = legacy;
     args.offset = offset;
@@ -147,9 +147,7 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
         args.scale_cap = cap_converted;
     }
     else {
-        double b = (cap_converted - 1) / power;
-        double e = 1 / (power - 1);
-        args.gain_cap = offset + (1 / accel) * std::pow(b, e);
+        args.gain_cap = offset + std::pow(cap_converted - 1, rpowm1) / args.accel;
     }
 
     return args;
