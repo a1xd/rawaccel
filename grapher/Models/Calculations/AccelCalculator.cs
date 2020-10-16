@@ -10,9 +10,10 @@ namespace grapher.Models.Calculations
     {
         #region Structs
 
-        public struct MagnitudeData
+        public struct SimulatedMouseInput
         {
-            public double magnitude;
+            public double velocity;
+            public double time;
             public int x;
             public int y;
         }
@@ -31,11 +32,11 @@ namespace grapher.Models.Calculations
 
         #region Properties
 
-        public ReadOnlyCollection<MagnitudeData> MagnitudesCombined { get; private set; }
+        public ReadOnlyCollection<SimulatedMouseInput> SimulatedInputCombined { get; private set; }
 
-        public ReadOnlyCollection<MagnitudeData> MagnitudesX { get; private set; }
+        public ReadOnlyCollection<SimulatedMouseInput> SimulatedInputX { get; private set; }
 
-        public ReadOnlyCollection<MagnitudeData> MagnitudesY { get; private set; }
+        public ReadOnlyCollection<SimulatedMouseInput> SimulatedInputY { get; private set; }
 
         public Field DPI { get; private set; }
 
@@ -57,7 +58,7 @@ namespace grapher.Models.Calculations
 
         #region Methods
 
-        public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<MagnitudeData> magnitudeData)
+        public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<SimulatedMouseInput> simulatedInputData)
         {
             double lastInputMagnitude = 0;
             double lastOutputMagnitude = 0;
@@ -71,19 +72,19 @@ namespace grapher.Models.Calculations
             int index = 0;
             int logIndex = 0;
 
-            foreach (var magnitudeDatum in magnitudeData)
+            foreach (var simulatedInputDatum in simulatedInputData)
             {
-                if (magnitudeDatum.magnitude <= 0)
+                if (simulatedInputDatum.velocity <= 0)
                 {
                     continue;
                 }
 
-                var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
+                var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
                 var outMagnitude = Magnitude(output.Item1, output.Item2);
 
-                if (!data.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.VelocityPoints.Add(magnitudeDatum.magnitude, outMagnitude);
+                    data.VelocityPoints.Add(simulatedInputDatum.velocity, outMagnitude);
                 }
                 else
                 {
@@ -97,7 +98,7 @@ namespace grapher.Models.Calculations
                     logIndex++;
                 }
 
-                var ratio = outMagnitude / magnitudeDatum.magnitude;
+                var ratio = outMagnitude / simulatedInputDatum.velocity;
                 
                 if (ratio > maxRatio)
                 {
@@ -109,7 +110,7 @@ namespace grapher.Models.Calculations
                     minRatio = ratio;
                 }
 
-                var inDiff = magnitudeDatum.magnitude - lastInputMagnitude;
+                var inDiff = simulatedInputDatum.velocity - lastInputMagnitude;
                 var outDiff = outMagnitude - lastOutputMagnitude;
                 var slope = inDiff > 0 ? outDiff / inDiff : starter;
 
@@ -123,17 +124,17 @@ namespace grapher.Models.Calculations
                     minSlope = slope;
                 }
 
-                if (!data.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.AccelPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.AccelPoints.Add(magnitudeDatum.magnitude, ratio);
+                    data.AccelPoints.Add(simulatedInputDatum.velocity, ratio);
                 }
 
-                if (!data.GainPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.GainPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.GainPoints.Add(magnitudeDatum.magnitude, slope);
+                    data.GainPoints.Add(simulatedInputDatum.velocity, slope);
                 }
 
-                lastInputMagnitude = magnitudeDatum.magnitude;
+                lastInputMagnitude = simulatedInputDatum.velocity;
                 lastOutputMagnitude = outMagnitude;
                 index += 1;
             }
@@ -153,7 +154,7 @@ namespace grapher.Models.Calculations
             data.MinGain = minSlope;
         }
 
-        public void CalculateCombinedDiffSens(AccelData data, ManagedAccel accel, DriverSettings settings, ICollection<MagnitudeData> magnitudeData)
+        public void CalculateCombinedDiffSens(AccelData data, ManagedAccel accel, DriverSettings settings, ICollection<SimulatedMouseInput> simulatedInputData)
         {
             double lastInputMagnitude = 0;
             double lastOutputMagnitudeX = 0;
@@ -171,22 +172,22 @@ namespace grapher.Models.Calculations
             int index = 0;
             int logIndex = 0;
 
-            foreach (var magnitudeDatum in magnitudeData)
+            foreach (var simulatedInputDatum in simulatedInputData)
             {
-                if (magnitudeDatum.magnitude <= 0)
+                if (simulatedInputDatum.velocity <= 0)
                 {
                     continue;
                 }
 
-                var output = accel.Accelerate(magnitudeDatum.x, magnitudeDatum.y, MeasurementTime);
+                var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
                 var outputWithoutSens = StripThisSens(output.Item1, output.Item2);
                 var magnitudeWithoutSens = Magnitude(outputWithoutSens.Item1, outputWithoutSens.Item2);
 
-                var ratio = magnitudeWithoutSens / magnitudeDatum.magnitude;
+                var ratio = magnitudeWithoutSens / simulatedInputDatum.velocity;
 
-                if (!data.Combined.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.Combined.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.Combined.VelocityPoints.Add(magnitudeDatum.magnitude, magnitudeWithoutSens);
+                    data.Combined.VelocityPoints.Add(simulatedInputDatum.velocity, magnitudeWithoutSens);
                 }
                 else
                 {
@@ -223,20 +224,20 @@ namespace grapher.Models.Calculations
                     minRatio = yRatio;
                 }
 
-                if (!data.X.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.X.AccelPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.X.AccelPoints.Add(magnitudeDatum.magnitude, xRatio);
+                    data.X.AccelPoints.Add(simulatedInputDatum.velocity, xRatio);
                 }
 
-                if (!data.Y.AccelPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.Y.AccelPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.Y.AccelPoints.Add(magnitudeDatum.magnitude, yRatio);
+                    data.Y.AccelPoints.Add(simulatedInputDatum.velocity, yRatio);
                 }
 
-                var xOut = xRatio * magnitudeDatum.magnitude;
-                var yOut = yRatio * magnitudeDatum.magnitude;
+                var xOut = xRatio * simulatedInputDatum.velocity;
+                var yOut = yRatio * simulatedInputDatum.velocity;
 
-                var inDiff = magnitudeDatum.magnitude - lastInputMagnitude;
+                var inDiff = simulatedInputDatum.velocity - lastInputMagnitude;
                 var xOutDiff = xOut - lastOutputMagnitudeX;
                 var yOutDiff = yOut - lastOutputMagnitudeY;
                 var xSlope = inDiff > 0 ? xOutDiff / inDiff : settings.sensitivity.x;
@@ -262,27 +263,27 @@ namespace grapher.Models.Calculations
                     minSlope = ySlope;
                 }
 
-                if (!data.X.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.X.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.X.VelocityPoints.Add(magnitudeDatum.magnitude, xOut);
+                    data.X.VelocityPoints.Add(simulatedInputDatum.velocity, xOut);
                 }
 
-                if (!data.Y.VelocityPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.Y.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.Y.VelocityPoints.Add(magnitudeDatum.magnitude, yOut);
+                    data.Y.VelocityPoints.Add(simulatedInputDatum.velocity, yOut);
                 }
 
-                if (!data.X.GainPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.X.GainPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.X.GainPoints.Add(magnitudeDatum.magnitude, xSlope);
+                    data.X.GainPoints.Add(simulatedInputDatum.velocity, xSlope);
                 }
 
-                if (!data.Y.GainPoints.ContainsKey(magnitudeDatum.magnitude))
+                if (!data.Y.GainPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
-                    data.Y.GainPoints.Add(magnitudeDatum.magnitude, ySlope);
+                    data.Y.GainPoints.Add(simulatedInputDatum.velocity, ySlope);
                 }
 
-                lastInputMagnitude = magnitudeDatum.magnitude;
+                lastInputMagnitude = simulatedInputDatum.velocity;
                 lastOutputMagnitudeX = xOut;
                 lastOutputMagnitudeY = yOut;
                 index += 1;
@@ -303,53 +304,56 @@ namespace grapher.Models.Calculations
             data.Combined.MinGain = minSlope;
         }
 
-        public ReadOnlyCollection<MagnitudeData> GetMagnitudes()
+        public ReadOnlyCollection<SimulatedMouseInput> GetSimulatedInput()
         {
-            var magnitudes = new List<MagnitudeData>();
+            var magnitudes = new List<SimulatedMouseInput>();
             for (int i = 0; i < CombinedMaxVelocity; i+=Increment)
             {
                 for (int j = 0; j <= i; j+=Increment)
                 {
-                    MagnitudeData magnitudeData;
-                    magnitudeData.magnitude = Magnitude(i, j);
-                    magnitudeData.x = i;
-                    magnitudeData.y = j;
-                    magnitudes.Add(magnitudeData);
+                    SimulatedMouseInput mouseInputData;
+                    mouseInputData.x = i;
+                    mouseInputData.y = j;
+                    mouseInputData.time = MeasurementTime;
+                    mouseInputData.velocity = Velocity(i, j, mouseInputData.time);
+                    magnitudes.Add(mouseInputData);
                 }
             }
 
-            magnitudes.Sort((m1, m2) => m1.magnitude.CompareTo(m2.magnitude));
+            magnitudes.Sort((m1, m2) => m1.velocity.CompareTo(m2.velocity));
 
             return magnitudes.AsReadOnly();
         }
 
-        public ReadOnlyCollection<MagnitudeData> GetMagnitudesX()
+        public ReadOnlyCollection<SimulatedMouseInput> GetSimulatInputX()
         {
-            var magnitudes = new List<MagnitudeData>();
+            var magnitudes = new List<SimulatedMouseInput>();
 
             for (int i = 0; i < XYMaxVelocity; i+=Increment)
             {
-                MagnitudeData magnitudeData;
-                magnitudeData.magnitude = i;
-                magnitudeData.x = i;
-                magnitudeData.y = 0;
-                magnitudes.Add(magnitudeData);
+                SimulatedMouseInput mouseInputData;
+                mouseInputData.x = i;
+                mouseInputData.y = 0;
+                mouseInputData.time = MeasurementTime;
+                mouseInputData.velocity = Velocity(i, 0, mouseInputData.time);
+                magnitudes.Add(mouseInputData);
             }
 
             return magnitudes.AsReadOnly();
         }
 
-        public ReadOnlyCollection<MagnitudeData> GetMagnitudesY()
+        public ReadOnlyCollection<SimulatedMouseInput> GetSimulatedInputY()
         {
-            var magnitudes = new List<MagnitudeData>();
+            var magnitudes = new List<SimulatedMouseInput>();
 
             for (int i = 0; i < XYMaxVelocity; i+=Increment)
             {
-                MagnitudeData magnitudeData;
-                magnitudeData.magnitude = i;
-                magnitudeData.x = 0;
-                magnitudeData.y = i;
-                magnitudes.Add(magnitudeData);
+                SimulatedMouseInput mouseInputData;
+                mouseInputData.x = 0;
+                mouseInputData.y = i;
+                mouseInputData.time = MeasurementTime;
+                mouseInputData.velocity = Velocity(0, i, mouseInputData.time);
+                magnitudes.Add(mouseInputData);
             }
 
             return magnitudes.AsReadOnly();
@@ -407,9 +411,9 @@ namespace grapher.Models.Calculations
             Increment = ratio > 1 ? (int) Math.Floor(ratio) : 1;
             MeasurementTime = Increment == 1 ? 1 / ratio : 1;
             XYMaxVelocity = CombinedMaxVelocity * Constants.XYToCombinedRatio;
-            MagnitudesCombined = GetMagnitudes();
-            MagnitudesX = GetMagnitudesX();
-            MagnitudesY = GetMagnitudesY();
+            SimulatedInputCombined = GetSimulatedInput();
+            SimulatedInputX = GetSimulatInputX();
+            SimulatedInputY = GetSimulatedInputY();
         }
 
         #endregion Methods
