@@ -76,8 +76,8 @@ namespace grapher.Models.Charts.ChartState
 
         public override void Calculate(ManagedAccel accel, DriverSettings settings)
         {
-            Calculator.Calculate(Data.X, accel, settings.sensitivity.x, Calculator.MagnitudesX);
-            Calculator.Calculate(Data.Y, accel, settings.sensitivity.y, Calculator.MagnitudesY);
+            Calculator.Calculate(Data.X, accel, settings.sensitivity.x, Calculator.SimulatedInputX);
+            Calculator.Calculate(Data.Y, accel, settings.sensitivity.y, Calculator.SimulatedInputY);
         }
     }
 }
