@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <optional>
+#include <sstream>
 #include <string>
 
 #include <rawaccel-settings.h>
@@ -44,12 +45,16 @@ static inline void trim(std::string& s) {
     rtrim(s);
 }
 
-bool yes() {
-    for (;;) {
-        wchar_t c = _getwch();
-        if (c == 'y') return true;
-        else if (c == 'n') return false;
-    }
+bool ask(std::string_view question) {
+    std::cout << question << " (Y/N)" << std::endl;
+    wchar_t ch;
+    bool yes;
+    do
+    {
+        ch = towupper(_getwch());
+        yes = ch == 'Y';
+    } while (ch != 'N' && !yes);
+    return yes;
 }
 
 using ia_settings_t = std::vector<std::pair<std::string, double>>;
@@ -128,10 +133,10 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
     double offset = get("Offset").value_or(0);
 
     ra::accel_args args;
-
-    double accel_b = std::pow(accel * prescale, power - 1) / sens;
-    double accel_e = 1 / (power - 1);
-    args.accel = std::pow(accel_b, accel_e);
+    double powm1 = power - 1;
+    double rpowm1 = 1 / powm1;
+    double accel_b = std::pow(accel * prescale, powm1) / sens;
+    args.accel = std::pow(accel_b, rpowm1);
     args.exponent = power;
     args.legacy_offset = legacy;
     args.offset = offset;
@@ -142,9 +147,7 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
         args.scale_cap = cap_converted;
     }
     else {
-        double b = (cap_converted - 1) / power;
-        double e = 1 / (power - 1);
-        args.gain_cap = offset + (1 / accel) * std::pow(b, e);
+        args.gain_cap = offset + std::pow(cap_converted - 1, rpowm1) / args.accel;
     }
 
     return args;
@@ -165,16 +168,16 @@ bool try_convert(const ia_settings_t& ia_settings) {
 
     switch (static_cast<IA_MODES_ENUM>(mode)) {
     case IA_QL: {
-        std::cout << "We recommend trying out our new cap and offset styles.\n"
-            "Use new cap and offset? (y|n)\n";
+        bool legacy = !ask("We recommend trying out our new cap and offset styles.\n"
+                           "Use new cap and offset?");
         ra_settings.modes.x = ra::accel_mode::classic;
-        ra_settings.argsv.x = convert_quake(ia_settings, !yes());
+        ra_settings.argsv.x = convert_quake(ia_settings, legacy);
         break;
     }
     case IA_NAT: {
-        std::cout << "Raw Accel offers a new mode that you might like more than Natural.\n"
-            "Wanna try it out now? (y|n)\n";
-        ra_settings.modes.x = yes() ? ra::accel_mode::naturalgain : ra::accel_mode::natural;
+        bool nat_gain = ask("Raw Accel offers a new mode that you might like more than Natural.\n"
+                            "Wanna try it out now?");
+        ra_settings.modes.x = nat_gain ? ra::accel_mode::naturalgain : ra::accel_mode::natural;
         ra_settings.argsv.x = convert_natural(ia_settings);
         break;
     }
@@ -223,29 +226,31 @@ int main()
     }
     
     if (opt_path) {
-        std::cout << "Found " << opt_path->filename() <<
-          "\n\nConvert and send settings generated from " << 
-            opt_path->filename() << "? (y|n)\n";
-        if (!yes()) return 0;
-        try {
-            if (!try_convert(parse_ia_settings(opt_path.value()))) 
-                std::cout << "Unable to convert settings.\n";
-        }
-        catch (DriverNotInstalledException^) {
-            Console::WriteLine("\nDriver is not installed.");
-        }
-        catch (Exception^ e) {
-            Console::WriteLine("\nError: " + e->ToString());
-        }
-        catch (const std::exception& e) {
-            std::cout << "Error: " << e.what() << '\n';
+        std::string path = opt_path->filename().generic_string();
+        std::stringstream ss;
+        ss << "Found " << path << 
+            "\n\nConvert and send settings generated from " << path << '?';
+        if (ask(ss.str())) {
+            try {
+                if (!try_convert(parse_ia_settings(opt_path.value())))
+                    std::cout << "Unable to convert settings.\n";
+            }
+            catch (DriverNotInstalledException^) {
+                Console::WriteLine("\nDriver is not installed.");
+            }
+            catch (Exception^ e) {
+                Console::WriteLine("\nError: " + e->ToString());
+            }
+            catch (const std::exception& e) {
+                std::cout << "Error: " << e.what() << '\n';
+            }
         }
     }
     else {
         std::cout << "Drop your InterAccel settings/profile into this directory.\n"
             "Then run this program to generate the equivalent Raw Accel settings.\n";
     }
-  
-    std::cout << "Press any key to close this window . . .\n";
+
+    std::cout << "Press any key to close this window . . ." << std::endl;
     _getwch();
 }
