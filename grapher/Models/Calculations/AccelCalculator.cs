@@ -80,7 +80,7 @@ namespace grapher.Models.Calculations
                 }
 
                 var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
-                var outMagnitude = Magnitude(output.Item1, output.Item2);
+                var outMagnitude = Velocity(output.Item1, output.Item2, simulatedInputDatum.time);
 
                 if (!data.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
                 {
@@ -181,7 +181,7 @@ namespace grapher.Models.Calculations
 
                 var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
                 var outputWithoutSens = StripThisSens(output.Item1, output.Item2);
-                var magnitudeWithoutSens = Magnitude(outputWithoutSens.Item1, outputWithoutSens.Item2);
+                var magnitudeWithoutSens = Velocity(outputWithoutSens.Item1, outputWithoutSens.Item2, simulatedInputDatum.time);
 
                 var ratio = magnitudeWithoutSens / simulatedInputDatum.velocity;
 
