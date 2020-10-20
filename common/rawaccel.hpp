@@ -200,11 +200,25 @@ namespace rawaccel {
             accel(args, mode, lut), gain_cap(args.gain_cap, accel), clamp(args.scale_cap)
         {}
 
-        inline double apply(double speed) const {
+        inline double apply(double speed, double output_speed_cap) const { 
+            double scale;
+
             if (gain_cap.should_apply(speed)) {
-                return clamp(gain_cap.apply(speed));
+                scale = gain_cap.apply(speed);
             }
-            else return clamp(accel.apply(speed));
+            else {
+                scale = accel.apply(speed);
+            }
+
+            scale = clamp(scale);
+
+            double output_speed = scale * speed;
+
+            if (output_speed_cap > 0 && output_speed > output_speed_cap) {
+                scale = output_speed_cap / speed;
+            }
+
+            return scale;
         }
 
         accelerator() = default;
@@ -216,6 +230,7 @@ namespace rawaccel {
         bool apply_accel = false;
         bool combine_magnitudes = true;
         rotator rotate;
+        double output_speed_cap = 0;
         vec2<accelerator> accels;
         vec2d sensitivity = { 1, 1 };
 
@@ -236,6 +251,7 @@ namespace rawaccel {
                 return;
             }
 
+            output_speed_cap = maxsd(args.speed_cap, 0);
             accels.x = accelerator(args.argsv.x, args.modes.x, luts.x);
             accels.y = accelerator(args.argsv.y, args.modes.y, luts.y);
             apply_accel = true;
@@ -259,13 +275,13 @@ namespace rawaccel {
                 if (combine_magnitudes) {
                     double mag = sqrtsd(movement.x * movement.x + movement.y * movement.y);
                     double speed = mag / time;
-                    double scale = accels.x.apply(speed);
+                    double scale = accels.x.apply(speed, output_speed_cap);
                     movement.x *= scale;
                     movement.y *= scale;
                 }
                 else {
-                    movement.x *= accels.x.apply(fabs(movement.x) / time);
-                    movement.y *= accels.y.apply(fabs(movement.y) / time);
+                    movement.x *= accels.x.apply(fabs(movement.x) / time, output_speed_cap);
+                    movement.y *= accels.y.apply(fabs(movement.y) / time, output_speed_cap);
                 }
             }
         }

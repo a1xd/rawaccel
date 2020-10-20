@@ -120,7 +120,8 @@ namespace grapher
                 combineMagnitudes = ApplyOptions.IsWhole,
                 modes = ApplyOptions.GetModes(),
                 args = ApplyOptions.GetArgs(),
-                minimumTime = driverSettings.minimumTime
+                minimumTime = driverSettings.minimumTime,
+                speedCap = driverSettings.speedCap
             };
 
             WriteButtonDelay();

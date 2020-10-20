@@ -63,6 +63,9 @@ public ref struct DriverSettings
     [JsonProperty("Accel parameters")]
     Vec2<AccelArgs> args;
 
+    [JsonProperty("Output Speed Cap", Required = Required::Default)]
+    double speedCap;
+
     [JsonProperty("Sensitivity multipliers")]
     Vec2<double> sensitivity;
     
