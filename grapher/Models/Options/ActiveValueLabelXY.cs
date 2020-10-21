@@ -143,7 +143,8 @@ namespace grapher.Models.Options
         private void Align (int width)
         {
             FullWidth = width;
-            ShortenedWidth = FullWidth / 2;
+            // ShortenedWidth = FullWidth / 2;
+            ShortenedWidth = FullWidth;
 
             SetYLeft();
             Y.Width = ShortenedWidth;
