@@ -117,13 +117,18 @@ namespace grapher.Models.Serialized
 
         public bool IsDefaultEquivalent()
         {
-            bool wholeOrNoY = AccelerationSettings.combineMagnitudes ||
-                AccelerationSettings.modes.y == AccelMode.noaccel;
+            return IsDefaultEquivalent(AccelerationSettings);
+        }
 
-            return AccelerationSettings.sensitivity.x == 1 &&
-                AccelerationSettings.sensitivity.y == 1 &&
-                AccelerationSettings.rotation == 0 &&
-                AccelerationSettings.modes.x == AccelMode.noaccel &&
+        public static bool IsDefaultEquivalent(DriverSettings accelSettings)
+        {
+            bool wholeOrNoY = accelSettings.combineMagnitudes ||
+                accelSettings.modes.y == AccelMode.noaccel;
+
+            return accelSettings.sensitivity.x == 1 &&
+                accelSettings.sensitivity.y == 1 &&
+                accelSettings.rotation == 0 &&
+                accelSettings.modes.x == AccelMode.noaccel &&
                 wholeOrNoY;
         }
 

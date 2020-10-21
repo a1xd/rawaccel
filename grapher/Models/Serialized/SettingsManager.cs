@@ -14,12 +14,14 @@ namespace grapher.Models.Serialized
             ManagedAccel activeAccel,
             Field dpiField,
             Field pollRateField,
+            ToolStripMenuItem autoWrite,
             ToolStripMenuItem showLastMouseMove,
             ToolStripMenuItem showVelocityAndGain)
         {
             ActiveAccel = activeAccel;
             DpiField = dpiField;
             PollRateField = pollRateField;
+            AutoWriteMenuItem = autoWrite;
             ShowLastMouseMoveMenuItem = showLastMouseMove;
             ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
         }
@@ -35,6 +37,8 @@ namespace grapher.Models.Serialized
         private Field DpiField { get; set; }
 
         private Field PollRateField { get; set; }
+
+        private ToolStripMenuItem AutoWriteMenuItem { get; set; }
 
         private ToolStripMenuItem ShowLastMouseMoveMenuItem { get; set; }
 
@@ -92,12 +96,7 @@ namespace grapher.Models.Serialized
             PollRateField.SetToEntered(RawAccelSettings.GUISettings.PollRate);
             ShowLastMouseMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowLastMouseMove;
             ShowVelocityAndGainMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowVelocityAndGain;
-        }
-
-        public void UpdateActiveAccelFromFileSettings(DriverSettings settings)
-        {
-            TryUpdateAccel(settings);
-            UpdateFieldsFromGUISettings();
+            AutoWriteMenuItem.Checked = RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup;
         }
 
         public SettingsErrors TryUpdateAccel(DriverSettings settings)
@@ -126,11 +125,13 @@ namespace grapher.Models.Serialized
                 DPI = (int)DpiField.Data,
                 PollRate = (int)PollRateField.Data,
                 ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
-                ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked
+                ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
+                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked
             };
         }
 
-        public void Startup()
+        // Returns true when file settings are active
+        public bool Startup()
         {
             if (RawAccelSettings.Exists())
             {
@@ -138,8 +139,11 @@ namespace grapher.Models.Serialized
                 {
                     RawAccelSettings = RawAccelSettings.Load(() => MakeGUISettingsFromFields());
                     UpdateFieldsFromGUISettings();
-                    UpdateActiveAccelFromFileSettings(RawAccelSettings.AccelerationSettings);
-                    return;
+                    if (RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup)
+                    {
+                        TryUpdateAccel(RawAccelSettings.AccelerationSettings);
+                    }
+                    return RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup;
                 }
                 catch (JsonException e)
                 {
@@ -151,6 +155,7 @@ namespace grapher.Models.Serialized
                 DriverInterop.GetActiveSettings(),
                 MakeGUISettingsFromFields());
             RawAccelSettings.Save();
+            return true;
         }
 
         #endregion Methods

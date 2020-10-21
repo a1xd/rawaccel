@@ -33,13 +33,8 @@ namespace grapher
             ToggleButton = (CheckBox)toggleButton;
             ScaleMenuItem = scaleMenuItem;
             Settings = settings;
-            Settings.Startup();
-            RefreshOnRead(Settings.RawAccelSettings.AccelerationSettings);
-            AccelForm.DoResize();
-
             DefaultButtonFont = WriteButton.Font;
             SmallButtonFont = new Font(WriteButton.Font.Name, WriteButton.Font.Size * Constants.SmallButtonSizeFactor);
-
             MouseWatcher = mouseWatcher;
 
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
@@ -50,9 +45,30 @@ namespace grapher
             ButtonTimerInterval = Convert.ToInt32(DriverInterop.WriteDelayMs);
             ButtonTimer = new Timer();
             ButtonTimer.Tick += new System.EventHandler(OnButtonTimerTick);
-            SetupButtons();
 
             ChartRefresh = SetupChartTimer();
+
+            bool settingsActive = Settings.Startup();
+            SettingsNotDefault = !Settings.RawAccelSettings.IsDefaultEquivalent();
+
+            if (settingsActive)
+            {
+                LastToggleChecked = SettingsNotDefault;
+                ToggleButton.Enabled = LastToggleChecked;
+                RefreshOnRead(Settings.RawAccelSettings.AccelerationSettings);
+            }
+            else
+            {
+                DriverSettings active = DriverInterop.GetActiveSettings();
+                bool activeNotDefault = !RawAccelSettings.IsDefaultEquivalent(active);
+
+                LastToggleChecked = activeNotDefault;
+                ToggleButton.Enabled = SettingsNotDefault || activeNotDefault;
+                RefreshOnRead(active);
+            }
+
+            SetupButtons();
+            AccelForm.DoResize();
         }
 
         #endregion Constructors
@@ -124,11 +140,12 @@ namespace grapher
                 speedCap = driverSettings.speedCap
             };
 
-            WriteButtonDelay();
+            ButtonDelay(WriteButton);
             SettingsErrors errors = Settings.TryUpdateActiveSettings(settings);
             if (errors.Empty())
             {
-                RefreshToggleStateFromNewSettings();
+                SettingsNotDefault = !Settings.RawAccelSettings.IsDefaultEquivalent();
+                LastToggleChecked = SettingsNotDefault;
                 RefreshOnRead(Settings.RawAccelSettings.AccelerationSettings);
             }
             else
@@ -177,32 +194,21 @@ namespace grapher
             ToggleButton.Size = WriteButton.Size;
             ToggleButton.Top = WriteButton.Top;
 
-            RefreshToggleStateFromNewSettings();
-            SetToggleButtonDefault();
-            SetWriteButtonDefault();
+            SetButtonDefaults();
         }
 
-        private void RefreshToggleStateFromNewSettings()
+        private void SetButtonDefaults()
         {
-            SettingsNotDefault = !Settings.RawAccelSettings.IsDefaultEquivalent();
-            LastToggleChecked = SettingsNotDefault;
-        }
+            ToggleButton.Checked = LastToggleChecked;
 
-        private void SetWriteButtonDefault()
-        {
+            ToggleButton.Font = DefaultButtonFont;
+            ToggleButton.Text = ToggleButton.Checked ? "Enabled" : "Disabled";
+            ToggleButton.Update();
+
             WriteButton.Font = DefaultButtonFont;
             WriteButton.Text = Constants.WriteButtonDefaultText;
             WriteButton.Enabled = ToggleButton.Checked || !ToggleButton.Enabled;
             WriteButton.Update();
-        }
-
-        private void SetToggleButtonDefault()
-        {
-            ToggleButton.Checked = LastToggleChecked;
-            ToggleButton.Enabled = SettingsNotDefault;
-            ToggleButton.Font = DefaultButtonFont;
-            ToggleButton.Text = ToggleButton.Checked ? "Enabled" : "Disabled";
-            ToggleButton.Update();
         }
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)
@@ -221,7 +227,8 @@ namespace grapher
                 Settings.RawAccelSettings.AccelerationSettings :
                 DriverInterop.DefaultSettings;
 
-            ToggleButtonDelay();
+            LastToggleChecked = ToggleButton.Checked;
+            ButtonDelay(ToggleButton);
 
             SettingsManager.SendToDriver(settings);
             Settings.ActiveAccel.UpdateFromSettings(settings);
@@ -231,8 +238,8 @@ namespace grapher
         private void OnButtonTimerTick(object sender, EventArgs e)
         {
             ButtonTimer.Stop();
-            SetToggleButtonDefault();
-            SetWriteButtonDefault();
+            ToggleButton.Enabled = SettingsNotDefault;
+            SetButtonDefaults();
         }
 
         private void StartButtonTimer()
@@ -241,33 +248,17 @@ namespace grapher
             ButtonTimer.Start();
         }
 
-        private void WriteButtonDelay()
+        private void ButtonDelay(ButtonBase btn)
         {
-            WriteButton.Font = SmallButtonFont;
-            WriteButton.Text = $"{Constants.ButtonDelayText} : {ButtonTimerInterval} ms";
-            WriteButton.Enabled = false;
-            WriteButton.Update();
-
-            if (ToggleButton.Enabled)
-            {
-                LastToggleChecked = ToggleButton.Checked;
-                ToggleButton.Checked = false;
-                ToggleButton.Enabled = false;
-                ToggleButton.Update();
-            }
-            StartButtonTimer();
-        }
-
-        private void ToggleButtonDelay()
-        { 
-            LastToggleChecked = ToggleButton.Checked;
             ToggleButton.Checked = false;
-            ToggleButton.Enabled = false;
-            ToggleButton.Font = SmallButtonFont;
-            ToggleButton.Text = $"{Constants.ButtonDelayText} : {ButtonTimerInterval} ms";
-            ToggleButton.Update();
 
+            ToggleButton.Enabled = false;
             WriteButton.Enabled = false;
+
+            btn.Font = SmallButtonFont;
+            btn.Text = $"{Constants.ButtonDelayText} : {ButtonTimerInterval} ms";
+
+            ToggleButton.Update();
             WriteButton.Update();
 
             StartButtonTimer();
