@@ -20,7 +20,6 @@ namespace rawaccel {
         bool combine_mags = true;
         vec2<accel_mode> modes = { accel_mode::noaccel, accel_mode::noaccel };
         vec2<accel_args> argsv;
-        double speed_cap = 0;
         vec2d sens = { 1, 1 };
         milliseconds time_min = DEFAULT_TIME_MIN;
     };

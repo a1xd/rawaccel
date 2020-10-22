@@ -125,6 +125,10 @@ namespace grapher
         {
             var driverSettings = Settings.RawAccelSettings.AccelerationSettings;
 
+            var newArgs = ApplyOptions.GetArgs();
+            newArgs.x.speedCap = driverSettings.args.x.speedCap;
+            newArgs.y.speedCap = driverSettings.args.y.speedCap;
+
             var settings = new DriverSettings
             {
                 rotation = ApplyOptions.Rotation.Field.Data,
@@ -135,9 +139,8 @@ namespace grapher
                 },
                 combineMagnitudes = ApplyOptions.IsWhole,
                 modes = ApplyOptions.GetModes(),
-                args = ApplyOptions.GetArgs(),
-                minimumTime = driverSettings.minimumTime,
-                speedCap = driverSettings.speedCap
+                args = newArgs,
+                minimumTime = driverSettings.minimumTime
             };
 
             ButtonDelay(WriteButton);
