@@ -33,6 +33,8 @@ public value struct AccelArgs
     [JsonProperty("legacyCap")]
     double scaleCap;
     double gainCap;
+    [JsonProperty(Required = Required::Default)]
+    double speedCap;
 };
 
 generic <typename T>

@@ -4,10 +4,12 @@
 #include "accel-base.hpp"
 
 namespace rawaccel {
+
     using milliseconds = double;
 
+    inline constexpr int MAX_POLL_RATE_KHZ = 8;
+    inline constexpr milliseconds DEFAULT_TIME_MIN = 1.0 / MAX_POLL_RATE_KHZ * 0.8;
     inline constexpr milliseconds WRITE_DELAY = 1000;
-    inline constexpr milliseconds DEFAULT_TIME_MIN = 0.4;
 
     enum class accel_mode {
         linear, classic, natural, naturalgain, power, motivity, noaccel

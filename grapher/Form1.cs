@@ -59,6 +59,7 @@ namespace grapher
                 legacyCapToolStripMenuItem,
                 gainOffsetToolStripMenuItem,
                 legacyOffsetToolStripMenuItem,
+                AutoWriteMenuItem,
                 ScaleMenuItem,
                 DPITextBox,
                 PollRateTextBox,

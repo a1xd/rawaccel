@@ -32,6 +32,7 @@ namespace grapher.Models
             ToolStripMenuItem legacyCapToolStripMenuItem,
             ToolStripMenuItem gainOffsetToolStripMenuItem,
             ToolStripMenuItem legacyOffsetToolStripMenuItem,
+            ToolStripMenuItem autoWriteMenuItem,
             ToolStripMenuItem scaleMenuItem,
             ToolStripTextBox dpiTextBox,
             ToolStripTextBox pollRateTextBox,
@@ -326,6 +327,7 @@ namespace grapher.Models
                 activeAccel,
                 accelCalculator.DPI,
                 accelCalculator.PollRate,
+                autoWriteMenuItem,
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem);
 

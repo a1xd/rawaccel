@@ -195,16 +195,31 @@ namespace rawaccel {
         accel_variant accel;
         velocity_gain_cap gain_cap;
         accel_scale_clamp clamp;
+        double output_speed_cap = 0;
 
         accelerator(const accel_args& args, accel_mode mode, si_pair* lut = nullptr) :
             accel(args, mode, lut), gain_cap(args.gain_cap, accel), clamp(args.scale_cap)
-        {}
+        {
+            output_speed_cap = maxsd(args.speed_cap, 0);
+        }
 
-        inline double apply(double speed) const {
+        inline double apply(double speed) const { 
+            double scale;
+
             if (gain_cap.should_apply(speed)) {
-                return clamp(gain_cap.apply(speed));
+                scale = gain_cap.apply(speed);
             }
-            else return clamp(accel.apply(speed));
+            else {
+                scale = accel.apply(speed);
+            }
+
+            scale = clamp(scale);
+
+            if (output_speed_cap > 0 && (scale * speed) > output_speed_cap) {
+                scale = output_speed_cap / speed;
+            }
+
+            return scale;
         }
 
         accelerator() = default;

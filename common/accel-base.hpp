@@ -14,6 +14,7 @@ namespace rawaccel {
         double weight = 1;
         double scale_cap = 0;
         double gain_cap = 0;
+        double speed_cap = 0;
     };
 
     template <typename Func>

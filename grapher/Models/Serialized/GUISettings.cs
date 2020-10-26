@@ -4,6 +4,7 @@ using System;
 namespace grapher.Models.Serialized
 {
     [Serializable]
+    [JsonObject(ItemRequired = Required.Always)]
     public class GUISettings
     {
         #region Constructors
@@ -27,6 +28,9 @@ namespace grapher.Models.Serialized
         [JsonProperty(Order = 4)]
         public bool ShowVelocityAndGain { get; set; }
 
+        [JsonProperty(Order = 5)]
+        public bool AutoWriteToDriverOnStartup { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -48,7 +52,8 @@ namespace grapher.Models.Serialized
             return DPI == other.DPI &&
                 PollRate == other.PollRate &&
                 ShowLastMouseMove == other.ShowLastMouseMove &&
-                ShowVelocityAndGain == other.ShowVelocityAndGain;
+                ShowVelocityAndGain == other.ShowVelocityAndGain &&
+                AutoWriteToDriverOnStartup == other.AutoWriteToDriverOnStartup;
         }
 
         public override int GetHashCode()
@@ -56,7 +61,8 @@ namespace grapher.Models.Serialized
             return DPI.GetHashCode() ^
                 PollRate.GetHashCode() ^
                 ShowLastMouseMove.GetHashCode() ^
-                ShowVelocityAndGain.GetHashCode();
+                ShowVelocityAndGain.GetHashCode() ^
+                AutoWriteToDriverOnStartup.GetHashCode();
         }
 
         #endregion Methods
