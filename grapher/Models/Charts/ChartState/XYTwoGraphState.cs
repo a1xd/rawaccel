@@ -6,8 +6,6 @@ namespace grapher.Models.Charts.ChartState
 {
     public class XYTwoGraphState : ChartState
     {
-        private DriverSettings _settings;
-
         public XYTwoGraphState(
             ChartXY sensitivityChart,
             ChartXY velocityChart,
@@ -22,23 +20,7 @@ namespace grapher.Models.Charts.ChartState
                   accelCalculator)
         { }
 
-        public override DriverSettings Settings
-        {
-            get { return _settings; }
-            set
-            {
-                _settings = value;
-                ShouldStripSens = AccelCalculator.ShouldStripSens(ref value);
-                if (ShouldStripSens)
-                {
-                    Sensitivity = AccelCalculator.GetSens(ref value);
-                }
-            }
-        }
-
-        private bool ShouldStripSens { get; set; }
-
-        private (double, double) Sensitivity { get; set; }
+        public override DriverSettings Settings { get; set; }
 
         public override void Activate()
         {
@@ -53,15 +35,7 @@ namespace grapher.Models.Charts.ChartState
 
         public override void MakeDots(int x, int y, double timeInMs)
         {
-            double xCalc = x; 
-            double yCalc = y;
-
-            if (ShouldStripSens)
-            {
-                (xCalc, yCalc) = AccelCalculator.StripSens(xCalc, yCalc, Sensitivity.Item1, Sensitivity.Item2);
-            }
-
-            Data.CalculateDotsXY((int)Math.Round(xCalc), (int)Math.Round(yCalc), timeInMs);
+            Data.CalculateDotsXY(x, y, timeInMs);
         }
 
         public override void Bind()
