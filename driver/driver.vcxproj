@@ -101,7 +101,7 @@
       <ExceptionHandling>
       </ExceptionHandling>
       <AdditionalOptions>/Kernel %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories);$(SolutionDir)\external;$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
       <RuntimeLibrary>
       </RuntimeLibrary>
