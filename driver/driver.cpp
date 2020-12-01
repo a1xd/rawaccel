@@ -404,7 +404,7 @@ Error:
         WdfObjectDelete(controlDevice);
     }
 
-    DebugPrint(("CreateControlDevice failed\n", status));
+    DebugPrint(("CreateControlDevice failed with status code 0x%x\n", status));
 }
 
 
