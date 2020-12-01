@@ -5,18 +5,16 @@
 #define NOMINMAX
 #include <Windows.h>
 
+#include "rawaccel-io-def.h"
 #include "rawaccel-settings.h"
 #include "rawaccel-error.hpp"
-
-#define RA_READ CTL_CODE(0x8888, 0x888, METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
-#define RA_WRITE CTL_CODE(0x8888, 0x889, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 #pragma warning(push)
 #pragma warning(disable:4245) // int -> DWORD conversion while passing CTL_CODE
 
 namespace rawaccel {
 
-	settings read() {
+	void io_control(DWORD code, void* in, DWORD in_size, void* out, DWORD out_size) {
 		HANDLE ra_handle = INVALID_HANDLE_VALUE;
 
 		ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
@@ -25,18 +23,17 @@ namespace rawaccel {
 			throw install_error();
 		}
 
-		settings args;
 		DWORD dummy;
 
 		BOOL success = DeviceIoControl(
 			ra_handle,
-			RA_READ,
-			NULL,					  // input buffer
-			0,                        // input buffer size
-			&args,                    // output buffer
-			sizeof(settings),         // output buffer size
-			&dummy,                   // bytes returned
-			NULL                      // overlapped structure
+			code,
+			in,
+			in_size,
+			out,
+			out_size,
+			&dummy,  // bytes returned
+			NULL     // overlapped structure
 		);
 
 		CloseHandle(ra_handle);
@@ -44,38 +41,18 @@ namespace rawaccel {
 		if (!success) {
 			throw std::system_error(GetLastError(), std::system_category(), "DeviceIoControl failed");
 		}
+	}
 
+	settings read() {
+		settings args;
+		io_control(RA_READ, NULL, 0, &args, sizeof(settings));
 		return args;
 	}
 
 
 	void write(const settings& args) {
-		HANDLE ra_handle = INVALID_HANDLE_VALUE;
-
-		ra_handle = CreateFileW(L"\\\\.\\rawaccel", 0, 0, 0, OPEN_EXISTING, 0, 0);
-
-		if (ra_handle == INVALID_HANDLE_VALUE) {
-			throw install_error();
-		}
-
-		DWORD dummy;
-
-		BOOL success = DeviceIoControl(
-			ra_handle,
-			RA_WRITE,
-			const_cast<settings*>(&args),      // input buffer
-			sizeof(settings),                  // input buffer size
-			NULL,                              // output buffer
-			0,                                 // output buffer size
-			&dummy,                            // bytes returned
-			NULL                               // overlapped structure
-		);
-
-		CloseHandle(ra_handle);
-
-		if (!success) {
-			throw std::system_error(GetLastError(), std::system_category(), "DeviceIoControl failed");
-		}
+		auto in_ptr = const_cast<settings*>(&args);
+		io_control(RA_WRITE, in_ptr, sizeof(settings), NULL, 0);
 	}
 
 }

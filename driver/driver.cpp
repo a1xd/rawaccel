@@ -1,9 +1,7 @@
 #include <rawaccel.hpp>
+#include <rawaccel-io-def.h>
 
 #include "driver.h"
-
-#define RA_READ CTL_CODE(0x8888, 0x888, METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
-#define RA_WRITE CTL_CODE(0x8888, 0x889, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -144,69 +142,60 @@ Return Value:
 {
     NTSTATUS status;
     void* buffer;
-    size_t size;
 
     UNREFERENCED_PARAMETER(Queue);
-    
-
+    UNREFERENCED_PARAMETER(OutputBufferLength);
+    UNREFERENCED_PARAMETER(InputBufferLength);
     PAGED_CODE();
 
     DebugPrint(("Ioctl received into filter control object.\n"));
 
-    if (IoControlCode == RA_WRITE && InputBufferLength == sizeof(ra::settings)) {
-        LARGE_INTEGER interval;
-        interval.QuadPart = static_cast<LONGLONG>(ra::WRITE_DELAY) * -10000;
-        KeDelayExecutionThread(KernelMode, FALSE, &interval);
-
-        status = WdfRequestRetrieveInputBuffer(
-            Request,
-            sizeof(ra::settings),
-            &buffer,
-            &size
-        );
-
-        if (!NT_SUCCESS(status)) {
-            DebugPrint(("RetrieveInputBuffer failed: 0x%x\n", status));
-            // status maps to win32 error code 1359: ERROR_INTERNAL_ERROR
-            WdfRequestComplete(Request, STATUS_MESSAGE_LOST);
-            return;
-        }
-
-        ra::settings new_settings = *reinterpret_cast<ra::settings*>(buffer);
-
-        if (new_settings.time_min <= 0 || _isnanf(static_cast<float>(new_settings.time_min))) {
-            new_settings.time_min = ra::settings{}.time_min;
-        }
-
-        global.args = new_settings;
-        global.modifier = { global.args, global.lookups };
-
-        WdfRequestComplete(Request, STATUS_SUCCESS);
-    }
-    else if (IoControlCode == RA_READ && OutputBufferLength == sizeof(ra::settings)) {
+    switch (IoControlCode) {
+    case RA_READ:
         status = WdfRequestRetrieveOutputBuffer(
             Request,
             sizeof(ra::settings),
             &buffer,
-            &size
+            NULL
         );
-
         if (!NT_SUCCESS(status)) {
             DebugPrint(("RetrieveOutputBuffer failed: 0x%x\n", status));
-            // status maps to win32 error code 1359: ERROR_INTERNAL_ERROR
-            WdfRequestComplete(Request, STATUS_MESSAGE_LOST);
-            return;
         }
+        else {
+            *reinterpret_cast<ra::settings*>(buffer) = global.args;
+        }
+        break;
+    case RA_WRITE:
+        status = WdfRequestRetrieveInputBuffer(
+            Request,
+            sizeof(ra::settings),
+            &buffer,
+            NULL
+        );
+        if (!NT_SUCCESS(status)) {
+            DebugPrint(("RetrieveInputBuffer failed: 0x%x\n", status));
+        }
+        else {
+            LARGE_INTEGER interval;
+            interval.QuadPart = static_cast<LONGLONG>(ra::WRITE_DELAY) * -10000;
+            KeDelayExecutionThread(KernelMode, FALSE, &interval);
 
-        *reinterpret_cast<ra::settings*>(buffer) = global.args;
+            ra::settings new_settings = *reinterpret_cast<ra::settings*>(buffer);
 
-        WdfRequestComplete(Request, STATUS_SUCCESS);
+            if (new_settings.time_min <= 0 || _isnanf(static_cast<float>(new_settings.time_min))) {
+                new_settings.time_min = ra::settings{}.time_min;
+            }
+
+            global.args = new_settings;
+            global.modifier = { global.args, global.lookups };
+        }
+        break;
+    default:
+        status = STATUS_INVALID_DEVICE_REQUEST;
+        break;
     }
-    else {
-        DebugPrint(("Received unknown request: in %uB, out %uB\n", InputBufferLength, OutputBufferLength));
-        // status maps to win32 error code 1784: ERROR_INVALID_USER_BUFFER
-        WdfRequestComplete(Request, STATUS_INVALID_BUFFER_SIZE);
-    }
+
+    WdfRequestComplete(Request, status);
 
 }
 #pragma warning(pop) // enable 28118 again
