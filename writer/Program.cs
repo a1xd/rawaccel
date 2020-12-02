@@ -1,15 +1,21 @@
-﻿using Microsoft.CSharp.RuntimeBinder;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace writer
 {
 
     class Program
     {
+
+        static void Show(string msg)
+        {
+            MessageBox.Show(msg, "Raw Accel writer");
+        }
+
         static void Send(JToken settingsToken)
         {
             var settings = settingsToken.ToObject<DriverSettings>();
@@ -21,7 +27,7 @@ namespace writer
                 return;
             }
 
-            Console.Write("Bad settings: \n\n{0}", errors);
+            Show($"Bad settings:\n\n{errors}");
         }
 
         static void Main(string[] args)
@@ -32,19 +38,19 @@ namespace writer
             }
             catch (VersionException e)
             {
-                Console.WriteLine(e.Message);
+                Show(e.Message);
                 return;
             }
 
-            if (args.Length != 1 || args[0].Equals("help"))
+            if (args.Length != 1)
             {
-                Console.WriteLine("USAGE: {0} <file>", System.AppDomain.CurrentDomain.FriendlyName);
+                Show($"Usage: {System.AppDomain.CurrentDomain.FriendlyName} <settings file path>");
                 return;
             }
 
             if (!File.Exists(args[0]))
             {
-                Console.WriteLine("Settings file not found at {0}", args[0]);
+                Show($"Settings file not found at {args[0]}");
                 return;
             }
 
@@ -62,11 +68,11 @@ namespace writer
             }
             catch (JsonException e)
             {
-                Console.WriteLine("Settings invalid:\n{0}", e.Message);
+                Show($"Settings invalid:\n\n{e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error: {0}", e);
+                Show($"Error:\n\n{e}");
             }
         }
     }
