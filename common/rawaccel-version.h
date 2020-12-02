@@ -4,7 +4,7 @@
 #define RA_VER_MINOR 3
 #define RA_VER_PATCH 0
 
-#define RA_MIN_OS "Win10"
+#define RA_MIN_OS "Win7"
 
 #define M_STR_HELPER(x) #x
 #define M_STR(x) M_STR_HELPER(x)

@@ -1,9 +1,8 @@
-
-
 #include <iostream>
 
 #include <utility-install.hpp>
 #include <VersionHelpers.h>
+
 void add_service(const fs::path& target) {
     SC_HANDLE schSCManager = OpenSCManager(
         NULL,                    // local computer
@@ -43,8 +42,8 @@ void add_service(const fs::path& target) {
 
 int main() {
     try {
-        if (!IsWindows10OrGreater()) {
-            throw std::runtime_error("OS not supported, you need at least Windows 10");
+        if (!IsWindows7OrGreater()) {
+            throw std::runtime_error("OS not supported, you need at least Windows 7");
         }
         fs::path source = fs::path(L"driver") / DRIVER_FILE_NAME;
 
