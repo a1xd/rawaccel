@@ -153,7 +153,7 @@ namespace grapher
             }
             else
             {
-                throw new Exception($"Bad arguments: \n {SettingsManager.ErrorStringFrom(errors)}");
+                throw new Exception($"Bad arguments:\n\n{errors}");
             }
         }
 

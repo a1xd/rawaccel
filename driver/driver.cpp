@@ -1,5 +1,6 @@
 #include <rawaccel.hpp>
 #include <rawaccel-io-def.h>
+#include <rawaccel-version.h>
 
 #include "driver.h"
 
@@ -188,6 +189,20 @@ Return Value:
 
             global.args = new_settings;
             global.modifier = { global.args, global.lookups };
+        }
+        break;
+    case RA_GET_VERSION:
+        status = WdfRequestRetrieveOutputBuffer(
+            Request,
+            sizeof(ra::version_t),
+            &buffer,
+            NULL
+        );
+        if (!NT_SUCCESS(status)) {
+            DebugPrint(("RetrieveOutputBuffer failed: 0x%x\n", status));
+        }
+        else {
+            *reinterpret_cast<ra::version_t*>(buffer) = { RA_VER_MAJOR, RA_VER_MINOR, RA_VER_PATCH };
         }
         break;
     default:

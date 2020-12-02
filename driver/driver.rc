@@ -1,0 +1,47 @@
+﻿//
+// Include the necessary resources
+//
+#include <winver.h>
+#include <ntdef.h>
+
+#include <rawaccel-version.h>
+
+#ifdef RC_INVOKED
+
+//
+// Set up debug information
+//
+#if DBG
+#define VER_DBG VS_FF_DEBUG
+#else
+#define VER_DBG 0
+#endif
+
+// ------- version info -------------------------------------------------------
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION             RA_VER_MAJOR, RA_VER_MINOR, RA_VER_PATCH
+PRODUCTVERSION          RA_VER_MAJOR, RA_VER_MINOR, RA_VER_PATCH
+FILEFLAGSMASK           VS_FFI_FILEFLAGSMASK
+FILEFLAGS               VER_DBG
+FILEOS                  VOS_NT
+FILETYPE                VFT_DRV
+FILESUBTYPE             VFT2_DRV_SYSTEM
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904b0"
+		BEGIN
+			VALUE "FileDescription", "mouse acceleration filter driver"
+			VALUE "FileVersion", RA_VER_STRING
+			VALUE "OriginalFilename", "rawaccel.sys"
+			VALUE "ProductName", "Raw Accel"
+			VALUE "ProductVersion", RA_VER_STRING
+		END
+	END
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x0409, 1200
+	END
+END
+#endif

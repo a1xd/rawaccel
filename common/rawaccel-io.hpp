@@ -7,6 +7,7 @@
 
 #include "rawaccel-io-def.h"
 #include "rawaccel-settings.h"
+#include "rawaccel-version.h"
 #include "rawaccel-error.hpp"
 
 #pragma warning(push)
@@ -53,6 +54,12 @@ namespace rawaccel {
 	void write(const settings& args) {
 		auto in_ptr = const_cast<settings*>(&args);
 		io_control(RA_WRITE, in_ptr, sizeof(settings), NULL, 0);
+	}
+
+	version_t get_version() {
+		version_t ver;
+		io_control(RA_GET_VERSION, NULL, 0, &ver, sizeof(version_t));
+		return ver;
 	}
 
 }

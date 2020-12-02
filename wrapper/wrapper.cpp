@@ -3,11 +3,15 @@
 #include <type_traits>
 
 #include <rawaccel.hpp>
+#include <rawaccel-version.h>
 
 #include "wrapper_io.hpp"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
+using namespace System::Reflection;
+
+using namespace Windows::Forms;
 
 using namespace Newtonsoft::Json;
 
@@ -129,9 +133,11 @@ using error_list_t = Collections::Generic::List<String^>;
 
 error_list_t^ get_accel_errors(AccelMode mode, AccelArgs^ args)
 {
-    accel_mode m = (accel_mode)mode;
+    accel_mode mode_native = (accel_mode)mode;
 
-    auto is_mode = [m](auto... modes) { return ((m == modes) || ...); };
+    auto is_mode = [mode_native](auto... modes) {
+        return ((mode_native == modes) || ...);
+    };
     
     using am = accel_mode;
 
@@ -142,7 +148,7 @@ error_list_t^ get_accel_errors(AccelMode mode, AccelArgs^ args)
     else if (args->acceleration == 0 && is_mode(am::naturalgain))
         error_list->Add("acceleration must be positive");
     else if (args->acceleration < 0) {
-        bool additive = m < am::power;
+        bool additive = mode_native < am::power;
         if (additive) error_list->Add("acceleration can not be negative, use a negative weight to compensate");
         else error_list->Add("acceleration can not be negative");
     }
@@ -161,6 +167,9 @@ error_list_t^ get_accel_errors(AccelMode mode, AccelArgs^ args)
     if (args->midpoint <= 0)
         error_list->Add("midpoint must be positive");
 
+    if (args->offset < 0)
+        error_list->Add("offset can not be negative");
+
     return error_list;
 }
 
@@ -172,7 +181,36 @@ public:
 
     bool Empty()
     {
-        return x->Count == 0 && y->Count == 0;
+        return (x == nullptr || x->Count == 0) && 
+            (y == nullptr || y->Count == 0);
+    }
+
+    virtual String^ ToString() override 
+    {
+        if (x == nullptr) throw;
+
+        Text::StringBuilder^ sb = gcnew Text::StringBuilder();
+
+        if (y == nullptr) // assume combineMagnitudes
+        {
+            for each (String^ str in x)
+            {
+                sb->AppendLine(str);
+            }
+        }
+        else
+        {
+            for each (String^ str in x)
+            {
+                sb->AppendFormat("x: {0}\n", str);
+            }
+            for each (String^ str in y)
+            {
+                sb->AppendFormat("y: {0}\n", str);
+            }
+        }
+        
+        return sb->ToString();
     }
 };
 
@@ -202,8 +240,9 @@ public ref struct DriverInterop
 
         errors->x = get_accel_errors(args->modes.x, args->args.x);
 
-        if (args->combineMagnitudes) errors->y = gcnew error_list_t();
-        else errors->y = get_accel_errors(args->modes.y, args->args.y);
+        if (!args->combineMagnitudes) {
+            errors->y = get_accel_errors(args->modes.y, args->args.y);
+        }
 
         return errors;
     }
@@ -273,4 +312,60 @@ public:
         };
         return active;
     }
+};
+
+public ref struct RawAccelVersion
+{
+    literal String^ value = RA_VER_STRING;
+};
+
+public ref struct VersionException : public Exception 
+{
+public:
+    VersionException() {}
+    VersionException(String^ what) : Exception(what) {}
+};
+
+Version^ convert(rawaccel::version_t v)
+{
+    return gcnew Version(v.major, v.minor, v.patch, 0);
+}
+
+public ref struct VersionHelper
+{
+
+    static Version^ ValidateAndGetDriverVersion(Version^ wrapperTarget)
+    {
+        Version^ wrapperActual = VersionHelper::typeid->Assembly->GetName()->Version;
+
+        if (wrapperTarget != wrapperActual) {
+            throw gcnew VersionException("version mismatch, expected wrapper.dll v" + wrapperActual);
+        }
+
+        version_t drv_ver;
+
+        try {
+            wrapper_io::getDriverVersion(drv_ver);
+        }
+        catch (DriverNotInstalledException^ ex) {
+            throw gcnew VersionException(ex->Message);
+        }
+        catch (DriverIOException^) {
+            // Assume version ioctl is unimplemented (driver version < v1.3.0)
+            throw gcnew VersionException("driver version is out of date, run installer.exe to reinstall");
+        }
+
+        Version^ drv_ver_managed = convert(drv_ver);
+
+        if (drv_ver_managed < convert(min_driver_version)) {
+            throw gcnew VersionException("driver version is out of date, run installer.exe to reinstall");
+        }
+        else if (drv_ver_managed > wrapperActual) {
+            throw gcnew VersionException("newer driver version is installed");
+        }
+        else {
+            return drv_ver_managed;
+        }
+    }
+
 };

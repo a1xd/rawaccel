@@ -21,18 +21,21 @@ namespace writer
                 return;
             }
 
-            foreach (var err in errors.x)
-            {
-                Console.WriteLine(err + (settings.combineMagnitudes ? "" : " (x)"));
-            }
-            foreach (var err in errors.y)
-            {
-                Console.WriteLine(err + " (y)");
-            }
+            Console.Write("Bad settings: \n\n{0}", errors);
         }
 
         static void Main(string[] args)
         {
+            try
+            {
+                VersionHelper.ValidateAndGetDriverVersion(typeof(Program).Assembly.GetName().Version);
+            }
+            catch (VersionException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
+
             if (args.Length != 1 || args[0].Equals("help"))
             {
                 Console.WriteLine("USAGE: {0} <file>", System.AppDomain.CurrentDomain.FriendlyName);
@@ -59,15 +62,11 @@ namespace writer
             }
             catch (JsonException e)
             {
-                Console.WriteLine("Settings invalid:\n{0}", e.Message.ToString());
-            }
-            catch (DriverNotInstalledException)
-            {
-                Console.WriteLine("Driver is not installed");
+                Console.WriteLine("Settings invalid:\n{0}", e.Message);
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error: {0}", e.Message.ToString());
+                Console.WriteLine("Error: {0}", e);
             }
         }
     }
