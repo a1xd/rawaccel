@@ -233,6 +233,7 @@ namespace rawaccel {
         rotator rotate;
         vec2<accelerator> accels;
         vec2d sensitivity = { 1, 1 };
+        vec2d negative_multipliers = {};
 
         mouse_modifier(const settings& args, vec2<si_pair*> luts = {}) :
             combine_magnitudes(args.combine_mags)
@@ -244,6 +245,9 @@ namespace rawaccel {
             
             if (args.sens.x != 0) sensitivity.x = args.sens.x;
             if (args.sens.y != 0) sensitivity.y = args.sens.y;
+
+            negative_multipliers.x = fabs(args.neg_multipliers.x);
+            negative_multipliers.y = fabs(args.neg_multipliers.y);
 
             if ((combine_magnitudes && args.modes.x == accel_mode::noaccel) ||
                 (args.modes.x == accel_mode::noaccel &&
@@ -285,9 +289,16 @@ namespace rawaccel {
             }
         }
 
-        inline void apply_sensitivity(vec2d& movement) {
+        inline void apply_sensitivity(vec2d& movement) {   
             movement.x *= sensitivity.x;
             movement.y *= sensitivity.y;
+
+            if (negative_multipliers.x > 0 && movement.x < 0) {
+                movement.x *= negative_multipliers.x;
+            }
+            if (negative_multipliers.y > 0 && movement.y < 0) {
+                movement.y *= negative_multipliers.y;
+            }
         }
 
         mouse_modifier() = default;

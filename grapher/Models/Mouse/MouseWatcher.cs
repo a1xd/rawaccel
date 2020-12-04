@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Models.Serialized;
+using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -677,12 +678,12 @@ namespace grapher.Models.Mouse
 
         #region Constructors
 
-        public MouseWatcher(Form containingForm, Label display, AccelCharts accelCharts, Field pollRate)
+        public MouseWatcher(Form containingForm, Label display, AccelCharts accelCharts, SettingsManager setMngr)
         {
             ContainingForm = containingForm;
             Display = display;
             AccelCharts = accelCharts;
-            PollRateField = pollRate;
+            SettingsManager = setMngr;
             MouseData = new MouseData();
 
             RAWINPUTDEVICE device = new RAWINPUTDEVICE();
@@ -694,7 +695,7 @@ namespace grapher.Models.Mouse
             RAWINPUTDEVICE[] devices = new RAWINPUTDEVICE[1];
             devices[0] = device;
             RegisterRawInputDevices(devices, 1, Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
-            PollTime = 1;
+            PollTimeRecip = 1;
             PollRate = 1000;
         }
 
@@ -708,23 +709,17 @@ namespace grapher.Models.Mouse
 
         private AccelCharts AccelCharts { get; }
 
-        private Field PollRateField { get; set; }
+        private SettingsManager SettingsManager { get; }
 
         private MouseData MouseData { get; }
 
         private double PollRate { get; set; }
 
-        private double PollTime { get; set; }
+        private double PollTimeRecip { get; set; }
 
         #endregion Properties
 
         #region Methods
-
-        public void OnMouseMove(int x, int y, double timeInMs)
-        {
-            MouseData.Set(x,y);
-            AccelCharts.MakeDots(x, y, timeInMs);
-        }
 
         public void UpdateLastMove()
         {
@@ -740,15 +735,34 @@ namespace grapher.Models.Mouse
 
             outSize = GetRawInputData((IntPtr)message.LParam, RawInputCommand.Input, out rawInput, ref size, Marshal.SizeOf(typeof(RAWINPUTHEADER)));
 
-            if (PollRateField.Data != PollRate)
+            if (SettingsManager.PollRateField.Data != PollRate)
             {
-                PollRate = PollRateField.Data;
-                PollTime = 1000 / PollRate;
+                PollRate = SettingsManager.PollRateField.Data;
+                PollTimeRecip = Math.Abs(SettingsManager.PollRateField.Data) / 1000;
             }
 
             if (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0)
             {
-                OnMouseMove(rawInput.Data.Mouse.LastX, rawInput.Data.Mouse.LastY, PollTime);
+                double x = rawInput.Data.Mouse.LastX;
+                double y = rawInput.Data.Mouse.LastY;
+
+                // strip negative multipliers, charts calculated from positive input
+
+                Vec2<double> negMults = SettingsManager.RawAccelSettings
+                    .AccelerationSettings.negativeMultipliers;
+
+                if (negMults.x > 0 && x < 0)
+                {
+                    x /= negMults.x;
+                }
+
+                if (negMults.y > 0 && y < 0)
+                {
+                    y /= negMults.y;
+                }
+
+                MouseData.Set(rawInput.Data.Mouse.LastX, rawInput.Data.Mouse.LastY);
+                AccelCharts.MakeDots(x, y, PollTimeRecip);
             }
 
         }

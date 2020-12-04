@@ -2,6 +2,7 @@
 using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
+using System;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -331,7 +332,7 @@ namespace grapher.Models
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem);
 
-            var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, accelCalculator.PollRate);
+            var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
 
             return new AccelGUI(
                 form,

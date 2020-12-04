@@ -34,9 +34,9 @@ namespace grapher.Models.Serialized
 
         public RawAccelSettings RawAccelSettings { get; private set; }
 
-        private Field DpiField { get; set; }
+        public Field DpiField { get; private set; }
 
-        private Field PollRateField { get; set; }
+        public Field PollRateField { get; private set; }
 
         private ToolStripMenuItem AutoWriteMenuItem { get; set; }
 
