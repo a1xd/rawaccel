@@ -73,7 +73,7 @@ public ref struct DriverSettings
     Vec2<double> sensitivity;
 
     [JsonProperty("Negative directional multipliers", Required = Required::Default)]
-    Vec2<double> negativeMultipliers;
+    Vec2<double> directionalMultipliers;
 
     [JsonProperty(Required = Required::Default)]
     double minimumTime;

@@ -695,8 +695,6 @@ namespace grapher.Models.Mouse
             RAWINPUTDEVICE[] devices = new RAWINPUTDEVICE[1];
             devices[0] = device;
             RegisterRawInputDevices(devices, 1, Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
-            PollTimeRecip = 1;
-            PollRate = 1000;
         }
 
         #endregion Constructors
@@ -713,9 +711,10 @@ namespace grapher.Models.Mouse
 
         private MouseData MouseData { get; }
 
-        private double PollRate { get; set; }
-
-        private double PollTimeRecip { get; set; }
+        private double PollTimeReciprocal
+        {
+            get => Math.Abs(SettingsManager.PollRateField.Data) * 0.001;
+        }
 
         #endregion Properties
 
@@ -735,12 +734,6 @@ namespace grapher.Models.Mouse
 
             outSize = GetRawInputData((IntPtr)message.LParam, RawInputCommand.Input, out rawInput, ref size, Marshal.SizeOf(typeof(RAWINPUTHEADER)));
 
-            if (SettingsManager.PollRateField.Data != PollRate)
-            {
-                PollRate = SettingsManager.PollRateField.Data;
-                PollTimeRecip = Math.Abs(SettingsManager.PollRateField.Data) / 1000;
-            }
-
             bool relative = !rawInput.Data.Mouse.Flags.HasFlag(RawMouseFlags.MoveAbsolute);
 
             if (relative && (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0))
@@ -748,23 +741,23 @@ namespace grapher.Models.Mouse
                 double x = rawInput.Data.Mouse.LastX;
                 double y = rawInput.Data.Mouse.LastY;
 
-                // strip negative multipliers, charts calculated from positive input
+                // strip negative directional multipliers, charts calculated from positive input
 
-                Vec2<double> negMults = SettingsManager.RawAccelSettings
-                    .AccelerationSettings.negativeMultipliers;
+                Vec2<double> dirMults = SettingsManager.RawAccelSettings
+                    .AccelerationSettings.directionalMultipliers;
 
-                if (negMults.x > 0 && x < 0)
+                if (dirMults.x > 0 && x < 0)
                 {
-                    x /= negMults.x;
+                    x /= dirMults.x;
                 }
 
-                if (negMults.y > 0 && y < 0)
+                if (dirMults.y > 0 && y < 0)
                 {
-                    y /= negMults.y;
+                    y /= dirMults.y;
                 }
 
                 MouseData.Set(rawInput.Data.Mouse.LastX, rawInput.Data.Mouse.LastY);
-                AccelCharts.MakeDots(x, y, PollTimeRecip);
+                AccelCharts.MakeDots(x, y, PollTimeReciprocal);
             }
 
         }

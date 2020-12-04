@@ -127,8 +127,8 @@ namespace grapher.Models.Serialized
 
             return accelSettings.sensitivity.x == 1 &&
                 accelSettings.sensitivity.y == 1 &&
-                accelSettings.negativeMultipliers.x <= 0 &&
-                accelSettings.negativeMultipliers.y <= 0 &&
+                accelSettings.directionalMultipliers.x <= 0 &&
+                accelSettings.directionalMultipliers.y <= 0 &&
                 accelSettings.rotation == 0 &&
                 accelSettings.modes.x == AccelMode.noaccel &&
                 wholeOrNoY;

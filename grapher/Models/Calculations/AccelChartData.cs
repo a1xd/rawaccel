@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace grapher.Models.Calculations
@@ -81,7 +80,10 @@ namespace grapher.Models.Calculations
 
         public int GetVelocityIndex(double outVelocityValue)
         {
-            Debug.Assert(outVelocityValue >= 0);
+            if (outVelocityValue < 0)
+            {
+                throw new ArgumentException($"invalid velocity: {outVelocityValue}");
+            }
 
             var log = Math.Log10(outVelocityValue);
             if (log < -2)

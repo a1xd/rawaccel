@@ -1,6 +1,6 @@
 ﻿using grapher.Models.Mouse;
+using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace grapher
@@ -222,20 +222,28 @@ namespace grapher
             ChartX.Series[2].IsVisibleInLegend = true;
         }
 
+        private void VerifyRange(double min, double max)
+        {
+            if (min > max)
+            {
+                throw new ArgumentException($"invalid chart range: ({min}, {max})");
+            }
+        }
+
         public void SetMinMax(double min, double max)
         {
-            Debug.Assert(min <= max);
+            VerifyRange(min, max);
             ChartX.ChartAreas[0].AxisY.Minimum = min * (1 - VerticalMargin);
             ChartX.ChartAreas[0].AxisY.Maximum = max * (1 + VerticalMargin);
         }
 
         public void SetMinMaxXY(double minX, double maxX, double minY, double maxY)
         {
-            Debug.Assert(minX <= maxY);
+            VerifyRange(minX, maxX);
             ChartX.ChartAreas[0].AxisY.Minimum = minX * (1 - VerticalMargin);
             ChartX.ChartAreas[0].AxisY.Maximum = maxX * (1 + VerticalMargin);
 
-            Debug.Assert(minX <= maxY);
+            VerifyRange(minY, maxY);
             ChartX.ChartAreas[0].AxisY.Minimum = minY * (1 - VerticalMargin);
             ChartX.ChartAreas[0].AxisY.Maximum = maxY * (1 + VerticalMargin);
         }
