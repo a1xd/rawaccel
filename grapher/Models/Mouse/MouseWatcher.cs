@@ -741,7 +741,9 @@ namespace grapher.Models.Mouse
                 PollTimeRecip = Math.Abs(SettingsManager.PollRateField.Data) / 1000;
             }
 
-            if (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0)
+            bool relative = !rawInput.Data.Mouse.Flags.HasFlag(RawMouseFlags.MoveAbsolute);
+
+            if (relative && (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0))
             {
                 double x = rawInput.Data.Mouse.LastX;
                 double y = rawInput.Data.Mouse.LastY;
