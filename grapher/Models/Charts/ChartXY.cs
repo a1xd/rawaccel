@@ -1,5 +1,6 @@
 ﻿using grapher.Models.Mouse;
 using System.Collections;
+using System.Diagnostics;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace grapher
@@ -28,6 +29,8 @@ namespace grapher
         }
 
         #endregion Constructors
+
+        private const double VerticalMargin = 0.1;
 
         #region Properties
 
@@ -221,26 +224,20 @@ namespace grapher
 
         public void SetMinMax(double min, double max)
         {
-            if (min < max)
-            {
-                ChartX.ChartAreas[0].AxisY.Minimum = min * 0.95;
-                ChartX.ChartAreas[0].AxisY.Maximum = max * 1.05;
-            }
+            Debug.Assert(min <= max);
+            ChartX.ChartAreas[0].AxisY.Minimum = min * (1 - VerticalMargin);
+            ChartX.ChartAreas[0].AxisY.Maximum = max * (1 + VerticalMargin);
         }
 
         public void SetMinMaxXY(double minX, double maxX, double minY, double maxY)
         {
-            if (minX < maxX)
-            {
-                ChartX.ChartAreas[0].AxisY.Minimum = minX * 0.95;
-                ChartX.ChartAreas[0].AxisY.Maximum = maxX  * 1.05;
-            }
+            Debug.Assert(minX <= maxY);
+            ChartX.ChartAreas[0].AxisY.Minimum = minX * (1 - VerticalMargin);
+            ChartX.ChartAreas[0].AxisY.Maximum = maxX * (1 + VerticalMargin);
 
-            if (minY < maxY)
-            {
-                ChartY.ChartAreas[0].AxisY.Minimum = minY  * 0.95;
-                ChartY.ChartAreas[0].AxisY.Maximum = maxY * 1.05;
-            }
+            Debug.Assert(minX <= maxY);
+            ChartX.ChartAreas[0].AxisY.Minimum = minY * (1 - VerticalMargin);
+            ChartX.ChartAreas[0].AxisY.Maximum = maxY * (1 + VerticalMargin);
         }
 
         public void SetCombined()
