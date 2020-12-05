@@ -711,9 +711,9 @@ namespace grapher.Models.Mouse
 
         private MouseData MouseData { get; }
 
-        private double PollTimeReciprocal
+        private double PollTime
         {
-            get => Math.Abs(SettingsManager.PollRateField.Data) * 0.001;
+            get => 1000 / SettingsManager.PollRateField.Data;
         }
 
         #endregion Properties
@@ -757,7 +757,7 @@ namespace grapher.Models.Mouse
                 }
 
                 MouseData.Set(rawInput.Data.Mouse.LastX, rawInput.Data.Mouse.LastY);
-                AccelCharts.MakeDots(x, y, PollTimeReciprocal);
+                AccelCharts.MakeDots(x, y, PollTime);
             }
 
         }

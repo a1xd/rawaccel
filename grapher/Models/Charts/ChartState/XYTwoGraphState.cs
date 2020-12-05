@@ -33,9 +33,9 @@ namespace grapher.Models.Charts.ChartState
             GainChart.ClearSecondDots();
         }
 
-        public override void MakeDots(double x, double y, double timeInMsRecip)
+        public override void MakeDots(double x, double y, double timeInMs)
         {
-            Data.CalculateDotsXY(x, y, timeInMsRecip);
+            Data.CalculateDotsXY(x, y, timeInMs);
         }
 
         public override void Bind()

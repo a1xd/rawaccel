@@ -28,9 +28,9 @@ namespace grapher.Models.Charts.ChartState
             GainChart.SetCombined();
         }
 
-        public override void MakeDots(double x, double y, double timeInMsRecip)
+        public override void MakeDots(double x, double y, double timeInMs)
         {
-            Data.CalculateDotsCombinedDiffSens(x, y, timeInMsRecip, Settings);
+            Data.CalculateDotsCombinedDiffSens(x, y, timeInMs, Settings);
         }
 
         public override void Bind()

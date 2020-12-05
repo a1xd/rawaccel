@@ -99,9 +99,9 @@ namespace grapher
 
         #region Methods
 
-        public void MakeDots(double x, double y, double timeInMsRecip)
+        public void MakeDots(double x, double y, double timeInMs)
         {
-            ChartState.MakeDots(x, y, timeInMsRecip);
+            ChartState.MakeDots(x, y, timeInMs);
         }
 
         public void DrawLastMovement()

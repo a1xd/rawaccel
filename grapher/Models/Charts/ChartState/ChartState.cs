@@ -40,7 +40,7 @@ namespace grapher.Models.Charts.ChartState
 
         internal bool TwoDotsPerGraph { get; set; }
 
-        public abstract void MakeDots(double x, double y, double timeInMsRecip);
+        public abstract void MakeDots(double x, double y, double timeInMs);
 
         public abstract void Bind();
 

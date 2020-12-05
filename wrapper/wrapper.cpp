@@ -355,16 +355,20 @@ public ref struct VersionHelper
         }
         catch (DriverIOException^) {
             // Assume version ioctl is unimplemented (driver version < v1.3.0)
-            throw gcnew VersionException("driver version is out of date, run installer.exe to reinstall");
+            throw gcnew VersionException("driver version is out of date\n\nrun installer.exe to reinstall");
         }
 
         Version^ drv_ver_managed = convert(drv_ver);
 
         if (drv_ver_managed < convert(min_driver_version)) {
-            throw gcnew VersionException("driver version is out of date, run installer.exe to reinstall");
+            throw gcnew VersionException(
+                String::Format("driver version is out of date (v{0})\n\nrun installer.exe to reinstall", 
+                    drv_ver_managed));
         }
         else if (drv_ver_managed > wrapperActual) {
-            throw gcnew VersionException("newer driver version is installed");
+            throw gcnew VersionException(
+                String::Format("newer driver version is installed (v{0})",
+                    drv_ver_managed));
         }
         else {
             return drv_ver_managed;

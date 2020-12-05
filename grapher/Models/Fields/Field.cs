@@ -27,12 +27,16 @@ namespace grapher
 
         #region Constructors
 
-        public Field(TextBox box, Form containingForm, double defaultData)
+        public Field(TextBox box, Form containingForm, double defaultData, 
+                                                       double minData = double.MinValue, 
+                                                       double maxData = double.MaxValue)
         {
             DefaultText = DecimalString(defaultData);
             Box = box;
             _data = defaultData;
             DefaultData = defaultData;
+            MinData = minData;
+            MaxData = maxData;
             State = FieldState.Undefined;
             ContainingForm = containingForm;
             FormatString = Constants.DefaultFieldFormatString;
@@ -69,7 +73,7 @@ namespace grapher
                 {
                     return DefaultData;
                 }
-            } 
+            }
         }
 
         public int Top
@@ -121,6 +125,10 @@ namespace grapher
         }
 
         private double DefaultData { get; set; }
+
+        private double MinData { get; }
+
+        private double MaxData { get; }
 
         #endregion Properties
 
@@ -268,12 +276,10 @@ namespace grapher
 
         private void TextToData()
         {
-            try
+            if (double.TryParse(Box.Text, out double value) && 
+                value <= MaxData && value >= MinData)
             {
-                _data = Convert.ToDouble(Box.Text);
-            }
-            catch
-            {
+                _data = value;
             }
 
             Box.Text = DecimalString(Data);
