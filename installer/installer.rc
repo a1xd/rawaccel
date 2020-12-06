@@ -72,7 +72,7 @@ BEGIN
         BEGIN
             VALUE "FileDescription", "Raw Accel installer (" RA_MIN_OS ")"
             VALUE "FileVersion", RA_VER_STRING
-            VALUE "OriginalFilename", "converter.exe"
+            VALUE "OriginalFilename", "installer.exe"
             VALUE "ProductName", "Raw Accel"
             VALUE "ProductVersion", RA_VER_STRING
         END

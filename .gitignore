@@ -28,6 +28,7 @@ bld/
 [Ll]og/
 signed/*
 !signed/driver/
+!signed/*install*.exe
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

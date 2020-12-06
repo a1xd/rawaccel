@@ -85,7 +85,8 @@
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetPath)" "$(SolutionDir)signed\$(TargetFileName)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)/common;</AdditionalIncludeDirectories>
