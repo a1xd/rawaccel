@@ -3,11 +3,10 @@
 #include <rawaccel-io.hpp>
 #include "wrapper_io.hpp"
 
-void wrapper_io::writeToDriver(const settings& args)
-{
-	try 
+auto with_managed_ex = [](auto fn) {
+	try
 	{
-		write(args);
+		fn();
 	}
 	catch (const install_error&)
 	{
@@ -17,20 +16,25 @@ void wrapper_io::writeToDriver(const settings& args)
 	{
 		throw gcnew DriverIOException(gcnew String(e.what()));
 	}
+};
+
+void wrapper_io::writeToDriver(const settings& args)
+{
+	with_managed_ex([&] {
+		write(args);
+	});
 }
 
 void wrapper_io::readFromDriver(settings& args)
 {
-	try
-	{
+	with_managed_ex([&] {
 		args = read();
-	}
-	catch (const install_error&)
-	{
-		throw gcnew DriverNotInstalledException();
-	}
-	catch (const std::system_error& e)
-	{
-		throw gcnew DriverIOException(gcnew String(e.what()));
-	}
+	});
+}
+
+void wrapper_io::getDriverVersion(version_t& ver)
+{
+	with_managed_ex([&] {
+		ver = get_version();
+	});
 }

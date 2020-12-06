@@ -2,6 +2,7 @@
 using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
+using System;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -104,8 +105,8 @@ namespace grapher.Models
             Label mouseLabel)
         {
             var accelCalculator = new AccelCalculator(
-                new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI),
-                new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate));
+                new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI, 1),
+                new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate, 1));
 
             var accelCharts = new AccelCharts(
                                 form,
@@ -331,7 +332,7 @@ namespace grapher.Models
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem);
 
-            var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, accelCalculator.PollRate);
+            var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
 
             return new AccelGUI(
                 form,

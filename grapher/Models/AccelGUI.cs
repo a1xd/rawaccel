@@ -140,7 +140,8 @@ namespace grapher
                 combineMagnitudes = ApplyOptions.IsWhole,
                 modes = ApplyOptions.GetModes(),
                 args = newArgs,
-                minimumTime = driverSettings.minimumTime
+                minimumTime = driverSettings.minimumTime,
+                directionalMultipliers = driverSettings.directionalMultipliers
             };
 
             ButtonDelay(WriteButton);
@@ -153,7 +154,7 @@ namespace grapher
             }
             else
             {
-                throw new Exception($"Bad arguments: \n {SettingsManager.ErrorStringFrom(errors)}");
+                throw new Exception($"Bad arguments:\n\n{errors}");
             }
         }
 

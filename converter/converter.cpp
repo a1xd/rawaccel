@@ -192,7 +192,7 @@ bool try_convert(const ia_settings_t& ia_settings) {
     auto errors = DriverInterop::GetSettingsErrors(new_settings);
 
     if (!errors->Empty()) {
-        Console::WriteLine("Bad settings: " + errors->x->ToArray()[0]);
+        Console::WriteLine("Bad settings: {0}", errors);
         return false;
     }
 
@@ -208,8 +208,26 @@ bool try_convert(const ia_settings_t& ia_settings) {
     return true;
 }
 
+public ref struct ASSEMBLY {
+    static initonly Version^ VERSION = ASSEMBLY::typeid->Assembly->GetName()->Version;
+};
+
 int main()
 {
+    auto close_prompt = [] {
+        std::cout << "Press any key to close this window . . ." << std::endl;
+        _getwch();
+        std::exit(0);
+    };
+
+    try {
+        VersionHelper::ValidateAndGetDriverVersion(ASSEMBLY::VERSION);
+    }
+    catch (VersionException^ ex) {
+        Console::WriteLine(ex->Message);
+        close_prompt();
+    }
+
     std::optional<fs::path> opt_path;
 
     if (fs::exists(IA_SETTINGS_NAME)) {
@@ -235,11 +253,8 @@ int main()
                 if (!try_convert(parse_ia_settings(opt_path.value())))
                     std::cout << "Unable to convert settings.\n";
             }
-            catch (DriverNotInstalledException^) {
-                Console::WriteLine("\nDriver is not installed.");
-            }
             catch (Exception^ e) {
-                Console::WriteLine("\nError: " + e->ToString());
+                Console::WriteLine("\nError: {0}", e);
             }
             catch (const std::exception& e) {
                 std::cout << "Error: " << e.what() << '\n';
@@ -251,6 +266,5 @@ int main()
             "Then run this program to generate the equivalent Raw Accel settings.\n";
     }
 
-    std::cout << "Press any key to close this window . . ." << std::endl;
-    _getwch();
+    close_prompt();
 }

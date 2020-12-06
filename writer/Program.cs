@@ -1,15 +1,21 @@
-﻿using Microsoft.CSharp.RuntimeBinder;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace writer
 {
 
     class Program
     {
+
+        static void Show(string msg)
+        {
+            MessageBox.Show(msg, "Raw Accel writer");
+        }
+
         static void Send(JToken settingsToken)
         {
             var settings = settingsToken.ToObject<DriverSettings>();
@@ -21,27 +27,30 @@ namespace writer
                 return;
             }
 
-            foreach (var err in errors.x)
-            {
-                Console.WriteLine(err + (settings.combineMagnitudes ? "" : " (x)"));
-            }
-            foreach (var err in errors.y)
-            {
-                Console.WriteLine(err + " (y)");
-            }
+            Show($"Bad settings:\n\n{errors}");
         }
 
         static void Main(string[] args)
         {
-            if (args.Length != 1 || args[0].Equals("help"))
+            try
             {
-                Console.WriteLine("USAGE: {0} <file>", System.AppDomain.CurrentDomain.FriendlyName);
+                VersionHelper.ValidateAndGetDriverVersion(typeof(Program).Assembly.GetName().Version);
+            }
+            catch (VersionException e)
+            {
+                Show(e.Message);
+                return;
+            }
+
+            if (args.Length != 1)
+            {
+                Show($"Usage: {System.AppDomain.CurrentDomain.FriendlyName} <settings file path>");
                 return;
             }
 
             if (!File.Exists(args[0]))
             {
-                Console.WriteLine("Settings file not found at {0}", args[0]);
+                Show($"Settings file not found at {args[0]}");
                 return;
             }
 
@@ -59,15 +68,11 @@ namespace writer
             }
             catch (JsonException e)
             {
-                Console.WriteLine("Settings invalid:\n{0}", e.Message.ToString());
-            }
-            catch (DriverNotInstalledException)
-            {
-                Console.WriteLine("Driver is not installed");
+                Show($"Settings invalid:\n\n{e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error: {0}", e.Message.ToString());
+                Show($"Error:\n\n{e}");
             }
         }
     }

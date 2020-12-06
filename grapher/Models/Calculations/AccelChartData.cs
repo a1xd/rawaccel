@@ -80,6 +80,11 @@ namespace grapher.Models.Calculations
 
         public int GetVelocityIndex(double outVelocityValue)
         {
+            if (outVelocityValue < 0)
+            {
+                throw new ArgumentException($"invalid velocity: {outVelocityValue}");
+            }
+
             var log = Math.Log10(outVelocityValue);
             if (log < -2)
             {

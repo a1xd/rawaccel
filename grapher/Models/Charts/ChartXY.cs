@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Mouse;
+using System;
 using System.Collections;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -28,6 +29,8 @@ namespace grapher
         }
 
         #endregion Constructors
+
+        private const double VerticalMargin = 0.1;
 
         #region Properties
 
@@ -219,28 +222,30 @@ namespace grapher
             ChartX.Series[2].IsVisibleInLegend = true;
         }
 
+        private void VerifyRange(double min, double max)
+        {
+            if (min > max)
+            {
+                throw new ArgumentException($"invalid chart range: ({min}, {max})");
+            }
+        }
+
         public void SetMinMax(double min, double max)
         {
-            if (min < max)
-            {
-                ChartX.ChartAreas[0].AxisY.Minimum = min * 0.95;
-                ChartX.ChartAreas[0].AxisY.Maximum = max * 1.05;
-            }
+            VerifyRange(min, max);
+            ChartX.ChartAreas[0].AxisY.Minimum = min * (1 - VerticalMargin);
+            ChartX.ChartAreas[0].AxisY.Maximum = max * (1 + VerticalMargin);
         }
 
         public void SetMinMaxXY(double minX, double maxX, double minY, double maxY)
         {
-            if (minX < maxX)
-            {
-                ChartX.ChartAreas[0].AxisY.Minimum = minX * 0.95;
-                ChartX.ChartAreas[0].AxisY.Maximum = maxX  * 1.05;
-            }
+            VerifyRange(minX, maxX);
+            ChartX.ChartAreas[0].AxisY.Minimum = minX * (1 - VerticalMargin);
+            ChartX.ChartAreas[0].AxisY.Maximum = maxX * (1 + VerticalMargin);
 
-            if (minY < maxY)
-            {
-                ChartY.ChartAreas[0].AxisY.Minimum = minY  * 0.95;
-                ChartY.ChartAreas[0].AxisY.Maximum = maxY * 1.05;
-            }
+            VerifyRange(minY, maxY);
+            ChartX.ChartAreas[0].AxisY.Minimum = minY * (1 - VerticalMargin);
+            ChartX.ChartAreas[0].AxisY.Maximum = maxY * (1 + VerticalMargin);
         }
 
         public void SetCombined()

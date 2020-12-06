@@ -13,6 +13,8 @@ using grapher.Models.Calculations;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
 using grapher.Models;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace grapher
 {
@@ -26,21 +28,30 @@ namespace grapher
         {
             InitializeComponent();
 
-            ManagedAccel activeAccel = null;
+            Version assemVersion = typeof(RawAcceleration).Assembly.GetName().Version;
+            Version driverVersion = null;
 
             try
             {
-                activeAccel = ManagedAccel.GetActiveAccel();
+                driverVersion = VersionHelper.ValidateAndGetDriverVersion(assemVersion);
             }
-            catch (DriverNotInstalledException ex)
+            catch (VersionException ex)
             {
-                MessageBox.Show($"Driver not installed.\n\n {ex.ToString()}");
+                MessageBox.Show(ex.Message);
                 throw;
             }
+            
+            ToolStripMenuItem HelpMenuItem = new ToolStripMenuItem("&Help");
+
+            HelpMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+                    new ToolStripMenuItem("&About", null, (s, e) => new AboutBox(driverVersion).ShowDialog())
+            });
+
+            menuStrip1.Items.AddRange(new ToolStripItem[] { HelpMenuItem });
 
             AccelGUI = AccelGUIFactory.Construct(
                 this,
-                activeAccel,
+                ManagedAccel.GetActiveAccel(),
                 AccelerationChart,
                 AccelerationChartY,
                 VelocityChart,

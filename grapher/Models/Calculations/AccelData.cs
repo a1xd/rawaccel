@@ -56,7 +56,7 @@ namespace grapher.Models.Calculations
             OutVelocityToPoints.Clear();
         }
 
-        public void CalculateDots(int x, int y, double timeInMs)
+        public void CalculateDots(double x, double y, double timeInMs)
         {
             var outVelocity = AccelCalculator.Velocity(x, y, timeInMs);
 
@@ -66,7 +66,7 @@ namespace grapher.Models.Calculations
             Estimated.Gain.Set(inCombVel, combGain);
         }
 
-        public void CalculateDotsXY(int x, int y, double timeInMs)
+        public void CalculateDotsXY(double x, double y, double timeInMs)
         {
             var outX = Math.Abs(x) / timeInMs;
             var outY = Math.Abs(y) / timeInMs;
@@ -82,7 +82,7 @@ namespace grapher.Models.Calculations
             EstimatedY.Gain.Set(inYVelocity, yGain);
         }
 
-        public void CalculateDotsCombinedDiffSens(int x, int y, double timeInMs, DriverSettings settings)
+        public void CalculateDotsCombinedDiffSens(double x, double y, double timeInMs, DriverSettings settings)
         {
             (var xStripped, var yStripped) = AccelCalculator.StripSens(x, y, settings.sensitivity.x, settings.sensitivity.y);
             var outVelocity = AccelCalculator.Velocity(xStripped, yStripped, timeInMs);
