@@ -1,13 +1,16 @@
 # Raw Accel Guide
 
 ## Installation
+- **Prerequisites**
+  * Visual C++ 2019 runtime, [download here](https://aka.ms/vs/16/release/vc_redist.x64.exe)
+  * .NET Framework 4.7.2+ runtime, [download here](https://dotnet.microsoft.com/download/dotnet-framework/net48)
+  * **Windows 7** — SHA-2 code signing support (download through Windows Update)
 
-Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
-* If you encounter a `VCRUNTIME` related system error, [download and install the latest version from Microsoft.](https://aka.ms/vs/16/release/vc_redist.x64.exe)
+- Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
 
-Run `uninstaller.exe` in the release directory to uninstall the driver. Restart for the uninstallation to take effect.
+- Run `uninstaller.exe` in the release directory to uninstall the driver. Restart for the uninstallation to take effect.
 
-Run `rawaccel.exe` when the driver is installed in order to run the Raw Accel GUI.
+- Run `rawaccel.exe` when the driver is installed in order to run the Raw Accel GUI.
 
 ## Philosophy
 The Raw Accel driver and GUI's workings and exposed parameters are based on our understanding of mouse acceleration. Our understanding includes the concepts of "gain", "whole vs by component", and "anisotropy." For clarity, we will outline this understanding here. Those uninterested can skip to Features below.
