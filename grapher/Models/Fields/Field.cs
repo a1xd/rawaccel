@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace grapher
@@ -274,9 +275,15 @@ namespace grapher
             }
         }
 
+        public static bool TryParse(string s, out double res)
+        {
+            return double.TryParse(s, Constants.FloatStyle, NumberFormatInfo.CurrentInfo, out res) ||
+                double.TryParse(s, Constants.FloatStyle, NumberFormatInfo.InvariantInfo, out res);
+        }
+
         private void TextToData()
         {
-            if (double.TryParse(Box.Text, out double value) && 
+            if (TryParse(Box.Text, out double value) && 
                 value <= MaxData && value >= MinData)
             {
                 _data = value;
