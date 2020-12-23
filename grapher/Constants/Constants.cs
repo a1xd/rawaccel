@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Globalization;
 
 namespace grapher
 {
@@ -109,6 +110,9 @@ namespace grapher
 
         /// <summary> Default name of settings file. </summary>
         public const string DefaultSettingsFileName = @"settings.json";
+
+        /// <summary> Style used by System.Double.Parse </summary>
+        public const NumberStyles FloatStyle = NumberStyles.Float | NumberStyles.AllowThousands;
 
         #endregion Constants
 
