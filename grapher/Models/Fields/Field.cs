@@ -275,7 +275,7 @@ namespace grapher
             }
         }
 
-        public static bool TryParse(string s, out double res)
+        public static bool TryParseDouble(string s, out double res)
         {
             return double.TryParse(s, Constants.FloatStyle, NumberFormatInfo.CurrentInfo, out res) ||
                 double.TryParse(s, Constants.FloatStyle, NumberFormatInfo.InvariantInfo, out res);
@@ -283,7 +283,7 @@ namespace grapher
 
         private void TextToData()
         {
-            if (TryParse(Box.Text, out double value) && 
+            if (TryParseDouble(Box.Text, out double value) && 
                 value <= MaxData && value >= MinData)
             {
                 _data = value;
