@@ -1,10 +1,13 @@
 # Raw Accel Guide
+## Download
+
+Visit the [Releases page](https://github.com/a1xd/rawaccel/releases) and navigate to the "Assets" dropdown under the latest release, then download the zip file titled `RawAccel_X.X.X.zip` where X are the latest version numbers. **DO NOT** download by clicking the green "Code"/"Download" file on the home page of this repository as that will only download the source code, which isn't what you want.
 
 ## Installation
 - **Prerequisites**
   * Visual C++ 2019 runtime, [download here](https://aka.ms/vs/16/release/vc_redist.x64.exe)
   * .NET Framework 4.7.2+ runtime, [download here](https://dotnet.microsoft.com/download/dotnet-framework/net48)
-  * **Windows 7** — SHA-2 code signing support (download through Windows Update)
+  * **For Windows 7 users only** — SHA-2 code signing support (download through Windows Update)
 
 - Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
 
