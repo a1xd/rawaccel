@@ -55,7 +55,7 @@ Arguments:
     PDEVICE_EXTENSION devExt = FilterGetData(hDevice);
 
     bool devMatch = true;
-    if (wcsncmp(L"", global.args.device_hw_id, sizeof(global.args.device_hw_id)) != 0) {
+    if (global.args.device_hw_id[0] != 0) {
         devMatch = wcsncmp(devExt->hwid, global.args.device_hw_id, sizeof(global.args.device_hw_id)) == 0;
     }
 
