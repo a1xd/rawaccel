@@ -99,6 +99,7 @@ namespace grapher.Models.Calculations
                 }
 
                 var ratio = outMagnitude / simulatedInputDatum.velocity;
+                ratio = Math.Min(int.MaxValue, Math.Max(int.MinValue, ratio));
                 
                 if (ratio > maxRatio)
                 {
@@ -203,6 +204,8 @@ namespace grapher.Models.Calculations
 
                 var xRatio = settings.sensitivity.x * ratio;
                 var yRatio = settings.sensitivity.y * ratio;
+                xRatio = Math.Min(int.MaxValue, Math.Max(int.MinValue, xRatio));
+                yRatio = Math.Min(int.MaxValue, Math.Max(int.MinValue, yRatio));
 
                 if (xRatio > maxRatio)
                 {

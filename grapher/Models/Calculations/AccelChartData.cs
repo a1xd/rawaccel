@@ -86,7 +86,7 @@ namespace grapher.Models.Calculations
             }
 
             var log = Math.Log10(outVelocityValue);
-            if (log < -2)
+            if (log < -2 || Double.IsNaN(log))
             {
                 log = -2;
             }
