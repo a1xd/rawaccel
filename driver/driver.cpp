@@ -56,7 +56,8 @@ Arguments:
 
     bool devMatch = true;
     if (global.args.device_hw_id[0] != 0) {
-        devMatch = wcsncmp(devExt->hwid, global.args.device_hw_id, sizeof(global.args.device_hw_id)) == 0;
+        size_t max_cnt = sizeof(global.args.device_hw_id) / sizeof(global.args.device_hw_id[0]);
+        devMatch = wcsncmp(devExt->hwid, global.args.device_hw_id, max_cnt) == 0;
     }
 
     if (!(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE)) {
