@@ -79,7 +79,7 @@ public ref struct DriverSettings
     double minimumTime;
 
     [JsonProperty("Device Hardware ID", Required = Required::Default)]
-    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = 512)]
+    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = MAX_HWID_LEN)]
     String^ deviceHardwareID;
 
     bool ShouldSerializeminimumTime() 

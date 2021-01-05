@@ -56,8 +56,7 @@ Arguments:
 
     bool devMatch = true;
     if (global.args.device_hw_id[0] != 0) {
-        size_t max_cnt = sizeof(global.args.device_hw_id) / sizeof(global.args.device_hw_id[0]);
-        devMatch = wcsncmp(devExt->hwid, global.args.device_hw_id, max_cnt) == 0;
+        devMatch = wcsncmp(devExt->hwid, global.args.device_hw_id, MAX_HWID_LEN) == 0;
     }
 
     if (!(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE)) {
@@ -569,7 +568,7 @@ Routine Description:
     //
     // Connect a mouse class device driver to the port driver.
     //
-    case IOCTL_INTERNAL_MOUSE_CONNECT:
+    case IOCTL_INTERNAL_MOUSE_CONNECT: {
         //
         // Only allow one connection.
         //
@@ -577,26 +576,42 @@ Routine Description:
             status = STATUS_SHARING_VIOLATION;
             break;
         }
-        
+
         //
         // Copy the connection parameters to the device extension.
         //
-         status = WdfRequestRetrieveInputBuffer(Request,
-                            sizeof(CONNECT_DATA),
-                            reinterpret_cast<PVOID*>(&connectData),
-                            &length);
-        if(!NT_SUCCESS(status)){
+        status = WdfRequestRetrieveInputBuffer(Request,
+            sizeof(CONNECT_DATA),
+            reinterpret_cast<PVOID*>(&connectData),
+            &length);
+        if (!NT_SUCCESS(status)) {
             DebugPrint(("WdfRequestRetrieveInputBuffer failed %x\n", status));
             break;
         }
 
-        ULONG resultLen;
-        status = WdfDeviceQueryProperty(hDevice, DevicePropertyHardwareID,
-            sizeof(devExt->hwid), devExt->hwid, &resultLen);
+        // taken from REGSTR_VAL_MAX_HCID_LEN defined in um/RegStr.h
+        const size_t POOL_SIZE = sizeof(wchar_t) * 1024;
 
-        if (!NT_SUCCESS(status)) {
-            DebugPrint(("WdfDeviceQueryProperty failed: 0x%x\n", status));
-            break;
+        auto pool = ExAllocatePoolWithTag(NonPagedPool, POOL_SIZE, 'AR');
+
+        if (!pool) {
+            DebugPrint(("RA - failed to allocate pool for hwid list\n"));
+        }
+        else {
+            RtlZeroMemory(pool, POOL_SIZE);
+
+            ULONG resultLen;
+            NTSTATUS tmp = WdfDeviceQueryProperty(hDevice, DevicePropertyHardwareID,
+                POOL_SIZE, pool, &resultLen);
+
+            if (!NT_SUCCESS(tmp)) {
+                DebugPrint(("WdfDeviceQueryProperty failed: 0x%x\n", tmp));
+            }
+            else {
+                wcsncpy(devExt->hwid, reinterpret_cast<wchar_t*>(pool), MAX_HWID_LEN);
+            }
+            
+            ExFreePoolWithTag(pool, 'AR');
         }
 
         devExt->counter = 0;
@@ -612,7 +627,7 @@ Routine Description:
         connectData->ClassService = RawaccelCallback;
 
         break;
-
+    }
     //
     // Disconnect a mouse class device driver from the port driver.
     //
