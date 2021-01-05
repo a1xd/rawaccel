@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "converter", "converter\conv
 		{28A3656F-A1DE-405C-B547-191C32EC555F} = {28A3656F-A1DE-405C-B547-191C32EC555F}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "devicelist", "devicelist\devicelist.csproj", "{3666B731-7406-41B1-BCFC-C65073FD09A1}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		common\common.vcxitems*{24b4226f-1461-408f-a1a4-1371c97153ea}*SharedItemsImports = 9
@@ -73,6 +75,10 @@ Global
 		{4C421992-9A27-4860-A40C-ADD76FBACE55}.Debug|x64.Build.0 = Debug|x64
 		{4C421992-9A27-4860-A40C-ADD76FBACE55}.Release|x64.ActiveCfg = Release|x64
 		{4C421992-9A27-4860-A40C-ADD76FBACE55}.Release|x64.Build.0 = Release|x64
+		{3666B731-7406-41B1-BCFC-C65073FD09A1}.Debug|x64.ActiveCfg = Debug|x64
+		{3666B731-7406-41B1-BCFC-C65073FD09A1}.Debug|x64.Build.0 = Debug|x64
+		{3666B731-7406-41B1-BCFC-C65073FD09A1}.Release|x64.ActiveCfg = Release|x64
+		{3666B731-7406-41B1-BCFC-C65073FD09A1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
