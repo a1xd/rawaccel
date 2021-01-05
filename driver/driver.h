@@ -20,8 +20,8 @@ using counter_t = long long;
 typedef struct _DEVICE_EXTENSION {
     counter_t counter;
     vec2d carry;
-    WCHAR hwid[512];
     CONNECT_DATA UpperConnectData;
+    WCHAR hwid[512];
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_EXTENSION, FilterGetData)
