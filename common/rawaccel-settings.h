@@ -23,6 +23,7 @@ namespace rawaccel {
         vec2d sens = { 1, 1 };
         vec2d dir_multipliers = {};
         milliseconds time_min = DEFAULT_TIME_MIN;
+        wchar_t device_hw_id[512] = {0};
     };
 
 }

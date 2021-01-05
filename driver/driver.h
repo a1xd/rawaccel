@@ -20,6 +20,7 @@ using counter_t = long long;
 typedef struct _DEVICE_EXTENSION {
     counter_t counter;
     vec2d carry;
+    WCHAR hwid[512];
     CONNECT_DATA UpperConnectData;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 

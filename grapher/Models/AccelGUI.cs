@@ -141,7 +141,8 @@ namespace grapher
                 modes = ApplyOptions.GetModes(),
                 args = newArgs,
                 minimumTime = driverSettings.minimumTime,
-                directionalMultipliers = driverSettings.directionalMultipliers
+                directionalMultipliers = driverSettings.directionalMultipliers,
+                deviceHardwareID = driverSettings.deviceHardwareID
             };
 
             ButtonDelay(WriteButton);

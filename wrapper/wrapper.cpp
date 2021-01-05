@@ -51,7 +51,7 @@ public value struct Vec2
 };
 
 [JsonObject(ItemRequired = Required::Always)]
-[StructLayout(LayoutKind::Sequential)]
+[StructLayout(LayoutKind::Sequential, CharSet = CharSet::Unicode)]
 public ref struct DriverSettings
 {
     literal String^ Key = "Driver settings";
@@ -77,6 +77,10 @@ public ref struct DriverSettings
 
     [JsonProperty(Required = Required::Default)]
     double minimumTime;
+
+    [JsonProperty("Device Hardware ID", Required = Required::Default)]
+    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = 512)]
+    String^ deviceHardwareID;
 
     bool ShouldSerializeminimumTime() 
     { 

@@ -54,6 +54,11 @@ Arguments:
     WDFDEVICE hDevice = WdfWdmDeviceGetWdfDeviceHandle(DeviceObject);
     PDEVICE_EXTENSION devExt = FilterGetData(hDevice);
 
+    bool devMatch = true;
+    if (wcsncmp(L"", global.args.device_hw_id, sizeof(global.args.device_hw_id)) != 0) {
+        devMatch = wcsncmp(devExt->hwid, global.args.device_hw_id, sizeof(global.args.device_hw_id)) == 0;
+    }
+
     if (!(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE)) {
         auto num_packets = InputDataEnd - InputDataStart;
           
@@ -63,28 +68,29 @@ Arguments:
 
         vec2d carry = devExt->carry;
 
-        auto it = InputDataStart;
-        do {
+        for (auto it = InputDataStart; it != InputDataEnd; ++it) {
             vec2d input = {
                 static_cast<double>(it->LastX),
                 static_cast<double>(it->LastY)
             };
 
-            global.modifier.apply_rotation(input);
+            if (devMatch) {
+                global.modifier.apply_rotation(input);
 
-            if (enable_accel) {
-                auto time_supplier = [=] {
-                    counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
-                    counter_t ticks = now - devExt->counter;
-                    devExt->counter = now;
-                    milliseconds time = ticks * global.tick_interval;
-                    return clampsd(time, global.args.time_min, 100);
-                };
+                if (enable_accel) {
+                    auto time_supplier = [=] {
+                        counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+                        counter_t ticks = now - devExt->counter;
+                        devExt->counter = now;
+                        milliseconds time = ticks * global.tick_interval;
+                        return clampsd(time, global.args.time_min, 100);
+                    };
 
-                global.modifier.apply_acceleration(input, time_supplier);
+                    global.modifier.apply_acceleration(input, time_supplier);
+                }
+
+                global.modifier.apply_sensitivity(input);
             }
-
-            global.modifier.apply_sensitivity(input);
 
             double carried_result_x = input.x + carry.x;
             double carried_result_y = input.y + carry.y;
@@ -98,7 +104,7 @@ Arguments:
             it->LastX = out_x;
             it->LastY = out_y;
 
-        } while (++it != InputDataEnd);
+        }
 
         devExt->carry = carry;
     }
@@ -581,7 +587,16 @@ Routine Description:
             DebugPrint(("WdfRequestRetrieveInputBuffer failed %x\n", status));
             break;
         }
-        
+
+        ULONG resultLen;
+        status = WdfDeviceQueryProperty(hDevice, DevicePropertyHardwareID,
+            sizeof(devExt->hwid), devExt->hwid, &resultLen);
+
+        if (!NT_SUCCESS(status)) {
+            DebugPrint(("WdfDeviceQueryProperty failed: 0x%x\n", status));
+            break;
+        }
+
         devExt->counter = 0;
         devExt->carry = {};
         devExt->UpperConnectData = *connectData;
