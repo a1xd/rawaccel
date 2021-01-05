@@ -68,7 +68,8 @@ Arguments:
 
         vec2d carry = devExt->carry;
 
-        for (auto it = InputDataStart; it != InputDataEnd; ++it) {
+        auto it = InputDataStart;
+        do {
             vec2d input = {
                 static_cast<double>(it->LastX),
                 static_cast<double>(it->LastY)
@@ -104,7 +105,7 @@ Arguments:
             it->LastX = out_x;
             it->LastY = out_y;
 
-        }
+        } while (++it != InputDataEnd);
 
         devExt->carry = carry;
     }
