@@ -53,6 +53,10 @@ int main() {
 
         fs::path target = get_target_path();
 
+        if (fs::exists(target)) {
+            std::cout << "Driver already installed. Removing previous installation.\n";
+        }
+
         add_service(target);
 
         fs::path tmp = make_temp_path(target);
