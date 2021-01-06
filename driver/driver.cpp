@@ -472,7 +472,7 @@ Return Value:
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&deviceAttributes,
         DEVICE_EXTENSION);
 
-    
+
     //
     // Create a framework device object.  This call will in turn create
     // a WDM deviceobject, attach to the lower stack and set the
@@ -484,6 +484,27 @@ Return Value:
         return status;
     }
 
+    //
+    // get device hwid
+    //
+    WDFMEMORY memory = NULL;
+
+    NTSTATUS hwid_query = WdfDeviceAllocAndQueryProperty(
+        hDevice,
+        DevicePropertyHardwareID,
+        PagedPool,
+        WDF_NO_OBJECT_ATTRIBUTES,
+        &memory);
+
+    if (!NT_SUCCESS(hwid_query)) {
+        DebugPrint(("WdfDeviceAllocAndQueryProperty failed: 0x%x\n", hwid_query));
+    }
+    else {
+        auto dev_ext = FilterGetData(hDevice);
+        void* buffer = WdfMemoryGetBuffer(memory, NULL);
+        wcsncpy(dev_ext->hwid, reinterpret_cast<wchar_t*>(buffer), MAX_HWID_LEN);
+        WdfObjectDelete(memory);
+    }
 
     //
     // Configure the default queue to be Parallel. Do not use sequential queue
@@ -587,31 +608,6 @@ Routine Description:
         if (!NT_SUCCESS(status)) {
             DebugPrint(("WdfRequestRetrieveInputBuffer failed %x\n", status));
             break;
-        }
-
-        // taken from REGSTR_VAL_MAX_HCID_LEN defined in um/RegStr.h
-        const size_t POOL_SIZE = sizeof(wchar_t) * 1024;
-
-        auto pool = ExAllocatePoolWithTag(NonPagedPool, POOL_SIZE, 'AR');
-
-        if (!pool) {
-            DebugPrint(("RA - failed to allocate pool for hwid list\n"));
-        }
-        else {
-            RtlZeroMemory(pool, POOL_SIZE);
-
-            ULONG resultLen;
-            NTSTATUS tmp = WdfDeviceQueryProperty(hDevice, DevicePropertyHardwareID,
-                POOL_SIZE, pool, &resultLen);
-
-            if (!NT_SUCCESS(tmp)) {
-                DebugPrint(("WdfDeviceQueryProperty failed: 0x%x\n", tmp));
-            }
-            else {
-                wcsncpy(devExt->hwid, reinterpret_cast<wchar_t*>(pool), MAX_HWID_LEN);
-            }
-            
-            ExFreePoolWithTag(pool, 'AR');
         }
 
         devExt->counter = 0;
