@@ -34,6 +34,7 @@ namespace grapher.Models
             ToolStripMenuItem gainOffsetToolStripMenuItem,
             ToolStripMenuItem legacyOffsetToolStripMenuItem,
             ToolStripMenuItem autoWriteMenuItem,
+            ToolStripMenuItem useSpecificDeviceMenuItem,
             ToolStripMenuItem scaleMenuItem,
             ToolStripTextBox dpiTextBox,
             ToolStripTextBox pollRateTextBox,
@@ -329,6 +330,7 @@ namespace grapher.Models
                 accelCalculator.DPI,
                 accelCalculator.PollRate,
                 autoWriteMenuItem,
+                useSpecificDeviceMenuItem,
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem);
 

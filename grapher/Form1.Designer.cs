@@ -161,6 +161,8 @@ namespace grapher
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.wholeVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byVectorComponentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UseSpecificDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartsPanel = new System.Windows.Forms.Panel();
             this.GainChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -168,7 +170,6 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.chartsPanel.SuspendLayout();
@@ -956,7 +957,8 @@ namespace grapher
             this.capStyleToolStripMenuItem,
             this.offsetStyleToolStripMenuItem,
             this.toolStripMenuItem1,
-            this.AutoWriteMenuItem});
+            this.AutoWriteMenuItem,
+            this.UseSpecificDeviceMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
@@ -1028,6 +1030,21 @@ namespace grapher
             this.byVectorComponentToolStripMenuItem.Name = "byVectorComponentToolStripMenuItem";
             this.byVectorComponentToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.byVectorComponentToolStripMenuItem.Text = "By Component";
+            // 
+            // AutoWriteMenuItem
+            // 
+            this.AutoWriteMenuItem.Checked = true;
+            this.AutoWriteMenuItem.CheckOnClick = true;
+            this.AutoWriteMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
+            this.AutoWriteMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.AutoWriteMenuItem.Text = "Apply Settings On Startup";
+            // 
+            // UseSpecificDeviceMenuItem
+            // 
+            this.UseSpecificDeviceMenuItem.Name = "UseSpecificDeviceMenuItem";
+            this.UseSpecificDeviceMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.UseSpecificDeviceMenuItem.Text = "Use Specific Device";
             // 
             // chartsPanel
             // 
@@ -1281,15 +1298,6 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // AutoWriteMenuItem
-            // 
-            this.AutoWriteMenuItem.Checked = true;
-            this.AutoWriteMenuItem.CheckOnClick = true;
-            this.AutoWriteMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
-            this.AutoWriteMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.AutoWriteMenuItem.Text = "Apply Settings On Startup";
-            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1418,6 +1426,7 @@ namespace grapher
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChart;
         private System.Windows.Forms.DataVisualization.Charting.Chart AccelerationChart;
         private System.Windows.Forms.ToolStripMenuItem AutoWriteMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
     }
 }
 
