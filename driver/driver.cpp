@@ -54,19 +54,17 @@ Arguments:
     WDFDEVICE hDevice = WdfWdmDeviceGetWdfDeviceHandle(DeviceObject);
     PDEVICE_EXTENSION devExt = FilterGetData(hDevice);
 
-    bool devMatch = true;
-    if (global.args.device_hw_id[0] != 0) {
-        devMatch = wcsncmp(devExt->hwid, global.args.device_hw_id, MAX_HWID_LEN) == 0;
-    }
+    auto num_packets = InputDataEnd - InputDataStart;
 
-    if (!(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE)) {
-        auto num_packets = InputDataEnd - InputDataStart;
-          
+    bool any = num_packets > 0;
+    bool rel_move = !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE);
+    bool dev_match = global.args.device_hw_id[0] == 0 ||
+        wcsncmp(devExt->hwid, global.args.device_hw_id, MAX_HWID_LEN) == 0;
+
+    if (any && rel_move && dev_match) {
         // if IO is backed up to the point where we get more than 1 packet here
         // then applying accel is pointless as we can't get an accurate timing
         bool enable_accel = num_packets == 1;
-
-        vec2d carry = devExt->carry;
 
         auto it = InputDataStart;
         do {
@@ -75,39 +73,36 @@ Arguments:
                 static_cast<double>(it->LastY)
             };
 
-            if (devMatch) {
-                global.modifier.apply_rotation(input);
+            global.modifier.apply_rotation(input);
 
-                if (enable_accel) {
-                    auto time_supplier = [=] {
-                        counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
-                        counter_t ticks = now - devExt->counter;
-                        devExt->counter = now;
-                        milliseconds time = ticks * global.tick_interval;
-                        return clampsd(time, global.args.time_min, 100);
-                    };
+            if (enable_accel) {
+                auto time_supplier = [=] {
+                    counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+                    counter_t ticks = now - devExt->counter;
+                    devExt->counter = now;
+                    milliseconds time = ticks * global.tick_interval;
+                    return clampsd(time, global.args.time_min, 100);
+                };
 
-                    global.modifier.apply_acceleration(input, time_supplier);
-                }
-
-                global.modifier.apply_sensitivity(input);
+                global.modifier.apply_acceleration(input, time_supplier);
             }
 
-            double carried_result_x = input.x + carry.x;
-            double carried_result_y = input.y + carry.y;
+            global.modifier.apply_sensitivity(input);
+
+            double carried_result_x = input.x + devExt->carry.x;
+            double carried_result_y = input.y + devExt->carry.y;
 
             LONG out_x = static_cast<LONG>(carried_result_x);
             LONG out_y = static_cast<LONG>(carried_result_y);
 
-            carry.x = carried_result_x - out_x;
-            carry.y = carried_result_y - out_y;
+            devExt->carry.x = carried_result_x - out_x;
+            devExt->carry.y = carried_result_y - out_y;
 
             it->LastX = out_x;
             it->LastY = out_y;
 
         } while (++it != InputDataEnd);
 
-        devExt->carry = carry;
     }
 
     (*(PSERVICE_CALLBACK_ROUTINE)devExt->UpperConnectData.ClassService)(
