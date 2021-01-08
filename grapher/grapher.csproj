@@ -93,7 +93,8 @@
     <Compile Include="Models\Charts\EstimatedPoints.cs" />
     <Compile Include="Models\Charts\ChartState\XYOneGraphState.cs" />
     <Compile Include="Models\Charts\ChartState\XYTwoGraphState.cs" />
-    <Compile Include="Models\Devices\DeviceList.cs" />
+    <Compile Include="Models\Devices\DeviceIDItem.cs" />
+    <Compile Include="Models\Devices\DeviceIDManager.cs" />
     <Compile Include="Models\Mouse\MouseData.cs" />
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
