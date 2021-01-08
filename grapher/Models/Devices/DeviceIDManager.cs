@@ -14,6 +14,7 @@ namespace grapher.Models.Devices
         public DeviceIDManager(ToolStripMenuItem deviceIDs)
         {
             DeviceIDsMenuItem = deviceIDs;
+            DeviceIDsMenuItem.Checked = false;
         }
 
         public ToolStripMenuItem DeviceIDsMenuItem { get; }
@@ -58,7 +59,6 @@ namespace grapher.Models.Devices
         {
             var nonEmptyHwid = !string.IsNullOrWhiteSpace(hwid);
 
-            DeviceIDsMenuItem.Checked = nonEmptyHwid;
             DeviceIDsMenuItem.DropDownItems.Clear();
             var anyDevice = new DeviceIDItem("Any", string.Empty, this);
             if (!nonEmptyHwid)
@@ -83,6 +83,7 @@ namespace grapher.Models.Devices
             {
                 var deviceItem = new DeviceIDItem(string.Empty, hwid, this);
                 deviceItem.SetDisconnected();
+                anyDevice.SetActivated();
             }
         }
 
