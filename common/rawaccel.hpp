@@ -225,6 +225,11 @@ namespace rawaccel {
         accelerator() = default;
     };
 
+    struct stigma_args {
+        vec2d sigmas = { 1, 1 };
+        double lp_norm = 2;
+    };
+
     struct stigma_distance {
         double p = 2.0;
         double p_inverse = 0.5;
@@ -232,11 +237,11 @@ namespace rawaccel {
         double sigma_x = 1.0;
         double sigma_y = 1.0;
 
-        stigma_distance(double sigma_x_in, double sigma_y_in, double lp_norm_in)
+        stigma_distance(stigma_args args)
         {
-            sigma_x = sigma_x_in;
-            sigma_y = sigma_y_in;
-            if (lp_norm_in <= 0)
+            sigma_x = args.sigmas.x;
+            sigma_y = args.sigmas.y;
+            if (args.lp_norm <= 0)
             {
                 lp_norm_infinity = true;
                 p = 0.0;
@@ -245,15 +250,15 @@ namespace rawaccel {
             else
             {
                 lp_norm_infinity = false;
-                p = lp_norm_in;
-                p_inverse = 1 / lp_norm_in;
+                p = args.lp_norm;
+                p_inverse = 1 / args.lp_norm;
             }
         }
 
         double calculate(int x, int y)
         {
             double x_scaled = x * sigma_x;
-            double y_scaled = y * sigma_x;
+            double y_scaled = y * sigma_y;
             return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
         }
 
@@ -265,10 +270,10 @@ namespace rawaccel {
         double start = 1.0;
         bool should_apply = false;
 
-        direction_weight(double theta_x_in, double theta_y_in)
+        direction_weight(vec2d thetas)
         {
-            diff = theta_y_in - theta_x_in;
-            start = theta_x_in;
+            diff = thetas.y - thetas.x;
+            start = thetas.x;
 
             if (diff != 0)
             {
@@ -282,7 +287,7 @@ namespace rawaccel {
 
         inline int atan_scale(double x, double y)
         {
-            return M_2_PI * atan2(abs(y), abs(x));
+            return M_2_PI * atan2(fabs(y), fabs(x));
         }
 
         double apply(double x, double y)
@@ -327,6 +332,10 @@ namespace rawaccel {
 
             accels.x = accelerator(args.argsv.x, args.modes.x, luts.x);
             accels.y = accelerator(args.argsv.y, args.modes.y, luts.y);
+
+            stigma = stigma_distance(args.args_stigma);
+            directional = direction_weight(args.directional_weights);
+
             apply_accel = true;
         }
 

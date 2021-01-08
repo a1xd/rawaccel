@@ -22,6 +22,8 @@ namespace rawaccel {
         vec2<accel_args> argsv;
         vec2d sens = { 1, 1 };
         vec2d dir_multipliers = {};
+        vec2d directional_weights = { 1, 1 };
+        stigma_args args_stigma;
         milliseconds time_min = DEFAULT_TIME_MIN;
     };
 
