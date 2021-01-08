@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
@@ -23,7 +24,8 @@ namespace grapher
             Button writeButton,
             ButtonBase toggleButton,
             MouseWatcher mouseWatcher,
-            ToolStripMenuItem scaleMenuItem)
+            ToolStripMenuItem scaleMenuItem,
+            DeviceIDManager deviceIDManager)
         {
             AccelForm = accelForm;
             AccelCalculator = accelCalculator;
@@ -36,6 +38,7 @@ namespace grapher
             DefaultButtonFont = WriteButton.Font;
             SmallButtonFont = new Font(WriteButton.Font.Name, WriteButton.Font.Size * Constants.SmallButtonSizeFactor);
             MouseWatcher = mouseWatcher;
+            DeviceIDManager = deviceIDManager;
 
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
             WriteButton.Click += new System.EventHandler(OnWriteButtonClick);
@@ -95,6 +98,8 @@ namespace grapher
 
         public ToolStripMenuItem ScaleMenuItem { get; }
 
+        public DeviceIDManager DeviceIDManager { get; }
+
         private Timer ChartRefresh { get; }
 
         private Font SmallButtonFont { get; }
@@ -142,7 +147,7 @@ namespace grapher
                 args = newArgs,
                 minimumTime = driverSettings.minimumTime,
                 directionalMultipliers = driverSettings.directionalMultipliers,
-                deviceHardwareID = driverSettings.deviceHardwareID
+                deviceHardwareID = DeviceIDManager.HWID,
             };
 
             ButtonDelay(WriteButton);
