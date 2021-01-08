@@ -225,12 +225,82 @@ namespace rawaccel {
         accelerator() = default;
     };
 
+    struct stigma_distance {
+        double p = 2.0;
+        double p_inverse = 0.5;
+        bool lp_norm_infinity = false;
+        double sigma_x = 1.0;
+        double sigma_y = 1.0;
+
+        stigma_distance(double sigma_x_in, double sigma_y_in, double lp_norm_in)
+        {
+            sigma_x = sigma_x_in;
+            sigma_y = sigma_y_in;
+            if (lp_norm_in <= 0)
+            {
+                lp_norm_infinity = true;
+                p = 0.0;
+                p_inverse = 0.0;
+            }
+            else
+            {
+                lp_norm_infinity = false;
+                p = lp_norm_in;
+                p_inverse = 1 / lp_norm_in;
+            }
+        }
+
+        double calculate(int x, int y)
+        {
+            double x_scaled = x * sigma_x;
+            double y_scaled = y * sigma_x;
+            return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
+        }
+
+        stigma_distance() = default;
+    };
+
+    struct direction_weight {
+        double diff = 0.0;
+        double start = 1.0;
+        bool should_apply = false;
+
+        direction_weight(double theta_x_in, double theta_y_in)
+        {
+            diff = theta_y_in - theta_x_in;
+            start = theta_x_in;
+
+            if (diff != 0)
+            {
+                should_apply = true;
+            }
+            else
+            {
+                should_apply = false;
+            }
+        }
+
+        inline int atan_scale(double x, double y)
+        {
+            return M_2_PI * atan2(abs(y), abs(x));
+        }
+
+        double apply(double x, double y)
+        {
+            return atan_scale(x, y) * diff + start;
+        }
+
+        direction_weight() = default;
+    };
+
     /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
     struct mouse_modifier {
         bool apply_rotate = false;
         bool apply_accel = false;
         bool combine_magnitudes = true;
         rotator rotate;
+        stigma_distance stigma;
+        direction_weight directional;
         vec2<accelerator> accels;
         vec2d sensitivity = { 1, 1 };
         vec2d directional_multipliers = {};
@@ -276,9 +346,15 @@ namespace rawaccel {
                 milliseconds time = time_supp();
 
                 if (combine_magnitudes) {
-                    double mag = sqrtsd(movement.x * movement.x + movement.y * movement.y);
+                    double mag = stigma.calculate(movement.x, movement.y);
                     double speed = mag / time;
                     double scale = accels.x.apply(speed);
+
+                    if (directional.should_apply)
+                    {
+                        scale *= directional.apply(movement.x, movement.y);
+                    }
+
                     movement.x *= scale;
                     movement.y *= scale;
                 }
