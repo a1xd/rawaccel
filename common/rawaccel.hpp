@@ -225,17 +225,17 @@ namespace rawaccel {
         accelerator() = default;
     };
 
-    struct stigma_distance {
+    struct weighted_distance {
         double p = 2.0;
         double p_inverse = 0.5;
         bool lp_norm_infinity = false;
         double sigma_x = 1.0;
         double sigma_y = 1.0;
 
-        stigma_distance(stigma_args args)
+        weighted_distance(domain_args args)
         {
-            sigma_x = args.sigmas.x;
-            sigma_y = args.sigmas.y;
+            sigma_x = args.domain_weights.x;
+            sigma_y = args.domain_weights.y;
             if (args.lp_norm <= 0)
             {
                 lp_norm_infinity = true;
@@ -252,12 +252,20 @@ namespace rawaccel {
 
         double calculate(double x, double y)
         {
-            double x_scaled = x * sigma_x;
-            double y_scaled = y * sigma_y;
+			double abs_x = fabs(x);
+			double abs_y = fabs(y);
+
+            if (lp_norm_infinity)
+            {
+                return abs_x > abs_y ? abs_x : abs_y;
+            }
+
+            double x_scaled = abs_x * sigma_x;
+            double y_scaled = abs_y * sigma_y;
             return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
         }
 
-        stigma_distance() = default;
+        weighted_distance() = default;
     };
 
     struct direction_weight {
@@ -299,7 +307,7 @@ namespace rawaccel {
         bool apply_accel = false;
         bool combine_magnitudes = true;
         rotator rotate;
-        stigma_distance stigma;
+        weighted_distance distance;
         direction_weight directional;
         vec2<accelerator> accels;
         vec2d sensitivity = { 1, 1 };
@@ -328,8 +336,8 @@ namespace rawaccel {
             accels.x = accelerator(args.argsv.x, args.modes.x, luts.x);
             accels.y = accelerator(args.argsv.y, args.modes.y, luts.y);
 
-            stigma = stigma_distance(args.args_stigma);
-            directional = direction_weight(args.directional_weights);
+            distance = weighted_distance(args.domain_args);
+            directional = direction_weight(args.range_weights);
 
             apply_accel = true;
         }
@@ -350,7 +358,7 @@ namespace rawaccel {
                 milliseconds time = time_supp();
 
                 if (combine_magnitudes) {
-                    double mag = stigma.calculate(movement.x, movement.y);
+                    double mag = distance.calculate(movement.x, movement.y);
                     double speed = mag / time;
                     double scale = accels.x.apply(speed);
 

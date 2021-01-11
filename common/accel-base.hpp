@@ -17,8 +17,8 @@ namespace rawaccel {
         double speed_cap = 0;
     };
 
-    struct stigma_args {
-        vec2d sigmas = { 1, 1 };
+    struct domain_args {
+        vec2d domain_weights = { 1, 1 };
         double lp_norm = 2;
     };
 

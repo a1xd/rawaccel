@@ -62,7 +62,7 @@ namespace grapher
         public const int ButtonVerticalOffset = 60;
 
         /// <summary> Padding between directionality title and containing panel </summary>
-        public const int DirectionalityTitlePad = 2;
+        public const int DirectionalityTitlePad = 4;
 
         public const float SmallButtonSizeFactor = 0.666f;
 

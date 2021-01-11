@@ -32,8 +32,10 @@ namespace grapher.Models.Options.Directionality
             ByComponentCheckBox = byComponentCheckBox;
 
             ContainingPanel.Paint += panel_Paint;
+            directionalityLabel.Click += title_click;
             DirectionalityLabel.Left = ContainingPanel.Left + Constants.DirectionalityTitlePad;
             DirectionalityLabel.Top = ContainingPanel.Top + Constants.DirectionalityTitlePad;
+            IsHidden = false;
             ToWhole();
             Hide();
         }
@@ -55,6 +57,8 @@ namespace grapher.Models.Options.Directionality
         public CheckBox WholeCheckBox { get; }
 
         public CheckBox ByComponentCheckBox { get; }
+
+        private bool IsHidden { get; set; }
 
         public DomainArgs GetDomainArgs()
         {
@@ -115,14 +119,34 @@ namespace grapher.Models.Options.Directionality
 
         public void Hide()
         {
-            DirectionalityX.Hide();
-            DirectionalityY.Hide();
-            LpNorm.Hide();
-            Domain.Hide();
-            Range.Hide();
-            WholeCheckBox.Hide();
-            ByComponentCheckBox.Hide();
-            DrawHidden();
+            if (!IsHidden)
+            {
+                DirectionalityX.Hide();
+                DirectionalityY.Hide();
+                LpNorm.Hide();
+                Domain.Hide();
+                Range.Hide();
+                WholeCheckBox.Hide();
+                ByComponentCheckBox.Hide();
+                DrawHidden();
+                IsHidden = true;
+            }
+        }
+
+        public void Show()
+        {
+            if (IsHidden)
+            {
+                DirectionalityX.Hide();
+                DirectionalityY.Hide();
+                LpNorm.Hide();
+                Domain.Hide();
+                Range.Hide();
+                WholeCheckBox.Hide();
+                ByComponentCheckBox.Hide();
+                DrawShown();
+                IsHidden = false;
+            }
         }
 
         public void ToByComponent()
@@ -137,18 +161,6 @@ namespace grapher.Models.Options.Directionality
             LpNorm.SetToAvailable();
             Domain.SetToAvailable();
             Range.SetToAvailable();
-        }
-
-        public void Show()
-        {
-            DirectionalityX.Hide();
-            DirectionalityY.Hide();
-            LpNorm.Hide();
-            Domain.Hide();
-            Range.Hide();
-            WholeCheckBox.Hide();
-            ByComponentCheckBox.Hide();
-            DrawShown();
         }
 
         private void DrawHidden()
@@ -167,6 +179,18 @@ namespace grapher.Models.Options.Directionality
             ButtonBorderStyle bbs = ButtonBorderStyle.Dashed;
             int thickness = 2;
             ControlPaint.DrawBorder(e.Graphics, this.ContainingPanel.ClientRectangle, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs);
+        }
+
+        private void title_click(object sender, EventArgs e)
+        {
+            if (IsHidden)
+            {
+                Show();
+            }
+            else
+            {
+                Hide();
+            }
         }
     }
 }
