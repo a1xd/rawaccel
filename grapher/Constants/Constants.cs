@@ -62,7 +62,7 @@ namespace grapher
         public const int ButtonVerticalOffset = 60;
 
         /// <summary> Padding between directionality title and containing panel </summary>
-        public const int DirectionalityTitlePad = 4;
+        public const int DirectionalityTitlePad = 8;
 
         public const float SmallButtonSizeFactor = 0.666f;
 
@@ -113,6 +113,12 @@ namespace grapher
 
         /// <summary> Default name of settings file. </summary>
         public const string DefaultSettingsFileName = @"settings.json";
+
+        /// <summary> Text to direcitonality panel title when panel is closed. </summary>
+        public const string DirectionalityTitleClosed = "Directionality\u25BC";
+
+        /// <summary> Text to direcitonality panel title when panel is open. </summary>
+        public const string DirectionalityTitleOpen = "Directionality\u25B2";
 
         /// <summary> Style used by System.Double.Parse </summary>
         public const NumberStyles FloatStyle = NumberStyles.Float | NumberStyles.AllowThousands;

@@ -371,6 +371,7 @@ namespace grapher.Models
                 directionalityLabel,
                 directionalityX,
                 directionalityY,
+                direcionalityActiveValueTitle,
                 lpNorm,
                 domain,
                 range,

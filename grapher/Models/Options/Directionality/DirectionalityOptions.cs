@@ -15,6 +15,7 @@ namespace grapher.Models.Options.Directionality
             Label directionalityLabel,
             Label directionalityX,
             Label directionalityY,
+            Label directionalityActiveValueTitle,
             Option lpNorm,
             OptionXY domain,
             OptionXY range,
@@ -25,6 +26,7 @@ namespace grapher.Models.Options.Directionality
             DirectionalityLabel = directionalityLabel;
             DirectionalityX = directionalityX;
             DirectionalityY = directionalityY;
+            DirectionalityActiveValueTitle = directionalityActiveValueTitle;
             LpNorm = lpNorm;
             Domain = domain;
             Range = range;
@@ -32,9 +34,9 @@ namespace grapher.Models.Options.Directionality
             ByComponentCheckBox = byComponentCheckBox;
 
             ContainingPanel.Paint += panel_Paint;
-            directionalityLabel.Click += title_click;
-            DirectionalityLabel.Left = ContainingPanel.Left + Constants.DirectionalityTitlePad;
-            DirectionalityLabel.Top = ContainingPanel.Top + Constants.DirectionalityTitlePad;
+            DirectionalityLabel.Click += title_click;
+            DirectionalityLabel.Left = Constants.DirectionalityTitlePad;
+            DirectionalityLabel.Top = Constants.DirectionalityTitlePad;
             IsHidden = false;
             ToWhole();
             Hide();
@@ -47,6 +49,8 @@ namespace grapher.Models.Options.Directionality
         public Label DirectionalityX { get; }
 
         public Label DirectionalityY { get; }
+
+        public Label DirectionalityActiveValueTitle { get; }
 
         public Option LpNorm { get; }
 
@@ -123,11 +127,13 @@ namespace grapher.Models.Options.Directionality
             {
                 DirectionalityX.Hide();
                 DirectionalityY.Hide();
+                DirectionalityActiveValueTitle.Hide();
                 LpNorm.Hide();
                 Domain.Hide();
                 Range.Hide();
                 WholeCheckBox.Hide();
                 ByComponentCheckBox.Hide();
+                DirectionalityLabel.Text = Constants.DirectionalityTitleClosed;
                 DrawHidden();
                 IsHidden = true;
             }
@@ -137,13 +143,15 @@ namespace grapher.Models.Options.Directionality
         {
             if (IsHidden)
             {
-                DirectionalityX.Hide();
-                DirectionalityY.Hide();
-                LpNorm.Hide();
-                Domain.Hide();
-                Range.Hide();
-                WholeCheckBox.Hide();
-                ByComponentCheckBox.Hide();
+                DirectionalityX.Show();
+                DirectionalityY.Show();
+                DirectionalityActiveValueTitle.Show();
+                LpNorm.Show();
+                Domain.Show();
+                Range.Show();
+                WholeCheckBox.Show();
+                ByComponentCheckBox.Show();
+                DirectionalityLabel.Text = Constants.DirectionalityTitleOpen;
                 DrawShown();
                 IsHidden = false;
             }
@@ -166,11 +174,13 @@ namespace grapher.Models.Options.Directionality
         private void DrawHidden()
         {
             ContainingPanel.Height = DirectionalityLabel.Height + 2 * Constants.DirectionalityTitlePad;
+            ContainingPanel.Invalidate();
         }
 
         private void DrawShown()
         {
             ContainingPanel.Height = WholeCheckBox.Bottom - DirectionalityLabel.Top + 2 * Constants.DirectionalityTitlePad;
+            ContainingPanel.Invalidate();
         }
 
         private void panel_Paint(object sender, PaintEventArgs e)
