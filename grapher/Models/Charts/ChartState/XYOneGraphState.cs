@@ -45,6 +45,10 @@ namespace grapher.Models.Charts.ChartState
         public override void Calculate(ManagedAccel accel, DriverSettings settings)
         {
             Calculator.CalculateCombinedDiffSens(Data, accel, settings, Calculator.SimulatedInputCombined);
+            Data.X.Clear();
+            Data.Y.Clear();
+            Calculator.Calculate(Data.X, accel, settings.sensitivity.x, Calculator.SimulatedInputX);
+            Calculator.Calculate(Data.Y, accel, settings.sensitivity.y, Calculator.SimulatedInputY);
         }
     }
 }

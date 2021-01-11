@@ -83,14 +83,14 @@ public ref struct DriverSettings
     [JsonProperty("Negative directional multipliers", Required = Required::Default)]
     Vec2<double> directionalMultipliers;
 
-    [JsonProperty(Required = Required::Default)]
-    double minimumTime;
-
     [JsonProperty("Stretches domain for horizontal vs vertical inputs")]
     DomainArgs domainArgs;
 
     [JsonProperty("Stretches accel range for horizontal vs vertical inputs")]
     Vec2<double> rangeXY;
+
+    [JsonProperty(Required = Required::Default)]
+    double minimumTime;
 
     bool ShouldSerializeminimumTime() 
     { 
