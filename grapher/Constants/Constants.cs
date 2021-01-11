@@ -61,6 +61,9 @@ namespace grapher
         /// <summary> Vertical placement of write button above bottom of sensitivity graph </summary>
         public const int ButtonVerticalOffset = 60;
 
+        /// <summary> Padding between directionality title and containing panel </summary>
+        public const int DirectionalityTitlePad = 2;
+
         public const float SmallButtonSizeFactor = 0.666f;
 
         /// <summary> Format string for shortened x and y textboxes. </summary>

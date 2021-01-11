@@ -225,11 +225,6 @@ namespace rawaccel {
         accelerator() = default;
     };
 
-    struct stigma_args {
-        vec2d sigmas = { 1, 1 };
-        double lp_norm = 2;
-    };
-
     struct stigma_distance {
         double p = 2.0;
         double p_inverse = 0.5;
@@ -255,7 +250,7 @@ namespace rawaccel {
             }
         }
 
-        double calculate(int x, int y)
+        double calculate(double x, double y)
         {
             double x_scaled = x * sigma_x;
             double y_scaled = y * sigma_y;
@@ -285,7 +280,7 @@ namespace rawaccel {
             }
         }
 
-        inline int atan_scale(double x, double y)
+        inline double atan_scale(double x, double y)
         {
             return M_2_PI * atan2(fabs(y), fabs(x));
         }
@@ -361,7 +356,7 @@ namespace rawaccel {
 
                     if (directional.should_apply)
                     {
-                        scale *= directional.apply(movement.x, movement.y);
+                        scale = (scale - 1)*directional.apply(movement.x, movement.y) + 1;
                     }
 
                     movement.x *= scale;

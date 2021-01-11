@@ -1,4 +1,5 @@
-﻿using grapher.Models.Serialized;
+﻿using grapher.Models.Options.Directionality;
+using grapher.Models.Serialized;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -10,24 +11,24 @@ namespace grapher.Models.Options
         #region Constructors
 
         public ApplyOptions(
-            ToolStripMenuItem wholeVectorMenuItem,
-            ToolStripMenuItem byComponentMenuItem,
             CheckBox byComponentVectorXYLock,
             AccelOptionSet optionSetX,
             AccelOptionSet optionSetY,
+            DirectionalityOptions directionalityOptions,
             OptionXY sensitivity,
             Option rotation,
             Label lockXYLabel,
             AccelCharts accelCharts)
         {
-            WholeVectorMenuItem = wholeVectorMenuItem;
-            ByComponentVectorMenuItem = byComponentMenuItem;
+            Directionality = directionalityOptions;
+            WholeVectorCheckBox = Directionality.WholeCheckBox;
+            ByComponentVectorCheckBox = Directionality.ByComponentCheckBox;
 
-            WholeVectorMenuItem.Click += new System.EventHandler(OnWholeClicked);
-            ByComponentVectorMenuItem.Click += new System.EventHandler(OnByComponentClicked);
+            WholeVectorCheckBox.Click += new System.EventHandler(OnWholeClicked);
+            ByComponentVectorCheckBox.Click += new System.EventHandler(OnByComponentClicked);
 
-            WholeVectorMenuItem.CheckedChanged += new System.EventHandler(OnWholeCheckedChange);
-            ByComponentVectorMenuItem.CheckedChanged += new System.EventHandler(OnByComponentCheckedChange);
+            WholeVectorCheckBox.CheckedChanged += new System.EventHandler(OnWholeCheckedChange);
+            ByComponentVectorCheckBox.CheckedChanged += new System.EventHandler(OnByComponentCheckedChange);
 
             ByComponentVectorXYLock = byComponentVectorXYLock;
             OptionSetX = optionSetX;
@@ -52,15 +53,17 @@ namespace grapher.Models.Options
 
         #region Properties
 
-        public ToolStripMenuItem WholeVectorMenuItem { get; }
+        public CheckBox WholeVectorCheckBox { get; }
 
-        public ToolStripMenuItem ByComponentVectorMenuItem { get; }
+        public CheckBox ByComponentVectorCheckBox { get; }
 
         public CheckBox ByComponentVectorXYLock { get; }
 
         public AccelOptionSet OptionSetX { get; }
 
         public AccelOptionSet OptionSetY { get; }
+
+        public DirectionalityOptions Directionality { get; }
 
         public OptionXY Sensitivity { get; }
 
@@ -114,8 +117,8 @@ namespace grapher.Models.Options
             Sensitivity.SetActiveValues(xSens, ySens);
             Rotation.SetActiveValue(rotation);
             OptionSetX.SetActiveValues(xMode, xArgs);
-            WholeVectorMenuItem.Checked = isWhole;
-            ByComponentVectorMenuItem.Checked = !isWhole;
+            WholeVectorCheckBox.Checked = isWhole;
+            ByComponentVectorCheckBox.Checked = !isWhole;
             ByComponentVectorXYLock.Checked = xArgs.Equals(yArgs);
             OptionSetY.SetActiveValues(yMode, yArgs);
         }
@@ -132,6 +135,8 @@ namespace grapher.Models.Options
                 settings.args.y,
                 settings.combineMagnitudes);
 
+            Directionality.SetActiveValues(settings);
+
             AccelCharts.SetLogarithmic(
                 OptionSetX.Options.AccelerationType.LogarithmicCharts,
                 OptionSetY.Options.AccelerationType.LogarithmicCharts);
@@ -139,25 +144,27 @@ namespace grapher.Models.Options
 
         public void OnWholeClicked(object sender, EventArgs e)
         {
-            if (!WholeVectorMenuItem.Checked)
+            if (!WholeVectorCheckBox.Checked)
             {
-                WholeVectorMenuItem.Checked = true;
-                ByComponentVectorMenuItem.Checked = false;
+                WholeVectorCheckBox.Checked = true;
+                ByComponentVectorCheckBox.Checked = false;
+                Directionality.ToWhole();
             }
         }
 
         public void OnByComponentClicked(object sender, EventArgs e)
         {
-            if (!ByComponentVectorMenuItem.Checked)
+            if (!ByComponentVectorCheckBox.Checked)
             {
-                WholeVectorMenuItem.Checked = false;
-                ByComponentVectorMenuItem.Checked = true;
+                WholeVectorCheckBox.Checked = false;
+                ByComponentVectorCheckBox.Checked = true;
+                Directionality.ToByComponent();
             }
         }
 
         public void OnWholeCheckedChange(object sender, EventArgs e)
         {
-            if (WholeVectorMenuItem.Checked)
+            if (WholeVectorCheckBox.Checked)
             {
                 EnableWholeApplication();
             }
@@ -165,7 +172,7 @@ namespace grapher.Models.Options
 
         public void OnByComponentCheckedChange(object sender, EventArgs e)
         {
-            if (ByComponentVectorMenuItem.Checked)
+            if (ByComponentVectorCheckBox.Checked)
             {
                 EnableByComponentApplication();
             }

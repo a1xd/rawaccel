@@ -117,6 +117,7 @@
     <Compile Include="Layouts\NaturalLayout.cs" />
     <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
+    <Compile Include="Models\Options\Directionality\DirectionalityOptions.cs" />
     <Compile Include="Models\Options\IOption.cs" />
     <Compile Include="Models\Options\OffsetOptions.cs" />
     <Compile Include="Models\Options\Option.cs" />

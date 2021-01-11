@@ -52,6 +52,14 @@ public value struct Vec2
 
 [JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential)]
+public value struct DomainArgs
+{
+    Vec2<double> domainXY;
+    double lpNorm;
+};
+
+[JsonObject(ItemRequired = Required::Always)]
+[StructLayout(LayoutKind::Sequential)]
 public ref struct DriverSettings
 {
     literal String^ Key = "Driver settings";
@@ -77,6 +85,12 @@ public ref struct DriverSettings
 
     [JsonProperty(Required = Required::Default)]
     double minimumTime;
+
+    [JsonProperty("Stretches domain for horizontal vs vertical inputs")]
+    DomainArgs domainArgs;
+
+    [JsonProperty("Stretches accel range for horizontal vs vertical inputs")]
+    Vec2<double> rangeXY;
 
     bool ShouldSerializeminimumTime() 
     { 

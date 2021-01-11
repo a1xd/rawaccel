@@ -153,6 +153,18 @@ namespace grapher
             Show();
         }
 
+        public void SetToUnavailable()
+        {
+            Fields.XField.SetToUnavailable();
+            Fields.YField.SetToUnavailable();
+        }
+
+        public void SetToAvailable()
+        {
+            Fields.XField.SetToDefault();
+            Fields.YField.SetToDefault();
+        }
+
         #endregion Methods
     }
 }

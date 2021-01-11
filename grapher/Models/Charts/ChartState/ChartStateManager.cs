@@ -52,7 +52,9 @@ namespace grapher.Models.Charts.ChartState
 
             if (settings.combineMagnitudes)
             {
-                if (settings.sensitivity.x != settings.sensitivity.y)
+                if (settings.sensitivity.x != settings.sensitivity.y ||
+                    settings.domainArgs.domainXY.x != settings.domainArgs.domainXY.y ||
+                    settings.rangeXY.x != settings.rangeXY.y)
                 {
                     chartState = XYOneGraphState;
                 }
