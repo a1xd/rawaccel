@@ -137,6 +137,7 @@ namespace grapher
             Fields.Hide();
             Fields.LockCheckBox.Hide();
             Label.Hide();
+            ActiveValueLabels.Hide();
         }
 
         public void Show()
@@ -144,6 +145,7 @@ namespace grapher
             Fields.Show();
             Fields.LockCheckBox.Show();
             Label.Show();
+            ActiveValueLabels.Show();
         }
 
         public override void Show(string name)

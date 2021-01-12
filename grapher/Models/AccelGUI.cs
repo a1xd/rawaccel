@@ -192,7 +192,7 @@ namespace grapher
 
         private void SetupButtons()
         {
-            WriteButton.Top = AccelCharts.Top + AccelCharts.TopChartHeight - Constants.ButtonVerticalOffset;
+            WriteButton.Top = Constants.SensitivityChartAloneHeight - Constants.ButtonVerticalOffset;
             
             ToggleButton.Appearance = Appearance.Button;
             ToggleButton.FlatStyle = FlatStyle.System;

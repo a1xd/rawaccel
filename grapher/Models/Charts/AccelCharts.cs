@@ -80,14 +80,6 @@ namespace grapher
             }
         }
 
-        public int TopChartHeight
-        {
-            get
-            {
-                return ChartState.SensitivityChart.Height;
-            }
-        }
-
         private int FormBorderHeight { get; }
 
         private ChartState ChartState { get; set; }

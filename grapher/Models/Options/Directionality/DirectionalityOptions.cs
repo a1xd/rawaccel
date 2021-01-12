@@ -20,7 +20,8 @@ namespace grapher.Models.Options.Directionality
             OptionXY domain,
             OptionXY range,
             CheckBox wholeCheckBox,
-            CheckBox byComponentCheckBox)
+            CheckBox byComponentCheckBox,
+            int top)
         {
             ContainingPanel = containingPanel;
             DirectionalityLabel = directionalityLabel;
@@ -33,8 +34,18 @@ namespace grapher.Models.Options.Directionality
             WholeCheckBox = wholeCheckBox;
             ByComponentCheckBox = byComponentCheckBox;
 
+            Domain.Fields.LockCheckBox.Checked = false;
+            Range.Fields.LockCheckBox.Checked = false;
+            Domain.Fields.LockCheckBox.Enabled = false;
+            Range.Fields.LockCheckBox.Enabled = false;
+            Domain.Fields.LockCheckBox.Hide();
+            Range.Fields.LockCheckBox.Hide();
+            Domain.Fields.SetSeparate();
+            Range.Fields.SetSeparate();
+
             ContainingPanel.Paint += panel_Paint;
             DirectionalityLabel.Click += title_click;
+            ContainingPanel.Top = top;
             DirectionalityLabel.Left = Constants.DirectionalityTitlePad;
             DirectionalityLabel.Top = Constants.DirectionalityTitlePad;
             IsHidden = false;
@@ -61,6 +72,10 @@ namespace grapher.Models.Options.Directionality
         public CheckBox WholeCheckBox { get; }
 
         public CheckBox ByComponentCheckBox { get; }
+
+        public int OpenHeight { get => WholeCheckBox.Bottom - DirectionalityLabel.Top + 2 * Constants.DirectionalityTitlePad; }
+
+        public int ClosedHeight { get => DirectionalityLabel.Height + 2 * Constants.DirectionalityTitlePad; }
 
         private bool IsHidden { get; set; }
 
@@ -149,6 +164,8 @@ namespace grapher.Models.Options.Directionality
                 LpNorm.Show();
                 Domain.Show();
                 Range.Show();
+                Domain.Fields.LockCheckBox.Hide();
+                Range.Fields.LockCheckBox.Hide();
                 WholeCheckBox.Show();
                 ByComponentCheckBox.Show();
                 DirectionalityLabel.Text = Constants.DirectionalityTitleOpen;
@@ -173,13 +190,13 @@ namespace grapher.Models.Options.Directionality
 
         private void DrawHidden()
         {
-            ContainingPanel.Height = DirectionalityLabel.Height + 2 * Constants.DirectionalityTitlePad;
+            ContainingPanel.Height = ClosedHeight;
             ContainingPanel.Invalidate();
         }
 
         private void DrawShown()
         {
-            ContainingPanel.Height = WholeCheckBox.Bottom - DirectionalityLabel.Top + 2 * Constants.DirectionalityTitlePad;
+            ContainingPanel.Height = OpenHeight;
             ContainingPanel.Invalidate();
         }
 

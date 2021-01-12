@@ -77,12 +77,14 @@ namespace grapher.Models.Charts.ChartState
 
         public void ShowVelocityAndGain()
         {
+            SensitivityChart.SetHeight(Constants.SensitivityChartTogetherHeight);
             VelocityChart.Show();
             GainChart.Show();
         }
 
         public void HideVelocityAndGain()
         {
+            SensitivityChart.SetHeight(Constants.SensitivityChartAloneHeight);
             VelocityChart.Hide();
             GainChart.Hide();
         }

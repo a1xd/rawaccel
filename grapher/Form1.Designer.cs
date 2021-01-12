@@ -71,7 +71,14 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.FakeBox = new System.Windows.Forms.CheckBox();
             this.DirectionalityPanel = new System.Windows.Forms.Panel();
+            this.LpNormActiveValue = new System.Windows.Forms.Label();
+            this.RangeActiveValueY = new System.Windows.Forms.Label();
+            this.RangeActiveValueX = new System.Windows.Forms.Label();
+            this.DomainActiveValueY = new System.Windows.Forms.Label();
+            this.DomainActiveValueX = new System.Windows.Forms.Label();
+            this.DirectionalityActiveValueTitle = new System.Windows.Forms.Label();
             this.ByComponentCheckBox = new System.Windows.Forms.CheckBox();
             this.WholeCheckBox = new System.Windows.Forms.CheckBox();
             this.DirectionalityRangeLabel = new System.Windows.Forms.Label();
@@ -180,13 +187,6 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.DirectionalityActiveValueTitle = new System.Windows.Forms.Label();
-            this.DomainActiveValueX = new System.Windows.Forms.Label();
-            this.DomainActiveValueY = new System.Windows.Forms.Label();
-            this.RangeActiveValueX = new System.Windows.Forms.Label();
-            this.RangeActiveValueY = new System.Windows.Forms.Label();
-            this.LpNormActiveValue = new System.Windows.Forms.Label();
-            this.FakeBox = new System.Windows.Forms.CheckBox();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -283,6 +283,16 @@ namespace grapher
             this.optionsPanel.TabIndex = 34;
             this.optionsPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.optionsPanel_Paint);
             // 
+            // FakeBox
+            // 
+            this.FakeBox.AutoSize = true;
+            this.FakeBox.Location = new System.Drawing.Point(31, 538);
+            this.FakeBox.Name = "FakeBox";
+            this.FakeBox.Size = new System.Drawing.Size(47, 17);
+            this.FakeBox.TabIndex = 151;
+            this.FakeBox.Text = "fake";
+            this.FakeBox.UseVisualStyleBackColor = true;
+            // 
             // DirectionalityPanel
             // 
             this.DirectionalityPanel.Controls.Add(this.LpNormActiveValue);
@@ -304,15 +314,70 @@ namespace grapher
             this.DirectionalityPanel.Controls.Add(this.DomainBoxY);
             this.DirectionalityPanel.Controls.Add(this.DomainBoxX);
             this.DirectionalityPanel.Controls.Add(this.DirectionalityLabel);
-            this.DirectionalityPanel.Location = new System.Drawing.Point(28, 369);
+            this.DirectionalityPanel.Location = new System.Drawing.Point(12, 369);
             this.DirectionalityPanel.Name = "DirectionalityPanel";
-            this.DirectionalityPanel.Size = new System.Drawing.Size(301, 126);
+            this.DirectionalityPanel.Size = new System.Drawing.Size(298, 135);
             this.DirectionalityPanel.TabIndex = 150;
+            // 
+            // LpNormActiveValue
+            // 
+            this.LpNormActiveValue.AutoSize = true;
+            this.LpNormActiveValue.Location = new System.Drawing.Point(185, 81);
+            this.LpNormActiveValue.Name = "LpNormActiveValue";
+            this.LpNormActiveValue.Size = new System.Drawing.Size(13, 13);
+            this.LpNormActiveValue.TabIndex = 18;
+            this.LpNormActiveValue.Text = "0";
+            // 
+            // RangeActiveValueY
+            // 
+            this.RangeActiveValueY.AutoSize = true;
+            this.RangeActiveValueY.Location = new System.Drawing.Point(204, 55);
+            this.RangeActiveValueY.Name = "RangeActiveValueY";
+            this.RangeActiveValueY.Size = new System.Drawing.Size(13, 13);
+            this.RangeActiveValueY.TabIndex = 17;
+            this.RangeActiveValueY.Text = "0";
+            // 
+            // RangeActiveValueX
+            // 
+            this.RangeActiveValueX.AutoSize = true;
+            this.RangeActiveValueX.Location = new System.Drawing.Point(177, 55);
+            this.RangeActiveValueX.Name = "RangeActiveValueX";
+            this.RangeActiveValueX.Size = new System.Drawing.Size(13, 13);
+            this.RangeActiveValueX.TabIndex = 16;
+            this.RangeActiveValueX.Text = "0";
+            // 
+            // DomainActiveValueY
+            // 
+            this.DomainActiveValueY.AutoSize = true;
+            this.DomainActiveValueY.Location = new System.Drawing.Point(204, 28);
+            this.DomainActiveValueY.Name = "DomainActiveValueY";
+            this.DomainActiveValueY.Size = new System.Drawing.Size(13, 13);
+            this.DomainActiveValueY.TabIndex = 15;
+            this.DomainActiveValueY.Text = "0";
+            // 
+            // DomainActiveValueX
+            // 
+            this.DomainActiveValueX.AutoSize = true;
+            this.DomainActiveValueX.Location = new System.Drawing.Point(177, 28);
+            this.DomainActiveValueX.Name = "DomainActiveValueX";
+            this.DomainActiveValueX.Size = new System.Drawing.Size(13, 13);
+            this.DomainActiveValueX.TabIndex = 14;
+            this.DomainActiveValueX.Text = "0";
+            // 
+            // DirectionalityActiveValueTitle
+            // 
+            this.DirectionalityActiveValueTitle.AutoSize = true;
+            this.DirectionalityActiveValueTitle.Location = new System.Drawing.Point(176, 9);
+            this.DirectionalityActiveValueTitle.Name = "DirectionalityActiveValueTitle";
+            this.DirectionalityActiveValueTitle.Size = new System.Drawing.Size(41, 13);
+            this.DirectionalityActiveValueTitle.TabIndex = 13;
+            this.DirectionalityActiveValueTitle.Text = "Current";
             // 
             // ByComponentCheckBox
             // 
+            this.ByComponentCheckBox.AutoCheck = false;
             this.ByComponentCheckBox.AutoSize = true;
-            this.ByComponentCheckBox.Location = new System.Drawing.Point(163, 104);
+            this.ByComponentCheckBox.Location = new System.Drawing.Point(180, 104);
             this.ByComponentCheckBox.Name = "ByComponentCheckBox";
             this.ByComponentCheckBox.Size = new System.Drawing.Size(95, 17);
             this.ByComponentCheckBox.TabIndex = 12;
@@ -321,6 +386,7 @@ namespace grapher
             // 
             // WholeCheckBox
             // 
+            this.WholeCheckBox.AutoCheck = false;
             this.WholeCheckBox.AutoSize = true;
             this.WholeCheckBox.Location = new System.Drawing.Point(43, 104);
             this.WholeCheckBox.Name = "WholeCheckBox";
@@ -332,7 +398,7 @@ namespace grapher
             // DirectionalityRangeLabel
             // 
             this.DirectionalityRangeLabel.AutoSize = true;
-            this.DirectionalityRangeLabel.Location = new System.Drawing.Point(9, 55);
+            this.DirectionalityRangeLabel.Location = new System.Drawing.Point(24, 55);
             this.DirectionalityRangeLabel.Name = "DirectionalityRangeLabel";
             this.DirectionalityRangeLabel.Size = new System.Drawing.Size(39, 13);
             this.DirectionalityRangeLabel.TabIndex = 10;
@@ -341,7 +407,7 @@ namespace grapher
             // DirectionalDomainLabel
             // 
             this.DirectionalDomainLabel.AutoSize = true;
-            this.DirectionalDomainLabel.Location = new System.Drawing.Point(9, 28);
+            this.DirectionalDomainLabel.Location = new System.Drawing.Point(23, 28);
             this.DirectionalDomainLabel.Name = "DirectionalDomainLabel";
             this.DirectionalDomainLabel.Size = new System.Drawing.Size(43, 13);
             this.DirectionalDomainLabel.TabIndex = 9;
@@ -349,7 +415,7 @@ namespace grapher
             // 
             // LpNormBox
             // 
-            this.LpNormBox.Location = new System.Drawing.Point(78, 78);
+            this.LpNormBox.Location = new System.Drawing.Point(94, 78);
             this.LpNormBox.Name = "LpNormBox";
             this.LpNormBox.Size = new System.Drawing.Size(76, 20);
             this.LpNormBox.TabIndex = 8;
@@ -357,7 +423,7 @@ namespace grapher
             // LPNormLabel
             // 
             this.LPNormLabel.AutoSize = true;
-            this.LPNormLabel.Location = new System.Drawing.Point(9, 81);
+            this.LPNormLabel.Location = new System.Drawing.Point(23, 81);
             this.LPNormLabel.Name = "LPNormLabel";
             this.LPNormLabel.Size = new System.Drawing.Size(47, 13);
             this.LPNormLabel.TabIndex = 7;
@@ -366,7 +432,7 @@ namespace grapher
             // DirectionalityY
             // 
             this.DirectionalityY.AutoSize = true;
-            this.DirectionalityY.Location = new System.Drawing.Point(129, 9);
+            this.DirectionalityY.Location = new System.Drawing.Point(147, 9);
             this.DirectionalityY.Name = "DirectionalityY";
             this.DirectionalityY.Size = new System.Drawing.Size(14, 13);
             this.DirectionalityY.TabIndex = 6;
@@ -375,7 +441,7 @@ namespace grapher
             // DirectionalityX
             // 
             this.DirectionalityX.AutoSize = true;
-            this.DirectionalityX.Location = new System.Drawing.Point(86, 9);
+            this.DirectionalityX.Location = new System.Drawing.Point(103, 9);
             this.DirectionalityX.Name = "DirectionalityX";
             this.DirectionalityX.Size = new System.Drawing.Size(14, 13);
             this.DirectionalityX.TabIndex = 5;
@@ -383,28 +449,28 @@ namespace grapher
             // 
             // RangeBoxY
             // 
-            this.RangeBoxY.Location = new System.Drawing.Point(120, 52);
+            this.RangeBoxY.Location = new System.Drawing.Point(136, 52);
             this.RangeBoxY.Name = "RangeBoxY";
             this.RangeBoxY.Size = new System.Drawing.Size(34, 20);
             this.RangeBoxY.TabIndex = 4;
             // 
             // RangeBoxX
             // 
-            this.RangeBoxX.Location = new System.Drawing.Point(78, 52);
+            this.RangeBoxX.Location = new System.Drawing.Point(94, 52);
             this.RangeBoxX.Name = "RangeBoxX";
             this.RangeBoxX.Size = new System.Drawing.Size(34, 20);
             this.RangeBoxX.TabIndex = 3;
             // 
             // DomainBoxY
             // 
-            this.DomainBoxY.Location = new System.Drawing.Point(120, 25);
+            this.DomainBoxY.Location = new System.Drawing.Point(136, 25);
             this.DomainBoxY.Name = "DomainBoxY";
             this.DomainBoxY.Size = new System.Drawing.Size(34, 20);
             this.DomainBoxY.TabIndex = 2;
             // 
             // DomainBoxX
             // 
-            this.DomainBoxX.Location = new System.Drawing.Point(78, 25);
+            this.DomainBoxX.Location = new System.Drawing.Point(94, 25);
             this.DomainBoxX.Name = "DomainBoxX";
             this.DomainBoxX.Size = new System.Drawing.Size(34, 20);
             this.DomainBoxX.TabIndex = 1;
@@ -1421,70 +1487,6 @@ namespace grapher
             title6.Name = "Title";
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
-            // 
-            // DirectionalityActiveValueTitle
-            // 
-            this.DirectionalityActiveValueTitle.AutoSize = true;
-            this.DirectionalityActiveValueTitle.Location = new System.Drawing.Point(169, 9);
-            this.DirectionalityActiveValueTitle.Name = "DirectionalityActiveValueTitle";
-            this.DirectionalityActiveValueTitle.Size = new System.Drawing.Size(41, 13);
-            this.DirectionalityActiveValueTitle.TabIndex = 13;
-            this.DirectionalityActiveValueTitle.Text = "Current";
-            // 
-            // DomainActiveValueX
-            // 
-            this.DomainActiveValueX.AutoSize = true;
-            this.DomainActiveValueX.Location = new System.Drawing.Point(169, 28);
-            this.DomainActiveValueX.Name = "DomainActiveValueX";
-            this.DomainActiveValueX.Size = new System.Drawing.Size(13, 13);
-            this.DomainActiveValueX.TabIndex = 14;
-            this.DomainActiveValueX.Text = "0";
-            // 
-            // DomainActiveValueY
-            // 
-            this.DomainActiveValueY.AutoSize = true;
-            this.DomainActiveValueY.Location = new System.Drawing.Point(189, 28);
-            this.DomainActiveValueY.Name = "DomainActiveValueY";
-            this.DomainActiveValueY.Size = new System.Drawing.Size(13, 13);
-            this.DomainActiveValueY.TabIndex = 15;
-            this.DomainActiveValueY.Text = "0";
-            // 
-            // RangeActiveValueX
-            // 
-            this.RangeActiveValueX.AutoSize = true;
-            this.RangeActiveValueX.Location = new System.Drawing.Point(169, 55);
-            this.RangeActiveValueX.Name = "RangeActiveValueX";
-            this.RangeActiveValueX.Size = new System.Drawing.Size(13, 13);
-            this.RangeActiveValueX.TabIndex = 16;
-            this.RangeActiveValueX.Text = "0";
-            // 
-            // RangeActiveValueY
-            // 
-            this.RangeActiveValueY.AutoSize = true;
-            this.RangeActiveValueY.Location = new System.Drawing.Point(188, 55);
-            this.RangeActiveValueY.Name = "RangeActiveValueY";
-            this.RangeActiveValueY.Size = new System.Drawing.Size(13, 13);
-            this.RangeActiveValueY.TabIndex = 17;
-            this.RangeActiveValueY.Text = "0";
-            // 
-            // LpNormActiveValue
-            // 
-            this.LpNormActiveValue.AutoSize = true;
-            this.LpNormActiveValue.Location = new System.Drawing.Point(180, 78);
-            this.LpNormActiveValue.Name = "LpNormActiveValue";
-            this.LpNormActiveValue.Size = new System.Drawing.Size(13, 13);
-            this.LpNormActiveValue.TabIndex = 18;
-            this.LpNormActiveValue.Text = "0";
-            // 
-            // FakeBox
-            // 
-            this.FakeBox.AutoSize = true;
-            this.FakeBox.Location = new System.Drawing.Point(28, 502);
-            this.FakeBox.Name = "FakeBox";
-            this.FakeBox.Size = new System.Drawing.Size(47, 17);
-            this.FakeBox.TabIndex = 151;
-            this.FakeBox.Text = "fake";
-            this.FakeBox.UseVisualStyleBackColor = true;
             // 
             // RawAcceleration
             // 

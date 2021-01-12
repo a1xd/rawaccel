@@ -376,7 +376,8 @@ namespace grapher.Models
                 domain,
                 range,
                 wholeCheckBox,
-                byComponentCheckBox);
+                byComponentCheckBox,
+                245);
 
             var applyOptions = new ApplyOptions(
                 byComponentXYLock,

@@ -46,6 +46,12 @@ namespace grapher
         /// <summary> Horizontal separation between left side of single dropdown and left side of labels beneath dropdown </summary>
         public const int DropDownLeftSeparation = 10;
 
+        /// <summary> Height of sensitivity chart when displayed alone. </summary>
+        public const int SensitivityChartAloneHeight = 450;
+
+        /// <summary> Height of sensitivity chart when displayed alongside Velocity and Gain charts. </summary>
+        public const int SensitivityChartTogetherHeight = 328;
+
         /// <summary> Width of charts when widened </summary>
         public const int WideChartWidth = 723;
 
@@ -115,10 +121,10 @@ namespace grapher
         public const string DefaultSettingsFileName = @"settings.json";
 
         /// <summary> Text to direcitonality panel title when panel is closed. </summary>
-        public const string DirectionalityTitleClosed = "Directionality\u25BC";
+        public const string DirectionalityTitleClosed = "Anisotropy\u25BC";
 
         /// <summary> Text to direcitonality panel title when panel is open. </summary>
-        public const string DirectionalityTitleOpen = "Directionality\u25B2";
+        public const string DirectionalityTitleOpen = "Anisotropy\u25B2";
 
         /// <summary> Style used by System.Double.Parse </summary>
         public const NumberStyles FloatStyle = NumberStyles.Float | NumberStyles.AllowThousands;
