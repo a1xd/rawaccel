@@ -22,8 +22,9 @@ namespace grapher
             Form containingForm,
             double defaultData,
             Label label,
-            ActiveValueLabelXY activeValueLabels)
-            : this(new FieldXY(xBox, yBox, lockCheckBox, containingForm, defaultData), label, activeValueLabels)
+            ActiveValueLabelXY activeValueLabels,
+            bool allowCombined = true)
+            : this(new FieldXY(xBox, yBox, lockCheckBox, containingForm, defaultData, allowCombined), label, activeValueLabels)
         {
         }
 
@@ -35,7 +36,8 @@ namespace grapher
             double defaultData,
             Label label,
             ActiveValueLabelXY activeValueLabels,
-            string startingName):
+            string startingName,
+            bool allowCombined = true):
             this(
                 xBox,
                 yBox,
@@ -43,7 +45,8 @@ namespace grapher
                 containingForm,
                 defaultData,
                 label,
-                activeValueLabels)
+                activeValueLabels,
+                allowCombined)
         {
             SetName(startingName);
         }

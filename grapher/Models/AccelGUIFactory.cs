@@ -305,7 +305,8 @@ namespace grapher.Models
                 domainLabel,
                 new ActiveValueLabelXY(
                     new ActiveValueLabel(domainActiveValueX, direcionalityActiveValueTitle),
-                    new ActiveValueLabel(domainActiveValueY, direcionalityActiveValueTitle)));
+                    new ActiveValueLabel(domainActiveValueY, direcionalityActiveValueTitle)),
+                false);
 
             var range = new OptionXY(
                 rangeBoxX,
@@ -316,7 +317,8 @@ namespace grapher.Models
                 rangeLabel,
                 new ActiveValueLabelXY(
                     new ActiveValueLabel(rangeActiveValueX, direcionalityActiveValueTitle),
-                    new ActiveValueLabel(rangeActiveValueY, direcionalityActiveValueTitle)));
+                    new ActiveValueLabel(rangeActiveValueY, direcionalityActiveValueTitle)),
+                false);
 
             var capOptionsX = new CapOptions(
                 velocityGainCapToolStripMenuItem,

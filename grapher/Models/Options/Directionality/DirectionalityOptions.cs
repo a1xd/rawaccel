@@ -34,17 +34,8 @@ namespace grapher.Models.Options.Directionality
             WholeCheckBox = wholeCheckBox;
             ByComponentCheckBox = byComponentCheckBox;
 
-            Domain.Fields.LockCheckBox.Checked = false;
-            Range.Fields.LockCheckBox.Checked = false;
-            Domain.Fields.LockCheckBox.Enabled = false;
-            Range.Fields.LockCheckBox.Enabled = false;
-            Domain.Fields.LockCheckBox.Hide();
-            Range.Fields.LockCheckBox.Hide();
-            Domain.Fields.SetSeparate();
-            Range.Fields.SetSeparate();
-
-            ContainingPanel.Paint += panel_Paint;
-            DirectionalityLabel.Click += title_click;
+            ContainingPanel.Paint += Panel_Paint;
+            DirectionalityLabel.Click += Title_click;
             ContainingPanel.Top = top;
             DirectionalityLabel.Left = Constants.DirectionalityTitlePad;
             DirectionalityLabel.Top = Constants.DirectionalityTitlePad;
@@ -164,8 +155,6 @@ namespace grapher.Models.Options.Directionality
                 LpNorm.Show();
                 Domain.Show();
                 Range.Show();
-                Domain.Fields.LockCheckBox.Hide();
-                Range.Fields.LockCheckBox.Hide();
                 WholeCheckBox.Show();
                 ByComponentCheckBox.Show();
                 DirectionalityLabel.Text = Constants.DirectionalityTitleOpen;
@@ -200,7 +189,7 @@ namespace grapher.Models.Options.Directionality
             ContainingPanel.Invalidate();
         }
 
-        private void panel_Paint(object sender, PaintEventArgs e)
+        private void Panel_Paint(object sender, PaintEventArgs e)
         {
             Color col = Color.DarkGray;
             ButtonBorderStyle bbs = ButtonBorderStyle.Dashed;
@@ -208,7 +197,7 @@ namespace grapher.Models.Options.Directionality
             ControlPaint.DrawBorder(e.Graphics, this.ContainingPanel.ClientRectangle, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs);
         }
 
-        private void title_click(object sender, EventArgs e)
+        private void Title_click(object sender, EventArgs e)
         {
             if (IsHidden)
             {
