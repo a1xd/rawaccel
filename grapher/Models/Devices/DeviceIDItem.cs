@@ -10,10 +10,10 @@ namespace grapher.Models.Devices
 {
     public class DeviceIDItem
     {
-        public DeviceIDItem(string name, string hwid, DeviceIDManager manager)
+        public DeviceIDItem(string name, string id, DeviceIDManager manager)
         {
             Name = name;
-            HWID = hwid;
+            ID = id;
             Manager = manager;
             DeviceIDMenuItem = new ToolStripMenuItem();
             DeviceIDMenuItem.Checked = false;
@@ -26,7 +26,7 @@ namespace grapher.Models.Devices
 
         public string Name { get; }
 
-        public string HWID { get; }
+        public string ID { get; }
 
         private DeviceIDManager Manager { get; }
 
@@ -40,9 +40,9 @@ namespace grapher.Models.Devices
             DeviceIDMenuItem.Checked = false;
         }
 
-        private string MenuItemText() => string.IsNullOrWhiteSpace(HWID) ? $"{Name}" : $"{Name}: {HWID}";
+        private string MenuItemText() => string.IsNullOrEmpty(ID) ? $"{Name}" : $"{Name}: {ID}";
 
-        private string DisconnectedText() => $"Disconnected: {HWID}";
+        private string DisconnectedText() => $"Disconnected: {ID}";
 
         public void SetDisconnected()
         {
@@ -59,14 +59,14 @@ namespace grapher.Models.Devices
         {
             return obj is DeviceIDItem item &&
                    Name == item.Name &&
-                   HWID == item.HWID;
+                   ID == item.ID;
         }
 
         public override int GetHashCode()
         {
             int hashCode = -1692744877;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(HWID);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ID);
             return hashCode;
         }
     }

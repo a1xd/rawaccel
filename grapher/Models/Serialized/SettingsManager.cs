@@ -42,13 +42,13 @@ namespace grapher.Models.Serialized
 
         public Field PollRateField { get; private set; }
 
+        public DeviceIDManager DeviceIDManager { get; }
+
         private ToolStripMenuItem AutoWriteMenuItem { get; set; }
 
         private ToolStripMenuItem ShowLastMouseMoveMenuItem { get; set; }
 
         private ToolStripMenuItem ShowVelocityAndGainMoveMenuItem { get; set; }
-
-        private DeviceIDManager DeviceIDManager { get; }
 
         #endregion Properties
 
@@ -74,7 +74,6 @@ namespace grapher.Models.Serialized
             ShowLastMouseMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowLastMouseMove;
             ShowVelocityAndGainMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowVelocityAndGain;
             AutoWriteMenuItem.Checked = RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup;
-            DeviceIDManager.OnStartup(RawAccelSettings.AccelerationSettings.deviceHardwareID);
         }
 
         public SettingsErrors TryUpdateAccel(DriverSettings settings)

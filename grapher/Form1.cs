@@ -155,17 +155,16 @@ namespace grapher
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == 0x00ff)
+            if (m.Msg == 0x00ff) // WM_INPUT
             {
                 AccelGUI.MouseWatcher.ReadMouseMove(m);
             }
+            else if (m.Msg == 0x00fe) // WM_INPUT_DEVICE_CHANGE
+            {
+                AccelGUI.UpdateInputManagers();
+            }
 
             base.WndProc(ref m);
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
 
         public void ResetAutoScroll()
@@ -187,16 +186,6 @@ namespace grapher
             };
         }
 
-        private void RawAcceleration_Paint(object sender, PaintEventArgs e)
-        {
-            //AccelGUI.AccelCharts.DrawLastMovement();
-        }
-
         #endregion Method
-
-        private void optionsPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }

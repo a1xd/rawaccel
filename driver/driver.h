@@ -21,7 +21,7 @@ typedef struct _DEVICE_EXTENSION {
     counter_t counter;
     vec2d carry;
     CONNECT_DATA UpperConnectData;
-    WCHAR hwid[MAX_HWID_LEN];
+    WCHAR dev_id[MAX_DEV_ID_LEN];
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_EXTENSION, FilterGetData)

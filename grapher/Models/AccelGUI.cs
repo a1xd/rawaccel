@@ -100,6 +100,8 @@ namespace grapher
 
         public DeviceIDManager DeviceIDManager { get; }
 
+        public Action UpdateInputManagers { get; private set; }
+
         private Timer ChartRefresh { get; }
 
         private Font SmallButtonFont { get; }
@@ -147,7 +149,7 @@ namespace grapher
                 args = newArgs,
                 minimumTime = driverSettings.minimumTime,
                 directionalMultipliers = driverSettings.directionalMultipliers,
-                deviceHardwareID = DeviceIDManager.HWID,
+                deviceID = DeviceIDManager.ID,
             };
 
             ButtonDelay(WriteButton);
@@ -168,6 +170,14 @@ namespace grapher
         {
             UpdateShownActiveValues(args);
             UpdateGraph(args);
+
+            UpdateInputManagers = () =>
+            {
+                MouseWatcher.UpdateHandles(args.deviceID);
+                DeviceIDManager.Update(args.deviceID);
+            };
+
+            UpdateInputManagers();
         }
 
         public void UpdateGraph(DriverSettings args)

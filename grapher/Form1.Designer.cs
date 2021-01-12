@@ -261,7 +261,6 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
-            this.optionsPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.optionsPanel_Paint);
             // 
             // toggleButton
             // 
@@ -1308,8 +1307,6 @@ namespace grapher
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RawAcceleration";
             this.Text = "Raw Accel";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.RawAcceleration_Paint);
             this.optionsPanel.ResumeLayout(false);
             this.optionsPanel.PerformLayout();
             this.menuStrip1.ResumeLayout(false);

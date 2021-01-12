@@ -19,27 +19,26 @@ namespace grapher.Models.Devices
 
         public ToolStripMenuItem DeviceIDsMenuItem { get; }
 
-        public string HWID { get => SelectedDeviceID.HWID; }
+        public string ID { get => SelectedDeviceID.ID; }
 
         public DeviceIDItem SelectedDeviceID { get; private set; }
 
         public Dictionary<string, DeviceIDItem> DeviceIDs { get; private set; }
 
-        public static IEnumerable<(string, string)> GetDeviceHardwareIDs(string PNPClass = "Mouse")
+        public static IEnumerable<(string, string)> GetDeviceIDs(string PNPClass = "Mouse")
         {
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(new SelectQuery("Win32_PnPEntity"));
 
             foreach (ManagementObject obj in searcher.Get())
             {
-                if (obj["PNPClass"] != null && obj["PNPClass"].ToString().Equals(PNPClass) && obj["HardwareID"] != null)
+                if (obj["PNPClass"] != null && obj["PNPClass"].ToString().Equals(PNPClass) && obj["DeviceID"] != null)
                 {
-                    string[] hwidArray = (string[])(obj["HardwareID"]);
-                    if (hwidArray.Length > 0)
-                    {
-                        string hwid = hwidArray[0].ToString();
-                        string name = obj["Name"].ToString();
-                        yield return (name, hwid);
-                    }
+                    string name = obj["Name"].ToString();
+
+                    string devInstanceID = obj["DeviceID"].ToString();
+                    string devID = devInstanceID.Remove(devInstanceID.LastIndexOf('\\'));
+                    
+                    yield return (name, devID);
                 }
             }
         }
@@ -55,35 +54,31 @@ namespace grapher.Models.Devices
             SelectedDeviceID.SetActivated();
         }
 
-        public void OnStartup(string hwid)
+        public void Update(string devID)
         {
-            var nonEmptyHwid = !string.IsNullOrWhiteSpace(hwid);
-
             DeviceIDsMenuItem.DropDownItems.Clear();
+
+            bool found = string.IsNullOrEmpty(devID);
+
             var anyDevice = new DeviceIDItem("Any", string.Empty, this);
-            if (!nonEmptyHwid)
-            {
-                SetActive(anyDevice);
-            }
 
-            bool found = false;
+            if (found) SetActive(anyDevice);
 
-            foreach (var device in GetDeviceHardwareIDs())
+            foreach (var device in GetDeviceIDs().Distinct())
             {
                 var deviceItem = new DeviceIDItem(device.Item1, device.Item2, this);
-                if (deviceItem.HWID.Equals(hwid))
+                if (!found && deviceItem.ID.Equals(devID))
                 {
+                    SetActive(deviceItem);
                     found = true;
-                    deviceItem.SetActivated();
-                    SelectedDeviceID = deviceItem;
                 }
             }
 
-            if (nonEmptyHwid && !found)
+            if (!found)
             {
-                var deviceItem = new DeviceIDItem(string.Empty, hwid, this);
+                var deviceItem = new DeviceIDItem(string.Empty, devID, this);
                 deviceItem.SetDisconnected();
-                anyDevice.SetActivated();
+                SetActive(deviceItem);
             }
         }
 

@@ -58,8 +58,8 @@ Arguments:
 
     bool any = num_packets > 0;
     bool rel_move = !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE);
-    bool dev_match = global.args.device_hw_id[0] == 0 ||
-        wcsncmp(devExt->hwid, global.args.device_hw_id, MAX_HWID_LEN) == 0;
+    bool dev_match = global.args.device_id[0] == 0 ||
+        wcsncmp(devExt->dev_id, global.args.device_id, MAX_DEV_ID_LEN) == 0;
 
     if (any && rel_move && dev_match) {
         // if IO is backed up to the point where we get more than 1 packet here
@@ -146,6 +146,8 @@ Return Value:
     NTSTATUS status;
     void* buffer;
 
+    size_t bytes_out = 0;
+
     UNREFERENCED_PARAMETER(Queue);
     UNREFERENCED_PARAMETER(OutputBufferLength);
     UNREFERENCED_PARAMETER(InputBufferLength);
@@ -166,6 +168,7 @@ Return Value:
         }
         else {
             *reinterpret_cast<ra::settings*>(buffer) = global.args;
+            bytes_out = sizeof(ra::settings);
         }
         break;
     case RA_WRITE:
@@ -205,6 +208,7 @@ Return Value:
         }
         else {
             *reinterpret_cast<ra::version_t*>(buffer) = { RA_VER_MAJOR, RA_VER_MINOR, RA_VER_PATCH };
+            bytes_out = sizeof(ra::version_t);
         }
         break;
     default:
@@ -212,7 +216,7 @@ Return Value:
         break;
     }
 
-    WdfRequestComplete(Request, status);
+    WdfRequestCompleteWithInformation(Request, status, bytes_out);
 
 }
 #pragma warning(pop) // enable 28118 again
@@ -480,25 +484,31 @@ Return Value:
     }
 
     //
-    // get device hwid
+    // get device id from bus driver
     //
-    WDFMEMORY memory = NULL;
+    DEVICE_OBJECT* pdo = WdfDeviceWdmGetPhysicalDevice(hDevice);
 
-    NTSTATUS hwid_query = WdfDeviceAllocAndQueryProperty(
-        hDevice,
-        DevicePropertyHardwareID,
-        PagedPool,
-        WDF_NO_OBJECT_ATTRIBUTES,
-        &memory);
+    KEVENT ke;
+    KeInitializeEvent(&ke, NotificationEvent, FALSE);
+    IO_STATUS_BLOCK iosb = {};
+    PIRP Irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
+        pdo, NULL, 0, NULL, &ke, &iosb);
+    Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
+    PIO_STACK_LOCATION stack = IoGetNextIrpStackLocation(Irp);
+    stack->MinorFunction = IRP_MN_QUERY_ID;
+    stack->Parameters.QueryId.IdType = BusQueryDeviceID;
 
-    if (!NT_SUCCESS(hwid_query)) {
-        DebugPrint(("WdfDeviceAllocAndQueryProperty failed: 0x%x\n", hwid_query));
+    NTSTATUS nts = IoCallDriver(pdo, Irp);
+
+    if (nts == STATUS_PENDING) {
+        KeWaitForSingleObject(&ke, Executive, KernelMode, FALSE, NULL);
     }
-    else {
-        auto dev_ext = FilterGetData(hDevice);
-        void* buffer = WdfMemoryGetBuffer(memory, NULL);
-        wcsncpy(dev_ext->hwid, reinterpret_cast<wchar_t*>(buffer), MAX_HWID_LEN);
-        WdfObjectDelete(memory);
+
+    if (NT_SUCCESS(nts)) {
+        auto* id_ptr = reinterpret_cast<WCHAR*>(iosb.Information); 
+        wcsncpy(FilterGetData(hDevice)->dev_id, id_ptr, MAX_DEV_ID_LEN);
+        DebugPrint(("Device ID = %ws\n", id_ptr));
+        ExFreePool(id_ptr);
     }
 
     //

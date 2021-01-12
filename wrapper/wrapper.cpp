@@ -1,13 +1,16 @@
 #pragma once
 
 #include <type_traits>
+#include <msclr\marshal_cppstd.h>
 
 #include <rawaccel.hpp>
 #include <rawaccel-version.h>
+#include <utility-rawinput.hpp>
 
 #include "wrapper_io.hpp"
 
 using namespace System;
+using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
 using namespace System::Reflection;
 
@@ -78,9 +81,9 @@ public ref struct DriverSettings
     [JsonProperty(Required = Required::Default)]
     double minimumTime;
 
-    [JsonProperty("Device Hardware ID", Required = Required::Default)]
-    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = MAX_HWID_LEN)]
-    String^ deviceHardwareID;
+    [JsonProperty("Device ID", Required = Required::Default)]
+    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = MAX_DEV_ID_LEN)]
+    String^ deviceID = "";
 
     bool ShouldSerializeminimumTime() 
     { 
@@ -218,6 +221,24 @@ public:
         }
         
         return sb->ToString();
+    }
+};
+
+public ref struct RawInputInterop
+{
+    static void AddHandlesFromID(String^ deviceID, List<IntPtr>^ rawInputHandles)
+    {
+        try
+        {
+            std::vector<HANDLE> nativeHandles = rawinput_handles_from_dev_id(
+                msclr::interop::marshal_as<std::wstring>(deviceID));
+
+            for (auto nh : nativeHandles) rawInputHandles->Add(IntPtr(nh));
+        }
+        catch (const std::exception& e)
+        {
+            throw gcnew System::Exception(gcnew String(e.what()));
+        }
     }
 };
 
