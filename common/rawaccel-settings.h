@@ -3,6 +3,8 @@
 #include "vec2.h"
 #include "accel-base.hpp"
 
+#define MAX_DEV_ID_LEN 200
+
 namespace rawaccel {
 
     using milliseconds = double;
@@ -23,6 +25,7 @@ namespace rawaccel {
         vec2d sens = { 1, 1 };
         vec2d dir_multipliers = {};
         milliseconds time_min = DEFAULT_TIME_MIN;
+        wchar_t device_id[MAX_DEV_ID_LEN] = {0};
     };
 
 }

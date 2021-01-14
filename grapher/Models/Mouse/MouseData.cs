@@ -8,7 +8,6 @@ namespace grapher.Models.Mouse
 
         public MouseData()
         {
-            Lock = new Object();
             X = 0;
             Y = 0;
         }
@@ -17,18 +16,13 @@ namespace grapher.Models.Mouse
 
         #region Properties
 
-        public Object Lock { get; }
-
         private int X { get; set; }
         private int Y { get; set; }
 
         public void Set(int x, int y)
         {
-            lock (Lock)
-            {
-                X = x;
-                Y = y;
-            }
+            X = x;
+            Y = y;
         }
 
         #endregion Properties
@@ -37,11 +31,8 @@ namespace grapher.Models.Mouse
 
         public void Get(out int x, out int y)
         {
-            lock (Lock)
-            {
-                x = X;
-                y = Y;
-            }
+            x = X;
+            y = Y;
         }
 
         #endregion Methods

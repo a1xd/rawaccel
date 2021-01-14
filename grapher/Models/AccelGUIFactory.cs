@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
@@ -34,6 +35,7 @@ namespace grapher.Models
             ToolStripMenuItem gainOffsetToolStripMenuItem,
             ToolStripMenuItem legacyOffsetToolStripMenuItem,
             ToolStripMenuItem autoWriteMenuItem,
+            ToolStripMenuItem useSpecificDeviceMenuItem,
             ToolStripMenuItem scaleMenuItem,
             ToolStripTextBox dpiTextBox,
             ToolStripTextBox pollRateTextBox,
@@ -324,15 +326,19 @@ namespace grapher.Models
                 lockXYLabel,
                 accelCharts);
 
+            var deviceIdManager = new DeviceIDManager(useSpecificDeviceMenuItem);
+
             var settings = new SettingsManager(
                 activeAccel,
                 accelCalculator.DPI,
                 accelCalculator.PollRate,
                 autoWriteMenuItem,
                 showLastMouseMoveMenuItem,
-                showVelocityGainToolStripMenuItem);
+                showVelocityGainToolStripMenuItem,
+                deviceIdManager);
 
             var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
+
 
             return new AccelGUI(
                 form,
@@ -343,7 +349,8 @@ namespace grapher.Models
                 writeButton,
                 toggleButton,
                 mouseWatcher,
-                scaleMenuItem);
+                scaleMenuItem,
+                deviceIdManager);
         }
 
         #endregion Methods

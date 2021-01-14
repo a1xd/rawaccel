@@ -1,5 +1,6 @@
 ﻿using grapher.Models.Serialized;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -397,7 +398,11 @@ namespace grapher.Models.Mouse
             /// <summary>If set, the application-defined keyboard device hotkeys are not handled. However, the system hotkeys; for example, ALT+TAB and CTRL+ALT+DEL, are still handled. By default, all keyboard hotkeys are handled. NoHotKeys can be specified even if NoLegacy is not specified and WindowHandle is NULL.</summary>
             NoHotKeys = 0x00000200,
             /// <summary>If set, application keys are handled.  NoLegacy must be specified.  Keyboard only.</summary>
-            AppKeys = 0x00000400
+            AppKeys = 0x00000400,
+            /// <summary>If set, this enables the caller to receive input in the background only if the foreground application does not process it. In other words, if the foreground application is not registered for raw input, then the background application that is registered will receive the input.</summary>
+            ExInputSink = 0x00001000,
+            /// <summary>If set, this enables the caller to receive WM_INPUT_DEVICE_CHANGE notifications for device arrival and device removal.</summary>
+            DevNotify = 0x00002000
         }
 
         /// <summary>Value type for raw input devices.</summary>
@@ -685,12 +690,13 @@ namespace grapher.Models.Mouse
             AccelCharts = accelCharts;
             SettingsManager = setMngr;
             MouseData = new MouseData();
+            DeviceHandles = new List<IntPtr>();
 
             RAWINPUTDEVICE device = new RAWINPUTDEVICE();
             device.WindowHandle = ContainingForm.Handle;
             device.UsagePage = HIDUsagePage.Generic;
             device.Usage = HIDUsage.Mouse;
-            device.Flags = RawInputDeviceFlags.InputSink;
+            device.Flags = RawInputDeviceFlags.InputSink | RawInputDeviceFlags.DevNotify;
 
             RAWINPUTDEVICE[] devices = new RAWINPUTDEVICE[1];
             devices[0] = device;
@@ -711,6 +717,10 @@ namespace grapher.Models.Mouse
 
         private MouseData MouseData { get; }
 
+        private List<IntPtr> DeviceHandles { get; }
+
+        private bool AnyDevice { get; set; }
+
         private double PollTime
         {
             get => 1000 / SettingsManager.PollRateField.Data;
@@ -720,6 +730,16 @@ namespace grapher.Models.Mouse
 
         #region Methods
 
+        public void UpdateHandles(string devID)
+        {
+            DeviceHandles.Clear();
+            AnyDevice = string.IsNullOrEmpty(devID);
+            if (!AnyDevice)
+            {
+                RawInputInterop.AddHandlesFromID(devID, DeviceHandles);
+            }
+        }
+
         public void UpdateLastMove()
         {
             MouseData.Get(out var x, out var y);
@@ -728,15 +748,14 @@ namespace grapher.Models.Mouse
 
         public void ReadMouseMove(Message message)
         {
-            RawInput rawInput = new RawInput();
-            int outSize = 0;
+            RawInput rawInput;
             int size = Marshal.SizeOf(typeof(RawInput));
-
-            outSize = GetRawInputData((IntPtr)message.LParam, RawInputCommand.Input, out rawInput, ref size, Marshal.SizeOf(typeof(RAWINPUTHEADER)));
+            _ = GetRawInputData(message.LParam, RawInputCommand.Input, out rawInput, ref size, Marshal.SizeOf(typeof(RAWINPUTHEADER)));
 
             bool relative = !rawInput.Data.Mouse.Flags.HasFlag(RawMouseFlags.MoveAbsolute);
+            bool deviceMatch = AnyDevice || DeviceHandles.Contains(rawInput.Header.Device);
 
-            if (relative && (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0))
+            if (relative && deviceMatch && (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0))
             {
                 double x = rawInput.Data.Mouse.LastX;
                 double y = rawInput.Data.Mouse.LastY;

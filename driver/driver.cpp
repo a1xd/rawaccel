@@ -54,14 +54,17 @@ Arguments:
     WDFDEVICE hDevice = WdfWdmDeviceGetWdfDeviceHandle(DeviceObject);
     PDEVICE_EXTENSION devExt = FilterGetData(hDevice);
 
-    if (!(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE)) {
-        auto num_packets = InputDataEnd - InputDataStart;
-          
+    auto num_packets = InputDataEnd - InputDataStart;
+
+    bool any = num_packets > 0;
+    bool rel_move = !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE);
+    bool dev_match = global.args.device_id[0] == 0 ||
+        wcsncmp(devExt->dev_id, global.args.device_id, MAX_DEV_ID_LEN) == 0;
+
+    if (any && rel_move && dev_match) {
         // if IO is backed up to the point where we get more than 1 packet here
         // then applying accel is pointless as we can't get an accurate timing
         bool enable_accel = num_packets == 1;
-
-        vec2d carry = devExt->carry;
 
         auto it = InputDataStart;
         do {
@@ -86,21 +89,20 @@ Arguments:
 
             global.modifier.apply_sensitivity(input);
 
-            double carried_result_x = input.x + carry.x;
-            double carried_result_y = input.y + carry.y;
+            double carried_result_x = input.x + devExt->carry.x;
+            double carried_result_y = input.y + devExt->carry.y;
 
             LONG out_x = static_cast<LONG>(carried_result_x);
             LONG out_y = static_cast<LONG>(carried_result_y);
 
-            carry.x = carried_result_x - out_x;
-            carry.y = carried_result_y - out_y;
+            devExt->carry.x = carried_result_x - out_x;
+            devExt->carry.y = carried_result_y - out_y;
 
             it->LastX = out_x;
             it->LastY = out_y;
 
         } while (++it != InputDataEnd);
 
-        devExt->carry = carry;
     }
 
     (*(PSERVICE_CALLBACK_ROUTINE)devExt->UpperConnectData.ClassService)(
@@ -144,6 +146,8 @@ Return Value:
     NTSTATUS status;
     void* buffer;
 
+    size_t bytes_out = 0;
+
     UNREFERENCED_PARAMETER(Queue);
     UNREFERENCED_PARAMETER(OutputBufferLength);
     UNREFERENCED_PARAMETER(InputBufferLength);
@@ -164,6 +168,7 @@ Return Value:
         }
         else {
             *reinterpret_cast<ra::settings*>(buffer) = global.args;
+            bytes_out = sizeof(ra::settings);
         }
         break;
     case RA_WRITE:
@@ -203,6 +208,7 @@ Return Value:
         }
         else {
             *reinterpret_cast<ra::version_t*>(buffer) = { RA_VER_MAJOR, RA_VER_MINOR, RA_VER_PATCH };
+            bytes_out = sizeof(ra::version_t);
         }
         break;
     default:
@@ -210,7 +216,7 @@ Return Value:
         break;
     }
 
-    WdfRequestComplete(Request, status);
+    WdfRequestCompleteWithInformation(Request, status, bytes_out);
 
 }
 #pragma warning(pop) // enable 28118 again
@@ -465,7 +471,7 @@ Return Value:
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&deviceAttributes,
         DEVICE_EXTENSION);
 
-    
+
     //
     // Create a framework device object.  This call will in turn create
     // a WDM deviceobject, attach to the lower stack and set the
@@ -477,6 +483,33 @@ Return Value:
         return status;
     }
 
+    //
+    // get device id from bus driver
+    //
+    DEVICE_OBJECT* pdo = WdfDeviceWdmGetPhysicalDevice(hDevice);
+
+    KEVENT ke;
+    KeInitializeEvent(&ke, NotificationEvent, FALSE);
+    IO_STATUS_BLOCK iosb = {};
+    PIRP Irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
+        pdo, NULL, 0, NULL, &ke, &iosb);
+    Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
+    PIO_STACK_LOCATION stack = IoGetNextIrpStackLocation(Irp);
+    stack->MinorFunction = IRP_MN_QUERY_ID;
+    stack->Parameters.QueryId.IdType = BusQueryDeviceID;
+
+    NTSTATUS nts = IoCallDriver(pdo, Irp);
+
+    if (nts == STATUS_PENDING) {
+        KeWaitForSingleObject(&ke, Executive, KernelMode, FALSE, NULL);
+    }
+
+    if (NT_SUCCESS(nts)) {
+        auto* id_ptr = reinterpret_cast<WCHAR*>(iosb.Information); 
+        wcsncpy(FilterGetData(hDevice)->dev_id, id_ptr, MAX_DEV_ID_LEN);
+        DebugPrint(("Device ID = %ws\n", id_ptr));
+        ExFreePool(id_ptr);
+    }
 
     //
     // Configure the default queue to be Parallel. Do not use sequential queue
@@ -561,7 +594,7 @@ Routine Description:
     //
     // Connect a mouse class device driver to the port driver.
     //
-    case IOCTL_INTERNAL_MOUSE_CONNECT:
+    case IOCTL_INTERNAL_MOUSE_CONNECT: {
         //
         // Only allow one connection.
         //
@@ -569,19 +602,19 @@ Routine Description:
             status = STATUS_SHARING_VIOLATION;
             break;
         }
-        
+
         //
         // Copy the connection parameters to the device extension.
         //
-         status = WdfRequestRetrieveInputBuffer(Request,
-                            sizeof(CONNECT_DATA),
-                            reinterpret_cast<PVOID*>(&connectData),
-                            &length);
-        if(!NT_SUCCESS(status)){
+        status = WdfRequestRetrieveInputBuffer(Request,
+            sizeof(CONNECT_DATA),
+            reinterpret_cast<PVOID*>(&connectData),
+            &length);
+        if (!NT_SUCCESS(status)) {
             DebugPrint(("WdfRequestRetrieveInputBuffer failed %x\n", status));
             break;
         }
-        
+
         devExt->counter = 0;
         devExt->carry = {};
         devExt->UpperConnectData = *connectData;
@@ -595,7 +628,7 @@ Routine Description:
         connectData->ClassService = RawaccelCallback;
 
         break;
-
+    }
     //
     // Disconnect a mouse class device driver from the port driver.
     //

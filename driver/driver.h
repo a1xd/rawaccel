@@ -4,7 +4,7 @@
 #include <kbdmou.h>
 #include <wdf.h>
 
-#include "vec2.h"
+#include "rawaccel-settings.h"
 
 #if DBG
 #define DebugPrint(_x_) DbgPrint _x_
@@ -21,6 +21,7 @@ typedef struct _DEVICE_EXTENSION {
     counter_t counter;
     vec2d carry;
     CONNECT_DATA UpperConnectData;
+    WCHAR dev_id[MAX_DEV_ID_LEN];
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_EXTENSION, FilterGetData)
