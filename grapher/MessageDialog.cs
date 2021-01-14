@@ -17,7 +17,7 @@ namespace grapher
             InitializeComponent();
             Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             Text = title;
-            messageLabel.Text = msg;
+            messageLabel.Text = message;
         }
 
     }
