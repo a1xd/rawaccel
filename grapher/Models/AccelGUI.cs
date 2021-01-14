@@ -154,7 +154,7 @@ namespace grapher
             }
             else
             {
-                throw new Exception($"Bad arguments:\n\n{errors}");
+                new MessageDialog(errors.ToString(), "bad input").ShowDialog();
             }
         }
 
