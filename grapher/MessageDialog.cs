@@ -12,7 +12,7 @@ namespace grapher
 {
     public partial class MessageDialog : Form
     {
-        public MessageDialog(string msg, string title = "")
+        public MessageDialog(string message, string title = "")
         {
             InitializeComponent();
             Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
