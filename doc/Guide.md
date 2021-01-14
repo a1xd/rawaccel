@@ -100,4 +100,4 @@ This curve looks like an "S" with the top half bigger than the bottom. Mathemati
 ![MotivityExample](images/motivity_example.png)
 
 ## Further Help
-Further help and frequently asked questions can be found in the ![FAQ](https://github.com/a1xd/rawaccel/blob/master/doc/FAQ.md).
+Further help and frequently asked questions can be found in the [FAQ](https://github.com/a1xd/rawaccel/blob/master/doc/FAQ.md).
