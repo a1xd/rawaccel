@@ -25,7 +25,7 @@ namespace grapher.Models.Calculations
 
         public static double[] SlowMovements =
         {
-            0,0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.333, 3.666, 4.0, 4.333, 4.666, 
+            0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.333, 3.666, 4.0, 4.333, 4.666, 
         };
 
         public IEnumerable<double> Angles = GetAngles();
@@ -50,6 +50,8 @@ namespace grapher.Models.Calculations
 
         public ReadOnlyCollection<SimulatedMouseInput> SimulatedInputY { get; private set; }
 
+        public IReadOnlyCollection<IReadOnlyCollection<SimulatedMouseInput>> SimulatedDirectionalInput { get; private set; }
+
         public Field DPI { get; private set; }
 
         public Field PollRate { get; private set; }
@@ -72,10 +74,16 @@ namespace grapher.Models.Calculations
 
         public static IEnumerable<double> GetAngles()
         {
-            for(int i=0; i<19; i++)
+            for(double i=0; i < (Constants.AngleDivisions); i++)
             {
-                yield return (i / 18) * (Math.PI / 2);
+                yield return (i / (Constants.AngleDivisions-1.0)) * (Math.PI / 2);
             }
+        }
+
+        public static int NearestAngleDivision(double angle)
+        {
+            var angleTransformed = angle * 2 / Math.PI * (Constants.AngleDivisions-1);
+            return (int)Math.Round(angleTransformed);
         }
 
         public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<SimulatedMouseInput> simulatedInputData)
@@ -174,12 +182,8 @@ namespace grapher.Models.Calculations
             data.MinGain = minSlope;
         }
 
-        public void CalculateCombinedDiffSens(AccelData data, ManagedAccel accel, DriverSettings settings, ICollection<SimulatedMouseInput> simulatedInputData)
+        public void CalculateCombinedDiffSens(AccelChartData[] dataByAngle, ManagedAccel accel, DriverSettings settings, IReadOnlyCollection<IReadOnlyCollection<SimulatedMouseInput>> simulatedInputData)
         {
-            double lastInputMagnitude = 0;
-            double lastOutputMagnitudeX = 0;
-            double lastOutputMagnitudeY = 0;
-
             double maxRatio = 0.0;
             double minRatio = Double.MaxValue;
             double maxSlope = 0.0;
@@ -188,140 +192,101 @@ namespace grapher.Models.Calculations
 
             Sensitivity = GetSens(ref settings);
 
-            double log = -2;
-            int index = 0;
-            int logIndex = 0;
+            int angleIndex = 0;
 
-            foreach (var simulatedInputDatum in simulatedInputData)
+            foreach (var simulatedInputDataAngle in simulatedInputData)
             {
-                if (simulatedInputDatum.velocity <= 0)
+                double log = -2;
+                int index = 0;
+                int logIndex = 0;
+                double lastInputMagnitude = 0;
+                double lastOutputMagnitude = 0;
+
+                var data = dataByAngle[angleIndex];
+
+                foreach (var simulatedInputDatum in simulatedInputDataAngle)
                 {
-                    continue;
+                    if (simulatedInputDatum.velocity <= 0)
+                    {
+                        continue;
+                    }
+
+                    var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
+                    var magnitude = Velocity(output.Item1, output.Item2, simulatedInputDatum.time);
+
+                    var ratio = magnitude / simulatedInputDatum.velocity;
+
+                    if (!data.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
+                    {
+                        data.VelocityPoints.Add(simulatedInputDatum.velocity, magnitude);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    while (Math.Pow(10, log) < magnitude && logIndex < data.LogToIndex.Length)
+                    {
+                        data.LogToIndex[logIndex] = index;
+                        log += 0.01;
+                        logIndex++;
+                    }
+
+                    if (ratio > maxRatio)
+                    {
+                        maxRatio = ratio;
+                    }
+
+                    if (ratio < minRatio)
+                    {
+                        minRatio = ratio;
+                    }
+
+                    var inDiff = simulatedInputDatum.velocity - lastInputMagnitude;
+                    var outDiff = magnitude - lastOutputMagnitude;
+                    var slope = inDiff > 0 ? outDiff / inDiff : settings.sensitivity.x;
+
+                    if (slope > maxSlope)
+                    {
+                        maxSlope = slope;
+                    }
+
+                    if (slope < minSlope)
+                    {
+                        minSlope = slope;
+                    }
+
+                    if (!data.AccelPoints.ContainsKey(simulatedInputDatum.velocity))
+                    {
+                        data.AccelPoints.Add(simulatedInputDatum.velocity, ratio);
+                    }
+
+                    if (!data.GainPoints.ContainsKey(simulatedInputDatum.velocity))
+                    {
+                        data.GainPoints.Add(simulatedInputDatum.velocity, slope);
+                    }
+
+                    lastInputMagnitude = simulatedInputDatum.velocity;
+                    lastOutputMagnitude = magnitude;
+                    index += 1;
                 }
 
-                var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
-                var outputWithoutSens = StripThisSens(output.Item1, output.Item2);
-                var magnitudeWithoutSens = Velocity(outputWithoutSens.Item1, outputWithoutSens.Item2, simulatedInputDatum.time);
+                index--;
 
-                var ratio = magnitudeWithoutSens / simulatedInputDatum.velocity;
-
-                if (!data.Combined.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
+                while (log <= 5.0)
                 {
-                    data.Combined.VelocityPoints.Add(simulatedInputDatum.velocity, magnitudeWithoutSens);
-                }
-                else
-                {
-                    continue;
-                }
-
-                while (Math.Pow(10,log) < magnitudeWithoutSens && logIndex < data.Combined.LogToIndex.Length)
-                {
-                    data.Combined.LogToIndex[logIndex] = index;
+                    data.LogToIndex[logIndex] = index;
                     log += 0.01;
                     logIndex++;
                 }
 
-                var xRatio = settings.sensitivity.x * ratio;
-                var yRatio = settings.sensitivity.y * ratio;
-
-                if (xRatio > maxRatio)
-                {
-                    maxRatio = xRatio;
-                }
-
-                if (xRatio < minRatio)
-                {
-                    minRatio = xRatio;
-                }
-
-                if (yRatio > maxRatio)
-                {
-                    maxRatio = yRatio;
-                }
-
-                if (yRatio < minRatio)
-                {
-                    minRatio = yRatio;
-                }
-
-                if (!data.X.AccelPoints.ContainsKey(simulatedInputDatum.velocity))
-                {
-                    data.X.AccelPoints.Add(simulatedInputDatum.velocity, xRatio);
-                }
-
-                if (!data.Y.AccelPoints.ContainsKey(simulatedInputDatum.velocity))
-                {
-                    data.Y.AccelPoints.Add(simulatedInputDatum.velocity, yRatio);
-                }
-
-                var xOut = xRatio * simulatedInputDatum.velocity;
-                var yOut = yRatio * simulatedInputDatum.velocity;
-
-                var inDiff = simulatedInputDatum.velocity - lastInputMagnitude;
-                var xOutDiff = xOut - lastOutputMagnitudeX;
-                var yOutDiff = yOut - lastOutputMagnitudeY;
-                var xSlope = inDiff > 0 ? xOutDiff / inDiff : settings.sensitivity.x;
-                var ySlope = inDiff > 0 ? yOutDiff / inDiff : settings.sensitivity.y;
-
-                if (xSlope > maxSlope)
-                {
-                    maxSlope = xSlope;
-                }
-
-                if (xSlope < minSlope)
-                {
-                    minSlope = xSlope;
-                }
-
-                if (ySlope > maxSlope)
-                {
-                    maxSlope = ySlope;
-                }
-
-                if (ySlope < minSlope)
-                {
-                    minSlope = ySlope;
-                }
-
-                if (!data.X.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
-                {
-                    data.X.VelocityPoints.Add(simulatedInputDatum.velocity, xOut);
-                }
-
-                if (!data.Y.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
-                {
-                    data.Y.VelocityPoints.Add(simulatedInputDatum.velocity, yOut);
-                }
-
-                if (!data.X.GainPoints.ContainsKey(simulatedInputDatum.velocity))
-                {
-                    data.X.GainPoints.Add(simulatedInputDatum.velocity, xSlope);
-                }
-
-                if (!data.Y.GainPoints.ContainsKey(simulatedInputDatum.velocity))
-                {
-                    data.Y.GainPoints.Add(simulatedInputDatum.velocity, ySlope);
-                }
-
-                lastInputMagnitude = simulatedInputDatum.velocity;
-                lastOutputMagnitudeX = xOut;
-                lastOutputMagnitudeY = yOut;
-                index += 1;
+                angleIndex++;
             }
 
-            index--;
-
-            while (log <= 5.0)
-            {
-                data.Combined.LogToIndex[logIndex] = index;
-                log += 0.01;
-                logIndex++;
-            }
-
-            data.Combined.MaxAccel = maxRatio;
-            data.Combined.MinAccel = minRatio;
-            data.Combined.MaxGain = maxSlope;
-            data.Combined.MinGain = minSlope;
+            dataByAngle[0].MaxAccel = maxRatio;
+            dataByAngle[0].MinAccel = minRatio;
+            dataByAngle[0].MaxGain = maxSlope;
+            dataByAngle[0].MinGain = minSlope;
         }
 
         public ReadOnlyCollection<SimulatedMouseInput> GetSimulatedInput()
@@ -382,54 +347,56 @@ namespace grapher.Models.Calculations
             return magnitudes.AsReadOnly();
         }
 
-        public ReadOnlyCollection<SimulatedMouseInput> GetSimulatedInputXY()
+        public IReadOnlyCollection<IReadOnlyCollection<SimulatedMouseInput>> GetSimulatedDirectionalInput()
         {
-            var magnitudes = new List<SimulatedMouseInput>();
+            var magnitudesByAngle = new List<IReadOnlyCollection<SimulatedMouseInput>>();
 
-            foreach (var slowMoveMagnitude in SlowMovements)
+            foreach (var angle in Angles)
             {
-                foreach (var slowAngle in Angles)
-                {
-                    var slowMoveX = slowMoveMagnitude * Math.Cos(slowAngle);
-                    var slowMoveY = slowMoveMagnitude * Math.Sin(slowAngle);
-                    var ceilX = (int)Math.Ceiling(slowMoveX);
-                    var ceilY = (int)Math.Ceiling(slowMoveY);
-                    var magnitude = Magnitude(slowMoveX, slowMoveY);
-                    var ceilMagnitude = Magnitude(ceilX, ceilY);
-                    var timeFactor = ceilMagnitude / magnitude;
+                var magnitudes = new List<SimulatedMouseInput>();
 
-                    SimulatedMouseInput mouseInputData;
-                    mouseInputData.x = ceilX;
-                    mouseInputData.y = ceilY;
-                    mouseInputData.time = timeFactor;
-                    mouseInputData.velocity = Velocity(ceilX, ceilY, timeFactor);
-                    mouseInputData.angle = slowAngle;
-                    magnitudes.Add(mouseInputData);
+                foreach (var slowMoveMagnitude in SlowMovements)
+                {
+                        var slowMoveX = Math.Round(slowMoveMagnitude * Math.Cos(angle), 4);
+                        var slowMoveY = Math.Round(slowMoveMagnitude * Math.Sin(angle), 4);
+                        var ratio = slowMoveX > 0.0 ? slowMoveY / slowMoveX : 90;
+                        var ceilX = (int)Math.Round(slowMoveX*90);
+                        var ceilY = (int)Math.Round(slowMoveY*ratio);
+                        var ceilMagnitude = Magnitude(ceilX, ceilY);
+                        var timeFactor = ceilMagnitude / slowMoveMagnitude;
+
+                        SimulatedMouseInput mouseInputData;
+                        mouseInputData.x = ceilX;
+                        mouseInputData.y = ceilY;
+                        mouseInputData.time = timeFactor;
+                        mouseInputData.velocity = Velocity(ceilX, ceilY, timeFactor);
+                        mouseInputData.angle = angle;
+                        magnitudes.Add(mouseInputData);
                 }
+
+                for (int magnitude = 5; magnitude < XYMaxVelocity; magnitude+=Increment)
+                {
+                        var slowMoveX = Math.Round(magnitude * Math.Cos(angle), 4);
+                        var slowMoveY = Math.Round(magnitude * Math.Sin(angle), 4);
+                        var ratio = slowMoveX > 0.0 ? slowMoveY / slowMoveX : 90;
+                        var ceilX = (int)Math.Round(slowMoveX*90);
+                        var ceilY = (int)Math.Round(slowMoveY*ratio);
+                        var ceilMagnitude = Magnitude(ceilX, ceilY);
+                        var timeFactor = ceilMagnitude / magnitude;
+
+                        SimulatedMouseInput mouseInputData;
+                        mouseInputData.x = ceilX;
+                        mouseInputData.y = ceilY;
+                        mouseInputData.time = timeFactor;
+                        mouseInputData.velocity = Velocity(ceilX, ceilY, mouseInputData.time);
+                        mouseInputData.angle = angle;
+                        magnitudes.Add(mouseInputData);
+                }
+
+                magnitudesByAngle.Add(magnitudes.AsReadOnly());
             }
 
-            for (int magnitude = 5; magnitude < XYMaxVelocity; magnitude+=Increment)
-            {
-                foreach (var angle in Angles)
-                {
-                    var slowMoveX = magnitude * Math.Cos(angle);
-                    var slowMoveY = magnitude * Math.Sin(angle);
-                    var ceilX = (int)Math.Ceiling(slowMoveX);
-                    var ceilY = (int)Math.Ceiling(slowMoveY);
-                    var ceilMagnitude = Magnitude(ceilX, ceilY);
-                    var timeFactor = ceilMagnitude / magnitude;
-
-                    SimulatedMouseInput mouseInputData;
-                    mouseInputData.x =ceilX;
-                    mouseInputData.y = ceilY;
-                    mouseInputData.time = MeasurementTime;
-                    mouseInputData.velocity = Velocity(ceilX, ceilY, mouseInputData.time);
-                    mouseInputData.angle = angle;
-                    magnitudes.Add(mouseInputData);
-                }
-            }
-
-            return magnitudes.AsReadOnly();
+            return magnitudesByAngle.AsReadOnly();
         }
 
         public static double Magnitude(int x, int y)
@@ -487,6 +454,7 @@ namespace grapher.Models.Calculations
             SimulatedInputCombined = GetSimulatedInput();
             SimulatedInputX = GetSimulatInputX();
             SimulatedInputY = GetSimulatedInputY();
+            SimulatedDirectionalInput = GetSimulatedDirectionalInput();
         }
 
         #endregion Methods

@@ -38,7 +38,8 @@ namespace grapher.Models.Charts.ChartState
                 sensitivityChart,
                 velocityChart,
                 gainChat,
-                accelData,
+                xPoints,
+                yPoints,
                 accelCalculator);
         }
 

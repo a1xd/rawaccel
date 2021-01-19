@@ -39,13 +39,19 @@ namespace grapher.Models.Charts.ChartState
 
         internal bool TwoDotsPerGraph { get; set; }
 
-        public abstract void MakeDots(double x, double y, double timeInMs);
+        public virtual void MakeDots(double x, double y, double timeInMs)
+        {
+            Data.CalculateDots(x, y, timeInMs);
+        }
 
         public abstract void Bind();
 
         public abstract void Activate();
 
-        public abstract void Calculate(ManagedAccel accel, DriverSettings settings);
+        public virtual void Calculate(ManagedAccel accel, DriverSettings settings)
+        {
+            Data.CreateGraphData(accel, settings);
+        }
 
         public void Redraw()
         {

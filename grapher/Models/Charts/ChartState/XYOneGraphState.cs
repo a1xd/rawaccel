@@ -19,9 +19,12 @@ namespace grapher.Models.Charts.ChartState
                   gainChart,
                   accelCalculator)
         {
-            Data = new AccelDataXYDirectional(xPoints, yPoints, accelCalculator);
+            DataDirectional  = new AccelDataXYDirectional(xPoints, yPoints, accelCalculator);
+            Data = DataDirectional;
             TwoDotsPerGraph = true;
         }
+
+        private AccelDataXYDirectional DataDirectional { get; }
 
         public override void Activate()
         {
@@ -30,27 +33,13 @@ namespace grapher.Models.Charts.ChartState
             GainChart.SetCombined();
         }
 
-        public override void MakeDots(double x, double y, double timeInMs)
-        {
-            Data.CalculateDots(x, y, timeInMs);
-        }
-
         public override void Bind()
         {
             SensitivityChart.BindXYCombined(Data.X.AccelPoints, Data.Y.AccelPoints);
             VelocityChart.BindXYCombined(Data.X.VelocityPoints, Data.Y.VelocityPoints);
             GainChart.BindXYCombined(Data.X.GainPoints, Data.Y.GainPoints);
-            SensitivityChart.SetMinMax(Data.Combined.MinAccel, Data.Combined.MaxAccel);
-            GainChart.SetMinMax(Data.Combined.MinGain, Data.Combined.MaxGain);
-        }
-
-        public override void Calculate(ManagedAccel accel, DriverSettings settings)
-        {
-            Calculator.CalculateCombinedDiffSens(Data, accel, settings, Calculator.SimulatedInputCombined);
-            Data.X.Clear();
-            Data.Y.Clear();
-            Calculator.Calculate(Data.X, accel, settings.sensitivity.x, Calculator.SimulatedInputX);
-            Calculator.Calculate(Data.Y, accel, settings.sensitivity.y, Calculator.SimulatedInputY);
+            SensitivityChart.SetMinMax(DataDirectional.SensitivityMin, DataDirectional.SensitivityMax);
+            GainChart.SetMinMax(DataDirectional.GainMin, DataDirectional.GainMax);
         }
     }
 }

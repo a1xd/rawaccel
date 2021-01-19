@@ -32,11 +32,6 @@ namespace grapher.Models.Charts.ChartState
             GainChart.ClearSecondDots();
         }
 
-        public override void MakeDots(double x, double y, double timeInMs)
-        {
-            Data.CalculateDots(x, y, timeInMs);
-        }
-
         public override void Bind()
         {
             SensitivityChart.Bind(Data.X.AccelPoints);
@@ -44,11 +39,6 @@ namespace grapher.Models.Charts.ChartState
             GainChart.Bind(Data.X.GainPoints);
             SensitivityChart.SetMinMax(Data.X.MinAccel, Data.X.MaxAccel);
             GainChart.SetMinMax(Data.X.MinGain, Data.X.MaxGain);
-        }
-
-        public override void Calculate(ManagedAccel accel, DriverSettings settings)
-        {
-            Calculator.Calculate(Data.X, accel, settings.sensitivity.x, Calculator.SimulatedInputCombined);
         }
     }
 }

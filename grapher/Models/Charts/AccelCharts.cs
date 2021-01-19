@@ -2,9 +2,7 @@
 using grapher.Models.Calculations.Data;
 using grapher.Models.Charts;
 using grapher.Models.Charts.ChartState;
-using grapher.Models.Serialized;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace grapher
@@ -27,7 +25,14 @@ namespace grapher
             var estimatedX = new EstimatedPoints();
             var estimatedY = new EstimatedPoints();
             SetupCharts(sensitivityChart, velocityChart, gainChart, estimated, estimatedX, estimatedY);
-            ChartStateManager = new ChartStateManager(sensitivityChart, velocityChart, gainChart, accelData, accelCalculator);
+            ChartStateManager = new ChartStateManager(
+                sensitivityChart,
+                velocityChart,
+                gainChart,
+                accelCalculator,
+                estimated,
+                estimatedY,
+                estimatedX);
 
             ContainingForm = form;
             EnableVelocityAndGain = enableVelocityAndGain;

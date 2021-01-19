@@ -72,6 +72,9 @@ namespace grapher
 
         public const float SmallButtonSizeFactor = 0.666f;
 
+        /// <summary> Number of divisions between 0 and 90 degrees for directional lookup. For 19: 0, 5, 10... 85, 90.</summary>
+        public const int AngleDivisions = 19;
+
         /// <summary> Format string for shortened x and y textboxes. </summary>
         public const string ShortenedFormatString = "0.###";
 
