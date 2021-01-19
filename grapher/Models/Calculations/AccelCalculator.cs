@@ -113,7 +113,6 @@ namespace grapher.Models.Calculations
                 var outMagnitude = Velocity(output.Item1, output.Item2, simulatedInputDatum.time);
                 var inDiff = Math.Round(simulatedInputDatum.velocity - lastInputMagnitude, 5);
                 var outDiff = Math.Round(outMagnitude - lastOutputMagnitude, 5);
-                var slope = inDiff > 0 ? outDiff / inDiff : starter;
 
                 if (inDiff <= 0)
                 {
@@ -137,6 +136,7 @@ namespace grapher.Models.Calculations
                 }
 
                 var ratio = outMagnitude / simulatedInputDatum.velocity;
+                var slope = inDiff > 0 ? outDiff / inDiff : starter;
                 
                 if (ratio > maxRatio)
                 {
@@ -303,42 +303,32 @@ namespace grapher.Models.Calculations
 
             foreach (var slowMoveX in SlowMovements)
             {
-                foreach (var slowMoveY in SlowMovements)
-                {
-                    if (slowMoveY >= slowMoveX)
-                    {
-                        continue;
-                    }
+                var slowMoveY = slowMoveX;
+                var ratio = slowMoveX > 0.0 ? slowMoveY / slowMoveX : 1;
+                var ceilX = (int)Math.Round(slowMoveX*50);
+                var ceilY = (int)Math.Round(slowMoveY*50);
+                var ceilMagnitude = Magnitude(ceilX, ceilY);
+                var timeFactor = ceilMagnitude / Magnitude(slowMoveX, slowMoveY);
 
-                    var ratio = slowMoveX > 0.0 ? slowMoveY / slowMoveX : 1;
-                    var ceilX = (int)Math.Round(slowMoveX*50);
-                    var ceilY = (int)Math.Round(slowMoveY*50);
-                    var ceilMagnitude = Magnitude(ceilX, ceilY);
-                    var timeFactor = ceilMagnitude / Magnitude(slowMoveX, slowMoveY);
+                SimulatedMouseInput mouseInputData;
+                mouseInputData.x = ceilX;
+                mouseInputData.y = ceilY;
+                mouseInputData.time = MeasurementTime*timeFactor;
+                mouseInputData.velocity = Velocity(ceilX, ceilY, mouseInputData.time);
+                mouseInputData.angle = Math.Atan2(ceilY, ceilX);
+                magnitudes.Add(mouseInputData);
 
-                    SimulatedMouseInput mouseInputData;
-                    mouseInputData.x = ceilX;
-                    mouseInputData.y = ceilY;
-                    mouseInputData.time = MeasurementTime*timeFactor;
-                    mouseInputData.velocity = Velocity(ceilX, ceilY, mouseInputData.time);
-                    mouseInputData.angle = Math.Atan2(ceilY, ceilX);
-                    magnitudes.Add(mouseInputData);
-
-                }
             }
 
             for (int i = 5; i < CombinedMaxVelocity; i+=Increment)
             {
-                for (int j = 0; j <= i; j+=Increment)
-                {
-                    SimulatedMouseInput mouseInputData;
-                    mouseInputData.x = i;
-                    mouseInputData.y = j;
-                    mouseInputData.time = MeasurementTime;
-                    mouseInputData.velocity = Velocity(i, j, mouseInputData.time);
-                    mouseInputData.angle = Math.Atan2(j,i);
-                    magnitudes.Add(mouseInputData);
-                }
+                SimulatedMouseInput mouseInputData;
+                mouseInputData.x = i;
+                mouseInputData.y = i;
+                mouseInputData.time = MeasurementTime;
+                mouseInputData.velocity = Velocity(i, i, mouseInputData.time);
+                mouseInputData.angle = Math.Atan2(i,i);
+                magnitudes.Add(mouseInputData);
             }
 
             magnitudes.Sort((m1, m2) => m1.velocity.CompareTo(m2.velocity));

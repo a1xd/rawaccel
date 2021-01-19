@@ -129,9 +129,10 @@ namespace grapher
             YField.SetNewDefault(y);
             XField.SetToDefault();
 
-            if (x != y)
+            if (x != y || !AllowCombined)
             {
                 LockCheckBox.Checked = false;
+                YField.SetToDefault();
 
                 if (Combined)
                 {

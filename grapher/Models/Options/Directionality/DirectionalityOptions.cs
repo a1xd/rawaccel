@@ -155,6 +155,7 @@ namespace grapher.Models.Options.Directionality
                 LpNorm.Show();
                 Domain.Show();
                 Range.Show();
+                Range.Fields.LockCheckBox.Hide();
                 WholeCheckBox.Show();
                 ByComponentCheckBox.Show();
                 DirectionalityLabel.Text = Constants.DirectionalityTitleOpen;
