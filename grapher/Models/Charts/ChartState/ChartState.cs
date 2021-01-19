@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Calculations.Data;
 using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,11 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData,
             AccelCalculator calculator)
         {
             SensitivityChart = sensitivityChart;
             VelocityChart = velocityChart;
             GainChart = gainChart;
-            Data = accelData;
             Calculator = calculator;
             TwoDotsPerGraph = false;
         }
@@ -32,7 +31,7 @@ namespace grapher.Models.Charts.ChartState
 
         public ChartXY GainChart { get; }
 
-        public AccelData Data { get; }
+        public IAccelData Data { get; protected set; }
 
         public AccelCalculator Calculator { get; }
 

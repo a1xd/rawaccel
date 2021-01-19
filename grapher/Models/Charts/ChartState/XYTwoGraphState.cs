@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Calculations.Data;
 using grapher.Models.Serialized;
 using System;
 
@@ -10,15 +11,17 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData,
+            EstimatedPoints xPoints,
+            EstimatedPoints yPoints,
             AccelCalculator accelCalculator)
             : base(
                   sensitivityChart,
                   velocityChart,
                   gainChart,
-                  accelData,
                   accelCalculator)
-        { }
+        {
+            Data = new AccelDataXYComponential(xPoints, yPoints, accelCalculator);
+        }
 
         public override DriverSettings Settings { get; set; }
 
@@ -35,7 +38,7 @@ namespace grapher.Models.Charts.ChartState
 
         public override void MakeDots(double x, double y, double timeInMs)
         {
-            Data.CalculateDotsXY(x, y, timeInMs);
+            Data.CalculateDots(x, y, timeInMs);
         }
 
         public override void Bind()

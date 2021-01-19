@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Calculations.Data;
 using grapher.Models.Serialized;
 
 namespace grapher.Models.Charts.ChartState
@@ -9,15 +10,16 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData,
+            EstimatedPoints xPoints,
+            EstimatedPoints yPoints,
             AccelCalculator accelCalculator)
             : base(
                   sensitivityChart,
                   velocityChart,
                   gainChart,
-                  accelData,
                   accelCalculator)
         {
+            Data = new AccelDataXYDirectional(xPoints, yPoints, accelCalculator);
             TwoDotsPerGraph = true;
         }
 
@@ -30,7 +32,7 @@ namespace grapher.Models.Charts.ChartState
 
         public override void MakeDots(double x, double y, double timeInMs)
         {
-            Data.CalculateDotsCombinedDiffSens(x, y, timeInMs, Settings);
+            Data.CalculateDots(x, y, timeInMs);
         }
 
         public override void Bind()

@@ -14,11 +14,23 @@ namespace grapher.Models.Calculations
         {
             public double velocity;
             public double time;
+            public double angle;
             public int x;
             public int y;
         }
 
         #endregion Structs
+
+        #region Static
+
+        public static double[] SlowMovements =
+        {
+            0,0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.333, 3.666, 4.0, 4.333, 4.666, 
+        };
+
+        public IEnumerable<double> Angles = GetAngles();
+
+        #endregion static
 
         #region Constructors
 
@@ -57,6 +69,14 @@ namespace grapher.Models.Calculations
         #endregion Fields
 
         #region Methods
+
+        public static IEnumerable<double> GetAngles()
+        {
+            for(int i=0; i<19; i++)
+            {
+                yield return (i / 18) * (Math.PI / 2);
+            }
+        }
 
         public void Calculate(AccelChartData data, ManagedAccel accel, double starter, ICollection<SimulatedMouseInput> simulatedInputData)
         {
@@ -316,6 +336,7 @@ namespace grapher.Models.Calculations
                     mouseInputData.y = j;
                     mouseInputData.time = MeasurementTime;
                     mouseInputData.velocity = Velocity(i, j, mouseInputData.time);
+                    mouseInputData.angle = Math.Atan2(j,i);
                     magnitudes.Add(mouseInputData);
                 }
             }
@@ -336,6 +357,7 @@ namespace grapher.Models.Calculations
                 mouseInputData.y = 0;
                 mouseInputData.time = MeasurementTime;
                 mouseInputData.velocity = Velocity(i, 0, mouseInputData.time);
+                mouseInputData.angle = 0;
                 magnitudes.Add(mouseInputData);
             }
 
@@ -353,7 +375,58 @@ namespace grapher.Models.Calculations
                 mouseInputData.y = i;
                 mouseInputData.time = MeasurementTime;
                 mouseInputData.velocity = Velocity(0, i, mouseInputData.time);
+                mouseInputData.angle = Math.PI / 2;
                 magnitudes.Add(mouseInputData);
+            }
+
+            return magnitudes.AsReadOnly();
+        }
+
+        public ReadOnlyCollection<SimulatedMouseInput> GetSimulatedInputXY()
+        {
+            var magnitudes = new List<SimulatedMouseInput>();
+
+            foreach (var slowMoveMagnitude in SlowMovements)
+            {
+                foreach (var slowAngle in Angles)
+                {
+                    var slowMoveX = slowMoveMagnitude * Math.Cos(slowAngle);
+                    var slowMoveY = slowMoveMagnitude * Math.Sin(slowAngle);
+                    var ceilX = (int)Math.Ceiling(slowMoveX);
+                    var ceilY = (int)Math.Ceiling(slowMoveY);
+                    var magnitude = Magnitude(slowMoveX, slowMoveY);
+                    var ceilMagnitude = Magnitude(ceilX, ceilY);
+                    var timeFactor = ceilMagnitude / magnitude;
+
+                    SimulatedMouseInput mouseInputData;
+                    mouseInputData.x = ceilX;
+                    mouseInputData.y = ceilY;
+                    mouseInputData.time = timeFactor;
+                    mouseInputData.velocity = Velocity(ceilX, ceilY, timeFactor);
+                    mouseInputData.angle = slowAngle;
+                    magnitudes.Add(mouseInputData);
+                }
+            }
+
+            for (int magnitude = 5; magnitude < XYMaxVelocity; magnitude+=Increment)
+            {
+                foreach (var angle in Angles)
+                {
+                    var slowMoveX = magnitude * Math.Cos(angle);
+                    var slowMoveY = magnitude * Math.Sin(angle);
+                    var ceilX = (int)Math.Ceiling(slowMoveX);
+                    var ceilY = (int)Math.Ceiling(slowMoveY);
+                    var ceilMagnitude = Magnitude(ceilX, ceilY);
+                    var timeFactor = ceilMagnitude / magnitude;
+
+                    SimulatedMouseInput mouseInputData;
+                    mouseInputData.x =ceilX;
+                    mouseInputData.y = ceilY;
+                    mouseInputData.time = MeasurementTime;
+                    mouseInputData.velocity = Velocity(ceilX, ceilY, mouseInputData.time);
+                    mouseInputData.angle = angle;
+                    magnitudes.Add(mouseInputData);
+                }
             }
 
             return magnitudes.AsReadOnly();

@@ -84,6 +84,10 @@
     <Compile Include="Models\Calculations\AccelCalculator.cs" />
     <Compile Include="Models\Calculations\AccelChartData.cs" />
     <Compile Include="Models\Calculations\AccelData.cs" />
+    <Compile Include="Models\Calculations\Data\AccelDataCombined.cs" />
+    <Compile Include="Models\Calculations\Data\AccelDataXYComponential.cs" />
+    <Compile Include="Models\Calculations\Data\AccelDataXYDirectional.cs" />
+    <Compile Include="Models\Calculations\Data\IAccelData.cs" />
     <Compile Include="Models\Charts\AccelCharts.cs" />
     <Compile Include="Models\AccelGUI.cs" />
     <Compile Include="Models\Charts\ChartState\ChartState.cs" />
