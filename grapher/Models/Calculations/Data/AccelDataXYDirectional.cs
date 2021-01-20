@@ -70,7 +70,7 @@ namespace grapher.Models.Calculations.Data
         public void CreateGraphData(ManagedAccel accel, DriverSettings settings)
         {
             Clear();
-            Calculator.CalculateCombinedDiffSens(AngleToData, accel, settings, Calculator.SimulatedDirectionalInput);
+            Calculator.CalculateDirectional(AngleToData, accel, settings, Calculator.SimulatedDirectionalInput);
         }
 
         private void FillAngleData()

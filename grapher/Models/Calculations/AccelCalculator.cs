@@ -56,9 +56,7 @@ namespace grapher.Models.Calculations
 
         public Field PollRate { get; private set; }
 
-        private double CombinedMaxVelocity { get; set; }
-
-        private double XYMaxVelocity { get; set; }
+        private double MaxVelocity { get; set; }
 
         private int Increment { get; set; }
         
@@ -114,7 +112,7 @@ namespace grapher.Models.Calculations
                 var inDiff = Math.Round(simulatedInputDatum.velocity - lastInputMagnitude, 5);
                 var outDiff = Math.Round(outMagnitude - lastOutputMagnitude, 5);
 
-                if (inDiff <= 0)
+                if (inDiff == 0)
                 {
                     continue;
                 }
@@ -137,7 +135,7 @@ namespace grapher.Models.Calculations
 
                 var ratio = outMagnitude / simulatedInputDatum.velocity;
                 var slope = inDiff > 0 ? outDiff / inDiff : starter;
-                
+
                 if (ratio > maxRatio)
                 {
                     maxRatio = ratio;
@@ -190,7 +188,7 @@ namespace grapher.Models.Calculations
             data.MinGain = minSlope;
         }
 
-        public void CalculateCombinedDiffSens(AccelChartData[] dataByAngle, ManagedAccel accel, DriverSettings settings, IReadOnlyCollection<IReadOnlyCollection<SimulatedMouseInput>> simulatedInputData)
+        public void CalculateDirectional(AccelChartData[] dataByAngle, ManagedAccel accel, DriverSettings settings, IReadOnlyCollection<IReadOnlyCollection<SimulatedMouseInput>> simulatedInputData)
         {
             double maxRatio = 0.0;
             double minRatio = Double.MaxValue;
@@ -221,8 +219,18 @@ namespace grapher.Models.Calculations
 
                     var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
                     var magnitude = Velocity(output.Item1, output.Item2, simulatedInputDatum.time);
+                    var inDiff = Math.Round(simulatedInputDatum.velocity - lastInputMagnitude, 5);
+                    var outDiff = Math.Round(magnitude - lastOutputMagnitude, 5);
 
-                    var ratio = magnitude / simulatedInputDatum.velocity;
+                    if (inDiff == 0)
+                    {
+                        continue;
+                    }
+
+                    if (inDiff < 0 || outDiff < 0)
+                    {
+                        Console.WriteLine(string.Empty);
+                    }
 
                     if (!data.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
                     {
@@ -240,26 +248,27 @@ namespace grapher.Models.Calculations
                         logIndex++;
                     }
 
-                    if (ratio > maxRatio)
+                    var ratio = magnitude / simulatedInputDatum.velocity;
+                    var slope = inDiff > 0 ? outDiff / inDiff : settings.sensitivity.x;
+
+                    bool indexToMeasureExtrema = (angleIndex == 0) || (angleIndex == (Constants.AngleDivisions - 1));
+
+                    if (indexToMeasureExtrema && (ratio > maxRatio))
                     {
                         maxRatio = ratio;
                     }
 
-                    if (ratio < minRatio)
+                    if (indexToMeasureExtrema && (ratio < minRatio))
                     {
                         minRatio = ratio;
                     }
 
-                    var inDiff = simulatedInputDatum.velocity - lastInputMagnitude;
-                    var outDiff = magnitude - lastOutputMagnitude;
-                    var slope = inDiff > 0 ? outDiff / inDiff : settings.sensitivity.x;
-
-                    if (slope > maxSlope)
+                    if (indexToMeasureExtrema && (slope > maxSlope))
                     {
                         maxSlope = slope;
                     }
 
-                    if (slope < minSlope)
+                    if (indexToMeasureExtrema && (slope < minSlope))
                     {
                         minSlope = slope;
                     }
@@ -320,7 +329,7 @@ namespace grapher.Models.Calculations
 
             }
 
-            for (int i = 5; i < CombinedMaxVelocity; i+=Increment)
+            for (int i = 5; i < MaxVelocity; i+=Increment)
             {
                 SimulatedMouseInput mouseInputData;
                 mouseInputData.x = i;
@@ -353,7 +362,7 @@ namespace grapher.Models.Calculations
                 magnitudes.Add(mouseInputData);
             }
 
-            for (int i = 5; i < XYMaxVelocity; i+=Increment)
+            for (int i = 5; i < MaxVelocity; i+=Increment)
             {
                 SimulatedMouseInput mouseInputData;
                 mouseInputData.x = i;
@@ -384,7 +393,7 @@ namespace grapher.Models.Calculations
                 magnitudes.Add(mouseInputData);
             }
 
-            for (int i = 5; i < XYMaxVelocity; i+=Increment)
+            for (int i = 5; i < MaxVelocity; i+=Increment)
             {
                 SimulatedMouseInput mouseInputData;
                 mouseInputData.x = 0;
@@ -424,7 +433,7 @@ namespace grapher.Models.Calculations
                         magnitudes.Add(mouseInputData);
                 }
 
-                for (int magnitude = 5; magnitude < XYMaxVelocity; magnitude+=Increment)
+                for (int magnitude = 5; magnitude < MaxVelocity; magnitude+=Increment)
                 {
                         var slowMoveX = Math.Round(magnitude * Math.Cos(angle), 4);
                         var slowMoveY = Math.Round(magnitude * Math.Sin(angle), 4);
@@ -495,12 +504,10 @@ namespace grapher.Models.Calculations
 
         public void ScaleByMouseSettings()
         {
-            var dpiPollFactor = DPI.Data / PollRate.Data;
-            CombinedMaxVelocity = dpiPollFactor * Constants.MaxMultiplier;
-            var ratio = CombinedMaxVelocity / Constants.Resolution;
+            MaxVelocity = DPI.Data * Constants.MaxMultiplier;
+            var ratio = MaxVelocity / Constants.Resolution;
             Increment = ratio > 1 ? (int) Math.Floor(ratio) : 1;
             MeasurementTime = Increment == 1 ? 1 / ratio : 1;
-            XYMaxVelocity = CombinedMaxVelocity * Constants.XYToCombinedRatio;
             SimulatedInputCombined = GetSimulatedInput();
             SimulatedInputX = GetSimulatInputX();
             SimulatedInputY = GetSimulatedInputY();

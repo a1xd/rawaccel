@@ -244,8 +244,8 @@ namespace grapher
             ChartX.ChartAreas[0].AxisY.Maximum = maxX * (1 + VerticalMargin);
 
             VerifyRange(minY, maxY);
-            ChartX.ChartAreas[0].AxisY.Minimum = minY * (1 - VerticalMargin);
-            ChartX.ChartAreas[0].AxisY.Maximum = maxY * (1 + VerticalMargin);
+            ChartY.ChartAreas[0].AxisY.Minimum = minY * (1 - VerticalMargin);
+            ChartY.ChartAreas[0].AxisY.Maximum = maxY * (1 + VerticalMargin);
         }
 
         public void SetCombined()

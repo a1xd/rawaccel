@@ -17,10 +17,7 @@ namespace grapher
         public const int Resolution = 100;
 
         /// <summary> Multiplied by DPI over poll rate to find rough max expected velocity. </summary>
-        public const double MaxMultiplier = 85;
-
-        /// <summary> Ratio of max (X, Y) used in "by component" calulations to those used in "whole vector" calculations. </summary>
-        public const double XYToCombinedRatio = 1.4;
+        public const double MaxMultiplier = .05;
 
         /// <summary> Separation between X and Y active value labels, in pixels. </summary>
         public const int ActiveLabelXYSeparation = 2;
