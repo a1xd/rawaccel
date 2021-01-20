@@ -227,11 +227,6 @@ namespace grapher.Models.Calculations
                         continue;
                     }
 
-                    if (inDiff < 0 || outDiff < 0)
-                    {
-                        Console.WriteLine(string.Empty);
-                    }
-
                     if (!data.VelocityPoints.ContainsKey(simulatedInputDatum.velocity))
                     {
                         data.VelocityPoints.Add(simulatedInputDatum.velocity, magnitude);
