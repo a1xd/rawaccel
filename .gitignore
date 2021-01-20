@@ -138,6 +138,17 @@ _TeamCity*
 .axoCover/*
 !.axoCover/settings.json
 
+# Visual Studio code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
 # Visual Studio code coverage results
 *.coverage
 *.coveragexml

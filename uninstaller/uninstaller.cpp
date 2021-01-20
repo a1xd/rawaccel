@@ -4,12 +4,22 @@
 
 int main() {
     try {
-        modify_upper_filters([](std::vector<std::wstring>& filters) {
-            std::erase(filters, DRIVER_NAME);
+        bool reboot_required = false;
+        modify_upper_filters([&reboot_required](std::vector<std::wstring>& filters) {
+            // check if driver is present in upper filters
+            bool driver_present = std::find(filters.begin(), filters.end(), DRIVER_NAME) != filters.end();
+            if (driver_present) {
+                std::erase(filters, DRIVER_NAME);
+                reboot_required = true;
+            }
         });
 
         fs::path target = get_target_path();
         fs::path tmp = make_temp_path(target);
+
+        if (fs::exists(target) || fs::exists(tmp)) {
+            reboot_required = true;
+        }
 
         // schedule tmp to be deleted if rename target -> tmp is successful
         if (MoveFileExW(target.c_str(), tmp.c_str(), MOVEFILE_REPLACE_EXISTING)) {
@@ -18,7 +28,14 @@ int main() {
         else { // tmp is in use and delete is already scheduled
             if (fs::exists(target)) fs::remove(target);
         }
-        std::cout << "Removal complete, change will take effect after restart.\n";
+        
+        if (reboot_required) {
+            std::cout << "Removal complete, change will take effect after restart.\n";
+        }
+        else {
+            std::cout << "No installed driver found.\n";
+        }
+        
     }
     catch (const std::system_error& e) {
         std::cerr << "Error: " << e.what() << ' ' << e.code() << '\n';

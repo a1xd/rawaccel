@@ -3,6 +3,8 @@ using System;
 using System.Windows.Forms;
 using System.Threading;
 using System.Text;
+using System.Drawing;
+using grapher.Models.Devices;
 
 namespace grapher.Models.Serialized
 {
@@ -16,7 +18,8 @@ namespace grapher.Models.Serialized
             Field pollRateField,
             ToolStripMenuItem autoWrite,
             ToolStripMenuItem showLastMouseMove,
-            ToolStripMenuItem showVelocityAndGain)
+            ToolStripMenuItem showVelocityAndGain,
+            DeviceIDManager deviceIDManager)
         {
             ActiveAccel = activeAccel;
             DpiField = dpiField;
@@ -24,6 +27,7 @@ namespace grapher.Models.Serialized
             AutoWriteMenuItem = autoWrite;
             ShowLastMouseMoveMenuItem = showLastMouseMove;
             ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
+            DeviceIDManager = deviceIDManager;
         }
 
         #endregion Constructors
@@ -37,6 +41,8 @@ namespace grapher.Models.Serialized
         public Field DpiField { get; private set; }
 
         public Field PollRateField { get; private set; }
+
+        public DeviceIDManager DeviceIDManager { get; }
 
         private ToolStripMenuItem AutoWriteMenuItem { get; set; }
 

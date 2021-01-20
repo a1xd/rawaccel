@@ -35,7 +35,7 @@ The above is much more clear with an example. Let's say I have
 
 and I move my mouse to create an input of (30,40) at a poll rate of 1000 hz.
 
-Then our input speed is sqrt(30^2 + 40^2) = 50 counts/ms. Our accelerated sensitivity is calculated to be (1 + 0.1 \* 50) * 0.5 = 1.5 \* 0.5 = 0.75. So our output velocity is 0.75 \* 50  = 37.5. If I run the previous calculations with input speed 49.9 I get output velocity 37.40005, so our gain is about (37.5-37.40005)/(50-49.9) = 0.9995. Here is a picture of the charts in Raw Accel showing the same thing:
+Then our input speed is sqrt(30^2 + 40^2) = 50 counts/ms. Our accelerated sensitivity is calculated to be (1 + 0.01 \* 50) * 0.5 = 1.5 \* 0.5 = 0.75. So our output velocity is 0.75 \* 50  = 37.5. If I run the previous calculations with input speed 49.9 I get output velocity 37.40005, so our gain is about (37.5-37.40005)/(50-49.9) = 0.9995. Here is a picture of the charts in Raw Accel showing the same thing:
 
 ![SensVelocityGainExample](images/accel_readme_example.png)
 
@@ -100,4 +100,4 @@ This curve looks like an "S" with the top half bigger than the bottom. Mathemati
 ![MotivityExample](images/motivity_example.png)
 
 ## Further Help
-Further help and frequently asked questions can be found in the FAQ.
+Further help and frequently asked questions can be found in the [FAQ](https://github.com/a1xd/rawaccel/blob/master/doc/FAQ.md).

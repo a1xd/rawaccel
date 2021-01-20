@@ -180,6 +180,7 @@ namespace grapher
             this.gainOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.legacyOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UseSpecificDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartsPanel = new System.Windows.Forms.Panel();
             this.GainChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -281,7 +282,6 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
-            this.optionsPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.optionsPanel_Paint);
             // 
             // FakeBox
             // 
@@ -1178,7 +1178,8 @@ namespace grapher
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.capStyleToolStripMenuItem,
             this.offsetStyleToolStripMenuItem,
-            this.AutoWriteMenuItem});
+            this.AutoWriteMenuItem,
+            this.UseSpecificDeviceMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
@@ -1235,6 +1236,21 @@ namespace grapher
             this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
             this.AutoWriteMenuItem.Size = new System.Drawing.Size(210, 22);
             this.AutoWriteMenuItem.Text = "Apply Settings On Startup";
+            // 
+            // AutoWriteMenuItem
+            // 
+            this.AutoWriteMenuItem.Checked = true;
+            this.AutoWriteMenuItem.CheckOnClick = true;
+            this.AutoWriteMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
+            this.AutoWriteMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.AutoWriteMenuItem.Text = "Apply Settings On Startup";
+            // 
+            // UseSpecificDeviceMenuItem
+            // 
+            this.UseSpecificDeviceMenuItem.Name = "UseSpecificDeviceMenuItem";
+            this.UseSpecificDeviceMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.UseSpecificDeviceMenuItem.Text = "Use Specific Device";
             // 
             // chartsPanel
             // 
@@ -1498,8 +1514,6 @@ namespace grapher
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RawAcceleration";
             this.Text = "Raw Accel";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.RawAcceleration_Paint);
             this.optionsPanel.ResumeLayout(false);
             this.optionsPanel.PerformLayout();
             this.DirectionalityPanel.ResumeLayout(false);
@@ -1636,6 +1650,7 @@ namespace grapher
         private System.Windows.Forms.Label LpNormActiveValue;
         private System.Windows.Forms.Label RangeActiveValueY;
         private System.Windows.Forms.CheckBox FakeBox;
+        private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
     }
 }
 

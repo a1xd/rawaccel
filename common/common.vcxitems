@@ -29,6 +29,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-version.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)utility-install.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utility-rawinput.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)x64-util.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)vec2.h" />
   </ItemGroup>

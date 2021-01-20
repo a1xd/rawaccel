@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
@@ -23,7 +24,8 @@ namespace grapher
             Button writeButton,
             ButtonBase toggleButton,
             MouseWatcher mouseWatcher,
-            ToolStripMenuItem scaleMenuItem)
+            ToolStripMenuItem scaleMenuItem,
+            DeviceIDManager deviceIDManager)
         {
             AccelForm = accelForm;
             AccelCalculator = accelCalculator;
@@ -36,6 +38,7 @@ namespace grapher
             DefaultButtonFont = WriteButton.Font;
             SmallButtonFont = new Font(WriteButton.Font.Name, WriteButton.Font.Size * Constants.SmallButtonSizeFactor);
             MouseWatcher = mouseWatcher;
+            DeviceIDManager = deviceIDManager;
 
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
             WriteButton.Click += new System.EventHandler(OnWriteButtonClick);
@@ -95,6 +98,10 @@ namespace grapher
 
         public ToolStripMenuItem ScaleMenuItem { get; }
 
+        public DeviceIDManager DeviceIDManager { get; }
+
+        public Action UpdateInputManagers { get; private set; }
+
         private Timer ChartRefresh { get; }
 
         private Font SmallButtonFont { get; }
@@ -144,6 +151,7 @@ namespace grapher
                 directionalMultipliers = driverSettings.directionalMultipliers,
                 domainArgs = ApplyOptions.Directionality.GetDomainArgs(),
                 rangeXY = ApplyOptions.Directionality.GetRangeXY(),
+                deviceID = DeviceIDManager.ID,
             };
 
             ButtonDelay(WriteButton);
@@ -156,7 +164,7 @@ namespace grapher
             }
             else
             {
-                throw new Exception($"Bad arguments:\n\n{errors}");
+                new MessageDialog(errors.ToString(), "bad input").ShowDialog();
             }
         }
 
@@ -164,6 +172,14 @@ namespace grapher
         {
             UpdateShownActiveValues(args);
             UpdateGraph(args);
+
+            UpdateInputManagers = () =>
+            {
+                MouseWatcher.UpdateHandles(args.deviceID);
+                DeviceIDManager.Update(args.deviceID);
+            };
+
+            UpdateInputManagers();
         }
 
         public void UpdateGraph(DriverSettings args)
