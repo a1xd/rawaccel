@@ -1,7 +1,7 @@
 #pragma once
 
 #define RA_VER_MAJOR 1
-#define RA_VER_MINOR 3
+#define RA_VER_MINOR 4
 #define RA_VER_PATCH 0
 
 #define RA_MIN_OS "Win7"
@@ -20,7 +20,7 @@ namespace rawaccel {
 	};
 
 #ifndef _KERNEL_MODE
-	inline constexpr version_t min_driver_version = { 1, 3, 0 };
+	inline constexpr version_t min_driver_version = { 1, 4, 0 };
 #endif
 
 }
