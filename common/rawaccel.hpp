@@ -232,7 +232,7 @@ namespace rawaccel {
         double sigma_x = 1.0;
         double sigma_y = 1.0;
 
-        weighted_distance(domain_args args)
+        weighted_distance(const domain_args& args)
         {
             sigma_x = args.domain_weights.x;
             sigma_y = args.domain_weights.y;
@@ -250,19 +250,18 @@ namespace rawaccel {
             }
         }
 
-        double calculate(double x, double y)
+        inline double calculate(double x, double y)
         {
 			double abs_x = fabs(x);
 			double abs_y = fabs(y);
 
-            if (lp_norm_infinity)
-            {
-                return abs_x > abs_y ? abs_x : abs_y;
-            }
+            if (lp_norm_infinity) return maxsd(abs_x, abs_y);
 
             double x_scaled = abs_x * sigma_x;
             double y_scaled = abs_y * sigma_y;
-            return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
+
+            if (p == 2) return sqrtsd(x_scaled * x_scaled + y_scaled * y_scaled);
+            else return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
         }
 
         weighted_distance() = default;
@@ -273,19 +272,12 @@ namespace rawaccel {
         double start = 1.0;
         bool should_apply = false;
 
-        direction_weight(vec2d thetas)
+        direction_weight(const vec2d& thetas)
         {
             diff = thetas.y - thetas.x;
             start = thetas.x;
 
-            if (diff != 0)
-            {
-                should_apply = true;
-            }
-            else
-            {
-                should_apply = false;
-            }
+            should_apply = diff != 0;
         }
 
         inline double atan_scale(double x, double y)
@@ -293,7 +285,7 @@ namespace rawaccel {
             return M_2_PI * atan2(fabs(y), fabs(x));
         }
 
-        double apply(double x, double y)
+        inline double apply(double x, double y)
         {
             return atan_scale(x, y) * diff + start;
         }
