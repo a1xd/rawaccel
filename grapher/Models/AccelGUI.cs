@@ -72,6 +72,11 @@ namespace grapher
 
             SetupButtons();
             AccelForm.DoResize();
+
+            // TODO: The below removes an overlapping form from the anisotropy panel.
+            // Figure out why and remove the overlap and below.
+            ApplyOptions.Directionality.Show();
+            ApplyOptions.Directionality.Hide();
         }
 
         #endregion Constructors
@@ -149,6 +154,8 @@ namespace grapher
                 args = newArgs,
                 minimumTime = driverSettings.minimumTime,
                 directionalMultipliers = driverSettings.directionalMultipliers,
+                domainArgs = ApplyOptions.Directionality.GetDomainArgs(),
+                rangeXY = ApplyOptions.Directionality.GetRangeXY(),
                 deviceID = DeviceIDManager.ID,
             };
 
@@ -206,7 +213,7 @@ namespace grapher
 
         private void SetupButtons()
         {
-            WriteButton.Top = AccelCharts.Top + AccelCharts.TopChartHeight - Constants.ButtonVerticalOffset;
+            WriteButton.Top = Constants.SensitivityChartAloneHeight - Constants.ButtonVerticalOffset;
             
             ToggleButton.Appearance = Appearance.Button;
             ToggleButton.FlatStyle = FlatStyle.System;

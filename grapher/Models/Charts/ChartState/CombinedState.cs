@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Calculations.Data;
 using grapher.Models.Serialized;
 
 namespace grapher.Models.Charts.ChartState
@@ -9,15 +10,16 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData,
+            EstimatedPoints points,
             AccelCalculator accelCalculator)
             : base(
                   sensitivityChart,
                   velocityChart,
                   gainChart,
-                  accelData,
                   accelCalculator)
-        { }
+        {
+            Data = new AccelDataCombined(points, accelCalculator);
+        }
 
         public override void Activate()
         {
@@ -30,23 +32,13 @@ namespace grapher.Models.Charts.ChartState
             GainChart.ClearSecondDots();
         }
 
-        public override void MakeDots(double x, double y, double timeInMs)
-        {
-            Data.CalculateDots(x, y, timeInMs);
-        }
-
         public override void Bind()
         {
-            SensitivityChart.Bind(Data.Combined.AccelPoints);
-            VelocityChart.Bind(Data.Combined.VelocityPoints);
-            GainChart.Bind(Data.Combined.GainPoints);
-            SensitivityChart.SetMinMax(Data.Combined.MinAccel, Data.Combined.MaxAccel);
-            GainChart.SetMinMax(Data.Combined.MinGain, Data.Combined.MaxGain);
-        }
-
-        public override void Calculate(ManagedAccel accel, DriverSettings settings)
-        {
-            Calculator.Calculate(Data.Combined, accel, settings.sensitivity.x, Calculator.SimulatedInputCombined);
+            SensitivityChart.Bind(Data.X.AccelPoints);
+            VelocityChart.Bind(Data.X.VelocityPoints);
+            GainChart.Bind(Data.X.GainPoints);
+            SensitivityChart.SetMinMax(Data.X.MinAccel, Data.X.MaxAccel);
+            GainChart.SetMinMax(Data.X.MinGain, Data.X.MaxGain);
         }
     }
 }

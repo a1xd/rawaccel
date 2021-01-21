@@ -171,6 +171,16 @@ namespace grapher
             ActiveValueLabel.Align();
         }
 
+        public void SetToUnavailable()
+        {
+            Field.SetToUnavailable();
+        }
+
+        public void SetToAvailable()
+        {
+            Field.SetToDefault();
+        }
+
         #endregion Methods
     }
 }

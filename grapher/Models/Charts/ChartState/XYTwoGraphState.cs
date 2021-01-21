@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Calculations.Data;
 using grapher.Models.Serialized;
 using System;
 
@@ -10,15 +11,17 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData,
+            EstimatedPoints xPoints,
+            EstimatedPoints yPoints,
             AccelCalculator accelCalculator)
             : base(
                   sensitivityChart,
                   velocityChart,
                   gainChart,
-                  accelData,
                   accelCalculator)
-        { }
+        {
+            Data = new AccelDataXYComponential(xPoints, yPoints, accelCalculator);
+        }
 
         public override DriverSettings Settings { get; set; }
 
@@ -33,11 +36,6 @@ namespace grapher.Models.Charts.ChartState
             GainChart.ClearSecondDots();
         }
 
-        public override void MakeDots(double x, double y, double timeInMs)
-        {
-            Data.CalculateDotsXY(x, y, timeInMs);
-        }
-
         public override void Bind()
         {
             SensitivityChart.BindXY(Data.X.AccelPoints, Data.Y.AccelPoints);
@@ -46,12 +44,6 @@ namespace grapher.Models.Charts.ChartState
 
             SensitivityChart.SetMinMaxXY(Data.X.MinAccel, Data.X.MaxAccel, Data.Y.MinAccel, Data.Y.MaxAccel);
             GainChart.SetMinMaxXY(Data.X.MinGain, Data.X.MaxGain, Data.Y.MinGain, Data.Y.MaxGain);
-        }
-
-        public override void Calculate(ManagedAccel accel, DriverSettings settings)
-        {
-            Calculator.Calculate(Data.X, accel, settings.sensitivity.x, Calculator.SimulatedInputX);
-            Calculator.Calculate(Data.Y, accel, settings.sensitivity.y, Calculator.SimulatedInputY);
         }
     }
 }

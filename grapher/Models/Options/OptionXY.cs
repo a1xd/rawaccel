@@ -22,8 +22,9 @@ namespace grapher
             Form containingForm,
             double defaultData,
             Label label,
-            ActiveValueLabelXY activeValueLabels)
-            : this(new FieldXY(xBox, yBox, lockCheckBox, containingForm, defaultData), label, activeValueLabels)
+            ActiveValueLabelXY activeValueLabels,
+            bool allowCombined = true)
+            : this(new FieldXY(xBox, yBox, lockCheckBox, containingForm, defaultData, allowCombined), label, activeValueLabels)
         {
         }
 
@@ -35,7 +36,8 @@ namespace grapher
             double defaultData,
             Label label,
             ActiveValueLabelXY activeValueLabels,
-            string startingName):
+            string startingName,
+            bool allowCombined = true):
             this(
                 xBox,
                 yBox,
@@ -43,7 +45,8 @@ namespace grapher
                 containingForm,
                 defaultData,
                 label,
-                activeValueLabels)
+                activeValueLabels,
+                allowCombined)
         {
             SetName(startingName);
         }
@@ -124,7 +127,6 @@ namespace grapher
         {
             ActiveValueLabels.SetValues(x, y);
             Fields.SetActive(x, y);
-            
         }
 
         public override void AlignActiveValues()
@@ -137,6 +139,7 @@ namespace grapher
             Fields.Hide();
             Fields.LockCheckBox.Hide();
             Label.Hide();
+            ActiveValueLabels.Hide();
         }
 
         public void Show()
@@ -144,6 +147,7 @@ namespace grapher
             Fields.Show();
             Fields.LockCheckBox.Show();
             Label.Show();
+            ActiveValueLabels.Show();
         }
 
         public override void Show(string name)
@@ -151,6 +155,18 @@ namespace grapher
             SetName(name);
 
             Show();
+        }
+
+        public void SetToUnavailable()
+        {
+            Fields.XField.SetToUnavailable();
+            Fields.YField.SetToUnavailable();
+        }
+
+        public void SetToAvailable()
+        {
+            Fields.XField.SetToDefault();
+            Fields.YField.SetToDefault();
         }
 
         #endregion Methods

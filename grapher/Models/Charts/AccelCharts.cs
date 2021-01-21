@@ -1,9 +1,8 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Calculations.Data;
 using grapher.Models.Charts;
 using grapher.Models.Charts.ChartState;
-using grapher.Models.Serialized;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace grapher
@@ -26,8 +25,14 @@ namespace grapher
             var estimatedX = new EstimatedPoints();
             var estimatedY = new EstimatedPoints();
             SetupCharts(sensitivityChart, velocityChart, gainChart, estimated, estimatedX, estimatedY);
-            var accelData = new AccelData(estimated, estimatedX, estimatedY);
-            ChartStateManager = new ChartStateManager(sensitivityChart, velocityChart, gainChart, accelData, accelCalculator);
+            ChartStateManager = new ChartStateManager(
+                sensitivityChart,
+                velocityChart,
+                gainChart,
+                accelCalculator,
+                estimated,
+                estimatedY,
+                estimatedX);
 
             ContainingForm = form;
             EnableVelocityAndGain = enableVelocityAndGain;
@@ -56,7 +61,7 @@ namespace grapher
 
         private Button WriteButton { get; }
 
-        public AccelData AccelData
+        public IAccelData AccelData
         {
             get
             {
@@ -77,14 +82,6 @@ namespace grapher
             get
             {
                 return ChartState.SensitivityChart.Top;
-            }
-        }
-
-        public int TopChartHeight
-        {
-            get
-            {
-                return ChartState.SensitivityChart.Height;
             }
         }
 

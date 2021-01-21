@@ -14,28 +14,32 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChat,
-            AccelData accelData,
-            AccelCalculator accelCalculator)
+            AccelCalculator accelCalculator,
+            EstimatedPoints combined,
+            EstimatedPoints xPoints,
+            EstimatedPoints yPoints)
         {
             CombinedState = new CombinedState(
                 sensitivityChart,
                 velocityChart,
                 gainChat,
-                accelData,
+                combined,
                 accelCalculator);
 
             XYOneGraphState = new XYOneGraphState(
                 sensitivityChart,
                 velocityChart,
                 gainChat,
-                accelData,
+                xPoints,
+                yPoints,
                 accelCalculator);
 
             XYTwoGraphState = new XYTwoGraphState(
                 sensitivityChart,
                 velocityChart,
                 gainChat,
-                accelData,
+                xPoints,
+                yPoints,
                 accelCalculator);
         }
 
@@ -52,7 +56,9 @@ namespace grapher.Models.Charts.ChartState
 
             if (settings.combineMagnitudes)
             {
-                if (settings.sensitivity.x != settings.sensitivity.y)
+                if (settings.sensitivity.x != settings.sensitivity.y ||
+                    settings.domainArgs.domainXY.x != settings.domainArgs.domainXY.y ||
+                    settings.rangeXY.x != settings.rangeXY.y)
                 {
                     chartState = XYOneGraphState;
                 }

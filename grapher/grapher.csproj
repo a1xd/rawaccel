@@ -90,7 +90,10 @@
     <Compile Include="Models\AccelGUIFactory.cs" />
     <Compile Include="Models\Calculations\AccelCalculator.cs" />
     <Compile Include="Models\Calculations\AccelChartData.cs" />
-    <Compile Include="Models\Calculations\AccelData.cs" />
+    <Compile Include="Models\Calculations\Data\AccelDataCombined.cs" />
+    <Compile Include="Models\Calculations\Data\AccelDataXYComponential.cs" />
+    <Compile Include="Models\Calculations\Data\AccelDataXYDirectional.cs" />
+    <Compile Include="Models\Calculations\Data\IAccelData.cs" />
     <Compile Include="Models\Charts\AccelCharts.cs" />
     <Compile Include="Models\AccelGUI.cs" />
     <Compile Include="Models\Charts\ChartState\ChartState.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Layouts\NaturalLayout.cs" />
     <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
+    <Compile Include="Models\Options\Directionality\DirectionalityOptions.cs" />
     <Compile Include="Models\Options\IOption.cs" />
     <Compile Include="Models\Options\OffsetOptions.cs" />
     <Compile Include="Models\Options\Option.cs" />

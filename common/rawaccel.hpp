@@ -225,12 +225,90 @@ namespace rawaccel {
         accelerator() = default;
     };
 
+    struct weighted_distance {
+        double p = 2.0;
+        double p_inverse = 0.5;
+        bool lp_norm_infinity = false;
+        double sigma_x = 1.0;
+        double sigma_y = 1.0;
+
+        weighted_distance(domain_args args)
+        {
+            sigma_x = args.domain_weights.x;
+            sigma_y = args.domain_weights.y;
+            if (args.lp_norm <= 0)
+            {
+                lp_norm_infinity = true;
+                p = 0.0;
+                p_inverse = 0.0;
+            }
+            else
+            {
+                lp_norm_infinity = false;
+                p = args.lp_norm;
+                p_inverse = 1 / args.lp_norm;
+            }
+        }
+
+        double calculate(double x, double y)
+        {
+			double abs_x = fabs(x);
+			double abs_y = fabs(y);
+
+            if (lp_norm_infinity)
+            {
+                return abs_x > abs_y ? abs_x : abs_y;
+            }
+
+            double x_scaled = abs_x * sigma_x;
+            double y_scaled = abs_y * sigma_y;
+            return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
+        }
+
+        weighted_distance() = default;
+    };
+
+    struct direction_weight {
+        double diff = 0.0;
+        double start = 1.0;
+        bool should_apply = false;
+
+        direction_weight(vec2d thetas)
+        {
+            diff = thetas.y - thetas.x;
+            start = thetas.x;
+
+            if (diff != 0)
+            {
+                should_apply = true;
+            }
+            else
+            {
+                should_apply = false;
+            }
+        }
+
+        inline double atan_scale(double x, double y)
+        {
+            return M_2_PI * atan2(fabs(y), fabs(x));
+        }
+
+        double apply(double x, double y)
+        {
+            return atan_scale(x, y) * diff + start;
+        }
+
+        direction_weight() = default;
+    };
+
     /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
     struct mouse_modifier {
         bool apply_rotate = false;
         bool apply_accel = false;
         bool combine_magnitudes = true;
         rotator rotate;
+        weighted_distance distance;
+        direction_weight directional;
         vec2<accelerator> accels;
         vec2d sensitivity = { 1, 1 };
         vec2d directional_multipliers = {};
@@ -257,6 +335,10 @@ namespace rawaccel {
 
             accels.x = accelerator(args.argsv.x, args.modes.x, luts.x);
             accels.y = accelerator(args.argsv.y, args.modes.y, luts.y);
+
+            distance = weighted_distance(args.domain_args);
+            directional = direction_weight(args.range_weights);
+
             apply_accel = true;
         }
 
@@ -276,9 +358,15 @@ namespace rawaccel {
                 milliseconds time = time_supp();
 
                 if (combine_magnitudes) {
-                    double mag = sqrtsd(movement.x * movement.x + movement.y * movement.y);
+                    double mag = distance.calculate(movement.x, movement.y);
                     double speed = mag / time;
                     double scale = accels.x.apply(speed);
+
+                    if (directional.should_apply)
+                    {
+                        scale = (scale - 1)*directional.apply(movement.x, movement.y) + 1;
+                    }
+
                     movement.x *= scale;
                     movement.y *= scale;
                 }

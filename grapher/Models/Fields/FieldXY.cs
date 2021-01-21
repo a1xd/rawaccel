@@ -7,13 +7,14 @@ namespace grapher
     {
         #region Constructors
 
-        public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData)
+        public FieldXY(TextBox xBox, TextBox yBox, CheckBox lockCheckBox, Form containingForm, double defaultData, bool allowCombined = true)
         {
             XField = new Field(xBox, containingForm, defaultData);
             YField = new Field(yBox, containingForm, defaultData);
             YField.FormatString = Constants.ShortenedFormatString;
             LockCheckBox = lockCheckBox;
             LockCheckBox.CheckedChanged += new System.EventHandler(CheckChanged);
+            AllowCombined = allowCombined;
 
             XField.Box.Width = (YField.Box.Left + YField.Box.Width - XField.Box.Left - Constants.DefaultFieldSeparation) / 2;
             YField.Box.Width = XField.Box.Width;
@@ -24,7 +25,7 @@ namespace grapher
             YField.Box.Left = XField.Box.Left + XField.Box.Width + Constants.DefaultFieldSeparation;
 
             CombinedWidth = DefaultWidthX + DefaultWidthY + YField.Box.Left - (XField.Box.Left + DefaultWidthX);
-            SetCombined();
+            Startup();
         }
 
         #endregion Constructors
@@ -116,6 +117,7 @@ namespace grapher
 
         private int DefaultWidthY { get; }
 
+        private bool AllowCombined { get; }
 
         #endregion Properties
 
@@ -127,9 +129,10 @@ namespace grapher
             YField.SetNewDefault(y);
             XField.SetToDefault();
 
-            if (x != y)
+            if (x != y || !AllowCombined)
             {
                 LockCheckBox.Checked = false;
+                YField.SetToDefault();
 
                 if (Combined)
                 {
@@ -147,6 +150,20 @@ namespace grapher
             }
         }
 
+        private void Startup()
+        {
+            if (AllowCombined)
+            {
+                SetCombined();
+            }
+            else
+            {
+                SetSeparate();
+                LockCheckBox.Hide();
+                LockCheckBox.Enabled = false;
+            }
+        }
+
         private void CheckChanged(object sender, EventArgs e)
         {
             if (LockCheckBox.CheckState == CheckState.Checked)
@@ -161,11 +178,14 @@ namespace grapher
 
         public void SetCombined()
         {
-            Combined = true;
-            YField.SetToUnavailable();
-            YField.Hide();
-            XField.Box.Width = CombinedWidth;
-            XField.FormatString = Constants.DefaultFieldFormatString;
+            if (AllowCombined)
+            {
+                Combined = true;
+                YField.SetToUnavailable();
+                YField.Hide();
+                XField.Box.Width = CombinedWidth;
+                XField.FormatString = Constants.DefaultFieldFormatString;
+            }
         }
 
         public void SetSeparate()

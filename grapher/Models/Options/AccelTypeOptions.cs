@@ -289,7 +289,6 @@ namespace grapher
                 Limit,
                 Exponent,
                 Midpoint,
-                WriteButton,
                 top);
         }
 

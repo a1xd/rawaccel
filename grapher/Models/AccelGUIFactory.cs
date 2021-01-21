@@ -2,6 +2,7 @@
 using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
+using grapher.Models.Options.Directionality;
 using grapher.Models.Serialized;
 using System;
 using System.Windows.Forms;
@@ -28,8 +29,6 @@ namespace grapher.Models
             ButtonBase toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem showLastMouseMoveMenuItem,
-            ToolStripMenuItem wholeVectorToolStripMenuItem,
-            ToolStripMenuItem byVectorComponentToolStripMenuItem,
             ToolStripMenuItem velocityGainCapToolStripMenuItem,
             ToolStripMenuItem legacyCapToolStripMenuItem,
             ToolStripMenuItem gainOffsetToolStripMenuItem,
@@ -39,6 +38,7 @@ namespace grapher.Models
             ToolStripMenuItem scaleMenuItem,
             ToolStripTextBox dpiTextBox,
             ToolStripTextBox pollRateTextBox,
+            Panel directionalityPanel,
             TextBox sensitivityBoxX,
             TextBox sensitivityBoxY,
             TextBox rotationBox,
@@ -58,8 +58,16 @@ namespace grapher.Models
             TextBox expBoxY,
             TextBox midpointBoxX,
             TextBox midpointBoxY,
+            TextBox domainBoxX,
+            TextBox domainBoxY,
+            TextBox rangeBoxX,
+            TextBox rangeBoxY,
+            TextBox lpNormBox,
             CheckBox sensXYLock,
             CheckBox byComponentXYLock,
+            CheckBox fakeBox,
+            CheckBox wholeCheckBox,
+            CheckBox byComponentCheckBox,
             Label lockXYLabel,
             Label sensitivityLabel,
             Label rotationLabel,
@@ -104,8 +112,23 @@ namespace grapher.Models
             Label accelTypeActiveLabelY,
             Label optionSetXTitle,
             Label optionSetYTitle,
-            Label mouseLabel)
+            Label mouseLabel,
+            Label directionalityLabel,
+            Label directionalityX,
+            Label directionalityY,
+            Label direcionalityActiveValueTitle,
+            Label lpNormLabel,
+            Label lpNormActiveLabel,
+            Label domainLabel,
+            Label domainActiveValueX,
+            Label domainActiveValueY,
+            Label rangeLabel,
+            Label rangeActiveValueX,
+            Label rangeActiveValueY)
         {
+            fakeBox.Checked = false;
+            fakeBox.Hide();
+
             var accelCalculator = new AccelCalculator(
                 new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI, 1),
                 new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate, 1));
@@ -142,6 +165,8 @@ namespace grapher.Models
                 "Rotation");
 
             var optionSetYLeft = rotation.Left + rotation.Width;
+
+            var directionalityLeft = directionalityPanel.Left;
 
             var weightX = new Option(
                 weightBoxX,
@@ -267,6 +292,36 @@ namespace grapher.Models
                 new ActiveValueLabel(midpointActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
+            var lpNorm = new Option(
+                new Field(lpNormBox, form, 2),
+                lpNormLabel,
+                new ActiveValueLabel(lpNormActiveLabel, direcionalityActiveValueTitle),
+                directionalityLeft);
+
+            var domain = new OptionXY(
+                domainBoxX,
+                domainBoxY,
+                fakeBox,
+                form,
+                1,
+                domainLabel,
+                new ActiveValueLabelXY(
+                    new ActiveValueLabel(domainActiveValueX, direcionalityActiveValueTitle),
+                    new ActiveValueLabel(domainActiveValueY, direcionalityActiveValueTitle)),
+                false);
+
+            var range = new OptionXY(
+                rangeBoxX,
+                rangeBoxY,
+                fakeBox,
+                form,
+                1,
+                rangeLabel,
+                new ActiveValueLabelXY(
+                    new ActiveValueLabel(rangeActiveValueX, direcionalityActiveValueTitle),
+                    new ActiveValueLabel(rangeActiveValueY, direcionalityActiveValueTitle)),
+                false);
+
             var capOptionsX = new CapOptions(
                 velocityGainCapToolStripMenuItem,
                 legacyCapToolStripMenuItem,
@@ -315,12 +370,24 @@ namespace grapher.Models
                 rotationBox.Top + rotationBox.Height + Constants.OptionVerticalSeperation,
                 accelerationOptionsY);
 
+            var directionalOptions = new DirectionalityOptions(
+                directionalityPanel,
+                directionalityLabel,
+                directionalityX,
+                directionalityY,
+                direcionalityActiveValueTitle,
+                lpNorm,
+                domain,
+                range,
+                wholeCheckBox,
+                byComponentCheckBox,
+                245);
+
             var applyOptions = new ApplyOptions(
-                wholeVectorToolStripMenuItem,
-                byVectorComponentToolStripMenuItem,
                 byComponentXYLock,
                 optionsSetX,
                 optionsSetY,
+                directionalOptions,
                 sensitivity,
                 rotation,
                 lockXYLabel,
@@ -338,7 +405,6 @@ namespace grapher.Models
                 deviceIdManager);
 
             var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
-
 
             return new AccelGUI(
                 form,

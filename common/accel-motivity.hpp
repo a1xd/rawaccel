@@ -55,28 +55,40 @@ namespace rawaccel {
 		inline void fill(si_pair* lookup) const
 		{
 			double lookup_speed = 0;
+			double integral_interval = 0;
 			double gain_integral_speed = 0;
+			double gain_integral_speed_prev = 0;
 			double gain = 0;
 			double intercept = 0;
 			double output = 0;
+			double output_prev = 0;
 			double x = -2;
+
+			double logarithm_interval = 0.01;
+			double integral_intervals_per_speed = 10;
+			double integral_interval_factor = pow(10, logarithm_interval) / integral_intervals_per_speed;
 
 			lookup[0] = {};
 
 			for (size_t i = 1; i < LUT_SIZE; i++)
 			{
-				x += 0.01;
+				x += logarithm_interval;
 
+				// Each lookup speed will be 10^0.01 = 2.33% higher than the previous
+				// To get 10 integral intervals per speed, set interval to 0.233%
 				lookup_speed = pow(10, x);
+				integral_interval = lookup_speed * integral_interval_factor;
 
 				while (gain_integral_speed < lookup_speed)
 				{
-					gain_integral_speed += 0.001;
+					output_prev = output;
+					gain_integral_speed_prev = gain_integral_speed;
+					gain_integral_speed += integral_interval;
 					gain = operator()(gain_integral_speed);
-					output += gain * 0.001;
+					output += gain * integral_interval;
 				}
 
-				intercept = output - gain * lookup_speed;
+				intercept = output_prev - gain_integral_speed_prev * gain;
 
 				lookup[i] = { gain, intercept };
 			}

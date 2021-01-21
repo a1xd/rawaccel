@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Calculations.Data;
 using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,11 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData,
             AccelCalculator calculator)
         {
             SensitivityChart = sensitivityChart;
             VelocityChart = velocityChart;
             GainChart = gainChart;
-            Data = accelData;
             Calculator = calculator;
             TwoDotsPerGraph = false;
         }
@@ -32,7 +31,7 @@ namespace grapher.Models.Charts.ChartState
 
         public ChartXY GainChart { get; }
 
-        public AccelData Data { get; }
+        public IAccelData Data { get; protected set; }
 
         public AccelCalculator Calculator { get; }
 
@@ -40,13 +39,19 @@ namespace grapher.Models.Charts.ChartState
 
         internal bool TwoDotsPerGraph { get; set; }
 
-        public abstract void MakeDots(double x, double y, double timeInMs);
+        public virtual void MakeDots(double x, double y, double timeInMs)
+        {
+            Data.CalculateDots(x, y, timeInMs);
+        }
 
         public abstract void Bind();
 
         public abstract void Activate();
 
-        public abstract void Calculate(ManagedAccel accel, DriverSettings settings);
+        public virtual void Calculate(ManagedAccel accel, DriverSettings settings)
+        {
+            Data.CreateGraphData(accel, settings);
+        }
 
         public void Redraw()
         {
@@ -77,12 +82,14 @@ namespace grapher.Models.Charts.ChartState
 
         public void ShowVelocityAndGain()
         {
+            SensitivityChart.SetHeight(Constants.SensitivityChartTogetherHeight);
             VelocityChart.Show();
             GainChart.Show();
         }
 
         public void HideVelocityAndGain()
         {
+            SensitivityChart.SetHeight(Constants.SensitivityChartAloneHeight);
             VelocityChart.Hide();
             GainChart.Hide();
         }

@@ -14,13 +14,10 @@ namespace grapher
         public const int DefaultPollRate = 1000;
 
         /// <summary> Resolution of chart calulation. </summary>
-        public const int Resolution = 100;
+        public const int Resolution = 500;
 
         /// <summary> Multiplied by DPI over poll rate to find rough max expected velocity. </summary>
-        public const double MaxMultiplier = 85;
-
-        /// <summary> Ratio of max (X, Y) used in "by component" calulations to those used in "whole vector" calculations. </summary>
-        public const double XYToCombinedRatio = 1.4;
+        public const double MaxMultiplier = .05;
 
         /// <summary> Separation between X and Y active value labels, in pixels. </summary>
         public const int ActiveLabelXYSeparation = 2;
@@ -46,6 +43,12 @@ namespace grapher
         /// <summary> Horizontal separation between left side of single dropdown and left side of labels beneath dropdown </summary>
         public const int DropDownLeftSeparation = 10;
 
+        /// <summary> Height of sensitivity chart when displayed alone. </summary>
+        public const int SensitivityChartAloneHeight = 450;
+
+        /// <summary> Height of sensitivity chart when displayed alongside Velocity and Gain charts. </summary>
+        public const int SensitivityChartTogetherHeight = 328;
+
         /// <summary> Width of charts when widened </summary>
         public const int WideChartWidth = 723;
 
@@ -61,7 +64,13 @@ namespace grapher
         /// <summary> Vertical placement of write button above bottom of sensitivity graph </summary>
         public const int ButtonVerticalOffset = 60;
 
+        /// <summary> Padding between directionality title and containing panel </summary>
+        public const int DirectionalityTitlePad = 8;
+
         public const float SmallButtonSizeFactor = 0.666f;
+
+        /// <summary> Number of divisions between 0 and 90 degrees for directional lookup. For 19: 0, 5, 10... 85, 90.</summary>
+        public const int AngleDivisions = 19;
 
         /// <summary> Format string for shortened x and y textboxes. </summary>
         public const string ShortenedFormatString = "0.###";
@@ -110,6 +119,12 @@ namespace grapher
 
         /// <summary> Default name of settings file. </summary>
         public const string DefaultSettingsFileName = @"settings.json";
+
+        /// <summary> Text to direcitonality panel title when panel is closed. </summary>
+        public const string DirectionalityTitleClosed = "Anisotropy \u25BC";
+
+        /// <summary> Text to direcitonality panel title when panel is open. </summary>
+        public const string DirectionalityTitleOpen = "Anisotropy \u25B2";
 
         /// <summary> Style used by System.Double.Parse </summary>
         public const NumberStyles FloatStyle = NumberStyles.Float | NumberStyles.AllowThousands;

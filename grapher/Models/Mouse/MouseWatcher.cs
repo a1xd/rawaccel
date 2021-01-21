@@ -1,6 +1,7 @@
 ﻿using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -701,6 +702,8 @@ namespace grapher.Models.Mouse
             RAWINPUTDEVICE[] devices = new RAWINPUTDEVICE[1];
             devices[0] = device;
             RegisterRawInputDevices(devices, 1, Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
+            Stopwatch = new Stopwatch();
+            Stopwatch.Start();
         }
 
         #endregion Constructors
@@ -716,6 +719,8 @@ namespace grapher.Models.Mouse
         private SettingsManager SettingsManager { get; }
 
         private MouseData MouseData { get; }
+
+        private Stopwatch Stopwatch { get; }
 
         private List<IntPtr> DeviceHandles { get; }
 
@@ -757,6 +762,11 @@ namespace grapher.Models.Mouse
 
             if (relative && deviceMatch && (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0))
             {
+                var time = Stopwatch.Elapsed.TotalMilliseconds;
+                Stopwatch.Restart();
+                time = time > 100 ? 100 : time;
+                time = time > (PollTime * 0.8) ? time : (PollTime * 0.8);
+
                 double x = rawInput.Data.Mouse.LastX;
                 double y = rawInput.Data.Mouse.LastY;
 
@@ -776,7 +786,7 @@ namespace grapher.Models.Mouse
                 }
 
                 MouseData.Set(rawInput.Data.Mouse.LastX, rawInput.Data.Mouse.LastY);
-                AccelCharts.MakeDots(x, y, PollTime);
+                AccelCharts.MakeDots(x, y, time);
             }
 
         }

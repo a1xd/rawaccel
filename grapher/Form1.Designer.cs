@@ -71,6 +71,27 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.FakeBox = new System.Windows.Forms.CheckBox();
+            this.DirectionalityPanel = new System.Windows.Forms.Panel();
+            this.LpNormActiveValue = new System.Windows.Forms.Label();
+            this.RangeActiveValueY = new System.Windows.Forms.Label();
+            this.RangeActiveValueX = new System.Windows.Forms.Label();
+            this.DomainActiveValueY = new System.Windows.Forms.Label();
+            this.DomainActiveValueX = new System.Windows.Forms.Label();
+            this.DirectionalityActiveValueTitle = new System.Windows.Forms.Label();
+            this.ByComponentCheckBox = new System.Windows.Forms.CheckBox();
+            this.WholeCheckBox = new System.Windows.Forms.CheckBox();
+            this.DirectionalityRangeLabel = new System.Windows.Forms.Label();
+            this.DirectionalDomainLabel = new System.Windows.Forms.Label();
+            this.LpNormBox = new System.Windows.Forms.TextBox();
+            this.LPNormLabel = new System.Windows.Forms.Label();
+            this.DirectionalityY = new System.Windows.Forms.Label();
+            this.DirectionalityX = new System.Windows.Forms.Label();
+            this.RangeBoxY = new System.Windows.Forms.TextBox();
+            this.RangeBoxX = new System.Windows.Forms.TextBox();
+            this.DomainBoxY = new System.Windows.Forms.TextBox();
+            this.DomainBoxX = new System.Windows.Forms.TextBox();
+            this.DirectionalityLabel = new System.Windows.Forms.Label();
             this.toggleButton = new System.Windows.Forms.CheckBox();
             this.scaleLabelY = new System.Windows.Forms.Label();
             this.ScaleActiveYLabel = new System.Windows.Forms.Label();
@@ -158,9 +179,6 @@ namespace grapher
             this.offsetStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gainOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.legacyOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.wholeVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.byVectorComponentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UseSpecificDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartsPanel = new System.Windows.Forms.Panel();
@@ -171,6 +189,7 @@ namespace grapher
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.optionsPanel.SuspendLayout();
+            this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.chartsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GainChartY)).BeginInit();
@@ -184,6 +203,8 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.FakeBox);
+            this.optionsPanel.Controls.Add(this.DirectionalityPanel);
             this.optionsPanel.Controls.Add(this.toggleButton);
             this.optionsPanel.Controls.Add(this.scaleLabelY);
             this.optionsPanel.Controls.Add(this.ScaleActiveYLabel);
@@ -262,9 +283,211 @@ namespace grapher
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
             // 
+            // FakeBox
+            // 
+            this.FakeBox.AutoSize = true;
+            this.FakeBox.Location = new System.Drawing.Point(31, 538);
+            this.FakeBox.Name = "FakeBox";
+            this.FakeBox.Size = new System.Drawing.Size(47, 17);
+            this.FakeBox.TabIndex = 151;
+            this.FakeBox.Text = "fake";
+            this.FakeBox.UseVisualStyleBackColor = true;
+            // 
+            // DirectionalityPanel
+            // 
+            this.DirectionalityPanel.Controls.Add(this.LpNormActiveValue);
+            this.DirectionalityPanel.Controls.Add(this.RangeActiveValueY);
+            this.DirectionalityPanel.Controls.Add(this.RangeActiveValueX);
+            this.DirectionalityPanel.Controls.Add(this.DomainActiveValueY);
+            this.DirectionalityPanel.Controls.Add(this.DomainActiveValueX);
+            this.DirectionalityPanel.Controls.Add(this.DirectionalityActiveValueTitle);
+            this.DirectionalityPanel.Controls.Add(this.ByComponentCheckBox);
+            this.DirectionalityPanel.Controls.Add(this.WholeCheckBox);
+            this.DirectionalityPanel.Controls.Add(this.DirectionalityRangeLabel);
+            this.DirectionalityPanel.Controls.Add(this.DirectionalDomainLabel);
+            this.DirectionalityPanel.Controls.Add(this.LpNormBox);
+            this.DirectionalityPanel.Controls.Add(this.LPNormLabel);
+            this.DirectionalityPanel.Controls.Add(this.DirectionalityY);
+            this.DirectionalityPanel.Controls.Add(this.DirectionalityX);
+            this.DirectionalityPanel.Controls.Add(this.RangeBoxY);
+            this.DirectionalityPanel.Controls.Add(this.RangeBoxX);
+            this.DirectionalityPanel.Controls.Add(this.DomainBoxY);
+            this.DirectionalityPanel.Controls.Add(this.DomainBoxX);
+            this.DirectionalityPanel.Controls.Add(this.DirectionalityLabel);
+            this.DirectionalityPanel.Location = new System.Drawing.Point(12, 369);
+            this.DirectionalityPanel.Name = "DirectionalityPanel";
+            this.DirectionalityPanel.Size = new System.Drawing.Size(298, 135);
+            this.DirectionalityPanel.TabIndex = 150;
+            // 
+            // LpNormActiveValue
+            // 
+            this.LpNormActiveValue.AutoSize = true;
+            this.LpNormActiveValue.Location = new System.Drawing.Point(185, 81);
+            this.LpNormActiveValue.Name = "LpNormActiveValue";
+            this.LpNormActiveValue.Size = new System.Drawing.Size(13, 13);
+            this.LpNormActiveValue.TabIndex = 18;
+            this.LpNormActiveValue.Text = "0";
+            // 
+            // RangeActiveValueY
+            // 
+            this.RangeActiveValueY.AutoSize = true;
+            this.RangeActiveValueY.Location = new System.Drawing.Point(204, 55);
+            this.RangeActiveValueY.Name = "RangeActiveValueY";
+            this.RangeActiveValueY.Size = new System.Drawing.Size(13, 13);
+            this.RangeActiveValueY.TabIndex = 17;
+            this.RangeActiveValueY.Text = "0";
+            // 
+            // RangeActiveValueX
+            // 
+            this.RangeActiveValueX.AutoSize = true;
+            this.RangeActiveValueX.Location = new System.Drawing.Point(177, 55);
+            this.RangeActiveValueX.Name = "RangeActiveValueX";
+            this.RangeActiveValueX.Size = new System.Drawing.Size(13, 13);
+            this.RangeActiveValueX.TabIndex = 16;
+            this.RangeActiveValueX.Text = "0";
+            // 
+            // DomainActiveValueY
+            // 
+            this.DomainActiveValueY.AutoSize = true;
+            this.DomainActiveValueY.Location = new System.Drawing.Point(204, 28);
+            this.DomainActiveValueY.Name = "DomainActiveValueY";
+            this.DomainActiveValueY.Size = new System.Drawing.Size(13, 13);
+            this.DomainActiveValueY.TabIndex = 15;
+            this.DomainActiveValueY.Text = "0";
+            // 
+            // DomainActiveValueX
+            // 
+            this.DomainActiveValueX.AutoSize = true;
+            this.DomainActiveValueX.Location = new System.Drawing.Point(177, 28);
+            this.DomainActiveValueX.Name = "DomainActiveValueX";
+            this.DomainActiveValueX.Size = new System.Drawing.Size(13, 13);
+            this.DomainActiveValueX.TabIndex = 14;
+            this.DomainActiveValueX.Text = "0";
+            // 
+            // DirectionalityActiveValueTitle
+            // 
+            this.DirectionalityActiveValueTitle.AutoSize = true;
+            this.DirectionalityActiveValueTitle.Location = new System.Drawing.Point(176, 9);
+            this.DirectionalityActiveValueTitle.Name = "DirectionalityActiveValueTitle";
+            this.DirectionalityActiveValueTitle.Size = new System.Drawing.Size(41, 13);
+            this.DirectionalityActiveValueTitle.TabIndex = 13;
+            this.DirectionalityActiveValueTitle.Text = "Current";
+            // 
+            // ByComponentCheckBox
+            // 
+            this.ByComponentCheckBox.AutoCheck = false;
+            this.ByComponentCheckBox.AutoSize = true;
+            this.ByComponentCheckBox.Location = new System.Drawing.Point(180, 104);
+            this.ByComponentCheckBox.Name = "ByComponentCheckBox";
+            this.ByComponentCheckBox.Size = new System.Drawing.Size(95, 17);
+            this.ByComponentCheckBox.TabIndex = 12;
+            this.ByComponentCheckBox.Text = "By Component";
+            this.ByComponentCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // WholeCheckBox
+            // 
+            this.WholeCheckBox.AutoCheck = false;
+            this.WholeCheckBox.AutoSize = true;
+            this.WholeCheckBox.Location = new System.Drawing.Point(43, 104);
+            this.WholeCheckBox.Name = "WholeCheckBox";
+            this.WholeCheckBox.Size = new System.Drawing.Size(57, 17);
+            this.WholeCheckBox.TabIndex = 11;
+            this.WholeCheckBox.Text = "Whole";
+            this.WholeCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // DirectionalityRangeLabel
+            // 
+            this.DirectionalityRangeLabel.AutoSize = true;
+            this.DirectionalityRangeLabel.Location = new System.Drawing.Point(24, 55);
+            this.DirectionalityRangeLabel.Name = "DirectionalityRangeLabel";
+            this.DirectionalityRangeLabel.Size = new System.Drawing.Size(39, 13);
+            this.DirectionalityRangeLabel.TabIndex = 10;
+            this.DirectionalityRangeLabel.Text = "Range";
+            // 
+            // DirectionalDomainLabel
+            // 
+            this.DirectionalDomainLabel.AutoSize = true;
+            this.DirectionalDomainLabel.Location = new System.Drawing.Point(23, 28);
+            this.DirectionalDomainLabel.Name = "DirectionalDomainLabel";
+            this.DirectionalDomainLabel.Size = new System.Drawing.Size(43, 13);
+            this.DirectionalDomainLabel.TabIndex = 9;
+            this.DirectionalDomainLabel.Text = "Domain";
+            // 
+            // LpNormBox
+            // 
+            this.LpNormBox.Location = new System.Drawing.Point(94, 78);
+            this.LpNormBox.Name = "LpNormBox";
+            this.LpNormBox.Size = new System.Drawing.Size(76, 20);
+            this.LpNormBox.TabIndex = 8;
+            // 
+            // LPNormLabel
+            // 
+            this.LPNormLabel.AutoSize = true;
+            this.LPNormLabel.Location = new System.Drawing.Point(23, 81);
+            this.LPNormLabel.Name = "LPNormLabel";
+            this.LPNormLabel.Size = new System.Drawing.Size(47, 13);
+            this.LPNormLabel.TabIndex = 7;
+            this.LPNormLabel.Text = "Lp Norm";
+            // 
+            // DirectionalityY
+            // 
+            this.DirectionalityY.AutoSize = true;
+            this.DirectionalityY.Location = new System.Drawing.Point(147, 9);
+            this.DirectionalityY.Name = "DirectionalityY";
+            this.DirectionalityY.Size = new System.Drawing.Size(14, 13);
+            this.DirectionalityY.TabIndex = 6;
+            this.DirectionalityY.Text = "Y";
+            // 
+            // DirectionalityX
+            // 
+            this.DirectionalityX.AutoSize = true;
+            this.DirectionalityX.Location = new System.Drawing.Point(103, 9);
+            this.DirectionalityX.Name = "DirectionalityX";
+            this.DirectionalityX.Size = new System.Drawing.Size(14, 13);
+            this.DirectionalityX.TabIndex = 5;
+            this.DirectionalityX.Text = "X";
+            // 
+            // RangeBoxY
+            // 
+            this.RangeBoxY.Location = new System.Drawing.Point(136, 52);
+            this.RangeBoxY.Name = "RangeBoxY";
+            this.RangeBoxY.Size = new System.Drawing.Size(34, 20);
+            this.RangeBoxY.TabIndex = 4;
+            // 
+            // RangeBoxX
+            // 
+            this.RangeBoxX.Location = new System.Drawing.Point(94, 52);
+            this.RangeBoxX.Name = "RangeBoxX";
+            this.RangeBoxX.Size = new System.Drawing.Size(34, 20);
+            this.RangeBoxX.TabIndex = 3;
+            // 
+            // DomainBoxY
+            // 
+            this.DomainBoxY.Location = new System.Drawing.Point(136, 25);
+            this.DomainBoxY.Name = "DomainBoxY";
+            this.DomainBoxY.Size = new System.Drawing.Size(34, 20);
+            this.DomainBoxY.TabIndex = 2;
+            // 
+            // DomainBoxX
+            // 
+            this.DomainBoxX.Location = new System.Drawing.Point(94, 25);
+            this.DomainBoxX.Name = "DomainBoxX";
+            this.DomainBoxX.Size = new System.Drawing.Size(34, 20);
+            this.DomainBoxX.TabIndex = 1;
+            // 
+            // DirectionalityLabel
+            // 
+            this.DirectionalityLabel.AutoSize = true;
+            this.DirectionalityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DirectionalityLabel.Location = new System.Drawing.Point(3, 9);
+            this.DirectionalityLabel.Name = "DirectionalityLabel";
+            this.DirectionalityLabel.Size = new System.Drawing.Size(67, 13);
+            this.DirectionalityLabel.TabIndex = 0;
+            this.DirectionalityLabel.Text = "Directionality";
+            // 
             // toggleButton
             // 
-            this.toggleButton.Location = new System.Drawing.Point(214, 387);
+            this.toggleButton.Location = new System.Drawing.Point(211, 534);
             this.toggleButton.Name = "toggleButton";
             this.toggleButton.Size = new System.Drawing.Size(104, 24);
             this.toggleButton.TabIndex = 112;
@@ -710,7 +933,7 @@ namespace grapher
             // writeButton
             // 
             this.writeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.writeButton.Location = new System.Drawing.Point(94, 380);
+            this.writeButton.Location = new System.Drawing.Point(90, 527);
             this.writeButton.Name = "writeButton";
             this.writeButton.Size = new System.Drawing.Size(92, 35);
             this.writeButton.TabIndex = 111;
@@ -955,7 +1178,6 @@ namespace grapher
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.capStyleToolStripMenuItem,
             this.offsetStyleToolStripMenuItem,
-            this.toolStripMenuItem1,
             this.AutoWriteMenuItem,
             this.UseSpecificDeviceMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
@@ -1005,30 +1227,6 @@ namespace grapher
             this.legacyOffsetToolStripMenuItem.Name = "legacyOffsetToolStripMenuItem";
             this.legacyOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.legacyOffsetToolStripMenuItem.Text = "Legacy";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.wholeVectorToolStripMenuItem,
-            this.byVectorComponentToolStripMenuItem});
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(210, 22);
-            this.toolStripMenuItem1.Text = "Application Style";
-            // 
-            // wholeVectorToolStripMenuItem
-            // 
-            this.wholeVectorToolStripMenuItem.Checked = true;
-            this.wholeVectorToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.wholeVectorToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.wholeVectorToolStripMenuItem.Name = "wholeVectorToolStripMenuItem";
-            this.wholeVectorToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.wholeVectorToolStripMenuItem.Text = "Whole";
-            // 
-            // byVectorComponentToolStripMenuItem
-            // 
-            this.byVectorComponentToolStripMenuItem.Name = "byVectorComponentToolStripMenuItem";
-            this.byVectorComponentToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.byVectorComponentToolStripMenuItem.Text = "By Component";
             // 
             // AutoWriteMenuItem
             // 
@@ -1309,6 +1507,8 @@ namespace grapher
             this.Text = "Raw Accel";
             this.optionsPanel.ResumeLayout(false);
             this.optionsPanel.PerformLayout();
+            this.DirectionalityPanel.ResumeLayout(false);
+            this.DirectionalityPanel.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.chartsPanel.ResumeLayout(false);
@@ -1412,9 +1612,6 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem offsetStyleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gainOffsetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem wholeVectorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem byVectorComponentToolStripMenuItem;
         private System.Windows.Forms.Panel chartsPanel;
         private System.Windows.Forms.DataVisualization.Charting.Chart GainChartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChartY;
@@ -1423,6 +1620,27 @@ namespace grapher
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChart;
         private System.Windows.Forms.DataVisualization.Charting.Chart AccelerationChart;
         private System.Windows.Forms.ToolStripMenuItem AutoWriteMenuItem;
+        private System.Windows.Forms.Panel DirectionalityPanel;
+        private System.Windows.Forms.Label DirectionalityRangeLabel;
+        private System.Windows.Forms.Label DirectionalDomainLabel;
+        private System.Windows.Forms.TextBox LpNormBox;
+        private System.Windows.Forms.Label LPNormLabel;
+        private System.Windows.Forms.Label DirectionalityY;
+        private System.Windows.Forms.Label DirectionalityX;
+        private System.Windows.Forms.TextBox RangeBoxY;
+        private System.Windows.Forms.TextBox RangeBoxX;
+        private System.Windows.Forms.TextBox DomainBoxY;
+        private System.Windows.Forms.TextBox DomainBoxX;
+        private System.Windows.Forms.Label DirectionalityLabel;
+        private System.Windows.Forms.CheckBox ByComponentCheckBox;
+        private System.Windows.Forms.CheckBox WholeCheckBox;
+        private System.Windows.Forms.Label DirectionalityActiveValueTitle;
+        private System.Windows.Forms.Label DomainActiveValueX;
+        private System.Windows.Forms.Label DomainActiveValueY;
+        private System.Windows.Forms.Label RangeActiveValueX;
+        private System.Windows.Forms.Label LpNormActiveValue;
+        private System.Windows.Forms.Label RangeActiveValueY;
+        private System.Windows.Forms.CheckBox FakeBox;
         private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
     }
 }

@@ -140,6 +140,18 @@ namespace grapher.Models.Options
             }
         }
 
+        public void Hide()
+        {
+            X.Hide();
+            Y.Hide();
+        }
+
+        public void Show()
+        {
+            X.Show();
+            Y.Show();
+        }
+
         private void Align (int width)
         {
             FullWidth = width;

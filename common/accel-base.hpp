@@ -17,6 +17,11 @@ namespace rawaccel {
         double speed_cap = 0;
     };
 
+    struct domain_args {
+        vec2d domain_weights = { 1, 1 };
+        double lp_norm = 2;
+    };
+
     template <typename Func>
     struct accel_val_base {
         bool legacy_offset = false;

@@ -64,7 +64,6 @@ namespace grapher.Layouts
             IOption limitOption,
             IOption expOption,
             IOption midpointOption,
-            Button button,
             int top)
         {
 
@@ -106,8 +105,7 @@ namespace grapher.Layouts
             IOption offsetOption,
             IOption limitOption,
             IOption expOption,
-            IOption midpointOption,
-            Button button)
+            IOption midpointOption)
         {
             Layout(accelOption,
                 scaleOption,
@@ -117,7 +115,6 @@ namespace grapher.Layouts
                 limitOption,
                 expOption,
                 midpointOption,
-                button,
                 accelOption.Top);
         }
     }

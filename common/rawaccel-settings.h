@@ -24,6 +24,8 @@ namespace rawaccel {
         vec2<accel_args> argsv;
         vec2d sens = { 1, 1 };
         vec2d dir_multipliers = {};
+        domain_args domain_args = {};
+        vec2d range_weights = { 1, 1 };
         milliseconds time_min = DEFAULT_TIME_MIN;
         wchar_t device_id[MAX_DEV_ID_LEN] = {0};
     };

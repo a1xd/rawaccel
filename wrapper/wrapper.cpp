@@ -54,6 +54,14 @@ public value struct Vec2
 };
 
 [JsonObject(ItemRequired = Required::Always)]
+[StructLayout(LayoutKind::Sequential)]
+public value struct DomainArgs
+{
+    Vec2<double> domainXY;
+    double lpNorm;
+};
+
+[JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential, CharSet = CharSet::Unicode)]
 public ref struct DriverSettings
 {
@@ -77,6 +85,12 @@ public ref struct DriverSettings
 
     [JsonProperty("Negative directional multipliers", Required = Required::Default)]
     Vec2<double> directionalMultipliers;
+
+    [JsonProperty("Stretches domain for horizontal vs vertical inputs")]
+    DomainArgs domainArgs;
+
+    [JsonProperty("Stretches accel range for horizontal vs vertical inputs")]
+    Vec2<double> rangeXY;
 
     [JsonProperty(Required = Required::Default)]
     double minimumTime;
@@ -183,16 +197,40 @@ error_list_t^ get_accel_errors(AccelMode mode, AccelArgs^ args)
     return error_list;
 }
 
+error_list_t^ get_other_errors(DriverSettings^ settings)
+{
+    auto error_list = gcnew error_list_t();
+
+    if (settings->rangeXY.x <= 0 || settings->rangeXY.y <= 0)
+    {
+        error_list->Add("range values must be positive");
+    }
+
+    if (settings->domainArgs.domainXY.x <= 0 || settings->domainArgs.domainXY.y <= 0)
+    {
+        error_list->Add("domain values must be positive");
+    }
+
+    if (settings->domainArgs.lpNorm <= 0)
+    {
+        error_list->Add("lp norm must be positive");
+    }
+    
+    return error_list;
+}
+
 public ref class SettingsErrors
 {
 public:
     error_list_t^ x;
     error_list_t^ y;
+    error_list_t^ other;
 
     bool Empty()
     {
         return (x == nullptr || x->Count == 0) && 
-            (y == nullptr || y->Count == 0);
+            (y == nullptr || y->Count == 0) &&
+            (other == nullptr || other->Count == 0);
     }
 
     virtual String^ ToString() override 
@@ -218,6 +256,11 @@ public:
             {
                 sb->AppendFormat("y: {0}\n", str);
             }
+        }
+
+        for each (String ^ str in other)
+        {
+			sb->AppendLine(str);
         }
         
         return sb->ToString();
@@ -272,8 +315,12 @@ public ref struct DriverInterop
             errors->y = get_accel_errors(args->modes.y, args->args.y);
         }
 
+        errors->other = get_other_errors(args);
+
         return errors;
     }
+
+
 
     static error_list_t^ GetAccelErrors(AccelMode mode, AccelArgs^ args)
     {

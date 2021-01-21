@@ -1,4 +1,5 @@
 ﻿using grapher.Models.Calculations;
+using grapher.Models.Calculations.Data;
 using grapher.Models.Serialized;
 
 namespace grapher.Models.Charts.ChartState
@@ -9,17 +10,21 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
-            AccelData accelData,
+            EstimatedPoints xPoints,
+            EstimatedPoints yPoints,
             AccelCalculator accelCalculator)
             : base(
                   sensitivityChart,
                   velocityChart,
                   gainChart,
-                  accelData,
                   accelCalculator)
         {
+            DataDirectional  = new AccelDataXYDirectional(xPoints, yPoints, accelCalculator);
+            Data = DataDirectional;
             TwoDotsPerGraph = true;
         }
+
+        private AccelDataXYDirectional DataDirectional { get; }
 
         public override void Activate()
         {
@@ -28,23 +33,13 @@ namespace grapher.Models.Charts.ChartState
             GainChart.SetCombined();
         }
 
-        public override void MakeDots(double x, double y, double timeInMs)
-        {
-            Data.CalculateDotsCombinedDiffSens(x, y, timeInMs, Settings);
-        }
-
         public override void Bind()
         {
             SensitivityChart.BindXYCombined(Data.X.AccelPoints, Data.Y.AccelPoints);
             VelocityChart.BindXYCombined(Data.X.VelocityPoints, Data.Y.VelocityPoints);
             GainChart.BindXYCombined(Data.X.GainPoints, Data.Y.GainPoints);
-            SensitivityChart.SetMinMax(Data.Combined.MinAccel, Data.Combined.MaxAccel);
-            GainChart.SetMinMax(Data.Combined.MinGain, Data.Combined.MaxGain);
-        }
-
-        public override void Calculate(ManagedAccel accel, DriverSettings settings)
-        {
-            Calculator.CalculateCombinedDiffSens(Data, accel, settings, Calculator.SimulatedInputCombined);
+            SensitivityChart.SetMinMax(DataDirectional.SensitivityMin, DataDirectional.SensitivityMax);
+            GainChart.SetMinMax(DataDirectional.GainMin, DataDirectional.GainMax);
         }
     }
 }
