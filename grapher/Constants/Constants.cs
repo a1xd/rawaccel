@@ -121,10 +121,10 @@ namespace grapher
         public const string DefaultSettingsFileName = @"settings.json";
 
         /// <summary> Text to direcitonality panel title when panel is closed. </summary>
-        public const string DirectionalityTitleClosed = "Anisotropy\u25BC";
+        public const string DirectionalityTitleClosed = "Anisotropy \u25BC";
 
         /// <summary> Text to direcitonality panel title when panel is open. </summary>
-        public const string DirectionalityTitleOpen = "Anisotropy\u25B2";
+        public const string DirectionalityTitleOpen = "Anisotropy \u25B2";
 
         /// <summary> Style used by System.Double.Parse </summary>
         public const NumberStyles FloatStyle = NumberStyles.Float | NumberStyles.AllowThousands;
