@@ -14,7 +14,7 @@ namespace grapher
         public const int DefaultPollRate = 1000;
 
         /// <summary> Resolution of chart calulation. </summary>
-        public const int Resolution = 100;
+        public const int Resolution = 500;
 
         /// <summary> Multiplied by DPI over poll rate to find rough max expected velocity. </summary>
         public const double MaxMultiplier = .05;

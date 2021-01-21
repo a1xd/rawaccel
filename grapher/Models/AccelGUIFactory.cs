@@ -406,7 +406,6 @@ namespace grapher.Models
 
             var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
 
-
             return new AccelGUI(
                 form,
                 accelCalculator,

@@ -1237,15 +1237,6 @@ namespace grapher
             this.AutoWriteMenuItem.Size = new System.Drawing.Size(210, 22);
             this.AutoWriteMenuItem.Text = "Apply Settings On Startup";
             // 
-            // AutoWriteMenuItem
-            // 
-            this.AutoWriteMenuItem.Checked = true;
-            this.AutoWriteMenuItem.CheckOnClick = true;
-            this.AutoWriteMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
-            this.AutoWriteMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.AutoWriteMenuItem.Text = "Apply Settings On Startup";
-            // 
             // UseSpecificDeviceMenuItem
             // 
             this.UseSpecificDeviceMenuItem.Name = "UseSpecificDeviceMenuItem";

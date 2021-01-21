@@ -56,9 +56,9 @@ There are anisotropic settings for whole mode.
 - **Domain**. This scales the domain of curve around 0 for the horizontal or vertical direction.  
     - If a given curve has an offset at 5 count/ms and a cap that is hit at 15 counts/ms, then a domain_y of 2 would mean that vertical movements hit the offset at 2.5 counts/ms and the cap at 7.5 counts/ms instead.  
 - **Lp Norm**. The distance calculation can be generalized to ((in_x)^p + (in_y)^p)^(1/p)), bringing the calculation into [Lp space](https://en.wikipedia.org/wiki/Lp_space).  
-        - p = 2 is then the "real world" value, yielding the pythagorean theorem as the distance calculation.  
-        - Increasing p makes distances for diagonal movements (where in_x and in_y are close) smaller, and increases the dominance of the larger of the two in determining the distance.  
-        - We recommend almost everyone leave this at 2.  
+    - p = 2 is then the "real world" value, yielding the pythagorean theorem as the distance calculation.  
+    - Increasing p makes distances for diagonal movements (where in_x and in_y are close) smaller, and increases the dominance of the larger of the two in determining the distance.  
+    - We recommend almost everyone leave this at 2.  
 
 ![AnisotropyExample](images/anisotropy_example.png)
 
@@ -68,7 +68,7 @@ With all anisotropic settings considered, the full formula looks like:
 This can be more easily understood as  
 - (out_x, out_y) = (in_x\*sens_x, in_y\*sens_y) \* ((f( domain-weighted lp-space speed) - 1) \* (directional weight) + 1), where f(v) is our sensitivity function
 
-This formula gaurantees the the smooth transition from the horizontal to vertical curve and vice versa as the user moves their hand diagonally.
+This formula gaurantees the smooth transition from the horizontal to vertical curve and vice versa as the user moves their hand diagonally.
 
 #### ***By Component***  
 In this case, the horizontal components are separated and each is given as input to the sensitivity calculation to multiplied by itself before being recombined at output.
