@@ -144,6 +144,7 @@ namespace grapher
             var settings = new DriverSettings
             {
                 rotation = ApplyOptions.Rotation.Field.Data,
+                snap = driverSettings.snap,
                 sensitivity = new Vec2<double>
                 {
                     x = ApplyOptions.Sensitivity.Fields.X,

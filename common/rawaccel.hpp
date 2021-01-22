@@ -42,6 +42,26 @@ namespace rawaccel {
         rotator() = default;
     };
 
+    struct snapper {
+        double threshold = 0;
+
+        inline vec2d apply(const vec2d& input) const {
+            if (input.x != 0 && input.y != 0) {
+                double angle = fabs(atan(input.y / input.x));
+                auto mag = [&] { return sqrtsd(input.x * input.x + input.y * input.y); };
+
+                if (angle > M_PI_2 - threshold) return { 0, _copysign(mag(), input.y) };
+                if (angle < threshold) return { _copysign(mag(), input.x), 0 };
+            }
+
+            return input;
+        }
+
+        snapper(double degrees) : threshold(minsd(fabs(degrees), 45) * M_PI / 180) {}
+
+        snapper() = default;
+    };
+
     /// <summary> Struct to hold clamp (min and max) details for acceleration application </summary>
     struct accel_scale_clamp {
         double lo = 0;
@@ -296,9 +316,11 @@ namespace rawaccel {
     /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
     struct mouse_modifier {
         bool apply_rotate = false;
+        bool apply_snap = false;
         bool apply_accel = false;
         bool combine_magnitudes = true;
         rotator rotate;
+        snapper snap;
         weighted_distance distance;
         direction_weight directional;
         vec2<accelerator> accels;
@@ -313,6 +335,11 @@ namespace rawaccel {
                 apply_rotate = true;
             }
             
+            if (args.degrees_snap != 0) {
+                snap = snapper(args.degrees_snap);
+                apply_snap = true;
+            }
+
             if (args.sens.x != 0) sensitivity.x = args.sens.x;
             if (args.sens.y != 0) sensitivity.y = args.sens.y;
 
@@ -336,12 +363,17 @@ namespace rawaccel {
 
         void modify(vec2d& movement, milliseconds time) {
             apply_rotation(movement);
+            apply_angle_snap(movement);
             apply_acceleration(movement, [=] { return time; });
             apply_sensitivity(movement);
         }
 
         inline void apply_rotation(vec2d& movement) {
             if (apply_rotate) movement = rotate.apply(movement);
+        }
+
+        inline void apply_angle_snap(vec2d& movement) {
+            if (apply_snap) movement = snap.apply(movement);
         }
 
         template <typename TimeSupplier>

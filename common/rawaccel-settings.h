@@ -19,6 +19,7 @@ namespace rawaccel {
 
     struct settings {
         double degrees_rotation = 0;
+        double degrees_snap = 0;
         bool combine_mags = true;
         vec2<accel_mode> modes = { accel_mode::noaccel, accel_mode::noaccel };
         vec2<accel_args> argsv;

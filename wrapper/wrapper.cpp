@@ -70,6 +70,9 @@ public ref struct DriverSettings
     [JsonProperty("Degrees of rotation")]
     double rotation;
 
+    [JsonProperty("Degrees of angle snapping", Required = Required::Default)]
+    double snap;
+
     [JsonProperty("Use x as whole/combined accel")]
     [MarshalAs(UnmanagedType::U1)]
     bool combineMagnitudes;
