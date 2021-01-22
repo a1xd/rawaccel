@@ -71,7 +71,6 @@ namespace grapher
             }
 
             SetupButtons();
-            AccelForm.DoResize();
 
             // TODO: The below removes an overlapping form from the anisotropy panel.
             // Figure out why and remove the overlap and below.

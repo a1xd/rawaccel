@@ -160,6 +160,8 @@ namespace grapher
                 DirectionalityRangeLabel,
                 RangeActiveValueX,
                 RangeActiveValueY);
+
+            ResizeAndCenter();
         }
 
         #endregion Constructor
@@ -191,18 +193,25 @@ namespace grapher
             chartsPanel.AutoScrollPosition = Constants.Origin;
         }
 
-        public void DoResize()
+        public void ResizeAndCenter()
         {
             ResetAutoScroll();
 
-            var workingArea = Screen.PrimaryScreen.WorkingArea;
+            var workingArea = Screen.FromControl(this).WorkingArea;
             var chartsPreferredSize = chartsPanel.GetPreferredSize(Constants.MaxSize);
 
             Size = new Size
             {
-                Width = Math.Min(workingArea.Width - Location.X, optionsPanel.Size.Width + chartsPreferredSize.Width),
-                Height = Math.Min(workingArea.Height - Location.Y, chartsPreferredSize.Height + 48)
+                Width = Math.Min(workingArea.Width, optionsPanel.Size.Width + chartsPreferredSize.Width),
+                Height = Math.Min(workingArea.Height, chartsPreferredSize.Height + 48)
             };
+
+            Location = new Point
+            {
+                X = workingArea.X + (workingArea.Width - Size.Width) / 2,
+                Y = workingArea.Y + (workingArea.Height - Size.Height) / 2
+            };
+
         }
 
         #endregion Method
