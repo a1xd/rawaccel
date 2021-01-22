@@ -229,7 +229,7 @@ namespace grapher
             ToggleButton.Checked = LastToggleChecked;
 
             ToggleButton.Font = DefaultButtonFont;
-            ToggleButton.Text = ToggleButton.Checked ? "Enabled" : "Disabled";
+            ToggleButton.Text = ToggleButton.Checked ? "Disable" : "Enable";
             ToggleButton.Update();
 
             WriteButton.Font = DefaultButtonFont;
