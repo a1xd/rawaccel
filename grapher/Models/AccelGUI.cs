@@ -71,7 +71,6 @@ namespace grapher
             }
 
             SetupButtons();
-            AccelForm.DoResize();
 
             // TODO: The below removes an overlapping form from the anisotropy panel.
             // Figure out why and remove the overlap and below.
@@ -144,6 +143,7 @@ namespace grapher
             var settings = new DriverSettings
             {
                 rotation = ApplyOptions.Rotation.Field.Data,
+                snap = driverSettings.snap,
                 sensitivity = new Vec2<double>
                 {
                     x = ApplyOptions.Sensitivity.Fields.X,
@@ -229,7 +229,7 @@ namespace grapher
             ToggleButton.Checked = LastToggleChecked;
 
             ToggleButton.Font = DefaultButtonFont;
-            ToggleButton.Text = ToggleButton.Checked ? "Enabled" : "Disabled";
+            ToggleButton.Text = ToggleButton.Checked ? "Disable" : "Enable";
             ToggleButton.Update();
 
             WriteButton.Font = DefaultButtonFont;

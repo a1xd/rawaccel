@@ -42,6 +42,26 @@ namespace rawaccel {
         rotator() = default;
     };
 
+    struct snapper {
+        double threshold = 0;
+
+        inline vec2d apply(const vec2d& input) const {
+            if (input.x != 0 && input.y != 0) {
+                double angle = fabs(atan(input.y / input.x));
+                auto mag = [&] { return sqrtsd(input.x * input.x + input.y * input.y); };
+
+                if (angle > M_PI_2 - threshold) return { 0, _copysign(mag(), input.y) };
+                if (angle < threshold) return { _copysign(mag(), input.x), 0 };
+            }
+
+            return input;
+        }
+
+        snapper(double degrees) : threshold(minsd(fabs(degrees), 45) * M_PI / 180) {}
+
+        snapper() = default;
+    };
+
     /// <summary> Struct to hold clamp (min and max) details for acceleration application </summary>
     struct accel_scale_clamp {
         double lo = 0;
@@ -232,7 +252,7 @@ namespace rawaccel {
         double sigma_x = 1.0;
         double sigma_y = 1.0;
 
-        weighted_distance(domain_args args)
+        weighted_distance(const domain_args& args)
         {
             sigma_x = args.domain_weights.x;
             sigma_y = args.domain_weights.y;
@@ -250,19 +270,18 @@ namespace rawaccel {
             }
         }
 
-        double calculate(double x, double y)
+        inline double calculate(double x, double y)
         {
 			double abs_x = fabs(x);
 			double abs_y = fabs(y);
 
-            if (lp_norm_infinity)
-            {
-                return abs_x > abs_y ? abs_x : abs_y;
-            }
+            if (lp_norm_infinity) return maxsd(abs_x, abs_y);
 
             double x_scaled = abs_x * sigma_x;
             double y_scaled = abs_y * sigma_y;
-            return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
+
+            if (p == 2) return sqrtsd(x_scaled * x_scaled + y_scaled * y_scaled);
+            else return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
         }
 
         weighted_distance() = default;
@@ -273,19 +292,12 @@ namespace rawaccel {
         double start = 1.0;
         bool should_apply = false;
 
-        direction_weight(vec2d thetas)
+        direction_weight(const vec2d& thetas)
         {
             diff = thetas.y - thetas.x;
             start = thetas.x;
 
-            if (diff != 0)
-            {
-                should_apply = true;
-            }
-            else
-            {
-                should_apply = false;
-            }
+            should_apply = diff != 0;
         }
 
         inline double atan_scale(double x, double y)
@@ -293,7 +305,7 @@ namespace rawaccel {
             return M_2_PI * atan2(fabs(y), fabs(x));
         }
 
-        double apply(double x, double y)
+        inline double apply(double x, double y)
         {
             return atan_scale(x, y) * diff + start;
         }
@@ -304,9 +316,11 @@ namespace rawaccel {
     /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
     struct mouse_modifier {
         bool apply_rotate = false;
+        bool apply_snap = false;
         bool apply_accel = false;
         bool combine_magnitudes = true;
         rotator rotate;
+        snapper snap;
         weighted_distance distance;
         direction_weight directional;
         vec2<accelerator> accels;
@@ -321,6 +335,11 @@ namespace rawaccel {
                 apply_rotate = true;
             }
             
+            if (args.degrees_snap != 0) {
+                snap = snapper(args.degrees_snap);
+                apply_snap = true;
+            }
+
             if (args.sens.x != 0) sensitivity.x = args.sens.x;
             if (args.sens.y != 0) sensitivity.y = args.sens.y;
 
@@ -344,12 +363,17 @@ namespace rawaccel {
 
         void modify(vec2d& movement, milliseconds time) {
             apply_rotation(movement);
+            apply_angle_snap(movement);
             apply_acceleration(movement, [=] { return time; });
             apply_sensitivity(movement);
         }
 
         inline void apply_rotation(vec2d& movement) {
             if (apply_rotate) movement = rotate.apply(movement);
+        }
+
+        inline void apply_angle_snap(vec2d& movement) {
+            if (apply_snap) movement = snap.apply(movement);
         }
 
         template <typename TimeSupplier>

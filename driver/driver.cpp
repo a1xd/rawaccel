@@ -74,6 +74,7 @@ Arguments:
             };
 
             global.modifier.apply_rotation(input);
+            global.modifier.apply_angle_snap(input);
 
             if (enable_accel) {
                 auto time_supplier = [=] {

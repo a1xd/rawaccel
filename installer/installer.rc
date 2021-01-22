@@ -70,7 +70,7 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "Raw Accel installer (" RA_MIN_OS ")"
+            VALUE "FileDescription", "Raw Accel installer (" RA_OS ")"
             VALUE "FileVersion", RA_VER_STRING
             VALUE "OriginalFilename", "installer.exe"
             VALUE "ProductName", "Raw Accel"
