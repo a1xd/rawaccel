@@ -136,6 +136,11 @@ namespace grapher.Models.Calculations
                 var ratio = outMagnitude / simulatedInputDatum.velocity;
                 var slope = inDiff > 0 ? outDiff / inDiff : starter;
 
+                if (slope < lastSlope)
+                {
+                    Console.WriteLine();
+                }
+
                 if (ratio > maxRatio)
                 {
                     maxRatio = ratio;
@@ -398,8 +403,8 @@ namespace grapher.Models.Calculations
                 var timeFactor = ceil / i;
                 mouseInputData.x = 0;
                 mouseInputData.y = ceil;
-                mouseInputData.time = MeasurementTime;
-                mouseInputData.velocity = Velocity(0, i, mouseInputData.time);
+                mouseInputData.time = MeasurementTime*timeFactor;
+                mouseInputData.velocity = Velocity(0, ceil, mouseInputData.time);
                 mouseInputData.angle = Math.PI / 2;
                 magnitudes.Add(mouseInputData);
             }

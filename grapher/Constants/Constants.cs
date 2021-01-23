@@ -44,7 +44,7 @@ namespace grapher
         public const int DropDownLeftSeparation = 10;
 
         /// <summary> Height of sensitivity chart when displayed alone. </summary>
-        public const int SensitivityChartAloneHeight = 450;
+        public const int SensitivityChartAloneHeight = 455;
 
         /// <summary> Height of sensitivity chart when displayed alongside Velocity and Gain charts. </summary>
         public const int SensitivityChartTogetherHeight = 328;
