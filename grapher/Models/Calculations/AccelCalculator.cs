@@ -307,8 +307,7 @@ namespace grapher.Models.Calculations
 
             foreach (var slowMoveX in SlowMovements)
             {
-                var slowMoveY = slowMoveX;
-                var ratio = slowMoveX > 0.0 ? slowMoveY / slowMoveX : 1;
+                var slowMoveY = 0.0;
                 var ceilX = (int)Math.Round(slowMoveX*50);
                 var ceilY = (int)Math.Round(slowMoveY*50);
                 var ceilMagnitude = Magnitude(ceilX, ceilY);
