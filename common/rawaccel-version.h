@@ -2,7 +2,7 @@
 
 #define RA_VER_MAJOR 1
 #define RA_VER_MINOR 4
-#define RA_VER_PATCH 0
+#define RA_VER_PATCH 1
 
 #define RA_OS "Win7+"
 
