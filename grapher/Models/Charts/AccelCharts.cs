@@ -31,8 +31,8 @@ namespace grapher
                 gainChart,
                 accelCalculator,
                 estimated,
-                estimatedY,
-                estimatedX);
+                estimatedX,
+                estimatedY);
 
             ContainingForm = form;
             EnableVelocityAndGain = enableVelocityAndGain;
