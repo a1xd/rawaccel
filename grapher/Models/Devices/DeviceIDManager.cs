@@ -25,24 +25,6 @@ namespace grapher.Models.Devices
 
         public Dictionary<string, DeviceIDItem> DeviceIDs { get; private set; }
 
-        public static IEnumerable<(string, string)> GetDeviceIDs(string PNPClass = "Mouse")
-        {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(new SelectQuery("Win32_PnPEntity"));
-
-            foreach (ManagementObject obj in searcher.Get())
-            {
-                if (obj["PNPClass"] != null && obj["PNPClass"].ToString().Equals(PNPClass) && obj["DeviceID"] != null)
-                {
-                    string name = obj["Name"].ToString();
-
-                    string devInstanceID = obj["DeviceID"].ToString();
-                    string devID = devInstanceID.Remove(devInstanceID.LastIndexOf('\\'));
-                    
-                    yield return (name, devID);
-                }
-            }
-        }
-
         public void SetActive(DeviceIDItem deviceIDItem)
         {
             if (SelectedDeviceID != null)
@@ -64,9 +46,9 @@ namespace grapher.Models.Devices
 
             if (found) SetActive(anyDevice);
 
-            foreach (var device in GetDeviceIDs().Distinct())
+            foreach (var (name, id) in RawInputInterop.GetDeviceIDs())
             {
-                var deviceItem = new DeviceIDItem(device.Item1, device.Item2, this);
+                var deviceItem = new DeviceIDItem(name, id, this);
                 if (!found && deviceItem.ID.Equals(devID))
                 {
                     SetActive(deviceItem);

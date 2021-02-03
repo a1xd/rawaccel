@@ -40,7 +40,7 @@ namespace grapher.Models.Devices
             DeviceIDMenuItem.Checked = false;
         }
 
-        private string MenuItemText() => string.IsNullOrEmpty(ID) ? $"{Name}" : $"{Name}: {ID}";
+        private string MenuItemText() => string.IsNullOrEmpty(ID) ? $"{Name}" : ID.Replace("&", "&&");
 
         private string DisconnectedText() => $"Disconnected: {ID}";
 
