@@ -114,7 +114,7 @@ This is the style found in Quake 3, Quake Live, and countless inspired followers
 ![ClassicExample](images/classic_example.png)
 
 ### Power
-This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1.). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps).
+This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multiplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps).
 ![PowerExample](images/power_example.png)
 
 ### Natural & NaturalGain
