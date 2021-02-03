@@ -65,7 +65,7 @@ namespace rawaccel {
     /// <summary> Struct to hold clamp (min and max) details for acceleration application </summary>
     struct accel_scale_clamp {
         double lo = 0;
-        double hi = 128;
+        double hi = 1e9;
 
         /// <summary>
         /// Clamps given input to min at lo, max at hi.
