@@ -10,25 +10,24 @@ namespace wr = winreg;
 
 inline const std::wstring DRIVER_NAME = L"rawaccel";
 inline const std::wstring DRIVER_FILE_NAME = DRIVER_NAME + L".sys";
+inline const std::wstring DRIVER_ENV_PATH = L"%systemroot%\\system32\\drivers\\" + DRIVER_FILE_NAME;
 
-fs::path get_sys_path() {
-    std::wstring path;
-    path.resize(MAX_PATH);
+inline const auto sys_error = [](auto what, DWORD code = GetLastError()) {
+    return std::system_error(code, std::system_category(), what);
+};
 
-    UINT chars_copied = GetSystemDirectoryW(path.data(), MAX_PATH);
-    if (chars_copied == 0) throw std::runtime_error("GetSystemDirectory failed");
+inline std::wstring expand(const std::wstring& env_path) {
+    std::wstring path(MAX_PATH, L'\0');
 
-    path.resize(chars_copied);
+    auto len = ExpandEnvironmentStringsW(env_path.c_str(), &path[0], MAX_PATH);
+    if (len == 0) throw sys_error("ExpandEnvironmentStrings failed");
+    path.resize(len - 1);
     return path;
 }
 
-fs::path get_target_path() {
-    return get_sys_path() / L"drivers" / DRIVER_FILE_NAME;
-}
-
-fs::path make_temp_path(const fs::path& p) {
+inline fs::path make_temp_path(const fs::path& p) {
     auto tmp_path = p;
-    tmp_path.concat(".tmp");
+    tmp_path.concat(L".tmp");
     return tmp_path;
 }
 
