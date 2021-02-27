@@ -3,24 +3,16 @@
 #include <utility-install.hpp>
 #include <VersionHelpers.h>
 
-void add_service(const fs::path& target) {
-    SC_HANDLE schSCManager = OpenSCManager(
-        NULL,                    // local computer
-        NULL,                    // ServicesActive database 
-        SC_MANAGER_ALL_ACCESS    // full access rights 
-    );
-
-    if (schSCManager == NULL) throw std::runtime_error("OpenSCManager failed");
-
-    SC_HANDLE schService = CreateService(
-        schSCManager,              // SCM database 
+void add_service(SC_HANDLE srv_manager) {
+    SC_HANDLE srv = CreateServiceW(
+        srv_manager,               // SCM database 
         DRIVER_NAME.c_str(),       // name of service 
         DRIVER_NAME.c_str(),       // service name to display 
         SERVICE_ALL_ACCESS,        // desired access 
         SERVICE_KERNEL_DRIVER,     // service type 
         SERVICE_DEMAND_START,      // start type 
         SERVICE_ERROR_NORMAL,      // error control type 
-        target.c_str(),            // path to service's binary 
+        DRIVER_ENV_PATH.c_str(),   // path to service's binary 
         NULL,                      // no load ordering group 
         NULL,                      // no tag identifier 
         NULL,                      // no dependencies 
@@ -28,45 +20,76 @@ void add_service(const fs::path& target) {
         NULL                       // no password 
     );
 
-    if (schService) {
-        CloseServiceHandle(schService);
-        CloseServiceHandle(schSCManager);
-        return;
-    }
+    if (srv) CloseServiceHandle(srv);
+    else throw sys_error("CreateService failed");
+}
 
-    if (auto err = GetLastError(); err != ERROR_SERVICE_EXISTS) {
-        CloseServiceHandle(schSCManager);
-        throw std::runtime_error("CreateService failed");
-    }
+BOOL update_service(SC_HANDLE srv) {
+    return ChangeServiceConfigW(
+        srv,                       // service handle 
+        SERVICE_KERNEL_DRIVER,     // service type 
+        SERVICE_DEMAND_START,      // start type 
+        SERVICE_ERROR_NORMAL,      // error control type 
+        DRIVER_ENV_PATH.c_str(),   // path to service's binary 
+        NULL,                      // no load ordering group 
+        NULL,                      // no tag identifier 
+        NULL,                      // no dependencies 
+        NULL,                      // LocalSystem account 
+        NULL,                      // no password
+        DRIVER_NAME.c_str()        // service name to display
+    );
 }
 
 int main() {
+    SC_HANDLE srv_manager = NULL;
+
     try {
         if (!IsWindows10OrGreater()) {
             throw std::runtime_error("OS not supported, you need at least Windows 10");
         }
+
         fs::path source = fs::path(L"driver") / DRIVER_FILE_NAME;
 
         if (!fs::exists(source)) {
             throw std::runtime_error(source.generic_string() + " does not exist");
         }
 
-        fs::path target = get_target_path();
-
+        fs::path target = expand(DRIVER_ENV_PATH);
+        
         if (fs::exists(target)) {
             std::cout << "Driver already installed. Removing previous installation.\n";
+
+            fs::path tmp = make_temp_path(target);
+
+            // schedule tmp to be deleted if rename target -> tmp is successful
+            if (MoveFileExW(target.c_str(), tmp.c_str(), MOVEFILE_REPLACE_EXISTING)) {
+                MoveFileExW(tmp.c_str(), NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
+            }
         }
 
-        add_service(target);
-
-        fs::path tmp = make_temp_path(target);
-
-        // schedule tmp to be deleted if rename target -> tmp is successful
-        if (MoveFileExW(target.c_str(), tmp.c_str(), MOVEFILE_REPLACE_EXISTING)) {
-            MoveFileExW(tmp.c_str(), NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
+        if (!fs::copy_file(source, target, fs::copy_options::overwrite_existing)) {
+            throw sys_error("copy_file failed");
         }
 
-        fs::copy_file(source, target, fs::copy_options::overwrite_existing);
+        srv_manager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+        if (srv_manager == NULL) throw sys_error("OpenSCManager failed");
+
+        SC_HANDLE srv = OpenServiceW(srv_manager, DRIVER_NAME.c_str(), SC_MANAGER_ALL_ACCESS);
+
+        if (srv != NULL) {
+            BOOL success = update_service(srv);
+            CloseServiceHandle(srv);
+            if (!success) throw sys_error("ChangeServiceConfig failed");
+        }
+        else {
+            auto error_code = GetLastError();
+            if (error_code == ERROR_SERVICE_DOES_NOT_EXIST) {
+                add_service(srv_manager);
+            }
+            else {
+                throw sys_error("OpenService failed", error_code);
+            }
+        }
 
         modify_upper_filters([](std::vector<std::wstring>& filters) {
             auto driver_pos = std::find(filters.begin(), filters.end(), DRIVER_NAME);
@@ -85,6 +108,8 @@ int main() {
     catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << '\n';
     }
+
+    if (srv_manager) CloseServiceHandle(srv_manager);
 
     std::cout << "Press any key to close this window . . .\n";
     _getwch();
