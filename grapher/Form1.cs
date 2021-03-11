@@ -176,13 +176,16 @@ namespace grapher
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == 0x00ff) // WM_INPUT
+            if (!(AccelGUI is null))
             {
-                AccelGUI.MouseWatcher.ReadMouseMove(m);
-            }
-            else if (m.Msg == 0x00fe) // WM_INPUT_DEVICE_CHANGE
-            {
-                AccelGUI.UpdateInputManagers();
+                if (m.Msg == 0x00ff) // WM_INPUT
+                {
+                    AccelGUI.MouseWatcher.ReadMouseMove(m);
+                }
+                else if (m.Msg == 0x00fe) // WM_INPUT_DEVICE_CHANGE
+                {
+                    AccelGUI.UpdateInputManagers();
+                }
             }
 
             base.WndProc(ref m);
