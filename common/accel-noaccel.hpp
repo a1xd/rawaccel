@@ -1,6 +1,6 @@
 #pragma once
 
-#include "accel-base.hpp"
+#include "rawaccel-settings.h"
 
 namespace rawaccel {
 
@@ -11,8 +11,6 @@ namespace rawaccel {
 		accel_noaccel() = default;
 
 		inline double operator()(double) const { return 1; }
-		
-		inline double legacy_offset(double speed) const { return operator()(speed); }
 	};
 
 }

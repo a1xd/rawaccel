@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-#include "accel-base.hpp"
+#include "rawaccel-settings.h"
 
 #define RA_LOOKUP
 
@@ -16,14 +16,14 @@ namespace rawaccel {
 	};
 
 	/// <summary> Struct to hold sigmoid (s-shaped) gain implementation. </summary>
-	struct motivity_impl {
+	struct motivity {
 		double rate;
 		double limit;
 		double midpoint;
 		double subtractive_constant;
 
-		motivity_impl(const accel_args& args) :
-			rate(pow(10,args.accel)), limit(2*log10(args.limit)), midpoint(log10(args.midpoint))
+		motivity(const accel_args& args) :
+			rate(pow(10,args.accel_motivity)), limit(2*log10(args.limit)), midpoint(log10(args.midpoint))
 		{
 			subtractive_constant = limit / 2;
 		}
@@ -33,8 +33,6 @@ namespace rawaccel {
 			return pow(10, limit / (exp(-rate * (log_speed - midpoint)) + 1) - subtractive_constant);
 
 		}
-
-		inline double legacy_offset(double speed) const { return operator()(speed); }
 
 		inline double apply(si_pair* lookup, double speed) const
 		{
@@ -95,7 +93,5 @@ namespace rawaccel {
 
 		}
 	};
-
-	using accel_motivity = nonadditive_accel<motivity_impl>;
 
 }

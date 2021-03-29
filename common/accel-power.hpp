@@ -2,25 +2,25 @@
 
 #include <math.h>
 
-#include "accel-base.hpp"
+#include "rawaccel-settings.h"
 
 namespace rawaccel {
 
 	/// <summary> Struct to hold power (non-additive) acceleration implementation. </summary>
-	struct power_impl {
-		double scale;
+	struct power {
+		double pre_scale;
 		double exponent;
+		double post_scale;
 
-		power_impl(const accel_args& args) :
-			scale(args.scale), exponent(args.exponent)
-		{}
+		power(const accel_args& args) :
+			pre_scale(args.scale), 
+			exponent(args.exponent),
+			post_scale(args.weight) {}
 
 		inline double operator()(double speed) const {
 			// f(x) = (mx)^k
-			return pow(speed * scale, exponent);
+			return post_scale * pow(speed * pre_scale, exponent);
 		}
 	};
-
-	using accel_power = nonadditive_accel<power_impl>;
 
 }

@@ -1,8 +1,9 @@
+#include "driver.h"
+
 #include <rawaccel.hpp>
 #include <rawaccel-io-def.h>
 #include <rawaccel-version.h>
 
-#include "driver.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -10,8 +11,6 @@
 #pragma alloc_text (PAGE, EvtIoInternalDeviceControl)
 #pragma alloc_text (PAGE, RawaccelControl)
 #endif
-
-namespace ra = rawaccel;
 
 using milliseconds = double;
 using lut_value_t = ra::si_pair;
@@ -21,7 +20,7 @@ struct {
     milliseconds tick_interval = 0; // set in DriverEntry
     ra::mouse_modifier modifier;
     vec2<lut_value_t*> lookups = {};
-} global;
+} global = {};
 
 VOID
 RawaccelCallback(
@@ -59,7 +58,7 @@ Arguments:
     bool any = num_packets > 0;
     bool rel_move = !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE);
     bool dev_match = global.args.device_id[0] == 0 ||
-        wcsncmp(devExt->dev_id, global.args.device_id, MAX_DEV_ID_LEN) == 0;
+        wcsncmp(devExt->dev_id, global.args.device_id, ra::MAX_DEV_ID_LEN) == 0;
 
     if (any && rel_move && dev_match) {
         // if IO is backed up to the point where we get more than 1 packet here
@@ -507,7 +506,7 @@ Return Value:
 
     if (NT_SUCCESS(nts)) {
         auto* id_ptr = reinterpret_cast<WCHAR*>(iosb.Information); 
-        wcsncpy(FilterGetData(hDevice)->dev_id, id_ptr, MAX_DEV_ID_LEN);
+        wcsncpy(FilterGetData(hDevice)->dev_id, id_ptr, ra::MAX_DEV_ID_LEN);
         DebugPrint(("Device ID = %ws\n", id_ptr));
         ExFreePool(id_ptr);
     }

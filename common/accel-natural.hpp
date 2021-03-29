@@ -2,34 +2,52 @@
 
 #include <math.h>
 
-#include "accel-base.hpp"
+#include "rawaccel-settings.h"
 
 namespace rawaccel {
 
 	/// <summary> Struct to hold "natural" (vanishing difference) acceleration implementation. </summary>
-	struct natural_impl {
-		double rate;
-		double limit;
+	struct natural_base {
 		double offset;
+		double accel;
+		double limit;
 
-		natural_impl(const accel_args& args) :
-			rate(args.accel), limit(args.limit - 1), offset(args.offset)
+		natural_base(const accel_args& args) :
+			offset(args.offset),
+			limit(args.limit - 1)
 		{
-			rate /= limit;
+			accel = args.accel_natural / fabs(limit);
 		}
-
-		inline double operator()(double speed) const {
-			// f(x) = k(1-e^(-mx))
-			double base_speed = speed + offset;
-			return limit * (1 - ((exp(-rate * speed) * speed + offset) / base_speed));
-		}
-
-		inline double legacy_offset(double speed) const {
-			return limit - (limit * exp(-rate * speed));
-		}
-
 	};
 
-	using accel_natural = additive_accel<natural_impl>;
+	struct natural_legacy : natural_base {
+
+		double operator()(double x) const {
+			if (x <= offset) return 1;
+
+			double offset_x = x - offset;
+			double decay = exp(-accel * offset_x);
+			return limit * (1 - (decay * offset_x + offset) / x) + 1;
+		}
+
+		using natural_base::natural_base;
+	};
+
+	struct natural : natural_base {
+		double constant;
+
+		double operator()(double x) const {
+			if (x <= offset) return 1;
+
+			double offset_x = x - offset;
+			double decay = exp(-accel * offset_x);
+			double output = limit * (offset_x + decay / accel) + constant;
+			return output / x + 1;
+		}
+
+		natural(const accel_args& args) :
+			natural_base(args),
+			constant(-limit / accel) {}
+	};
 
 }

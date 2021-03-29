@@ -3,13 +3,10 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "rawaccel-settings.h"
 #include "x64-util.hpp"
 
-#include "accel-linear.hpp"
 #include "accel-classic.hpp"
 #include "accel-natural.hpp"
-#include "accel-naturalgain.hpp"
 #include "accel-power.hpp"
 #include "accel-motivity.hpp"
 #include "accel-noaccel.hpp"
@@ -62,81 +59,86 @@ namespace rawaccel {
         snapper() = default;
     };
 
-    /// <summary> Struct to hold clamp (min and max) details for acceleration application </summary>
-    struct accel_scale_clamp {
-        double lo = 0;
-        double hi = 1e9;
-
-        /// <summary>
-        /// Clamps given input to min at lo, max at hi.
-        /// </summary>
-        /// <param name="scale">Double to be clamped</param>
-        /// <returns>Clamped input as double</returns>
-        inline double operator()(double scale) const {
-            return clampsd(scale, lo, hi);
-        }
-
-        accel_scale_clamp(double cap) {
-            if (cap <= 0) {
-                // use default, effectively uncapped accel
-                return;
-            }
-
-            if (cap < 1) {
-                // assume negative accel
-                lo = cap;
-                hi = 1;
-            }
-            else hi = cap;
-        }
-
-        accel_scale_clamp() = default;
-    };
+    inline void cap_speed(vec2d& v, double cap, double norm) {
+        double speed = sqrtsd(v.x * v.x + v.y * v.y) * norm;
+        double ratio = minsd(speed, cap) / speed;
+        v.x *= ratio;
+        v.y *= ratio;
+    }
     
+    enum class internal_mode {
+        classic_lgcy,
+        classic_gain,
+        natural_lgcy,
+        natural_gain,
+        power,
+        motivity,
+        noaccel
+    };
+
+    constexpr internal_mode make_mode(accel_mode m, bool legacy) {
+        switch (m) {
+        case accel_mode::classic:
+            return legacy ? internal_mode::classic_lgcy : internal_mode::classic_gain;
+        case accel_mode::natural:
+            return legacy ? internal_mode::natural_lgcy : internal_mode::natural_gain;
+        case accel_mode::power:
+            return internal_mode::power;
+        case accel_mode::motivity: 
+            return internal_mode::motivity;
+        default: 
+            return internal_mode::noaccel;
+        }
+    }
+
+    constexpr internal_mode make_mode(const accel_args& args) {
+        return make_mode(args.mode, args.legacy);
+    }
+
     template <typename Visitor, typename Variant>
     inline auto visit_accel(Visitor vis, Variant&& var) {
         switch (var.tag) {
-        case accel_mode::linear:      return vis(var.u.linear);
-        case accel_mode::classic:     return vis(var.u.classic);
-        case accel_mode::natural:     return vis(var.u.natural);
-        case accel_mode::naturalgain: return vis(var.u.naturalgain);
-        case accel_mode::power:       return vis(var.u.power);
-        case accel_mode::motivity:    return vis(var.u.motivity);
-        default:                      return vis(var.u.noaccel);
+        case internal_mode::classic_lgcy: return vis(var.u.classic_l);
+        case internal_mode::classic_gain: return vis(var.u.classic_g);
+        case internal_mode::natural_lgcy: return vis(var.u.natural_l);
+        case internal_mode::natural_gain: return vis(var.u.natural_g);
+        case internal_mode::power:        return vis(var.u.power);
+        case internal_mode::motivity:     return vis(var.u.motivity);
+        default:                          return vis(var.u.noaccel);
         }
     }
 
     struct accel_variant {
         si_pair* lookup;
 
-        accel_mode tag = accel_mode::noaccel;
+        internal_mode tag = internal_mode::noaccel;
 
         union union_t {
-            accel_linear linear;
-            accel_classic classic;
-            accel_natural natural;
-            accel_naturalgain naturalgain;
-            accel_power power;
-            accel_motivity motivity;
+            classic classic_g;
+            classic_legacy classic_l;
+            natural natural_g;
+            natural_legacy natural_l;
+            power power;
+            motivity motivity;
             accel_noaccel noaccel = {};
         } u = {};
 
-        accel_variant(const accel_args& args, accel_mode mode, si_pair* lut = nullptr) :
-            tag(mode), lookup(lut)
+        accel_variant(const accel_args& args, si_pair* lut = nullptr) :
+            tag(make_mode(args)), lookup(lut)
         {
             visit_accel([&](auto& impl) {
                 impl = { args }; 
             }, *this);
 
-            if (lookup && tag == accel_mode::motivity) {
-                u.motivity.fn.fill(lookup);
+            if (lookup && tag == internal_mode::motivity) {
+                u.motivity.fill(lookup);
             }
 
         }
 
         inline double apply(double speed) const {
-            if (lookup && tag == accel_mode::motivity) {
-                return u.motivity.fn.apply(lookup, speed);
+            if (lookup && tag == internal_mode::motivity) {
+                return u.motivity.apply(lookup, speed);
             }
 
             return visit_accel([=](auto&& impl) {
@@ -145,104 +147,6 @@ namespace rawaccel {
         }
 
         accel_variant() = default;
-    };
-
-    /// <summary> Struct to hold information about applying a gain cap. </summary>
-    struct velocity_gain_cap {
-
-        // <summary> The minimum speed past which gain cap is applied. </summary>
-        double threshold = 0;
-
-        // <summary> The gain at the point of cap </summary>
-        double slope = 0;
-
-        // <summary> The intercept for the line with above slope to give continuous velocity function </summary>
-        double intercept = 0;
-
-        /// <summary>
-        /// Initializes a velocity gain cap for a certain speed threshold
-        /// by estimating the slope at the threshold and creating a line
-        /// with that slope for output velocity calculations.
-        /// </summary>
-        /// <param name="speed"> The speed at which velocity gain cap will kick in </param>
-        /// <param name="accel"> The accel implementation used in the containing accel_variant </param>
-        velocity_gain_cap(double speed, const accel_variant& accel)
-        {
-            if (speed <= 0) return;
-
-            // Estimate gain at cap point by taking line between two input vs output velocity points.
-            // First input velocity point is at cap; for second pick a velocity a tiny bit larger.
-            double speed_second = 1.001 * speed;
-            double speed_diff = speed_second - speed;
-
-            // Return if by glitch or strange values the difference in points is 0.
-            if (speed_diff == 0) return;
-
-            // Find the corresponding output velocities for the two points.
-            double out_first = accel.apply(speed) * speed;
-            double out_second = accel.apply(speed_second) * speed_second;
-
-            // Calculate slope and intercept from two points.
-            slope = (out_second - out_first) / speed_diff;
-            intercept = out_first - slope * speed;
-
-            threshold = speed;
-        }
-
-        /// <summary>
-        /// Applies velocity gain cap to speed.
-        /// Returns scale value by which to multiply input to place on gain cap line.
-        /// </summary>
-        /// <param name="speed"> Speed to be capped </param>
-        /// <returns> Scale multiplier for input </returns>
-        inline double apply(double speed) const {
-			return  slope + intercept / speed;
-        }
-
-        /// <summary>
-        /// Whether gain cap should be applied to given speed.
-        /// </summary>
-        /// <param name="speed"> Speed to check against threshold. </param>
-        /// <returns> Whether gain cap should be applied. </returns>
-        inline bool should_apply(double speed) const {
-            return threshold > 0 && speed > threshold;
-        }
-
-        velocity_gain_cap() = default;
-    };
-
-    struct accelerator {
-        accel_variant accel;
-        velocity_gain_cap gain_cap;
-        accel_scale_clamp clamp;
-        double output_speed_cap = 0;
-
-        accelerator(const accel_args& args, accel_mode mode, si_pair* lut = nullptr) :
-            accel(args, mode, lut), gain_cap(args.gain_cap, accel), clamp(args.scale_cap)
-        {
-            output_speed_cap = maxsd(args.speed_cap, 0);
-        }
-
-        inline double apply(double speed) const { 
-            double scale;
-
-            if (gain_cap.should_apply(speed)) {
-                scale = gain_cap.apply(speed);
-            }
-            else {
-                scale = accel.apply(speed);
-            }
-
-            scale = clamp(scale);
-
-            if (output_speed_cap > 0 && (scale * speed) > output_speed_cap) {
-                scale = output_speed_cap / speed;
-            }
-
-            return scale;
-        }
-
-        accelerator() = default;
     };
 
     struct weighted_distance {
@@ -318,17 +222,21 @@ namespace rawaccel {
         bool apply_rotate = false;
         bool apply_snap = false;
         bool apply_accel = false;
-        bool combine_magnitudes = true;
+        bool by_component = false;
         rotator rotate;
         snapper snap;
+        double dpi_factor = 1;
+        double speed_cap = 0;
         weighted_distance distance;
         direction_weight directional;
-        vec2<accelerator> accels;
+        vec2<accel_variant> accels;
         vec2d sensitivity = { 1, 1 };
         vec2d directional_multipliers = {};
 
         mouse_modifier(const settings& args, vec2<si_pair*> luts = {}) :
-            combine_magnitudes(args.combine_mags)
+            by_component(!args.combine_mags),
+            dpi_factor(1000 / args.dpi),
+            speed_cap(args.speed_cap)
         {
             if (args.degrees_rotation != 0) {
                 rotate = rotator(args.degrees_rotation);
@@ -346,16 +254,16 @@ namespace rawaccel {
             directional_multipliers.x = fabs(args.dir_multipliers.x);
             directional_multipliers.y = fabs(args.dir_multipliers.y);
 
-            if ((combine_magnitudes && args.modes.x == accel_mode::noaccel) ||
-                (args.modes.x == accel_mode::noaccel &&
-                    args.modes.y == accel_mode::noaccel)) {
+            if ((!by_component && args.argsv.x.mode == accel_mode::noaccel) ||
+                (args.argsv.x.mode == accel_mode::noaccel &&
+                    args.argsv.y.mode == accel_mode::noaccel)) {
                 return;
             }
 
-            accels.x = accelerator(args.argsv.x, args.modes.x, luts.x);
-            accels.y = accelerator(args.argsv.y, args.modes.y, luts.y);
+            accels.x = accel_variant(args.argsv.x, luts.x);
+            accels.y = accel_variant(args.argsv.y, luts.y);
 
-            distance = weighted_distance(args.domain_args);
+            distance = weighted_distance(args.dom_args);
             directional = direction_weight(args.range_weights);
 
             apply_accel = true;
@@ -380,10 +288,13 @@ namespace rawaccel {
         inline void apply_acceleration(vec2d& movement, TimeSupplier time_supp) {
             if (apply_accel) {
                 milliseconds time = time_supp();
+                double norm = dpi_factor / time;
 
-                if (combine_magnitudes) {
+                if (speed_cap > 0) cap_speed(movement, speed_cap, norm);
+
+                if (!by_component) {
                     double mag = distance.calculate(movement.x, movement.y);
-                    double speed = mag / time;
+                    double speed = mag * norm;
                     double scale = accels.x.apply(speed);
 
                     if (directional.should_apply)
@@ -395,8 +306,8 @@ namespace rawaccel {
                     movement.y *= scale;
                 }
                 else {
-                    movement.x *= accels.x.apply(fabs(movement.x) / time);
-                    movement.y *= accels.y.apply(fabs(movement.y) / time);
+                    movement.x *= accels.x.apply(fabs(movement.x) * norm);
+                    movement.y *= accels.y.apply(fabs(movement.y) * norm);
                 }
             }
         }
