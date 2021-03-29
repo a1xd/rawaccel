@@ -1,6 +1,7 @@
 #pragma once
 
 #include "accel-classic.hpp"
+#include "accel-jump.hpp"
 #include "accel-natural.hpp"
 #include "accel-power.hpp"
 #include "accel-motivity.hpp"
@@ -11,6 +12,8 @@ namespace rawaccel {
     enum class internal_mode {
         classic_lgcy,
         classic_gain,
+        jump_lgcy,
+        jump_gain,
         natural_lgcy,
         natural_gain,
         power,
@@ -23,6 +26,8 @@ namespace rawaccel {
         switch (m) {
         case accel_mode::classic:
             return legacy ? internal_mode::classic_lgcy : internal_mode::classic_gain;
+        case accel_mode::jump:
+            return legacy ? internal_mode::jump_lgcy : internal_mode::jump_gain;
         case accel_mode::natural:
             return legacy ? internal_mode::natural_lgcy : internal_mode::natural_gain;
         case accel_mode::power:
@@ -45,6 +50,8 @@ namespace rawaccel {
         switch (var.tag) {
         case internal_mode::classic_lgcy: return vis(var.u.classic_l);
         case internal_mode::classic_gain: return vis(var.u.classic_g);
+        case internal_mode::jump_lgcy: return vis(var.u.jump_l);
+        case internal_mode::jump_gain: return vis(var.u.jump_g);
         case internal_mode::natural_lgcy: return vis(var.u.natural_l);
         case internal_mode::natural_gain: return vis(var.u.natural_g);
         case internal_mode::power:        return vis(var.u.power);
@@ -61,6 +68,8 @@ namespace rawaccel {
         union union_t {
             classic classic_g;
             classic_legacy classic_l;
+            jump jump_g;
+            jump_legacy jump_l;
             natural natural_g;
             natural_legacy natural_l;
             power power;

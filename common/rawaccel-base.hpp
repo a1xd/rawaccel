@@ -15,6 +15,7 @@ namespace rawaccel {
 
     enum class accel_mode {
         classic,
+        jump,
         natural,
         motivity,
         power,
@@ -37,6 +38,7 @@ namespace rawaccel {
         double exponent = 0.05;
         double limit = 1.5;
         double midpoint = 5;
+        double smooth = 0.5;
     };
 
     struct domain_args {
