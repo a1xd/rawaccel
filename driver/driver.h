@@ -1,10 +1,10 @@
 #pragma once
 
+#include "rawaccel-base.hpp"
+
 #include <ntddk.h>
 #include <kbdmou.h>
 #include <wdf.h>
-
-#include "rawaccel-settings.h"
 
 #if DBG
 #define DebugPrint(_x_) DbgPrint _x_

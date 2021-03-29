@@ -1,8 +1,8 @@
 #pragma once
 
-#include <math.h>
+#include "rawaccel-base.hpp"
 
-#include "rawaccel-settings.h"
+#include <math.h>
 
 namespace rawaccel {
 
@@ -22,7 +22,8 @@ namespace rawaccel {
 
 	struct natural_legacy : natural_base {
 
-		double operator()(double x) const {
+		double operator()(double x) const 
+		{
 			if (x <= offset) return 1;
 
 			double offset_x = x - offset;
@@ -36,7 +37,8 @@ namespace rawaccel {
 	struct natural : natural_base {
 		double constant;
 
-		double operator()(double x) const {
+		double operator()(double x) const 
+		{
 			if (x <= offset) return 1;
 
 			double offset_x = x - offset;

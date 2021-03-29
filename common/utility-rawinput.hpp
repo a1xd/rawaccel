@@ -11,7 +11,9 @@
 #include <initguid.h> // needed for devpkey.h to parse properly
 #include <devpkey.h>
 
-std::wstring dev_prop_wstr_from_interface(const WCHAR* interface_name, const DEVPROPKEY* key) {
+inline 
+std::wstring dev_prop_wstr_from_interface(const WCHAR* interface_name, const DEVPROPKEY* key) 
+{
     ULONG size = 0;
     DEVPROPTYPE type;
     CONFIGRET cm_res;
@@ -37,14 +39,17 @@ std::wstring dev_prop_wstr_from_interface(const WCHAR* interface_name, const DEV
     return prop;
 }
 
-std::wstring dev_id_from_interface(const WCHAR* interface_name) {
+inline
+std::wstring dev_id_from_interface(const WCHAR* interface_name) 
+{
     auto id = dev_prop_wstr_from_interface(interface_name, &DEVPKEY_Device_InstanceId);
     id.resize(id.find_last_of('\\'));
     return id;
 }
 
 template <typename Func>
-void rawinput_foreach_with_interface(Func fn, DWORD input_type = RIM_TYPEMOUSE) {
+void rawinput_foreach_with_interface(Func fn, DWORD input_type = RIM_TYPEMOUSE) 
+{
     const UINT RI_ERROR = -1;
 
     UINT num_devs = 0;
@@ -75,7 +80,9 @@ void rawinput_foreach_with_interface(Func fn, DWORD input_type = RIM_TYPEMOUSE) 
 
 // returns device handles corresponding to a "device id"
 // https://docs.microsoft.com/en-us/windows-hardware/drivers/install/device-ids
-std::vector<HANDLE> rawinput_handles_from_dev_id(const std::wstring& device_id, DWORD input_type = RIM_TYPEMOUSE) {
+inline
+std::vector<HANDLE> rawinput_handles_from_dev_id(const std::wstring& device_id, DWORD input_type = RIM_TYPEMOUSE) 
+{
     std::vector<HANDLE> handles;
 
     rawinput_foreach_with_interface([&](const auto& dev, const WCHAR* name) {

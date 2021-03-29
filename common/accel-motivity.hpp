@@ -1,8 +1,8 @@
 #pragma once
 
-#include <math.h>
+#include "rawaccel-base.hpp"
 
-#include "rawaccel-settings.h"
+#include <math.h>
 
 #define RA_LOOKUP
 
@@ -23,24 +23,27 @@ namespace rawaccel {
 		double subtractive_constant;
 
 		motivity(const accel_args& args) :
-			rate(pow(10,args.accel_motivity)), limit(2*log10(args.limit)), midpoint(log10(args.midpoint))
+			rate(pow(10,args.accel_motivity)), 
+			limit(2*log10(args.limit)), 
+			midpoint(log10(args.midpoint))
 		{
 			subtractive_constant = limit / 2;
 		}
 
-		inline double operator()(double speed) const {
+		double operator()(double speed) const 
+		{
 			double log_speed = log10(speed);
 			return pow(10, limit / (exp(-rate * (log_speed - midpoint)) + 1) - subtractive_constant);
 
 		}
 
-		inline double apply(si_pair* lookup, double speed) const
+		double apply(si_pair* lookup, double speed) const
 		{
 			si_pair pair = lookup[map(speed)];
 			return pair.slope + pair.intercept / speed;
 		}
 
-		inline int map(double speed) const
+		int map(double speed) const
 		{
 			int index = speed > 0 ? (int)(100 * log10(speed) + 201) : 0;
 
@@ -50,7 +53,7 @@ namespace rawaccel {
 			return index;
 		}
 
-		inline void fill(si_pair* lookup) const
+		void fill(si_pair* lookup) const
 		{
 			double lookup_speed = 0;
 			double integral_interval = 0;

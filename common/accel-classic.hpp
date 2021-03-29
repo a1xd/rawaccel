@@ -1,9 +1,10 @@
 #pragma once
 
+#include "rawaccel-base.hpp"
+#include "utility.hpp"
+
 #include <math.h>
 #include <float.h>
-
-#include "rawaccel-settings.h"
 
 namespace rawaccel {
 
@@ -18,7 +19,8 @@ namespace rawaccel {
             power(args.power),
             accel_raised(pow(args.accel_classic, power - 1)) {}
 
-        double base_fn(double x) const {
+        double base_fn(double x) const
+        {
             return accel_raised * pow(x - offset, power) / x;
         }
     };
@@ -40,7 +42,8 @@ namespace rawaccel {
             }
         }
 
-        inline double operator()(double x) const {
+        double operator()(double x) const 
+        {
             if (x <= offset) return 1;
             return sign * minsd(base_fn(x), sens_cap) + 1;
         }   
@@ -67,7 +70,8 @@ namespace rawaccel {
             }
         }
 
-        double operator()(double x) const {
+        double operator()(double x) const 
+        {
             double output;
 
             if (x <= offset) return 1;
@@ -81,7 +85,7 @@ namespace rawaccel {
 
             return sign * output + 1;
         }
-        
+
         static double gain(double x, double accel, double power, double offset)
         {
             return power * pow(accel * (x - offset), power - 1);

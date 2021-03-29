@@ -1,8 +1,8 @@
 #pragma once
 
-#include <math.h>
+#include "rawaccel-base.hpp"
 
-#include "rawaccel-settings.h"
+#include <math.h>
 
 namespace rawaccel {
 
@@ -17,7 +17,8 @@ namespace rawaccel {
 			exponent(args.exponent),
 			post_scale(args.weight) {}
 
-		inline double operator()(double speed) const {
+		double operator()(double speed) const 
+		{
 			// f(x) = (mx)^k
 			return post_scale * pow(speed * pre_scale, exponent);
 		}
