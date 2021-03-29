@@ -28,3 +28,15 @@ inline constexpr double maxsd(double a, double b) {
 inline constexpr double clampsd(double v, double lo, double hi) {
     return minsd(maxsd(v, lo), hi);
 }
+
+// returns the unbiased exponent of x if x is normal 
+inline int ilogb(double x)
+{
+	union { double f; unsigned long long i; } u = { x };
+	return static_cast<int>((u.i >> 52) & 0x7ff) - 0x3ff;
+}
+
+inline bool infnan(double x)
+{
+	return ilogb(x) == 0x400;
+}

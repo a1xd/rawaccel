@@ -67,40 +67,45 @@ Arguments:
 
         auto it = InputDataStart;
         do {
-            vec2d input = {
-                static_cast<double>(it->LastX),
-                static_cast<double>(it->LastY)
-            };
-
-            global.modifier.apply_rotation(input);
-            global.modifier.apply_angle_snap(input);
-
-            if (enable_accel) {
-                auto time_supplier = [=] {
-                    counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
-                    counter_t ticks = now - devExt->counter;
-                    devExt->counter = now;
-                    milliseconds time = ticks * global.tick_interval;
-                    return clampsd(time, global.args.time_min, 100);
+            if (it->LastX || it->LastY) {
+                vec2d input = {
+                    static_cast<double>(it->LastX),
+                    static_cast<double>(it->LastY)
                 };
 
-                global.modifier.apply_acceleration(input, time_supplier);
+                global.modifier.apply_rotation(input);
+                global.modifier.apply_angle_snap(input);
+
+                if (enable_accel) {
+                    auto time_supplier = [=] {
+                        counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+                        counter_t ticks = now - devExt->counter;
+                        devExt->counter = now;
+                        milliseconds time = ticks * global.tick_interval;
+                        return clampsd(time, global.args.time_min, 100);
+                    };
+
+                    global.modifier.apply_acceleration(input, time_supplier);
+                }
+
+                global.modifier.apply_sensitivity(input);
+
+                double carried_result_x = input.x + devExt->carry.x;
+                double carried_result_y = input.y + devExt->carry.y;
+
+                LONG out_x = static_cast<LONG>(carried_result_x);
+                LONG out_y = static_cast<LONG>(carried_result_y);
+
+                double carry_x = carried_result_x - out_x;
+                double carry_y = carried_result_y - out_y;
+
+                if (!infnan(carry_x + carry_y)) {
+                    devExt->carry.x = carried_result_x - out_x;
+                    devExt->carry.y = carried_result_y - out_y;
+                    it->LastX = out_x;
+                    it->LastY = out_y;
+                }
             }
-
-            global.modifier.apply_sensitivity(input);
-
-            double carried_result_x = input.x + devExt->carry.x;
-            double carried_result_y = input.y + devExt->carry.y;
-
-            LONG out_x = static_cast<LONG>(carried_result_x);
-            LONG out_y = static_cast<LONG>(carried_result_y);
-
-            devExt->carry.x = carried_result_x - out_x;
-            devExt->carry.y = carried_result_y - out_y;
-
-            it->LastX = out_x;
-            it->LastY = out_y;
-
         } while (++it != InputDataEnd);
 
     }

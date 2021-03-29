@@ -218,8 +218,12 @@ namespace rawaccel {
                     movement.y *= scale;
                 }
                 else {
-                    movement.x *= accels.x.apply(fabs(movement.x) * norm);
-                    movement.y *= accels.y.apply(fabs(movement.y) * norm);
+                    if (movement.x != 0) {
+                        movement.x *= accels.x.apply(fabs(movement.x) * norm);
+                    }
+                    if (movement.y != 0) {
+                        movement.y *= accels.y.apply(fabs(movement.y) * norm);
+                    }
                 }
             }
         }
