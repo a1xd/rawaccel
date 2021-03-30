@@ -1,42 +1,49 @@
 #pragma once
 
 #ifdef _MANAGED
-
 #include <math.h>
-inline double sqrtsd(double val) { return sqrt(val); }
-
 #else
-
 #include <emmintrin.h>
-inline double sqrtsd(double val) {
-    __m128d src = _mm_load_sd(&val);
-    __m128d dst = _mm_sqrt_sd(src, src);
-    _mm_store_sd(&val, dst);
-    return val;
-}
-
 #endif
 
-inline constexpr double minsd(double a, double b) {
-    return (a < b) ? a : b;
-}
+namespace rawaccel {
 
-inline constexpr double maxsd(double a, double b) {
-    return (b < a) ? a : b;
-}
+#ifdef _MANAGED
+    inline double sqrtsd(double val) { return sqrt(val); }
+#else
+    inline double sqrtsd(double val) {
+        __m128d src = _mm_load_sd(&val);
+        __m128d dst = _mm_sqrt_sd(src, src);
+        _mm_store_sd(&val, dst);
+        return val;
+    }
+#endif
 
-inline constexpr double clampsd(double v, double lo, double hi) {
-    return minsd(maxsd(v, lo), hi);
-}
+    constexpr double minsd(double a, double b) 
+    {
+        return (a < b) ? a : b;
+    }
 
-// returns the unbiased exponent of x if x is normal 
-inline int ilogb(double x)
-{
-	union { double f; unsigned long long i; } u = { x };
-	return static_cast<int>((u.i >> 52) & 0x7ff) - 0x3ff;
-}
+    constexpr double maxsd(double a, double b) 
+    {
+        return (b < a) ? a : b;
+    }
 
-inline bool infnan(double x)
-{
-	return ilogb(x) == 0x400;
+    constexpr double clampsd(double v, double lo, double hi) 
+    {
+        return minsd(maxsd(v, lo), hi);
+    }
+
+    // returns the unbiased exponent of x if x is normal 
+    inline int ilogb(double x)
+    {
+	    union { double f; unsigned long long i; } u = { x };
+	    return static_cast<int>((u.i >> 52) & 0x7ff) - 0x3ff;
+    }
+
+    inline bool infnan(double x)
+    {
+	    return ilogb(x) == 0x400;
+    }
+
 }

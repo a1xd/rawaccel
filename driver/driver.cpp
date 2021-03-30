@@ -82,7 +82,7 @@ Arguments:
                         counter_t ticks = now - devExt->counter;
                         devExt->counter = now;
                         milliseconds time = ticks * global.tick_interval;
-                        return clampsd(time, global.args.time_min, 100);
+                        return ra::clampsd(time, global.args.time_min, 100);
                     };
 
                     global.modifier.apply_acceleration(input, time_supplier);
@@ -99,7 +99,7 @@ Arguments:
                 double carry_x = carried_result_x - out_x;
                 double carry_y = carried_result_y - out_y;
 
-                if (!infnan(carry_x + carry_y)) {
+                if (!ra::infnan(carry_x + carry_y)) {
                     devExt->carry.x = carried_result_x - out_x;
                     devExt->carry.y = carried_result_y - out_y;
                     it->LastX = out_x;
