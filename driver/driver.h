@@ -2,6 +2,7 @@
 
 #include "rawaccel-base.hpp"
 
+#define NOMINMAX
 #include <ntddk.h>
 #include <kbdmou.h>
 #include <wdf.h>

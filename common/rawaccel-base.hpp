@@ -13,18 +13,37 @@ namespace rawaccel {
 
     inline constexpr size_t MAX_DEV_ID_LEN = 200;
 
+    inline constexpr size_t LUT_CAPACITY = 1025;
+
     enum class accel_mode {
         classic,
         jump,
         natural,
-        motivity,
         power,
+        motivity,
         noaccel
+    };
+
+    enum class table_mode {
+        off,
+        binlog,
+        linear
+    };
+
+    struct table_args {
+        table_mode mode = table_mode::off;
+        bool transfer = true;
+        unsigned char partitions = 2;
+        short num_elements = 8;
+        double start = 0;
+        double stop = 8;
     };
 
     struct accel_args {
         accel_mode mode = accel_mode::noaccel;
         bool legacy = false;
+
+        table_args lut_args = {};
 
         double offset = 0;
         double cap = 1.5;

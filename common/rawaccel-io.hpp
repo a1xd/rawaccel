@@ -1,14 +1,15 @@
 #pragma once
 
-#include <system_error>
-
-#define NOMINMAX
-#include <Windows.h>
-
 #include "rawaccel-io-def.h"
-#include "rawaccel-base.hpp"
+#include "rawaccel.hpp"
 #include "rawaccel-version.h"
 #include "rawaccel-error.hpp"
+
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
+#include <system_error>
 
 #pragma warning(push)
 #pragma warning(disable:4245) // int -> DWORD conversion while passing CTL_CODE
@@ -45,18 +46,14 @@ namespace rawaccel {
 		}
 	}
 
-	inline settings read() 
+	inline void read(io_t& args)
 	{
-		settings args;
-		io_control(RA_READ, NULL, 0, &args, sizeof(settings));
-		return args;
+		io_control(RA_READ, NULL, 0, &args, sizeof(io_t));
 	}
 
-
-	inline void write(const settings& args) 
+	inline void write(const io_t& args) 
 	{
-		auto in_ptr = const_cast<settings*>(&args);
-		io_control(RA_WRITE, in_ptr, sizeof(settings), NULL, 0);
+		io_control(RA_WRITE, const_cast<io_t*>(&args), sizeof(io_t), NULL, 0);
 	}
 
 	inline version_t get_version() 

@@ -145,7 +145,7 @@ namespace rawaccel {
         vec2d sensitivity = { 1, 1 };
         vec2d directional_multipliers = {};
 
-        mouse_modifier(const settings& args, vec2<si_pair*> luts = {}) :
+        mouse_modifier(const settings& args) :
             by_component(!args.combine_mags),
             dpi_factor(1000 / args.dpi),
             speed_cap(args.speed_cap)
@@ -172,8 +172,8 @@ namespace rawaccel {
                 return;
             }
 
-            accels.x = accel_variant(args.argsv.x, luts.x);
-            accels.y = accel_variant(args.argsv.y, luts.y);
+            accels.x = accel_variant(args.argsv.x);
+            accels.y = accel_variant(args.argsv.y);
 
             distance = weighted_distance(args.dom_args);
             directional = direction_weight(args.range_weights);
@@ -241,6 +241,11 @@ namespace rawaccel {
         }
 
         mouse_modifier() = default;
+    };
+
+    struct io_t {
+        settings args;
+        mouse_modifier mod;
     };
 
 } // rawaccel

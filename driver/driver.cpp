@@ -13,13 +13,11 @@
 #endif
 
 using milliseconds = double;
-using lut_value_t = ra::si_pair;
 
 struct {
     ra::settings args;
     milliseconds tick_interval = 0; // set in DriverEntry
     ra::mouse_modifier modifier;
-    vec2<lut_value_t*> lookups = {};
 } global = {};
 
 VOID
@@ -164,7 +162,7 @@ Return Value:
     case RA_READ:
         status = WdfRequestRetrieveOutputBuffer(
             Request,
-            sizeof(ra::settings),
+            sizeof(ra::io_t),
             &buffer,
             NULL
         );
@@ -172,14 +170,18 @@ Return Value:
             DebugPrint(("RetrieveOutputBuffer failed: 0x%x\n", status));
         }
         else {
-            *reinterpret_cast<ra::settings*>(buffer) = global.args;
-            bytes_out = sizeof(ra::settings);
+            ra::io_t& output = *reinterpret_cast<ra::io_t*>(buffer);
+
+            output.args = global.args;
+            output.mod = global.modifier;
+
+            bytes_out = sizeof(ra::io_t);
         }
         break;
     case RA_WRITE:
         status = WdfRequestRetrieveInputBuffer(
             Request,
-            sizeof(ra::settings),
+            sizeof(ra::io_t),
             &buffer,
             NULL
         );
@@ -191,14 +193,10 @@ Return Value:
             interval.QuadPart = static_cast<LONGLONG>(ra::WRITE_DELAY) * -10000;
             KeDelayExecutionThread(KernelMode, FALSE, &interval);
 
-            ra::settings new_settings = *reinterpret_cast<ra::settings*>(buffer);
+            ra::io_t& input = *reinterpret_cast<ra::io_t*>(buffer);
 
-            if (new_settings.time_min <= 0 || _isnanf(static_cast<float>(new_settings.time_min))) {
-                new_settings.time_min = ra::settings{}.time_min;
-            }
-
-            global.args = new_settings;
-            global.modifier = { global.args, global.lookups };
+            global.args = input.args;
+            global.modifier = input.mod;
         }
         break;
     case RA_GET_VERSION:
@@ -275,23 +273,6 @@ Routine Description:
         LARGE_INTEGER freq;
         KeQueryPerformanceCounter(&freq);
         global.tick_interval = 1e3 / freq.QuadPart;
-
-        auto make_lut = [] {
-            const size_t POOL_SIZE = sizeof(lut_value_t) * ra::LUT_SIZE;
-
-            auto pool = ExAllocatePoolWithTag(NonPagedPool, POOL_SIZE, 'AR');
-
-            if (!pool) {
-                DebugPrint(("RA - failed to allocate LUT\n"));
-            }
-            else {
-                RtlZeroMemory(pool, POOL_SIZE);
-            }
-
-            return reinterpret_cast<lut_value_t*>(pool);
-        };
-
-        global.lookups = { make_lut(), make_lut() };
 
         CreateControlDevice(driver);
     }
