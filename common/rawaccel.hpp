@@ -88,46 +88,30 @@ namespace rawaccel {
 
         inline double calculate(double x, double y)
         {
-			double abs_x = fabs(x);
-			double abs_y = fabs(y);
+			double abs_scaled_x = fabs(x) * sigma_x;
+			double abs_scaled_y = fabs(y) * sigma_y;
 
-            if (lp_norm_infinity) return maxsd(abs_x, abs_y);
+            if (lp_norm_infinity) {
+                return maxsd(abs_scaled_x, abs_scaled_y);
+            }
 
-            double x_scaled = abs_x * sigma_x;
-            double y_scaled = abs_y * sigma_y;
+            if (p == 2) {
+                return sqrtsd(abs_scaled_x * abs_scaled_x +
+                              abs_scaled_y * abs_scaled_y);
+            }
 
-            if (p == 2) return sqrtsd(x_scaled * x_scaled + y_scaled * y_scaled);
-            else return pow(pow(x_scaled, p) + pow(y_scaled, p), p_inverse);
+            double dist_p = pow(abs_scaled_x, p) + pow(abs_scaled_y, p);
+            return pow(dist_p, p_inverse);
         }
 
         weighted_distance() = default;
     };
 
-    struct direction_weight {
-        double diff = 0.0;
-        double start = 1.0;
-        bool should_apply = false;
-
-        direction_weight(const vec2d& thetas)
-        {
-            diff = thetas.y - thetas.x;
-            start = thetas.x;
-
-            should_apply = diff != 0;
-        }
-
-        inline double atan_scale(double x, double y)
-        {
-            return M_2_PI * atan2(fabs(y), fabs(x));
-        }
-
-        inline double apply(double x, double y)
-        {
-            return atan_scale(x, y) * diff + start;
-        }
-
-        direction_weight() = default;
-    };
+    inline double directional_weight(const vec2d& in, const vec2d& weights)
+    {
+        double atan_scale = M_2_PI * atan2(fabs(in.y), fabs(in.x));
+        return atan_scale * (weights.y - weights.x) + weights.x;
+    }
 
     /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
     struct mouse_modifier {
@@ -135,12 +119,13 @@ namespace rawaccel {
         bool apply_snap = false;
         bool apply_accel = false;
         bool by_component = false;
+        bool apply_directional_weight = false;
         rotator rotate;
         snapper snap;
         double dpi_factor = 1;
         double speed_cap = 0;
         weighted_distance distance;
-        direction_weight directional;
+        vec2d range_weights = { 1, 1 };
         vec2<accel_variant> accels;
         vec2d sensitivity = { 1, 1 };
         vec2d directional_multipliers = {};
@@ -148,7 +133,8 @@ namespace rawaccel {
         mouse_modifier(const settings& args) :
             by_component(!args.combine_mags),
             dpi_factor(1000 / args.dpi),
-            speed_cap(args.speed_cap)
+            speed_cap(args.speed_cap),
+            range_weights(args.range_weights)
         {
             if (args.degrees_rotation != 0) {
                 rotate = rotator(args.degrees_rotation);
@@ -176,8 +162,8 @@ namespace rawaccel {
             accels.y = accel_variant(args.argsv.y);
 
             distance = weighted_distance(args.dom_args);
-            directional = direction_weight(args.range_weights);
 
+            apply_directional_weight = range_weights.x != range_weights.y;
             apply_accel = true;
         }
 
@@ -207,22 +193,28 @@ namespace rawaccel {
                 if (!by_component) {
                     double mag = distance.calculate(movement.x, movement.y);
                     double speed = mag * norm;
-                    double scale = accels.x.apply(speed);
 
-                    if (directional.should_apply)
-                    {
-                        scale = (scale - 1)*directional.apply(movement.x, movement.y) + 1;
+                    double weight;
+
+                    if (apply_directional_weight) {
+                        weight = directional_weight(movement, range_weights);
+                    }
+                    else {
+                        weight = range_weights.x;
                     }
 
+                    double scale = accels.x.apply(speed, weight);
                     movement.x *= scale;
                     movement.y *= scale;
                 }
                 else {
                     if (movement.x != 0) {
-                        movement.x *= accels.x.apply(fabs(movement.x) * norm);
+                        double x = fabs(movement.x) * norm * distance.sigma_x;
+                        movement.x *= accels.x.apply(x, range_weights.x);
                     }
                     if (movement.y != 0) {
-                        movement.y *= accels.y.apply(fabs(movement.y) * norm);
+                        double y = fabs(movement.y) * norm * distance.sigma_y;
+                        movement.y *= accels.y.apply(y, range_weights.y);
                     }
                 }
             }

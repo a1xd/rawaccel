@@ -87,4 +87,10 @@ namespace rawaccel {
         wchar_t device_id[MAX_DEV_ID_LEN] = {};
     };
 
+    template <typename AccelFunc>
+    inline double apply_weighted(AccelFunc&& f, double x, double w)
+    {
+        return 1 + (f(x) - 1) * w;
+    }
+
 }

@@ -95,10 +95,10 @@ namespace rawaccel {
             }, *this);
         }
 
-        double apply(double speed) const 
+        double apply(double speed, double weight = 1) const 
         {
             return visit_accel([=](auto&& impl) {
-                return impl(speed);
+                return apply_weighted(impl, speed, weight);
             }, *this);
         }
 
