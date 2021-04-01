@@ -5,9 +5,11 @@
 namespace rawaccel {
     using milliseconds = double;
 
+    inline constexpr int POLL_RATE_MIN = 125;
     inline constexpr int POLL_RATE_MAX = 8000;
 
     inline constexpr milliseconds DEFAULT_TIME_MIN = 1000.0 / POLL_RATE_MAX / 2;
+    inline constexpr milliseconds DEFAULT_TIME_MAX = 1000.0 / POLL_RATE_MIN * 2;
 
     inline constexpr milliseconds WRITE_DELAY = 1000;
 
@@ -77,7 +79,9 @@ namespace rawaccel {
         vec2d dir_multipliers = {};
         domain_args dom_args = {};
         vec2d range_weights = { 1, 1 };
+
         milliseconds time_min = DEFAULT_TIME_MIN;
+        milliseconds time_max = DEFAULT_TIME_MAX;
 
         bool ignore = false;
         wchar_t device_id[MAX_DEV_ID_LEN] = {};

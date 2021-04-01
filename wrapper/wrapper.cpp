@@ -130,6 +130,9 @@ public ref struct DriverSettings
     [JsonProperty(Required = Required::Default)]
     double minimumTime;
 
+    [JsonProperty(Required = Required::Default)]
+    double maximumTime;
+
     [JsonProperty("Ignore devices with matching ID")]
     [MarshalAs(UnmanagedType::U1)]
     bool ignore;
@@ -141,6 +144,11 @@ public ref struct DriverSettings
     bool ShouldSerializeminimumTime() 
     { 
         return minimumTime != ra::DEFAULT_TIME_MIN;
+    }
+
+    bool ShouldSerializemaximumTime()
+    {
+        return maximumTime != ra::DEFAULT_TIME_MAX;
     }
 
     DriverSettings() 

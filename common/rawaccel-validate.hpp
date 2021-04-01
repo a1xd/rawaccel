@@ -162,6 +162,10 @@ namespace rawaccel {
 			error("minimum time"" must be positive");
 		}
 
+		if (args.time_max < args.time_min) {
+			error("max time is less than min time");
+		}
+
 		return ret;
 	}
 

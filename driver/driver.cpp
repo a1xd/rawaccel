@@ -60,9 +60,18 @@ Arguments:
             bool(wcsncmp(devExt->dev_id, global.args.device_id, ra::MAX_DEV_ID_LEN));
 
     if (any && rel_move && dev_match) {
-        // if IO is backed up to the point where we get more than 1 packet here
-        // then applying accel is pointless as we can't get an accurate timing
-        bool enable_accel = num_packets == 1;
+        milliseconds time;
+
+        if (global.args.time_min == global.args.time_max) {
+            time = global.args.time_min;
+        }
+        else {
+            counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+            counter_t ticks = now - devExt->counter;
+            devExt->counter = now;
+            milliseconds t = ticks * global.tick_interval / num_packets;
+            time = ra::clampsd(t, global.args.time_min, global.args.time_max);
+        }
 
         auto it = InputDataStart;
         do {
@@ -72,22 +81,7 @@ Arguments:
                     static_cast<double>(it->LastY)
                 };
 
-                global.modifier.apply_rotation(input);
-                global.modifier.apply_angle_snap(input);
-
-                if (enable_accel) {
-                    auto time_supplier = [=] {
-                        counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
-                        counter_t ticks = now - devExt->counter;
-                        devExt->counter = now;
-                        milliseconds time = ticks * global.tick_interval;
-                        return ra::clampsd(time, global.args.time_min, 100);
-                    };
-
-                    global.modifier.apply_acceleration(input, time_supplier);
-                }
-
-                global.modifier.apply_sensitivity(input);
+                global.modifier.modify(input, time);
 
                 double carried_result_x = input.x + devExt->carry.x;
                 double carried_result_y = input.y + devExt->carry.y;
