@@ -79,6 +79,7 @@ namespace rawaccel {
         vec2d range_weights = { 1, 1 };
         milliseconds time_min = DEFAULT_TIME_MIN;
 
+        bool ignore = false;
         wchar_t device_id[MAX_DEV_ID_LEN] = {};
     };
 

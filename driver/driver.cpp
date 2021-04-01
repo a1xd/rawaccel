@@ -55,8 +55,9 @@ Arguments:
 
     bool any = num_packets > 0;
     bool rel_move = !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE);
-    bool dev_match = global.args.device_id[0] == 0 ||
-        wcsncmp(devExt->dev_id, global.args.device_id, ra::MAX_DEV_ID_LEN) == 0;
+    bool dev_match = global.args.device_id[0] == 0 || 
+        global.args.ignore == 
+            bool(wcsncmp(devExt->dev_id, global.args.device_id, ra::MAX_DEV_ID_LEN));
 
     if (any && rel_move && dev_match) {
         // if IO is backed up to the point where we get more than 1 packet here

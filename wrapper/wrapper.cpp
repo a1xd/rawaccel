@@ -130,6 +130,10 @@ public ref struct DriverSettings
     [JsonProperty(Required = Required::Default)]
     double minimumTime;
 
+    [JsonProperty("Ignore devices with matching ID")]
+    [MarshalAs(UnmanagedType::U1)]
+    bool ignore;
+
     [JsonProperty("Device ID")]
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_DEV_ID_LEN)]
     String^ deviceID = "";
