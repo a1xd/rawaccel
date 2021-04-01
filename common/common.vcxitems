@@ -26,6 +26,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-io-def.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-io.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-base.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-validate.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-version.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)utility-install.hpp" />

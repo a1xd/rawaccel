@@ -1,9 +1,8 @@
 #pragma once
 
 #include "rawaccel-base.hpp"
+#include "rawaccel-io-def.h"
 
-#define NOMINMAX
-#include <ntddk.h>
 #include <kbdmou.h>
 #include <wdf.h>
 

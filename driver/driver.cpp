@@ -210,7 +210,7 @@ Return Value:
             DebugPrint(("RetrieveOutputBuffer failed: 0x%x\n", status));
         }
         else {
-            *reinterpret_cast<ra::version_t*>(buffer) = { RA_VER_MAJOR, RA_VER_MINOR, RA_VER_PATCH };
+            *reinterpret_cast<ra::version_t*>(buffer) = ra::version;
             bytes_out = sizeof(ra::version_t);
         }
         break;

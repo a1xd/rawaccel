@@ -16,27 +16,13 @@ namespace writer
             MessageBox.Show(msg, "Raw Accel writer");
         }
 
-        static void Send(JToken settingsToken)
-        {
-            var settings = settingsToken.ToObject<DriverSettings>();
-
-            var errors = DriverInterop.GetSettingsErrors(settings);
-            if (errors.Empty())
-            {
-                DriverInterop.Write(settings);
-                return;
-            }
-
-            Show($"Bad settings:\n\n{errors}");
-        }
-
         static void Main(string[] args)
         {
             try
             {
-                VersionHelper.ValidateAndGetDriverVersion(typeof(Program).Assembly.GetName().Version);
+                VersionHelper.ValidOrThrow();
             }
-            catch (VersionException e)
+            catch (InteropException e)
             {
                 Show(e.Message);
                 return;
@@ -48,23 +34,19 @@ namespace writer
                 return;
             }
 
-            if (!File.Exists(args[0]))
-            {
-                Show($"Settings file not found at {args[0]}");
-                return;
-            }
-
             try
             {
-                var JO = JObject.Parse(File.ReadAllText(args[0]));
+                var settings = DriverSettings.FromFile(args[0]);
+                var errors = new SettingsErrors(settings);
 
-                if (JO.ContainsKey(DriverSettings.Key))
+                if (errors.Empty())
                 {
-                    Send(JO[DriverSettings.Key]);
-                    return;
+                    new ManagedAccel(settings).Activate();
                 }
-
-                Send(JO);
+                else
+                {
+                    Show($"Bad settings:\n\n{errors}");
+                }
             }
             catch (JsonException e)
             {

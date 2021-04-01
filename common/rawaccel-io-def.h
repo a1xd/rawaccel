@@ -1,9 +1,11 @@
 #pragma once
 
+#define NOMINMAX
+
 #ifdef _KERNEL_MODE
 #include <ntddk.h>
 #else
-#include <winioctl.h>
+#include <Windows.h>
 #endif
 
 #define RA_DEV_TYPE 0x8888u

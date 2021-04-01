@@ -81,4 +81,8 @@ namespace rawaccel {
 	    return ilogb(x) == 0x400;
     }
 
+    struct noop { 
+        template <typename... Ts> 
+        constexpr void operator()(Ts&&...) const noexcept {}
+    };
 }

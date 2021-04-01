@@ -84,12 +84,10 @@ copy /Y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)signed\Newtonsoft.Json.
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="wrapper_io.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="wrapper.cpp" />
-    <ClCompile Include="wrapper_io.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
