@@ -20,6 +20,8 @@ struct {
     ra::mouse_modifier modifier;
 } global = {};
 
+extern "C" PULONG InitSafeBootMode;
+
 VOID
 RawaccelCallback(
     IN PDEVICE_OBJECT DeviceObject,
@@ -433,12 +435,16 @@ Return Value:
     NTSTATUS status;
     WDFDEVICE hDevice;
     WDF_IO_QUEUE_CONFIG ioQueueConfig;
-    
+
     UNREFERENCED_PARAMETER(Driver);
 
     PAGED_CODE();
 
     DebugPrint(("Enter FilterEvtDeviceAdd \n"));
+
+    if (*InitSafeBootMode > 0) {
+        return STATUS_SUCCESS;
+    }
 
     //
     // Tell the framework that you are filter driver. Framework
