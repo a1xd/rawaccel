@@ -85,7 +85,7 @@ namespace grapher.Models.Serialized
 
         public static void SendToDriver(DriverSettings settings)
         {
-            new Thread(() => DriverInterop.Write(settings)).Start();
+            new Thread(() => settings.ToFile()).Start();
         }
 
         public static SettingsErrors SendToDriverSafe(DriverSettings settings)

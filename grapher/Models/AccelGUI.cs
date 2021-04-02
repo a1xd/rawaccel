@@ -45,7 +45,7 @@ namespace grapher
             ToggleButton.Click += new System.EventHandler(OnToggleButtonClick);
             AccelForm.FormClosing += new FormClosingEventHandler(SaveGUISettingsOnClose);
 
-            ButtonTimerInterval = Convert.ToInt32(DriverInterop.WriteDelayMs);
+            ButtonTimerInterval = Convert.ToInt32(DriverSettings.WriteDelayMs);
             ButtonTimer = new Timer();
             ButtonTimer.Tick += new System.EventHandler(OnButtonTimerTick);
 
@@ -62,7 +62,7 @@ namespace grapher
             }
             else
             {
-                DriverSettings active = DriverInterop.GetActiveSettings();
+                DriverSettings active = ManagedAccel.GetActive().Settings;
                 bool activeNotDefault = !RawAccelSettings.IsDefaultEquivalent(active);
 
                 LastToggleChecked = activeNotDefault;
