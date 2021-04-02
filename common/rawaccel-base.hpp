@@ -72,7 +72,8 @@ namespace rawaccel {
         double degrees_snap = 0;
         bool combine_mags = true;
         double dpi = 1000;
-        double speed_cap = 0;
+        double speed_min = 0;
+        double speed_max = 0;
 
         vec2<accel_args> argsv;
         vec2d sens = { 1, 1 };

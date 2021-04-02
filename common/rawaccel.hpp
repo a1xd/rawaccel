@@ -49,18 +49,18 @@ namespace rawaccel {
             return input;
         }
 
-        snapper(double degrees) : threshold(minsd(fabs(degrees), 45) * M_PI / 180) {}
+        snapper(double degrees) : threshold(minsd(fabs(degrees), 45)* M_PI / 180) {}
 
         snapper() = default;
     };
 
-    inline void cap_speed(vec2d& v, double cap, double norm) {
+    inline void clamp_speed(vec2d& v, double min, double max, double norm) {
         double speed = sqrtsd(v.x * v.x + v.y * v.y) * norm;
-        double ratio = minsd(speed, cap) / speed;
+        double ratio = clampsd(speed, min, max) / speed;
         v.x *= ratio;
         v.y *= ratio;
     }
-    
+
     struct weighted_distance {
         double p = 2.0;
         double p_inverse = 0.5;
@@ -88,8 +88,8 @@ namespace rawaccel {
 
         inline double calculate(double x, double y)
         {
-			double abs_scaled_x = fabs(x) * sigma_x;
-			double abs_scaled_y = fabs(y) * sigma_y;
+            double abs_scaled_x = fabs(x) * sigma_x;
+            double abs_scaled_y = fabs(y) * sigma_y;
 
             if (lp_norm_infinity) {
                 return maxsd(abs_scaled_x, abs_scaled_y);
@@ -97,7 +97,7 @@ namespace rawaccel {
 
             if (p == 2) {
                 return sqrtsd(abs_scaled_x * abs_scaled_x +
-                              abs_scaled_y * abs_scaled_y);
+                    abs_scaled_y * abs_scaled_y);
             }
 
             double dist_p = pow(abs_scaled_x, p) + pow(abs_scaled_y, p);
@@ -117,13 +117,14 @@ namespace rawaccel {
     struct mouse_modifier {
         bool apply_rotate = false;
         bool apply_snap = false;
-        bool apply_accel = false;
+        bool apply_speed_clamp = false;
         bool by_component = false;
         bool apply_directional_weight = false;
         rotator rotate;
         snapper snap;
         double dpi_factor = 1;
-        double speed_cap = 0;
+        double speed_min = 0;
+        double speed_max = 0;
         weighted_distance distance;
         vec2d range_weights = { 1, 1 };
         vec2<accel_variant> accels;
@@ -133,14 +134,15 @@ namespace rawaccel {
         mouse_modifier(const settings& args) :
             by_component(!args.combine_mags),
             dpi_factor(1000 / args.dpi),
-            speed_cap(args.speed_cap),
+            speed_min(args.speed_min),
+            speed_max(args.speed_max),
             range_weights(args.range_weights)
         {
             if (args.degrees_rotation != 0) {
                 rotate = rotator(args.degrees_rotation);
                 apply_rotate = true;
             }
-            
+
             if (args.degrees_snap != 0) {
                 snap = snapper(args.degrees_snap);
                 apply_snap = true;
@@ -151,6 +153,8 @@ namespace rawaccel {
 
             directional_multipliers.x = fabs(args.dir_multipliers.x);
             directional_multipliers.y = fabs(args.dir_multipliers.y);
+
+            apply_speed_clamp = speed_max > 0;
 
             if ((!by_component && args.argsv.x.mode == accel_mode::noaccel) ||
                 (args.argsv.x.mode == accel_mode::noaccel &&
@@ -164,13 +168,12 @@ namespace rawaccel {
             distance = weighted_distance(args.dom_args);
 
             apply_directional_weight = range_weights.x != range_weights.y;
-            apply_accel = true;
         }
 
         void modify(vec2d& movement, milliseconds time) {
             apply_rotation(movement);
             apply_angle_snap(movement);
-            apply_acceleration(movement, [=] { return time; });
+            apply_acceleration(movement, time);
             apply_sensitivity(movement);
         }
 
@@ -182,43 +185,42 @@ namespace rawaccel {
             if (apply_snap) movement = snap.apply(movement);
         }
 
-        template <typename TimeSupplier>
-        inline void apply_acceleration(vec2d& movement, TimeSupplier time_supp) {
-            if (apply_accel) {
-                milliseconds time = time_supp();
-                double norm = dpi_factor / time;
+        inline void apply_acceleration(vec2d& movement, milliseconds time) {
+            double norm = dpi_factor / time;
 
-                if (speed_cap > 0) cap_speed(movement, speed_cap, norm);
+            if (apply_speed_clamp) {
+                clamp_speed(movement, speed_min, speed_max, norm);
+            }
 
-                if (!by_component) {
-                    double mag = distance.calculate(movement.x, movement.y);
-                    double speed = mag * norm;
+            if (!by_component) {
+                double mag = distance.calculate(movement.x, movement.y);
+                double speed = mag * norm;
 
-                    double weight;
+                double weight;
 
-                    if (apply_directional_weight) {
-                        weight = directional_weight(movement, range_weights);
-                    }
-                    else {
-                        weight = range_weights.x;
-                    }
-
-                    double scale = accels.x.apply(speed, weight);
-                    movement.x *= scale;
-                    movement.y *= scale;
+                if (apply_directional_weight) {
+                    weight = directional_weight(movement, range_weights);
                 }
                 else {
-                    if (movement.x != 0) {
-                        double x = fabs(movement.x) * norm * distance.sigma_x;
-                        movement.x *= accels.x.apply(x, range_weights.x);
-                    }
-                    if (movement.y != 0) {
-                        double y = fabs(movement.y) * norm * distance.sigma_y;
-                        movement.y *= accels.y.apply(y, range_weights.y);
-                    }
+                    weight = range_weights.x;
+                }
+
+                double scale = accels.x.apply(speed, weight);
+                movement.x *= scale;
+                movement.y *= scale;
+            }
+            else {
+                if (movement.x != 0) {
+                    double x = fabs(movement.x) * norm * distance.sigma_x;
+                    movement.x *= accels.x.apply(x, range_weights.x);
+                }
+                if (movement.y != 0) {
+                    double y = fabs(movement.y) * norm * distance.sigma_y;
+                    movement.y *= accels.y.apply(y, range_weights.y);
                 }
             }
         }
+    
 
         inline void apply_sensitivity(vec2d& movement) {   
             movement.x *= sensitivity.x;

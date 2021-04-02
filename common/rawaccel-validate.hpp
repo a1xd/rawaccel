@@ -133,8 +133,11 @@ namespace rawaccel {
 			error("dpi"" must be positive");
 		}
 
-		if (args.speed_cap <= 0) {
-			error("speed cap"" must be positive");
+		if (args.speed_max < 0) {
+			error("speed cap is negative");
+		}
+		else if (args.speed_max < args.speed_min) {
+			error("max speed is less than min speed");
 		}
 
 		if (args.sens.x == 0 || args.sens.y == 0) {
@@ -147,7 +150,7 @@ namespace rawaccel {
 		}
 
 		if (args.dom_args.lp_norm <= 0) {
-			error("Lp norm can not be negative");
+			error("Lp norm must be positive");
 		}
 
 		if (args.dir_multipliers.x < 0 || args.dir_multipliers.y < 0) {

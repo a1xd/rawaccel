@@ -110,7 +110,10 @@ public ref struct DriverSettings
 
     double dpi;
 
-    double speedCap;
+    [JsonIgnore]
+    double minimumSpeed;
+    [JsonProperty("Input Speed Cap")]
+    double maximumSpeed;
 
     [JsonProperty("Accel parameters")]
     Vec2<AccelArgs> args;
