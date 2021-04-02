@@ -10,32 +10,9 @@ using System.Threading.Tasks;
 namespace grapher.Models.Serialized
 {
     [Serializable]
-    public class LookupTable
+    public static class LookupTable
     {
-        [Serializable]
-        public class Point
-        {
-            public Point(double x, double y)
-            {
-                X = x;
-                Y = y;
-            }
-
-            double X { get; set; }
-
-            double Y { get; set; }
-        }
-
-        public LookupTable(Point[] points)
-        {
-            Points = points;
-        }
-
-        public Point[] Points { get; }
-
-        public bool InSensGraph { get; }
-
-        public static LookupTable Deserialize(string lutFile)
+        public static void Deserialize(string lutFile, ref DriverSettings settings)
         {
             if (!File.Exists(lutFile))
             {
@@ -44,23 +21,29 @@ namespace grapher.Models.Serialized
 
             JObject lutJObject = JObject.Parse(File.ReadAllText(lutFile));
 
-            var lut = lutJObject.ToObject<LookupTable>(JsonSerializer.Create(RawAccelSettings.SerializerSettings));
+            var spacedLut = lutJObject.ToObject<SpacedTable>(JsonSerializer.Create(RawAccelSettings.SerializerSettings));
 
-            if (lut is null || lut.Points is null)
+            if (spacedLut is null)
             {
-                throw new Exception($"{lutFile} does not contain valid lookuptable json.");
+                var arbitraryLut = lutJObject.ToObject<ArbitraryTable>(JsonSerializer.Create(RawAccelSettings.SerializerSettings));
+
+                if (arbitraryLut is null || arbitraryLut.points is null)
+                {
+                    throw new Exception($"{lutFile} does not contain valid lookuptable json.");
+                }
+
+                settings.ArbitraryTable = arbitraryLut;
+                settings.args.x.lutArgs.type = TableType.arbitrary;
             }
-
-            lut.Verify();
-
-            return lut;
-        }
-
-        private void Verify()
-        {
-            if (Points.Length >= short.MaxValue)
+            else
             {
-                throw new Exception($"LUT file with {Points.Length} points is too long. Max points: {short.MaxValue}");
+                if (spacedLut.points is null)
+                {
+                    throw new Exception($"{lutFile} does not contain valid lookuptable json.");
+                }
+
+                settings.SpacedTable = spacedLut;
+                settings.args.x.lutArgs = spacedLut.args;
             }
         }
     }

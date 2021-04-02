@@ -25,7 +25,7 @@ ra::settings default_settings;
 [JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class AccelMode
 {
-    classic, jump, natural, power, motivity, noaccel
+    classic, jump, natural, power, motivity, lut, noaccel
 };
 
 public enum class TableMode
@@ -33,11 +33,19 @@ public enum class TableMode
     off, binlog, linear
 };
 
+public enum class TableType
+{
+    spaced, arbitrary
+};
+
 [StructLayout(LayoutKind::Sequential)]
 public value struct TableArgs
 {
     [JsonIgnore]
     TableMode mode;
+
+    [JsonIgnore]
+    TableType type;
 
     [MarshalAs(UnmanagedType::U1)]
     bool transfer;
@@ -50,12 +58,31 @@ public value struct TableArgs
     double stop;
 };
 
+
 generic <typename T>
 [StructLayout(LayoutKind::Sequential)]
 public value struct Vec2
 {
     T x;
     T y;
+};
+
+public ref struct SpacedTable
+{
+    [JsonProperty("Arguments for spacing in table")]
+    TableArgs args;
+
+    [JsonProperty("Series of points for use in curve")]
+    List<double>^ points;
+};
+
+public ref struct ArbitraryTable
+{
+    [JsonProperty("Whether points affect velocity (true) or sensitivity (false)")]
+    bool transfer;
+
+    [JsonProperty("Series of points for use in curve")]
+    List<Vec2<double>>^ points;
 };
 
 [StructLayout(LayoutKind::Sequential)]
@@ -143,6 +170,12 @@ public ref struct DriverSettings
     [JsonProperty("Device ID")]
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_DEV_ID_LEN)]
     String^ deviceID = "";
+
+    [JsonIgnore]
+    SpacedTable^ SpacedTable;
+
+    [JsonIgnore]
+    ArbitraryTable^ ArbitraryTable;
 
     bool ShouldSerializeminimumTime() 
     { 

@@ -136,6 +136,7 @@
     <Compile Include="Models\Options\OptionBase.cs" />
     <Compile Include="Models\Options\OptionXY.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
+    <Compile Include="Models\Serialized\LookupTable.cs" />
     <Compile Include="Models\Serialized\RawAccelSettings.cs" />
     <Compile Include="Models\Serialized\SettingsManager.cs" />
     <Compile Include="Program.cs" />
