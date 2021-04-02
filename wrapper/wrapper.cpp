@@ -321,9 +321,14 @@ public ref struct RawInputInterop
 
 };
 
+struct instance_t {
+    ra::io_t data;
+    vec2<ra::accel_invoker> inv;
+};
+
 public ref class ManagedAccel
 {
-    ra::io_t* const instance = new ra::io_t();
+    instance_t* const instance = new instance_t();
 
 public:
     ManagedAccel() {};
@@ -350,7 +355,7 @@ public:
             (double)y
         };
 
-        instance->mod.modify(in_out_vec, time);
+        instance->data.mod.modify(in_out_vec, instance->inv, time);
 
         return gcnew Tuple<double, double>(in_out_vec.x, in_out_vec.y);
     }
@@ -358,7 +363,7 @@ public:
     void Activate()
     {
         try {
-            ra::write(*instance);
+            ra::write(instance->data);
         }
         catch (const ra::error& e) {
             throw gcnew InteropException(e);
@@ -370,14 +375,15 @@ public:
         DriverSettings^ get()
         {
             DriverSettings^ settings = gcnew DriverSettings();
-            Marshal::PtrToStructure(IntPtr(&instance->args), settings);
+            Marshal::PtrToStructure(IntPtr(&instance->data.args), settings);
             return settings;
         }
 
         void set(DriverSettings^ val)
         {
-            Marshal::StructureToPtr(val, IntPtr(&instance->args), false);
-            instance->mod = { instance->args };
+            Marshal::StructureToPtr(val, IntPtr(&instance->data.args), false);
+            instance->data.mod = { instance->data.args };
+            instance->inv = ra::invokers(instance->data.args);
         }
 
     }
@@ -386,7 +392,8 @@ public:
     {
         try {
             auto active = gcnew ManagedAccel();
-            ra::read(*active->instance);
+            ra::read(active->instance->data);
+            active->instance->inv = ra::invokers(active->instance->data.args);
             return active;
         }
         catch (const ra::error& e) {

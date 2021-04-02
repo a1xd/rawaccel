@@ -1,7 +1,6 @@
 #pragma once
 
-#include "accel-union.hpp"
-#include "utility.hpp"
+#include "accel-invoke.hpp"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -127,7 +126,7 @@ namespace rawaccel {
         double speed_max = 0;
         weighted_distance distance;
         vec2d range_weights = { 1, 1 };
-        vec2<accel_variant> accels;
+        vec2<accel_union> accels;
         vec2d sensitivity = { 1, 1 };
         vec2d directional_multipliers = {};
 
@@ -162,18 +161,18 @@ namespace rawaccel {
                 return;
             }
 
-            accels.x = accel_variant(args.argsv.x);
-            accels.y = accel_variant(args.argsv.y);
+            accels.x = accel_union(args.argsv.x);
+            accels.y = accel_union(args.argsv.y);
 
             distance = weighted_distance(args.dom_args);
 
             apply_directional_weight = range_weights.x != range_weights.y;
         }
 
-        void modify(vec2d& movement, milliseconds time) {
+        void modify(vec2d& movement, const vec2<accel_invoker>& inv = {}, milliseconds time = 1) {
             apply_rotation(movement);
             apply_angle_snap(movement);
-            apply_acceleration(movement, time);
+            apply_acceleration(movement, inv, time);
             apply_sensitivity(movement);
         }
 
@@ -185,7 +184,7 @@ namespace rawaccel {
             if (apply_snap) movement = snap.apply(movement);
         }
 
-        inline void apply_acceleration(vec2d& movement, milliseconds time) {
+        inline void apply_acceleration(vec2d& movement, const vec2<accel_invoker>& inv, milliseconds time) {
             double norm = dpi_factor / time;
 
             if (apply_speed_clamp) {
@@ -205,18 +204,18 @@ namespace rawaccel {
                     weight = range_weights.x;
                 }
 
-                double scale = accels.x.apply(speed, weight);
+                double scale = inv.x.invoke(accels.x, speed, weight);
                 movement.x *= scale;
                 movement.y *= scale;
             }
             else {
                 if (movement.x != 0) {
                     double x = fabs(movement.x) * norm * distance.sigma_x;
-                    movement.x *= accels.x.apply(x, range_weights.x);
+                    movement.x *= inv.x.invoke(accels.x, x, range_weights.x);
                 }
                 if (movement.y != 0) {
                     double y = fabs(movement.y) * norm * distance.sigma_y;
-                    movement.y *= accels.y.apply(y, range_weights.y);
+                    movement.y *= inv.y.invoke(accels.y, y, range_weights.y);
                 }
             }
         }

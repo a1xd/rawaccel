@@ -34,7 +34,7 @@ namespace rawaccel {
             default: return internal_mode::noaccel;
             }
         }
-        else if (mode < accel_mode{} || mode >= accel_mode::noaccel) {
+        else if (mode == accel_mode::noaccel) {
             return internal_mode::noaccel;
         }
         else {
@@ -48,61 +48,49 @@ namespace rawaccel {
         return make_mode(args.mode, args.lut_args.mode, args.legacy);
     }
 
-    template <typename Visitor, typename Variant>
-    inline auto visit_accel(Visitor vis, Variant&& var) 
+    template <typename Visitor, typename AccelUnion>
+    constexpr auto visit_accel(Visitor vis, internal_mode mode, AccelUnion&& u)
     {
-        switch (var.tag) {
-        case internal_mode::classic_lgcy:  return vis(var.u.classic_l);
-        case internal_mode::classic_gain:  return vis(var.u.classic_g);
-        case internal_mode::jump_lgcy:     return vis(var.u.jump_l);
-        case internal_mode::jump_gain:     return vis(var.u.jump_g);
-        case internal_mode::natural_lgcy:  return vis(var.u.natural_l);
-        case internal_mode::natural_gain:  return vis(var.u.natural_g);
-        case internal_mode::power_lgcy:    return vis(var.u.power_l);
-        case internal_mode::power_gain:    return vis(var.u.power_g);
-        case internal_mode::motivity_lgcy: return vis(var.u.motivity_l);
-        case internal_mode::motivity_gain: return vis(var.u.motivity_g);
-        case internal_mode::lut_log:       return vis(var.u.log_lut);
-        case internal_mode::lut_lin:       return vis(var.u.lin_lut);
-        default:                           return vis(var.u.noaccel);
+        switch (mode) {
+        case internal_mode::classic_lgcy:  return vis(u.classic_l);
+        case internal_mode::classic_gain:  return vis(u.classic_g);
+        case internal_mode::jump_lgcy:     return vis(u.jump_l);
+        case internal_mode::jump_gain:     return vis(u.jump_g);
+        case internal_mode::natural_lgcy:  return vis(u.natural_l);
+        case internal_mode::natural_gain:  return vis(u.natural_g);
+        case internal_mode::power_lgcy:    return vis(u.power_l);
+        case internal_mode::power_gain:    return vis(u.power_g);
+        case internal_mode::motivity_lgcy: return vis(u.motivity_l);
+        case internal_mode::motivity_gain: return vis(u.motivity_g);
+        case internal_mode::lut_log:       return vis(u.log_lut);
+        case internal_mode::lut_lin:       return vis(u.lin_lut);
+        default:                           return vis(u.noaccel);
         }
     }
 
-    struct accel_variant {
-        internal_mode tag = internal_mode::noaccel;
+    union accel_union {
+        classic classic_g;
+        classic_legacy classic_l;
+        jump jump_g;
+        jump_legacy jump_l;
+        natural natural_g;
+        natural_legacy natural_l;
+        power power_g;
+        power_legacy power_l;
+        sigmoid motivity_l;
+        motivity motivity_g;
+        linear_lut lin_lut;
+        binlog_lut log_lut;
+        accel_noaccel noaccel = {};
 
-        union union_t {
-            classic classic_g;
-            classic_legacy classic_l;
-            jump jump_g;
-            jump_legacy jump_l;
-            natural natural_g;
-            natural_legacy natural_l;
-            power power_g;
-            power_legacy power_l;
-            sigmoid motivity_l;
-            motivity motivity_g;
-            linear_lut lin_lut;
-            binlog_lut log_lut;
-            accel_noaccel noaccel = {};
-        } u = {};
-
-        accel_variant(const accel_args& args) :
-            tag(make_mode(args))
+        accel_union(const accel_args& args)
         {
             visit_accel([&](auto& impl) {
                 impl = { args };
-            }, *this);
+            }, make_mode(args), *this);
         }
 
-        double apply(double speed, double weight = 1) const 
-        {
-            return visit_accel([=](auto&& impl) {
-                return apply_weighted(impl, speed, weight);
-            }, *this);
-        }
-
-        accel_variant() = default;
+        accel_union() = default;
     };
 
 }

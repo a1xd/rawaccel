@@ -16,7 +16,8 @@ using milliseconds = double;
 
 struct {
     ra::settings args;
-    milliseconds tick_interval = 0; // set in DriverEntry
+    milliseconds tick_interval;
+    vec2<ra::accel_invoker> invokers;
     ra::mouse_modifier modifier;
 } global = {};
 
@@ -83,7 +84,7 @@ Arguments:
                     static_cast<double>(it->LastY)
                 };
 
-                global.modifier.modify(input, time);
+                global.modifier.modify(input, global.invokers, time);
 
                 double carried_result_x = input.x + devExt->carry.x;
                 double carried_result_y = input.y + devExt->carry.y;
@@ -193,6 +194,7 @@ Return Value:
             ra::io_t& input = *reinterpret_cast<ra::io_t*>(buffer);
 
             global.args = input.args;
+            global.invokers = ra::invokers(input.args);
             global.modifier = input.mod;
         }
         break;
