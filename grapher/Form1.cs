@@ -33,9 +33,9 @@ namespace grapher
 
             try
             {
-                driverVersion = VersionHelper.ValidateAndGetDriverVersion(assemVersion);
+                driverVersion = VersionHelper.ValidOrThrow();
             }
-            catch (VersionException ex)
+            catch (InteropException ex)
             {
                 MessageBox.Show(ex.Message);
                 throw;
