@@ -78,8 +78,8 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Layouts\LUTLayout.cs" />
     <Compile Include="Layouts\MotivityLayout.cs" />
-    <Compile Include="Layouts\NaturalGainLayout.cs" />
     <Compile Include="MessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +135,7 @@
     <Compile Include="Layouts\OptionLayout.cs" />
     <Compile Include="Models\Options\OptionBase.cs" />
     <Compile Include="Models\Options\OptionXY.cs" />
+    <Compile Include="Models\Options\TextOption.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
     <Compile Include="Models\Serialized\LookupTable.cs" />
     <Compile Include="Models\Serialized\RawAccelSettings.cs" />
