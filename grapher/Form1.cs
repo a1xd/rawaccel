@@ -51,7 +51,7 @@ namespace grapher
 
             AccelGUI = AccelGUIFactory.Construct(
                 this,
-                ManagedAccel.GetActiveAccel(),
+                ManagedAccel.GetActive(),
                 AccelerationChart,
                 AccelerationChartY,
                 VelocityChart,

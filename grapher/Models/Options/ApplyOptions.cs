@@ -108,19 +108,17 @@ namespace grapher.Models.Options
             double xSens,
             double ySens,
             double rotation,
-            int xMode,
-            int yMode,
             AccelArgs xArgs,
             AccelArgs yArgs,
             bool isWhole)
         {
             Sensitivity.SetActiveValues(xSens, ySens);
             Rotation.SetActiveValue(rotation);
-            OptionSetX.SetActiveValues(xMode, xArgs);
+            OptionSetX.SetActiveValues(xArgs);
             WholeVectorCheckBox.Checked = isWhole;
             ByComponentVectorCheckBox.Checked = !isWhole;
             ByComponentVectorXYLock.Checked = xArgs.Equals(yArgs);
-            OptionSetY.SetActiveValues(yMode, yArgs);
+            OptionSetY.SetActiveValues(yArgs);
         }
 
         public void SetActiveValues(DriverSettings settings)
@@ -129,8 +127,6 @@ namespace grapher.Models.Options
                 settings.sensitivity.x,
                 settings.sensitivity.y,
                 settings.rotation,
-                (int)settings.modes.x,
-                (int)settings.modes.y,
                 settings.args.x,
                 settings.args.y,
                 settings.combineMagnitudes);

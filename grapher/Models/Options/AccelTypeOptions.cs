@@ -17,11 +17,12 @@ namespace grapher
             new LinearLayout(),
             new ClassicLayout(),
             new NaturalLayout(),
-            new NaturalGainLayout(),
             new PowerLayout(),
             new MotivityLayout(),
             new OffLayout()
         }.ToDictionary(k => k.Name);
+
+        public static readonly DriverSettings DefaultSettings = new DriverSettings();
 
         #endregion Fields
 
@@ -187,16 +188,16 @@ namespace grapher
             Show();
         }
 
-        public void SetActiveValues(int index, AccelArgs args)
+        public void SetActiveValues(AccelArgs args)
         {
-            AccelerationType = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value;
+            AccelerationType = AccelTypeFromSettings(args);
             AccelTypeActiveValue.SetValue(AccelerationType.Name);
             AccelDropdown.SelectedIndex = AccelerationType.Index;
 
             Weight.SetActiveValue(args.weight);
-            Cap.SetActiveValues(args.gainCap, args.scaleCap, args.gainCap > 0 || args.scaleCap <= 0);
-            Offset.SetActiveValue(args.offset, args.legacyOffset);
-            Acceleration.SetActiveValue(args.acceleration);
+            Cap.SetActiveValues(args.cap, args.legacy);
+            Offset.SetActiveValue(args.offset);
+            Acceleration.SetActiveValue(AccelerationParameterFromArgs(args));
             Scale.SetActiveValue(args.scale);
             Limit.SetActiveValue(args.limit);
             Exponent.SetActiveValue(args.exponent);
@@ -227,15 +228,15 @@ namespace grapher
 
         public void SetArgs(ref AccelArgs args)
         {
-            AccelArgs defaults = DriverInterop.DefaultSettings.args.x;
-            args.acceleration = Acceleration.Visible ? Acceleration.Field.Data : defaults.acceleration;
+            AccelArgs defaults = DefaultSettings.args.x;
+            args.accelClassic = defaults.accelClassic;
+            args.accelMotivity = defaults.accelMotivity;
+            args.accelNatural = defaults.accelClassic;
             args.scale = Scale.Visible ? Scale.Field.Data : defaults.scale;
-            args.gainCap = Cap.Visible ? Cap.VelocityGainCap : defaults.gainCap;
-            args.scaleCap = Cap.Visible ? Cap.SensitivityCap : defaults.scaleCap;
+            args.cap = Cap.Visible ? Cap.SensitivityCap : defaults.cap;
             args.limit = Limit.Visible ? Limit.Field.Data : defaults.limit;
             args.exponent = Exponent.Visible ? Exponent.Field.Data : defaults.exponent;
             args.offset = Offset.Visible ? Offset.Offset : defaults.offset;
-            args.legacyOffset = Offset.IsLegacy;
             args.midpoint = Midpoint.Visible ? Midpoint.Field.Data : defaults.midpoint;
             args.weight = Weight.Visible ? Weight.Field.Data : defaults.weight;
         }
@@ -290,6 +291,38 @@ namespace grapher
                 Exponent,
                 Midpoint,
                 top);
+        }
+
+        private LayoutBase AccelTypeFromSettings(AccelArgs args)
+        {
+            LayoutBase type;
+            if (args.mode == AccelMode.classic && args.exponent == 2)
+            {
+                type = AccelerationTypes.Values.Where(t => string.Equals(t.Name, LinearLayout.LinearName)).FirstOrDefault();
+            }
+            else
+            {
+                int index = (int)args.mode;
+                type = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value;
+            }
+
+            return type;
+        }
+
+        private double AccelerationParameterFromArgs(AccelArgs args)
+        {
+            if (args.mode == AccelMode.motivity)
+            {
+                return args.accelMotivity;
+            }
+            else if (args.mode == AccelMode.natural)
+            {
+                return args.accelNatural;
+            }
+            else
+            {
+                return args.accelClassic;
+            }
         }
 
         #endregion Methods

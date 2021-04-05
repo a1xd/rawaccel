@@ -4,11 +4,13 @@ namespace grapher.Layouts
 {
     public class LinearLayout : LayoutBase
     {
+        public const string LinearName = "Linear";
+
         public LinearLayout()
             : base()
         {
-            Name = "Linear";
-            Index = (int)AccelMode.linear;
+            Name = LinearName;
+            Index = (int)AccelMode.classic;
             LogarithmicCharts = false;
 
             AccelLayout = new OptionLayout(true, Acceleration);

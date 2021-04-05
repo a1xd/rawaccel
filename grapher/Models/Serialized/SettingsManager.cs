@@ -79,7 +79,7 @@ namespace grapher.Models.Serialized
         public SettingsErrors TryUpdateAccel(DriverSettings settings)
         {
             var errors = SendToDriverSafe(settings);
-            if (errors.Empty()) ActiveAccel.UpdateFromSettings(settings);
+            if (errors.Empty()) ActiveAccel.Settings = settings;
             return errors;
         }
 
@@ -90,7 +90,7 @@ namespace grapher.Models.Serialized
 
         public static SettingsErrors SendToDriverSafe(DriverSettings settings)
         {
-            var errors = DriverInterop.GetSettingsErrors(settings);
+            var errors = new SettingsErrors(settings);
             if (errors.Empty()) SendToDriver(settings);
             return errors;
         }
@@ -129,7 +129,7 @@ namespace grapher.Models.Serialized
             }
 
             RawAccelSettings = new RawAccelSettings(
-                DriverInterop.GetActiveSettings(),
+                ManagedAccel.GetActive().Settings,
                 MakeGUISettingsFromFields());
             RawAccelSettings.Save();
             return true;

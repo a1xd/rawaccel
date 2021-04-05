@@ -106,12 +106,9 @@ namespace grapher.Models.Options
             OffsetOption.Show(name);
         }
 
-        public void SetActiveValue(double offset, bool legacy)
+        public void SetActiveValue(double offset)
         {
             OffsetOption.SetActiveValue(offset);
-
-            VelocityGainOffsetCheck.Checked = !legacy;
-            LegacyOffsetCheck.Checked = legacy;
         }
 
         public override void AlignActiveValues()

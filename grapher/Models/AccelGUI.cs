@@ -137,8 +137,6 @@ namespace grapher
             var driverSettings = Settings.RawAccelSettings.AccelerationSettings;
 
             var newArgs = ApplyOptions.GetArgs();
-            newArgs.x.speedCap = driverSettings.args.x.speedCap;
-            newArgs.y.speedCap = driverSettings.args.y.speedCap;
 
             var settings = new DriverSettings
             {
@@ -150,13 +148,14 @@ namespace grapher
                     y = ApplyOptions.Sensitivity.Fields.Y
                 },
                 combineMagnitudes = ApplyOptions.IsWhole,
-                modes = ApplyOptions.GetModes(),
                 args = newArgs,
                 minimumTime = driverSettings.minimumTime,
                 directionalMultipliers = driverSettings.directionalMultipliers,
                 domainArgs = ApplyOptions.Directionality.GetDomainArgs(),
                 rangeXY = ApplyOptions.Directionality.GetRangeXY(),
                 deviceID = DeviceIDManager.ID,
+                maximumSpeed = driverSettings.maximumSpeed,
+                minimumSpeed = driverSettings.minimumSpeed
             };
 
             ButtonDelay(WriteButton);
@@ -252,13 +251,13 @@ namespace grapher
         {
             var settings = ToggleButton.Checked ?
                 Settings.RawAccelSettings.AccelerationSettings :
-                DriverInterop.DefaultSettings;
+                AccelTypeOptions.DefaultSettings;
 
             LastToggleChecked = ToggleButton.Checked;
             ButtonDelay(ToggleButton);
 
             SettingsManager.SendToDriver(settings);
-            Settings.ActiveAccel.UpdateFromSettings(settings);
+            Settings.ActiveAccel.Settings = settings;
             RefreshOnRead(settings);
         }
 

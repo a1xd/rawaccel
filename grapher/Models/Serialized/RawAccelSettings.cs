@@ -123,7 +123,7 @@ namespace grapher.Models.Serialized
         public static bool IsDefaultEquivalent(DriverSettings accelSettings)
         {
             bool wholeOrNoY = accelSettings.combineMagnitudes ||
-                accelSettings.modes.y == AccelMode.noaccel;
+                accelSettings.args.y.mode == AccelMode.noaccel;
 
             return string.IsNullOrEmpty(accelSettings.deviceID) &&
                 accelSettings.sensitivity.x == 1 &&
@@ -132,7 +132,7 @@ namespace grapher.Models.Serialized
                 accelSettings.directionalMultipliers.y <= 0 &&
                 accelSettings.rotation == 0 &&
                 accelSettings.snap == 0 &&
-                accelSettings.modes.x == AccelMode.noaccel &&
+                accelSettings.args.x.mode == AccelMode.noaccel &&
                 wholeOrNoY;
         }
 

@@ -149,24 +149,20 @@ namespace grapher
         }
 
 
-        public void SetActiveValues(double gainCap, double sensCap, bool capGainEnabled)
+        public void SetActiveValues(double cap, bool legacyCap)
         {
-            if (capGainEnabled)
+            if (!legacyCap)
             {
                 CapOption.ActiveValueLabel.FormatString = Constants.GainCapFormatString;
                 CapOption.ActiveValueLabel.Prefix = "Gain";
-                CapOption.SetActiveValue(gainCap);
-                LegacyCapCheck.Checked = false;
-                VelocityGainCapCheck.Checked = true;
             }
             else
             {
                 CapOption.ActiveValueLabel.FormatString = Constants.DefaultActiveValueFormatString;
                 CapOption.ActiveValueLabel.Prefix = string.Empty;
-                CapOption.SetActiveValue(sensCap);
-                LegacyCapCheck.Checked = true;
-                VelocityGainCapCheck.Checked = false;
             }
+
+            CapOption.SetActiveValue(cap);
         }
 
         public override void AlignActiveValues()
