@@ -308,7 +308,7 @@ namespace grapher
         {
             if (top < 0)
             {
-                top = Acceleration.Top;
+                top = GainSwitch.Top;
             }
 
             AccelerationType.Layout(

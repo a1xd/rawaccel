@@ -7,6 +7,7 @@ namespace grapher.Models.Options
         public CheckBoxOption(CheckBox checkBox)
         {
             CheckBox = checkBox;
+            Show(string.Empty);
         }
 
         public CheckBox CheckBox { get; }
@@ -15,7 +16,7 @@ namespace grapher.Models.Options
         {
             get
             {
-                return CheckBox.Visible;
+                return CheckBox.Visible || ShouldShow;
             }
         }
 
@@ -63,6 +64,13 @@ namespace grapher.Models.Options
             }
         }
 
+        /// <summary>
+        /// For some reason, setting CheckBox.Show() does not result in visible not being true on GUI startup.
+        /// This is inconsistent with the other options, which do.
+        /// Keep this bool for allowing Visible to still be the signal for option snapping.
+        /// </summary>
+        private bool ShouldShow { get; set; }
+
         public override void AlignActiveValues()
         {
         }
@@ -70,11 +78,15 @@ namespace grapher.Models.Options
         public override void Hide()
         {
             CheckBox.Hide();
+            ShouldShow = false;
+            CheckBox.Enabled = false;
         }
 
         public override void Show(string Name)
         {
             CheckBox.Show();
+            ShouldShow = true;
+            CheckBox.Enabled = true;
             CheckBox.Name = Name;
         }
     }
