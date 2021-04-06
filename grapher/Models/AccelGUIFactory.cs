@@ -394,7 +394,7 @@ namespace grapher.Models
                 range,
                 wholeCheckBox,
                 byComponentCheckBox,
-                260);
+                Constants.DirectionalityVerticalOffset);
 
             var applyOptions = new ApplyOptions(
                 byComponentXYLock,
