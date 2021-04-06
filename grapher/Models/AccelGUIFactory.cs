@@ -68,6 +68,8 @@ namespace grapher.Models
             CheckBox fakeBox,
             CheckBox wholeCheckBox,
             CheckBox byComponentCheckBox,
+            CheckBox gainSwitchX,
+            CheckBox gainSwitchY,
             Label lockXYLabel,
             Label sensitivityLabel,
             Label rotationLabel,
@@ -336,9 +338,12 @@ namespace grapher.Models
 
             var lutTextX = new TextOption(lutTextLabelX);
             var lutTextY = new TextOption(lutTextLabelY);
+            var gainSwitchOptionX = new CheckBoxOption(gainSwitchX);
+            var gainSwitchOptionY = new CheckBoxOption(gainSwitchY);
 
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,
+                gainSwitchOptionX,
                 accelerationX,
                 scaleX,
                 capOptionsX,
@@ -353,6 +358,7 @@ namespace grapher.Models
 
             var accelerationOptionsY = new AccelTypeOptions(
                 accelTypeDropY,
+                gainSwitchOptionY,
                 accelerationY,
                 scaleY,
                 capOptionsY,

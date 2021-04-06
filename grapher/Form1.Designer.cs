@@ -71,6 +71,7 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.LUTTextLabelY = new System.Windows.Forms.Label();
             this.LUTTextLabelX = new System.Windows.Forms.Label();
             this.FakeBox = new System.Windows.Forms.CheckBox();
             this.DirectionalityPanel = new System.Windows.Forms.Panel();
@@ -189,7 +190,8 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.LUTTextLabelY = new System.Windows.Forms.Label();
+            this.gainSwitchX = new System.Windows.Forms.CheckBox();
+            this.gainSwitchY = new System.Windows.Forms.CheckBox();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -205,6 +207,8 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.gainSwitchY);
+            this.optionsPanel.Controls.Add(this.gainSwitchX);
             this.optionsPanel.Controls.Add(this.LUTTextLabelY);
             this.optionsPanel.Controls.Add(this.LUTTextLabelX);
             this.optionsPanel.Controls.Add(this.FakeBox);
@@ -286,6 +290,15 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // LUTTextLabelY
+            // 
+            this.LUTTextLabelY.AutoSize = true;
+            this.LUTTextLabelY.Location = new System.Drawing.Point(266, 350);
+            this.LUTTextLabelY.Name = "LUTTextLabelY";
+            this.LUTTextLabelY.Size = new System.Drawing.Size(52, 13);
+            this.LUTTextLabelY.TabIndex = 153;
+            this.LUTTextLabelY.Text = "LUT Text";
             // 
             // LUTTextLabelX
             // 
@@ -1508,14 +1521,29 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // LUTTextLabelY
+            // gainSwitchX
             // 
-            this.LUTTextLabelY.AutoSize = true;
-            this.LUTTextLabelY.Location = new System.Drawing.Point(266, 350);
-            this.LUTTextLabelY.Name = "LUTTextLabelY";
-            this.LUTTextLabelY.Size = new System.Drawing.Size(52, 13);
-            this.LUTTextLabelY.TabIndex = 153;
-            this.LUTTextLabelY.Text = "LUT Text";
+            this.gainSwitchX.AutoSize = true;
+            this.gainSwitchX.Checked = true;
+            this.gainSwitchX.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainSwitchX.Location = new System.Drawing.Point(38, 116);
+            this.gainSwitchX.Name = "gainSwitchX";
+            this.gainSwitchX.Size = new System.Drawing.Size(48, 17);
+            this.gainSwitchX.TabIndex = 154;
+            this.gainSwitchX.Text = "Gain";
+            this.gainSwitchX.UseVisualStyleBackColor = true;
+            // 
+            // gainSwitchY
+            // 
+            this.gainSwitchY.AutoSize = true;
+            this.gainSwitchY.Checked = true;
+            this.gainSwitchY.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainSwitchY.Location = new System.Drawing.Point(283, 116);
+            this.gainSwitchY.Name = "gainSwitchY";
+            this.gainSwitchY.Size = new System.Drawing.Size(48, 17);
+            this.gainSwitchY.TabIndex = 155;
+            this.gainSwitchY.Text = "Gain";
+            this.gainSwitchY.UseVisualStyleBackColor = true;
             // 
             // RawAcceleration
             // 
@@ -1666,6 +1694,8 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
         private System.Windows.Forms.Label LUTTextLabelX;
         private System.Windows.Forms.Label LUTTextLabelY;
+        private System.Windows.Forms.CheckBox gainSwitchX;
+        private System.Windows.Forms.CheckBox gainSwitchY;
     }
 }
 

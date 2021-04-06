@@ -1,6 +1,4 @@
-﻿using grapher.Models.Serialized;
-
-namespace grapher.Layouts
+﻿namespace grapher.Layouts
 {
     public class PowerLayout : LayoutBase
     {
@@ -11,6 +9,7 @@ namespace grapher.Layouts
             Index = (int)AccelMode.power;
             LogarithmicCharts = false;
 
+            GainSwitchOptionLayout = new OptionLayout(true, Gain);
             AccelLayout = new OptionLayout(false, string.Empty);
             ScaleLayout = new OptionLayout(true, Scale);
             CapLayout = new OptionLayout(true, Cap);

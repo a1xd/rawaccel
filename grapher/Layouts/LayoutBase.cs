@@ -14,6 +14,8 @@ namespace grapher.Layouts
         public const string Offset = "Offset";
         public const string Cap = "Cap";
         public const string Weight = "Weight";
+        public const string Smooth = "Smooth";
+        public const string Gain = "Gain";
 
         public LayoutBase()
         {
@@ -25,6 +27,8 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
+            LUTTextLayout = new OptionLayout(false, string.Empty);
+            GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
 
             LogarithmicCharts = false;
         }
@@ -57,7 +61,10 @@ namespace grapher.Layouts
 
         protected OptionLayout LUTTextLayout { get; set; }
 
+        protected OptionLayout GainSwitchOptionLayout { get; set; }
+
         public void Layout(
+            IOption gainSwitchOption,
             IOption accelOption,
             IOption scaleOption,
             IOption capOption,
@@ -73,6 +80,7 @@ namespace grapher.Layouts
             IOption previous = null;
 
             foreach (var option in new (OptionLayout, IOption)[] {
+                (GainSwitchOptionLayout, gainSwitchOption),
                 (AccelLayout, accelOption),
                 (ScaleLayout, scaleOption),
                 (CapLayout, capOption),
@@ -102,6 +110,7 @@ namespace grapher.Layouts
         }
 
         public void Layout(
+            IOption gainSwitchOption,
             IOption accelOption,
             IOption scaleOption,
             IOption capOption,
@@ -112,7 +121,8 @@ namespace grapher.Layouts
             IOption midpointOption,
             IOption lutTextOption)
         {
-            Layout(accelOption,
+            Layout(gainSwitchOption,
+                accelOption,
                 scaleOption,
                 capOption,
                 weightOption,

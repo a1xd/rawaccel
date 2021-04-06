@@ -16,6 +16,7 @@ namespace grapher.Layouts
             Name = "LookUpTable";
             Index = (int)AccelMode.noaccel + 1;
 
+            GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
             AccelLayout = new OptionLayout(false, Acceleration);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, Cap);

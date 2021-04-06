@@ -11,6 +11,7 @@ namespace grapher.Layouts
             Index = (int)AccelMode.noaccel;
             LogarithmicCharts = false;
 
+            GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
             AccelLayout = new OptionLayout(false, string.Empty);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, string.Empty);

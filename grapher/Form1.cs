@@ -102,6 +102,8 @@ namespace grapher
                 FakeBox,
                 WholeCheckBox,
                 ByComponentCheckBox,
+                gainSwitchX,
+                gainSwitchY,
                 LockXYLabel,
                 sensitivityLabel,
                 rotationLabel,

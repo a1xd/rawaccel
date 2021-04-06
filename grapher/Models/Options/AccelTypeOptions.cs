@@ -32,6 +32,7 @@ namespace grapher
 
         public AccelTypeOptions(
             ComboBox accelDropdown,
+            CheckBoxOption gainSwitch,
             Option acceleration,
             Option scale,
             CapOptions cap,
@@ -49,6 +50,7 @@ namespace grapher
             AccelDropdown.Items.AddRange(AccelerationTypes.Keys.ToArray());
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
+            GainSwitch = gainSwitch;
             Acceleration = acceleration;
             Scale = scale;
             Cap = cap;
@@ -106,6 +108,8 @@ namespace grapher
         public Option Midpoint { get; }
 
         public TextOption LutText { get; }
+
+        public CheckBoxOption GainSwitch { get; }
 
         public override int Top 
         {
@@ -172,6 +176,7 @@ namespace grapher
             AccelDropdown.Hide();
             AccelTypeActiveValue.Hide();
 
+            GainSwitch.Hide();
             Acceleration.Hide();
             Scale.Hide();
             Cap.Hide();
@@ -180,6 +185,7 @@ namespace grapher
             Limit.Hide();
             Exponent.Hide();
             Midpoint.Hide();
+            LutText.Hide();
         }
 
         public void Show()
@@ -234,6 +240,27 @@ namespace grapher
 
         public void SetArgs(ref AccelArgs args)
         {
+            args.mode = (AccelMode)AccelerationType.Index;
+            if (Acceleration.Visible)
+            {
+                if (args.mode == AccelMode.natural)
+                {
+                    args.accelNatural = Acceleration.Field.Data;
+                }
+                else if (args.mode == AccelMode.motivity)
+                {
+                    args.accelMotivity = Acceleration.Field.Data;
+                }
+                else
+                {
+                    args.accelClassic = Acceleration.Field.Data;
+                }
+
+                args.smooth = Acceleration.Field.Data;
+            }
+
+            args.legacy = !GainSwitch.CheckBox.Checked;
+
             if (Scale.Visible) args.scale = Scale.Field.Data;
             if (Cap.Visible) args.cap = Cap.SensitivityCap;
             if (Limit.Visible) args.limit = Limit.Field.Data;
@@ -284,6 +311,7 @@ namespace grapher
             }
 
             AccelerationType.Layout(
+                GainSwitch,
                 Acceleration,
                 Scale,
                 Cap,
