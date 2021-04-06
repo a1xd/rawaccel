@@ -71,7 +71,7 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
-            this.LUTTextLabel = new System.Windows.Forms.Label();
+            this.LUTTextLabelX = new System.Windows.Forms.Label();
             this.FakeBox = new System.Windows.Forms.CheckBox();
             this.DirectionalityPanel = new System.Windows.Forms.Panel();
             this.LpNormActiveValue = new System.Windows.Forms.Label();
@@ -189,6 +189,7 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.LUTTextLabelY = new System.Windows.Forms.Label();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -204,7 +205,8 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
-            this.optionsPanel.Controls.Add(this.LUTTextLabel);
+            this.optionsPanel.Controls.Add(this.LUTTextLabelY);
+            this.optionsPanel.Controls.Add(this.LUTTextLabelX);
             this.optionsPanel.Controls.Add(this.FakeBox);
             this.optionsPanel.Controls.Add(this.DirectionalityPanel);
             this.optionsPanel.Controls.Add(this.toggleButton);
@@ -285,14 +287,14 @@ namespace grapher
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
             // 
-            // LUTTextLabel
+            // LUTTextLabelX
             // 
-            this.LUTTextLabel.AutoSize = true;
-            this.LUTTextLabel.Location = new System.Drawing.Point(38, 350);
-            this.LUTTextLabel.Name = "LUTTextLabel";
-            this.LUTTextLabel.Size = new System.Drawing.Size(52, 13);
-            this.LUTTextLabel.TabIndex = 152;
-            this.LUTTextLabel.Text = "LUT Text";
+            this.LUTTextLabelX.AutoSize = true;
+            this.LUTTextLabelX.Location = new System.Drawing.Point(38, 350);
+            this.LUTTextLabelX.Name = "LUTTextLabelX";
+            this.LUTTextLabelX.Size = new System.Drawing.Size(52, 13);
+            this.LUTTextLabelX.TabIndex = 152;
+            this.LUTTextLabelX.Text = "LUT Text";
             // 
             // FakeBox
             // 
@@ -1506,6 +1508,15 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
+            // LUTTextLabelY
+            // 
+            this.LUTTextLabelY.AutoSize = true;
+            this.LUTTextLabelY.Location = new System.Drawing.Point(266, 350);
+            this.LUTTextLabelY.Name = "LUTTextLabelY";
+            this.LUTTextLabelY.Size = new System.Drawing.Size(52, 13);
+            this.LUTTextLabelY.TabIndex = 153;
+            this.LUTTextLabelY.Text = "LUT Text";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1653,7 +1664,8 @@ namespace grapher
         private System.Windows.Forms.Label RangeActiveValueY;
         private System.Windows.Forms.CheckBox FakeBox;
         private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
-        private System.Windows.Forms.Label LUTTextLabel;
+        private System.Windows.Forms.Label LUTTextLabelX;
+        private System.Windows.Forms.Label LUTTextLabelY;
     }
 }
 

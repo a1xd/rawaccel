@@ -20,8 +20,8 @@ namespace grapher
             new JumpLayout(),
             new PowerLayout(),
             new MotivityLayout(),
-            new OffLayout(),
             new LUTLayout(),
+            new OffLayout(),
         }.ToDictionary(k => k.Name);
 
         public static readonly AccelArgs DefaultArgs = new DriverSettings().args.x;

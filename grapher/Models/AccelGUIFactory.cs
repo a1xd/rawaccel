@@ -85,7 +85,8 @@ namespace grapher.Models
             Label limitLabelY,
             Label expLabelX,
             Label expLabelY,
-            Label lutTextLabel,
+            Label lutTextLabelX,
+            Label lutTextLabelY,
             Label constantThreeLabelX,
             Label constantThreeLabelY,
             Label activeValueTitleX,
@@ -333,7 +334,8 @@ namespace grapher.Models
                 legacyCapToolStripMenuItem,
                 capY);
 
-            var lutText = new TextOption(lutTextLabel);
+            var lutTextX = new TextOption(lutTextLabelX);
+            var lutTextY = new TextOption(lutTextLabelY);
 
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,
@@ -345,7 +347,7 @@ namespace grapher.Models
                 limitX,
                 exponentX,
                 midpointX,
-                lutText,
+                lutTextX,
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitleX));
 
@@ -359,7 +361,7 @@ namespace grapher.Models
                 limitY,
                 exponentY,
                 midpointY,
-                lutText,
+                lutTextY,
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitleY));
 

@@ -14,6 +14,9 @@ namespace grapher.Models.Options
         public TextOption(Label label)
         {
             Label = label;
+            Label.AutoSize = false;
+            Label.Width = 150;
+            Label.Height = 100;
         }
 
         #endregion Constructors
