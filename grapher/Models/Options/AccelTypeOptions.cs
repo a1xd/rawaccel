@@ -22,7 +22,7 @@ namespace grapher
             new OffLayout()
         }.ToDictionary(k => k.Name);
 
-        public static readonly DriverSettings DefaultSettings = new DriverSettings();
+        public static readonly ManagedAccel DefaultSettings = new ManagedAccel();
 
         #endregion Fields
 
@@ -228,7 +228,7 @@ namespace grapher
 
         public void SetArgs(ref AccelArgs args)
         {
-            AccelArgs defaults = DefaultSettings.args.x;
+            AccelArgs defaults = DefaultSettings.Settings.args.x;
             args.accelClassic = defaults.accelClassic;
             args.accelMotivity = defaults.accelMotivity;
             args.accelNatural = defaults.accelClassic;

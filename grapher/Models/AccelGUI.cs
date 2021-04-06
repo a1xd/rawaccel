@@ -249,16 +249,16 @@ namespace grapher
 
         private void OnToggleButtonClick(object sender, EventArgs e)
         {
-            var settings = ToggleButton.Checked ?
-                Settings.RawAccelSettings.AccelerationSettings :
+            var accel = ToggleButton.Checked ?
+                new ManagedAccel(Settings.RawAccelSettings.AccelerationSettings) :
                 AccelTypeOptions.DefaultSettings;
 
             LastToggleChecked = ToggleButton.Checked;
             ButtonDelay(ToggleButton);
 
-            SettingsManager.SendToDriver(settings);
-            Settings.ActiveAccel.Settings = settings;
-            RefreshOnRead(settings);
+            SettingsManager.SendToDriver(accel);
+            Settings.ActiveAccel = accel;
+            RefreshOnRead(accel.Settings);
         }
 
         private void OnButtonTimerTick(object sender, EventArgs e)

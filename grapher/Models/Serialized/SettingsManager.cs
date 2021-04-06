@@ -34,7 +34,7 @@ namespace grapher.Models.Serialized
 
         #region Properties
 
-        public ManagedAccel ActiveAccel { get; }
+        public ManagedAccel ActiveAccel { get; set; }
 
         public RawAccelSettings RawAccelSettings { get; private set; }
 
@@ -78,20 +78,21 @@ namespace grapher.Models.Serialized
 
         public SettingsErrors TryUpdateAccel(DriverSettings settings)
         {
-            var errors = SendToDriverSafe(settings);
-            if (errors.Empty()) ActiveAccel.Settings = settings;
+            var accel = new ManagedAccel(settings);
+            var errors = SendToDriverSafe(accel);
+            if (errors.Empty()) ActiveAccel= accel;
             return errors;
         }
 
-        public static void SendToDriver(DriverSettings settings)
+        public static void SendToDriver(ManagedAccel accel)
         {
-            new Thread(() => settings.ToFile()).Start();
+            new Thread(() => accel.Activate()).Start();
         }
 
-        public static SettingsErrors SendToDriverSafe(DriverSettings settings)
+        public static SettingsErrors SendToDriverSafe(ManagedAccel accel)
         {
-            var errors = new SettingsErrors(settings);
-            if (errors.Empty()) SendToDriver(settings);
+            var errors = new SettingsErrors(accel.Settings);
+            if (errors.Empty()) SendToDriver(accel);
             return errors;
         }
 
