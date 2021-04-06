@@ -71,6 +71,7 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.LUTTextLabel = new System.Windows.Forms.Label();
             this.FakeBox = new System.Windows.Forms.CheckBox();
             this.DirectionalityPanel = new System.Windows.Forms.Panel();
             this.LpNormActiveValue = new System.Windows.Forms.Label();
@@ -203,6 +204,7 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.LUTTextLabel);
             this.optionsPanel.Controls.Add(this.FakeBox);
             this.optionsPanel.Controls.Add(this.DirectionalityPanel);
             this.optionsPanel.Controls.Add(this.toggleButton);
@@ -282,6 +284,15 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // LUTTextLabel
+            // 
+            this.LUTTextLabel.AutoSize = true;
+            this.LUTTextLabel.Location = new System.Drawing.Point(38, 350);
+            this.LUTTextLabel.Name = "LUTTextLabel";
+            this.LUTTextLabel.Size = new System.Drawing.Size(52, 13);
+            this.LUTTextLabel.TabIndex = 152;
+            this.LUTTextLabel.Text = "LUT Text";
             // 
             // FakeBox
             // 
@@ -1642,6 +1653,7 @@ namespace grapher
         private System.Windows.Forms.Label RangeActiveValueY;
         private System.Windows.Forms.CheckBox FakeBox;
         private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
+        private System.Windows.Forms.Label LUTTextLabel;
     }
 }
 

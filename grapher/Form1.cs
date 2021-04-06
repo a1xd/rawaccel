@@ -120,6 +120,7 @@ namespace grapher
                 limitLabelY,
                 expLabelX,
                 expLabelY,
+                LUTTextLabel,
                 constantThreeLabelX,
                 constantThreeLabelY,
                 ActiveValueTitle,

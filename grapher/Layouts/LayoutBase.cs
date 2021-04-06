@@ -55,6 +55,8 @@ namespace grapher.Layouts
 
         protected OptionLayout MidpointLayout { get; set; }
 
+        protected OptionLayout LUTTextLayout { get; set; }
+
         public void Layout(
             IOption accelOption,
             IOption scaleOption,
@@ -64,6 +66,7 @@ namespace grapher.Layouts
             IOption limitOption,
             IOption expOption,
             IOption midpointOption,
+            IOption lutTextOption,
             int top)
         {
 
@@ -77,7 +80,8 @@ namespace grapher.Layouts
                 (OffsetLayout, offsetOption),
                 (LimitLayout, limitOption),
                 (ExponentLayout, expOption),
-                (MidpointLayout, midpointOption)})
+                (MidpointLayout, midpointOption),
+                (LUTTextLayout, lutTextOption)})
             {
                 option.Item1.Layout(option.Item2);
 
@@ -105,7 +109,8 @@ namespace grapher.Layouts
             IOption offsetOption,
             IOption limitOption,
             IOption expOption,
-            IOption midpointOption)
+            IOption midpointOption,
+            IOption lutTextOption)
         {
             Layout(accelOption,
                 scaleOption,
@@ -115,6 +120,7 @@ namespace grapher.Layouts
                 limitOption,
                 expOption,
                 midpointOption,
+                lutTextOption,
                 accelOption.Top);
         }
     }

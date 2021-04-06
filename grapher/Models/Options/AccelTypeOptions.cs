@@ -19,7 +19,8 @@ namespace grapher
             new NaturalLayout(),
             new PowerLayout(),
             new MotivityLayout(),
-            new OffLayout()
+            new OffLayout(),
+            new LUTLayout(),
         }.ToDictionary(k => k.Name);
 
         public static readonly ManagedAccel DefaultSettings = new ManagedAccel();
@@ -38,6 +39,7 @@ namespace grapher
             Option limit,
             Option exponent,
             Option midpoint,
+            TextOption lutText,
             Button writeButton,
             ActiveValueLabel accelTypeActiveValue)
         {
@@ -56,6 +58,7 @@ namespace grapher
             Midpoint = midpoint;
             WriteButton = writeButton;
             AccelTypeActiveValue = accelTypeActiveValue;
+            LutText = lutText;
 
             AccelTypeActiveValue.Left = AccelDropdown.Left + AccelDropdown.Width;
             AccelTypeActiveValue.Height = AccelDropdown.Height;
@@ -100,6 +103,8 @@ namespace grapher
         public Option Exponent { get; }
 
         public Option Midpoint { get; }
+
+        public TextOption LutText { get; }
 
         public override int Top 
         {
@@ -290,6 +295,7 @@ namespace grapher
                 Limit,
                 Exponent,
                 Midpoint,
+                LutText,
                 top);
         }
 
