@@ -29,7 +29,8 @@ namespace rawaccel {
     enum class table_mode {
         off,
         binlog,
-        linear
+        linear,
+        arbitrary
     };
 
     struct table_args {

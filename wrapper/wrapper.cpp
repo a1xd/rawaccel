@@ -1,22 +1,17 @@
 #pragma once
 
+#include "interop-exception.h"
+
 #include <rawaccel-io.hpp>
 #include <rawaccel-validate.hpp>
-#include <utility-rawinput.hpp>
-
-#include <algorithm>
-#include <type_traits>
-#include <msclr\marshal_cppstd.h>
 
 using namespace System;
 using namespace System::Collections::Generic;
-using namespace System::IO;
 using namespace System::Runtime::InteropServices;
 using namespace System::Reflection;
 
-using namespace Windows::Forms;
-
 using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
 
 namespace ra = rawaccel;
 
@@ -25,17 +20,13 @@ ra::settings default_settings;
 [JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class AccelMode
 {
-    classic, jump, natural, power, motivity, lut, noaccel
+    classic, jump, natural, power, motivity, noaccel
 };
 
+[JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class TableMode
 {
-    off, binlog, linear
-};
-
-public enum class TableType
-{
-    spaced, arbitrary
+    off, binlog, linear, arbitrary
 };
 
 [StructLayout(LayoutKind::Sequential)]
@@ -43,9 +34,6 @@ public value struct TableArgs
 {
     [JsonIgnore]
     TableMode mode;
-
-    [JsonIgnore]
-    TableType type;
 
     [MarshalAs(UnmanagedType::U1)]
     bool transfer;
@@ -65,24 +53,6 @@ public value struct Vec2
 {
     T x;
     T y;
-};
-
-public ref struct SpacedTable
-{
-    [JsonProperty("Arguments for spacing in table")]
-    TableArgs args;
-
-    [JsonProperty("Series of points for use in curve")]
-    List<double>^ points;
-};
-
-public ref struct ArbitraryTable
-{
-    [JsonProperty("Whether points affect velocity (true) or sensitivity (false)")]
-    bool transfer;
-
-    [JsonProperty("Series of points for use in curve")]
-    List<Vec2<double>>^ points;
 };
 
 [StructLayout(LayoutKind::Sequential)]
@@ -171,12 +141,6 @@ public ref struct DriverSettings
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_DEV_ID_LEN)]
     String^ deviceID = "";
 
-    [JsonIgnore]
-    SpacedTable^ SpacedTable;
-
-    [JsonIgnore]
-    ArbitraryTable^ ArbitraryTable;
-
     bool ShouldSerializeminimumTime() 
     { 
         return minimumTime != ra::DEFAULT_TIME_MIN;
@@ -191,49 +155,254 @@ public ref struct DriverSettings
     {
         Marshal::PtrToStructure(IntPtr(&default_settings), this);
     }
-    
-    void ToFile(String^ path)
-    {
-        using namespace Newtonsoft::Json::Linq;
+};
 
-        JObject^ thisJO = JObject::FromObject(this);
-        String^ modes = String::Join(" | ", Enum::GetNames(AccelMode::typeid));
-        thisJO->AddFirst(gcnew JProperty("### Accel Modes ###", modes));
-        File::WriteAllText(path, thisJO->ToString(Formatting::Indented));
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct LutBase abstract
+{
+    [JsonConverter(Converters::StringEnumConverter::typeid)]
+    enum class Mode
+    {
+        logarithmic, linear, arbitrary
+    } mode;
+
+    virtual void SetArgs(TableArgs%) abstract;
+    virtual void SetData(ra::accel_union&) abstract;
+};
+
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct ArbitraryLut sealed : public LutBase
+{
+    [JsonProperty("Whether points affect velocity (true) or sensitivity (false)")]
+    bool transfer;
+
+    array<float, 2>^ data;
+
+    virtual void SetArgs(TableArgs% args) override
+    {
+        args.mode = TableMode::arbitrary;
+        args.transfer = transfer;
     }
 
-    static DriverSettings^ FromFile(String^ path)
+    virtual void SetData(ra::accel_union& accel) override
     {
-        if (!File::Exists(path))
-        {
-            throw gcnew FileNotFoundException(
-                String::Format("Settings file not found at {0}", path));
+        throw gcnew NotImplementedException();
+    }
+
+};
+
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct SpacedLut abstract : public LutBase
+{
+    [JsonProperty("Whether points affect velocity (true) or sensitivity (false)")]
+    bool transfer;
+
+    double start;
+    double stop;
+    array<float>^ data;
+
+    void SetArgsBase(TableArgs% args)
+    {
+        args.transfer = transfer;
+        args.start = start;
+        args.stop = stop;
+    }
+
+    void SetDataBase(ra::accel_union& accel)
+    {
+        if (size_t(data->LongLength) > ra::LUT_CAPACITY) {
+            throw gcnew InteropException("data is too large");
         }
-
-        auto settings = JsonConvert::DeserializeObject<DriverSettings^>(
-            File::ReadAllText(path));
-
-        if (settings == nullptr) {
-            throw gcnew JsonException(String::Format("{0} contains invalid JSON", path));
-        }
-
-        return settings;
     }
 };
 
-public ref struct InteropException : public Exception {
-public:
-    InteropException(String^ what) :
-        Exception(what) {}
-    InteropException(const char* what) :
-        Exception(gcnew String(what)) {}
-    InteropException(const std::exception& e) :
-        InteropException(e.what()) {}
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct LinearLut sealed : public SpacedLut
+{
+    LinearLut(const ra::linear_lut& table)
+    {
+        mode = Mode::linear;
+        transfer = table.transfer;
+        start = table.range.start;
+        stop = table.range.stop;
+        data = gcnew array<float>(table.range.num);
+
+        pin_ptr<float> pdata = &data[0];
+        std::memcpy(pdata, &table.data, sizeof(float) * data->Length);
+    }
+
+    virtual void SetArgs(TableArgs% args) override
+    {
+        SetArgsBase(args);
+        args.num = data->Length;
+        args.mode = TableMode::linear;
+    }
+
+    virtual void SetData(ra::accel_union& accel) override
+    {
+        SetDataBase(accel);
+        pin_ptr<float> pdata = &data[0];
+        std::memcpy(&accel.lin_lut.data, pdata, sizeof(float) * data->Length);
+    }
+};
+
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct BinLogLut sealed : public SpacedLut
+{
+    short num;
+
+    BinLogLut(const ra::binlog_lut& table)
+    {
+        mode = Mode::logarithmic;
+        transfer = table.transfer;
+        start = table.range.start;
+        stop = table.range.stop;
+        num = table.range.num;
+        data = gcnew array<float>(1 + num * (int(stop) - int(start)));
+
+        pin_ptr<float> pdata = &data[0];
+        std::memcpy(pdata, &table.data, sizeof(float) * data->Length);
+    }
+
+    virtual void SetArgs(TableArgs% args) override
+    {
+        SetArgsBase(args);
+        args.num = num;
+        args.mode = TableMode::binlog;
+    }
+
+    virtual void SetData(ra::accel_union& accel) override
+    {
+        SetDataBase(accel);
+
+        if (data->Length != 1 + num * (int(stop) - int(start))) {
+            throw gcnew InteropException("size of data does not match args");
+        }
+
+        pin_ptr<float> pdata = &data[0];
+        std::memcpy(&accel.log_lut.data, pdata, sizeof(float) * data->Length);
+    }
+};
+
+public ref struct RaConvert {
+
+    static DriverSettings^ Settings(String^ json)
+    {
+        return NonNullable<DriverSettings^>(json);
+    }
+
+    static String^ Settings(DriverSettings^ settings)
+    {
+        JObject^ jObject = JObject::FromObject(settings);
+        String^ modes = String::Join(" | ", Enum::GetNames(AccelMode::typeid));
+        jObject->AddFirst(gcnew JProperty("### Accel Modes ###", modes));
+        return jObject->ToString(Formatting::Indented);
+    }
+
+    static LutBase^ Table(String^ json)
+    {
+        JObject^ jObject = JObject::Parse(json);
+
+        if ((Object^)jObject == nullptr) {
+            throw gcnew JsonException("bad json");
+        }
+
+        LutBase^ base = NonNullable<LutBase^>(jObject);
+
+        switch (base->mode) {
+        case LutBase::Mode::logarithmic:
+            return NonNullable<BinLogLut^>(jObject);
+        case LutBase::Mode::linear:
+            return NonNullable<LinearLut^>(jObject);
+        case LutBase::Mode::arbitrary:
+            return NonNullable<ArbitraryLut^>(jObject);
+        default:
+            throw gcnew NotImplementedException();
+        }
+    }
+
+    static String^ Table(LutBase^ lut)
+    {
+        auto serializerSettings = gcnew JsonSerializerSettings();
+        return JsonConvert::SerializeObject(
+            lut, lut->GetType(), Formatting::Indented, serializerSettings);
+    };
+
+    generic <typename T>
+    static T NonNullable(String^ json)
+    {
+        T obj = JsonConvert::DeserializeObject<T>(json);
+        if (obj == nullptr) throw gcnew JsonException("invalid JSON");
+        return obj;
+    }
+
+    generic <typename T>
+    static T NonNullable(JObject^ jObject)
+    {
+        T obj = jObject->ToObject<T>();
+        if (obj == nullptr) throw gcnew JsonException("invalid JSON");
+        return obj;
+    }
+};
+
+public ref struct ExtendedSettings {
+    DriverSettings^ baseSettings;
+    Vec2<LutBase^> tables;
+    
+    using JSON = String^;
+
+    ExtendedSettings(DriverSettings^ driverSettings) :
+        baseSettings(driverSettings) {}
+
+    ExtendedSettings() :
+        ExtendedSettings(gcnew DriverSettings()) {}
+
+    ExtendedSettings(JSON settingsJson) :
+        ExtendedSettings(settingsJson, nullptr, nullptr, false) {}
+
+    ExtendedSettings(JSON settingsJson, JSON tableJson) :
+        ExtendedSettings(settingsJson, tableJson, nullptr, false) {}
+
+    ExtendedSettings(JSON settingsJson, JSON xTableJson, JSON yTableJson) :
+        ExtendedSettings(settingsJson, xTableJson, yTableJson, true) {}
+
+private:
+    ExtendedSettings(JSON settingsJson, JSON xTableJson, JSON yTableJson, bool byComponent)
+    {
+        if (settingsJson) {
+            baseSettings = RaConvert::Settings(settingsJson);
+        }
+        else {
+            baseSettings = gcnew DriverSettings();
+        }
+
+        if (xTableJson || yTableJson) {
+            baseSettings->combineMagnitudes = !byComponent;
+        }
+
+        if (xTableJson) {
+            tables.x = RaConvert::Table(xTableJson);
+            tables.x->SetArgs(baseSettings->args.x.lutArgs);
+        }
+
+        if (yTableJson) {
+            if (Object::ReferenceEquals(yTableJson, xTableJson)) {
+                tables.y = tables.x;
+            }
+            else {
+                tables.y = RaConvert::Table(yTableJson);
+            }
+
+            tables.y->SetArgs(baseSettings->args.y.lutArgs);
+        }
+    }
+
 };
 
 public ref class SettingsErrors
 {
 public:
+
     List<String^>^ list;
     int countX;
     int countY;
@@ -242,8 +411,11 @@ public:
 
     void Add(const char* msg)
     {
-        list->Add(msclr::interop::marshal_as<String^>(msg));
+        list->Add(gcnew String(msg));
     }
+
+    SettingsErrors(ExtendedSettings^ settings) :
+        SettingsErrors(settings->baseSettings) {}
 
     SettingsErrors(DriverSettings^ settings)
     {
@@ -289,71 +461,6 @@ public:
     }
 };
 
-struct device_info {
-    std::wstring name;
-    std::wstring id;
-};
-
-std::vector<device_info> get_unique_device_info() {
-    std::vector<device_info> info;
-
-    rawinput_foreach_with_interface([&](const auto& dev, const WCHAR* name) {
-        info.push_back({
-            L"", // get_property_wstr(name, &DEVPKEY_Device_FriendlyName), /* doesn't work */
-            dev_id_from_interface(name)
-        });
-    });
-
-    std::sort(info.begin(), info.end(),
-        [](auto&& l, auto&& r) { return l.id < r.id; });
-    auto last = std::unique(info.begin(), info.end(),
-        [](auto&& l, auto&& r) { return l.id == r.id; });
-    info.erase(last, info.end());
-
-    return info;
-}
-
-public ref struct RawInputInterop
-{
-    static void AddHandlesFromID(String^ deviceID, List<IntPtr>^ rawInputHandles)
-    {
-        try
-        {
-            std::vector<HANDLE> nativeHandles = rawinput_handles_from_dev_id(
-                msclr::interop::marshal_as<std::wstring>(deviceID));
-
-            for (auto nh : nativeHandles) rawInputHandles->Add(IntPtr(nh));
-        }
-        catch (const std::exception& e)
-        {
-            throw gcnew InteropException(e);
-        }
-    }
-
-    static List<ValueTuple<String^, String^>>^ GetDeviceIDs()
-    {
-        try
-        {
-            auto managed = gcnew List<ValueTuple<String^, String^>>();
-
-            for (auto&& [name, id] : get_unique_device_info())
-            {
-                managed->Add(
-                    ValueTuple<String^, String^>(
-                        msclr::interop::marshal_as<String^>(name),
-                        msclr::interop::marshal_as<String^>(id)));
-            }
-
-            return managed;
-        }
-        catch (const std::exception& e)
-        {
-            throw gcnew InteropException(e);
-        }
-    }
-
-};
-
 struct instance_t {
     ra::io_t data;
     vec2<ra::accel_invoker> inv;
@@ -364,9 +471,9 @@ public ref class ManagedAccel
     instance_t* const instance = new instance_t();
 
 public:
-    ManagedAccel() {};
+    ManagedAccel() {}
 
-    ManagedAccel(DriverSettings^ settings)
+    ManagedAccel(ExtendedSettings^ settings)
     {
         Settings = settings;
     }
@@ -403,20 +510,32 @@ public:
         }
     }
 
-    property DriverSettings^ Settings
+    property ExtendedSettings^ Settings
     {
-        DriverSettings^ get()
+        ExtendedSettings^ get()
         {
-            DriverSettings^ settings = gcnew DriverSettings();
-            Marshal::PtrToStructure(IntPtr(&instance->data.args), settings);
+            auto settings = gcnew ExtendedSettings();
+            Marshal::PtrToStructure(IntPtr(&instance->data.args), settings->baseSettings);
+            settings->tables.x = extract(instance->data.args.argsv.x.lut_args.mode, 
+                instance->data.mod.accels.x);
+            settings->tables.y = extract(instance->data.args.argsv.y.lut_args.mode,
+                instance->data.mod.accels.y);
             return settings;
         }
 
-        void set(DriverSettings^ val)
+        void set(ExtendedSettings^ val)
         {
-            Marshal::StructureToPtr(val, IntPtr(&instance->data.args), false);
+            Marshal::StructureToPtr(val->baseSettings, IntPtr(&instance->data.args), false);
             instance->data.mod = { instance->data.args };
             instance->inv = ra::invokers(instance->data.args);
+
+            if (val->tables.x) {
+                val->tables.x->SetData(instance->data.mod.accels.x);
+            }
+
+            if (val->tables.y) {
+                val->tables.y->SetData(instance->data.mod.accels.y);
+            }   
         }
 
     }
@@ -431,6 +550,18 @@ public:
         }
         catch (const ra::error& e) {
             throw gcnew InteropException(e);
+        }
+    }
+
+private:
+    LutBase^ extract(ra::table_mode mode, ra::accel_union& au)
+    {
+        switch (mode) {
+        case ra::table_mode::off: return nullptr;
+        case ra::table_mode::linear: return gcnew LinearLut(au.lin_lut);
+        case ra::table_mode::binlog: return gcnew BinLogLut(au.log_lut);
+        case ra::table_mode::arbitrary:
+        default: throw gcnew NotImplementedException();
         }
     }
 };
@@ -449,5 +580,4 @@ public ref struct VersionHelper
             throw gcnew InteropException(e);
         }
     }
-
 };

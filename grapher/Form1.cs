@@ -28,7 +28,6 @@ namespace grapher
         {
             InitializeComponent();
 
-            Version assemVersion = typeof(RawAcceleration).Assembly.GetName().Version;
             Version driverVersion = null;
 
             try

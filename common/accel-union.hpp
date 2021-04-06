@@ -22,6 +22,7 @@ namespace rawaccel {
         motivity_gain,
         lut_log,
         lut_lin,
+        lut_arb,
         noaccel
     };
 
@@ -31,6 +32,7 @@ namespace rawaccel {
             switch (lut_mode) {
             case table_mode::binlog: return internal_mode::lut_log;
             case table_mode::linear: return internal_mode::lut_lin;
+            case table_mode::arbitrary: return internal_mode::lut_arb;
             default: return internal_mode::noaccel;
             }
         }
@@ -64,6 +66,7 @@ namespace rawaccel {
         case internal_mode::motivity_gain: return vis(u.motivity_g);
         case internal_mode::lut_log:       return vis(u.log_lut);
         case internal_mode::lut_lin:       return vis(u.lin_lut);
+        case internal_mode::lut_arb:
         default:                           return vis(u.noaccel);
         }
     }

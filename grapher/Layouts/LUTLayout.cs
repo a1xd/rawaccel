@@ -14,7 +14,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = "LookUpTable";
-            Index = (int)AccelMode.lut;
+            Index = (int)AccelMode.noaccel + 1;
 
             AccelLayout = new OptionLayout(false, Acceleration);
             ScaleLayout = new OptionLayout(false, string.Empty);

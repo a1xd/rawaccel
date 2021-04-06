@@ -44,7 +44,7 @@ namespace rawaccel {
 					error("stop must be greater than start");
 				}
 
-				if (lut_args.num_elements < 2 || 
+				if (lut_args.num_elements < 2 ||
 					lut_args.num_elements > 1025) {
 					error("num must be between 2 and 1025");
 				}
@@ -72,6 +72,7 @@ namespace rawaccel {
 					error("binlog mode requires (num * (stop - start)) < 1025");
 				}
 			}
+
 
 			if (args.offset < 0) {
 				error("offset can not be negative");

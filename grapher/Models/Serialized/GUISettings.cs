@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 
 namespace grapher.Models.Serialized
 {
@@ -65,6 +66,32 @@ namespace grapher.Models.Serialized
                 AutoWriteToDriverOnStartup.GetHashCode();
         }
 
+        public void Save()
+        {
+            File.WriteAllText(Constants.GuiConfigFileName, JsonConvert.SerializeObject(this));
+        }
+
+        public static GUISettings MaybeLoad()
+        {
+            GUISettings settings = null;
+
+            try
+            {
+                settings = JsonConvert.DeserializeObject<GUISettings>(
+                    File.ReadAllText(Constants.GuiConfigFileName));
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is JsonException || ex is FileNotFoundException))
+                {
+                    throw;
+                }
+            }
+
+            return settings;
+        }
+
         #endregion Methods
+
     }
 }

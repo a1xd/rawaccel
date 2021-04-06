@@ -17,13 +17,14 @@ namespace grapher
             new LinearLayout(),
             new ClassicLayout(),
             new NaturalLayout(),
+            new JumpLayout(),
             new PowerLayout(),
             new MotivityLayout(),
             new OffLayout(),
             new LUTLayout(),
         }.ToDictionary(k => k.Name);
 
-        public static readonly ManagedAccel DefaultSettings = new ManagedAccel();
+        public static readonly AccelArgs DefaultArgs = new DriverSettings().args.x;
 
         #endregion Fields
 
@@ -233,22 +234,18 @@ namespace grapher
 
         public void SetArgs(ref AccelArgs args)
         {
-            AccelArgs defaults = DefaultSettings.Settings.args.x;
-            args.accelClassic = defaults.accelClassic;
-            args.accelMotivity = defaults.accelMotivity;
-            args.accelNatural = defaults.accelClassic;
-            args.scale = Scale.Visible ? Scale.Field.Data : defaults.scale;
-            args.cap = Cap.Visible ? Cap.SensitivityCap : defaults.cap;
-            args.limit = Limit.Visible ? Limit.Field.Data : defaults.limit;
-            args.exponent = Exponent.Visible ? Exponent.Field.Data : defaults.exponent;
-            args.offset = Offset.Visible ? Offset.Offset : defaults.offset;
-            args.midpoint = Midpoint.Visible ? Midpoint.Field.Data : defaults.midpoint;
-            args.weight = Weight.Visible ? Weight.Field.Data : defaults.weight;
+            if (Scale.Visible) args.scale = Scale.Field.Data;
+            if (Cap.Visible) args.cap = Cap.SensitivityCap;
+            if (Limit.Visible) args.limit = Limit.Field.Data;
+            if (Exponent.Visible) args.exponent = Exponent.Field.Data;
+            if (Offset.Visible) args.offset = Offset.Offset;
+            if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
+            if (Weight.Visible) args.weight = Weight.Field.Data;
         }
 
         public AccelArgs GenerateArgs()
         {
-            AccelArgs args = new AccelArgs();
+            AccelArgs args = new DriverSettings().args.x;
             SetArgs(ref args);
             return args;
         }

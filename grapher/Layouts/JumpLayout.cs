@@ -2,26 +2,23 @@
 
 namespace grapher.Layouts
 {
-    public class LinearLayout : LayoutBase
+    public class JumpLayout : LayoutBase
     {
-        public const string LinearName = "Linear";
-
-        public LinearLayout()
+        public JumpLayout()
             : base()
         {
-            Name = LinearName;
-            Index = (int)AccelMode.classic;
+            Name = "Jump";
+            Index = (int)AccelMode.jump;
             LogarithmicCharts = false;
 
-            AccelLayout = new OptionLayout(true, Acceleration);
+            AccelLayout = new OptionLayout(false, Acceleration);
             ScaleLayout = new OptionLayout(false, string.Empty);
-            CapLayout = new OptionLayout(true, Cap);
+            CapLayout = new OptionLayout(true, string.Empty);
             WeightLayout = new OptionLayout(false, Weight);
             OffsetLayout = new OptionLayout(true, Offset);
-            LimitLayout = new OptionLayout(false, string.Empty);
+            LimitLayout = new OptionLayout(false, Limit);
             ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
-            LUTTextLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

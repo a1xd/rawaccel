@@ -80,6 +80,7 @@
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Layouts\LUTLayout.cs" />
     <Compile Include="Layouts\MotivityLayout.cs" />
+    <Compile Include="Layouts\JumpLayout.cs" />
     <Compile Include="MessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,8 +138,6 @@
     <Compile Include="Models\Options\OptionXY.cs" />
     <Compile Include="Models\Options\TextOption.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
-    <Compile Include="Models\Serialized\LookupTable.cs" />
-    <Compile Include="Models\Serialized\RawAccelSettings.cs" />
     <Compile Include="Models\Serialized\SettingsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,6 +10,7 @@
 #include <string>
 
 using namespace System;
+using namespace System::IO;
 using namespace System::Runtime::InteropServices;
 using namespace Newtonsoft::Json;
 
@@ -181,9 +182,9 @@ bool try_convert(const ia_settings_t& ia_settings) {
     }
     default: return false;
     }
-
+    
     DriverSettings^ new_settings = Marshal::PtrToStructure<DriverSettings^>((IntPtr)&ra_settings);
-    auto errors = gcnew SettingsErrors(new_settings);
+    SettingsErrors^ errors = gcnew SettingsErrors(new_settings);
 
     if (!errors->Empty()) {
         Console::WriteLine("Bad settings: {0}", errors);
@@ -191,12 +192,11 @@ bool try_convert(const ia_settings_t& ia_settings) {
     }
 
     Console::Write("Sending to driver... ");
-    (gcnew ManagedAccel(new_settings))->Activate();
+    (gcnew ManagedAccel(gcnew ExtendedSettings(new_settings)))->Activate();
     Console::WriteLine("done");
 
     Console::Write("Generating settings.json... ");
-    auto json = JsonConvert::SerializeObject(new_settings, Formatting::Indented);
-    System::IO::File::WriteAllText("settings.json", json);
+    File::WriteAllText("settings.json", RaConvert::Settings(new_settings));
     Console::WriteLine("done");
 
     return true;
