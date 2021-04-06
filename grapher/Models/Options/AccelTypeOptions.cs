@@ -65,6 +65,7 @@ namespace grapher
 
             AccelTypeActiveValue.Left = AccelDropdown.Left + AccelDropdown.Width;
             AccelTypeActiveValue.Height = AccelDropdown.Height;
+            GainSwitch.Left = Acceleration.Field.Left;
 
             Layout("Off");
             ShowingDefault = true;
