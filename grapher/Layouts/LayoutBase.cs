@@ -17,6 +17,7 @@ namespace grapher.Layouts
         public const string Smooth = "Smooth";
         public const string Gain = "Gain";
         public const string GrowthRate = "Growth Rate";
+        public const string DecayRate = "Decay Rate";
 
         public LayoutBase()
         {

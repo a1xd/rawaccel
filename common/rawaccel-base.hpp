@@ -51,7 +51,7 @@ namespace rawaccel {
         double offset = 0;
         double cap = 1.5;
         double accel_classic = 0.005;
-        double accel_natural = 0.1;
+        double decay_rate = 0.1;
         double growth_rate = 1;
         double motivity = 1.5;
         double power = 2;

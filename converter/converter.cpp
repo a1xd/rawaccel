@@ -120,7 +120,7 @@ ra::accel_args convert_natural(const ia_settings_t& ia_settings, bool legacy) {
     ra::accel_args args;
 
     args.limit = 1 + std::abs(cap - sens) / sens;
-    args.accel_natural = accel * prescale / sens;
+    args.decay_rate = accel * prescale / sens;
     args.offset = get("Offset").value_or(0);
     args.mode = ra::accel_mode::natural;
     args.legacy = legacy;

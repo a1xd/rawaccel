@@ -69,7 +69,7 @@ public value struct AccelArgs
     double offset;
     double cap;
     double accelClassic;
-    double accelNatural;
+    double decayRate;
     double growthRate;
     double motivity;
     double power;

@@ -246,7 +246,7 @@ namespace grapher
             {
                 if (args.mode == AccelMode.natural)
                 {
-                    args.accelNatural = Acceleration.Field.Data;
+                    args.decayRate = Acceleration.Field.Data;
                 }
                 else if (args.mode == AccelMode.motivity)
                 {
@@ -349,7 +349,7 @@ namespace grapher
             }
             else if (args.mode == AccelMode.natural)
             {
-                return args.accelNatural;
+                return args.decayRate;
             }
             else
             {
