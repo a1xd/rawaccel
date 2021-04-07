@@ -29,10 +29,6 @@ namespace grapher.Models
             ButtonBase toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem showLastMouseMoveMenuItem,
-            ToolStripMenuItem velocityGainCapToolStripMenuItem,
-            ToolStripMenuItem legacyCapToolStripMenuItem,
-            ToolStripMenuItem gainOffsetToolStripMenuItem,
-            ToolStripMenuItem legacyOffsetToolStripMenuItem,
             ToolStripMenuItem autoWriteMenuItem,
             ToolStripMenuItem useSpecificDeviceMenuItem,
             ToolStripMenuItem scaleMenuItem,
@@ -226,16 +222,6 @@ namespace grapher.Models
                 new ActiveValueLabel(offsetActiveLabelY, activeValueTitleY),
                 "Offset");
 
-            var offsetOptionsX = new OffsetOptions(
-                gainOffsetToolStripMenuItem,
-                legacyOffsetToolStripMenuItem,
-                offsetX);
-
-            var offsetOptionsY = new OffsetOptions(
-                gainOffsetToolStripMenuItem,
-                legacyOffsetToolStripMenuItem,
-                offsetY);
-
             var accelerationX = new Option(
                 new Field(accelerationBoxX, form, 0),
                 constantOneLabelX,
@@ -326,15 +312,6 @@ namespace grapher.Models
                     new ActiveValueLabel(rangeActiveValueY, direcionalityActiveValueTitle)),
                 false);
 
-            var capOptionsX = new CapOptions(
-                velocityGainCapToolStripMenuItem,
-                legacyCapToolStripMenuItem,
-                capX);
-
-            var capOptionsY = new CapOptions(
-                velocityGainCapToolStripMenuItem,
-                legacyCapToolStripMenuItem,
-                capY);
 
             var lutTextX = new TextOption(lutTextLabelX);
             var lutTextY = new TextOption(lutTextLabelY);
@@ -346,9 +323,9 @@ namespace grapher.Models
                 gainSwitchOptionX,
                 accelerationX,
                 scaleX,
-                capOptionsX,
+                capX,
                 weightX,
-                offsetOptionsX,
+                offsetX,
                 limitX,
                 exponentX,
                 midpointX,
@@ -361,9 +338,9 @@ namespace grapher.Models
                 gainSwitchOptionY,
                 accelerationY,
                 scaleY,
-                capOptionsY,
+                capY,
                 weightY,
-                offsetOptionsY,
+                offsetY,
                 limitY,
                 exponentY,
                 midpointY,

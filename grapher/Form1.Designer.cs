@@ -71,6 +71,8 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.gainSwitchY = new System.Windows.Forms.CheckBox();
+            this.gainSwitchX = new System.Windows.Forms.CheckBox();
             this.LUTTextLabelY = new System.Windows.Forms.Label();
             this.LUTTextLabelX = new System.Windows.Forms.Label();
             this.FakeBox = new System.Windows.Forms.CheckBox();
@@ -175,12 +177,6 @@ namespace grapher
             this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gainCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.legacyCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.offsetStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gainOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.legacyOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UseSpecificDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartsPanel = new System.Windows.Forms.Panel();
@@ -190,8 +186,6 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.gainSwitchX = new System.Windows.Forms.CheckBox();
-            this.gainSwitchY = new System.Windows.Forms.CheckBox();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -290,6 +284,30 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // gainSwitchY
+            // 
+            this.gainSwitchY.AutoSize = true;
+            this.gainSwitchY.Checked = true;
+            this.gainSwitchY.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainSwitchY.Location = new System.Drawing.Point(283, 116);
+            this.gainSwitchY.Name = "gainSwitchY";
+            this.gainSwitchY.Size = new System.Drawing.Size(48, 17);
+            this.gainSwitchY.TabIndex = 155;
+            this.gainSwitchY.Text = "Gain";
+            this.gainSwitchY.UseVisualStyleBackColor = true;
+            // 
+            // gainSwitchX
+            // 
+            this.gainSwitchX.AutoSize = true;
+            this.gainSwitchX.Checked = true;
+            this.gainSwitchX.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainSwitchX.Location = new System.Drawing.Point(38, 116);
+            this.gainSwitchX.Name = "gainSwitchX";
+            this.gainSwitchX.Size = new System.Drawing.Size(48, 17);
+            this.gainSwitchX.TabIndex = 154;
+            this.gainSwitchX.Text = "Gain";
+            this.gainSwitchX.UseVisualStyleBackColor = true;
             // 
             // LUTTextLabelY
             // 
@@ -1202,57 +1220,11 @@ namespace grapher
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.capStyleToolStripMenuItem,
-            this.offsetStyleToolStripMenuItem,
             this.AutoWriteMenuItem,
             this.UseSpecificDeviceMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
-            // 
-            // capStyleToolStripMenuItem
-            // 
-            this.capStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gainCapToolStripMenuItem,
-            this.legacyCapToolStripMenuItem});
-            this.capStyleToolStripMenuItem.Name = "capStyleToolStripMenuItem";
-            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.capStyleToolStripMenuItem.Text = "Cap Style";
-            // 
-            // gainCapToolStripMenuItem
-            // 
-            this.gainCapToolStripMenuItem.Checked = true;
-            this.gainCapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.gainCapToolStripMenuItem.Name = "gainCapToolStripMenuItem";
-            this.gainCapToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.gainCapToolStripMenuItem.Text = "Gain (Default)";
-            // 
-            // legacyCapToolStripMenuItem
-            // 
-            this.legacyCapToolStripMenuItem.Name = "legacyCapToolStripMenuItem";
-            this.legacyCapToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.legacyCapToolStripMenuItem.Text = "Legacy";
-            // 
-            // offsetStyleToolStripMenuItem
-            // 
-            this.offsetStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gainOffsetToolStripMenuItem,
-            this.legacyOffsetToolStripMenuItem});
-            this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
-            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.offsetStyleToolStripMenuItem.Text = "Offset Style";
-            // 
-            // gainOffsetToolStripMenuItem
-            // 
-            this.gainOffsetToolStripMenuItem.Name = "gainOffsetToolStripMenuItem";
-            this.gainOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.gainOffsetToolStripMenuItem.Text = "Gain (Default)";
-            // 
-            // legacyOffsetToolStripMenuItem
-            // 
-            this.legacyOffsetToolStripMenuItem.Name = "legacyOffsetToolStripMenuItem";
-            this.legacyOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.legacyOffsetToolStripMenuItem.Text = "Legacy";
             // 
             // AutoWriteMenuItem
             // 
@@ -1521,30 +1493,6 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // gainSwitchX
-            // 
-            this.gainSwitchX.AutoSize = true;
-            this.gainSwitchX.Checked = true;
-            this.gainSwitchX.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.gainSwitchX.Location = new System.Drawing.Point(38, 116);
-            this.gainSwitchX.Name = "gainSwitchX";
-            this.gainSwitchX.Size = new System.Drawing.Size(48, 17);
-            this.gainSwitchX.TabIndex = 154;
-            this.gainSwitchX.Text = "Gain";
-            this.gainSwitchX.UseVisualStyleBackColor = true;
-            // 
-            // gainSwitchY
-            // 
-            this.gainSwitchY.AutoSize = true;
-            this.gainSwitchY.Checked = true;
-            this.gainSwitchY.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.gainSwitchY.Location = new System.Drawing.Point(283, 116);
-            this.gainSwitchY.Name = "gainSwitchY";
-            this.gainSwitchY.Size = new System.Drawing.Size(48, 17);
-            this.gainSwitchY.TabIndex = 155;
-            this.gainSwitchY.Text = "Gain";
-            this.gainSwitchY.UseVisualStyleBackColor = true;
-            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1656,12 +1604,6 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem showVelocityGainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLastMouseMoveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem capStyleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gainCapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem legacyCapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem offsetStyleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gainOffsetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
         private System.Windows.Forms.Panel chartsPanel;
         private System.Windows.Forms.DataVisualization.Charting.Chart GainChartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChartY;

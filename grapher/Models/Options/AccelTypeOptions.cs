@@ -35,9 +35,9 @@ namespace grapher
             CheckBoxOption gainSwitch,
             Option acceleration,
             Option scale,
-            CapOptions cap,
+            Option cap,
             Option weight,
-            OffsetOptions offset,
+            Option offset,
             Option limit,
             Option exponent,
             Option midpoint,
@@ -96,11 +96,11 @@ namespace grapher
 
         public Option Scale { get; }
 
-        public CapOptions Cap { get; }
+        public Option Cap { get; }
 
         public Option Weight { get; }
 
-        public OffsetOptions Offset { get; }
+        public Option Offset { get; }
 
         public Option Limit { get; }
 
@@ -208,7 +208,7 @@ namespace grapher
             AccelDropdown.SelectedIndex = AccelerationType.Index;
 
             Weight.SetActiveValue(args.weight);
-            Cap.SetActiveValues(args.cap, args.legacy);
+            Cap.SetActiveValue(args.cap);
             Offset.SetActiveValue(args.offset);
             Acceleration.SetActiveValue(AccelerationParameterFromArgs(args));
             Scale.SetActiveValue(args.scale);
@@ -263,10 +263,10 @@ namespace grapher
             args.legacy = !GainSwitch.CheckBox.Checked;
 
             if (Scale.Visible) args.scale = Scale.Field.Data;
-            if (Cap.Visible) args.cap = Cap.SensitivityCap;
+            if (Cap.Visible) args.cap = Cap.Field.Data;
             if (Limit.Visible) args.limit = Limit.Field.Data;
             if (Exponent.Visible) args.exponent = Exponent.Field.Data;
-            if (Offset.Visible) args.offset = Offset.Offset;
+            if (Offset.Visible) args.offset = Offset.Field.Data;
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
             if (Weight.Visible) args.weight = Weight.Field.Data;
         }
