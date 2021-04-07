@@ -205,8 +205,10 @@ namespace grapher
         {
             AccelerationType = AccelTypeFromSettings(args);
             AccelTypeActiveValue.SetValue(AccelerationType.Name);
-            AccelDropdown.SelectedIndex = AccelerationType.Index;
+            // Add one to include linear, which is not represented separately in the config
+            AccelDropdown.SelectedIndex = AccelerationType.Index + 1;
 
+            GainSwitch.SetActiveValue(args.legacy);
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValue(args.cap);
             Offset.SetActiveValue(args.offset);
@@ -281,6 +283,7 @@ namespace grapher
         public override void AlignActiveValues()
         {
             AccelTypeActiveValue.Align();
+            GainSwitch.AlignActiveValues();
             Acceleration.AlignActiveValues();
             Scale.AlignActiveValues();
             Cap.AlignActiveValues();

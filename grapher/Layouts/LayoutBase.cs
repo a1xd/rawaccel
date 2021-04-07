@@ -1,5 +1,4 @@
 ﻿using grapher.Models.Options;
-using System.Windows.Forms;
 
 namespace grapher.Layouts
 {

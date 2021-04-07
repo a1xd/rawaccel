@@ -154,6 +154,7 @@ namespace grapher
         {
             UpdateGraph();
             UpdateInputManagers();
+            UpdateShownActiveValues(Settings.UserSettings);
         }
 
         public void RefreshUser()

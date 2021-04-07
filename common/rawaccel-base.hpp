@@ -23,6 +23,7 @@ namespace rawaccel {
         natural,
         power,
         motivity,
+        lookuptable,
         noaccel
     };
 

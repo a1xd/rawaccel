@@ -186,6 +186,8 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.gainSwitchActiveLabelX = new System.Windows.Forms.Label();
+            this.gainSwitchActiveLabelY = new System.Windows.Forms.Label();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -201,6 +203,8 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelY);
+            this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelX);
             this.optionsPanel.Controls.Add(this.gainSwitchY);
             this.optionsPanel.Controls.Add(this.gainSwitchX);
             this.optionsPanel.Controls.Add(this.LUTTextLabelY);
@@ -1493,6 +1497,24 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
+            // gainSwitchActiveLabelX
+            // 
+            this.gainSwitchActiveLabelX.AutoSize = true;
+            this.gainSwitchActiveLabelX.Location = new System.Drawing.Point(200, 96);
+            this.gainSwitchActiveLabelX.Name = "gainSwitchActiveLabelX";
+            this.gainSwitchActiveLabelX.Size = new System.Drawing.Size(29, 13);
+            this.gainSwitchActiveLabelX.TabIndex = 156;
+            this.gainSwitchActiveLabelX.Text = "Gain";
+            // 
+            // gainSwitchActiveLabelY
+            // 
+            this.gainSwitchActiveLabelY.AutoSize = true;
+            this.gainSwitchActiveLabelY.Location = new System.Drawing.Point(417, 95);
+            this.gainSwitchActiveLabelY.Name = "gainSwitchActiveLabelY";
+            this.gainSwitchActiveLabelY.Size = new System.Drawing.Size(29, 13);
+            this.gainSwitchActiveLabelY.TabIndex = 157;
+            this.gainSwitchActiveLabelY.Text = "Gain";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1638,6 +1660,8 @@ namespace grapher
         private System.Windows.Forms.Label LUTTextLabelY;
         private System.Windows.Forms.CheckBox gainSwitchX;
         private System.Windows.Forms.CheckBox gainSwitchY;
+        private System.Windows.Forms.Label gainSwitchActiveLabelY;
+        private System.Windows.Forms.Label gainSwitchActiveLabelX;
     }
 }
 

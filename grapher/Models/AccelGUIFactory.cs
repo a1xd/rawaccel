@@ -110,6 +110,8 @@ namespace grapher.Models
             Label midpointActiveLabelY,
             Label accelTypeActiveLabelX,
             Label accelTypeActiveLabelY,
+            Label gainSwitchActiveLabelX,
+            Label gainSwitchActiveLabelY,
             Label optionSetXTitle,
             Label optionSetYTitle,
             Label mouseLabel,
@@ -315,8 +317,12 @@ namespace grapher.Models
 
             var lutTextX = new TextOption(lutTextLabelX);
             var lutTextY = new TextOption(lutTextLabelY);
-            var gainSwitchOptionX = new CheckBoxOption(gainSwitchX);
-            var gainSwitchOptionY = new CheckBoxOption(gainSwitchY);
+            var gainSwitchOptionX = new CheckBoxOption(
+                                            gainSwitchX,
+                                            new ActiveValueLabel(gainSwitchActiveLabelX, activeValueTitleX));
+            var gainSwitchOptionY = new CheckBoxOption(
+                                            gainSwitchY,
+                                            new ActiveValueLabel(gainSwitchActiveLabelY, activeValueTitleY));
 
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,

@@ -144,6 +144,8 @@ namespace grapher
                 MidpointActiveYLabel,
                 AccelTypeActiveLabelX,
                 AccelTypeActiveLabelY,
+                gainSwitchActiveLabelX,
+                gainSwitchActiveLabelY,
                 OptionSetXTitle,
                 OptionSetYTitle,
                 MouseLabel,

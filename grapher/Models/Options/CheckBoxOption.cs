@@ -4,13 +4,18 @@ namespace grapher.Models.Options
 {
     public class CheckBoxOption : OptionBase
     {
-        public CheckBoxOption(CheckBox checkBox)
+        public CheckBoxOption(
+            CheckBox checkBox,
+            ActiveValueLabel activeValueLabel)
         {
             CheckBox = checkBox;
+            ActiveValueLabel = activeValueLabel;
             Show(string.Empty);
         }
 
         public CheckBox CheckBox { get; }
+
+        public ActiveValueLabel ActiveValueLabel { get; }
 
         public override bool Visible
         {
@@ -49,6 +54,7 @@ namespace grapher.Models.Options
             set
             {
                 CheckBox.Top = value;
+                ActiveValueLabel.Top = value;
             }
         }
 
@@ -73,6 +79,7 @@ namespace grapher.Models.Options
 
         public override void AlignActiveValues()
         {
+            ActiveValueLabel.Align();
         }
 
         public override void Hide()
@@ -80,6 +87,7 @@ namespace grapher.Models.Options
             CheckBox.Hide();
             ShouldShow = false;
             CheckBox.Enabled = false;
+            ActiveValueLabel.Hide();
         }
 
         public override void Show(string Name)
@@ -88,6 +96,14 @@ namespace grapher.Models.Options
             ShouldShow = true;
             CheckBox.Enabled = true;
             CheckBox.Name = Name;
+            ActiveValueLabel.Show();
+        }
+
+        public void SetActiveValue(bool legacy)
+        {
+            CheckBox.Checked = !legacy;
+            var activeValueString = legacy ? "Legacy" : "Gain";
+            ActiveValueLabel.SetValue(activeValueString);
         }
     }
 }

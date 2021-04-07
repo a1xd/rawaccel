@@ -20,7 +20,7 @@ ra::settings default_settings;
 [JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class AccelMode
 {
-    classic, jump, natural, power, motivity, noaccel
+    classic, jump, natural, power, motivity, lut, noaccel
 };
 
 [JsonConverter(Converters::StringEnumConverter::typeid)]
