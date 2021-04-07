@@ -52,7 +52,7 @@ namespace rawaccel {
         double cap = 1.5;
         double accel_classic = 0.005;
         double accel_natural = 0.1;
-        double accel_motivity = 1;
+        double growth_rate = 1;
         double motivity = 1.5;
         double power = 2;
         double scale = 1;

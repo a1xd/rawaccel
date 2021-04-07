@@ -17,7 +17,7 @@ namespace grapher.Layouts
             LogarithmicCharts = true;
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);
-            AccelLayout = new OptionLayout(true, Acceleration);
+            AccelLayout = new OptionLayout(true, GrowthRate);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(false, string.Empty);

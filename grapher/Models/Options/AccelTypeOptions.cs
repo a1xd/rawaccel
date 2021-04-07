@@ -250,7 +250,7 @@ namespace grapher
                 }
                 else if (args.mode == AccelMode.motivity)
                 {
-                    args.accelMotivity = Acceleration.Field.Data;
+                    args.growthRate = Acceleration.Field.Data;
                 }
                 else
                 {
@@ -345,7 +345,7 @@ namespace grapher
         {
             if (args.mode == AccelMode.motivity)
             {
-                return args.accelMotivity;
+                return args.growthRate;
             }
             else if (args.mode == AccelMode.natural)
             {

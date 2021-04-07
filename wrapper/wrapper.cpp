@@ -70,7 +70,7 @@ public value struct AccelArgs
     double cap;
     double accelClassic;
     double accelNatural;
-    double accelMotivity;
+    double growthRate;
     double motivity;
     double power;
     double scale;

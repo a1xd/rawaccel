@@ -13,7 +13,7 @@ namespace rawaccel {
 		double constant;
 
 		sigmoid(const accel_args& args) :
-			accel(exp(args.accel_motivity)),
+			accel(exp(args.growth_rate)),
 			motivity(2 * log(args.motivity)),
 			midpoint(log(args.midpoint)),
 			constant(-motivity / 2) {}

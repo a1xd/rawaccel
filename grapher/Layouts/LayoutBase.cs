@@ -16,6 +16,7 @@ namespace grapher.Layouts
         public const string Weight = "Weight";
         public const string Smooth = "Smooth";
         public const string Gain = "Gain";
+        public const string GrowthRate = "Growth Rate";
 
         public LayoutBase()
         {

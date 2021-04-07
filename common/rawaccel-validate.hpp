@@ -82,7 +82,7 @@ namespace rawaccel {
 				error("cap"" must be positive");
 			}
 
-			if (args.accel_motivity <= 0 ||
+			if (args.growth_rate <= 0 ||
 				args.accel_natural <= 0 ||
 				args.accel_classic <= 0) {
 				error("acceleration"" must be positive");
