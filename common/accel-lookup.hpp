@@ -216,6 +216,8 @@ namespace rawaccel {
 			while (index <= last_arbitrary_index && data[index].applicable_speed < speed);
 
 			index--;
+
+			return index;
 		}
 
 		double inline apply(int index, double speed) const
