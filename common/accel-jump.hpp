@@ -2,9 +2,6 @@
 
 #include "rawaccel-base.hpp"
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 namespace rawaccel {
 
 	struct jump_base {
@@ -18,7 +15,7 @@ namespace rawaccel {
 				smooth_rate = 0;
 			}
 			else {
-				smooth_rate = 2 * M_PI / (args.offset * args.smooth);
+				smooth_rate = 2 * PI / (args.offset * args.smooth);
 			}
 
 		}

@@ -20,7 +20,16 @@ namespace rawaccel {
         accel_invoker(const accel_args& args)
         {
             cb = visit_accel([](auto&& arg) { 
-                return &invoke_impl<remove_ref_t<decltype(arg)>>; 
+                using T = remove_ref_t<decltype(arg)>;
+
+                if constexpr (is_same_v<T, motivity>) {
+                    static_assert(sizeof motivity == sizeof binlog_lut);
+                    return &invoke_impl<binlog_lut>;
+                }
+                else {
+                    return &invoke_impl<T>;
+                }
+
             }, make_mode(args), accel_union{});
         }
 

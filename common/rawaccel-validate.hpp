@@ -141,6 +141,10 @@ namespace rawaccel {
 			error("max speed is less than min speed");
 		}
 
+		if (args.degrees_snap < 0 || args.degrees_snap > 45) {
+			error("snap angle must be between 0 and 45 degrees");
+		}
+
 		if (args.sens.x == 0 || args.sens.y == 0) {
 			error("sens multiplier is 0");
 		}
@@ -150,12 +154,12 @@ namespace rawaccel {
 			error("domain weights"" must be positive");
 		}
 
-		if (args.dom_args.lp_norm <= 0) {
-			error("Lp norm must be positive");
+		if (args.dir_multipliers.x <= 0 || args.dir_multipliers.y <= 0) {
+			error("directional multipliers must be positive");
 		}
 
-		if (args.dir_multipliers.x < 0 || args.dir_multipliers.y < 0) {
-			error("directional multipliers can not be negative");
+		if (args.dom_args.lp_norm < 2) {
+			error("Lp norm is less than 2 (default=2)");
 		}
 
 		if (args.range_weights.x <= 0 || args.range_weights.y <= 0) {

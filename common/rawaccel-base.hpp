@@ -17,6 +17,9 @@ namespace rawaccel {
 
     inline constexpr size_t LUT_CAPACITY = 1025;
 
+    inline constexpr double MAX_NORM = 16;
+    inline constexpr double PI = 3.14159265358979323846;
+
     enum class accel_mode {
         classic,
         jump,
@@ -79,7 +82,7 @@ namespace rawaccel {
 
         vec2<accel_args> argsv;
         vec2d sens = { 1, 1 };
-        vec2d dir_multipliers = {};
+        vec2d dir_multipliers = { 1, 1 };
         domain_args dom_args = {};
         vec2d range_weights = { 1, 1 };
 

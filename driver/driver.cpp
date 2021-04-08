@@ -23,6 +23,7 @@ struct {
 
 extern "C" PULONG InitSafeBootMode;
 
+__declspec(guard(ignore))
 VOID
 RawaccelCallback(
     IN PDEVICE_OBJECT DeviceObject,
@@ -56,26 +57,18 @@ Arguments:
 
     auto num_packets = InputDataEnd - InputDataStart;
 
-    bool any = num_packets > 0;
-    bool rel_move = !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE);
-    bool dev_match = global.args.device_id[0] == 0 || 
-        global.args.ignore == 
-            bool(wcsncmp(devExt->dev_id, global.args.device_id, ra::MAX_DEV_ID_LEN));
-
-    if (any && rel_move && dev_match) {
-        milliseconds time;
-
-        if (global.args.time_min == global.args.time_max) {
-            time = global.args.time_min;
-        }
-        else {
-            counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
-            counter_t ticks = now - devExt->counter;
-            devExt->counter = now;
-            milliseconds t = ticks * global.tick_interval / num_packets;
-            time = ra::clampsd(t, global.args.time_min, global.args.time_max);
-        }
-
+    if (num_packets > 0 &&
+        !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE) && 
+            (global.args.device_id[0] == 0 ||
+                bool(wcsncmp(devExt->dev_id, global.args.device_id, ra::MAX_DEV_ID_LEN)) == 
+                    global.args.ignore)) {
+        counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+        counter_t ticks = now - devExt->counter;
+        devExt->counter = now;
+        milliseconds raw_elapsed = ticks * global.tick_interval;
+        milliseconds time = ra::clampsd(raw_elapsed / num_packets, 
+                                        global.args.time_min, 
+                                        global.args.time_max);
         auto it = InputDataStart;
         do {
             if (it->LastX || it->LastY) {
