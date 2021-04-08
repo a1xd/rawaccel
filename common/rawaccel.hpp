@@ -2,235 +2,170 @@
 
 #include "accel-invoke.hpp"
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 namespace rawaccel {
 
-    /// <summary> Struct to hold vector rotation details. </summary>
-    struct rotator {
-
-        /// <summary> Rotational vector, which points in the direction of the post-rotation positive x axis. </summary>
-        vec2d rot_vec = { 1, 0 };
-
-        /// <summary>
-        /// Rotates given input vector according to struct's rotational vector.
-        /// </summary>
-        /// <param name="input">Input vector to be rotated</param>
-        /// <returns>2d vector of rotated input.</returns>
-        inline vec2d apply(const vec2d& input) const {
-            return {
-                input.x * rot_vec.x - input.y * rot_vec.y,
-                input.x * rot_vec.y + input.y * rot_vec.x
-            };
-        }
-
-        rotator(double degrees) {
-            double rads = degrees * M_PI / 180;
-            rot_vec = { cos(rads), sin(rads) };
-        }
-
-        rotator() = default;
-    };
-
-    struct snapper {
-        double threshold = 0;
-
-        inline vec2d apply(const vec2d& input) const {
-            if (input.x != 0 && input.y != 0) {
-                double angle = fabs(atan(input.y / input.x));
-                auto mag = [&] { return sqrtsd(input.x * input.x + input.y * input.y); };
-
-                if (angle > M_PI_2 - threshold) return { 0, _copysign(mag(), input.y) };
-                if (angle < threshold) return { _copysign(mag(), input.x), 0 };
-            }
-
-            return input;
-        }
-
-        snapper(double degrees) : threshold(minsd(fabs(degrees), 45)* M_PI / 180) {}
-
-        snapper() = default;
-    };
-
-    inline void clamp_speed(vec2d& v, double min, double max, double norm) {
-        double speed = sqrtsd(v.x * v.x + v.y * v.y) * norm;
-        double ratio = clampsd(speed, min, max) / speed;
-        v.x *= ratio;
-        v.y *= ratio;
-    }
-
-    struct weighted_distance {
-        double p = 2.0;
-        double p_inverse = 0.5;
-        bool lp_norm_infinity = false;
-        double sigma_x = 1.0;
-        double sigma_y = 1.0;
-
-        weighted_distance(const domain_args& args)
-        {
-            sigma_x = args.domain_weights.x;
-            sigma_y = args.domain_weights.y;
-            if (args.lp_norm <= 0)
-            {
-                lp_norm_infinity = true;
-                p = 0.0;
-                p_inverse = 0.0;
-            }
-            else
-            {
-                lp_norm_infinity = false;
-                p = args.lp_norm;
-                p_inverse = 1 / args.lp_norm;
-            }
-        }
-
-        inline double calculate(double x, double y)
-        {
-            double abs_scaled_x = fabs(x) * sigma_x;
-            double abs_scaled_y = fabs(y) * sigma_y;
-
-            if (lp_norm_infinity) {
-                return maxsd(abs_scaled_x, abs_scaled_y);
-            }
-
-            if (p == 2) {
-                return sqrtsd(abs_scaled_x * abs_scaled_x +
-                    abs_scaled_y * abs_scaled_y);
-            }
-
-            double dist_p = pow(abs_scaled_x, p) + pow(abs_scaled_y, p);
-            return pow(dist_p, p_inverse);
-        }
-
-        weighted_distance() = default;
-    };
-
-    inline double directional_weight(const vec2d& in, const vec2d& weights)
+    inline vec2d direction(double degrees)
     {
-        double atan_scale = M_2_PI * atan2(fabs(in.y), fabs(in.x));
-        return atan_scale * (weights.y - weights.x) + weights.x;
+        double radians = degrees * PI / 180;
+        return { cos(radians), sin(radians) };
     }
 
-    /// <summary> Struct to hold variables and methods for modifying mouse input </summary>
-    struct mouse_modifier {
+    constexpr vec2d rotate(const vec2d& v, const vec2d& direction)
+    {
+        return {
+            v.x * direction.x - v.y * direction.y,
+            v.x * direction.y + v.y * direction.x
+        };
+    }
+
+    inline double magnitude(const vec2d& v)
+    {
+        return sqrt(v.x * v.x + v.y * v.y);
+    }
+
+    inline double lp_distance(const vec2d& v, double p)
+    {
+        return pow(pow(v.x, p) + pow(v.y, p), 1 / p);
+    }
+
+    class mouse_modifier {
+    public:
+        enum accel_distance_mode : unsigned char {
+            separate, 
+            max,
+            Lp,
+            euclidean,
+        };
+
         bool apply_rotate = false;
+        bool compute_ref_angle = false;
         bool apply_snap = false;
-        bool apply_speed_clamp = false;
-        bool by_component = false;
+        bool cap_speed = false;
+        accel_distance_mode dist_mode = euclidean;
         bool apply_directional_weight = false;
-        rotator rotate;
-        snapper snap;
-        double dpi_factor = 1;
+        bool apply_dir_mul_x = false;
+        bool apply_dir_mul_y = false;
+
+        vec2d rot_vec = { 1, 0 };
+        double snap = 0;
+        double dpi_norm_factor = 1;
         double speed_min = 0;
         double speed_max = 0;
-        weighted_distance distance;
+        vec2d domain_weights = { 1, 1 };
+        double p = 2;
         vec2d range_weights = { 1, 1 };
-        vec2<accel_union> accels;
+        vec2d directional_multipliers = { 1, 1 };
         vec2d sensitivity = { 1, 1 };
-        vec2d directional_multipliers = {};
+        vec2<accel_union> accel;
 
-        mouse_modifier(const settings& args) :
-            by_component(!args.combine_mags),
-            dpi_factor(1000 / args.dpi),
-            speed_min(args.speed_min),
-            speed_max(args.speed_max),
-            range_weights(args.range_weights)
+#ifdef _KERNEL_MODE
+        __forceinline
+#endif
+        void modify(vec2d& in, const vec2<accel_invoker>& inv, milliseconds time = 1) const
         {
-            if (args.degrees_rotation != 0) {
-                rotate = rotator(args.degrees_rotation);
-                apply_rotate = true;
-            }
+            double ips_factor = dpi_norm_factor / time;
+            double reference_angle = 0;
 
-            if (args.degrees_snap != 0) {
-                snap = snapper(args.degrees_snap);
-                apply_snap = true;
-            }
+            if (apply_rotate) in = rotate(in, rot_vec);
 
-            if (args.sens.x != 0) sensitivity.x = args.sens.x;
-            if (args.sens.y != 0) sensitivity.y = args.sens.y;
-
-            directional_multipliers.x = fabs(args.dir_multipliers.x);
-            directional_multipliers.y = fabs(args.dir_multipliers.y);
-
-            apply_speed_clamp = speed_max > 0;
-
-            if ((!by_component && args.argsv.x.mode == accel_mode::noaccel) ||
-                (args.argsv.x.mode == accel_mode::noaccel &&
-                    args.argsv.y.mode == accel_mode::noaccel)) {
-                return;
-            }
-
-            accels.x = accel_union(args.argsv.x);
-            accels.y = accel_union(args.argsv.y);
-
-            distance = weighted_distance(args.dom_args);
-
-            apply_directional_weight = range_weights.x != range_weights.y;
-        }
-
-        void modify(vec2d& movement, const vec2<accel_invoker>& inv = {}, milliseconds time = 1) {
-            apply_rotation(movement);
-            apply_angle_snap(movement);
-            apply_acceleration(movement, inv, time);
-            apply_sensitivity(movement);
-        }
-
-        inline void apply_rotation(vec2d& movement) {
-            if (apply_rotate) movement = rotate.apply(movement);
-        }
-
-        inline void apply_angle_snap(vec2d& movement) {
-            if (apply_snap) movement = snap.apply(movement);
-        }
-
-        inline void apply_acceleration(vec2d& movement, const vec2<accel_invoker>& inv, milliseconds time) {
-            double norm = dpi_factor / time;
-
-            if (apply_speed_clamp) {
-                clamp_speed(movement, speed_min, speed_max, norm);
-            }
-
-            if (!by_component) {
-                double mag = distance.calculate(movement.x, movement.y);
-                double speed = mag * norm;
-
-                double weight;
-
-                if (apply_directional_weight) {
-                    weight = directional_weight(movement, range_weights);
+            if (compute_ref_angle && in.y != 0) {
+                if (in.x == 0) {
+                    reference_angle = PI / 2;
                 }
                 else {
-                    weight = range_weights.x;
+                    reference_angle = atan(fabs(in.y / in.x));
+
+                    if (apply_snap) {
+                        if (reference_angle > PI / 2 - snap) {
+                            reference_angle = PI / 2;
+                            in = { 0, _copysign(magnitude(in), in.y) };
+                        }
+                        else if (reference_angle < snap) {
+                            reference_angle = 0;
+                            in = { _copysign(magnitude(in), in.x), 0 };
+                        }
+                    }
+                }
+            }
+
+            if (cap_speed) {
+                double speed = magnitude(in) * ips_factor;
+                double ratio = clampsd(speed, speed_min, speed_max) / speed;
+                in.x *= ratio;
+                in.y *= ratio;
+            }
+
+            vec2d abs_weighted_vel = {
+                fabs(in.x * ips_factor * domain_weights.x),
+                fabs(in.y * ips_factor * domain_weights.y)
+            };
+
+            if (dist_mode == separate) {
+                in.x *= inv.x.invoke(accel.x, abs_weighted_vel.x, range_weights.x);
+                in.y *= inv.y.invoke(accel.y, abs_weighted_vel.y, range_weights.y);
+            }
+            else { 
+                double speed;
+
+                if (dist_mode == max) {
+                    speed = maxsd(abs_weighted_vel.x, abs_weighted_vel.y);
+                }
+                else if (dist_mode == Lp) {
+                    speed = lp_distance(abs_weighted_vel, p);
+                }
+                else {
+                    speed = magnitude(abs_weighted_vel);
                 }
 
-                double scale = inv.x.invoke(accels.x, speed, weight);
-                movement.x *= scale;
-                movement.y *= scale;
-            }
-            else {
-                if (movement.x != 0) {
-                    double x = fabs(movement.x) * norm * distance.sigma_x;
-                    movement.x *= inv.x.invoke(accels.x, x, range_weights.x);
+                double weight = range_weights.x;
+
+                if (apply_directional_weight) {
+                    double diff = range_weights.y - range_weights.x;
+                    weight += 2 / PI * reference_angle * diff;
                 }
-                if (movement.y != 0) {
-                    double y = fabs(movement.y) * norm * distance.sigma_y;
-                    movement.y *= inv.y.invoke(accels.y, y, range_weights.y);
-                }
+
+                double scale = inv.x.invoke(accel.x, speed, weight);
+                in.x *= scale;
+                in.y *= scale;
             }
+
+            if (apply_dir_mul_x && in.x < 0) {
+                in.x *= directional_multipliers.x;
+            }
+
+            if (apply_dir_mul_y && in.y < 0) {
+                in.y *= directional_multipliers.y;
+            }
+
+            in.x *= sensitivity.x;
+            in.y *= sensitivity.y;
         }
-    
 
-        inline void apply_sensitivity(vec2d& movement) {   
-            movement.x *= sensitivity.x;
-            movement.y *= sensitivity.y;
+        mouse_modifier(const settings& args) :
+            rot_vec(direction(args.degrees_rotation)),
+            snap(args.degrees_snap * PI / 180),
+            dpi_norm_factor(1000 / args.dpi),
+            speed_min(args.speed_min),
+            speed_max(args.speed_max),
+            p(args.dom_args.lp_norm),
+            domain_weights(args.dom_args.domain_weights),
+            range_weights(args.range_weights),
+            directional_multipliers(args.dir_multipliers),
+            sensitivity(args.sens),
+            accel({ { args.argsv.x }, { args.argsv.y } })
+        {
+            cap_speed = speed_max > 0 && speed_min <= speed_max;
+            apply_rotate = rot_vec.x != 1;
+            apply_snap = snap != 0;
+            apply_directional_weight = range_weights.x != range_weights.y;
+            compute_ref_angle = apply_snap || apply_directional_weight;
+            apply_dir_mul_x = directional_multipliers.x != 1;
+            apply_dir_mul_y = directional_multipliers.y != 1;
 
-            if (directional_multipliers.x > 0 && movement.x < 0) {
-                movement.x *= directional_multipliers.x;
-            }
-            if (directional_multipliers.y > 0 && movement.y < 0) {
-                movement.y *= directional_multipliers.y;
-            }
+            if (!args.combine_mags) dist_mode = separate;
+            else if (p >= MAX_NORM) dist_mode = max;
+            else if (p > 2)         dist_mode = Lp;
+            else                    dist_mode = euclidean;
         }
 
         mouse_modifier() = default;

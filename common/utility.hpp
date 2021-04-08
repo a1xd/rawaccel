@@ -1,23 +1,6 @@
 #pragma once
 
-#ifdef _MANAGED
-#include <math.h>
-#else
-#include <emmintrin.h>
-#endif
-
 namespace rawaccel {
-
-#ifdef _MANAGED
-    inline double sqrtsd(double val) { return sqrt(val); }
-#else
-    inline double sqrtsd(double val) {
-        __m128d src = _mm_load_sd(&val);
-        __m128d dst = _mm_sqrt_sd(src, src);
-        _mm_store_sd(&val, dst);
-        return val;
-    }
-#endif
 
     constexpr double minsd(double a, double b) 
     {
@@ -92,4 +75,14 @@ namespace rawaccel {
 
     template <typename T>
     using remove_ref_t = typename remove_ref<T>::type;
+
+    template <typename T, typename U>
+    struct is_same { static constexpr bool value = false; };
+
+    template <typename T>
+    struct is_same<T, T> { static constexpr bool value = true; };
+
+    template <typename T, typename U>
+    inline constexpr bool is_same_v = is_same<T, U>::value;
+
 }

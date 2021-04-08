@@ -26,8 +26,8 @@ namespace rawaccel {
 		{
 			if (x <= offset) return 1;
 
-			double offset_x = x - offset;
-			double decay = exp(-accel * offset_x);
+			double offset_x = offset - x;
+			double decay = exp(accel * offset_x);
 			return limit * (1 - (decay * offset_x + offset) / x) + 1;
 		}
 
@@ -41,8 +41,8 @@ namespace rawaccel {
 		{
 			if (x <= offset) return 1;
 
-			double offset_x = x - offset;
-			double decay = exp(-accel * offset_x);
+			double offset_x = offset - x;
+			double decay = exp(accel * offset_x);
 			double output = limit * (offset_x + decay / accel) + constant;
 			return output / x + 1;
 		}
