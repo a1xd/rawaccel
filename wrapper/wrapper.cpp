@@ -517,9 +517,9 @@ public:
             auto settings = gcnew ExtendedSettings();
             Marshal::PtrToStructure(IntPtr(&instance->data.args), settings->baseSettings);
             settings->tables.x = extract(instance->data.args.argsv.x.lut_args.mode, 
-                instance->data.mod.accels.x);
+                instance->data.mod.accel.x);
             settings->tables.y = extract(instance->data.args.argsv.y.lut_args.mode,
-                instance->data.mod.accels.y);
+                instance->data.mod.accel.y);
             return settings;
         }
 
@@ -530,11 +530,11 @@ public:
             instance->inv = ra::invokers(instance->data.args);
 
             if (val->tables.x) {
-                val->tables.x->SetData(instance->data.mod.accels.x);
+                val->tables.x->SetData(instance->data.mod.accel.x);
             }
 
             if (val->tables.y) {
-                val->tables.y->SetData(instance->data.mod.accels.y);
+                val->tables.y->SetData(instance->data.mod.accel.y);
             }   
         }
 
