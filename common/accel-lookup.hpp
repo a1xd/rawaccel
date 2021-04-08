@@ -223,7 +223,7 @@ namespace rawaccel {
 			return pair.slope + pair.intercept / speed;
 		}
 
-		void fill(vec2d* points, int length) const
+		void fill(vec2d* points, int length)
 		{
 			vec2d current = {0, 0};
 			vec2d next;
