@@ -262,9 +262,9 @@ namespace rawaccel {
 			last_arbitrary_index = length - 2;
 			last_point_speed = points[last_arbitrary_index].x;
 
-			double start = (int)floor(log(first_point_speed));
-			double end = (int)floor(log(last_point_speed));
-			double num = (int)floor(LUT_CAPACITY / (end - start));
+			int start = static_cast<int>(log(first_point_speed));
+			int end = static_cast<int>(log(last_point_speed));
+			int num = static_cast<int>(LUT_CAPACITY / (end - start));
 			range = fp_rep_range{ start, end, num };
 			last_log_lookup_index = num * (end - start) - 1;
 
