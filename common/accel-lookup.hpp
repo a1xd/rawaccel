@@ -165,7 +165,8 @@ namespace rawaccel {
 		int log_lookup[LUT_CAPACITY] = {};
 		double first_point_speed;
 		double last_point_speed;
-		int last_index;
+		int last_arbitrary_index;
+		int last_log_lookup_index;
 
 		double operator()(double speed) const
 		{
@@ -177,11 +178,11 @@ namespace rawaccel {
 			}
 			else if (speed > last_point_speed)
 			{
-				index = last_index;
+				index = last_arbitrary_index;
 			}
 			else if (speed > range.stop)
 			{
-				index = search_from(log_lookup[LUT_CAPACITY - 1], speed);
+				index = search_from(log_lookup[last_log_lookup_index], speed);
 			}
 			else if (speed < range.start)
 			{
@@ -212,7 +213,7 @@ namespace rawaccel {
 				prev_index = index;
 				index++;
 			}
-			while (index <= last_index && data[index].applicable_speed < speed);
+			while (index <= last_arbitrary_index && data[index].applicable_speed < speed);
 
 			index--;
 		}
@@ -250,6 +251,22 @@ namespace rawaccel {
 					log_value = pow(2, log_inner_iterator);
 				}
 			}
+		}
+
+		arbitrary_lut(vec2d* points, int length)
+		{
+			first_point_speed = points[0].x;
+			// -2 because the last index in the arbitrary array is used for slope-intercept only
+			last_arbitrary_index = length - 2;
+			last_point_speed = points[last_arbitrary_index].x;
+
+			double start = (int)floor(log(first_point_speed));
+			double end = (int)floor(log(last_point_speed));
+			double num = (int)floor(LUT_CAPACITY / (end - start));
+			range = fp_rep_range{ start, end, num };
+			last_log_lookup_index = num * (end - start) - 1;
+
+			fill(points, length);
 		}
 	};
 }
