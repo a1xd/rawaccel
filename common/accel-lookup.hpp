@@ -172,6 +172,8 @@ namespace rawaccel {
 		double last_point_speed;
 		int last_arbitrary_index;
 		int last_log_lookup_index;
+		double last_log_lookup_speed;
+		double first_log_lookup_speed;
 
 		double operator()(double speed) const
 		{
@@ -187,13 +189,13 @@ namespace rawaccel {
 				{
 					index = last_arb_index;
 				}
-				else if (speed > range.stop)
+				else if (speed > last_log_lookup_speed)
 				{
 					int last_log = log_lookup[last_log_index];
 					if (unsigned(last_log) >= capacity) return 1;
 					index = search_from(last_log, last_arb_index, speed);
 				}
-				else if (speed < range.start)
+				else if (speed < first_log_lookup_speed)
 				{
 					index = search_from(0, last_arb_index, speed);
 				}
@@ -246,8 +248,10 @@ namespace rawaccel {
 			last_arbitrary_index = length - 2;
 			last_point_speed = points[last_arbitrary_index].x;
 
-			int start = static_cast<int>(floor(log(first_point_speed)));
-			int end = static_cast<int>(floor(log(last_point_speed)));
+			int start = static_cast<int>(floor(log(first_point_speed) / log(2.0)));
+			first_log_lookup_speed = pow(2.0, start);
+			int end = static_cast<int>(floor(log(last_point_speed) / log(2.0)));
+			last_log_lookup_speed = pow(2.0, end);
 			int num = static_cast<int>(capacity / (end - start));
 			range = fp_rep_range{ start, end, num };
 			last_log_lookup_index = num * (end - start) - 1;
@@ -256,7 +260,7 @@ namespace rawaccel {
 			vec2<float> next;
 			int log_index = 0;
 			double log_inner_iterator = range.start;
-			double log_inner_slice = 1 / range.num;
+			double log_inner_slice = 1.0 / (range.num * 1.0);
 			double log_value = pow(2, log_inner_iterator);
 
 			for (int i = 0; i < length; i++)
@@ -275,9 +279,9 @@ namespace rawaccel {
 
 				this->data[i] = current_lut_point;
 
-				while (log_value < next.x)
+				while (log_value < next.x && log_inner_iterator < end)
 				{
-					this->log_lookup[log_index] = static_cast<int>(log_value);
+					this->log_lookup[log_index] = i;
 					log_index++;
 					log_inner_iterator += log_inner_slice;
 					log_value = pow(2, log_inner_iterator);

@@ -188,7 +188,7 @@ public ref struct ArbitraryLut sealed : public LutBase
     {
         pin_ptr<float> pdata = &data[0,0];
 
-        accel.arb_lut.fill(reinterpret_cast<vec2<float>*>(pdata), data->Length);
+        accel.arb_lut.fill(reinterpret_cast<vec2<float>*>(pdata), data->Length/2);
     }
 };
 
