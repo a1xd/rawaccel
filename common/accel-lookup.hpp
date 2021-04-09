@@ -175,27 +175,34 @@ namespace rawaccel {
 		double operator()(double speed) const
 		{
 			int index = 0;
+			int last_arb_index = last_arbitrary_index;
+			int last_log_index = last_log_lookup_index;
 
-			if (speed < first_point_speed)
+			if (unsigned(last_arb_index) < capacity &&
+				unsigned(last_log_index) < capacity &&
+				speed > first_point_speed)
 			{
-				// Apply from 0 index
-			}
-			else if (speed > last_point_speed)
-			{
-				index = last_arbitrary_index;
-			}
-			else if (speed > range.stop)
-			{
-				index = search_from(log_lookup[last_log_lookup_index], speed);
-			}
-			else if (speed < range.start)
-			{
-				index = search_from(0, speed);
-			}
-			else
-			{
-				int log_lookup = get_log_index(speed);
-				index = search_from(log_lookup, speed);
+				if (speed > last_point_speed)
+				{
+					index = last_arb_index;
+				}
+				else if (speed > range.stop)
+				{
+					int last_log = log_lookup[last_log_index];
+					if (unsigned(last_log) >= capacity) return 1;
+					index = search_from(last_log, last_arb_index, speed);
+				}
+				else if (speed < range.start)
+				{
+					index = search_from(0, last_arb_index, speed);
+				}
+				else
+				{
+					int log_index = get_log_index(speed);
+					if (unsigned(log_index) >= capacity) return 1;
+					index = search_from(log_index, last_arb_index, speed);
+				}
+
 			}
 
 			return apply(index, speed);
@@ -208,7 +215,7 @@ namespace rawaccel {
 			return index;
 		}
 
-		int inline search_from(int index, double speed) const
+		int inline search_from(int index, int last, double speed) const
 		{
 			int prev_index;
 
@@ -217,7 +224,7 @@ namespace rawaccel {
 				prev_index = index;
 				index++;
 			}
-			while (index <= last_arbitrary_index && data[index].applicable_speed < speed);
+			while (index <= last && data[index].applicable_speed < speed);
 
 			index--;
 
