@@ -186,7 +186,8 @@ public ref struct ArbitraryLut sealed : public LutBase
 
     virtual void SetData(ra::accel_union& accel) override
     {
-        throw gcnew NotImplementedException();
+        pin_ptr<float> pdata = &data[0,0];
+        std::memcpy(&accel.arb_lut.raw_data_in, pdata, sizeof(float) * data->Length * 2);
     }
 
 };

@@ -163,6 +163,7 @@ namespace rawaccel {
 		fp_rep_range range;
 		arbitrary_lut_point data[LUT_CAPACITY] = {};
 		int log_lookup[LUT_CAPACITY] = {};
+		float raw_data_in[LUT_CAPACITY * 2] = {};
 		double first_point_speed;
 		double last_point_speed;
 		int last_arbitrary_index;
@@ -226,7 +227,7 @@ namespace rawaccel {
 			return pair.slope + pair.intercept / speed;
 		}
 
-		void fill(vec2d* points, int length)
+		void fill(float* points, int length)
 		{
 			vec2d current = {0, 0};
 			vec2d next;
@@ -237,7 +238,7 @@ namespace rawaccel {
 
 			for (int i = 0; i < length; i++)
 			{
-				next = points[i];
+				next = vec2d{ points[i * 2], points[i * 2 + 1] };
 				double slope = (next.y - current.y) / (next.x - current.x);
 				double intercept = next.y - slope * next.x;
 				si_pair current_si = { slope, intercept };
@@ -255,12 +256,12 @@ namespace rawaccel {
 			}
 		}
 
-		arbitrary_lut(vec2d* points, int length)
+		arbitrary_lut(const table_args &args)
 		{
-			first_point_speed = points[0].x;
+			first_point_speed = raw_data_in[0];
 			// -2 because the last index in the arbitrary array is used for slope-intercept only
-			last_arbitrary_index = length - 2;
-			last_point_speed = points[last_arbitrary_index].x;
+			last_arbitrary_index = (length - 2)*2;
+			last_point_speed = raw_data_in[last_arbitrary_index];
 
 			double start = (int)floor(log(first_point_speed));
 			double end = (int)floor(log(last_point_speed));
@@ -268,7 +269,7 @@ namespace rawaccel {
 			range = fp_rep_range{ start, end, num };
 			last_log_lookup_index = num * (end - start) - 1;
 
-			fill(points, length);
+			fill(raw_data_in, length);
 		}
 	};
 }
