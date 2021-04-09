@@ -167,6 +167,7 @@ namespace rawaccel {
 		fp_rep_range range;
 ;
 		arbitrary_lut_point data[capacity] = {};
+		float raw_data_in[capacity*2] = {};
 		int log_lookup[capacity] = {};
 		double first_point_speed;
 		double last_point_speed;
@@ -248,10 +249,10 @@ namespace rawaccel {
 			last_arbitrary_index = length - 2;
 			last_point_speed = points[last_arbitrary_index].x;
 
-			int start = static_cast<int>(floor(log(first_point_speed) / log(2.0)));
-			first_log_lookup_speed = pow(2.0, start);
-			int end = static_cast<int>(floor(log(last_point_speed) / log(2.0)));
-			last_log_lookup_speed = pow(2.0, end);
+			int start = static_cast<int>(floor(log(first_point_speed)));
+			first_log_lookup_speed = exp(start*1.0);
+			int end = static_cast<int>(floor(log(last_point_speed)));
+			last_log_lookup_speed = exp(end*1.0);
 			int num = static_cast<int>(capacity / (end - start));
 			range = fp_rep_range{ start, end, num };
 			last_log_lookup_index = num * (end - start) - 1;
@@ -266,6 +267,8 @@ namespace rawaccel {
 			for (int i = 0; i < length; i++)
 			{
 				next = points[i];
+				raw_data_in[i * 2] = next.x;
+				raw_data_in[i * 2 + 1] = next.y;
 				double slope = (next.y - current.y) / (next.x - current.x);
 				double intercept = next.y - slope * next.x;
 				si_pair current_si = { 
@@ -284,8 +287,10 @@ namespace rawaccel {
 					this->log_lookup[log_index] = i;
 					log_index++;
 					log_inner_iterator += log_inner_slice;
-					log_value = pow(2, log_inner_iterator);
+					log_value = exp(log_inner_iterator);
 				}
+
+				current = next;
 			}
 		}
 

@@ -178,6 +178,20 @@ public ref struct ArbitraryLut sealed : public LutBase
 
     array<float, 2>^ data;
 
+    ArbitraryLut()
+    {
+    }
+
+    ArbitraryLut(const ra::arbitrary_lut& table)
+    {
+        mode = Mode::arbitrary;
+        transfer = true;
+        data = gcnew array<float, 2>(table.last_arbitrary_index + 1, 2);
+
+        pin_ptr<float> pdata = &data[0,0];
+        std::memcpy(pdata, &table.raw_data_in, sizeof(float) * 2 * (table.last_arbitrary_index + 1));
+    }
+
     virtual void SetArgs(TableArgs% args) override
     {
         args.mode = TableMode::arbitrary;
@@ -565,7 +579,7 @@ private:
         case ra::table_mode::off: return nullptr;
         case ra::table_mode::linear: return gcnew LinearLut(au.lin_lut);
         case ra::table_mode::binlog: return gcnew BinLogLut(au.log_lut);
-        case ra::table_mode::arbitrary:
+        case ra::table_mode::arbitrary: return gcnew ArbitraryLut(au.arb_lut);
         default: throw gcnew NotImplementedException();
         }
     }
