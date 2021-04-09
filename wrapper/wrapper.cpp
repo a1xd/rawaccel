@@ -210,7 +210,7 @@ public ref struct SpacedLut abstract : public LutBase
 
     void SetDataBase(ra::accel_union& accel)
     {
-        if (size_t(data->LongLength) > ra::LUT_CAPACITY) {
+        if (size_t(data->LongLength) > ra::SPACED_LUT_CAPACITY) {
             throw gcnew InteropException("data is too large");
         }
     }

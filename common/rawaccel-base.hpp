@@ -15,7 +15,7 @@ namespace rawaccel {
 
     inline constexpr size_t MAX_DEV_ID_LEN = 200;
 
-    inline constexpr size_t LUT_CAPACITY = 1025;
+    inline constexpr size_t SPACED_LUT_CAPACITY = 1025;
 
     inline constexpr double MAX_NORM = 16;
     inline constexpr double PI = 3.14159265358979323846;

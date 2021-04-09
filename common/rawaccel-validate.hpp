@@ -27,7 +27,7 @@ namespace rawaccel {
 		};
 
 		auto check_accel = [&error](const accel_args& args) {
-			static_assert(LUT_CAPACITY == 1025, "update error msg");
+			static_assert(SPACED_LUT_CAPACITY == 1025, "update error msg");
 
 			const auto& lut_args = args.lut_args;
 

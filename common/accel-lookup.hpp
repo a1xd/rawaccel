@@ -3,6 +3,8 @@
 #include "rawaccel-base.hpp"
 #include "utility.hpp"
 
+#include <math.h>
+
 namespace rawaccel {
 
 	struct linear_range {
@@ -55,7 +57,7 @@ namespace rawaccel {
 
 	template <typename Lookup>
 	struct lut_base {
-		enum { capacity = LUT_CAPACITY };
+		enum { capacity = SPACED_LUT_CAPACITY };
 		using value_t = float;
 
 		template <typename Func>
@@ -150,19 +152,21 @@ namespace rawaccel {
 	};
 
 	struct si_pair { 
-		double slope = 0;
-		double intercept = 0; 
+		float slope = 0;
+		float intercept = 0;
 	};
 
 	struct arbitrary_lut_point {
-		double applicable_speed = 0;
+		float applicable_speed = 0;
 		si_pair slope_intercept = {};
 	};
 
 	struct arbitrary_lut {
+		enum { capacity = SPACED_LUT_CAPACITY / 4 };
+
 		fp_rep_range range;
-		arbitrary_lut_point data[LUT_CAPACITY] = {};
-		int log_lookup[LUT_CAPACITY] = {};
+		arbitrary_lut_point data[capacity] = {};
+		int log_lookup[capacity] = {};
 		double first_point_speed;
 		double last_point_speed;
 		int last_arbitrary_index;
@@ -226,8 +230,20 @@ namespace rawaccel {
 			return pair.slope + pair.intercept / speed;
 		}
 
-		void fill(vec2d* points, int length)
+
+		void init(vec2d* points, int length)
 		{
+			first_point_speed = points[0].x;
+			// -2 because the last index in the arbitrary array is used for slope-intercept only
+			last_arbitrary_index = length - 2;
+			last_point_speed = points[last_arbitrary_index].x;
+
+			int start = static_cast<int>(floor(log(first_point_speed)));
+			int end = static_cast<int>(floor(log(last_point_speed)));
+			int num = static_cast<int>(capacity / (end - start));
+			range = fp_rep_range{ start, end, num };
+			last_log_lookup_index = num * (end - start) - 1;
+
 			vec2d current = {0, 0};
 			vec2d next;
 			int log_index = 0;
@@ -240,14 +256,20 @@ namespace rawaccel {
 				next = points[i];
 				double slope = (next.y - current.y) / (next.x - current.x);
 				double intercept = next.y - slope * next.x;
-				si_pair current_si = { slope, intercept };
-				arbitrary_lut_point current_lut_point = { next.x, current_si };
+				si_pair current_si = { 
+					static_cast<float>(slope), 
+					static_cast<float>(intercept)
+				};
+				arbitrary_lut_point current_lut_point = { 
+					static_cast<float>(next.x), 
+					current_si 
+				};
 
 				this->data[i] = current_lut_point;
 
 				while (log_value < next.x)
 				{
-					this->log_lookup[log_index] = log_value;
+					this->log_lookup[log_index] = static_cast<int>(log_value);
 					log_index++;
 					log_inner_iterator += log_inner_slice;
 					log_value = pow(2, log_inner_iterator);
@@ -257,18 +279,9 @@ namespace rawaccel {
 
 		arbitrary_lut(vec2d* points, int length)
 		{
-			first_point_speed = points[0].x;
-			// -2 because the last index in the arbitrary array is used for slope-intercept only
-			last_arbitrary_index = length - 2;
-			last_point_speed = points[last_arbitrary_index].x;
-
-			int start = static_cast<int>(log(first_point_speed));
-			int end = static_cast<int>(log(last_point_speed));
-			int num = static_cast<int>(LUT_CAPACITY / (end - start));
-			range = fp_rep_range{ start, end, num };
-			last_log_lookup_index = num * (end - start) - 1;
-
-			fill(points, length);
+			init(points, length);
 		}
+
+		arbitrary_lut(const accel_args&) {}
 	};
 }

@@ -66,7 +66,7 @@ namespace rawaccel {
         case internal_mode::motivity_gain: return vis(u.motivity_g);
         case internal_mode::lut_log:       return vis(u.log_lut);
         case internal_mode::lut_lin:       return vis(u.lin_lut);
-        case internal_mode::lut_arb:
+        case internal_mode::lut_arb:       return vis(u.arb_lut);
         default:                           return vis(u.noaccel);
         }
     }
@@ -84,6 +84,7 @@ namespace rawaccel {
         motivity motivity_g;
         linear_lut lin_lut;
         binlog_lut log_lut;
+        arbitrary_lut arb_lut;
         accel_noaccel noaccel = {};
 
         accel_union(const accel_args& args)
