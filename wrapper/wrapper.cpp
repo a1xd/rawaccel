@@ -187,9 +187,9 @@ public ref struct ArbitraryLut sealed : public LutBase
     virtual void SetData(ra::accel_union& accel) override
     {
         pin_ptr<float> pdata = &data[0,0];
-        std::memcpy(&accel.arb_lut.raw_data_in, pdata, sizeof(float) * data->Length * 2);
-    }
 
+        accel.arb_lut.fill(pdata, data->Length);
+    }
 };
 
 [JsonObject(ItemRequired = Required::Always)]
@@ -211,7 +211,7 @@ public ref struct SpacedLut abstract : public LutBase
 
     void SetDataBase(ra::accel_union& accel)
     {
-        if (size_t(data->LongLength) > ra::LUT_CAPACITY) {
+        if (size_t(data->LongLength) > ra::SPACED_LUT_CAPACITY) {
             throw gcnew InteropException("data is too large");
         }
     }
@@ -518,9 +518,9 @@ public:
             auto settings = gcnew ExtendedSettings();
             Marshal::PtrToStructure(IntPtr(&instance->data.args), settings->baseSettings);
             settings->tables.x = extract(instance->data.args.argsv.x.lut_args.mode, 
-                instance->data.mod.accels.x);
+                instance->data.mod.accel.x);
             settings->tables.y = extract(instance->data.args.argsv.y.lut_args.mode,
-                instance->data.mod.accels.y);
+                instance->data.mod.accel.y);
             return settings;
         }
 
@@ -531,11 +531,11 @@ public:
             instance->inv = ra::invokers(instance->data.args);
 
             if (val->tables.x) {
-                val->tables.x->SetData(instance->data.mod.accels.x);
+                val->tables.x->SetData(instance->data.mod.accel.x);
             }
 
             if (val->tables.y) {
-                val->tables.y->SetData(instance->data.mod.accels.y);
+                val->tables.y->SetData(instance->data.mod.accel.y);
             }   
         }
 

@@ -28,7 +28,7 @@ namespace rawaccel {
 
 			double offset_x = offset - x;
 			double decay = exp(accel * offset_x);
-			return limit * (1 - (decay * offset_x + offset) / x) + 1;
+			return limit * (1 - (offset - decay * offset_x) / x) + 1;
 		}
 
 		using natural_base::natural_base;
@@ -43,7 +43,7 @@ namespace rawaccel {
 
 			double offset_x = offset - x;
 			double decay = exp(accel * offset_x);
-			double output = limit * (offset_x + decay / accel) + constant;
+			double output = limit * (decay / accel - offset_x) + constant;
 			return output / x + 1;
 		}
 

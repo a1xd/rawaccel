@@ -3,6 +3,8 @@
 #include "rawaccel-base.hpp"
 #include "utility.hpp"
 
+#include <math.h>
+
 namespace rawaccel {
 
 	struct linear_range {
@@ -55,7 +57,7 @@ namespace rawaccel {
 
 	template <typename Lookup>
 	struct lut_base {
-		enum { capacity = LUT_CAPACITY };
+		enum { capacity = SPACED_LUT_CAPACITY };
 		using value_t = float;
 
 		template <typename Func>
@@ -150,20 +152,22 @@ namespace rawaccel {
 	};
 
 	struct si_pair { 
-		double slope = 0;
-		double intercept = 0; 
+		float slope = 0;
+		float intercept = 0;
 	};
 
 	struct arbitrary_lut_point {
-		double applicable_speed = 0;
+		float applicable_speed = 0;
 		si_pair slope_intercept = {};
 	};
 
 	struct arbitrary_lut {
+		enum { capacity = SPACED_LUT_CAPACITY / 4 };
+
 		fp_rep_range range;
-		arbitrary_lut_point data[LUT_CAPACITY] = {};
-		int log_lookup[LUT_CAPACITY] = {};
-		float raw_data_in[LUT_CAPACITY * 2] = {};
+;
+		arbitrary_lut_point data[capacity] = {};
+		int log_lookup[capacity] = {};
 		double first_point_speed;
 		double last_point_speed;
 		int last_arbitrary_index;
@@ -172,27 +176,34 @@ namespace rawaccel {
 		double operator()(double speed) const
 		{
 			int index = 0;
+			int last_arb_index = last_arbitrary_index;
+			int last_log_index = last_log_lookup_index;
 
-			if (speed < first_point_speed)
+			if (unsigned(last_arb_index) < capacity &&
+				unsigned(last_log_index) < capacity &&
+				speed > first_point_speed)
 			{
-				// Apply from 0 index
-			}
-			else if (speed > last_point_speed)
-			{
-				index = last_arbitrary_index;
-			}
-			else if (speed > range.stop)
-			{
-				index = search_from(log_lookup[last_log_lookup_index], speed);
-			}
-			else if (speed < range.start)
-			{
-				index = search_from(0, speed);
-			}
-			else
-			{
-				int log_lookup = get_log_index(speed);
-				index = search_from(log_lookup, speed);
+				if (speed > last_point_speed)
+				{
+					index = last_arb_index;
+				}
+				else if (speed > range.stop)
+				{
+					int last_log = log_lookup[last_log_index];
+					if (unsigned(last_log) >= capacity) return 1;
+					index = search_from(last_log, last_arb_index, speed);
+				}
+				else if (speed < range.start)
+				{
+					index = search_from(0, last_arb_index, speed);
+				}
+				else
+				{
+					int log_index = get_log_index(speed);
+					if (unsigned(log_index) >= capacity) return 1;
+					index = search_from(log_index, last_arb_index, speed);
+				}
+
 			}
 
 			return apply(index, speed);
@@ -205,7 +216,7 @@ namespace rawaccel {
 			return index;
 		}
 
-		int inline search_from(int index, double speed) const
+		int inline search_from(int index, int last, double speed) const
 		{
 			int prev_index;
 
@@ -214,7 +225,7 @@ namespace rawaccel {
 				prev_index = index;
 				index++;
 			}
-			while (index <= last_arbitrary_index && data[index].applicable_speed < speed);
+			while (index <= last && data[index].applicable_speed < speed);
 
 			index--;
 
@@ -227,10 +238,22 @@ namespace rawaccel {
 			return pair.slope + pair.intercept / speed;
 		}
 
-		void fill(float* points, int length)
+
+		void fill(vec2<float>* points, int length)
 		{
-			vec2d current = {0, 0};
-			vec2d next;
+			first_point_speed = points[0].x;
+			// -2 because the last index in the arbitrary array is used for slope-intercept only
+			last_arbitrary_index = length - 2;
+			last_point_speed = points[last_arbitrary_index].x;
+
+			int start = static_cast<int>(floor(log(first_point_speed)));
+			int end = static_cast<int>(floor(log(last_point_speed)));
+			int num = static_cast<int>(capacity / (end - start));
+			range = fp_rep_range{ start, end, num };
+			last_log_lookup_index = num * (end - start) - 1;
+
+			vec2<float> current = {0, 0};
+			vec2<float> next;
 			int log_index = 0;
 			double log_inner_iterator = range.start;
 			double log_inner_slice = 1 / range.num;
@@ -238,17 +261,23 @@ namespace rawaccel {
 
 			for (int i = 0; i < length; i++)
 			{
-				next = vec2d{ points[i * 2], points[i * 2 + 1] };
+				next = points[i];
 				double slope = (next.y - current.y) / (next.x - current.x);
 				double intercept = next.y - slope * next.x;
-				si_pair current_si = { slope, intercept };
-				arbitrary_lut_point current_lut_point = { next.x, current_si };
+				si_pair current_si = { 
+					static_cast<float>(slope), 
+					static_cast<float>(intercept)
+				};
+				arbitrary_lut_point current_lut_point = { 
+					static_cast<float>(next.x), 
+					current_si 
+				};
 
 				this->data[i] = current_lut_point;
 
 				while (log_value < next.x)
 				{
-					this->log_lookup[log_index] = log_value;
+					this->log_lookup[log_index] = static_cast<int>(log_value);
 					log_index++;
 					log_inner_iterator += log_inner_slice;
 					log_value = pow(2, log_inner_iterator);
@@ -256,20 +285,8 @@ namespace rawaccel {
 			}
 		}
 
-		arbitrary_lut(const table_args &args)
+		arbitrary_lut(const accel_args&)
 		{
-			first_point_speed = raw_data_in[0];
-			// -2 because the last index in the arbitrary array is used for slope-intercept only
-			last_arbitrary_index = (length - 2)*2;
-			last_point_speed = raw_data_in[last_arbitrary_index];
-
-			double start = (int)floor(log(first_point_speed));
-			double end = (int)floor(log(last_point_speed));
-			double num = (int)floor(LUT_CAPACITY / (end - start));
-			range = fp_rep_range{ start, end, num };
-			last_log_lookup_index = num * (end - start) - 1;
-
-			fill(raw_data_in, length);
 		}
 	};
 }
