@@ -158,7 +158,7 @@ public ref struct DriverSettings
 };
 
 [JsonObject(ItemRequired = Required::Always)]
-public ref struct LutBase abstract
+public ref struct LutBase
 {
     [JsonConverter(Converters::StringEnumConverter::typeid)]
     enum class Mode
@@ -166,8 +166,8 @@ public ref struct LutBase abstract
         logarithmic, linear, arbitrary
     } mode;
 
-    virtual void SetArgs(TableArgs%) abstract;
-    virtual void SetData(ra::accel_union&) abstract;
+    virtual void SetArgs(TableArgs%) {}
+    virtual void SetData(ra::accel_union&) {}
 };
 
 [JsonObject(ItemRequired = Required::Always)]
@@ -220,6 +220,10 @@ public ref struct SpacedLut abstract : public LutBase
 [JsonObject(ItemRequired = Required::Always)]
 public ref struct LinearLut sealed : public SpacedLut
 {
+    LinearLut()
+    {
+    }
+
     LinearLut(const ra::linear_lut& table)
     {
         mode = Mode::linear;
