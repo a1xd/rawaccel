@@ -254,9 +254,9 @@ namespace rawaccel {
 			first_log_lookup_speed = exp(start*1.0);
 			int end = static_cast<int>(floor(log(last_point_speed)));
 			last_log_lookup_speed = exp(end*1.0);
-			int num = static_cast<int>(capacity / (end - start));
+			int num = end > start ? static_cast<int>(capacity / (end - start)) : 1;
 			range = fp_rep_range{ start, end, num };
-			last_log_lookup_index = num * (end - start) - 1;
+			last_log_lookup_index = end > start ? num * (end - start) - 1 : 0;
 
 			vec2<float> current = {0, 0};
 			vec2<float> next;
