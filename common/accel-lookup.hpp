@@ -204,7 +204,8 @@ namespace rawaccel {
 				{
 					int log_index = get_log_index(speed);
 					if (unsigned(log_index) >= capacity) return 1;
-					index = search_from(log_index, last_arb_index, speed);
+					int arbitrary_index = log_lookup[log_index];
+					index = search_from(arbitrary_index, last_arb_index, speed);
 				}
 
 			}
@@ -245,9 +246,9 @@ namespace rawaccel {
 		void fill(vec2<float>* points, int length)
 		{
 			first_point_speed = points[0].x;
+			last_arbitrary_index = length - 1;
 			// -2 because the last index in the arbitrary array is used for slope-intercept only
-			last_arbitrary_index = length - 2;
-			last_point_speed = points[last_arbitrary_index].x;
+			last_point_speed = points[length-2].x;
 
 			int start = static_cast<int>(floor(log(first_point_speed)));
 			first_log_lookup_speed = exp(start*1.0);
@@ -262,7 +263,7 @@ namespace rawaccel {
 			int log_index = 0;
 			double log_inner_iterator = range.start;
 			double log_inner_slice = 1.0 / (range.num * 1.0);
-			double log_value = pow(2, log_inner_iterator);
+			double log_value = exp(log_inner_iterator);
 
 			for (int i = 0; i < length; i++)
 			{
@@ -276,7 +277,7 @@ namespace rawaccel {
 					static_cast<float>(intercept)
 				};
 				arbitrary_lut_point current_lut_point = { 
-					static_cast<float>(next.x), 
+					static_cast<float>(current.x), 
 					current_si 
 				};
 
