@@ -10,7 +10,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = LinearName;
-            Index = (int)AccelMode.classic;
+            Mode = AccelMode.classic;
             LogarithmicCharts = false;
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);

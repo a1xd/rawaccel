@@ -34,11 +34,7 @@ namespace grapher.Layouts
             LogarithmicCharts = false;
         }
 
-        /// <summary>
-        ///  Gets or sets mapping from acceleration type to identifying integer.
-        ///  Must match accel_mode defined in rawaccel-settings.h
-        /// </summary>
-        public int Index { get; protected set; }
+        public AccelMode Mode { get; protected set; }
 
         public string Name { get; protected set; }
 
@@ -63,6 +59,11 @@ namespace grapher.Layouts
         protected OptionLayout LUTTextLayout { get; set; }
 
         protected OptionLayout GainSwitchOptionLayout { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public void Layout(
             IOption gainSwitchOption,

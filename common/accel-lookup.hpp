@@ -97,7 +97,7 @@ namespace rawaccel {
 			return y;
 		}
 
-		linear_lut(const table_args& args) :
+		linear_lut(const spaced_lut_args& args) :
 			range({
 				args.start,
 				args.stop,
@@ -106,7 +106,7 @@ namespace rawaccel {
 			transfer(args.transfer) {}
 
 		linear_lut(const accel_args& args) :
-			linear_lut(args.lut_args) {}
+			linear_lut(args.spaced_args) {}
 	};
 
 	struct binlog_lut : lut_base<binlog_lut> {
@@ -138,7 +138,7 @@ namespace rawaccel {
 			return y;
 		}
 
-		binlog_lut(const table_args& args) :
+		binlog_lut(const spaced_lut_args& args) :
 			range({
 				static_cast<int>(args.start),
 				static_cast<int>(args.stop),
@@ -148,7 +148,7 @@ namespace rawaccel {
 			transfer(args.transfer) {}
 
 		binlog_lut(const accel_args& args) :
-			binlog_lut(args.lut_args) {}
+			binlog_lut(args.spaced_args) {}
 	};
 
 	struct si_pair { 
@@ -162,12 +162,10 @@ namespace rawaccel {
 	};
 
 	struct arbitrary_lut {
-		enum { capacity = SPACED_LUT_CAPACITY / 4 };
+		enum { capacity = ARB_LUT_CAPACITY };
 
 		fp_rep_range range;
-;
 		arbitrary_lut_point data[capacity] = {};
-		float raw_data_in[capacity*2] = {};
 		int log_lookup[capacity] = {};
 		double first_point_speed;
 		double last_point_speed;
@@ -175,6 +173,7 @@ namespace rawaccel {
 		int last_log_lookup_index;
 		double last_log_lookup_speed;
 		double first_log_lookup_speed;
+		bool velocity_points;
 
 		double operator()(double speed) const
 		{
@@ -205,6 +204,7 @@ namespace rawaccel {
 					int log_index = get_log_index(speed);
 					if (unsigned(log_index) >= capacity) return 1;
 					int arbitrary_index = log_lookup[log_index];
+					if (arbitrary_index < 0) return 1;
 					index = search_from(arbitrary_index, last_arb_index, speed);
 				}
 
@@ -238,12 +238,19 @@ namespace rawaccel {
 
 		double inline apply(int index, double speed) const
 		{
-			si_pair pair = data[index].slope_intercept;
-			return pair.slope + pair.intercept / speed;
+			auto [slope, intercept] = data[index].slope_intercept;
+
+			if (velocity_points)
+			{
+				return slope + intercept / speed;
+			}
+			else
+			{
+				return slope * speed + intercept;
+			}
 		}
 
-
-		void fill(vec2<float>* points, int length)
+		void fill(const vec2<float>* points, int length)
 		{
 			first_point_speed = points[0].x;
 			last_arbitrary_index = length - 1;
@@ -268,8 +275,6 @@ namespace rawaccel {
 			for (int i = 0; i < length; i++)
 			{
 				next = points[i];
-				raw_data_in[i * 2] = next.x;
-				raw_data_in[i * 2 + 1] = next.y;
 				double slope = (next.y - current.y) / (next.x - current.x);
 				double intercept = next.y - slope * next.x;
 				si_pair current_si = { 
@@ -295,8 +300,10 @@ namespace rawaccel {
 			}
 		}
 
-		arbitrary_lut(const accel_args&)
+		arbitrary_lut(const accel_args& args)
 		{
+			velocity_points = args.arb_args.velocity;
+			fill(args.arb_args.data, args.arb_args.length);
 		}
 	};
 }

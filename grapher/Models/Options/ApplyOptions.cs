@@ -81,55 +81,30 @@ namespace grapher.Models.Options
 
         #region Methods
 
-        public Vec2<AccelMode> GetModes()
+        public void SetArgs(ref Vec2<AccelArgs> args)
         {
-            var xMode = (AccelMode)OptionSetX.Options.AccelerationIndex;
+            OptionSetX.SetArgs(ref args.x);
 
-            return new Vec2<AccelMode>
+            if (ByComponentVectorXYLock.Checked)
             {
-                x = xMode,
-                y = ByComponentVectorXYLock.Checked ? xMode : (AccelMode)OptionSetY.Options.AccelerationIndex
-            };
-        }
-
-        public Vec2<AccelArgs> GetArgs()
-        {
-            var xArgs = OptionSetX.GenerateArgs();
-            
-            return new Vec2<AccelArgs>
+                OptionSetX.SetArgs(ref args.y);
+            }
+            else
             {
-                x = xArgs,
-                y = ByComponentVectorXYLock.Checked ? xArgs : OptionSetY.GenerateArgs()
-            };
-
-        }
-
-        public void SetActiveValues(
-            double xSens,
-            double ySens,
-            double rotation,
-            AccelArgs xArgs,
-            AccelArgs yArgs,
-            bool isWhole)
-        {
-            Sensitivity.SetActiveValues(xSens, ySens);
-            Rotation.SetActiveValue(rotation);
-            OptionSetX.SetActiveValues(xArgs);
-            WholeVectorCheckBox.Checked = isWhole;
-            ByComponentVectorCheckBox.Checked = !isWhole;
-            ByComponentVectorXYLock.Checked = xArgs.Equals(yArgs);
-            OptionSetY.SetActiveValues(yArgs);
+                OptionSetY.SetArgs(ref args.y);
+            }
         }
 
         public void SetActiveValues(DriverSettings settings)
         {
-            SetActiveValues(
-                settings.sensitivity.x,
-                settings.sensitivity.y,
-                settings.rotation,
-                settings.args.x,
-                settings.args.y,
-                settings.combineMagnitudes);
+            Sensitivity.SetActiveValues(settings.sensitivity.x, settings.sensitivity.y);
+            Rotation.SetActiveValue(settings.rotation);
+            
+            WholeVectorCheckBox.Checked = settings.combineMagnitudes;
+            ByComponentVectorCheckBox.Checked = !settings.combineMagnitudes;
+            ByComponentVectorXYLock.Checked = settings.args.x.Equals(settings.args.y);
+            OptionSetX.SetActiveValues(ref settings.args.x);
+            OptionSetY.SetActiveValues(ref settings.args.y);
 
             Directionality.SetActiveValues(settings);
 

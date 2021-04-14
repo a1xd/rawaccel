@@ -8,7 +8,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Off";
-            Index = (int)AccelMode.noaccel;
+            Mode = AccelMode.noaccel;
             LogarithmicCharts = false;
 
             GainSwitchOptionLayout = new OptionLayout(false, string.Empty);

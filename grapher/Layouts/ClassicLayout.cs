@@ -8,7 +8,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Classic";
-            Index = (int)AccelMode.classic;
+            Mode = AccelMode.classic;
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);
             AccelLayout = new OptionLayout(true, Acceleration);

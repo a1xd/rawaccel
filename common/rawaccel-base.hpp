@@ -16,6 +16,7 @@ namespace rawaccel {
     inline constexpr size_t MAX_DEV_ID_LEN = 200;
 
     inline constexpr size_t SPACED_LUT_CAPACITY = 1025;
+    inline constexpr size_t ARB_LUT_CAPACITY = SPACED_LUT_CAPACITY / 4;
 
     inline constexpr double MAX_NORM = 16;
     inline constexpr double PI = 3.14159265358979323846;
@@ -24,21 +25,20 @@ namespace rawaccel {
         classic,
         jump,
         natural,
-        power,
         motivity,
-        lookuptable,
+        power,
+        arb_lookup,
         noaccel
     };
 
-    enum class table_mode {
+    enum class spaced_lut_mode {
         off,
         binlog,
-        linear,
-        arbitrary
+        linear
     };
 
-    struct table_args {
-        table_mode mode = table_mode::off;
+    struct spaced_lut_args {
+        spaced_lut_mode mode = spaced_lut_mode::off;
         bool transfer = true;
         unsigned char partitions = 2;
         short num_elements = 8;
@@ -46,11 +46,15 @@ namespace rawaccel {
         double stop = 8;
     };
 
+    struct table_args {
+        bool velocity = true;
+        int length = 0;
+        vec2<float> data[ARB_LUT_CAPACITY] = {};
+    };
+
     struct accel_args {
         accel_mode mode = accel_mode::noaccel;
         bool legacy = false;
-
-        table_args lut_args = {};
 
         double offset = 0;
         double cap = 1.5;
@@ -65,6 +69,9 @@ namespace rawaccel {
         double limit = 1.5;
         double midpoint = 5;
         double smooth = 0.5;
+
+        spaced_lut_args spaced_args;
+        table_args arb_args;
     };
 
     struct domain_args {

@@ -8,7 +8,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Jump";
-            Index = (int)AccelMode.jump;
+            Mode = AccelMode.jump;
             LogarithmicCharts = false;
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);

@@ -16,27 +16,31 @@ namespace rawaccel {
         jump_gain,
         natural_lgcy,
         natural_gain,
-        power_lgcy,
-        power_gain,
         motivity_lgcy,
         motivity_gain,
+        power,
+        lut_arb,
         lut_log,
         lut_lin,
-        lut_arb,
         noaccel
     };
 
-    constexpr internal_mode make_mode(accel_mode mode, table_mode lut_mode, bool legacy) 
+    constexpr internal_mode make_mode(accel_mode mode, spaced_lut_mode lut_mode, bool legacy) 
     {
-        if (lut_mode != table_mode::off) {
+        if (lut_mode != spaced_lut_mode::off) {
             switch (lut_mode) {
-            case table_mode::binlog: return internal_mode::lut_log;
-            case table_mode::linear: return internal_mode::lut_lin;
-            case table_mode::arbitrary: return internal_mode::lut_arb;
+            case spaced_lut_mode::binlog: return internal_mode::lut_log;
+            case spaced_lut_mode::linear: return internal_mode::lut_lin;
             default: return internal_mode::noaccel;
             }
         }
-        else if (mode == accel_mode::noaccel) {
+        else if (mode == accel_mode::power) {
+            return internal_mode::power;
+        }
+        else if (mode == accel_mode::arb_lookup) {
+            return internal_mode::lut_arb;
+        }
+        else if (mode >= accel_mode::noaccel) {
             return internal_mode::noaccel;
         }
         else {
@@ -47,7 +51,7 @@ namespace rawaccel {
 
     constexpr internal_mode make_mode(const accel_args& args) 
     {
-        return make_mode(args.mode, args.lut_args.mode, args.legacy);
+        return make_mode(args.mode, args.spaced_args.mode, args.legacy);
     }
 
     template <typename Visitor, typename AccelUnion>
@@ -60,13 +64,12 @@ namespace rawaccel {
         case internal_mode::jump_gain:     return vis(u.jump_g);
         case internal_mode::natural_lgcy:  return vis(u.natural_l);
         case internal_mode::natural_gain:  return vis(u.natural_g);
-        case internal_mode::power_lgcy:    return vis(u.power_l);
-        case internal_mode::power_gain:    return vis(u.power_g);
         case internal_mode::motivity_lgcy: return vis(u.motivity_l);
         case internal_mode::motivity_gain: return vis(u.motivity_g);
+        case internal_mode::power:         return vis(u.power);
+        case internal_mode::lut_arb:       return vis(u.arb_lut);
         case internal_mode::lut_log:       return vis(u.log_lut);
         case internal_mode::lut_lin:       return vis(u.lin_lut);
-        case internal_mode::lut_arb:       return vis(u.arb_lut);
         default:                           return vis(u.noaccel);
         }
     }
@@ -78,8 +81,7 @@ namespace rawaccel {
         jump_legacy jump_l;
         natural natural_g;
         natural_legacy natural_l;
-        power power_g;
-        power_legacy power_l;
+        power power;
         sigmoid motivity_l;
         motivity motivity_g;
         linear_lut lin_lut;

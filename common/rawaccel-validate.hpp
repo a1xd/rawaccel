@@ -29,13 +29,13 @@ namespace rawaccel {
 		auto check_accel = [&error](const accel_args& args) {
 			static_assert(SPACED_LUT_CAPACITY == 1025, "update error msg");
 
-			const auto& lut_args = args.lut_args;
+			const auto& lut_args = args.spaced_args;
 
 			if (lut_args.partitions <= 0) {
 				error("lut partitions"" must be positive");
 			}
 
-			if (lut_args.mode == table_mode::linear) {
+			if (lut_args.mode == spaced_lut_mode::linear) {
 				if (lut_args.start <= 0) {
 					error("start"" must be positive");
 				}
@@ -49,7 +49,7 @@ namespace rawaccel {
 					error("num must be between 2 and 1025");
 				}
 			}
-			else if (lut_args.mode == table_mode::binlog) {
+			else if (lut_args.mode == spaced_lut_mode::binlog) {
 				int istart = static_cast<int>(lut_args.start);
 				int istop = static_cast<int>(lut_args.stop);
 
@@ -73,6 +73,11 @@ namespace rawaccel {
 				}
 			}
 
+			if (args.mode == accel_mode::arb_lookup) {
+				if (args.arb_args.length < 2) {
+					error("lookup mode requires at least 2 points");
+				}
+			}
 
 			if (args.offset < 0) {
 				error("offset can not be negative");

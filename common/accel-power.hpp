@@ -24,5 +24,4 @@ namespace rawaccel {
 		}
 	};
 
-	using power_legacy = power;
 }

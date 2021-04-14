@@ -6,7 +6,7 @@
             : base()
         {
             Name = "Power";
-            Index = (int)AccelMode.power;
+            Mode = AccelMode.power;
             LogarithmicCharts = false;
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);

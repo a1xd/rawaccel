@@ -12,19 +12,15 @@ namespace grapher
     {
         #region Fields
 
-        public static readonly Dictionary<string, LayoutBase> AccelerationTypes = new List<LayoutBase>
-        {
-            new LinearLayout(),
-            new ClassicLayout(),
-            new NaturalLayout(),
-            new JumpLayout(),
-            new PowerLayout(),
-            new MotivityLayout(),
-            new LUTLayout(),
-            new OffLayout(),
-        }.ToDictionary(k => k.Name);
-
-        public static readonly AccelArgs DefaultArgs = new DriverSettings().args.x;
+        public static readonly LayoutBase Linear = new LinearLayout();
+        public static readonly LayoutBase Classic = new ClassicLayout();
+        public static readonly LayoutBase Jump = new JumpLayout();
+        public static readonly LayoutBase Natural = new NaturalLayout();
+        public static readonly LayoutBase Motivity = new MotivityLayout();
+        public static readonly LayoutBase Power = new PowerLayout();
+        public static readonly LayoutBase LUT = new LUTLayout();
+        public static readonly LayoutBase Off = new OffLayout();
+        public static readonly LayoutBase Unsupported = new UnsupportedLayout();
 
         #endregion Fields
 
@@ -47,7 +43,19 @@ namespace grapher
         {
             AccelDropdown = accelDropdown;
             AccelDropdown.Items.Clear();
-            AccelDropdown.Items.AddRange(AccelerationTypes.Keys.ToArray());
+            AccelDropdown.Items.AddRange(
+                new LayoutBase[]
+                {
+                    Linear,
+                    Classic,
+                    Jump,
+                    Natural,
+                    Motivity,
+                    Power,
+                    LUT,
+                    Off
+                });
+
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
             GainSwitch = gainSwitch;
@@ -67,7 +75,8 @@ namespace grapher
             AccelTypeActiveValue.Height = AccelDropdown.Height;
             GainSwitch.Left = Acceleration.Field.Left;
 
-            Layout("Off");
+            AccelerationType = Off;
+            Layout();
             ShowingDefault = true;
         }
 
@@ -79,16 +88,6 @@ namespace grapher
         public Button WriteButton { get; }
 
         public ComboBox AccelDropdown { get; }
-
-        public int AccelerationIndex
-        {
-            get
-            {
-                return AccelerationType.Index;
-            }
-        }
-
-        public LayoutBase AccelerationType { get; private set; }
 
         public ActiveValueLabel AccelTypeActiveValue { get; }
 
@@ -111,6 +110,18 @@ namespace grapher
         public TextOption LutText { get; }
 
         public CheckBoxOption GainSwitch { get; }
+
+        public LayoutBase AccelerationType
+        {
+            get
+            {
+                return AccelDropdown.SelectedItem as LayoutBase;
+            }
+            private set
+            {
+                AccelDropdown.SelectedItem = value;
+            }
+        }
 
         public override int Top 
         {
@@ -201,18 +212,15 @@ namespace grapher
             Show();
         }
 
-        public void SetActiveValues(AccelArgs args)
+        public void SetActiveValues(ref AccelArgs args)
         {
-            AccelerationType = AccelTypeFromSettings(args);
+            AccelerationType = AccelTypeFromSettings(ref args);
             AccelTypeActiveValue.SetValue(AccelerationType.Name);
-            // Add one to include linear, which is not represented separately in the config
-            AccelDropdown.SelectedIndex = AccelerationType.Index + 1;
-
             GainSwitch.SetActiveValue(args.legacy);
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValue(args.cap);
             Offset.SetActiveValue(args.offset);
-            Acceleration.SetActiveValue(AccelerationParameterFromArgs(args));
+            Acceleration.SetActiveValue(AccelerationParameterFromArgs(ref args));
             Scale.SetActiveValue(args.scale);
             Limit.SetActiveValue(args.limit);
             Exponent.SetActiveValue(args.exponent);
@@ -243,7 +251,10 @@ namespace grapher
 
         public void SetArgs(ref AccelArgs args)
         {
-            args.mode = (AccelMode)AccelerationType.Index;
+            if (AccelerationType == Unsupported) throw new NotImplementedException();
+
+            args.mode = AccelerationType.Mode;
+
             if (Acceleration.Visible)
             {
                 if (args.mode == AccelMode.natural)
@@ -273,13 +284,6 @@ namespace grapher
             if (Weight.Visible) args.weight = Weight.Field.Data;
         }
 
-        public AccelArgs GenerateArgs()
-        {
-            AccelArgs args = new DriverSettings().args.x;
-            SetArgs(ref args);
-            return args;
-        }
-
         public override void AlignActiveValues()
         {
             AccelTypeActiveValue.Align();
@@ -296,15 +300,8 @@ namespace grapher
 
         private void OnIndexChanged(object sender, EventArgs e)
         {
-            var accelerationTypeString = AccelDropdown.SelectedItem.ToString();
-            Layout(accelerationTypeString, Beneath);
+            Layout(Beneath);
             ShowingDefault = false;
-        }
-
-        private void Layout(string type, int top = -1)
-        {
-            AccelerationType = AccelerationTypes[type];
-            Layout(top);
         }
 
         private void Layout(int top = -1)
@@ -328,23 +325,31 @@ namespace grapher
                 top);
         }
 
-        private LayoutBase AccelTypeFromSettings(AccelArgs args)
-        {
-            LayoutBase type;
-            if (args.mode == AccelMode.classic && args.exponent == 2)
+        private LayoutBase AccelTypeFromSettings(ref AccelArgs args)
+        { 
+            if (args.spacedTableArgs.mode != SpacedTableMode.off)
             {
-                type = AccelerationTypes.Values.Where(t => string.Equals(t.Name, LinearLayout.LinearName)).FirstOrDefault();
-            }
-            else
-            {
-                int index = (int)args.mode;
-                type = AccelerationTypes.Where(t => t.Value.Index == index).FirstOrDefault().Value;
+                if (!AccelDropdown.Items.Contains(Unsupported))
+                {
+                    AccelDropdown.Items.Add(Unsupported);
+                }
+
+                return Unsupported;
             }
 
-            return type;
+            switch (args.mode)
+            {
+                case AccelMode.classic:  return (args.power == 2) ? Linear : Classic;
+                case AccelMode.jump:     return Jump;
+                case AccelMode.natural:  return Natural;
+                case AccelMode.motivity: return Motivity;
+                case AccelMode.power:    return Power;
+                case AccelMode.lut:      return LUT;
+                default:                 return Off;
+            }
         }
 
-        private double AccelerationParameterFromArgs(AccelArgs args)
+        private double AccelerationParameterFromArgs(ref AccelArgs args)
         {
             if (args.mode == AccelMode.motivity)
             {

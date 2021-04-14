@@ -81,6 +81,7 @@
     <Compile Include="Layouts\LUTLayout.cs" />
     <Compile Include="Layouts\MotivityLayout.cs" />
     <Compile Include="Layouts\JumpLayout.cs" />
+    <Compile Include="Layouts\UnsupportedLayout.cs" />
     <Compile Include="MessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>

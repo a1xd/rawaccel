@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace grapher.Layouts
 {
-    public class LUTLayout : LayoutBase
+    public class UnsupportedLayout : LayoutBase
     {
-        public const string LUTLayoutText = "This mode is for advanced users only. It requires a lut.json file to define the velocity curve. See the guide for specifics.";
+        public const string LUTLayoutText = "This mode is unsupported by this program. See the guide for details.";
 
-        public LUTLayout()
+        public UnsupportedLayout()
             : base()
         {
-            Name = "LookUpTable";
-            Mode = AccelMode.lut;
+            Name = "Unsupported";
+            Mode = AccelMode.noaccel + 1;
 
             GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
             AccelLayout = new OptionLayout(false, Acceleration);

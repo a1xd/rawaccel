@@ -114,20 +114,19 @@ namespace grapher
 
         public void UpdateActiveSettingsFromFields()
         {
-            var settings = new DriverSettings
+            var settings = new DriverSettings();
+
+            settings.rotation = ApplyOptions.Rotation.Field.Data;
+            settings.sensitivity = new Vec2<double>
             {
-                rotation = ApplyOptions.Rotation.Field.Data,
-                sensitivity = new Vec2<double>
-                {
-                    x = ApplyOptions.Sensitivity.Fields.X,
-                    y = ApplyOptions.Sensitivity.Fields.Y
-                },
-                combineMagnitudes = ApplyOptions.IsWhole,
-                args = ApplyOptions.GetArgs(),
-                domainArgs = ApplyOptions.Directionality.GetDomainArgs(),
-                rangeXY = ApplyOptions.Directionality.GetRangeXY(),
-                deviceID = DeviceIDManager.ID,
+                x = ApplyOptions.Sensitivity.Fields.X,
+                y = ApplyOptions.Sensitivity.Fields.Y
             };
+            settings.combineMagnitudes = ApplyOptions.IsWhole;
+            ApplyOptions.SetArgs(ref settings.args);
+            settings.domainArgs = ApplyOptions.Directionality.GetDomainArgs();
+            settings.rangeXY = ApplyOptions.Directionality.GetRangeXY();
+            settings.deviceID = DeviceIDManager.ID;
 
             Settings.SetHiddenOptions(settings);
 

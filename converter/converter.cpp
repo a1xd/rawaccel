@@ -153,7 +153,7 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
 bool try_convert(const ia_settings_t& ia_settings) {
     auto get = make_extractor(ia_settings);
 
-    ra::settings ra_settings;
+    ra::settings& ra_settings = *(new ra::settings());
 
     ra_settings.degrees_rotation = get("Angle", "AngleAdjustment").value_or(0);
     ra_settings.sens = {

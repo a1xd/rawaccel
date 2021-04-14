@@ -13,7 +13,7 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Motivity";
-            Index = (int)AccelMode.motivity;
+            Mode = AccelMode.motivity;
             LogarithmicCharts = true;
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);

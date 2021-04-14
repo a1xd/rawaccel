@@ -36,8 +36,8 @@ namespace rawaccel {
 			double sum = 0;
 			double a = 0;
 			auto sigmoid_sum = [&, sig = sigmoid(args)](double b) mutable {
-				double interval = (b - a) / args.lut_args.partitions;
-				for (int i = 1; i <= args.lut_args.partitions; i++) {
+				double interval = (b - a) / args.spaced_args.partitions;
+				for (int i = 1; i <= args.spaced_args.partitions; i++) {
 					sum += sig(a + i * interval) * interval;
 				}
 				a = b;

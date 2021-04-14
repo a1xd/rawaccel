@@ -9,7 +9,7 @@ using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
 using namespace System::Reflection;
-
+using namespace System::Runtime::Serialization;
 using namespace Newtonsoft::Json;
 using namespace Newtonsoft::Json::Linq;
 
@@ -20,20 +20,20 @@ ra::settings default_settings;
 [JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class AccelMode
 {
-    classic, jump, natural, power, motivity, lut, noaccel
+    classic, jump, natural, motivity, power, lut, noaccel
 };
 
 [JsonConverter(Converters::StringEnumConverter::typeid)]
-public enum class TableMode
+public enum class SpacedTableMode
 {
-    off, binlog, linear, arbitrary
+    off, binlog, linear
 };
 
 [StructLayout(LayoutKind::Sequential)]
-public value struct TableArgs
+public value struct SpacedTableArgs
 {
     [JsonIgnore]
-    TableMode mode;
+    SpacedTableMode mode;
 
     [MarshalAs(UnmanagedType::U1)]
     bool transfer;
@@ -56,15 +56,56 @@ public value struct Vec2
 };
 
 [StructLayout(LayoutKind::Sequential)]
+public value struct TableArgs
+{
+    [JsonProperty("Whether points affect velocity (true) or sensitivity (false)")]
+    [MarshalAs(UnmanagedType::U1)]
+    bool velocity;
+
+    [JsonIgnore]
+    int length;
+
+    [MarshalAs(UnmanagedType::ByValArray, SizeConst = ra::ARB_LUT_CAPACITY)]
+    array<Vec2<float>>^ points;
+
+    virtual bool Equals(Object^ ob) override {
+        if (ob->GetType() == this->GetType()) {
+            TableArgs^ other = (TableArgs^)ob;
+
+            if (this->length != other->length) return false;
+            if (this->points == other->points) return true;
+            
+            if (unsigned(length) >= ra::ARB_LUT_CAPACITY ||
+                points == nullptr ||
+                other->points == nullptr) {
+                throw gcnew InteropException("invalid table args");
+            }
+
+            for (int i = 0; i < length; i++) {
+                if (points[i].x != other->points[i].x ||
+                    points[i].y != other->points[i].y)
+                    return false;
+            }
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    virtual int GetHashCode() override {
+        return points->GetHashCode() ^ length.GetHashCode();
+    }
+};
+
+[StructLayout(LayoutKind::Sequential)]
 public value struct AccelArgs
 {
     AccelMode mode;
 
     [MarshalAs(UnmanagedType::U1)]
     bool legacy;
-
-    [JsonProperty(Required = Required::Default)]
-    TableArgs lutArgs;
 
     double offset;
     double cap;
@@ -79,6 +120,11 @@ public value struct AccelArgs
     double limit;
     double midpoint;
     double smooth;
+
+    [JsonProperty(Required = Required::Default)]
+    SpacedTableArgs spacedTableArgs;
+
+    TableArgs tableData;
 };
 
 [StructLayout(LayoutKind::Sequential)]
@@ -155,6 +201,32 @@ public ref struct DriverSettings
     {
         Marshal::PtrToStructure(IntPtr(&default_settings), this);
     }
+
+private:
+    [OnDeserialized]
+    void OnDeserializedMethod(StreamingContext context)
+    {
+        args.x.tableData.length = args.x.tableData.points->Length;
+        args.y.tableData.length = args.y.tableData.points->Length;
+
+        array<Vec2<float>>::Resize(args.x.tableData.points, ra::ARB_LUT_CAPACITY);
+        array<Vec2<float>>::Resize(args.y.tableData.points, ra::ARB_LUT_CAPACITY);
+    }
+
+    [OnSerializing]
+    void OnSerializingMethod(StreamingContext context)
+    {
+        array<Vec2<float>>::Resize(args.x.tableData.points, args.x.tableData.length);
+        array<Vec2<float>>::Resize(args.y.tableData.points, args.y.tableData.length);
+    }
+
+    [OnSerialized]
+    void OnSerializedMethod(StreamingContext context)
+    {
+        array<Vec2<float>>::Resize(args.x.tableData.points, ra::ARB_LUT_CAPACITY);
+        array<Vec2<float>>::Resize(args.y.tableData.points, ra::ARB_LUT_CAPACITY);
+    }
+
 };
 
 [JsonObject(ItemRequired = Required::Always)]
@@ -163,48 +235,13 @@ public ref struct LutBase
     [JsonConverter(Converters::StringEnumConverter::typeid)]
     enum class Mode
     {
-        logarithmic, linear, arbitrary
+        logarithmic, linear
     } mode;
 
-    virtual void SetArgs(TableArgs%) {}
+    virtual void SetArgs(AccelArgs%) {}
     virtual void SetData(ra::accel_union&) {}
 };
 
-[JsonObject(ItemRequired = Required::Always)]
-public ref struct ArbitraryLut sealed : public LutBase
-{
-    [JsonProperty("Whether points affect velocity (true) or sensitivity (false)")]
-    bool transfer;
-
-    array<float, 2>^ data;
-
-    ArbitraryLut()
-    {
-    }
-
-    ArbitraryLut(const ra::arbitrary_lut& table)
-    {
-        mode = Mode::arbitrary;
-        transfer = true;
-        data = gcnew array<float, 2>(table.last_arbitrary_index + 1, 2);
-
-        pin_ptr<float> pdata = &data[0,0];
-        std::memcpy(pdata, &table.raw_data_in, sizeof(float) * 2 * (table.last_arbitrary_index + 1));
-    }
-
-    virtual void SetArgs(TableArgs% args) override
-    {
-        args.mode = TableMode::arbitrary;
-        args.transfer = transfer;
-    }
-
-    virtual void SetData(ra::accel_union& accel) override
-    {
-        pin_ptr<float> pdata = &data[0,0];
-
-        accel.arb_lut.fill(reinterpret_cast<vec2<float>*>(pdata), data->Length/2);
-    }
-};
 
 [JsonObject(ItemRequired = Required::Always)]
 public ref struct SpacedLut abstract : public LutBase
@@ -216,11 +253,11 @@ public ref struct SpacedLut abstract : public LutBase
     double stop;
     array<float>^ data;
 
-    void SetArgsBase(TableArgs% args)
+    void SetArgsBase(AccelArgs% args)
     {
-        args.transfer = transfer;
-        args.start = start;
-        args.stop = stop;
+        args.spacedTableArgs.transfer = transfer;
+        args.spacedTableArgs.start = start;
+        args.spacedTableArgs.stop = stop;
     }
 
     void SetDataBase(ra::accel_union& accel)
@@ -250,11 +287,11 @@ public ref struct LinearLut sealed : public SpacedLut
         std::memcpy(pdata, &table.data, sizeof(float) * data->Length);
     }
 
-    virtual void SetArgs(TableArgs% args) override
+    virtual void SetArgs(AccelArgs% args) override
     {
         SetArgsBase(args);
-        args.num = data->Length;
-        args.mode = TableMode::linear;
+        args.spacedTableArgs.num = data->Length;
+        args.spacedTableArgs.mode = SpacedTableMode::linear;
     }
 
     virtual void SetData(ra::accel_union& accel) override
@@ -270,6 +307,10 @@ public ref struct BinLogLut sealed : public SpacedLut
 {
     short num;
 
+    BinLogLut()
+    {
+    }
+
     BinLogLut(const ra::binlog_lut& table)
     {
         mode = Mode::logarithmic;
@@ -283,11 +324,11 @@ public ref struct BinLogLut sealed : public SpacedLut
         std::memcpy(pdata, &table.data, sizeof(float) * data->Length);
     }
 
-    virtual void SetArgs(TableArgs% args) override
+    virtual void SetArgs(AccelArgs% args) override
     {
         SetArgsBase(args);
-        args.num = num;
-        args.mode = TableMode::binlog;
+        args.spacedTableArgs.num = num;
+        args.spacedTableArgs.mode = SpacedTableMode::binlog;
     }
 
     virtual void SetData(ra::accel_union& accel) override
@@ -333,8 +374,6 @@ public ref struct RaConvert {
             return NonNullable<BinLogLut^>(jObject);
         case LutBase::Mode::linear:
             return NonNullable<LinearLut^>(jObject);
-        case LutBase::Mode::arbitrary:
-            return NonNullable<ArbitraryLut^>(jObject);
         default:
             throw gcnew NotImplementedException();
         }
@@ -401,7 +440,7 @@ private:
 
         if (xTableJson) {
             tables.x = RaConvert::Table(xTableJson);
-            tables.x->SetArgs(baseSettings->args.x.lutArgs);
+            tables.x->SetArgs(baseSettings->args.x);
         }
 
         if (yTableJson) {
@@ -412,7 +451,7 @@ private:
                 tables.y = RaConvert::Table(yTableJson);
             }
 
-            tables.y->SetArgs(baseSettings->args.y.lutArgs);
+            tables.y->SetArgs(baseSettings->args.y);
         }
     }
 
@@ -443,15 +482,16 @@ public:
         auto fp = static_cast<void (*)(const char*)>(
             Marshal::GetFunctionPointerForDelegate(del).ToPointer());
 
-        ra::settings args;
-        Marshal::StructureToPtr(settings, (IntPtr)&args, false);
+        ra::settings* args_ptr = new ra::settings();
+        Marshal::StructureToPtr(settings, (IntPtr)args_ptr, false);
 
         list = gcnew List<String^>();
-        auto [cx, cy, _] = ra::valid(args, fp);
+        auto [cx, cy, _] = ra::valid(*args_ptr, fp);
         countX = cx;
         countY = cy;
 
         gch.Free();
+        delete args_ptr;
     }
 
     bool Empty()
@@ -535,9 +575,9 @@ public:
         {
             auto settings = gcnew ExtendedSettings();
             Marshal::PtrToStructure(IntPtr(&instance->data.args), settings->baseSettings);
-            settings->tables.x = extract(instance->data.args.argsv.x.lut_args.mode, 
+            settings->tables.x = extract(instance->data.args.argsv.x.spaced_args.mode, 
                 instance->data.mod.accel.x);
-            settings->tables.y = extract(instance->data.args.argsv.y.lut_args.mode,
+            settings->tables.y = extract(instance->data.args.argsv.y.spaced_args.mode,
                 instance->data.mod.accel.y);
             return settings;
         }
@@ -573,13 +613,12 @@ public:
     }
 
 private:
-    LutBase^ extract(ra::table_mode mode, ra::accel_union& au)
+    LutBase^ extract(ra::spaced_lut_mode mode, ra::accel_union& au)
     {
         switch (mode) {
-        case ra::table_mode::off: return nullptr;
-        case ra::table_mode::linear: return gcnew LinearLut(au.lin_lut);
-        case ra::table_mode::binlog: return gcnew BinLogLut(au.log_lut);
-        case ra::table_mode::arbitrary: return gcnew ArbitraryLut(au.arb_lut);
+        case ra::spaced_lut_mode::off: return nullptr;
+        case ra::spaced_lut_mode::linear: return gcnew LinearLut(au.lin_lut);
+        case ra::spaced_lut_mode::binlog: return gcnew BinLogLut(au.log_lut);
         default: throw gcnew NotImplementedException();
         }
     }

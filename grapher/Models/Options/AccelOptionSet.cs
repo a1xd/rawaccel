@@ -103,16 +103,11 @@ namespace grapher.Models.Options
             Options.SetArgs(ref args);
         }
 
-        public AccelArgs GenerateArgs()
-        {
-            return Options.GenerateArgs();
-        }
-
-        public void SetActiveValues(AccelArgs args)
+        public void SetActiveValues(ref AccelArgs args)
         {
             if (!Hidden)
             {
-                Options.SetActiveValues(args);
+                Options.SetActiveValues(ref args);
             }
         }
 
