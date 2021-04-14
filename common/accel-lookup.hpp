@@ -265,7 +265,7 @@ namespace rawaccel {
 			range = fp_rep_range{ start, end, num };
 			last_log_lookup_index = end > start ? num * (end - start) - 1 : 0;
 
-			vec2<float> current = {0, 0};
+			vec2<float> current = {0, velocity_points ? 0.0f : 1.0f };
 			vec2<float> next;
 			int log_index = 0;
 			double log_inner_iterator = range.start;
