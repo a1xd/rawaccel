@@ -32,7 +32,7 @@ namespace rawaccel {
 
 		double smooth(double x) const
 		{
-			return step.y * 1 / (1 + decay(x));
+			return step.y / (1 + decay(x));
 		}
 
 		double smooth_antideriv(double x) const
@@ -61,8 +61,11 @@ namespace rawaccel {
 
 		double operator()(double x) const
 		{
+			if (x <= 0) return 1;
+
 			if (is_smooth()) return 1 + (smooth_antideriv(x) + C) / x;
-			else if (x < step.x) return 1;
+
+			if (x < step.x) return 1;
 			else return 1 + step.y * (x - step.x) / x;
 		}
 	};

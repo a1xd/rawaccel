@@ -181,6 +181,8 @@ namespace rawaccel {
 			int last_arb_index = last_arbitrary_index;
 			int last_log_index = last_log_lookup_index;
 
+			if (speed <= 0) return 1;
+
 			if (unsigned(last_arb_index) < capacity &&
 				unsigned(last_log_index) < capacity &&
 				speed > first_point_speed)
@@ -222,18 +224,13 @@ namespace rawaccel {
 
 		int inline search_from(int index, int last, double speed) const
 		{
-			int prev_index;
-
 			do
 			{
-				prev_index = index;
 				index++;
-			}
+			} 			
 			while (index <= last && data[index].applicable_speed < speed);
 
-			index--;
-
-			return index;
+			return index - 1;
 		}
 
 		double inline apply(int index, double speed) const
