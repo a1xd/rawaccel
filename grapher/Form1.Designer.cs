@@ -1134,7 +1134,6 @@ namespace grapher
 			// 
 			// DPITextBox
 			// 
-			this.DPITextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.DPITextBox.Name = "DPITextBox";
 			this.DPITextBox.Size = new System.Drawing.Size(100, 23);
 			// 
@@ -1148,7 +1147,6 @@ namespace grapher
 			// 
 			// PollRateTextBox
 			// 
-			this.PollRateTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.PollRateTextBox.Name = "PollRateTextBox";
 			this.PollRateTextBox.Size = new System.Drawing.Size(100, 23);
 			// 
@@ -1263,6 +1261,7 @@ namespace grapher
 			this.GainChartY.BackColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
 			chartArea1.AxisX.Title = "Input Speed (counts/ms)";
 			chartArea1.AxisY.Title = "Slope of Velocity Chart";
+			chartArea1.BackColor = System.Drawing.Color.Transparent;
 			chartArea1.Name = "ChartArea1";
 			this.GainChartY.ChartAreas.Add(chartArea1);
 			this.GainChartY.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::grapher.Properties.Settings.Default, "Chart_BG_Colour", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -1306,6 +1305,7 @@ namespace grapher
 			this.VelocityChartY.BackColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
 			chartArea2.AxisX.Title = "Input Speed (count/ms)";
 			chartArea2.AxisY.Title = "Output Speed (counts/ms)";
+			chartArea2.BackColor = System.Drawing.Color.Transparent;
 			chartArea2.Name = "ChartArea1";
 			this.VelocityChartY.ChartAreas.Add(chartArea2);
 			this.VelocityChartY.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::grapher.Properties.Settings.Default, "Chart_BG_Colour", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -1349,6 +1349,7 @@ namespace grapher
 			this.AccelerationChartY.BackColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
 			chartArea3.AxisX.Title = "Input Speed (counts/ms)";
 			chartArea3.AxisY.Title = "Ratio of Output to Input)";
+			chartArea3.BackColor = System.Drawing.Color.Transparent;
 			chartArea3.Name = "ChartArea1";
 			this.AccelerationChartY.ChartAreas.Add(chartArea3);
 			this.AccelerationChartY.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::grapher.Properties.Settings.Default, "Chart_BG_Colour", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -1392,6 +1393,7 @@ namespace grapher
 			this.GainChart.BackColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
 			chartArea4.AxisX.Title = "Input Speed (counts/ms)";
 			chartArea4.AxisY.Title = "Slope of Velocity Chart";
+			chartArea4.BackColor = System.Drawing.Color.Transparent;
 			chartArea4.Name = "ChartArea1";
 			this.GainChart.ChartAreas.Add(chartArea4);
 			this.GainChart.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::grapher.Properties.Settings.Default, "Chart_BG_Colour", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -1440,6 +1442,7 @@ namespace grapher
 			this.VelocityChart.BackColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
 			chartArea5.AxisX.Title = "Input Speed (count/ms)";
 			chartArea5.AxisY.Title = "Output Speed (counts/ms)";
+			chartArea5.BackColor = System.Drawing.Color.Transparent;
 			chartArea5.Name = "ChartArea1";
 			this.VelocityChart.ChartAreas.Add(chartArea5);
 			this.VelocityChart.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::grapher.Properties.Settings.Default, "Chart_BG_Colour", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -1488,6 +1491,7 @@ namespace grapher
 			this.AccelerationChart.BackColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
 			chartArea6.AxisX.Title = "Input Speed (counts/ms)";
 			chartArea6.AxisY.Title = "Ratio of Output to Input";
+			chartArea6.BackColor = System.Drawing.Color.Transparent;
 			chartArea6.Name = "ChartArea1";
 			this.AccelerationChart.ChartAreas.Add(chartArea6);
 			this.AccelerationChart.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::grapher.Properties.Settings.Default, "Chart_BG_Colour", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));

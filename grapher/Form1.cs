@@ -217,6 +217,6 @@ namespace grapher
 
         }
 
-        #endregion Method
-    }
+		#endregion Method
+	}
 }
