@@ -57,17 +57,24 @@ void rawinput_foreach_with_interface(Func fn, DWORD input_type = RIM_TYPEMOUSE) 
         throw std::system_error(GetLastError(), std::system_category(), "GetRawInputDeviceList failed");
     }
 
+    std::wstring name;
+    UINT len;
+
     for (auto&& dev : devs) {
         if (dev.dwType != input_type) continue;
 
-        WCHAR name[256] = {};
-        UINT len = 256;
-
-        if (GetRawInputDeviceInfoW(dev.hDevice, RIDI_DEVICENAME, name, &len) == RI_ERROR) {
-            throw std::system_error(GetLastError(), std::system_category(), "GetRawInputDeviceInfoW failed");
+        // get required length
+        if (GetRawInputDeviceInfoW(dev.hDevice, RIDI_DEVICENAME, NULL, &len) == RI_ERROR) {
+            continue;
         }
 
-        fn(dev, name);
+        name.resize(len);
+
+        if (GetRawInputDeviceInfoW(dev.hDevice, RIDI_DEVICENAME, &name[0], &len) == RI_ERROR) {
+            continue;
+        }
+
+        fn(dev, &name[0]);
     }
 }
 
