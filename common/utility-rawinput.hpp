@@ -61,9 +61,9 @@ void rawinput_foreach_with_interface(Func fn, DWORD input_type = RIM_TYPEMOUSE) 
         if (dev.dwType != input_type) continue;
 
         WCHAR name[256] = {};
-        UINT name_size = sizeof(name);
+        UINT len = 256;
 
-        if (GetRawInputDeviceInfoW(dev.hDevice, RIDI_DEVICENAME, name, &name_size) == RI_ERROR) {
+        if (GetRawInputDeviceInfoW(dev.hDevice, RIDI_DEVICENAME, name, &len) == RI_ERROR) {
             throw std::system_error(GetLastError(), std::system_category(), "GetRawInputDeviceInfoW failed");
         }
 
