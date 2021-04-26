@@ -286,10 +286,15 @@ std::vector<device_info> get_unique_device_info() {
     std::vector<device_info> info;
 
     rawinput_foreach_with_interface([&](const auto& dev, const WCHAR* name) {
-        info.push_back({
-            L"", // get_property_wstr(name, &DEVPKEY_Device_FriendlyName), /* doesn't work */
-            dev_id_from_interface(name)
-        });
+        auto id = dev_id_from_interface(name);
+
+        if (!id.empty()) {
+            info.push_back({
+                L"", // get_property_wstr(name, &DEVPKEY_Device_FriendlyName), /* doesn't work */
+                id
+            });
+        }
+
     });
 
     std::sort(info.begin(), info.end(),

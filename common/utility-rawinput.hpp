@@ -11,35 +11,33 @@
 #include <initguid.h> // needed for devpkey.h to parse properly
 #include <devpkey.h>
 
-std::wstring dev_prop_wstr_from_interface(const WCHAR* interface_name, const DEVPROPKEY* key) {
+// Returns an empty string on failure
+// 
+// interface names from GetRawInputDeviceInfo are not guaranteed to be valid;
+// CM_Get_Device_Interface_PropertyW can return CR_NO_SUCH_DEVICE_INTERFACE
+std::wstring dev_id_from_interface(const WCHAR* interface_name) {
     ULONG size = 0;
     DEVPROPTYPE type;
     CONFIGRET cm_res;
 
-    cm_res = CM_Get_Device_Interface_PropertyW(interface_name, key,
+    cm_res = CM_Get_Device_Interface_PropertyW(interface_name, &DEVPKEY_Device_InstanceId,
         &type, NULL, &size, 0);
 
-    if (cm_res != CR_BUFFER_SMALL && cm_res != CR_SUCCESS) {
-        throw std::runtime_error("CM_Get_Device_Interface_PropertyW failed (" +
-            std::to_string(cm_res) + ')');
+    if (cm_res != CR_BUFFER_SMALL && cm_res != CR_SUCCESS) return {};
+
+    std::wstring id((size + 1) / 2, L'\0');
+
+    cm_res = CM_Get_Device_Interface_PropertyW(interface_name, &DEVPKEY_Device_InstanceId,
+        &type, reinterpret_cast<PBYTE>(&id[0]), &size, 0);
+
+    if (cm_res != CR_SUCCESS) return {};
+
+    auto instance_delim_pos = id.find_last_of('\\');
+
+    if (instance_delim_pos != std::string::npos) {
+        id.resize(instance_delim_pos);
     }
 
-    std::wstring prop((size + 1) / 2, L'\0');
-
-    cm_res = CM_Get_Device_Interface_PropertyW(interface_name, key,
-        &type, reinterpret_cast<PBYTE>(&prop[0]), &size, 0);
-
-    if (cm_res != CR_SUCCESS) {
-        throw std::runtime_error("CM_Get_Device_Interface_PropertyW failed (" +
-            std::to_string(cm_res) + ')');
-    }
-
-    return prop;
-}
-
-std::wstring dev_id_from_interface(const WCHAR* interface_name) {
-    auto id = dev_prop_wstr_from_interface(interface_name, &DEVPKEY_Device_InstanceId);
-    id.resize(id.find_last_of('\\'));
     return id;
 }
 
@@ -79,7 +77,8 @@ std::vector<HANDLE> rawinput_handles_from_dev_id(const std::wstring& device_id, 
     std::vector<HANDLE> handles;
 
     rawinput_foreach_with_interface([&](const auto& dev, const WCHAR* name) {
-        if (device_id == dev_id_from_interface(name)) {
+        auto id = dev_id_from_interface(name);
+        if (!id.empty() && id == device_id) {
             handles.push_back(dev.hDevice);
         } 
     }, input_type);
