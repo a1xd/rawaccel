@@ -3,6 +3,7 @@ using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Options.Directionality;
+using grapher.Models.Options.LUT;
 using grapher.Models.Serialized;
 using System;
 using System.Windows.Forms;
@@ -66,6 +67,8 @@ namespace grapher.Models
             CheckBox byComponentCheckBox,
             CheckBox gainSwitchX,
             CheckBox gainSwitchY,
+            Panel lutPanelX,
+            Panel lutPanelY,
             Label lockXYLabel,
             Label sensitivityLabel,
             Label rotationLabel,
@@ -336,6 +339,7 @@ namespace grapher.Models
                 exponentX,
                 midpointX,
                 lutTextX,
+                new LUTPanelOptions(lutPanelX),
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitleX));
 
@@ -351,6 +355,7 @@ namespace grapher.Models
                 exponentY,
                 midpointY,
                 lutTextY,
+                new LUTPanelOptions(lutPanelY),
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitleY));
 

@@ -71,6 +71,8 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.gainSwitchActiveLabelY = new System.Windows.Forms.Label();
+            this.gainSwitchActiveLabelX = new System.Windows.Forms.Label();
             this.gainSwitchY = new System.Windows.Forms.CheckBox();
             this.gainSwitchX = new System.Windows.Forms.CheckBox();
             this.LUTTextLabelY = new System.Windows.Forms.Label();
@@ -186,8 +188,8 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.gainSwitchActiveLabelX = new System.Windows.Forms.Label();
-            this.gainSwitchActiveLabelY = new System.Windows.Forms.Label();
+            this.LUTPanelX = new System.Windows.Forms.Panel();
+            this.LUTPanelY = new System.Windows.Forms.Panel();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -203,6 +205,8 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.LUTPanelY);
+            this.optionsPanel.Controls.Add(this.LUTPanelX);
             this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelY);
             this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelX);
             this.optionsPanel.Controls.Add(this.gainSwitchY);
@@ -288,6 +292,24 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // gainSwitchActiveLabelY
+            // 
+            this.gainSwitchActiveLabelY.AutoSize = true;
+            this.gainSwitchActiveLabelY.Location = new System.Drawing.Point(417, 95);
+            this.gainSwitchActiveLabelY.Name = "gainSwitchActiveLabelY";
+            this.gainSwitchActiveLabelY.Size = new System.Drawing.Size(29, 13);
+            this.gainSwitchActiveLabelY.TabIndex = 157;
+            this.gainSwitchActiveLabelY.Text = "Gain";
+            // 
+            // gainSwitchActiveLabelX
+            // 
+            this.gainSwitchActiveLabelX.AutoSize = true;
+            this.gainSwitchActiveLabelX.Location = new System.Drawing.Point(200, 96);
+            this.gainSwitchActiveLabelX.Name = "gainSwitchActiveLabelX";
+            this.gainSwitchActiveLabelX.Size = new System.Drawing.Size(29, 13);
+            this.gainSwitchActiveLabelX.TabIndex = 156;
+            this.gainSwitchActiveLabelX.Text = "Gain";
             // 
             // gainSwitchY
             // 
@@ -1497,23 +1519,21 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // gainSwitchActiveLabelX
+            // LUTPanelX
             // 
-            this.gainSwitchActiveLabelX.AutoSize = true;
-            this.gainSwitchActiveLabelX.Location = new System.Drawing.Point(200, 96);
-            this.gainSwitchActiveLabelX.Name = "gainSwitchActiveLabelX";
-            this.gainSwitchActiveLabelX.Size = new System.Drawing.Size(29, 13);
-            this.gainSwitchActiveLabelX.TabIndex = 156;
-            this.gainSwitchActiveLabelX.Text = "Gain";
+            this.LUTPanelX.AutoScroll = true;
+            this.LUTPanelX.Location = new System.Drawing.Point(317, 369);
+            this.LUTPanelX.Name = "LUTPanelX";
+            this.LUTPanelX.Size = new System.Drawing.Size(68, 135);
+            this.LUTPanelX.TabIndex = 158;
             // 
-            // gainSwitchActiveLabelY
+            // LUTPanelY
             // 
-            this.gainSwitchActiveLabelY.AutoSize = true;
-            this.gainSwitchActiveLabelY.Location = new System.Drawing.Point(417, 95);
-            this.gainSwitchActiveLabelY.Name = "gainSwitchActiveLabelY";
-            this.gainSwitchActiveLabelY.Size = new System.Drawing.Size(29, 13);
-            this.gainSwitchActiveLabelY.TabIndex = 157;
-            this.gainSwitchActiveLabelY.Text = "Gain";
+            this.LUTPanelY.AutoScroll = true;
+            this.LUTPanelY.Location = new System.Drawing.Point(397, 369);
+            this.LUTPanelY.Name = "LUTPanelY";
+            this.LUTPanelY.Size = new System.Drawing.Size(73, 135);
+            this.LUTPanelY.TabIndex = 159;
             // 
             // RawAcceleration
             // 
@@ -1662,6 +1682,8 @@ namespace grapher
         private System.Windows.Forms.CheckBox gainSwitchY;
         private System.Windows.Forms.Label gainSwitchActiveLabelY;
         private System.Windows.Forms.Label gainSwitchActiveLabelX;
+        private System.Windows.Forms.Panel LUTPanelY;
+        private System.Windows.Forms.Panel LUTPanelX;
     }
 }
 

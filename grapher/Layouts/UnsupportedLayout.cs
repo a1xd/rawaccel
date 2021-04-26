@@ -25,7 +25,8 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, Exponent);
             MidpointLayout = new OptionLayout(false, string.Empty);
-            LUTTextLayout = new OptionLayout(true, LUTLayoutText);
+            LutTextLayout = new OptionLayout(true, LUTLayoutText);
+            LutPanelLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

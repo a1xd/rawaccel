@@ -100,6 +100,8 @@ namespace grapher
                 ByComponentCheckBox,
                 gainSwitchX,
                 gainSwitchY,
+                LUTPanelX,
+                LUTPanelY,
                 LockXYLabel,
                 sensitivityLabel,
                 rotationLabel,

@@ -133,6 +133,7 @@
     <Compile Include="Models\Options\CheckBoxOption.cs" />
     <Compile Include="Models\Options\Directionality\DirectionalityOptions.cs" />
     <Compile Include="Models\Options\IOption.cs" />
+    <Compile Include="Models\Options\LUT\LUTPanelOptions.cs" />
     <Compile Include="Models\Options\OffsetOptions.cs" />
     <Compile Include="Models\Options\Option.cs" />
     <Compile Include="Layouts\OptionLayout.cs" />

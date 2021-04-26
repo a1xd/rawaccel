@@ -28,7 +28,8 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
-            LUTTextLayout = new OptionLayout(false, string.Empty);
+            LutTextLayout = new OptionLayout(false, string.Empty);
+            LutPanelLayout = new OptionLayout(false, string.Empty);
             GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
 
             LogarithmicCharts = false;
@@ -58,7 +59,9 @@ namespace grapher.Layouts
 
         protected OptionLayout MidpointLayout { get; set; }
 
-        protected OptionLayout LUTTextLayout { get; set; }
+        protected OptionLayout LutTextLayout { get; set; }
+
+        protected OptionLayout LutPanelLayout { get; set; }
 
         protected OptionLayout GainSwitchOptionLayout { get; set; }
 
@@ -78,6 +81,7 @@ namespace grapher.Layouts
             IOption expOption,
             IOption midpointOption,
             IOption lutTextOption,
+            IOption lutPanelOption,
             int top)
         {
 
@@ -93,7 +97,8 @@ namespace grapher.Layouts
                 (LimitLayout, limitOption),
                 (ExponentLayout, expOption),
                 (MidpointLayout, midpointOption),
-                (LUTTextLayout, lutTextOption)})
+                (LutTextLayout, lutTextOption),
+                (LutPanelLayout, lutPanelOption)})
             {
                 option.Item1.Layout(option.Item2);
 
@@ -123,7 +128,8 @@ namespace grapher.Layouts
             IOption limitOption,
             IOption expOption,
             IOption midpointOption,
-            IOption lutTextOption)
+            IOption lutTextOption,
+            IOption lutPanelOption)
         {
             Layout(gainSwitchOption,
                 accelOption,
@@ -135,6 +141,7 @@ namespace grapher.Layouts
                 expOption,
                 midpointOption,
                 lutTextOption,
+                lutPanelOption,
                 accelOption.Top);
         }
     }

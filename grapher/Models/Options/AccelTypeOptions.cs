@@ -1,5 +1,6 @@
 ﻿using grapher.Layouts;
 using grapher.Models.Options;
+using grapher.Models.Options.LUT;
 using grapher.Models.Serialized;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace grapher
             Option exponent,
             Option midpoint,
             TextOption lutText,
+            LUTPanelOptions lutPanelOptions,
             Button writeButton,
             ActiveValueLabel accelTypeActiveValue)
         {
@@ -70,10 +72,14 @@ namespace grapher
             WriteButton = writeButton;
             AccelTypeActiveValue = accelTypeActiveValue;
             LutText = lutText;
+            LutPanel = lutPanelOptions;
 
             AccelTypeActiveValue.Left = AccelDropdown.Left + AccelDropdown.Width;
             AccelTypeActiveValue.Height = AccelDropdown.Height;
             GainSwitch.Left = Acceleration.Field.Left;
+
+            LutPanel.Left = AccelDropdown.Left;
+            LutPanel.Width = AccelDropdown.Width + AccelTypeActiveValue.Width;
 
             AccelerationType = Off;
             Layout();
@@ -110,6 +116,8 @@ namespace grapher
         public TextOption LutText { get; }
 
         public CheckBoxOption GainSwitch { get; }
+
+        public LUTPanelOptions LutPanel { get; }
 
         public LayoutBase AccelerationType
         {
@@ -198,6 +206,7 @@ namespace grapher
             Exponent.Hide();
             Midpoint.Hide();
             LutText.Hide();
+            LutPanel.Hide();
         }
 
         public void Show()
@@ -322,6 +331,7 @@ namespace grapher
                 Exponent,
                 Midpoint,
                 LutText,
+                LutPanel,
                 top);
         }
 

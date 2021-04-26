@@ -8,7 +8,7 @@ namespace grapher.Layouts
 {
     public class LUTLayout : LayoutBase
     {
-        public const string LUTLayoutText = "This mode is for advanced users only. It requires a lut.json file to define the velocity curve. See the guide for specifics.";
+        public const string LUTLayoutText = "This mode is for advanced users only. We recommend setting points in the settings file with a script.";
 
         /// <summary>
         /// String small enough to fit in active value label
@@ -30,7 +30,8 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, Exponent);
             MidpointLayout = new OptionLayout(false, string.Empty);
-            LUTTextLayout = new OptionLayout(true, LUTLayoutText);
+            LutTextLayout = new OptionLayout(true, LUTLayoutText);
+            LutPanelLayout = new OptionLayout(true, string.Empty);
         }
 
         public override string ActiveName => LUTActiveName;
