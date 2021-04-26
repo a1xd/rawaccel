@@ -38,6 +38,8 @@ namespace grapher.Layouts
 
         public string Name { get; protected set; }
 
+        public virtual string ActiveName { get => Name; }
+
         public bool LogarithmicCharts { get; protected set; }
 
         protected OptionLayout AccelLayout { get; set; }

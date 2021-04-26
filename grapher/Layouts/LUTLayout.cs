@@ -10,6 +10,11 @@ namespace grapher.Layouts
     {
         public const string LUTLayoutText = "This mode is for advanced users only. It requires a lut.json file to define the velocity curve. See the guide for specifics.";
 
+        /// <summary>
+        /// String small enough to fit in active value label
+        /// </summary>
+        public const string LUTActiveName = "LUT";
+
         public LUTLayout()
             : base()
         {
@@ -27,5 +32,7 @@ namespace grapher.Layouts
             MidpointLayout = new OptionLayout(false, string.Empty);
             LUTTextLayout = new OptionLayout(true, LUTLayoutText);
         }
+
+        public override string ActiveName => LUTActiveName;
     }
 }

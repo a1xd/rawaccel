@@ -29,7 +29,7 @@ namespace grapher.Models.Options
         { 
             get 
             { 
-                return Label.Visible;
+                return Label.Visible || ShouldShow;
             }
         }
 
@@ -77,15 +77,22 @@ namespace grapher.Models.Options
             }
         }
 
+        private bool ShouldShow
+        {
+            get; set;
+        }
+
         public override void Hide()
         {
             Label.Hide();
+            ShouldShow = false;
         }
 
         public override void Show(string Name)
         {
             Label.Show();
             Label.Text = Name;
+            ShouldShow = true;
         }
 
         public override void AlignActiveValues()

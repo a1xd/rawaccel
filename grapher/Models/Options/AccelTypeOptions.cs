@@ -215,7 +215,7 @@ namespace grapher
         public void SetActiveValues(ref AccelArgs args)
         {
             AccelerationType = AccelTypeFromSettings(ref args);
-            AccelTypeActiveValue.SetValue(AccelerationType.Name);
+            AccelTypeActiveValue.SetValue(AccelerationType.ActiveName);
             GainSwitch.SetActiveValue(args.legacy);
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValue(args.cap);
