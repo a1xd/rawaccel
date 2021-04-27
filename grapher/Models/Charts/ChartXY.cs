@@ -89,6 +89,39 @@ namespace grapher
 
         #region Methods
 
+        public static void setChartColors(Chart chart)
+        {
+            //global::grapher.Models.Serialized.GUISettings
+            System.Drawing.Color fgColor = global::grapher.Properties.Settings.Default.Chart_FG_Colour;
+            System.Drawing.Color bgColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
+            System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
+
+            chart.ForeColor = fgColor;
+            chart.Titles[0].ForeColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.LabelStyle.ForeColor = fgColor;
+            chart.ChartAreas[0].AxisY.LabelStyle.ForeColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.LineColor = fgColor;
+            chart.ChartAreas[0].AxisY.LineColor = fgColor;
+            chart.ChartAreas[0].AxisY.MajorTickMark.LineColor = fgColor;
+            chart.ChartAreas[0].AxisX.MajorTickMark.LineColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.MajorGrid.LineColor = fgColor;
+            chart.ChartAreas[0].AxisY.MajorGrid.LineColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.MinorGrid.LineColor = fgColor;
+            chart.Legends[0].ForeColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.TitleForeColor = fgColor;
+            chart.ChartAreas[0].AxisY.TitleForeColor = fgColor;
+
+            chart.ChartAreas[0].BorderColor = fgColor;
+
+            chart.Legends[0].BackColor = bgTrans;
+            chart.ChartAreas[0].BackColor = bgTrans;
+        }
+
         public static void SetupChart(Chart chart)
         {
             chart.ChartAreas[0].AxisX.RoundAxisValues();
@@ -98,7 +131,7 @@ namespace grapher
 
             chart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
             chart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
-
+            
             chart.ChartAreas[0].AxisX.LabelStyle.Format = "0.##";
             chart.ChartAreas[0].AxisY.LabelStyle.Format = "0.##";
 
@@ -116,7 +149,20 @@ namespace grapher
             chart.Series[1].Points.Clear();
             chart.Series[1].Points.AddXY(0, 0);
 
-            chart.Titles[0].Font = new System.Drawing.Font(chart.Titles[0].Font.Name, 9.0f, System.Drawing.FontStyle.Italic);
+            chart.ChartAreas[0].AxisX.TitleFont = new System.Drawing.Font(chart.ChartAreas[0].AxisX.TitleFont.Name, global::grapher.Properties.Settings.Default.Chart_Axis_Font_Size, System.Drawing.FontStyle.Bold);
+            chart.ChartAreas[0].AxisY.TitleFont = chart.ChartAreas[0].AxisX.TitleFont;
+
+            chart.Titles[0].Font = new System.Drawing.Font(chart.Titles[0].Font.Name, global::grapher.Properties.Settings.Default.Chart_Font_Size, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Bold);
+            int line_width = global::grapher.Properties.Settings.Default.Chart_Series_Line_Width;
+            chart.Series[0].BorderWidth = line_width;
+            chart.Series[0].MarkerSize = line_width;
+            chart.Series[2].BorderWidth = line_width;
+            chart.Series[2].MarkerSize = line_width;
+
+            chart.ChartAreas[0].AxisX.MinorGrid.Enabled = true;
+            chart.ChartAreas[0].AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot;
+
+            setChartColors(chart);
         }
 
         public static void DrawPoint(Chart chart, PointData pointOne, PointData pointTwo = null)
