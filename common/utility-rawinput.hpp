@@ -27,7 +27,7 @@ void rawinput_foreach_dev_with_id(Func fn, bool with_instance_id = false,
     auto devs = std::vector<RAWINPUTDEVICELIST>(num_devs);
 
     if (GetRawInputDeviceList(&devs[0], &num_devs, sizeof(RAWINPUTDEVICELIST)) == RI_ERROR) {
-        throw std::system_error(GetLastError(), std::system_category(), "GetRawInputDeviceList failed");
+        return;
     }
 
     std::wstring name;
