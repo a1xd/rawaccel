@@ -91,12 +91,13 @@ namespace grapher
 
         public static void setChartColors(Chart chart)
         {
-            //global::grapher.Models.Serialized.GUISettings
             System.Drawing.Color fgColor = global::grapher.Properties.Settings.Default.Chart_FG_Colour;
             System.Drawing.Color bgColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
             System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
 
             chart.ForeColor = fgColor;
+            chart.BackColor = bgColor;
+
             chart.Titles[0].ForeColor = fgColor;
 
             chart.ChartAreas[0].AxisX.LabelStyle.ForeColor = fgColor;
@@ -124,43 +125,57 @@ namespace grapher
 
         public static void SetupChart(Chart chart)
         {
-            chart.ChartAreas[0].AxisX.RoundAxisValues();
+            ChartArea area = chart.ChartAreas[0];
+            Legend legend = chart.Legends[0];
+            Title title = chart.Titles[0];
 
-            chart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            chart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+            area.AxisX.RoundAxisValues();
 
-            chart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
-            chart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
+            area.AxisX.ScaleView.Zoomable = true;
+            area.AxisY.ScaleView.Zoomable = true;
+
+            area.AxisY.ScaleView.MinSize = 0.01;
+            area.AxisY.ScaleView.SmallScrollSize = 0.001;
             
-            chart.ChartAreas[0].AxisX.LabelStyle.Format = "0.##";
-            chart.ChartAreas[0].AxisY.LabelStyle.Format = "0.##";
+            area.AxisX.LabelStyle.Format = "0.##";
+            area.AxisY.LabelStyle.Format = "0.##";
 
-            chart.ChartAreas[0].CursorY.Interval = 0.001;
+            area.CursorY.Interval = 0.001;
 
-            chart.ChartAreas[0].CursorX.AutoScroll = true;
-            chart.ChartAreas[0].CursorY.AutoScroll = true;
+            area.CursorX.AutoScroll = true;
+            area.CursorY.AutoScroll = true;
 
-            chart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            chart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+            area.CursorX.IsUserSelectionEnabled = true;
+            area.CursorY.IsUserSelectionEnabled = true;
 
-            chart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            chart.ChartAreas[0].CursorY.IsUserEnabled = true;
+            area.CursorX.IsUserEnabled = true;
+            area.CursorY.IsUserEnabled = true;
 
             chart.Series[1].Points.Clear();
             chart.Series[1].Points.AddXY(0, 0);
 
-            chart.ChartAreas[0].AxisX.TitleFont = new System.Drawing.Font(chart.ChartAreas[0].AxisX.TitleFont.Name, global::grapher.Properties.Settings.Default.Chart_Axis_Font_Size, System.Drawing.FontStyle.Bold);
-            chart.ChartAreas[0].AxisY.TitleFont = chart.ChartAreas[0].AxisX.TitleFont;
+            area.AxisX.TitleFont = new System.Drawing.Font(area.AxisX.TitleFont.Name, global::grapher.Properties.Settings.Default.Chart_Axis_Font_Size, System.Drawing.FontStyle.Bold);
+            area.AxisY.TitleFont = area.AxisX.TitleFont;
 
-            chart.Titles[0].Font = new System.Drawing.Font(chart.Titles[0].Font.Name, global::grapher.Properties.Settings.Default.Chart_Font_Size, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Bold);
+            title.Font = new System.Drawing.Font(title.Font.Name, global::grapher.Properties.Settings.Default.Chart_Font_Size, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Bold);
             int line_width = global::grapher.Properties.Settings.Default.Chart_Series_Line_Width;
             chart.Series[0].BorderWidth = line_width;
             chart.Series[0].MarkerSize = line_width;
             chart.Series[2].BorderWidth = line_width;
             chart.Series[2].MarkerSize = line_width;
 
-            chart.ChartAreas[0].AxisX.MinorGrid.Enabled = true;
-            chart.ChartAreas[0].AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot;
+            area.AxisX.MinorGrid.Enabled = true;
+            area.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot;
+
+            title.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
+
+            legend.DockedToChartArea = area.Name;
+            legend.LegendStyle = LegendStyle.Row;
+
+            ElementPosition legendPos = legend.Position;
+            
+            ElementPosition legendPosNew = new ElementPosition(100 -, 0, legendPos.Width, legendPos.Height);
+            legend.Position = legendPosNew;
 
             setChartColors(chart);
         }
