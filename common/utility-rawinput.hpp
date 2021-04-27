@@ -18,9 +18,9 @@ void rawinput_foreach_dev_with_id(Func fn, bool with_instance_id = false,
 {
     const UINT RI_ERROR = -1;
     
+    // get number of devices
     UINT num_devs = 0;
-
-    if (GetRawInputDeviceList(NULL, &num_devs, sizeof(RAWINPUTDEVICELIST)) == RI_ERROR) {
+    if (GetRawInputDeviceList(NULL, &num_devs, sizeof(RAWINPUTDEVICELIST)) != 0) {
         throw std::system_error(GetLastError(), std::system_category(), "GetRawInputDeviceList failed");
     }
 
