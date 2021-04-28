@@ -25,18 +25,6 @@ namespace grapher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Window")]
-        public global::System.Drawing.Color Chart_BG_Colour {
-            get {
-                return ((global::System.Drawing.Color)(this["Chart_BG_Colour"]));
-            }
-            set {
-                this["Chart_BG_Colour"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("15")]
         public float Chart_Font_Size {
             get {
@@ -73,7 +61,19 @@ namespace grapher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Desktop")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Green")]
+        public global::System.Drawing.Color Chart_BG_Colour {
+            get {
+                return ((global::System.Drawing.Color)(this["Chart_BG_Colour"]));
+            }
+            set {
+                this["Chart_BG_Colour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
         public global::System.Drawing.Color Chart_FG_Colour {
             get {
                 return ((global::System.Drawing.Color)(this["Chart_FG_Colour"]));
