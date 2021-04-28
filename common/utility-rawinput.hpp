@@ -2,6 +2,7 @@
 
 #pragma comment(lib, "cfgmgr32.lib")
 
+#include <algorithm>
 #include <string>
 #include <system_error>
 #include <vector>
@@ -11,78 +12,92 @@
 #include <initguid.h> // needed for devpkey.h to parse properly
 #include <devpkey.h>
 
-std::wstring dev_prop_wstr_from_interface(const WCHAR* interface_name, const DEVPROPKEY* key) {
-    ULONG size = 0;
-    DEVPROPTYPE type;
-    CONFIGRET cm_res;
-
-    cm_res = CM_Get_Device_Interface_PropertyW(interface_name, key,
-        &type, NULL, &size, 0);
-
-    if (cm_res != CR_BUFFER_SMALL && cm_res != CR_SUCCESS) {
-        throw std::runtime_error("CM_Get_Device_Interface_PropertyW failed (" +
-            std::to_string(cm_res) + ')');
-    }
-
-    std::wstring prop((size + 1) / 2, L'\0');
-
-    cm_res = CM_Get_Device_Interface_PropertyW(interface_name, key,
-        &type, reinterpret_cast<PBYTE>(&prop[0]), &size, 0);
-
-    if (cm_res != CR_SUCCESS) {
-        throw std::runtime_error("CM_Get_Device_Interface_PropertyW failed (" +
-            std::to_string(cm_res) + ')');
-    }
-
-    return prop;
-}
-
-std::wstring dev_id_from_interface(const WCHAR* interface_name) {
-    auto id = dev_prop_wstr_from_interface(interface_name, &DEVPKEY_Device_InstanceId);
-    id.resize(id.find_last_of('\\'));
-    return id;
-}
-
 template <typename Func>
-void rawinput_foreach_with_interface(Func fn, DWORD input_type = RIM_TYPEMOUSE) {
+void rawinput_foreach_dev_with_id(Func fn, bool with_instance_id = false, 
+                                           DWORD input_type = RIM_TYPEMOUSE) 
+{
     const UINT RI_ERROR = -1;
-
+    
+    // get number of devices
     UINT num_devs = 0;
-
-    if (GetRawInputDeviceList(NULL, &num_devs, sizeof(RAWINPUTDEVICELIST)) == RI_ERROR) {
+    if (GetRawInputDeviceList(NULL, &num_devs, sizeof(RAWINPUTDEVICELIST)) != 0) {
         throw std::system_error(GetLastError(), std::system_category(), "GetRawInputDeviceList failed");
     }
 
     auto devs = std::vector<RAWINPUTDEVICELIST>(num_devs);
 
     if (GetRawInputDeviceList(&devs[0], &num_devs, sizeof(RAWINPUTDEVICELIST)) == RI_ERROR) {
-        throw std::system_error(GetLastError(), std::system_category(), "GetRawInputDeviceList failed");
+        return;
     }
+
+    std::wstring name;
+    std::wstring id;
+    DEVPROPTYPE type;
+    CONFIGRET cm_res;
 
     for (auto&& dev : devs) {
         if (dev.dwType != input_type) continue;
 
-        WCHAR name[256] = {};
-        UINT name_size = sizeof(name);
-
-        if (GetRawInputDeviceInfoW(dev.hDevice, RIDI_DEVICENAME, name, &name_size) == RI_ERROR) {
-            throw std::system_error(GetLastError(), std::system_category(), "GetRawInputDeviceInfoW failed");
+        // get interface name length
+        UINT name_len = 0;
+        if (GetRawInputDeviceInfoW(dev.hDevice, RIDI_DEVICENAME, NULL, &name_len) == RI_ERROR) {
+            continue;
         }
 
-        fn(dev, name);
+        name.resize(name_len);
+
+        if (GetRawInputDeviceInfoW(dev.hDevice, RIDI_DEVICENAME, &name[0], &name_len) == RI_ERROR) {
+            continue;
+        }
+
+        // get sizeof dev instance id
+        ULONG id_size = 0;
+        cm_res = CM_Get_Device_Interface_PropertyW(&name[0], &DEVPKEY_Device_InstanceId,
+            &type, NULL, &id_size, 0);
+
+        if (cm_res != CR_BUFFER_SMALL && cm_res != CR_SUCCESS) continue;
+
+        id.resize((id_size + 1) / 2);
+
+        cm_res = CM_Get_Device_Interface_PropertyW(&name[0], &DEVPKEY_Device_InstanceId,
+            &type, reinterpret_cast<PBYTE>(&id[0]), &id_size, 0);
+
+        if (cm_res != CR_SUCCESS) continue;
+    
+        if (!with_instance_id) {
+            auto instance_delim_pos = id.find_last_of('\\');
+            if(instance_delim_pos != std::string::npos) id.resize(instance_delim_pos);
+        }
+
+        fn(dev, id);
     }
 }
 
-// returns device handles corresponding to a "device id"
-// https://docs.microsoft.com/en-us/windows-hardware/drivers/install/device-ids
-std::vector<HANDLE> rawinput_handles_from_dev_id(const std::wstring& device_id, DWORD input_type = RIM_TYPEMOUSE) {
+inline
+std::vector<HANDLE> rawinput_handles_from_dev_id(const std::wstring& device_id, 
+                                                 bool with_instance_id = false,
+                                                 DWORD input_type = RIM_TYPEMOUSE) 
+{
     std::vector<HANDLE> handles;
 
-    rawinput_foreach_with_interface([&](const auto& dev, const WCHAR* name) {
-        if (device_id == dev_id_from_interface(name)) {
-            handles.push_back(dev.hDevice);
-        } 
-    }, input_type);
+    rawinput_foreach_dev_with_id([&](const auto& dev, const std::wstring& id) {
+        if (id == device_id) handles.push_back(dev.hDevice);
+    }, with_instance_id, input_type);
 
     return handles;
+}
+
+inline
+std::vector<std::wstring> rawinput_dev_id_list(bool with_instance_id = false, 
+                                               DWORD input_type = RIM_TYPEMOUSE) 
+{
+    std::vector<std::wstring> ids;
+
+    rawinput_foreach_dev_with_id([&](const auto& dev, const std::wstring& id) {
+        ids.push_back(id);
+    }, with_instance_id, input_type);
+
+    std::sort(ids.begin(), ids.end());
+    ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
+    return ids;
 }
