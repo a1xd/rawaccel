@@ -174,7 +174,7 @@ namespace grapher
 
             ElementPosition legendPos = legend.Position;
             
-            ElementPosition legendPosNew = new ElementPosition(100 -, 0, legendPos.Width, legendPos.Height);
+            ElementPosition legendPosNew = new ElementPosition(75, 0, 25, 25);
             legend.Position = legendPosNew;
 
             setChartColors(chart);
