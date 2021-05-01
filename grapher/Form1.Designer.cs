@@ -188,6 +188,7 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.streamingModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -1108,7 +1109,8 @@ namespace grapher
             this.graphsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.scaleByDPIToolStripMenuItem,
             this.showVelocityGainToolStripMenuItem,
-            this.showLastMouseMoveToolStripMenuItem});
+            this.showLastMouseMoveToolStripMenuItem,
+            this.streamingModeToolStripMenuItem});
             this.graphsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.graphsToolStripMenuItem.Name = "graphsToolStripMenuItem";
             this.graphsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
@@ -1495,6 +1497,13 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
+            // streamingModeToolStripMenuItem
+            // 
+            this.streamingModeToolStripMenuItem.CheckOnClick = true;
+            this.streamingModeToolStripMenuItem.Name = "streamingModeToolStripMenuItem";
+            this.streamingModeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.streamingModeToolStripMenuItem.Text = "Streaming Mode";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1642,6 +1651,7 @@ namespace grapher
         private System.Windows.Forms.Label RangeActiveValueY;
         private System.Windows.Forms.CheckBox FakeBox;
         private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem streamingModeToolStripMenuItem;
     }
 }
 
