@@ -166,10 +166,8 @@ namespace grapher
 
             legend.DockedToChartArea = area.Name;
             legend.LegendStyle = LegendStyle.Row;
-
-            ElementPosition legendPos = legend.Position;
             
-            ElementPosition legendPosNew = new ElementPosition(75, 0, 25, 25);
+            ElementPosition legendPosNew = new ElementPosition(25, 0, 50, 25);
             legend.Position = legendPosNew;
 
             System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
