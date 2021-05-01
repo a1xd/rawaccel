@@ -64,6 +64,7 @@ namespace grapher
                 toggleButton,
                 showVelocityGainToolStripMenuItem,
                 showLastMouseMoveToolStripMenuItem,
+                streamingModeToolStripMenuItem,
                 gainCapToolStripMenuItem,
                 legacyCapToolStripMenuItem,
                 gainOffsetToolStripMenuItem,
