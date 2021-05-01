@@ -91,8 +91,6 @@ namespace grapher
 
         public static void setChartColors(Chart chart, System.Drawing.Color fgColor, System.Drawing.Color bgColor)
         {
-            System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
-
             chart.ForeColor = fgColor;
             chart.BackColor = bgColor;
 
@@ -117,8 +115,7 @@ namespace grapher
 
             chart.ChartAreas[0].BorderColor = fgColor;
 
-            chart.Legends[0].BackColor = bgTrans;
-            chart.ChartAreas[0].BackColor = bgTrans;
+
         }
 
         public static void SetupChart(Chart chart)
@@ -174,6 +171,11 @@ namespace grapher
             
             ElementPosition legendPosNew = new ElementPosition(75, 0, 25, 25);
             legend.Position = legendPosNew;
+
+            System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
+
+            area.BackColor = bgTrans;
+            legend.BackColor = bgTrans;
         }
 
         public static void DrawPoint(Chart chart, PointData pointOne, PointData pointTwo = null)
