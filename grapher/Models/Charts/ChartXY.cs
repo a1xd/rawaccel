@@ -160,9 +160,9 @@ namespace grapher
             title.Font = new System.Drawing.Font(title.Font.Name, global::grapher.Properties.Settings.Default.Chart_Font_Size, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Bold);
             int line_width = global::grapher.Properties.Settings.Default.Chart_Series_Line_Width;
             chart.Series[0].BorderWidth = line_width;
-            chart.Series[0].MarkerSize = line_width;
+            chart.Series[0].MarkerSize = line_width * 2;
             chart.Series[2].BorderWidth = line_width;
-            chart.Series[2].MarkerSize = line_width;
+            chart.Series[2].MarkerSize = line_width * 2;
 
             area.AxisX.MinorGrid.Enabled = true;
             area.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot;
