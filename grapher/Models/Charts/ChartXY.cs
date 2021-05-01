@@ -89,10 +89,10 @@ namespace grapher
 
         #region Methods
 
-        public static void setChartColors(Chart chart)
+        public static void setChartColors(Chart chart, System.Drawing.Color fgColor, System.Drawing.Color bgColor)
         {
-            System.Drawing.Color fgColor = global::grapher.Properties.Settings.Default.Chart_FG_Colour;
-            System.Drawing.Color bgColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
+            // System.Drawing.Color fgColor = global::grapher.Properties.Settings.Default.Chart_FG_Colour;
+            // System.Drawing.Color bgColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
             System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
 
             chart.ForeColor = fgColor;
@@ -176,8 +176,6 @@ namespace grapher
             
             ElementPosition legendPosNew = new ElementPosition(75, 0, 25, 25);
             legend.Position = legendPosNew;
-
-            setChartColors(chart);
         }
 
         public static void DrawPoint(Chart chart, PointData pointOne, PointData pointTwo = null)
@@ -372,6 +370,22 @@ namespace grapher
         {
             ChartX.Height = height;
             ChartY.Height = height;
+        }
+
+        public void SetStreaming(bool streaming)
+        {
+            var fgColor = Constants.fgNoStreamer;
+            var bgColor = Constants.bgNoStreamer;
+
+            if (streaming)
+            {
+                fgColor = Constants.fgStreamer;
+                bgColor = Constants.bgStreamer;
+            }
+
+            setChartColors(ChartX, fgColor, bgColor);
+            setChartColors(ChartY, fgColor, bgColor);
+            Update();
         }
 
         private string SetComponentTitle(string component)
