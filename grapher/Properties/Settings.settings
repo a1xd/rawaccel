@@ -1,21 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="grapher.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
   <Profiles />
-  <Settings>
-    <Setting Name="Chart_Font_Size" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">15</Value>
-    </Setting>
-    <Setting Name="Chart_Axis_Font_Size" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">12</Value>
-    </Setting>
-    <Setting Name="Chart_Series_Line_Width" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3</Value>
-    </Setting>
-    <Setting Name="Chart_BG_Colour" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Green</Value>
-    </Setting>
-    <Setting Name="Chart_FG_Colour" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">White</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>

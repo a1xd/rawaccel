@@ -91,8 +91,6 @@ namespace grapher
 
         public static void setChartColors(Chart chart, System.Drawing.Color fgColor, System.Drawing.Color bgColor)
         {
-            // System.Drawing.Color fgColor = global::grapher.Properties.Settings.Default.Chart_FG_Colour;
-            // System.Drawing.Color bgColor = global::grapher.Properties.Settings.Default.Chart_BG_Colour;
             System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
 
             chart.ForeColor = fgColor;
@@ -154,15 +152,15 @@ namespace grapher
             chart.Series[1].Points.Clear();
             chart.Series[1].Points.AddXY(0, 0);
 
-            area.AxisX.TitleFont = new System.Drawing.Font(area.AxisX.TitleFont.Name, global::grapher.Properties.Settings.Default.Chart_Axis_Font_Size, System.Drawing.FontStyle.Bold);
+            area.AxisX.TitleFont = new System.Drawing.Font(area.AxisX.TitleFont.Name, Constants.ChartAxisFontSize, System.Drawing.FontStyle.Bold);
             area.AxisY.TitleFont = area.AxisX.TitleFont;
 
-            title.Font = new System.Drawing.Font(title.Font.Name, global::grapher.Properties.Settings.Default.Chart_Font_Size, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Bold);
-            int line_width = global::grapher.Properties.Settings.Default.Chart_Series_Line_Width;
-            chart.Series[0].BorderWidth = line_width;
-            chart.Series[0].MarkerSize = line_width * 2;
-            chart.Series[2].BorderWidth = line_width;
-            chart.Series[2].MarkerSize = line_width * 2;
+            title.Font = new System.Drawing.Font(title.Font.Name, Constants.ChartTitleFontSize, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Bold);
+            
+            chart.Series[0].BorderWidth = Constants.ChartSeriesLineWidth;
+            chart.Series[0].MarkerSize = Constants.ChartSeriesLineWidth * 2;
+            chart.Series[2].BorderWidth = Constants.ChartSeriesLineWidth;
+            chart.Series[2].MarkerSize = Constants.ChartSeriesLineWidth * 2;
 
             area.AxisX.MinorGrid.Enabled = true;
             area.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot;
