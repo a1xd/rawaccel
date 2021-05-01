@@ -47,6 +47,8 @@ namespace grapher
 
             EnableLastValue.CheckedChanged += new System.EventHandler(OnEnableLastMouseMoveCheckStateChange);
 
+            EnableStreamingMode.CheckedChanged += new System.EventHandler(OnEnableStreamingModeCheckStateChange);
+
             ChartState = ChartStateManager.InitialState();
             ChartState.Activate();
             HideVelocityAndGain();
@@ -178,6 +180,10 @@ namespace grapher
             {
                 HideVelocityAndGain();
             }
+        }
+        private void OnEnableStreamingModeCheckStateChange(object sender, EventArgs e)
+        {
+            ChartState.SetStreaming(EnableStreamingMode.Checked);
         }
 
         private void OnEnableLastMouseMoveCheckStateChange(object sender, EventArgs e)
