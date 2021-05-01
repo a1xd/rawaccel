@@ -19,6 +19,7 @@ namespace grapher.Models.Serialized
             ToolStripMenuItem autoWrite,
             ToolStripMenuItem showLastMouseMove,
             ToolStripMenuItem showVelocityAndGain,
+            ToolStripMenuItem streamingMode,
             DeviceIDManager deviceIDManager)
         {
             ActiveAccel = activeAccel;
@@ -27,6 +28,7 @@ namespace grapher.Models.Serialized
             AutoWriteMenuItem = autoWrite;
             ShowLastMouseMoveMenuItem = showLastMouseMove;
             ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
+            StreamingModeMenuItem = streamingMode;
             DeviceIDManager = deviceIDManager;
         }
 
@@ -49,7 +51,7 @@ namespace grapher.Models.Serialized
         private ToolStripMenuItem ShowLastMouseMoveMenuItem { get; set; }
 
         private ToolStripMenuItem ShowVelocityAndGainMoveMenuItem { get; set; }
-
+        private ToolStripMenuItem StreamingModeMenuItem{ get; set; }
         #endregion Properties
 
         #region Methods
@@ -73,6 +75,7 @@ namespace grapher.Models.Serialized
             PollRateField.SetToEntered(RawAccelSettings.GUISettings.PollRate);
             ShowLastMouseMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowLastMouseMove;
             ShowVelocityAndGainMoveMenuItem.Checked = RawAccelSettings.GUISettings.ShowVelocityAndGain;
+            StreamingModeMenuItem.Checked = RawAccelSettings.GUISettings.StreamingMode;
             AutoWriteMenuItem.Checked = RawAccelSettings.GUISettings.AutoWriteToDriverOnStartup;
         }
 
@@ -103,7 +106,8 @@ namespace grapher.Models.Serialized
                 PollRate = (int)PollRateField.Data,
                 ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
                 ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
-                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked
+                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
+                StreamingMode = StreamingModeMenuItem.Checked
             };
         }
 
