@@ -129,6 +129,27 @@ namespace grapher
         /// <summary> Style used by System.Double.Parse </summary>
         public const NumberStyles FloatStyle = NumberStyles.Float | NumberStyles.AllowThousands;
 
+        /// <summary> Font Size for Chart Titles </summary>
+        public const float ChartTitleFontSize = 15;
+
+        /// <summary> Font Size for Chart Axis Titles </summary>
+        public const float ChartAxisFontSize = 12;
+
+        /// <summary> Line Width For Series data on chart </summary>
+        public const int ChartSeriesLineWidth = 3;
+
+        /// <summary> Foreground Color When Streamer Mode Active </summary>
+        public static readonly System.Drawing.Color fgStreamer = System.Drawing.Color.White;
+
+        /// <summary> Background Color When Streamer Mode Active </summary>
+        public static readonly System.Drawing.Color bgStreamer = System.Drawing.Color.Green;
+
+        /// <summary> Foreground Color When Streamer Mode Inactive </summary>
+        public static readonly System.Drawing.Color fgNoStreamer = System.Drawing.Color.Black;
+
+        /// <summary> Background Color When Streamer Mode Inactive </summary>
+        public static readonly System.Drawing.Color bgNoStreamer = System.Drawing.Color.White;
+
         #endregion Constants
 
         #region ReadOnly

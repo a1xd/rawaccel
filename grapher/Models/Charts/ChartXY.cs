@@ -89,34 +89,91 @@ namespace grapher
 
         #region Methods
 
+        public static void setChartColors(Chart chart, System.Drawing.Color fgColor, System.Drawing.Color bgColor)
+        {
+            chart.ForeColor = fgColor;
+            chart.BackColor = bgColor;
+
+            chart.Titles[0].ForeColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.LabelStyle.ForeColor = fgColor;
+            chart.ChartAreas[0].AxisY.LabelStyle.ForeColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.LineColor = fgColor;
+            chart.ChartAreas[0].AxisY.LineColor = fgColor;
+            chart.ChartAreas[0].AxisY.MajorTickMark.LineColor = fgColor;
+            chart.ChartAreas[0].AxisX.MajorTickMark.LineColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.MajorGrid.LineColor = fgColor;
+            chart.ChartAreas[0].AxisY.MajorGrid.LineColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.MinorGrid.LineColor = fgColor;
+            chart.Legends[0].ForeColor = fgColor;
+
+            chart.ChartAreas[0].AxisX.TitleForeColor = fgColor;
+            chart.ChartAreas[0].AxisY.TitleForeColor = fgColor;
+
+            chart.ChartAreas[0].BorderColor = fgColor;
+
+
+        }
+
         public static void SetupChart(Chart chart)
         {
-            chart.ChartAreas[0].AxisX.RoundAxisValues();
+            ChartArea area = chart.ChartAreas[0];
+            Legend legend = chart.Legends[0];
+            Title title = chart.Titles[0];
 
-            chart.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            chart.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+            area.AxisX.RoundAxisValues();
 
-            chart.ChartAreas[0].AxisY.ScaleView.MinSize = 0.01;
-            chart.ChartAreas[0].AxisY.ScaleView.SmallScrollSize = 0.001;
+            area.AxisX.ScaleView.Zoomable = true;
+            area.AxisY.ScaleView.Zoomable = true;
 
-            chart.ChartAreas[0].AxisX.LabelStyle.Format = "0.##";
-            chart.ChartAreas[0].AxisY.LabelStyle.Format = "0.##";
+            area.AxisY.ScaleView.MinSize = 0.01;
+            area.AxisY.ScaleView.SmallScrollSize = 0.001;
+            
+            area.AxisX.LabelStyle.Format = "0.##";
+            area.AxisY.LabelStyle.Format = "0.##";
 
-            chart.ChartAreas[0].CursorY.Interval = 0.001;
+            area.CursorY.Interval = 0.001;
 
-            chart.ChartAreas[0].CursorX.AutoScroll = true;
-            chart.ChartAreas[0].CursorY.AutoScroll = true;
+            area.CursorX.AutoScroll = true;
+            area.CursorY.AutoScroll = true;
 
-            chart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-            chart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+            area.CursorX.IsUserSelectionEnabled = true;
+            area.CursorY.IsUserSelectionEnabled = true;
 
-            chart.ChartAreas[0].CursorX.IsUserEnabled = true;
-            chart.ChartAreas[0].CursorY.IsUserEnabled = true;
+            area.CursorX.IsUserEnabled = true;
+            area.CursorY.IsUserEnabled = true;
 
             chart.Series[1].Points.Clear();
             chart.Series[1].Points.AddXY(0, 0);
 
-            chart.Titles[0].Font = new System.Drawing.Font(chart.Titles[0].Font.Name, 9.0f, System.Drawing.FontStyle.Italic);
+            area.AxisX.TitleFont = new System.Drawing.Font(area.AxisX.TitleFont.Name, Constants.ChartAxisFontSize, System.Drawing.FontStyle.Bold);
+            area.AxisY.TitleFont = area.AxisX.TitleFont;
+
+            title.Font = new System.Drawing.Font(title.Font.Name, Constants.ChartTitleFontSize, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Bold);
+            
+            chart.Series[0].BorderWidth = Constants.ChartSeriesLineWidth;
+            chart.Series[0].MarkerSize = Constants.ChartSeriesLineWidth * 2;
+            chart.Series[2].BorderWidth = Constants.ChartSeriesLineWidth;
+            chart.Series[2].MarkerSize = Constants.ChartSeriesLineWidth * 2;
+
+            area.AxisX.MinorGrid.Enabled = true;
+            area.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot;
+
+            title.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
+
+            legend.DockedToChartArea = area.Name;
+            legend.LegendStyle = LegendStyle.Row;
+            
+            ElementPosition legendPosNew = new ElementPosition(25, 0, 50, 25);
+            legend.Position = legendPosNew;
+
+            System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
+
+            area.BackColor = bgTrans;
+            legend.BackColor = bgTrans;
         }
 
         public static void DrawPoint(Chart chart, PointData pointOne, PointData pointTwo = null)
@@ -311,6 +368,22 @@ namespace grapher
         {
             ChartX.Height = height;
             ChartY.Height = height;
+        }
+
+        public void SetStreaming(bool streaming)
+        {
+            var fgColor = Constants.fgNoStreamer;
+            var bgColor = Constants.bgNoStreamer;
+
+            if (streaming)
+            {
+                fgColor = Constants.fgStreamer;
+                bgColor = Constants.bgStreamer;
+            }
+
+            setChartColors(ChartX, fgColor, bgColor);
+            setChartColors(ChartY, fgColor, bgColor);
+            Update();
         }
 
         private string SetComponentTitle(string component)

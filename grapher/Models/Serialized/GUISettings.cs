@@ -31,6 +31,9 @@ namespace grapher.Models.Serialized
         [JsonProperty(Order = 5)]
         public bool AutoWriteToDriverOnStartup { get; set; }
 
+        [JsonProperty(Order = 6)]
+        public bool StreamingMode { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -53,7 +56,8 @@ namespace grapher.Models.Serialized
                 PollRate == other.PollRate &&
                 ShowLastMouseMove == other.ShowLastMouseMove &&
                 ShowVelocityAndGain == other.ShowVelocityAndGain &&
-                AutoWriteToDriverOnStartup == other.AutoWriteToDriverOnStartup;
+                AutoWriteToDriverOnStartup == other.AutoWriteToDriverOnStartup &&
+                StreamingMode == other.StreamingMode;
         }
 
         public override int GetHashCode()
@@ -62,7 +66,8 @@ namespace grapher.Models.Serialized
                 PollRate.GetHashCode() ^
                 ShowLastMouseMove.GetHashCode() ^
                 ShowVelocityAndGain.GetHashCode() ^
-                AutoWriteToDriverOnStartup.GetHashCode();
+                AutoWriteToDriverOnStartup.GetHashCode() ^
+                StreamingMode.GetHashCode();
         }
 
         #endregion Methods

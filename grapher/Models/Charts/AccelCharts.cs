@@ -18,6 +18,7 @@ namespace grapher
             ChartXY gainChart,
             ToolStripMenuItem enableVelocityAndGain,
             ToolStripMenuItem enableLastMouseMove,
+            ToolStripMenuItem enableStreamingMode,
             Button writeButton,
             AccelCalculator accelCalculator)
         {
@@ -37,12 +38,16 @@ namespace grapher
             ContainingForm = form;
             EnableVelocityAndGain = enableVelocityAndGain;
             EnableLastValue = enableLastMouseMove;
+            EnableStreamingMode = enableStreamingMode;
+
             WriteButton = writeButton;
 
             EnableVelocityAndGain.Click += new System.EventHandler(OnEnableClick);
             EnableVelocityAndGain.CheckedChanged += new System.EventHandler(OnEnableVelocityGainCheckStateChange);
 
             EnableLastValue.CheckedChanged += new System.EventHandler(OnEnableLastMouseMoveCheckStateChange);
+
+            EnableStreamingMode.CheckedChanged += new System.EventHandler(OnEnableStreamingModeCheckStateChange);
 
             ChartState = ChartStateManager.InitialState();
             ChartState.Activate();
@@ -56,6 +61,8 @@ namespace grapher
         public RawAcceleration ContainingForm { get; }
 
         public ToolStripMenuItem EnableVelocityAndGain { get; }
+
+        public ToolStripMenuItem EnableStreamingMode { get; }
 
         private ToolStripMenuItem EnableLastValue { get; }
 
@@ -173,6 +180,10 @@ namespace grapher
             {
                 HideVelocityAndGain();
             }
+        }
+        private void OnEnableStreamingModeCheckStateChange(object sender, EventArgs e)
+        {
+            ChartState.SetStreaming(EnableStreamingMode.Checked);
         }
 
         private void OnEnableLastMouseMoveCheckStateChange(object sender, EventArgs e)

@@ -64,6 +64,7 @@ namespace grapher
                 toggleButton,
                 showVelocityGainToolStripMenuItem,
                 showLastMouseMoveToolStripMenuItem,
+                streamingModeToolStripMenuItem,
                 gainCapToolStripMenuItem,
                 legacyCapToolStripMenuItem,
                 gainOffsetToolStripMenuItem,
@@ -217,6 +218,6 @@ namespace grapher
 
         }
 
-        #endregion Method
-    }
+		#endregion Method
+	}
 }
