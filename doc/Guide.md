@@ -9,9 +9,9 @@ Visit the [Releases page](https://github.com/a1xd/rawaccel/releases) and navigat
   * .NET Framework 4.7.2+ runtime, [download here](https://dotnet.microsoft.com/download/dotnet-framework/net48)
   * **For Windows 7 users only** — SHA-2 code signing support (download through Windows Update)
 
-- Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
+- Run `installer.exe` in the release directory to install the Raw Accel driver. Disconnect and reconnect your mouse to switch to the driver. If it doesn't work, restart your computer for the installation to take effect.
 
-- Run `uninstaller.exe` in the release directory to uninstall the driver. Restart for the uninstallation to take effect.
+- Run `uninstaller.exe` in the release directory to uninstall the driver. Reconnect the mouse or restart for the uninstallation to take effect.
 
 - Run `rawaccel.exe` when the driver is installed in order to run the Raw Accel GUI.
 
