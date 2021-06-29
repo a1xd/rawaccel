@@ -108,7 +108,7 @@ namespace grapher.Models.Calculations
                 }
 
                 var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
-                var outMagnitude = Velocity(output.Item1, output.Item2, simulatedInputDatum.time);
+                var outMagnitude = DecimalCheck(Velocity(output.Item1, output.Item2, simulatedInputDatum.time));
                 var inDiff = Math.Round(simulatedInputDatum.velocity - lastInputMagnitude, 5);
                 var outDiff = Math.Round(outMagnitude - lastOutputMagnitude, 5);
 
@@ -133,8 +133,8 @@ namespace grapher.Models.Calculations
                     logIndex++;
                 }
 
-                var ratio = outMagnitude / simulatedInputDatum.velocity;
-                var slope = inDiff > 0 ? outDiff / inDiff : starter;
+                var ratio = DecimalCheck(outMagnitude / simulatedInputDatum.velocity);
+                var slope = DecimalCheck(inDiff > 0 ? outDiff / inDiff : starter);
 
                 if (slope < lastSlope)
                 {
@@ -200,9 +200,6 @@ namespace grapher.Models.Calculations
             double maxSlope = 0.0;
             double minSlope = Double.MaxValue;
 
-
-            Sensitivity = GetSens(ref settings);
-
             int angleIndex = 0;
 
             foreach (var simulatedInputDataAngle in simulatedInputData)
@@ -223,7 +220,7 @@ namespace grapher.Models.Calculations
                     }
 
                     var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
-                    var magnitude = Velocity(output.Item1, output.Item2, simulatedInputDatum.time);
+                    var magnitude = DecimalCheck(Velocity(output.Item1, output.Item2, simulatedInputDatum.time));
                     var inDiff = Math.Round(simulatedInputDatum.velocity - lastInputMagnitude, 5);
                     var outDiff = Math.Round(magnitude - lastOutputMagnitude, 5);
 
@@ -248,10 +245,15 @@ namespace grapher.Models.Calculations
                         logIndex++;
                     }
 
-                    var ratio = magnitude / simulatedInputDatum.velocity;
-                    var slope = inDiff > 0 ? outDiff / inDiff : settings.sensitivity.x;
+                    var ratio = DecimalCheck(magnitude / simulatedInputDatum.velocity);
+                    var slope = DecimalCheck(inDiff > 0 ? outDiff / inDiff : settings.sensitivity.x);
 
                     bool indexToMeasureExtrema = (angleIndex == 0) || (angleIndex == (Constants.AngleDivisions - 1));
+                    
+                    if (angleIndex == 0 && double.IsNaN(ratio))
+                    {
+                        Console.WriteLine("oops");
+                    }
 
                     if (indexToMeasureExtrema && (ratio > maxRatio))
                     {
@@ -322,10 +324,9 @@ namespace grapher.Models.Calculations
                 mouseInputData.x = ceilX;
                 mouseInputData.y = ceilY;
                 mouseInputData.time = MeasurementTime*timeFactor;
-                mouseInputData.velocity = Velocity(ceilX, ceilY, mouseInputData.time);
+                mouseInputData.velocity = DecimalCheck(Velocity(ceilX, ceilY, mouseInputData.time));
                 mouseInputData.angle = Math.Atan2(ceilY, ceilX);
                 magnitudes.Add(mouseInputData);
-
             }
 
             for (double i = 5; i < MaxVelocity; i+=Increment)
@@ -336,7 +337,7 @@ namespace grapher.Models.Calculations
                 mouseInputData.x = ceil;
                 mouseInputData.y = 0;
                 mouseInputData.time = MeasurementTime * timeFactor;
-                mouseInputData.velocity = Velocity(ceil, 0, mouseInputData.time);
+                mouseInputData.velocity = DecimalCheck(Velocity(ceil, 0, mouseInputData.time));
                 mouseInputData.angle = Math.Atan2(ceil, 0);
                 magnitudes.Add(mouseInputData);
             }
@@ -371,7 +372,7 @@ namespace grapher.Models.Calculations
                 mouseInputData.x = ceil;
                 mouseInputData.y = 0;
                 mouseInputData.time = MeasurementTime*timeFactor;
-                mouseInputData.velocity = Velocity(ceil, 0, mouseInputData.time);
+                mouseInputData.velocity = DecimalCheck(Velocity(ceil, 0, mouseInputData.time));
                 mouseInputData.angle = 0;
                 magnitudes.Add(mouseInputData);
             }
@@ -391,7 +392,7 @@ namespace grapher.Models.Calculations
                 mouseInputData.x = 0;
                 mouseInputData.y = ceil;
                 mouseInputData.time = MeasurementTime*timeFactor;
-                mouseInputData.velocity = Velocity(0, ceil, mouseInputData.time);
+                mouseInputData.velocity = DecimalCheck(Velocity(0, ceil, mouseInputData.time));
                 mouseInputData.angle = 0;
                 magnitudes.Add(mouseInputData);
             }
@@ -404,7 +405,7 @@ namespace grapher.Models.Calculations
                 mouseInputData.x = 0;
                 mouseInputData.y = ceil;
                 mouseInputData.time = MeasurementTime*timeFactor;
-                mouseInputData.velocity = Velocity(0, ceil, mouseInputData.time);
+                mouseInputData.velocity = DecimalCheck(Velocity(0, ceil, mouseInputData.time));
                 mouseInputData.angle = Math.PI / 2;
                 magnitudes.Add(mouseInputData);
             }
@@ -422,39 +423,12 @@ namespace grapher.Models.Calculations
 
                 foreach (var slowMoveMagnitude in SlowMovements)
                 {
-                        var slowMoveX = Math.Round(slowMoveMagnitude * Math.Cos(angle), 4);
-                        var slowMoveY = Math.Round(slowMoveMagnitude * Math.Sin(angle), 4);
-                        var ceilX = (int)Math.Round(slowMoveX*90);
-                        var ceilY = (int)Math.Round(slowMoveY*90);
-                        var ceilMagnitude = Magnitude(ceilX, ceilY);
-                        var timeFactor = ceilMagnitude / slowMoveMagnitude;
-
-                        SimulatedMouseInput mouseInputData;
-                        mouseInputData.x = ceilX;
-                        mouseInputData.y = ceilY;
-                        mouseInputData.time = timeFactor;
-                        mouseInputData.velocity = Velocity(ceilX, ceilY, timeFactor);
-                        mouseInputData.angle = angle;
-                        magnitudes.Add(mouseInputData);
+                        magnitudes.Add(SimulateAngledInput(angle, slowMoveMagnitude));
                 }
 
                 for (double magnitude = 5; magnitude < MaxVelocity; magnitude+=Increment)
                 {
-                        var slowMoveX = Math.Round(magnitude * Math.Cos(angle), 4);
-                        var slowMoveY = Math.Round(magnitude * Math.Sin(angle), 4);
-                        var ratio = slowMoveX > 0.0 ? slowMoveY / slowMoveX : 90;
-                        var ceilX = (int)Math.Round(slowMoveX*90);
-                        var ceilY = (int)Math.Round(slowMoveY*ratio);
-                        var ceilMagnitude = Magnitude(ceilX, ceilY);
-                        var timeFactor = ceilMagnitude / magnitude;
-
-                        SimulatedMouseInput mouseInputData;
-                        mouseInputData.x = ceilX;
-                        mouseInputData.y = ceilY;
-                        mouseInputData.time = timeFactor;
-                        mouseInputData.velocity = Velocity(ceilX, ceilY, mouseInputData.time);
-                        mouseInputData.angle = angle;
-                        magnitudes.Add(mouseInputData);
+                        magnitudes.Add(SimulateAngledInput(angle, magnitude));
                 }
 
                 magnitudesByAngle.Add(magnitudes.AsReadOnly());
@@ -465,11 +439,31 @@ namespace grapher.Models.Calculations
 
         public static double Magnitude(int x, int y)
         {
+            if (x == 0)
+            {
+                return Math.Abs(y);
+            }
+
+            if (y == 0)
+            {
+                return Math.Abs(x);
+            }
+
             return Math.Sqrt(x * x + y * y);
         }
 
         public static double Magnitude(double x, double y)
         {
+            if (x == 0)
+            {
+                return Math.Abs(y);
+            }
+
+            if (y == 0)
+            {
+                return Math.Abs(x);
+            }
+
             return Math.Sqrt(x * x + y * y);
         }
 
@@ -517,6 +511,94 @@ namespace grapher.Models.Calculations
             SimulatedInputX = GetSimulatInputX();
             SimulatedInputY = GetSimulatedInputY();
             SimulatedDirectionalInput = GetSimulatedDirectionalInput();
+        }
+
+        private static readonly double MinChartAllowedValue = Convert.ToDouble(Decimal.MinValue) / 10;
+        private static readonly double MaxChartAllowedValue = Convert.ToDouble(Decimal.MaxValue) / 10;
+
+        private double DecimalCheck(double value)
+        {
+            if (value < MinChartAllowedValue)
+            {
+                return MinChartAllowedValue;
+            }
+            
+            if (value > MaxChartAllowedValue)
+            {
+                return MaxChartAllowedValue;
+            }
+
+            return value;
+        }
+
+        private SimulatedMouseInput SimulateAngledInput(double angle, double magnitude)
+        {
+            SimulatedMouseInput mouseInputData;
+
+            var moveX = Math.Round(magnitude * Math.Cos(angle), 4);
+            var moveY = Math.Round(magnitude * Math.Sin(angle), 4);
+
+            if (moveX == 0)
+            {
+                mouseInputData.x = 0;
+                mouseInputData.y = (int)Math.Ceiling(moveY);
+                mouseInputData.time = mouseInputData.y / moveY;
+            }
+            else if (moveY == 0)
+            {
+                mouseInputData.x = (int)Math.Ceiling(moveX);
+                mouseInputData.y = 0;
+                mouseInputData.time = mouseInputData.x / moveX;
+            }
+            else
+            {
+                var ratio =  moveY / moveX;
+                int ceilX = 0;
+                int ceilY = 0;
+                double biggerX = 0;
+                double biggerY = 0;
+                double roundedBiggerX = 0;
+                double roundedBiggerY = 0;
+                double roundedRatio = -1;
+                double factor = 10;
+
+                while (Math.Abs(roundedRatio - ratio) > 0.01 &&
+                    biggerX < 25000 &&
+                    biggerY < 25000)
+                {
+                    roundedBiggerX = Math.Floor(biggerX);
+                    roundedBiggerY = Math.Floor(biggerY);
+                    ceilX = Convert.ToInt32(roundedBiggerX);
+                    ceilY = Convert.ToInt32(roundedBiggerY);
+                    roundedRatio =  ceilX > 0 ? ceilY / ceilX : -1;
+                    biggerX = moveX * factor;
+                    biggerY = moveY * factor;
+                    factor *= 10;
+                }
+
+                var ceilMagnitude = Magnitude(ceilX, ceilY);
+                var timeFactor = ceilMagnitude / magnitude;
+
+                mouseInputData.x = ceilX;
+                mouseInputData.y = ceilY;
+                mouseInputData.time = timeFactor;
+
+                if (mouseInputData.x == 1 && mouseInputData.time == 1)
+                {
+                    Console.WriteLine("Oops");
+                }
+
+            }
+
+            mouseInputData.velocity = DecimalCheck(Velocity(mouseInputData.x, mouseInputData.y, mouseInputData.time));
+
+            if (double.IsNaN(mouseInputData.velocity))
+            {
+                Console.WriteLine("oopsie");
+            }
+
+            mouseInputData.angle = angle;
+            return mouseInputData;
         }
 
         #endregion Methods

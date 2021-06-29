@@ -10,31 +10,24 @@ namespace grapher.Models.Options.LUT
 {
     public class LUTPanelOptions : OptionBase
     {
-        public const string LUTPanelTitle = "LookupTable Points";
         public const string ApplyAsSensTitle = "Apply as sensitivity";
         public const string ApplyAsVelocityTitle = "Apply as velocity";
         public const int TitlePadding = 5;
-        public const int PanelHeight = 40;
+        public const int PanelHeight = 100;
 
-        public LUTPanelOptions(Panel panel)
+        public LUTPanelOptions(Panel activePanel)
         {
-            Panel = panel;
-            Panel.Height = PanelHeight;
-            Panel.Paint += Panel_Paint;
+            ActivePanel = activePanel;
+            ActivePanel.Height = PanelHeight;
+            ActivePanel.Paint += Panel_Paint;
 
-            Title = new Label();
-            Title.Text = LUTPanelTitle;
             ApplyAsSens = new CheckBox();
             ApplyAsSens.Text = ApplyAsSensTitle;
             ApplyAsVelocity = new CheckBox();
             ApplyAsVelocity.Text = ApplyAsVelocityTitle;
-
-            Panel.Controls.Add(Title);
-            Title.Left = TitlePadding;
-            Title.Top = TitlePadding;
         }
 
-        public Panel Panel
+        public Panel ActivePanel
         {
             get;
         }
@@ -58,7 +51,7 @@ namespace grapher.Models.Options.LUT
         {
             get
             {
-                return Panel.Visible || ShouldShow;
+                return ActivePanel.Visible || ShouldShow;
             }
         }
 
@@ -66,11 +59,11 @@ namespace grapher.Models.Options.LUT
         {
             get
             {
-                return Panel.Top;
+                return ActivePanel.Top;
             }
             set
             {
-                Panel.Top = value;
+                ActivePanel.Top = value;
             }
         }
 
@@ -78,7 +71,7 @@ namespace grapher.Models.Options.LUT
         {
             get
             {
-                return Panel.Height;
+                return ActivePanel.Height;
             }
         }
 
@@ -86,11 +79,11 @@ namespace grapher.Models.Options.LUT
         {
             get
             {
-                return Panel.Left;
+                return ActivePanel.Left;
             }
             set
             {
-                Panel.Left = value;
+                ActivePanel.Left = value;
             }
         }
 
@@ -98,11 +91,11 @@ namespace grapher.Models.Options.LUT
         {
             get
             {
-                return Panel.Width;
+                return ActivePanel.Width;
             }
             set
             {
-                Panel.Width = value;
+                ActivePanel.Width = value;
             }
         }
 
@@ -110,13 +103,13 @@ namespace grapher.Models.Options.LUT
 
         public override void Hide()
         {
-            Panel.Hide();
+            ActivePanel.Hide();
             ShouldShow = false;
         }
 
         public override void Show(string name)
         {
-            Panel.Show();
+            ActivePanel.Show();
             ShouldShow = true;
         }
 
@@ -130,7 +123,7 @@ namespace grapher.Models.Options.LUT
             Color col = Color.DarkGray;
             ButtonBorderStyle bbs = ButtonBorderStyle.Dashed;
             int thickness = 2;
-            ControlPaint.DrawBorder(e.Graphics, Panel.ClientRectangle, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs);
+            ControlPaint.DrawBorder(e.Graphics, ActivePanel.ClientRectangle, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs);
         }
     }
 }

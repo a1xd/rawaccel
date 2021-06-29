@@ -71,6 +71,8 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.LUTPanelY = new System.Windows.Forms.Panel();
+            this.LUTPanelX = new System.Windows.Forms.Panel();
             this.gainSwitchActiveLabelY = new System.Windows.Forms.Label();
             this.gainSwitchActiveLabelX = new System.Windows.Forms.Label();
             this.gainSwitchY = new System.Windows.Forms.CheckBox();
@@ -188,8 +190,8 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.LUTPanelX = new System.Windows.Forms.Panel();
-            this.LUTPanelY = new System.Windows.Forms.Panel();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -205,6 +207,8 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.richTextBox2);
+            this.optionsPanel.Controls.Add(this.richTextBox1);
             this.optionsPanel.Controls.Add(this.LUTPanelY);
             this.optionsPanel.Controls.Add(this.LUTPanelX);
             this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelY);
@@ -292,6 +296,22 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // LUTPanelY
+            // 
+            this.LUTPanelY.AutoScroll = true;
+            this.LUTPanelY.Location = new System.Drawing.Point(397, 369);
+            this.LUTPanelY.Name = "LUTPanelY";
+            this.LUTPanelY.Size = new System.Drawing.Size(73, 72);
+            this.LUTPanelY.TabIndex = 159;
+            // 
+            // LUTPanelX
+            // 
+            this.LUTPanelX.AutoScroll = true;
+            this.LUTPanelX.Location = new System.Drawing.Point(317, 369);
+            this.LUTPanelX.Name = "LUTPanelX";
+            this.LUTPanelX.Size = new System.Drawing.Size(68, 72);
+            this.LUTPanelX.TabIndex = 158;
             // 
             // gainSwitchActiveLabelY
             // 
@@ -1519,21 +1539,21 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // LUTPanelX
+            // richTextBox1
             // 
-            this.LUTPanelX.AutoScroll = true;
-            this.LUTPanelX.Location = new System.Drawing.Point(317, 369);
-            this.LUTPanelX.Name = "LUTPanelX";
-            this.LUTPanelX.Size = new System.Drawing.Size(68, 135);
-            this.LUTPanelX.TabIndex = 158;
+            this.richTextBox1.Location = new System.Drawing.Point(317, 447);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(68, 57);
+            this.richTextBox1.TabIndex = 160;
+            this.richTextBox1.Text = "";
             // 
-            // LUTPanelY
+            // richTextBox2
             // 
-            this.LUTPanelY.AutoScroll = true;
-            this.LUTPanelY.Location = new System.Drawing.Point(397, 369);
-            this.LUTPanelY.Name = "LUTPanelY";
-            this.LUTPanelY.Size = new System.Drawing.Size(73, 135);
-            this.LUTPanelY.TabIndex = 159;
+            this.richTextBox2.Location = new System.Drawing.Point(397, 447);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(73, 57);
+            this.richTextBox2.TabIndex = 161;
+            this.richTextBox2.Text = "";
             // 
             // RawAcceleration
             // 
@@ -1684,6 +1704,8 @@ namespace grapher
         private System.Windows.Forms.Label gainSwitchActiveLabelX;
         private System.Windows.Forms.Panel LUTPanelY;
         private System.Windows.Forms.Panel LUTPanelX;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 
