@@ -30,6 +30,7 @@ namespace grapher.Layouts
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);
+            LutApplyOptionsLayout = new OptionLayout(false, string.Empty);
             GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
 
             LogarithmicCharts = false;
@@ -63,6 +64,8 @@ namespace grapher.Layouts
 
         protected OptionLayout LutPanelLayout { get; set; }
 
+        protected OptionLayout LutApplyOptionsLayout { get; set; }
+
         protected OptionLayout GainSwitchOptionLayout { get; set; }
 
         public override string ToString()
@@ -82,6 +85,7 @@ namespace grapher.Layouts
             IOption midpointOption,
             IOption lutTextOption,
             IOption lutPanelOption,
+            IOption lutApplyOption,
             int top)
         {
 
@@ -98,7 +102,8 @@ namespace grapher.Layouts
                 (ExponentLayout, expOption),
                 (MidpointLayout, midpointOption),
                 (LutTextLayout, lutTextOption),
-                (LutPanelLayout, lutPanelOption)})
+                (LutPanelLayout, lutPanelOption),
+                (LutApplyOptionsLayout, lutApplyOption)})
             {
                 option.Item1.Layout(option.Item2);
 
@@ -129,7 +134,8 @@ namespace grapher.Layouts
             IOption expOption,
             IOption midpointOption,
             IOption lutTextOption,
-            IOption lutPanelOption)
+            IOption lutPanelOption,
+            IOption lutApplyOption)
         {
             Layout(gainSwitchOption,
                 accelOption,
@@ -142,6 +148,7 @@ namespace grapher.Layouts
                 midpointOption,
                 lutTextOption,
                 lutPanelOption,
+                lutApplyOption,
                 accelOption.Top);
         }
     }

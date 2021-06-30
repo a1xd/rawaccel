@@ -119,6 +119,8 @@ namespace grapher
 
         public LUTPanelOptions LutPanel { get; }
 
+        public LutApplyOptions LutApply { get; }
+
         public LayoutBase AccelerationType
         {
             get
@@ -207,6 +209,7 @@ namespace grapher
             Midpoint.Hide();
             LutText.Hide();
             LutPanel.Hide();
+            LutApply.Hide();
         }
 
         public void Show()
@@ -234,6 +237,7 @@ namespace grapher
             Limit.SetActiveValue(args.limit);
             Exponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
+            LutApply.SetActiveValue(args.tableData.velocity);
         }
 
         public void ShowFull()
@@ -291,6 +295,7 @@ namespace grapher
             if (Offset.Visible) args.offset = Offset.Field.Data;
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
             if (Weight.Visible) args.weight = Weight.Field.Data;
+            if (LutApply.Visible) args.tableData.velocity = LutApply.ApplyType == LutApplyOptions.LutApplyType.Velocity;
         }
 
         public override void AlignActiveValues()
@@ -305,6 +310,7 @@ namespace grapher
             Limit.AlignActiveValues();
             Exponent.AlignActiveValues();
             Midpoint.AlignActiveValues();
+            LutApply.AlignActiveValues();
         }
 
         private void OnIndexChanged(object sender, EventArgs e)
@@ -332,6 +338,7 @@ namespace grapher
                 Midpoint,
                 LutText,
                 LutPanel,
+                LutApply,
                 top);
         }
 

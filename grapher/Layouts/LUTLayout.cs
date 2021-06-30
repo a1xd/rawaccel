@@ -8,7 +8,7 @@ namespace grapher.Layouts
 {
     public class LUTLayout : LayoutBase
     {
-        public const string LUTLayoutText = "This mode is for advanced users only. We recommend setting points in the settings file with a script.";
+        public const string LUTLayoutText = "This mode is for advanced users only. Format: x1,y1;x2,y2;...xn,yn;";
 
         /// <summary>
         /// String small enough to fit in active value label
@@ -32,6 +32,7 @@ namespace grapher.Layouts
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(true, LUTLayoutText);
             LutPanelLayout = new OptionLayout(true, string.Empty);
+            LutApplyOptionsLayout = new OptionLayout(true, string.Empty);
         }
 
         public override string ActiveName => LUTActiveName;
