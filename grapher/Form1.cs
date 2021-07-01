@@ -59,6 +59,8 @@ namespace grapher
                 GainChartY,
                 accelTypeDropX,
                 accelTypeDropY,
+                XLutApplyDropdown,
+                YLutApplyDropdown,
                 writeButton,
                 toggleButton,
                 showVelocityGainToolStripMenuItem,
@@ -102,6 +104,8 @@ namespace grapher
                 gainSwitchY,
                 LUTPanelX,
                 LUTPanelY,
+                XLutPointsBox,
+                YLutPointsBox,
                 LockXYLabel,
                 sensitivityLabel,
                 rotationLabel,
@@ -162,7 +166,11 @@ namespace grapher
                 DomainActiveValueY,
                 DirectionalityRangeLabel,
                 RangeActiveValueX,
-                RangeActiveValueY);
+                RangeActiveValueY,
+                XLutApplyLabel,
+                YLutApplyLabel,
+                LutApplyActiveXLabel,
+                LutApplyActiveYLabel);
 
             ResizeAndCenter();
         }

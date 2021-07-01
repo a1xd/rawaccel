@@ -26,6 +26,8 @@ namespace grapher.Models
             Chart gainChartY,
             ComboBox accelTypeDropX,
             ComboBox accelTypeDropY,
+            ComboBox lutApplyDropdownX,
+            ComboBox lutApplyDropdownY,
             Button writeButton,
             ButtonBase toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
@@ -69,6 +71,8 @@ namespace grapher.Models
             CheckBox gainSwitchY,
             Panel lutPanelX,
             Panel lutPanelY,
+            RichTextBox xLutPointsBox,
+            RichTextBox yLutPointsBox,
             Label lockXYLabel,
             Label sensitivityLabel,
             Label rotationLabel,
@@ -129,7 +133,11 @@ namespace grapher.Models
             Label domainActiveValueY,
             Label rangeLabel,
             Label rangeActiveValueX,
-            Label rangeActiveValueY)
+            Label rangeActiveValueY,
+            Label lutApplyLabelX,
+            Label lutApplyLabelY,
+            Label lutApplyActiveValueX,
+            Label lutApplyActiveValueY)
         {
             fakeBox.Checked = false;
             fakeBox.Hide();
@@ -339,7 +347,11 @@ namespace grapher.Models
                 exponentX,
                 midpointX,
                 lutTextX,
-                new LUTPanelOptions(lutPanelX),
+                new LUTPanelOptions(lutPanelX, xLutPointsBox),
+                new LutApplyOptions(
+                    lutApplyLabelX,
+                    lutApplyDropdownX,
+                    new ActiveValueLabel(lutApplyActiveValueX, activeValueTitleX)),
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitleX));
 
@@ -355,7 +367,11 @@ namespace grapher.Models
                 exponentY,
                 midpointY,
                 lutTextY,
-                new LUTPanelOptions(lutPanelY),
+                new LUTPanelOptions(lutPanelY, yLutPointsBox),
+                new LutApplyOptions(
+                    lutApplyLabelY,
+                    lutApplyDropdownY,
+                    new ActiveValueLabel(lutApplyActiveValueY, activeValueTitleY)),
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitleY));
 

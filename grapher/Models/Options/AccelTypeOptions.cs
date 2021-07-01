@@ -40,6 +40,7 @@ namespace grapher
             Option midpoint,
             TextOption lutText,
             LUTPanelOptions lutPanelOptions,
+            LutApplyOptions lutApplyOptions,
             Button writeButton,
             ActiveValueLabel accelTypeActiveValue)
         {
@@ -73,6 +74,7 @@ namespace grapher
             AccelTypeActiveValue = accelTypeActiveValue;
             LutText = lutText;
             LutPanel = lutPanelOptions;
+            LutApply = lutApplyOptions;
 
             AccelTypeActiveValue.Left = AccelDropdown.Left + AccelDropdown.Width;
             AccelTypeActiveValue.Height = AccelDropdown.Height;
@@ -237,6 +239,7 @@ namespace grapher
             Limit.SetActiveValue(args.limit);
             Exponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
+            LutPanel.SetActiveValues(args.tableData.points);
             LutApply.SetActiveValue(args.tableData.velocity);
         }
 
