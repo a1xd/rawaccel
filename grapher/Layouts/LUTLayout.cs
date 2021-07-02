@@ -8,8 +8,6 @@ namespace grapher.Layouts
 {
     public class LUTLayout : LayoutBase
     {
-        public const string LUTLayoutText = "This mode is for advanced users only. Format: x1,y1;x2,y2;...xn,yn;";
-
         /// <summary>
         /// String small enough to fit in active value label
         /// </summary>
@@ -30,7 +28,7 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, Exponent);
             MidpointLayout = new OptionLayout(false, string.Empty);
-            LutTextLayout = new OptionLayout(true, LUTLayoutText);
+            LutTextLayout = new OptionLayout(true, string.Empty);
             LutPanelLayout = new OptionLayout(true, string.Empty);
             LutApplyOptionsLayout = new OptionLayout(true, string.Empty);
         }

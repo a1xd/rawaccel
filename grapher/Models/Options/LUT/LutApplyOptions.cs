@@ -10,6 +10,7 @@ namespace grapher.Models.Options.LUT
     public class LutApplyOptions : OptionBase
     {
         public const string LUTApplyOptionsLabelText = "Apply as:";
+        public const int LUTApplyLabelDropdownSeparation = 4;
 
         public enum LutApplyType
         {
@@ -52,7 +53,8 @@ namespace grapher.Models.Options.LUT
 
             Label = label;
             Label.Text = LUTApplyOptionsLabelText;
-            Label.Width = 45;
+            Label.AutoSize = false;
+            Label.Width = 50;
 
             ActiveValueLabel = lutApplyActiveValue;
         }
@@ -93,7 +95,7 @@ namespace grapher.Models.Options.LUT
             set
             {
                 Label.Left = value;
-                ApplyOptions.Left = Label.Left + Label.Width + Constants.OptionLabelBoxSeperation;
+                ApplyOptions.Left = Label.Left + Label.Width + LUTApplyLabelDropdownSeparation;
             }
         }
 
@@ -113,8 +115,8 @@ namespace grapher.Models.Options.LUT
             }
             set
             {
-                Label.Top = value;
                 ApplyOptions.Top = value;
+                Label.Top = (ApplyOptions.Height - Label.Height) / 2 + ApplyOptions.Top;
                 ActiveValueLabel.Top = value;
             }
         }

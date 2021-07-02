@@ -83,6 +83,8 @@ namespace grapher
             LutPanel.Left = AccelDropdown.Left;
             LutPanel.Width = AccelDropdown.Width + AccelTypeActiveValue.Width;
 
+            LutText.SetText(TextOption.LUTLayoutExpandedText, TextOption.LUTLayoutShortenedText);
+
             AccelerationType = Off;
             Layout();
             ShowingDefault = true;
@@ -182,7 +184,7 @@ namespace grapher
             {
                 AccelDropdown.Width = value;
                 LutText.Width = value;
-                LutPanel.Width = value;
+                LutPanel.Width = AccelTypeActiveValue.CenteringLabel.Right - AccelDropdown.Left;
                 LutApply.Width = value;
             }
         }
@@ -258,6 +260,7 @@ namespace grapher
 
             Left = Acceleration.Left + Constants.DropDownLeftSeparation;
             Width = Acceleration.Width - Constants.DropDownLeftSeparation;
+            LutText.Expand();
         }
 
         public void ShowShortened()
@@ -269,6 +272,7 @@ namespace grapher
 
             Left = Acceleration.Field.Left;
             Width = Acceleration.Field.Width;
+            LutText.Shorten();
         }
 
         public void SetArgs(ref AccelArgs args)

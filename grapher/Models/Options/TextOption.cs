@@ -9,6 +9,13 @@ namespace grapher.Models.Options
 {
     public class TextOption : OptionBase
     {
+        #region Constants
+
+        public const string LUTLayoutExpandedText = "This mode is for experts only. Format: x1,y1;x2,y2;...xn,yn;";
+        public const string LUTLayoutShortenedText = "Experts only.";
+
+        #endregion Constants
+
         #region Constructors
 
         public TextOption(Label label)
@@ -22,6 +29,10 @@ namespace grapher.Models.Options
         #region Properties
 
         private Label Label { get; }
+
+        private string ExpandedText { get; set; }
+
+        private string ShortenedText { get; set; }
 
         public override bool Visible
         { 
@@ -89,8 +100,23 @@ namespace grapher.Models.Options
         public override void Show(string Name)
         {
             Label.Show();
-            Label.Text = Name;
             ShouldShow = true;
+        }
+
+        public void Expand()
+        {
+            Label.Text = ExpandedText;
+        }
+
+        public void Shorten()
+        {
+            Label.Text = ShortenedText;
+        }
+
+        public void SetText(string expandedText, string shortenedText)
+        {
+            ExpandedText = expandedText;
+            ShortenedText = shortenedText;
         }
 
         public override void AlignActiveValues()
