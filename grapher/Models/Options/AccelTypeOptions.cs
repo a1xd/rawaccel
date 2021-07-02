@@ -253,8 +253,6 @@ namespace grapher
 
         public void ShowFull()
         {
-            LutText.Expand();
-
             if (ShowingDefault)
             {
                 AccelDropdown.Text = Constants.AccelDropDownDefaultFullText;
@@ -262,12 +260,13 @@ namespace grapher
 
             Left = Acceleration.Left + Constants.DropDownLeftSeparation;
             Width = Acceleration.Width - Constants.DropDownLeftSeparation;
+
+            LutText.Expand();
+            HandleLUTOptionsOnResize();
         }
 
         public void ShowShortened()
         {
-            LutText.Shorten();
-
             if (ShowingDefault)
             {
                 AccelDropdown.Text = Constants.AccelDropDownDefaultShortText;
@@ -275,6 +274,8 @@ namespace grapher
 
             Left = Acceleration.Field.Left;
             Width = Acceleration.Field.Width;
+
+            LutText.Shorten();
         }
 
         public void SetArgs(ref AccelArgs args)
@@ -332,6 +333,15 @@ namespace grapher
             Exponent.AlignActiveValues();
             Midpoint.AlignActiveValues();
             LutApply.AlignActiveValues();
+        }
+
+        public void HandleLUTOptionsOnResize()
+        {
+            LutText.Left = AccelDropdown.Left;
+            LutPanel.Left = GainSwitch.Left - 100;
+            LutPanel.Width = Acceleration.ActiveValueLabel.CenteringLabel.Right - LutPanel.Left;
+            LutApply.Left = LutPanel.Left;
+            LutApply.Width = AccelDropdown.Right - LutPanel.Left;
         }
 
         private void OnIndexChanged(object sender, EventArgs e)

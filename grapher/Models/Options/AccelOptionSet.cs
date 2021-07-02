@@ -61,6 +61,7 @@ namespace grapher.Models.Options
 
                 Options.ShowShortened();
                 DisplayTitle();
+                Options.HandleLUTOptionsOnResize();
             }
         }
 
