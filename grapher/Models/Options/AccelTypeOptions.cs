@@ -166,6 +166,9 @@ namespace grapher
             set
             {
                 AccelDropdown.Left = value;
+                LutText.Left = value;
+                LutPanel.Left = value;
+                LutApply.Left = value;
             }
         }
 
@@ -178,6 +181,9 @@ namespace grapher
             set
             {
                 AccelDropdown.Width = value;
+                LutText.Width = value;
+                LutPanel.Width = value;
+                LutApply.Width = value;
             }
         }
 
@@ -239,7 +245,7 @@ namespace grapher
             Limit.SetActiveValue(args.limit);
             Exponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
-            LutPanel.SetActiveValues(args.tableData.points);
+            LutPanel.SetActiveValues(args.tableData.points, args.tableData.length);
             LutApply.SetActiveValue(args.tableData.velocity);
         }
 
@@ -298,6 +304,12 @@ namespace grapher
             if (Offset.Visible) args.offset = Offset.Field.Data;
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
             if (Weight.Visible) args.weight = Weight.Field.Data;
+            if (LutPanel.Visible)
+            {
+                (var points, var length) = LutPanel.GetPoints();
+                args.tableData.points = points;
+                args.tableData.length = length;
+            }
             if (LutApply.Visible) args.tableData.velocity = LutApply.ApplyType == LutApplyOptions.LutApplyType.Velocity;
         }
 

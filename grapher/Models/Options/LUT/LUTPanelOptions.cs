@@ -13,17 +13,14 @@ namespace grapher.Models.Options.LUT
         public const int PanelPadding = 5;
         public const int PanelHeight = 100;
 
-        public LUTPanelOptions(Panel activePanel, RichTextBox pointsTextBox)
+        public LUTPanelOptions(RichTextBox pointsTextBox, RichTextBox activeValuesTextBox)
         {
             PointsTextBox = pointsTextBox;
+            PointsTextBox.Height = PanelHeight;
 
-            ActivePanel = activePanel;
-            ActivePanel.Height = PanelHeight;
-            ActivePanel.Paint += Panel_Paint;
-
-            ActiveValuesTextBox = new RichTextBox();
+            ActiveValuesTextBox = activeValuesTextBox;
+            ActiveValuesTextBox.Height = PanelHeight;
             ActiveValuesTextBox.ReadOnly = true;
-            ActivePanel.Controls.Add(ActiveValuesTextBox);
         }
 
         public RichTextBox PointsTextBox
@@ -32,11 +29,6 @@ namespace grapher.Models.Options.LUT
         }
 
         public RichTextBox ActiveValuesTextBox
-        {
-            get;
-        }
-
-        public Panel ActivePanel
         {
             get;
         }
@@ -58,7 +50,7 @@ namespace grapher.Models.Options.LUT
             set
             {
                 PointsTextBox.Top = value;
-                ActivePanel.Top = value;
+                ActiveValuesTextBox.Top = value;
             }
         }
 
@@ -93,7 +85,7 @@ namespace grapher.Models.Options.LUT
             {
                 var panelWidth = value / 2 - PanelPadding;
                 PointsTextBox.Width = panelWidth;
-                ActivePanel.Width = panelWidth;
+                ActiveValuesTextBox.Width = panelWidth;
                 AlignActivePanelToPointsTextBox();
             }
         }
@@ -103,14 +95,14 @@ namespace grapher.Models.Options.LUT
         public override void Hide()
         {
             PointsTextBox.Hide();
-            ActivePanel.Hide();
+            ActiveValuesTextBox.Hide();
             ShouldShow = false;
         }
 
         public override void Show(string name)
         {
             PointsTextBox.Show();
-            ActivePanel.Show();
+            ActiveValuesTextBox.Show();
             ShouldShow = true;
         }
 
@@ -119,11 +111,11 @@ namespace grapher.Models.Options.LUT
             // Nothing to do here.
         }
 
-        public void SetActiveValues(IEnumerable<Vec2<float>> activePoints)
+        public void SetActiveValues(IEnumerable<Vec2<float>> activePoints, int length)
         {
-            if (activePoints.Any() && activePoints.First().x != 0)
+            if (length > 0 && activePoints.First().x != 0)
             {
-                ActiveValuesTextBox.Text = PointsToActiveValuesText(activePoints);
+                ActiveValuesTextBox.Text = PointsToActiveValuesText(activePoints, length);
             }
             else
             {
@@ -131,12 +123,12 @@ namespace grapher.Models.Options.LUT
             }
         }
 
-        public Vec2<float>[] GetPoints()
+        public (Vec2<float>[], int length) GetPoints()
         {
             return UserTextToPoints(PointsTextBox.Text);
         }
 
-        private static Vec2<float>[] UserTextToPoints(string userText)
+        private static (Vec2<float>[], int length) UserTextToPoints(string userText)
         {
             if (string.IsNullOrWhiteSpace(userText))
             {
@@ -145,7 +137,7 @@ namespace grapher.Models.Options.LUT
 
             Vec2<float>[] points = new Vec2<float>[256];
 
-            var userTextSplit = userText.Split(';');
+            var userTextSplit = userText.Trim().Trim(';').Split(';');
             int index = 0;
             float lastX = 0;
 
@@ -201,32 +193,25 @@ namespace grapher.Models.Options.LUT
                 index++;
             }
 
-            return points;
+            return (points, userTextSplit.Length);
         }
 
         private void AlignActivePanelToPointsTextBox()
         {
-            ActivePanel.Left = PointsTextBox.Right + PanelPadding;
+            ActiveValuesTextBox.Left = PointsTextBox.Right + PanelPadding;
         }
 
-        private string PointsToActiveValuesText(IEnumerable<Vec2<float>> points)
+        private string PointsToActiveValuesText(IEnumerable<Vec2<float>> points, int length)
         {
             StringBuilder builder = new StringBuilder();
 
-            foreach(var point in points)
+            for(int i = 0; i < length; i++)
             {
+                var point = points.ElementAt(i);
                 builder.AppendLine($"{point.x},{point.y};");
             }
 
             return builder.ToString();
-        }
-
-        private void Panel_Paint(object sender, PaintEventArgs e)
-        {
-            Color col = Color.DarkGray;
-            ButtonBorderStyle bbs = ButtonBorderStyle.Dashed;
-            int thickness = 2;
-            ControlPaint.DrawBorder(e.Graphics, ActivePanel.ClientRectangle, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs);
         }
     }
 }

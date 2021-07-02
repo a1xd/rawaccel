@@ -71,10 +71,14 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.LutApplyActiveYLabel = new System.Windows.Forms.Label();
+            this.YLutApplyDropdown = new System.Windows.Forms.ComboBox();
+            this.XLutApplyDropdown = new System.Windows.Forms.ComboBox();
+            this.LutApplyActiveXLabel = new System.Windows.Forms.Label();
+            this.YLutApplyLabel = new System.Windows.Forms.Label();
+            this.XLutApplyLabel = new System.Windows.Forms.Label();
             this.YLutPointsBox = new System.Windows.Forms.RichTextBox();
             this.XLutPointsBox = new System.Windows.Forms.RichTextBox();
-            this.LUTPanelY = new System.Windows.Forms.Panel();
-            this.LUTPanelX = new System.Windows.Forms.Panel();
             this.gainSwitchActiveLabelY = new System.Windows.Forms.Label();
             this.gainSwitchActiveLabelX = new System.Windows.Forms.Label();
             this.gainSwitchY = new System.Windows.Forms.CheckBox();
@@ -192,12 +196,8 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.XLutApplyLabel = new System.Windows.Forms.Label();
-            this.YLutApplyLabel = new System.Windows.Forms.Label();
-            this.LutApplyActiveXLabel = new System.Windows.Forms.Label();
-            this.XLutApplyDropdown = new System.Windows.Forms.ComboBox();
-            this.YLutApplyDropdown = new System.Windows.Forms.ComboBox();
-            this.LutApplyActiveYLabel = new System.Windows.Forms.Label();
+            this.XLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
+            this.YLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -213,6 +213,8 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.YLutActiveValuesBox);
+            this.optionsPanel.Controls.Add(this.XLutActiveValuesBox);
             this.optionsPanel.Controls.Add(this.LutApplyActiveYLabel);
             this.optionsPanel.Controls.Add(this.YLutApplyDropdown);
             this.optionsPanel.Controls.Add(this.XLutApplyDropdown);
@@ -221,8 +223,6 @@ namespace grapher
             this.optionsPanel.Controls.Add(this.XLutApplyLabel);
             this.optionsPanel.Controls.Add(this.YLutPointsBox);
             this.optionsPanel.Controls.Add(this.XLutPointsBox);
-            this.optionsPanel.Controls.Add(this.LUTPanelY);
-            this.optionsPanel.Controls.Add(this.LUTPanelX);
             this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelY);
             this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelX);
             this.optionsPanel.Controls.Add(this.gainSwitchY);
@@ -309,6 +309,58 @@ namespace grapher
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
             // 
+            // LutApplyActiveYLabel
+            // 
+            this.LutApplyActiveYLabel.AutoSize = true;
+            this.LutApplyActiveYLabel.Location = new System.Drawing.Point(417, 565);
+            this.LutApplyActiveYLabel.Name = "LutApplyActiveYLabel";
+            this.LutApplyActiveYLabel.Size = new System.Drawing.Size(35, 13);
+            this.LutApplyActiveYLabel.TabIndex = 167;
+            this.LutApplyActiveYLabel.Text = "label1";
+            // 
+            // YLutApplyDropdown
+            // 
+            this.YLutApplyDropdown.FormattingEnabled = true;
+            this.YLutApplyDropdown.Location = new System.Drawing.Point(397, 527);
+            this.YLutApplyDropdown.Name = "YLutApplyDropdown";
+            this.YLutApplyDropdown.Size = new System.Drawing.Size(73, 21);
+            this.YLutApplyDropdown.TabIndex = 166;
+            // 
+            // XLutApplyDropdown
+            // 
+            this.XLutApplyDropdown.FormattingEnabled = true;
+            this.XLutApplyDropdown.Location = new System.Drawing.Point(320, 527);
+            this.XLutApplyDropdown.Name = "XLutApplyDropdown";
+            this.XLutApplyDropdown.Size = new System.Drawing.Size(65, 21);
+            this.XLutApplyDropdown.TabIndex = 165;
+            // 
+            // LutApplyActiveXLabel
+            // 
+            this.LutApplyActiveXLabel.AutoSize = true;
+            this.LutApplyActiveXLabel.Location = new System.Drawing.Point(200, 565);
+            this.LutApplyActiveXLabel.Name = "LutApplyActiveXLabel";
+            this.LutApplyActiveXLabel.Size = new System.Drawing.Size(35, 13);
+            this.LutApplyActiveXLabel.TabIndex = 164;
+            this.LutApplyActiveXLabel.Text = "label1";
+            // 
+            // YLutApplyLabel
+            // 
+            this.YLutApplyLabel.AutoSize = true;
+            this.YLutApplyLabel.Location = new System.Drawing.Point(397, 510);
+            this.YLutApplyLabel.Name = "YLutApplyLabel";
+            this.YLutApplyLabel.Size = new System.Drawing.Size(47, 13);
+            this.YLutApplyLabel.TabIndex = 163;
+            this.YLutApplyLabel.Text = "Apply as";
+            // 
+            // XLutApplyLabel
+            // 
+            this.XLutApplyLabel.AutoSize = true;
+            this.XLutApplyLabel.Location = new System.Drawing.Point(317, 511);
+            this.XLutApplyLabel.Name = "XLutApplyLabel";
+            this.XLutApplyLabel.Size = new System.Drawing.Size(47, 13);
+            this.XLutApplyLabel.TabIndex = 162;
+            this.XLutApplyLabel.Text = "Apply as";
+            // 
             // YLutPointsBox
             // 
             this.YLutPointsBox.Location = new System.Drawing.Point(397, 447);
@@ -324,22 +376,6 @@ namespace grapher
             this.XLutPointsBox.Size = new System.Drawing.Size(68, 57);
             this.XLutPointsBox.TabIndex = 160;
             this.XLutPointsBox.Text = "";
-            // 
-            // LUTPanelY
-            // 
-            this.LUTPanelY.AutoScroll = true;
-            this.LUTPanelY.Location = new System.Drawing.Point(397, 369);
-            this.LUTPanelY.Name = "LUTPanelY";
-            this.LUTPanelY.Size = new System.Drawing.Size(73, 72);
-            this.LUTPanelY.TabIndex = 159;
-            // 
-            // LUTPanelX
-            // 
-            this.LUTPanelX.AutoScroll = true;
-            this.LUTPanelX.Location = new System.Drawing.Point(317, 369);
-            this.LUTPanelX.Name = "LUTPanelX";
-            this.LUTPanelX.Size = new System.Drawing.Size(68, 72);
-            this.LUTPanelX.TabIndex = 158;
             // 
             // gainSwitchActiveLabelY
             // 
@@ -1567,57 +1603,21 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // XLutApplyLabel
+            // XLutActiveValuesBox
             // 
-            this.XLutApplyLabel.AutoSize = true;
-            this.XLutApplyLabel.Location = new System.Drawing.Point(317, 511);
-            this.XLutApplyLabel.Name = "XLutApplyLabel";
-            this.XLutApplyLabel.Size = new System.Drawing.Size(47, 13);
-            this.XLutApplyLabel.TabIndex = 162;
-            this.XLutApplyLabel.Text = "Apply as";
+            this.XLutActiveValuesBox.Location = new System.Drawing.Point(317, 369);
+            this.XLutActiveValuesBox.Name = "XLutActiveValuesBox";
+            this.XLutActiveValuesBox.Size = new System.Drawing.Size(68, 72);
+            this.XLutActiveValuesBox.TabIndex = 168;
+            this.XLutActiveValuesBox.Text = "";
             // 
-            // YLutApplyLabel
+            // YLutActiveValuesBox
             // 
-            this.YLutApplyLabel.AutoSize = true;
-            this.YLutApplyLabel.Location = new System.Drawing.Point(397, 510);
-            this.YLutApplyLabel.Name = "YLutApplyLabel";
-            this.YLutApplyLabel.Size = new System.Drawing.Size(47, 13);
-            this.YLutApplyLabel.TabIndex = 163;
-            this.YLutApplyLabel.Text = "Apply as";
-            // 
-            // LutApplyActiveXLabel
-            // 
-            this.LutApplyActiveXLabel.AutoSize = true;
-            this.LutApplyActiveXLabel.Location = new System.Drawing.Point(200, 565);
-            this.LutApplyActiveXLabel.Name = "LutApplyActiveXLabel";
-            this.LutApplyActiveXLabel.Size = new System.Drawing.Size(35, 13);
-            this.LutApplyActiveXLabel.TabIndex = 164;
-            this.LutApplyActiveXLabel.Text = "label1";
-            // 
-            // XLutApplyDropdown
-            // 
-            this.XLutApplyDropdown.FormattingEnabled = true;
-            this.XLutApplyDropdown.Location = new System.Drawing.Point(320, 527);
-            this.XLutApplyDropdown.Name = "XLutApplyDropdown";
-            this.XLutApplyDropdown.Size = new System.Drawing.Size(65, 21);
-            this.XLutApplyDropdown.TabIndex = 165;
-            // 
-            // YLutApplyDropdown
-            // 
-            this.YLutApplyDropdown.FormattingEnabled = true;
-            this.YLutApplyDropdown.Location = new System.Drawing.Point(397, 527);
-            this.YLutApplyDropdown.Name = "YLutApplyDropdown";
-            this.YLutApplyDropdown.Size = new System.Drawing.Size(73, 21);
-            this.YLutApplyDropdown.TabIndex = 166;
-            // 
-            // LutApplyActiveYLabel
-            // 
-            this.LutApplyActiveYLabel.AutoSize = true;
-            this.LutApplyActiveYLabel.Location = new System.Drawing.Point(417, 565);
-            this.LutApplyActiveYLabel.Name = "LutApplyActiveYLabel";
-            this.LutApplyActiveYLabel.Size = new System.Drawing.Size(35, 13);
-            this.LutApplyActiveYLabel.TabIndex = 167;
-            this.LutApplyActiveYLabel.Text = "label1";
+            this.YLutActiveValuesBox.Location = new System.Drawing.Point(397, 369);
+            this.YLutActiveValuesBox.Name = "YLutActiveValuesBox";
+            this.YLutActiveValuesBox.Size = new System.Drawing.Size(73, 72);
+            this.YLutActiveValuesBox.TabIndex = 169;
+            this.YLutActiveValuesBox.Text = "";
             // 
             // RawAcceleration
             // 
@@ -1766,8 +1766,6 @@ namespace grapher
         private System.Windows.Forms.CheckBox gainSwitchY;
         private System.Windows.Forms.Label gainSwitchActiveLabelY;
         private System.Windows.Forms.Label gainSwitchActiveLabelX;
-        private System.Windows.Forms.Panel LUTPanelY;
-        private System.Windows.Forms.Panel LUTPanelX;
         private System.Windows.Forms.RichTextBox YLutPointsBox;
         private System.Windows.Forms.RichTextBox XLutPointsBox;
         private System.Windows.Forms.Label LutApplyActiveYLabel;
@@ -1776,6 +1774,8 @@ namespace grapher
         private System.Windows.Forms.Label LutApplyActiveXLabel;
         private System.Windows.Forms.Label YLutApplyLabel;
         private System.Windows.Forms.Label XLutApplyLabel;
+        private System.Windows.Forms.RichTextBox YLutActiveValuesBox;
+        private System.Windows.Forms.RichTextBox XLutActiveValuesBox;
     }
 }
 

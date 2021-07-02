@@ -69,8 +69,8 @@ namespace grapher.Models
             CheckBox byComponentCheckBox,
             CheckBox gainSwitchX,
             CheckBox gainSwitchY,
-            Panel lutPanelX,
-            Panel lutPanelY,
+            RichTextBox xLutActiveValuesBox,
+            RichTextBox yLutActiveValuesBox,
             RichTextBox xLutPointsBox,
             RichTextBox yLutPointsBox,
             Label lockXYLabel,
@@ -347,7 +347,7 @@ namespace grapher.Models
                 exponentX,
                 midpointX,
                 lutTextX,
-                new LUTPanelOptions(lutPanelX, xLutPointsBox),
+                new LUTPanelOptions(xLutPointsBox, xLutActiveValuesBox),
                 new LutApplyOptions(
                     lutApplyLabelX,
                     lutApplyDropdownX,
@@ -367,7 +367,7 @@ namespace grapher.Models
                 exponentY,
                 midpointY,
                 lutTextY,
-                new LUTPanelOptions(lutPanelY, yLutPointsBox),
+                new LUTPanelOptions(yLutPointsBox, yLutActiveValuesBox),
                 new LutApplyOptions(
                     lutApplyLabelY,
                     lutApplyDropdownY,

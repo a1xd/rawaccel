@@ -22,6 +22,8 @@ namespace grapher.Models.Options.LUT
             public LutApplyType Type { get; set; }
 
             public string Name => Type.ToString();
+
+            public override string ToString() => Name;
         }
 
         public static readonly LutApplyOption Sensitivity = new LutApplyOption
@@ -50,6 +52,7 @@ namespace grapher.Models.Options.LUT
 
             Label = label;
             Label.Text = LUTApplyOptionsLabelText;
+            Label.Width = 45;
 
             ActiveValueLabel = lutApplyActiveValue;
         }
