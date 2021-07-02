@@ -226,7 +226,7 @@ namespace grapher
         {
             AccelDropdown.Show();
             AccelTypeActiveValue.Show();
-            Layout();
+            Layout(AccelDropdown.Bottom + Constants.OptionVerticalSeperation);
         }
 
         public override void Show(string name)
@@ -253,6 +253,8 @@ namespace grapher
 
         public void ShowFull()
         {
+            LutText.Expand();
+
             if (ShowingDefault)
             {
                 AccelDropdown.Text = Constants.AccelDropDownDefaultFullText;
@@ -260,11 +262,12 @@ namespace grapher
 
             Left = Acceleration.Left + Constants.DropDownLeftSeparation;
             Width = Acceleration.Width - Constants.DropDownLeftSeparation;
-            LutText.Expand();
         }
 
         public void ShowShortened()
         {
+            LutText.Shorten();
+
             if (ShowingDefault)
             {
                 AccelDropdown.Text = Constants.AccelDropDownDefaultShortText;
@@ -272,7 +275,6 @@ namespace grapher
 
             Left = Acceleration.Field.Left;
             Width = Acceleration.Field.Width;
-            LutText.Shorten();
         }
 
         public void SetArgs(ref AccelArgs args)

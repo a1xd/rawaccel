@@ -46,8 +46,8 @@ namespace grapher.Models.Options
             {
                 IsTitleMode = false;
 
-                HideTitle();
                 Options.ShowFull();
+                HideTitle();
             }
         }
 
