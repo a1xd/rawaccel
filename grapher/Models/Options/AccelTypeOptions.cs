@@ -387,7 +387,7 @@ namespace grapher
 
             switch (args.mode)
             {
-                case AccelMode.classic:  return (args.power == 2) ? Linear : Classic;
+                case AccelMode.classic:  return (args.exponent == 2) ? Linear : Classic;
                 case AccelMode.jump:     return Jump;
                 case AccelMode.natural:  return Natural;
                 case AccelMode.motivity: return Motivity;
