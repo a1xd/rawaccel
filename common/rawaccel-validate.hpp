@@ -83,8 +83,8 @@ namespace rawaccel {
 				error("offset can not be negative");
 			}
 
-			if (args.cap <= 0) {
-				error("cap"" must be positive");
+			if (args.cap < 0) {
+				error("cap"" must not be negative");
 			}
 
 			if (args.growth_rate <= 0 ||

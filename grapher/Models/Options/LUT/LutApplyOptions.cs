@@ -139,6 +139,7 @@ namespace grapher.Models.Options.LUT
         {
             Label.Hide();
             ApplyOptions.Hide();
+            ActiveValueLabel.Hide();
             ShouldShow = false;
         }
 
@@ -152,6 +153,7 @@ namespace grapher.Models.Options.LUT
             }
 
             ApplyOptions.Show();
+            ActiveValueLabel.Show();
             ShouldShow = true;
         }
 

@@ -151,9 +151,9 @@ namespace grapher
 
         public void RefreshActive()
         {
+            UpdateShownActiveValues(Settings.UserSettings);
             UpdateGraph();
             UpdateInputManagers();
-            UpdateShownActiveValues(Settings.UserSettings);
         }
 
         public void RefreshUser()
