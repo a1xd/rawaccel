@@ -106,7 +106,7 @@ The Raw Accel GUI reads the output of the raw input stream, and thus the output 
 This option does not scale your acceleration curve in any way. Rather, DPI scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI. The poll rate is used as a safeguard for the Last Mouse Move points and therefore should be set for accuracy in that measurement.
 
 ## Acceleration Styles
-The examples of various types below show some typical settings, without a cap or offset, for a mouse at 1200 DPI and 1000 hz.
+The examples of various types below show some typical settings, without a cap or offset, for a mouse at 1600 DPI and 1000 hz.
 
 ### Linear
 This is simplest style used by most; it is simply a line rising at a given rate. This is a good choice for new users.

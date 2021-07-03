@@ -245,7 +245,7 @@ namespace grapher
             Acceleration.SetActiveValue(AccelerationParameterFromArgs(ref args));
             Scale.SetActiveValue(args.scale);
             Limit.SetActiveValue(args.limit);
-            Exponent.SetActiveValue(args.exponent);
+            Exponent.SetActiveValue(ExponentParameterFromArgs(ref args));
             Midpoint.SetActiveValue(args.midpoint);
             LutPanel.SetActiveValues(args.tableData.points, args.tableData.length);
             LutApply.SetActiveValue(args.tableData.velocity);
@@ -307,7 +307,17 @@ namespace grapher
             if (Scale.Visible) args.scale = Scale.Field.Data;
             if (Cap.Visible) args.cap = Cap.Field.Data;
             if (Limit.Visible) args.limit = Limit.Field.Data;
-            if (Exponent.Visible) args.exponent = Exponent.Field.Data;
+            if (Exponent.Visible)
+            {
+                if (args.mode == AccelMode.classic)
+                {
+                    args.power = Exponent.Field.Data;
+                }
+                else
+                {
+                    args.exponent = Exponent.Field.Data;
+                }
+            }
             if (Offset.Visible) args.offset = Offset.Field.Data;
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
             if (Weight.Visible) args.weight = Weight.Field.Data;
@@ -387,7 +397,7 @@ namespace grapher
 
             switch (args.mode)
             {
-                case AccelMode.classic:  return (args.exponent == 2) ? Linear : Classic;
+                case AccelMode.classic:  return (args.power == 2) ? Linear : Classic;
                 case AccelMode.jump:     return Jump;
                 case AccelMode.natural:  return Natural;
                 case AccelMode.motivity: return Motivity;
@@ -410,6 +420,18 @@ namespace grapher
             else
             {
                 return args.accelClassic;
+            }
+        }
+
+        private double ExponentParameterFromArgs(ref AccelArgs args)
+        {
+            if (args.mode == AccelMode.classic)
+            {
+                return args.power;
+            }
+            else
+            {
+                return args.exponent;
             }
         }
 
