@@ -28,18 +28,8 @@ namespace grapher
         {
             InitializeComponent();
 
-            Version driverVersion = null;
+            Version driverVersion = VersionHelper.ValidOrThrow();
 
-            try
-            {
-                driverVersion = VersionHelper.ValidOrThrow();
-            }
-            catch (InteropException ex)
-            {
-                MessageBox.Show(ex.Message);
-                throw;
-            }
-            
             ToolStripMenuItem HelpMenuItem = new ToolStripMenuItem("&Help");
 
             HelpMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
