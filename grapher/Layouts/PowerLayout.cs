@@ -1,6 +1,4 @@
-﻿using grapher.Models.Serialized;
-
-namespace grapher.Layouts
+﻿namespace grapher.Layouts
 {
     public class PowerLayout : LayoutBase
     {
@@ -8,9 +6,10 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Power";
-            Index = (int)AccelMode.power;
+            Mode = AccelMode.power;
             LogarithmicCharts = false;
 
+            GainSwitchOptionLayout = new OptionLayout(true, Gain);
             AccelLayout = new OptionLayout(false, string.Empty);
             ScaleLayout = new OptionLayout(true, Scale);
             CapLayout = new OptionLayout(true, Cap);
@@ -19,6 +18,8 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(true, Exponent);
             MidpointLayout = new OptionLayout(false, string.Empty);
+            LutTextLayout = new OptionLayout(false, string.Empty);
+            LutPanelLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

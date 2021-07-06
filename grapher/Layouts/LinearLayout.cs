@@ -4,21 +4,26 @@ namespace grapher.Layouts
 {
     public class LinearLayout : LayoutBase
     {
+        public const string LinearName = "Linear";
+
         public LinearLayout()
             : base()
         {
-            Name = "Linear";
-            Index = (int)AccelMode.linear;
+            Name = LinearName;
+            Mode = AccelMode.classic;
             LogarithmicCharts = false;
 
+            GainSwitchOptionLayout = new OptionLayout(true, Gain);
             AccelLayout = new OptionLayout(true, Acceleration);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(true, Cap);
-            WeightLayout = new OptionLayout(true, Weight);
+            WeightLayout = new OptionLayout(false, Weight);
             OffsetLayout = new OptionLayout(true, Offset);
             LimitLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
+            LutTextLayout = new OptionLayout(false, string.Empty);
+            LutPanelLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

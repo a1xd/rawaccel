@@ -44,7 +44,7 @@ namespace grapher
         public const int DropDownLeftSeparation = 10;
 
         /// <summary> Height of sensitivity chart when displayed alone. </summary>
-        public const int SensitivityChartAloneHeight = 455;
+        public const int SensitivityChartAloneHeight = 480;
 
         /// <summary> Height of sensitivity chart when displayed alongside Velocity and Gain charts. </summary>
         public const int SensitivityChartTogetherHeight = 328;
@@ -63,6 +63,9 @@ namespace grapher
 
         /// <summary> Vertical placement of write button above bottom of sensitivity graph </summary>
         public const int ButtonVerticalOffset = 60;
+
+        /// <summary> Vertical placement of directionality panel below top of containing form </summary>
+        public const int DirectionalityVerticalOffset = 285;
 
         /// <summary> Padding between directionality title and containing panel </summary>
         public const int DirectionalityTitlePad = 8;
@@ -119,6 +122,8 @@ namespace grapher
 
         /// <summary> Default name of settings file. </summary>
         public const string DefaultSettingsFileName = @"settings.json";
+
+        public const string GuiConfigFileName = ".config";
 
         /// <summary> Text to direcitonality panel title when panel is closed. </summary>
         public const string DirectionalityTitleClosed = "Anisotropy \u25BC";

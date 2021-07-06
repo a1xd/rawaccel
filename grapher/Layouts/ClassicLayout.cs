@@ -8,8 +8,9 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Classic";
-            Index = (int)AccelMode.classic;
+            Mode = AccelMode.classic;
 
+            GainSwitchOptionLayout = new OptionLayout(true, Gain);
             AccelLayout = new OptionLayout(true, Acceleration);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(true, Cap);
@@ -18,6 +19,8 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(true, Exponent);
             MidpointLayout = new OptionLayout(false, string.Empty);
+            LutTextLayout = new OptionLayout(false, string.Empty);
+            LutPanelLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

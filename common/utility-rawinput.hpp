@@ -66,7 +66,7 @@ void rawinput_foreach_dev_with_id(Func fn, bool with_instance_id = false,
     
         if (!with_instance_id) {
             auto instance_delim_pos = id.find_last_of('\\');
-            if(instance_delim_pos != std::string::npos) id.resize(instance_delim_pos);
+            if (instance_delim_pos != std::string::npos) id.resize(instance_delim_pos);
         }
 
         fn(dev, id);

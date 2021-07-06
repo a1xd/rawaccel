@@ -71,6 +71,20 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.LutApplyActiveYLabel = new System.Windows.Forms.Label();
+            this.YLutApplyDropdown = new System.Windows.Forms.ComboBox();
+            this.XLutApplyDropdown = new System.Windows.Forms.ComboBox();
+            this.LutApplyActiveXLabel = new System.Windows.Forms.Label();
+            this.YLutApplyLabel = new System.Windows.Forms.Label();
+            this.XLutApplyLabel = new System.Windows.Forms.Label();
+            this.YLutPointsBox = new System.Windows.Forms.RichTextBox();
+            this.XLutPointsBox = new System.Windows.Forms.RichTextBox();
+            this.gainSwitchActiveLabelY = new System.Windows.Forms.Label();
+            this.gainSwitchActiveLabelX = new System.Windows.Forms.Label();
+            this.gainSwitchY = new System.Windows.Forms.CheckBox();
+            this.gainSwitchX = new System.Windows.Forms.CheckBox();
+            this.LUTTextLabelY = new System.Windows.Forms.Label();
+            this.LUTTextLabelX = new System.Windows.Forms.Label();
             this.FakeBox = new System.Windows.Forms.CheckBox();
             this.DirectionalityPanel = new System.Windows.Forms.Panel();
             this.LpNormActiveValue = new System.Windows.Forms.Label();
@@ -173,12 +187,6 @@ namespace grapher
             this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gainCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.legacyCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.offsetStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gainOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.legacyOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UseSpecificDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartsPanel = new System.Windows.Forms.Panel();
@@ -189,6 +197,8 @@ namespace grapher
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.streamingModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.XLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
+            this.YLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -204,6 +214,22 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.YLutActiveValuesBox);
+            this.optionsPanel.Controls.Add(this.XLutActiveValuesBox);
+            this.optionsPanel.Controls.Add(this.LutApplyActiveYLabel);
+            this.optionsPanel.Controls.Add(this.YLutApplyDropdown);
+            this.optionsPanel.Controls.Add(this.XLutApplyDropdown);
+            this.optionsPanel.Controls.Add(this.LutApplyActiveXLabel);
+            this.optionsPanel.Controls.Add(this.YLutApplyLabel);
+            this.optionsPanel.Controls.Add(this.XLutApplyLabel);
+            this.optionsPanel.Controls.Add(this.YLutPointsBox);
+            this.optionsPanel.Controls.Add(this.XLutPointsBox);
+            this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelY);
+            this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelX);
+            this.optionsPanel.Controls.Add(this.gainSwitchY);
+            this.optionsPanel.Controls.Add(this.gainSwitchX);
+            this.optionsPanel.Controls.Add(this.LUTTextLabelY);
+            this.optionsPanel.Controls.Add(this.LUTTextLabelX);
             this.optionsPanel.Controls.Add(this.FakeBox);
             this.optionsPanel.Controls.Add(this.DirectionalityPanel);
             this.optionsPanel.Controls.Add(this.toggleButton);
@@ -283,6 +309,134 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // LutApplyActiveYLabel
+            // 
+            this.LutApplyActiveYLabel.AutoSize = true;
+            this.LutApplyActiveYLabel.Location = new System.Drawing.Point(417, 565);
+            this.LutApplyActiveYLabel.Name = "LutApplyActiveYLabel";
+            this.LutApplyActiveYLabel.Size = new System.Drawing.Size(35, 13);
+            this.LutApplyActiveYLabel.TabIndex = 167;
+            this.LutApplyActiveYLabel.Text = "label1";
+            // 
+            // YLutApplyDropdown
+            // 
+            this.YLutApplyDropdown.FormattingEnabled = true;
+            this.YLutApplyDropdown.Location = new System.Drawing.Point(397, 527);
+            this.YLutApplyDropdown.Name = "YLutApplyDropdown";
+            this.YLutApplyDropdown.Size = new System.Drawing.Size(73, 21);
+            this.YLutApplyDropdown.TabIndex = 166;
+            // 
+            // XLutApplyDropdown
+            // 
+            this.XLutApplyDropdown.FormattingEnabled = true;
+            this.XLutApplyDropdown.Location = new System.Drawing.Point(320, 527);
+            this.XLutApplyDropdown.Name = "XLutApplyDropdown";
+            this.XLutApplyDropdown.Size = new System.Drawing.Size(65, 21);
+            this.XLutApplyDropdown.TabIndex = 165;
+            // 
+            // LutApplyActiveXLabel
+            // 
+            this.LutApplyActiveXLabel.AutoSize = true;
+            this.LutApplyActiveXLabel.Location = new System.Drawing.Point(200, 565);
+            this.LutApplyActiveXLabel.Name = "LutApplyActiveXLabel";
+            this.LutApplyActiveXLabel.Size = new System.Drawing.Size(35, 13);
+            this.LutApplyActiveXLabel.TabIndex = 164;
+            this.LutApplyActiveXLabel.Text = "label1";
+            // 
+            // YLutApplyLabel
+            // 
+            this.YLutApplyLabel.AutoSize = true;
+            this.YLutApplyLabel.Location = new System.Drawing.Point(397, 510);
+            this.YLutApplyLabel.Name = "YLutApplyLabel";
+            this.YLutApplyLabel.Size = new System.Drawing.Size(47, 13);
+            this.YLutApplyLabel.TabIndex = 163;
+            this.YLutApplyLabel.Text = "Apply as";
+            // 
+            // XLutApplyLabel
+            // 
+            this.XLutApplyLabel.AutoSize = true;
+            this.XLutApplyLabel.Location = new System.Drawing.Point(317, 511);
+            this.XLutApplyLabel.Name = "XLutApplyLabel";
+            this.XLutApplyLabel.Size = new System.Drawing.Size(47, 13);
+            this.XLutApplyLabel.TabIndex = 162;
+            this.XLutApplyLabel.Text = "Apply as";
+            // 
+            // YLutPointsBox
+            // 
+            this.YLutPointsBox.Location = new System.Drawing.Point(397, 447);
+            this.YLutPointsBox.Name = "YLutPointsBox";
+            this.YLutPointsBox.Size = new System.Drawing.Size(73, 57);
+            this.YLutPointsBox.TabIndex = 161;
+            this.YLutPointsBox.Text = "";
+            // 
+            // XLutPointsBox
+            // 
+            this.XLutPointsBox.Location = new System.Drawing.Point(317, 447);
+            this.XLutPointsBox.Name = "XLutPointsBox";
+            this.XLutPointsBox.Size = new System.Drawing.Size(68, 57);
+            this.XLutPointsBox.TabIndex = 160;
+            this.XLutPointsBox.Text = "";
+            // 
+            // gainSwitchActiveLabelY
+            // 
+            this.gainSwitchActiveLabelY.AutoSize = true;
+            this.gainSwitchActiveLabelY.Location = new System.Drawing.Point(417, 95);
+            this.gainSwitchActiveLabelY.Name = "gainSwitchActiveLabelY";
+            this.gainSwitchActiveLabelY.Size = new System.Drawing.Size(29, 13);
+            this.gainSwitchActiveLabelY.TabIndex = 157;
+            this.gainSwitchActiveLabelY.Text = "Gain";
+            // 
+            // gainSwitchActiveLabelX
+            // 
+            this.gainSwitchActiveLabelX.AutoSize = true;
+            this.gainSwitchActiveLabelX.Location = new System.Drawing.Point(200, 96);
+            this.gainSwitchActiveLabelX.Name = "gainSwitchActiveLabelX";
+            this.gainSwitchActiveLabelX.Size = new System.Drawing.Size(29, 13);
+            this.gainSwitchActiveLabelX.TabIndex = 156;
+            this.gainSwitchActiveLabelX.Text = "Gain";
+            // 
+            // gainSwitchY
+            // 
+            this.gainSwitchY.AutoSize = true;
+            this.gainSwitchY.Checked = true;
+            this.gainSwitchY.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainSwitchY.Location = new System.Drawing.Point(283, 116);
+            this.gainSwitchY.Name = "gainSwitchY";
+            this.gainSwitchY.Size = new System.Drawing.Size(48, 17);
+            this.gainSwitchY.TabIndex = 155;
+            this.gainSwitchY.Text = "Gain";
+            this.gainSwitchY.UseVisualStyleBackColor = true;
+            // 
+            // gainSwitchX
+            // 
+            this.gainSwitchX.AutoSize = true;
+            this.gainSwitchX.Checked = true;
+            this.gainSwitchX.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainSwitchX.Location = new System.Drawing.Point(38, 116);
+            this.gainSwitchX.Name = "gainSwitchX";
+            this.gainSwitchX.Size = new System.Drawing.Size(48, 17);
+            this.gainSwitchX.TabIndex = 154;
+            this.gainSwitchX.Text = "Gain";
+            this.gainSwitchX.UseVisualStyleBackColor = true;
+            // 
+            // LUTTextLabelY
+            // 
+            this.LUTTextLabelY.AutoSize = true;
+            this.LUTTextLabelY.Location = new System.Drawing.Point(266, 350);
+            this.LUTTextLabelY.Name = "LUTTextLabelY";
+            this.LUTTextLabelY.Size = new System.Drawing.Size(52, 13);
+            this.LUTTextLabelY.TabIndex = 153;
+            this.LUTTextLabelY.Text = "LUT Text";
+            // 
+            // LUTTextLabelX
+            // 
+            this.LUTTextLabelX.AutoSize = true;
+            this.LUTTextLabelX.Location = new System.Drawing.Point(38, 350);
+            this.LUTTextLabelX.Name = "LUTTextLabelX";
+            this.LUTTextLabelX.Size = new System.Drawing.Size(52, 13);
+            this.LUTTextLabelX.TabIndex = 152;
+            this.LUTTextLabelX.Text = "LUT Text";
             // 
             // FakeBox
             // 
@@ -1178,57 +1332,11 @@ namespace grapher
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.capStyleToolStripMenuItem,
-            this.offsetStyleToolStripMenuItem,
             this.AutoWriteMenuItem,
             this.UseSpecificDeviceMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
-            // 
-            // capStyleToolStripMenuItem
-            // 
-            this.capStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gainCapToolStripMenuItem,
-            this.legacyCapToolStripMenuItem});
-            this.capStyleToolStripMenuItem.Name = "capStyleToolStripMenuItem";
-            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.capStyleToolStripMenuItem.Text = "Cap Style";
-            // 
-            // gainCapToolStripMenuItem
-            // 
-            this.gainCapToolStripMenuItem.Checked = true;
-            this.gainCapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.gainCapToolStripMenuItem.Name = "gainCapToolStripMenuItem";
-            this.gainCapToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.gainCapToolStripMenuItem.Text = "Gain (Default)";
-            // 
-            // legacyCapToolStripMenuItem
-            // 
-            this.legacyCapToolStripMenuItem.Name = "legacyCapToolStripMenuItem";
-            this.legacyCapToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.legacyCapToolStripMenuItem.Text = "Legacy";
-            // 
-            // offsetStyleToolStripMenuItem
-            // 
-            this.offsetStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gainOffsetToolStripMenuItem,
-            this.legacyOffsetToolStripMenuItem});
-            this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
-            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.offsetStyleToolStripMenuItem.Text = "Offset Style";
-            // 
-            // gainOffsetToolStripMenuItem
-            // 
-            this.gainOffsetToolStripMenuItem.Name = "gainOffsetToolStripMenuItem";
-            this.gainOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.gainOffsetToolStripMenuItem.Text = "Gain (Default)";
-            // 
-            // legacyOffsetToolStripMenuItem
-            // 
-            this.legacyOffsetToolStripMenuItem.Name = "legacyOffsetToolStripMenuItem";
-            this.legacyOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.legacyOffsetToolStripMenuItem.Text = "Legacy";
             // 
             // AutoWriteMenuItem
             // 
@@ -1504,6 +1612,22 @@ namespace grapher
             this.streamingModeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.streamingModeToolStripMenuItem.Text = "Streaming Mode";
             // 
+            // XLutActiveValuesBox
+            // 
+            this.XLutActiveValuesBox.Location = new System.Drawing.Point(317, 369);
+            this.XLutActiveValuesBox.Name = "XLutActiveValuesBox";
+            this.XLutActiveValuesBox.Size = new System.Drawing.Size(68, 72);
+            this.XLutActiveValuesBox.TabIndex = 168;
+            this.XLutActiveValuesBox.Text = "";
+            // 
+            // YLutActiveValuesBox
+            // 
+            this.YLutActiveValuesBox.Location = new System.Drawing.Point(397, 369);
+            this.YLutActiveValuesBox.Name = "YLutActiveValuesBox";
+            this.YLutActiveValuesBox.Size = new System.Drawing.Size(73, 72);
+            this.YLutActiveValuesBox.TabIndex = 169;
+            this.YLutActiveValuesBox.Text = "";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1615,12 +1739,6 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem showVelocityGainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLastMouseMoveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem capStyleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gainCapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem legacyCapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem offsetStyleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gainOffsetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
         private System.Windows.Forms.Panel chartsPanel;
         private System.Windows.Forms.DataVisualization.Charting.Chart GainChartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChartY;
@@ -1651,6 +1769,22 @@ namespace grapher
         private System.Windows.Forms.Label RangeActiveValueY;
         private System.Windows.Forms.CheckBox FakeBox;
         private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
+        private System.Windows.Forms.Label LUTTextLabelX;
+        private System.Windows.Forms.Label LUTTextLabelY;
+        private System.Windows.Forms.CheckBox gainSwitchX;
+        private System.Windows.Forms.CheckBox gainSwitchY;
+        private System.Windows.Forms.Label gainSwitchActiveLabelY;
+        private System.Windows.Forms.Label gainSwitchActiveLabelX;
+        private System.Windows.Forms.RichTextBox YLutPointsBox;
+        private System.Windows.Forms.RichTextBox XLutPointsBox;
+        private System.Windows.Forms.Label LutApplyActiveYLabel;
+        private System.Windows.Forms.ComboBox YLutApplyDropdown;
+        private System.Windows.Forms.ComboBox XLutApplyDropdown;
+        private System.Windows.Forms.Label LutApplyActiveXLabel;
+        private System.Windows.Forms.Label YLutApplyLabel;
+        private System.Windows.Forms.Label XLutApplyLabel;
+        private System.Windows.Forms.RichTextBox YLutActiveValuesBox;
+        private System.Windows.Forms.RichTextBox XLutActiveValuesBox;
         private System.Windows.Forms.ToolStripMenuItem streamingModeToolStripMenuItem;
     }
 }

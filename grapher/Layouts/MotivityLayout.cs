@@ -13,10 +13,11 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Motivity";
-            Index = (int)AccelMode.motivity;
+            Mode = AccelMode.motivity;
             LogarithmicCharts = true;
 
-            AccelLayout = new OptionLayout(true, Acceleration);
+            GainSwitchOptionLayout = new OptionLayout(true, Gain);
+            AccelLayout = new OptionLayout(true, GrowthRate);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(false, string.Empty);
@@ -24,6 +25,8 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(true, Motivity);
             ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(true, Midpoint);
+            LutTextLayout = new OptionLayout(false, string.Empty);
+            LutPanelLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

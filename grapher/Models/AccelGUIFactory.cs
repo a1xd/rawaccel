@@ -3,6 +3,7 @@ using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Options.Directionality;
+using grapher.Models.Options.LUT;
 using grapher.Models.Serialized;
 using System;
 using System.Windows.Forms;
@@ -25,15 +26,13 @@ namespace grapher.Models
             Chart gainChartY,
             ComboBox accelTypeDropX,
             ComboBox accelTypeDropY,
+            ComboBox lutApplyDropdownX,
+            ComboBox lutApplyDropdownY,
             Button writeButton,
             ButtonBase toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem showLastMouseMoveMenuItem,
             ToolStripMenuItem streamingModeToolStripMenuItem,
-            ToolStripMenuItem velocityGainCapToolStripMenuItem,
-            ToolStripMenuItem legacyCapToolStripMenuItem,
-            ToolStripMenuItem gainOffsetToolStripMenuItem,
-            ToolStripMenuItem legacyOffsetToolStripMenuItem,
             ToolStripMenuItem autoWriteMenuItem,
             ToolStripMenuItem useSpecificDeviceMenuItem,
             ToolStripMenuItem scaleMenuItem,
@@ -69,6 +68,12 @@ namespace grapher.Models
             CheckBox fakeBox,
             CheckBox wholeCheckBox,
             CheckBox byComponentCheckBox,
+            CheckBox gainSwitchX,
+            CheckBox gainSwitchY,
+            RichTextBox xLutActiveValuesBox,
+            RichTextBox yLutActiveValuesBox,
+            RichTextBox xLutPointsBox,
+            RichTextBox yLutPointsBox,
             Label lockXYLabel,
             Label sensitivityLabel,
             Label rotationLabel,
@@ -86,6 +91,8 @@ namespace grapher.Models
             Label limitLabelY,
             Label expLabelX,
             Label expLabelY,
+            Label lutTextLabelX,
+            Label lutTextLabelY,
             Label constantThreeLabelX,
             Label constantThreeLabelY,
             Label activeValueTitleX,
@@ -111,6 +118,8 @@ namespace grapher.Models
             Label midpointActiveLabelY,
             Label accelTypeActiveLabelX,
             Label accelTypeActiveLabelY,
+            Label gainSwitchActiveLabelX,
+            Label gainSwitchActiveLabelY,
             Label optionSetXTitle,
             Label optionSetYTitle,
             Label mouseLabel,
@@ -125,7 +134,11 @@ namespace grapher.Models
             Label domainActiveValueY,
             Label rangeLabel,
             Label rangeActiveValueX,
-            Label rangeActiveValueY)
+            Label rangeActiveValueY,
+            Label lutApplyLabelX,
+            Label lutApplyLabelY,
+            Label lutApplyActiveValueX,
+            Label lutApplyActiveValueY)
         {
             fakeBox.Checked = false;
             fakeBox.Hide();
@@ -224,16 +237,6 @@ namespace grapher.Models
                 new ActiveValueLabel(offsetActiveLabelY, activeValueTitleY),
                 "Offset");
 
-            var offsetOptionsX = new OffsetOptions(
-                gainOffsetToolStripMenuItem,
-                legacyOffsetToolStripMenuItem,
-                offsetX);
-
-            var offsetOptionsY = new OffsetOptions(
-                gainOffsetToolStripMenuItem,
-                legacyOffsetToolStripMenuItem,
-                offsetY);
-
             var accelerationX = new Option(
                 new Field(accelerationBoxX, form, 0),
                 constantOneLabelX,
@@ -324,39 +327,53 @@ namespace grapher.Models
                     new ActiveValueLabel(rangeActiveValueY, direcionalityActiveValueTitle)),
                 false);
 
-            var capOptionsX = new CapOptions(
-                velocityGainCapToolStripMenuItem,
-                legacyCapToolStripMenuItem,
-                capX);
 
-            var capOptionsY = new CapOptions(
-                velocityGainCapToolStripMenuItem,
-                legacyCapToolStripMenuItem,
-                capY);
+            var lutTextX = new TextOption(lutTextLabelX);
+            var lutTextY = new TextOption(lutTextLabelY);
+            var gainSwitchOptionX = new CheckBoxOption(
+                                            gainSwitchX,
+                                            new ActiveValueLabel(gainSwitchActiveLabelX, activeValueTitleX));
+            var gainSwitchOptionY = new CheckBoxOption(
+                                            gainSwitchY,
+                                            new ActiveValueLabel(gainSwitchActiveLabelY, activeValueTitleY));
 
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,
+                gainSwitchOptionX,
                 accelerationX,
                 scaleX,
-                capOptionsX,
+                capX,
                 weightX,
-                offsetOptionsX,
+                offsetX,
                 limitX,
                 exponentX,
                 midpointX,
+                lutTextX,
+                new LUTPanelOptions(xLutPointsBox, xLutActiveValuesBox),
+                new LutApplyOptions(
+                    lutApplyLabelX,
+                    lutApplyDropdownX,
+                    new ActiveValueLabel(lutApplyActiveValueX, activeValueTitleX)),
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelX, activeValueTitleX));
 
             var accelerationOptionsY = new AccelTypeOptions(
                 accelTypeDropY,
+                gainSwitchOptionY,
                 accelerationY,
                 scaleY,
-                capOptionsY,
+                capY,
                 weightY,
-                offsetOptionsY,
+                offsetY,
                 limitY,
                 exponentY,
                 midpointY,
+                lutTextY,
+                new LUTPanelOptions(yLutPointsBox, yLutActiveValuesBox),
+                new LutApplyOptions(
+                    lutApplyLabelY,
+                    lutApplyDropdownY,
+                    new ActiveValueLabel(lutApplyActiveValueY, activeValueTitleY)),
                 writeButton,
                 new ActiveValueLabel(accelTypeActiveLabelY, activeValueTitleY));
 
@@ -383,7 +400,7 @@ namespace grapher.Models
                 range,
                 wholeCheckBox,
                 byComponentCheckBox,
-                260);
+                Constants.DirectionalityVerticalOffset);
 
             var applyOptions = new ApplyOptions(
                 byComponentXYLock,

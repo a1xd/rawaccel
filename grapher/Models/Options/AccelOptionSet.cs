@@ -46,8 +46,8 @@ namespace grapher.Models.Options
             {
                 IsTitleMode = false;
 
-                HideTitle();
                 Options.ShowFull();
+                HideTitle();
             }
         }
 
@@ -61,6 +61,7 @@ namespace grapher.Models.Options
 
                 Options.ShowShortened();
                 DisplayTitle();
+                Options.HandleLUTOptionsOnResize();
             }
         }
 
@@ -103,16 +104,11 @@ namespace grapher.Models.Options
             Options.SetArgs(ref args);
         }
 
-        public AccelArgs GenerateArgs()
-        {
-            return Options.GenerateArgs();
-        }
-
-        public void SetActiveValues(int mode, AccelArgs args)
+        public void SetActiveValues(ref AccelArgs args)
         {
             if (!Hidden)
             {
-                Options.SetActiveValues(mode, args);
+                Options.SetActiveValues(ref args);
             }
         }
 

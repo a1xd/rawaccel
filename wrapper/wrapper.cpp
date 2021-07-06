@@ -1,51 +1,53 @@
 #pragma once
 
-#include <type_traits>
-#include <msclr\marshal_cppstd.h>
+#include "interop-exception.h"
 
-#include <rawaccel.hpp>
-#include <rawaccel-version.h>
-#include <utility-rawinput.hpp>
-
-#include "wrapper_io.hpp"
+#include <rawaccel-io.hpp>
+#include <rawaccel-validate.hpp>
 
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
 using namespace System::Reflection;
-
-using namespace Windows::Forms;
-
+using namespace System::Runtime::Serialization;
 using namespace Newtonsoft::Json;
+using namespace Newtonsoft::Json::Linq;
+
+namespace ra = rawaccel;
+
+ra::settings default_settings;
 
 [JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class AccelMode
 {
-    linear, classic, natural, naturalgain, power, motivity, noaccel
+    classic, jump, natural, motivity, power, lut, noaccel
 };
 
-[JsonObject(ItemRequired = Required::Always)]
-[StructLayout(LayoutKind::Sequential)]
-public value struct AccelArgs
+[JsonConverter(Converters::StringEnumConverter::typeid)]
+public enum class SpacedTableMode
 {
-    double offset;
-    [MarshalAs(UnmanagedType::U1)]
-    bool legacyOffset;
-    double acceleration;
-    double scale;
-    double limit;
-    double exponent;
-    double midpoint;
-    double weight;
-    [JsonProperty("legacyCap")]
-    double scaleCap;
-    double gainCap;
-    [JsonProperty(Required = Required::Default)]
-    double speedCap;
+    off, binlog, linear
 };
+
+[StructLayout(LayoutKind::Sequential)]
+public value struct SpacedTableArgs
+{
+    [JsonIgnore]
+    SpacedTableMode mode;
+
+    [MarshalAs(UnmanagedType::U1)]
+    bool transfer;
+
+    [MarshalAs(UnmanagedType::U1)]
+    unsigned char partitions;
+
+    short num;
+    double start;
+    double stop;
+};
+
 
 generic <typename T>
-[JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential)]
 public value struct Vec2
 {
@@ -53,7 +55,78 @@ public value struct Vec2
     T y;
 };
 
-[JsonObject(ItemRequired = Required::Always)]
+[StructLayout(LayoutKind::Sequential)]
+public value struct TableArgs
+{
+    [JsonProperty("Whether points affect velocity (true) or sensitivity (false)")]
+    [MarshalAs(UnmanagedType::U1)]
+    bool velocity;
+
+    [JsonIgnore]
+    int length;
+
+    [MarshalAs(UnmanagedType::ByValArray, SizeConst = ra::ARB_LUT_CAPACITY)]
+    array<Vec2<float>>^ points;
+
+    virtual bool Equals(Object^ ob) override {
+        if (ob->GetType() == this->GetType()) {
+            TableArgs^ other = (TableArgs^)ob;
+
+            if (this->length != other->length) return false;
+            if (this->points == other->points) return true;
+            
+            if (unsigned(length) >= ra::ARB_LUT_CAPACITY ||
+                points == nullptr ||
+                other->points == nullptr) {
+                throw gcnew InteropException("invalid table args");
+            }
+
+            for (int i = 0; i < length; i++) {
+                if (points[i].x != other->points[i].x ||
+                    points[i].y != other->points[i].y)
+                    return false;
+            }
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    virtual int GetHashCode() override {
+        return points->GetHashCode() ^ length.GetHashCode();
+    }
+};
+
+[StructLayout(LayoutKind::Sequential)]
+public value struct AccelArgs
+{
+    AccelMode mode;
+
+    [MarshalAs(UnmanagedType::U1)]
+    bool legacy;
+
+    double offset;
+    double cap;
+    double accelClassic;
+    double decayRate;
+    double growthRate;
+    double motivity;
+    double power;
+    double scale;
+    double weight;
+    double exponent;
+    double limit;
+    double midpoint;
+    double smooth;
+
+    [JsonProperty(Required = Required::Default)]
+    SpacedTableArgs spacedTableArgs;
+
+    TableArgs tableData;
+};
+
 [StructLayout(LayoutKind::Sequential)]
 public value struct DomainArgs
 {
@@ -65,20 +138,25 @@ public value struct DomainArgs
 [StructLayout(LayoutKind::Sequential, CharSet = CharSet::Unicode)]
 public ref struct DriverSettings
 {
+    literal double WriteDelayMs = ra::WRITE_DELAY;
     literal String^ Key = "Driver settings";
 
     [JsonProperty("Degrees of rotation")]
     double rotation;
 
-    [JsonProperty("Degrees of angle snapping", Required = Required::Default)]
+    [JsonProperty("Degrees of angle snapping")]
     double snap;
 
     [JsonProperty("Use x as whole/combined accel")]
     [MarshalAs(UnmanagedType::U1)]
     bool combineMagnitudes;
 
-    [JsonProperty("Accel modes")]
-    Vec2<AccelMode> modes;
+    double dpi;
+
+    [JsonIgnore]
+    double minimumSpeed;
+    [JsonProperty("Input Speed Cap")]
+    double maximumSpeed;
 
     [JsonProperty("Accel parameters")]
     Vec2<AccelArgs> args;
@@ -86,302 +164,387 @@ public ref struct DriverSettings
     [JsonProperty("Sensitivity multipliers")]
     Vec2<double> sensitivity;
 
-    [JsonProperty("Negative directional multipliers", Required = Required::Default)]
+    [JsonProperty("Negative directional multipliers")]
     Vec2<double> directionalMultipliers;
 
-    [JsonProperty("Stretches domain for horizontal vs vertical inputs", Required = Required::Default)]
+    [JsonProperty("Stretches domain for horizontal vs vertical inputs")]
     DomainArgs domainArgs;
 
-    [JsonProperty("Stretches accel range for horizontal vs vertical inputs", Required = Required::Default)]
+    [JsonProperty("Stretches accel range for horizontal vs vertical inputs")]
     Vec2<double> rangeXY;
 
     [JsonProperty(Required = Required::Default)]
     double minimumTime;
 
-    [JsonProperty("Device ID", Required = Required::Default)]
-    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = MAX_DEV_ID_LEN)]
+    [JsonProperty(Required = Required::Default)]
+    double maximumTime;
+
+    [JsonProperty("Ignore devices with matching ID")]
+    [MarshalAs(UnmanagedType::U1)]
+    bool ignore;
+
+    [JsonProperty("Device ID")]
+    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_DEV_ID_LEN)]
     String^ deviceID = "";
 
     bool ShouldSerializeminimumTime() 
     { 
-        return minimumTime > 0 && minimumTime != DEFAULT_TIME_MIN;
+        return minimumTime != ra::DEFAULT_TIME_MIN;
+    }
+
+    bool ShouldSerializemaximumTime()
+    {
+        return maximumTime != ra::DEFAULT_TIME_MAX;
     }
 
     DriverSettings() 
     {
-        domainArgs = { { 1, 1 }, 2 };
-        rangeXY = { 1, 1 };
+        Marshal::PtrToStructure(IntPtr(&default_settings), this);
     }
+
+private:
+    [OnDeserialized]
+    void OnDeserializedMethod(StreamingContext context)
+    {
+        args.x.tableData.length = args.x.tableData.points->Length;
+        args.y.tableData.length = args.y.tableData.points->Length;
+
+        array<Vec2<float>>::Resize(args.x.tableData.points, ra::ARB_LUT_CAPACITY);
+        array<Vec2<float>>::Resize(args.y.tableData.points, ra::ARB_LUT_CAPACITY);
+    }
+
+    [OnSerializing]
+    void OnSerializingMethod(StreamingContext context)
+    {
+        array<Vec2<float>>::Resize(args.x.tableData.points, args.x.tableData.length);
+        array<Vec2<float>>::Resize(args.y.tableData.points, args.y.tableData.length);
+    }
+
+    [OnSerialized]
+    void OnSerializedMethod(StreamingContext context)
+    {
+        array<Vec2<float>>::Resize(args.x.tableData.points, ra::ARB_LUT_CAPACITY);
+        array<Vec2<float>>::Resize(args.y.tableData.points, ra::ARB_LUT_CAPACITY);
+    }
+
+};
+
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct LutBase
+{
+    [JsonConverter(Converters::StringEnumConverter::typeid)]
+    enum class Mode
+    {
+        logarithmic, linear
+    } mode;
+
+    virtual void SetArgs(AccelArgs%) {}
+    virtual void SetData(ra::accel_union&) {}
 };
 
 
-template <typename NativeSettingsFunc>
-void as_native(DriverSettings^ managed_args, NativeSettingsFunc fn)
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct SpacedLut abstract : public LutBase
 {
-#ifndef NDEBUG
-    if (Marshal::SizeOf(managed_args) != sizeof(settings))
-        throw gcnew InvalidOperationException("setting sizes differ");
-#endif
-    settings args;
-    Marshal::StructureToPtr(managed_args, (IntPtr)&args, false);
-    fn(args);
-    if constexpr (!std::is_invocable_v<NativeSettingsFunc, const settings&>) {
-        Marshal::PtrToStructure((IntPtr)&args, managed_args);
+    [JsonProperty("Whether points affect velocity (true) or sensitivity (false)")]
+    bool transfer;
+
+    double start;
+    double stop;
+    array<float>^ data;
+
+    void SetArgsBase(AccelArgs% args)
+    {
+        args.spacedTableArgs.transfer = transfer;
+        args.spacedTableArgs.start = start;
+        args.spacedTableArgs.stop = stop;
     }
-}
 
-DriverSettings^ get_default()
+    void SetDataBase(ra::accel_union& accel)
+    {
+        if (size_t(data->LongLength) > ra::SPACED_LUT_CAPACITY) {
+            throw gcnew InteropException("data is too large");
+        }
+    }
+};
+
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct LinearLut sealed : public SpacedLut
 {
-    DriverSettings^ managed = gcnew DriverSettings();
-    as_native(managed, [](settings& args) {
-        args = {};
-    });
-    return managed;
-}
+    LinearLut()
+    {
+    }
 
-void set_active(DriverSettings^ managed)
+    LinearLut(const ra::linear_lut& table)
+    {
+        mode = Mode::linear;
+        transfer = table.transfer;
+        start = table.range.start;
+        stop = table.range.stop;
+        data = gcnew array<float>(table.range.num);
+
+        pin_ptr<float> pdata = &data[0];
+        std::memcpy(pdata, &table.data, sizeof(float) * data->Length);
+    }
+
+    virtual void SetArgs(AccelArgs% args) override
+    {
+        SetArgsBase(args);
+        args.spacedTableArgs.num = data->Length;
+        args.spacedTableArgs.mode = SpacedTableMode::linear;
+    }
+
+    virtual void SetData(ra::accel_union& accel) override
+    {
+        SetDataBase(accel);
+        pin_ptr<float> pdata = &data[0];
+        std::memcpy(&accel.lin_lut.data, pdata, sizeof(float) * data->Length);
+    }
+};
+
+[JsonObject(ItemRequired = Required::Always)]
+public ref struct BinLogLut sealed : public SpacedLut
 {
-    as_native(managed, [](const settings& args) {
-        wrapper_io::writeToDriver(args);
-    });
-}
+    short num;
 
-DriverSettings^ get_active()
-{
-    DriverSettings^ managed = gcnew DriverSettings();
-    as_native(managed, [](settings& args) {
-        wrapper_io::readFromDriver(args);
-    });
-    return managed;
-}
+    BinLogLut()
+    {
+    }
 
-void update_modifier(mouse_modifier& mod, DriverSettings^ managed, vec2<si_pair*> luts = {})
-{
-    as_native(managed, [&](const settings& args) {
-        mod = { args, luts };
-    });
-}
+    BinLogLut(const ra::binlog_lut& table)
+    {
+        mode = Mode::logarithmic;
+        transfer = table.transfer;
+        start = table.range.start;
+        stop = table.range.stop;
+        num = table.range.num;
+        data = gcnew array<float>(1 + num * (int(stop) - int(start)));
 
-using error_list_t = Collections::Generic::List<String^>;
+        pin_ptr<float> pdata = &data[0];
+        std::memcpy(pdata, &table.data, sizeof(float) * data->Length);
+    }
 
-error_list_t^ get_accel_errors(AccelMode mode, AccelArgs^ args)
-{
-    accel_mode mode_native = (accel_mode)mode;
+    virtual void SetArgs(AccelArgs% args) override
+    {
+        SetArgsBase(args);
+        args.spacedTableArgs.num = num;
+        args.spacedTableArgs.mode = SpacedTableMode::binlog;
+    }
 
-    auto is_mode = [mode_native](auto... modes) {
-        return ((mode_native == modes) || ...);
+    virtual void SetData(ra::accel_union& accel) override
+    {
+        SetDataBase(accel);
+
+        if (data->Length != 1 + num * (int(stop) - int(start))) {
+            throw gcnew InteropException("size of data does not match args");
+        }
+
+        pin_ptr<float> pdata = &data[0];
+        std::memcpy(&accel.log_lut.data, pdata, sizeof(float) * data->Length);
+    }
+};
+
+public ref struct RaConvert {
+
+    static DriverSettings^ Settings(String^ json)
+    {
+        return NonNullable<DriverSettings^>(json);
+    }
+
+    static String^ Settings(DriverSettings^ settings)
+    {
+        JObject^ jObject = JObject::FromObject(settings);
+        String^ modes = String::Join(" | ", Enum::GetNames(AccelMode::typeid));
+        jObject->AddFirst(gcnew JProperty("### Accel Modes ###", modes));
+        return jObject->ToString(Formatting::Indented);
+    }
+
+    static LutBase^ Table(String^ json)
+    {
+        JObject^ jObject = JObject::Parse(json);
+
+        if ((Object^)jObject == nullptr) {
+            throw gcnew JsonException("bad json");
+        }
+
+        LutBase^ base = NonNullable<LutBase^>(jObject);
+
+        switch (base->mode) {
+        case LutBase::Mode::logarithmic:
+            return NonNullable<BinLogLut^>(jObject);
+        case LutBase::Mode::linear:
+            return NonNullable<LinearLut^>(jObject);
+        default:
+            throw gcnew NotImplementedException();
+        }
+    }
+
+    static String^ Table(LutBase^ lut)
+    {
+        auto serializerSettings = gcnew JsonSerializerSettings();
+        return JsonConvert::SerializeObject(
+            lut, lut->GetType(), Formatting::Indented, serializerSettings);
     };
-    
-    using am = accel_mode;
 
-    auto error_list = gcnew error_list_t();
-    
-    if (args->acceleration > 10 && is_mode(am::natural, am::naturalgain))
-        error_list->Add("acceleration can not be greater than 10");
-    else if (args->acceleration == 0 && is_mode(am::naturalgain))
-        error_list->Add("acceleration must be positive");
-    else if (args->acceleration < 0) {
-        bool additive = mode_native < am::power;
-        if (additive) error_list->Add("acceleration can not be negative, use a negative weight to compensate");
-        else error_list->Add("acceleration can not be negative");
-    }
-        
-    if (args->scale <= 0)
-        error_list->Add("scale must be positive");
-
-    if (args->exponent <= 1 && is_mode(am::classic))
-        error_list->Add("exponent must be greater than 1");
-    else if (args->exponent <= 0)
-        error_list->Add("exponent must be positive");
-
-    if (args->limit <= 1)
-        error_list->Add("limit must be greater than 1");
-
-    if (args->midpoint <= 0)
-        error_list->Add("midpoint must be positive");
-
-    if (args->offset < 0)
-        error_list->Add("offset can not be negative");
-
-    return error_list;
-}
-
-error_list_t^ get_other_errors(DriverSettings^ settings)
-{
-    auto error_list = gcnew error_list_t();
-
-    if (settings->rangeXY.x <= 0 || settings->rangeXY.y <= 0)
+    generic <typename T>
+    static T NonNullable(String^ json)
     {
-        error_list->Add("range values must be positive");
+        T obj = JsonConvert::DeserializeObject<T>(json);
+        if (obj == nullptr) throw gcnew JsonException("invalid JSON");
+        return obj;
     }
 
-    if (settings->domainArgs.domainXY.x <= 0 || settings->domainArgs.domainXY.y <= 0)
+    generic <typename T>
+    static T NonNullable(JObject^ jObject)
     {
-        error_list->Add("domain values must be positive");
+        T obj = jObject->ToObject<T>();
+        if (obj == nullptr) throw gcnew JsonException("invalid JSON");
+        return obj;
     }
+};
 
-    if (settings->domainArgs.lpNorm <= 0)
-    {
-        error_list->Add("lp norm must be positive");
-    }
+public ref struct ExtendedSettings {
+    DriverSettings^ baseSettings;
+    Vec2<LutBase^> tables;
     
-    return error_list;
-}
+    using JSON = String^;
+
+    ExtendedSettings(DriverSettings^ driverSettings) :
+        baseSettings(driverSettings) {}
+
+    ExtendedSettings() :
+        ExtendedSettings(gcnew DriverSettings()) {}
+
+    ExtendedSettings(JSON settingsJson) :
+        ExtendedSettings(settingsJson, nullptr, nullptr, false) {}
+
+    ExtendedSettings(JSON settingsJson, JSON tableJson) :
+        ExtendedSettings(settingsJson, tableJson, nullptr, false) {}
+
+    ExtendedSettings(JSON settingsJson, JSON xTableJson, JSON yTableJson) :
+        ExtendedSettings(settingsJson, xTableJson, yTableJson, true) {}
+
+private:
+    ExtendedSettings(JSON settingsJson, JSON xTableJson, JSON yTableJson, bool byComponent)
+    {
+        if (settingsJson) {
+            baseSettings = RaConvert::Settings(settingsJson);
+        }
+        else {
+            baseSettings = gcnew DriverSettings();
+        }
+
+        if (xTableJson || yTableJson) {
+            baseSettings->combineMagnitudes = !byComponent;
+        }
+
+        if (xTableJson) {
+            tables.x = RaConvert::Table(xTableJson);
+            tables.x->SetArgs(baseSettings->args.x);
+        }
+
+        if (yTableJson) {
+            if (Object::ReferenceEquals(yTableJson, xTableJson)) {
+                tables.y = tables.x;
+            }
+            else {
+                tables.y = RaConvert::Table(yTableJson);
+            }
+
+            tables.y->SetArgs(baseSettings->args.y);
+        }
+    }
+
+};
 
 public ref class SettingsErrors
 {
 public:
-    error_list_t^ x;
-    error_list_t^ y;
-    error_list_t^ other;
+
+    List<String^>^ list;
+    int countX;
+    int countY;
+
+    delegate void MsgHandler(const char*);
+
+    void Add(const char* msg)
+    {
+        list->Add(gcnew String(msg));
+    }
+
+    SettingsErrors(ExtendedSettings^ settings) :
+        SettingsErrors(settings->baseSettings) {}
+
+    SettingsErrors(DriverSettings^ settings)
+    {
+        MsgHandler^ del = gcnew MsgHandler(this, &SettingsErrors::Add);
+        GCHandle gch = GCHandle::Alloc(del);
+        auto fp = static_cast<void (*)(const char*)>(
+            Marshal::GetFunctionPointerForDelegate(del).ToPointer());
+
+        ra::settings* args_ptr = new ra::settings();
+        Marshal::StructureToPtr(settings, (IntPtr)args_ptr, false);
+
+        list = gcnew List<String^>();
+        auto [cx, cy, _] = ra::valid(*args_ptr, fp);
+        countX = cx;
+        countY = cy;
+
+        gch.Free();
+        delete args_ptr;
+    }
 
     bool Empty()
     {
-        return (x == nullptr || x->Count == 0) && 
-            (y == nullptr || y->Count == 0) &&
-            (other == nullptr || other->Count == 0);
+        return list->Count == 0;
     }
 
-    virtual String^ ToString() override 
+    virtual String^ ToString() override
     {
-        if (x == nullptr) throw;
-
         Text::StringBuilder^ sb = gcnew Text::StringBuilder();
 
-        if (y == nullptr) // assume combineMagnitudes
+        for each (auto s in list->GetRange(0, countX))
         {
-            for each (String^ str in x)
-            {
-                sb->AppendLine(str);
-            }
+            sb->AppendFormat("x: {0}\n", s);
         }
-        else
+        for each (auto s in list->GetRange(countX, countY))
         {
-            for each (String^ str in x)
-            {
-                sb->AppendFormat("x: {0}\n", str);
-            }
-            for each (String^ str in y)
-            {
-                sb->AppendFormat("y: {0}\n", str);
-            }
+            sb->AppendFormat("y: {0}\n", s);
+        }
+        for each (auto s in list->GetRange(countY, list->Count))
+        {
+            sb->AppendLine(s);
         }
 
-        for each (String ^ str in other)
-        {
-			sb->AppendLine(str);
-        }
-        
         return sb->ToString();
     }
 };
 
-public ref struct RawInputInterop
-{
-    static void AddHandlesFromID(String^ deviceID, List<IntPtr>^ rawInputHandles)
-    {
-        try
-        {
-            std::vector<HANDLE> nativeHandles = rawinput_handles_from_dev_id(
-                msclr::interop::marshal_as<std::wstring>(deviceID));
-
-            for (auto nh : nativeHandles) rawInputHandles->Add(IntPtr(nh));
-        }
-        catch (const std::exception& e)
-        {
-            throw gcnew System::Exception(gcnew String(e.what()));
-        }
-    }
-
-    static List<String^>^ GetDeviceIDs()
-    {
-        try
-        {
-            auto managed = gcnew List<String^>();
-
-            for (auto&& id : rawinput_dev_id_list())
-            {
-                managed->Add(msclr::interop::marshal_as<String^>(id));
-            }
-
-            return managed;
-        }
-        catch (const std::exception& e)
-        {
-            throw gcnew System::Exception(gcnew String(e.what()));
-        }
-    }
-
-};
-
-public ref struct DriverInterop
-{
-    literal double WriteDelayMs = WRITE_DELAY;
-    static initonly DriverSettings^ DefaultSettings = get_default();
-
-    static DriverSettings^ GetActiveSettings()
-    {
-        return get_active();
-    }
-
-    static void Write(DriverSettings^ args)
-    {
-        set_active(args);
-    }
-
-    static DriverSettings^ GetDefaultSettings()
-    {
-        return get_default();
-    }
-
-    static SettingsErrors^ GetSettingsErrors(DriverSettings^ args)
-    {
-        auto errors = gcnew SettingsErrors();
-
-        errors->x = get_accel_errors(args->modes.x, args->args.x);
-
-        if (!args->combineMagnitudes) {
-            errors->y = get_accel_errors(args->modes.y, args->args.y);
-        }
-
-        errors->other = get_other_errors(args);
-
-        return errors;
-    }
-
-
-
-    static error_list_t^ GetAccelErrors(AccelMode mode, AccelArgs^ args)
-    {
-        return get_accel_errors(mode, args);
-    }
+struct instance_t {
+    ra::io_t data;
+    vec2<ra::accel_invoker> inv;
 };
 
 public ref class ManagedAccel
 {
-    mouse_modifier* const modifier_instance = new mouse_modifier();
-#ifdef RA_LOOKUP
-    si_pair* const lut_x = new si_pair[LUT_SIZE];
-    si_pair* const lut_y = new si_pair[LUT_SIZE];
-#else
-    si_pair* lut_x = nullptr;
-    si_pair* lut_y = nullptr;
-#endif
+    instance_t* const instance = new instance_t();
 
 public:
+    ManagedAccel() {}
+
+    ManagedAccel(ExtendedSettings^ settings)
+    {
+        Settings = settings;
+    }
 
     virtual ~ManagedAccel()
     {
-        delete modifier_instance;
-        delete[] lut_x;
-        delete[] lut_y;
+        delete instance;
     }
 
     !ManagedAccel()
     {
-        delete modifier_instance;
-        delete[] lut_x;
-        delete[] lut_y;
+        delete instance;
     }
 
     Tuple<double, double>^ Accelerate(int x, int y, double time)
@@ -390,90 +553,89 @@ public:
             (double)x,
             (double)y
         };
-        modifier_instance->modify(in_out_vec, time);
+
+        instance->data.mod.modify(in_out_vec, instance->inv, time);
 
         return gcnew Tuple<double, double>(in_out_vec.x, in_out_vec.y);
     }
 
-    void UpdateFromSettings(DriverSettings^ args)
+    void Activate()
     {
-        update_modifier(
-            *modifier_instance, 
-            args, 
-            vec2<si_pair*>{ lut_x, lut_y }
-        );
+        try {
+            ra::write(instance->data);
+        }
+        catch (const ra::error& e) {
+            throw gcnew InteropException(e);
+        }
     }
 
-    static ManagedAccel^ GetActiveAccel()
+    property ExtendedSettings^ Settings
     {
-        settings args;
-        wrapper_io::readFromDriver(args);
+        ExtendedSettings^ get()
+        {
+            auto settings = gcnew ExtendedSettings();
+            Marshal::PtrToStructure(IntPtr(&instance->data.args), settings->baseSettings);
+            settings->tables.x = extract(instance->data.args.argsv.x.spaced_args.mode, 
+                instance->data.mod.accel.x);
+            settings->tables.y = extract(instance->data.args.argsv.y.spaced_args.mode,
+                instance->data.mod.accel.y);
+            return settings;
+        }
 
-        auto active = gcnew ManagedAccel();
-        *active->modifier_instance = { 
-            args
-            , vec2<si_pair*> { active->lut_x, active->lut_y }
-        };
-        return active;
+        void set(ExtendedSettings^ val)
+        {
+            Marshal::StructureToPtr(val->baseSettings, IntPtr(&instance->data.args), false);
+            instance->data.mod = { instance->data.args };
+            instance->inv = ra::invokers(instance->data.args);
+
+            if (val->tables.x) {
+                val->tables.x->SetData(instance->data.mod.accel.x);
+            }
+
+            if (val->tables.y) {
+                val->tables.y->SetData(instance->data.mod.accel.y);
+            }   
+        }
+
+    }
+
+    static ManagedAccel^ GetActive()
+    {
+        try {
+            auto active = gcnew ManagedAccel();
+            ra::read(active->instance->data);
+            active->instance->inv = ra::invokers(active->instance->data.args);
+            return active;
+        }
+        catch (const ra::error& e) {
+            throw gcnew InteropException(e);
+        }
+    }
+
+private:
+    LutBase^ extract(ra::spaced_lut_mode mode, ra::accel_union& au)
+    {
+        switch (mode) {
+        case ra::spaced_lut_mode::off: return nullptr;
+        case ra::spaced_lut_mode::linear: return gcnew LinearLut(au.lin_lut);
+        case ra::spaced_lut_mode::binlog: return gcnew BinLogLut(au.log_lut);
+        default: throw gcnew NotImplementedException();
+        }
     }
 };
-
-public ref struct RawAccelVersion
-{
-    literal String^ value = RA_VER_STRING;
-};
-
-public ref struct VersionException : public Exception 
-{
-public:
-    VersionException() {}
-    VersionException(String^ what) : Exception(what) {}
-};
-
-Version^ convert(rawaccel::version_t v)
-{
-    return gcnew Version(v.major, v.minor, v.patch, 0);
-}
 
 public ref struct VersionHelper
 {
+    literal String^ VersionString = RA_VER_STRING;
 
-    static Version^ ValidateAndGetDriverVersion(Version^ wrapperTarget)
+    static Version^ ValidOrThrow()
     {
-        Version^ wrapperActual = VersionHelper::typeid->Assembly->GetName()->Version;
-
-        if (wrapperTarget != wrapperActual) {
-            throw gcnew VersionException("version mismatch, expected wrapper.dll v" + wrapperActual);
-        }
-
-        version_t drv_ver;
-
         try {
-            wrapper_io::getDriverVersion(drv_ver);
+            ra::version_t v = ra::valid_version_or_throw();
+            return gcnew Version(v.major, v.minor, v.patch, 0);
         }
-        catch (DriverNotInstalledException^ ex) {
-            throw gcnew VersionException(ex->Message);
-        }
-        catch (DriverIOException^) {
-            // Assume version ioctl is unimplemented (driver version < v1.3.0)
-            throw gcnew VersionException("driver version is out of date\n\nrun installer.exe to reinstall");
-        }
-
-        Version^ drv_ver_managed = convert(drv_ver);
-
-        if (drv_ver_managed < convert(min_driver_version)) {
-            throw gcnew VersionException(
-                String::Format("driver version is out of date (v{0})\n\nrun installer.exe to reinstall", 
-                    drv_ver_managed));
-        }
-        else if (drv_ver_managed > wrapperActual) {
-            throw gcnew VersionException(
-                String::Format("newer driver version is installed (v{0})",
-                    drv_ver_managed));
-        }
-        else {
-            return drv_ver_managed;
+        catch (const ra::error& e) {
+            throw gcnew InteropException(e);
         }
     }
-
 };

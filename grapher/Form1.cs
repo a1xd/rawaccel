@@ -28,14 +28,13 @@ namespace grapher
         {
             InitializeComponent();
 
-            Version assemVersion = typeof(RawAcceleration).Assembly.GetName().Version;
             Version driverVersion = null;
 
             try
             {
-                driverVersion = VersionHelper.ValidateAndGetDriverVersion(assemVersion);
+                driverVersion = VersionHelper.ValidOrThrow();
             }
-            catch (VersionException ex)
+            catch (InteropException ex)
             {
                 MessageBox.Show(ex.Message);
                 throw;
@@ -51,7 +50,7 @@ namespace grapher
 
             AccelGUI = AccelGUIFactory.Construct(
                 this,
-                ManagedAccel.GetActiveAccel(),
+                ManagedAccel.GetActive(),
                 AccelerationChart,
                 AccelerationChartY,
                 VelocityChart,
@@ -60,15 +59,13 @@ namespace grapher
                 GainChartY,
                 accelTypeDropX,
                 accelTypeDropY,
+                XLutApplyDropdown,
+                YLutApplyDropdown,
                 writeButton,
                 toggleButton,
                 showVelocityGainToolStripMenuItem,
                 showLastMouseMoveToolStripMenuItem,
                 streamingModeToolStripMenuItem,
-                gainCapToolStripMenuItem,
-                legacyCapToolStripMenuItem,
-                gainOffsetToolStripMenuItem,
-                legacyOffsetToolStripMenuItem,
                 AutoWriteMenuItem,
                 UseSpecificDeviceMenuItem,
                 ScaleMenuItem,
@@ -104,6 +101,12 @@ namespace grapher
                 FakeBox,
                 WholeCheckBox,
                 ByComponentCheckBox,
+                gainSwitchX,
+                gainSwitchY,
+                XLutActiveValuesBox,
+                YLutActiveValuesBox,
+                XLutPointsBox,
+                YLutPointsBox,
                 LockXYLabel,
                 sensitivityLabel,
                 rotationLabel,
@@ -121,6 +124,8 @@ namespace grapher
                 limitLabelY,
                 expLabelX,
                 expLabelY,
+                LUTTextLabelX,
+                LUTTextLabelY,
                 constantThreeLabelX,
                 constantThreeLabelY,
                 ActiveValueTitle,
@@ -146,6 +151,8 @@ namespace grapher
                 MidpointActiveYLabel,
                 AccelTypeActiveLabelX,
                 AccelTypeActiveLabelY,
+                gainSwitchActiveLabelX,
+                gainSwitchActiveLabelY,
                 OptionSetXTitle,
                 OptionSetYTitle,
                 MouseLabel,
@@ -160,7 +167,11 @@ namespace grapher
                 DomainActiveValueY,
                 DirectionalityRangeLabel,
                 RangeActiveValueX,
-                RangeActiveValueY);
+                RangeActiveValueY,
+                XLutApplyLabel,
+                YLutApplyLabel,
+                LutApplyActiveXLabel,
+                LutApplyActiveYLabel);
 
             ResizeAndCenter();
         }

@@ -14,23 +14,25 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)accel-base.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-classic.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-invoke.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-jump.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-lookup.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-motivity.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)accel-linear.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-natural.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)accel-naturalgain.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-noaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-power.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-union.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-error.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-io-def.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-io.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-settings.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-base.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-validate.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-version.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)utility-install.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)utility-rawinput.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)x64-util.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)vec2.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utility.hpp" />
   </ItemGroup>
 </Project>
