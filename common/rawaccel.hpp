@@ -162,10 +162,10 @@ namespace rawaccel {
             apply_dir_mul_x = directional_multipliers.x != 1;
             apply_dir_mul_y = directional_multipliers.y != 1;
 
-            if (!args.combine_mags) dist_mode = separate;
-            else if (p >= MAX_NORM) dist_mode = max;
-            else if (p > 2)         dist_mode = Lp;
-            else                    dist_mode = euclidean;
+            if (!args.combine_mags)           dist_mode = separate;
+            else if (p >= MAX_NORM || p <= 0) dist_mode = max;
+            else if (p != 2)                  dist_mode = Lp;
+            else                              dist_mode = euclidean;
         }
 
         mouse_modifier() = default;
