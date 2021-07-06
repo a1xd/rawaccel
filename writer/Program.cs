@@ -47,7 +47,7 @@ namespace writer
 
             string settingsPath = null;
 
-            string tablePath = maybePop("table", "t");
+            string tablePath = maybePop("/table", "/t");
 
             if (tablePath != null)
             {
@@ -57,8 +57,8 @@ namespace writer
                 return new ExtendedSettings(Read(settingsPath), Read(tablePath));
             }
 
-            string xTablePath = maybePop("xtable", "xt");
-            string yTablePath = maybePop("ytable", "yt");
+            string xTablePath = maybePop("/xtable", "/xt");
+            string yTablePath = maybePop("/ytable", "/yt");
 
             if (args.Count > 1) ExitWithUsage();
             else if (args.Count == 1) settingsPath = args[0];
