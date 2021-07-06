@@ -85,6 +85,7 @@ copy /Y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)signed\Newtonsoft.Json.
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="input.h" />
     <ClInclude Include="interop-exception.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

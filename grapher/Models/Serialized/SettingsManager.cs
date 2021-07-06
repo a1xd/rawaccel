@@ -90,7 +90,7 @@ namespace grapher.Models.Serialized
             PollRateField.SetToEntered(GuiSettings.PollRate);
             ShowLastMouseMoveMenuItem.Checked = GuiSettings.ShowLastMouseMove;
             ShowVelocityAndGainMoveMenuItem.Checked = GuiSettings.ShowVelocityAndGain;
-            StreamingModeMenuItem.Checked = GUISettings.StreamingMode;
+            StreamingModeMenuItem.Checked = GuiSettings.StreamingMode;
             AutoWriteMenuItem.Checked = GuiSettings.AutoWriteToDriverOnStartup;
         }
 

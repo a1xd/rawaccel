@@ -10,12 +10,3 @@ public ref struct InteropException : System::Exception {
     InteropException(const std::exception& e) :
         InteropException(e.what()) {}
 };
-
-public ref struct RawInputInteropException : InteropException {
-    RawInputInteropException(System::String^ what) :
-        InteropException(what) {}
-    RawInputInteropException(const char* what) :
-        InteropException(what) {}
-    RawInputInteropException(const std::exception& e) :
-        InteropException(e) {}
-};

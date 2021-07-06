@@ -31,7 +31,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel-version.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)rawaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)utility-install.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)utility-rawinput.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)vec2.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)utility.hpp" />
   </ItemGroup>

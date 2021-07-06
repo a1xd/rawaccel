@@ -1,35 +1,44 @@
+#include "input.h"
 #include "interop-exception.h"
 
-#include <utility-rawinput.hpp>
-#include <algorithm>
 #include <msclr\marshal_cppstd.h>
+#include <algorithm>
 
 using namespace System;
 using namespace System::Collections::Generic;
 
-struct device_info {
-    std::wstring name;
-    std::wstring id;
-};
+std::vector<HANDLE> rawinput_handles_from_id(const std::wstring& device_id)
+{
+    std::vector<HANDLE> handles;
 
-std::vector<device_info> get_unique_device_info() {
-    std::vector<device_info> info;
-
-    rawinput_foreach_with_interface([&](const auto& dev, const WCHAR* name) {
-        info.push_back({
-            L"", // get_property_wstr(name, &DEVPKEY_Device_FriendlyName), /* doesn't work */
-            dev_id_from_interface(name)
-            });
+    rawinput_foreach([&](const auto& dev) {
+        if (dev.id == device_id) handles.push_back(dev.handle);
     });
 
-    std::sort(info.begin(), info.end(),
-        [](auto&& l, auto&& r) { return l.id < r.id; });
-    auto last = std::unique(info.begin(), info.end(),
-        [](auto&& l, auto&& r) { return l.id == r.id; });
-    info.erase(last, info.end());
-    
-    return info;
+    return handles;
 }
+
+std::vector<std::wstring> rawinput_id_list()
+{
+    std::vector<std::wstring> ids;
+
+    rawinput_foreach([&](const auto& dev) {
+        ids.push_back(dev.id);
+    });
+
+    std::sort(ids.begin(), ids.end());
+    ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
+    return ids;
+}
+
+public ref struct RawInputInteropException : InteropException {
+    RawInputInteropException(System::String^ what) :
+        InteropException(what) {}
+    RawInputInteropException(const char* what) :
+        InteropException(what) {}
+    RawInputInteropException(const std::exception& e) :
+        InteropException(e) {}
+};
 
 public ref struct RawInputInterop
 {
@@ -37,7 +46,7 @@ public ref struct RawInputInterop
     {
         try
         {
-            std::vector<HANDLE> nativeHandles = rawinput_handles_from_dev_id(
+            std::vector<HANDLE> nativeHandles = rawinput_handles_from_id(
                 msclr::interop::marshal_as<std::wstring>(deviceID));
 
             for (auto nh : nativeHandles) rawInputHandles->Add(IntPtr(nh));
@@ -48,21 +57,18 @@ public ref struct RawInputInterop
         }
     }
 
-    static List<ValueTuple<String^, String^>>^ GetDeviceIDs()
+    static List<String^>^ GetDeviceIDs()
     {
         try
         {
-            auto managed = gcnew List<ValueTuple<String^, String^>>();
+            auto ids = gcnew List<String^>();
 
-            for (auto&& [name, id] : get_unique_device_info())
+            for (auto&& name : rawinput_id_list())
             {
-                managed->Add(
-                    ValueTuple<String^, String^>(
-                        msclr::interop::marshal_as<String^>(name),
-                        msclr::interop::marshal_as<String^>(id)));
+                ids->Add(msclr::interop::marshal_as<String^>(name));
             }
 
-            return managed;
+            return ids;
         }
         catch (const std::exception& e)
         {
@@ -71,4 +77,3 @@ public ref struct RawInputInterop
     }
 
 };
-
