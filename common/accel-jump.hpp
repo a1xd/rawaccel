@@ -52,7 +52,7 @@ namespace rawaccel {
 		{
 			if (is_smooth()) return smooth(x) + 1;
 			else if (x < step.x) return 1;
-			else return step.y;
+			else return 1 + step.y;
 		}
 	};
 
