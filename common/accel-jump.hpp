@@ -5,19 +5,23 @@
 namespace rawaccel {
 
 	struct jump_base {
+		static constexpr double smooth_scale = 2 * PI;
+
 		vec2d step;
 		double smooth_rate;
 
+		// requirements: args.smooth in range [0, 1]
 		jump_base(const accel_args& args) :
 			step({ args.offset, args.cap - 1 })
 		{
-			if (args.smooth == 0 || args.offset == 0) {
+			double rate_inverse = args.smooth * step.x;
+
+			if (rate_inverse < 1) {
 				smooth_rate = 0;
 			}
 			else {
-				smooth_rate = 2 * PI / (args.offset * args.smooth);
+				smooth_rate = smooth_scale / rate_inverse;
 			}
-
 		}
 
 		bool is_smooth() const
