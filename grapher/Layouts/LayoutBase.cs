@@ -7,6 +7,7 @@ namespace grapher.Layouts
         public const string Acceleration = "Acceleration";
         public const string Scale = "Scale";
         public const string Exponent = "Exponent";
+        public const string PowerClassic = "Power";
         public const string Limit = "Limit";
         public const string Midpoint = "Midpoint";
         public const string Motivity = "Motivity";
@@ -26,6 +27,7 @@ namespace grapher.Layouts
             WeightLayout = new OptionLayout(false, string.Empty);
             OffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(false, string.Empty);
+            PowerClassicLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(false, string.Empty);
@@ -56,6 +58,8 @@ namespace grapher.Layouts
 
         protected OptionLayout LimitLayout { get; set; }
 
+        protected OptionLayout PowerClassicLayout { get; set; }
+
         protected OptionLayout ExponentLayout { get; set; }
 
         protected OptionLayout MidpointLayout { get; set; }
@@ -81,6 +85,7 @@ namespace grapher.Layouts
             IOption weightOption,
             IOption offsetOption,
             IOption limitOption,
+            IOption powerClassicOption,
             IOption expOption,
             IOption midpointOption,
             IOption lutTextOption,
@@ -99,6 +104,7 @@ namespace grapher.Layouts
                 (WeightLayout, weightOption),
                 (OffsetLayout, offsetOption),
                 (LimitLayout, limitOption),
+                (PowerClassicLayout, powerClassicOption),
                 (ExponentLayout, expOption),
                 (MidpointLayout, midpointOption),
                 (LutTextLayout, lutTextOption),
@@ -131,6 +137,7 @@ namespace grapher.Layouts
             IOption weightOption,
             IOption offsetOption,
             IOption limitOption,
+            IOption powerClassicOption,
             IOption expOption,
             IOption midpointOption,
             IOption lutTextOption,
@@ -144,6 +151,7 @@ namespace grapher.Layouts
                 weightOption,
                 offsetOption,
                 limitOption,
+                powerClassicOption,
                 expOption,
                 midpointOption,
                 lutTextOption,

@@ -18,10 +18,12 @@ namespace grapher.Layouts
             WeightLayout = new OptionLayout(true, Weight);
             OffsetLayout = new OptionLayout(true, Offset);
             LimitLayout = new OptionLayout(true, Limit);
+            PowerClassicLayout = new OptionLayout(true, PowerClassic);
             ExponentLayout = new OptionLayout(true, Exponent);
             MidpointLayout = new OptionLayout(true, Midpoint);
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);
+            LutApplyOptionsLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

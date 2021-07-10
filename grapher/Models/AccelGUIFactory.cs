@@ -54,6 +54,8 @@ namespace grapher.Models
             TextBox scaleBoxY,
             TextBox limitBoxX,
             TextBox limitBoxY,
+            TextBox powerClassicBoxX,
+            TextBox powerClassicBoxY,
             TextBox expBoxX,
             TextBox expBoxY,
             TextBox midpointBoxX,
@@ -89,6 +91,8 @@ namespace grapher.Models
             Label scaleLabelY,
             Label limitLabelX,
             Label limitLabelY,
+            Label powerClassicLabelX,
+            Label powerClassicLabelY,
             Label expLabelX,
             Label expLabelY,
             Label lutTextLabelX,
@@ -112,6 +116,8 @@ namespace grapher.Models
             Label scaleActiveLabelY,
             Label limitActiveLabelX,
             Label limitActiveLabelY,
+            Label powerClassicActiveLabelX,
+            Label powerClassicActiveLabelY,
             Label expActiveLabelX,
             Label expActiveLabelY,
             Label midpointActiveLabelX,
@@ -273,6 +279,18 @@ namespace grapher.Models
                 new ActiveValueLabel(limitActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
+            var powerClassicX = new Option(
+                new Field(powerClassicBoxX, form, 2),
+                powerClassicLabelX,
+                new ActiveValueLabel(powerClassicActiveLabelX, activeValueTitleX),
+                0);
+
+            var powerClassicY = new Option(
+                new Field(powerClassicBoxY, form, 2),
+                powerClassicLabelY,
+                new ActiveValueLabel(powerClassicActiveLabelY, activeValueTitleY),
+                optionSetYLeft);
+
             var exponentX = new Option(
                 new Field(expBoxX, form, 2),
                 expLabelX,
@@ -346,6 +364,7 @@ namespace grapher.Models
                 weightX,
                 offsetX,
                 limitX,
+                powerClassicX,
                 exponentX,
                 midpointX,
                 lutTextX,
@@ -366,6 +385,7 @@ namespace grapher.Models
                 weightY,
                 offsetY,
                 limitY,
+                powerClassicX,
                 exponentY,
                 midpointY,
                 lutTextY,

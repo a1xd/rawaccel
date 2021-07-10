@@ -71,6 +71,8 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.YLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
+            this.XLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
             this.LutApplyActiveYLabel = new System.Windows.Forms.Label();
             this.YLutApplyDropdown = new System.Windows.Forms.ComboBox();
             this.XLutApplyDropdown = new System.Windows.Forms.ComboBox();
@@ -186,6 +188,7 @@ namespace grapher
             this.ScaleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.streamingModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UseSpecificDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -196,9 +199,12 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.streamingModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.XLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
-            this.YLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
+            this.powerBoxX = new System.Windows.Forms.TextBox();
+            this.powerBoxY = new System.Windows.Forms.TextBox();
+            this.powerLabelX = new System.Windows.Forms.Label();
+            this.powerLabelY = new System.Windows.Forms.Label();
+            this.PowerClassicActiveXLabel = new System.Windows.Forms.Label();
+            this.PowerClassicActiveYLabel = new System.Windows.Forms.Label();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -214,6 +220,12 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.PowerClassicActiveYLabel);
+            this.optionsPanel.Controls.Add(this.PowerClassicActiveXLabel);
+            this.optionsPanel.Controls.Add(this.powerLabelY);
+            this.optionsPanel.Controls.Add(this.powerLabelX);
+            this.optionsPanel.Controls.Add(this.powerBoxY);
+            this.optionsPanel.Controls.Add(this.powerBoxX);
             this.optionsPanel.Controls.Add(this.YLutActiveValuesBox);
             this.optionsPanel.Controls.Add(this.XLutActiveValuesBox);
             this.optionsPanel.Controls.Add(this.LutApplyActiveYLabel);
@@ -309,6 +321,22 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // YLutActiveValuesBox
+            // 
+            this.YLutActiveValuesBox.Location = new System.Drawing.Point(397, 369);
+            this.YLutActiveValuesBox.Name = "YLutActiveValuesBox";
+            this.YLutActiveValuesBox.Size = new System.Drawing.Size(73, 72);
+            this.YLutActiveValuesBox.TabIndex = 169;
+            this.YLutActiveValuesBox.Text = "";
+            // 
+            // XLutActiveValuesBox
+            // 
+            this.XLutActiveValuesBox.Location = new System.Drawing.Point(317, 369);
+            this.XLutActiveValuesBox.Name = "XLutActiveValuesBox";
+            this.XLutActiveValuesBox.Size = new System.Drawing.Size(68, 72);
+            this.XLutActiveValuesBox.TabIndex = 168;
+            this.XLutActiveValuesBox.Text = "";
             // 
             // LutApplyActiveYLabel
             // 
@@ -1329,6 +1357,13 @@ namespace grapher
             this.showLastMouseMoveToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.showLastMouseMoveToolStripMenuItem.Text = "Show Last Mouse Move";
             // 
+            // streamingModeToolStripMenuItem
+            // 
+            this.streamingModeToolStripMenuItem.CheckOnClick = true;
+            this.streamingModeToolStripMenuItem.Name = "streamingModeToolStripMenuItem";
+            this.streamingModeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.streamingModeToolStripMenuItem.Text = "Streaming Mode";
+            // 
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1605,28 +1640,55 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // streamingModeToolStripMenuItem
+            // powerBoxX
             // 
-            this.streamingModeToolStripMenuItem.CheckOnClick = true;
-            this.streamingModeToolStripMenuItem.Name = "streamingModeToolStripMenuItem";
-            this.streamingModeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.streamingModeToolStripMenuItem.Text = "Streaming Mode";
+            this.powerBoxX.Location = new System.Drawing.Point(106, 595);
+            this.powerBoxX.Name = "powerBoxX";
+            this.powerBoxX.Size = new System.Drawing.Size(76, 20);
+            this.powerBoxX.TabIndex = 170;
             // 
-            // XLutActiveValuesBox
+            // powerBoxY
             // 
-            this.XLutActiveValuesBox.Location = new System.Drawing.Point(317, 369);
-            this.XLutActiveValuesBox.Name = "XLutActiveValuesBox";
-            this.XLutActiveValuesBox.Size = new System.Drawing.Size(68, 72);
-            this.XLutActiveValuesBox.TabIndex = 168;
-            this.XLutActiveValuesBox.Text = "";
+            this.powerBoxY.Location = new System.Drawing.Point(332, 594);
+            this.powerBoxY.Name = "powerBoxY";
+            this.powerBoxY.Size = new System.Drawing.Size(76, 20);
+            this.powerBoxY.TabIndex = 171;
             // 
-            // YLutActiveValuesBox
+            // powerLabelX
             // 
-            this.YLutActiveValuesBox.Location = new System.Drawing.Point(397, 369);
-            this.YLutActiveValuesBox.Name = "YLutActiveValuesBox";
-            this.YLutActiveValuesBox.Size = new System.Drawing.Size(73, 72);
-            this.YLutActiveValuesBox.TabIndex = 169;
-            this.YLutActiveValuesBox.Text = "";
+            this.powerLabelX.AutoSize = true;
+            this.powerLabelX.Location = new System.Drawing.Point(41, 594);
+            this.powerLabelX.Name = "powerLabelX";
+            this.powerLabelX.Size = new System.Drawing.Size(35, 13);
+            this.powerLabelX.TabIndex = 172;
+            this.powerLabelX.Text = "label1";
+            // 
+            // powerLabelY
+            // 
+            this.powerLabelY.AutoSize = true;
+            this.powerLabelY.Location = new System.Drawing.Point(266, 600);
+            this.powerLabelY.Name = "powerLabelY";
+            this.powerLabelY.Size = new System.Drawing.Size(35, 13);
+            this.powerLabelY.TabIndex = 173;
+            this.powerLabelY.Text = "label2";
+            // 
+            // PowerClassicActiveXLabel
+            // 
+            this.PowerClassicActiveXLabel.AutoSize = true;
+            this.PowerClassicActiveXLabel.Location = new System.Drawing.Point(200, 599);
+            this.PowerClassicActiveXLabel.Name = "PowerClassicActiveXLabel";
+            this.PowerClassicActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.PowerClassicActiveXLabel.TabIndex = 174;
+            this.PowerClassicActiveXLabel.Text = "0";
+            // 
+            // PowerClassicActiveYLabel
+            // 
+            this.PowerClassicActiveYLabel.AutoSize = true;
+            this.PowerClassicActiveYLabel.Location = new System.Drawing.Point(417, 599);
+            this.PowerClassicActiveYLabel.Name = "PowerClassicActiveYLabel";
+            this.PowerClassicActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.PowerClassicActiveYLabel.TabIndex = 175;
+            this.PowerClassicActiveYLabel.Text = "0";
             // 
             // RawAcceleration
             // 
@@ -1786,6 +1848,12 @@ namespace grapher
         private System.Windows.Forms.RichTextBox YLutActiveValuesBox;
         private System.Windows.Forms.RichTextBox XLutActiveValuesBox;
         private System.Windows.Forms.ToolStripMenuItem streamingModeToolStripMenuItem;
+        private System.Windows.Forms.Label powerLabelY;
+        private System.Windows.Forms.Label powerLabelX;
+        private System.Windows.Forms.TextBox powerBoxY;
+        private System.Windows.Forms.TextBox powerBoxX;
+        private System.Windows.Forms.Label PowerClassicActiveYLabel;
+        private System.Windows.Forms.Label PowerClassicActiveXLabel;
     }
 }
 

@@ -36,6 +36,7 @@ namespace grapher
             Option weight,
             Option offset,
             Option limit,
+            Option powerClassic,
             Option exponent,
             Option midpoint,
             TextOption lutText,
@@ -68,6 +69,7 @@ namespace grapher
             Weight = weight;
             Offset = offset;
             Limit = limit;
+            PowerClassic = powerClassic;
             Exponent = exponent;
             Midpoint = midpoint;
             WriteButton = writeButton;
@@ -112,6 +114,12 @@ namespace grapher
         public Option Offset { get; }
 
         public Option Limit { get; }
+
+        /// <summary>
+        /// This is the option for the power parameter for Classic style,
+        /// and has nothing to do with the Power style.
+        /// </summary>
+        public Option PowerClassic { get; }
 
         public Option Exponent { get; }
 
@@ -215,6 +223,7 @@ namespace grapher
             Weight.Hide();
             Offset.Hide();
             Limit.Hide();
+            PowerClassic.Hide();
             Exponent.Hide();
             Midpoint.Hide();
             LutText.Hide();
@@ -245,7 +254,8 @@ namespace grapher
             Acceleration.SetActiveValue(AccelerationParameterFromArgs(ref args));
             Scale.SetActiveValue(args.scale);
             Limit.SetActiveValue(args.limit);
-            Exponent.SetActiveValue(ExponentParameterFromArgs(ref args));
+            PowerClassic.SetActiveValue(args.power);
+            Exponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
             LutPanel.SetActiveValues(args.tableData.points, args.tableData.length);
             LutApply.SetActiveValue(args.tableData.velocity);
@@ -307,17 +317,8 @@ namespace grapher
             if (Scale.Visible) args.scale = Scale.Field.Data;
             if (Cap.Visible) args.cap = Cap.Field.Data;
             if (Limit.Visible) args.limit = Limit.Field.Data;
-            if (Exponent.Visible)
-            {
-                if (args.mode == AccelMode.classic)
-                {
-                    args.power = Exponent.Field.Data;
-                }
-                else
-                {
-                    args.exponent = Exponent.Field.Data;
-                }
-            }
+            if (PowerClassic.Visible) args.power = PowerClassic.Field.Data;
+            if (Exponent.Visible)args.exponent = Exponent.Field.Data;
             if (Offset.Visible) args.offset = Offset.Field.Data;
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
             if (Weight.Visible) args.weight = Weight.Field.Data;
@@ -340,6 +341,7 @@ namespace grapher
             Offset.AlignActiveValues();
             Weight.AlignActiveValues();
             Limit.AlignActiveValues();
+            PowerClassic.AlignActiveValues();
             Exponent.AlignActiveValues();
             Midpoint.AlignActiveValues();
             LutApply.AlignActiveValues();
@@ -375,6 +377,7 @@ namespace grapher
                 Weight,
                 Offset,
                 Limit,
+                PowerClassic,
                 Exponent,
                 Midpoint,
                 LutText,
@@ -420,18 +423,6 @@ namespace grapher
             else
             {
                 return args.accelClassic;
-            }
-        }
-
-        private double ExponentParameterFromArgs(ref AccelArgs args)
-        {
-            if (args.mode == AccelMode.classic)
-            {
-                return args.power;
-            }
-            else
-            {
-                return args.exponent;
             }
         }
 
