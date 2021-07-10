@@ -416,22 +416,6 @@ namespace grapher
             }
         }
 
-        private double AccelerationParameterFromArgs(ref AccelArgs args)
-        {
-            if (args.mode == AccelMode.motivity)
-            {
-                return args.growthRate;
-            }
-            else if (args.mode == AccelMode.natural)
-            {
-                return args.decayRate;
-            }
-            else
-            {
-                return args.accelClassic;
-            }
-        }
-
         #endregion Methods
     }
 }
