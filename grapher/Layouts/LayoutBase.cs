@@ -5,6 +5,8 @@ namespace grapher.Layouts
     public abstract class LayoutBase
     {
         public const string Acceleration = "Acceleration";
+        public const string GrowthRate = "Growth Rate";
+        public const string DecayRate = "Decay Rate";
         public const string Scale = "Scale";
         public const string Exponent = "Exponent";
         public const string PowerClassic = "Power";
@@ -16,12 +18,13 @@ namespace grapher.Layouts
         public const string Weight = "Weight";
         public const string Smooth = "Smooth";
         public const string Gain = "Gain";
-        public const string GrowthRate = "Growth Rate";
-        public const string DecayRate = "Decay Rate";
 
         public LayoutBase()
         {
             AccelLayout = new OptionLayout(false, string.Empty);
+            DecayRateLayout = new OptionLayout(false, string.Empty);
+            GrowthRateLayout = new OptionLayout(false, string.Empty);
+            SmoothLayout = new OptionLayout(false, string.Empty);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(false, string.Empty);
@@ -47,6 +50,12 @@ namespace grapher.Layouts
         public bool LogarithmicCharts { get; protected set; }
 
         protected OptionLayout AccelLayout { get; set; }
+
+        protected OptionLayout DecayRateLayout { get; set; }
+
+        protected OptionLayout GrowthRateLayout { get; set; }
+
+        protected OptionLayout SmoothLayout { get; set; }
 
         protected OptionLayout ScaleLayout { get; set; }
 
@@ -80,6 +89,9 @@ namespace grapher.Layouts
         public void Layout(
             IOption gainSwitchOption,
             IOption accelOption,
+            IOption decayRateOption,
+            IOption growthRateOption,
+            IOption smoothOption,
             IOption scaleOption,
             IOption capOption,
             IOption weightOption,
@@ -99,6 +111,9 @@ namespace grapher.Layouts
             foreach (var option in new (OptionLayout, IOption)[] {
                 (GainSwitchOptionLayout, gainSwitchOption),
                 (AccelLayout, accelOption),
+                (DecayRateLayout, decayRateOption),
+                (GrowthRateLayout, growthRateOption),
+                (SmoothLayout, smoothOption),
                 (ScaleLayout, scaleOption),
                 (CapLayout, capOption),
                 (WeightLayout, weightOption),
@@ -132,6 +147,9 @@ namespace grapher.Layouts
         public void Layout(
             IOption gainSwitchOption,
             IOption accelOption,
+            IOption decayRateOption,
+            IOption growthRateOption,
+            IOption smoothOption,
             IOption scaleOption,
             IOption capOption,
             IOption weightOption,
@@ -146,6 +164,9 @@ namespace grapher.Layouts
         {
             Layout(gainSwitchOption,
                 accelOption,
+                decayRateOption,
+                growthRateOption,
+                smoothOption,
                 scaleOption,
                 capOption,
                 weightOption,

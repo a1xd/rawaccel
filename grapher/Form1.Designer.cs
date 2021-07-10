@@ -71,6 +71,24 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.GrowthRateActiveYLabel = new System.Windows.Forms.Label();
+            this.GrowthRateActiveXLabel = new System.Windows.Forms.Label();
+            this.DecayRateActiveYLabel = new System.Windows.Forms.Label();
+            this.DecayRateActiveXLabel = new System.Windows.Forms.Label();
+            this.growthRateLabelY = new System.Windows.Forms.Label();
+            this.growthRateLabelX = new System.Windows.Forms.Label();
+            this.decayRateLabelY = new System.Windows.Forms.Label();
+            this.decayRateLabelX = new System.Windows.Forms.Label();
+            this.growthRateBoxY = new System.Windows.Forms.TextBox();
+            this.growthRateBoxX = new System.Windows.Forms.TextBox();
+            this.decayRateBoxY = new System.Windows.Forms.TextBox();
+            this.decayRateBoxX = new System.Windows.Forms.TextBox();
+            this.PowerClassicActiveYLabel = new System.Windows.Forms.Label();
+            this.PowerClassicActiveXLabel = new System.Windows.Forms.Label();
+            this.powerLabelY = new System.Windows.Forms.Label();
+            this.powerLabelX = new System.Windows.Forms.Label();
+            this.powerBoxY = new System.Windows.Forms.TextBox();
+            this.powerBoxX = new System.Windows.Forms.TextBox();
             this.YLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
             this.XLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
             this.LutApplyActiveYLabel = new System.Windows.Forms.Label();
@@ -199,12 +217,12 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.powerBoxX = new System.Windows.Forms.TextBox();
-            this.powerBoxY = new System.Windows.Forms.TextBox();
-            this.powerLabelX = new System.Windows.Forms.Label();
-            this.powerLabelY = new System.Windows.Forms.Label();
-            this.PowerClassicActiveXLabel = new System.Windows.Forms.Label();
-            this.PowerClassicActiveYLabel = new System.Windows.Forms.Label();
+            this.smoothBoxX = new System.Windows.Forms.TextBox();
+            this.smoothBoxY = new System.Windows.Forms.TextBox();
+            this.smoothLabelX = new System.Windows.Forms.Label();
+            this.SmoothActiveXLabel = new System.Windows.Forms.Label();
+            this.smoothLabelY = new System.Windows.Forms.Label();
+            this.SmoothActiveYLabel = new System.Windows.Forms.Label();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -220,6 +238,24 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.SmoothActiveYLabel);
+            this.optionsPanel.Controls.Add(this.smoothLabelY);
+            this.optionsPanel.Controls.Add(this.SmoothActiveXLabel);
+            this.optionsPanel.Controls.Add(this.smoothLabelX);
+            this.optionsPanel.Controls.Add(this.smoothBoxY);
+            this.optionsPanel.Controls.Add(this.smoothBoxX);
+            this.optionsPanel.Controls.Add(this.GrowthRateActiveYLabel);
+            this.optionsPanel.Controls.Add(this.GrowthRateActiveXLabel);
+            this.optionsPanel.Controls.Add(this.DecayRateActiveYLabel);
+            this.optionsPanel.Controls.Add(this.DecayRateActiveXLabel);
+            this.optionsPanel.Controls.Add(this.growthRateLabelY);
+            this.optionsPanel.Controls.Add(this.growthRateLabelX);
+            this.optionsPanel.Controls.Add(this.decayRateLabelY);
+            this.optionsPanel.Controls.Add(this.decayRateLabelX);
+            this.optionsPanel.Controls.Add(this.growthRateBoxY);
+            this.optionsPanel.Controls.Add(this.growthRateBoxX);
+            this.optionsPanel.Controls.Add(this.decayRateBoxY);
+            this.optionsPanel.Controls.Add(this.decayRateBoxX);
             this.optionsPanel.Controls.Add(this.PowerClassicActiveYLabel);
             this.optionsPanel.Controls.Add(this.PowerClassicActiveXLabel);
             this.optionsPanel.Controls.Add(this.powerLabelY);
@@ -321,6 +357,156 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // GrowthRateActiveYLabel
+            // 
+            this.GrowthRateActiveYLabel.AutoSize = true;
+            this.GrowthRateActiveYLabel.Location = new System.Drawing.Point(417, 647);
+            this.GrowthRateActiveYLabel.Name = "GrowthRateActiveYLabel";
+            this.GrowthRateActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.GrowthRateActiveYLabel.TabIndex = 187;
+            this.GrowthRateActiveYLabel.Text = "0";
+            // 
+            // GrowthRateActiveXLabel
+            // 
+            this.GrowthRateActiveXLabel.AutoSize = true;
+            this.GrowthRateActiveXLabel.Location = new System.Drawing.Point(200, 647);
+            this.GrowthRateActiveXLabel.Name = "GrowthRateActiveXLabel";
+            this.GrowthRateActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.GrowthRateActiveXLabel.TabIndex = 186;
+            this.GrowthRateActiveXLabel.Text = "0";
+            // 
+            // DecayRateActiveYLabel
+            // 
+            this.DecayRateActiveYLabel.AutoSize = true;
+            this.DecayRateActiveYLabel.Location = new System.Drawing.Point(417, 626);
+            this.DecayRateActiveYLabel.Name = "DecayRateActiveYLabel";
+            this.DecayRateActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.DecayRateActiveYLabel.TabIndex = 185;
+            this.DecayRateActiveYLabel.Text = "0";
+            // 
+            // DecayRateActiveXLabel
+            // 
+            this.DecayRateActiveXLabel.AutoSize = true;
+            this.DecayRateActiveXLabel.Location = new System.Drawing.Point(200, 622);
+            this.DecayRateActiveXLabel.Name = "DecayRateActiveXLabel";
+            this.DecayRateActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.DecayRateActiveXLabel.TabIndex = 184;
+            this.DecayRateActiveXLabel.Text = "0";
+            // 
+            // growthRateLabelY
+            // 
+            this.growthRateLabelY.AutoSize = true;
+            this.growthRateLabelY.Location = new System.Drawing.Point(262, 648);
+            this.growthRateLabelY.Name = "growthRateLabelY";
+            this.growthRateLabelY.Size = new System.Drawing.Size(67, 13);
+            this.growthRateLabelY.TabIndex = 183;
+            this.growthRateLabelY.Text = "Growth Rate";
+            // 
+            // growthRateLabelX
+            // 
+            this.growthRateLabelX.AutoSize = true;
+            this.growthRateLabelX.Location = new System.Drawing.Point(37, 648);
+            this.growthRateLabelX.Name = "growthRateLabelX";
+            this.growthRateLabelX.Size = new System.Drawing.Size(67, 13);
+            this.growthRateLabelX.TabIndex = 182;
+            this.growthRateLabelX.Text = "Growth Rate";
+            // 
+            // decayRateLabelY
+            // 
+            this.decayRateLabelY.AutoSize = true;
+            this.decayRateLabelY.Location = new System.Drawing.Point(262, 626);
+            this.decayRateLabelY.Name = "decayRateLabelY";
+            this.decayRateLabelY.Size = new System.Drawing.Size(64, 13);
+            this.decayRateLabelY.TabIndex = 181;
+            this.decayRateLabelY.Text = "Decay Rate";
+            // 
+            // decayRateLabelX
+            // 
+            this.decayRateLabelX.AutoSize = true;
+            this.decayRateLabelX.Location = new System.Drawing.Point(37, 622);
+            this.decayRateLabelX.Name = "decayRateLabelX";
+            this.decayRateLabelX.Size = new System.Drawing.Size(64, 13);
+            this.decayRateLabelX.TabIndex = 180;
+            this.decayRateLabelX.Text = "Decay Rate";
+            // 
+            // growthRateBoxY
+            // 
+            this.growthRateBoxY.Location = new System.Drawing.Point(332, 644);
+            this.growthRateBoxY.Name = "growthRateBoxY";
+            this.growthRateBoxY.Size = new System.Drawing.Size(76, 20);
+            this.growthRateBoxY.TabIndex = 179;
+            // 
+            // growthRateBoxX
+            // 
+            this.growthRateBoxX.Location = new System.Drawing.Point(106, 645);
+            this.growthRateBoxX.Name = "growthRateBoxX";
+            this.growthRateBoxX.Size = new System.Drawing.Size(76, 20);
+            this.growthRateBoxX.TabIndex = 178;
+            // 
+            // decayRateBoxY
+            // 
+            this.decayRateBoxY.Location = new System.Drawing.Point(332, 619);
+            this.decayRateBoxY.Name = "decayRateBoxY";
+            this.decayRateBoxY.Size = new System.Drawing.Size(76, 20);
+            this.decayRateBoxY.TabIndex = 177;
+            // 
+            // decayRateBoxX
+            // 
+            this.decayRateBoxX.Location = new System.Drawing.Point(106, 619);
+            this.decayRateBoxX.Name = "decayRateBoxX";
+            this.decayRateBoxX.Size = new System.Drawing.Size(76, 20);
+            this.decayRateBoxX.TabIndex = 176;
+            // 
+            // PowerClassicActiveYLabel
+            // 
+            this.PowerClassicActiveYLabel.AutoSize = true;
+            this.PowerClassicActiveYLabel.Location = new System.Drawing.Point(417, 599);
+            this.PowerClassicActiveYLabel.Name = "PowerClassicActiveYLabel";
+            this.PowerClassicActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.PowerClassicActiveYLabel.TabIndex = 175;
+            this.PowerClassicActiveYLabel.Text = "0";
+            // 
+            // PowerClassicActiveXLabel
+            // 
+            this.PowerClassicActiveXLabel.AutoSize = true;
+            this.PowerClassicActiveXLabel.Location = new System.Drawing.Point(200, 599);
+            this.PowerClassicActiveXLabel.Name = "PowerClassicActiveXLabel";
+            this.PowerClassicActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.PowerClassicActiveXLabel.TabIndex = 174;
+            this.PowerClassicActiveXLabel.Text = "0";
+            // 
+            // powerLabelY
+            // 
+            this.powerLabelY.AutoSize = true;
+            this.powerLabelY.Location = new System.Drawing.Point(263, 599);
+            this.powerLabelY.Name = "powerLabelY";
+            this.powerLabelY.Size = new System.Drawing.Size(37, 13);
+            this.powerLabelY.TabIndex = 173;
+            this.powerLabelY.Text = "Power";
+            // 
+            // powerLabelX
+            // 
+            this.powerLabelX.AutoSize = true;
+            this.powerLabelX.Location = new System.Drawing.Point(35, 595);
+            this.powerLabelX.Name = "powerLabelX";
+            this.powerLabelX.Size = new System.Drawing.Size(37, 13);
+            this.powerLabelX.TabIndex = 172;
+            this.powerLabelX.Text = "Power";
+            // 
+            // powerBoxY
+            // 
+            this.powerBoxY.Location = new System.Drawing.Point(332, 594);
+            this.powerBoxY.Name = "powerBoxY";
+            this.powerBoxY.Size = new System.Drawing.Size(76, 20);
+            this.powerBoxY.TabIndex = 171;
+            // 
+            // powerBoxX
+            // 
+            this.powerBoxX.Location = new System.Drawing.Point(106, 595);
+            this.powerBoxX.Name = "powerBoxX";
+            this.powerBoxX.Size = new System.Drawing.Size(76, 20);
+            this.powerBoxX.TabIndex = 170;
             // 
             // YLutActiveValuesBox
             // 
@@ -1640,55 +1826,55 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // powerBoxX
+            // smoothBoxX
             // 
-            this.powerBoxX.Location = new System.Drawing.Point(106, 595);
-            this.powerBoxX.Name = "powerBoxX";
-            this.powerBoxX.Size = new System.Drawing.Size(76, 20);
-            this.powerBoxX.TabIndex = 170;
+            this.smoothBoxX.Location = new System.Drawing.Point(106, 672);
+            this.smoothBoxX.Name = "smoothBoxX";
+            this.smoothBoxX.Size = new System.Drawing.Size(76, 20);
+            this.smoothBoxX.TabIndex = 188;
             // 
-            // powerBoxY
+            // smoothBoxY
             // 
-            this.powerBoxY.Location = new System.Drawing.Point(332, 594);
-            this.powerBoxY.Name = "powerBoxY";
-            this.powerBoxY.Size = new System.Drawing.Size(76, 20);
-            this.powerBoxY.TabIndex = 171;
+            this.smoothBoxY.Location = new System.Drawing.Point(332, 671);
+            this.smoothBoxY.Name = "smoothBoxY";
+            this.smoothBoxY.Size = new System.Drawing.Size(76, 20);
+            this.smoothBoxY.TabIndex = 189;
             // 
-            // powerLabelX
+            // smoothLabelX
             // 
-            this.powerLabelX.AutoSize = true;
-            this.powerLabelX.Location = new System.Drawing.Point(41, 594);
-            this.powerLabelX.Name = "powerLabelX";
-            this.powerLabelX.Size = new System.Drawing.Size(35, 13);
-            this.powerLabelX.TabIndex = 172;
-            this.powerLabelX.Text = "label1";
+            this.smoothLabelX.AutoSize = true;
+            this.smoothLabelX.Location = new System.Drawing.Point(38, 677);
+            this.smoothLabelX.Name = "smoothLabelX";
+            this.smoothLabelX.Size = new System.Drawing.Size(43, 13);
+            this.smoothLabelX.TabIndex = 190;
+            this.smoothLabelX.Text = "Smooth";
             // 
-            // powerLabelY
+            // SmoothActiveXLabel
             // 
-            this.powerLabelY.AutoSize = true;
-            this.powerLabelY.Location = new System.Drawing.Point(266, 600);
-            this.powerLabelY.Name = "powerLabelY";
-            this.powerLabelY.Size = new System.Drawing.Size(35, 13);
-            this.powerLabelY.TabIndex = 173;
-            this.powerLabelY.Text = "label2";
+            this.SmoothActiveXLabel.AutoSize = true;
+            this.SmoothActiveXLabel.Location = new System.Drawing.Point(200, 677);
+            this.SmoothActiveXLabel.Name = "SmoothActiveXLabel";
+            this.SmoothActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.SmoothActiveXLabel.TabIndex = 191;
+            this.SmoothActiveXLabel.Text = "0";
             // 
-            // PowerClassicActiveXLabel
+            // smoothLabelY
             // 
-            this.PowerClassicActiveXLabel.AutoSize = true;
-            this.PowerClassicActiveXLabel.Location = new System.Drawing.Point(200, 599);
-            this.PowerClassicActiveXLabel.Name = "PowerClassicActiveXLabel";
-            this.PowerClassicActiveXLabel.Size = new System.Drawing.Size(13, 13);
-            this.PowerClassicActiveXLabel.TabIndex = 174;
-            this.PowerClassicActiveXLabel.Text = "0";
+            this.smoothLabelY.AutoSize = true;
+            this.smoothLabelY.Location = new System.Drawing.Point(266, 677);
+            this.smoothLabelY.Name = "smoothLabelY";
+            this.smoothLabelY.Size = new System.Drawing.Size(43, 13);
+            this.smoothLabelY.TabIndex = 192;
+            this.smoothLabelY.Text = "Smooth";
             // 
-            // PowerClassicActiveYLabel
+            // SmoothActiveYLabel
             // 
-            this.PowerClassicActiveYLabel.AutoSize = true;
-            this.PowerClassicActiveYLabel.Location = new System.Drawing.Point(417, 599);
-            this.PowerClassicActiveYLabel.Name = "PowerClassicActiveYLabel";
-            this.PowerClassicActiveYLabel.Size = new System.Drawing.Size(13, 13);
-            this.PowerClassicActiveYLabel.TabIndex = 175;
-            this.PowerClassicActiveYLabel.Text = "0";
+            this.SmoothActiveYLabel.AutoSize = true;
+            this.SmoothActiveYLabel.Location = new System.Drawing.Point(420, 678);
+            this.SmoothActiveYLabel.Name = "SmoothActiveYLabel";
+            this.SmoothActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.SmoothActiveYLabel.TabIndex = 193;
+            this.SmoothActiveYLabel.Text = "0";
             // 
             // RawAcceleration
             // 
@@ -1854,6 +2040,24 @@ namespace grapher
         private System.Windows.Forms.TextBox powerBoxX;
         private System.Windows.Forms.Label PowerClassicActiveYLabel;
         private System.Windows.Forms.Label PowerClassicActiveXLabel;
+        private System.Windows.Forms.Label growthRateLabelY;
+        private System.Windows.Forms.Label growthRateLabelX;
+        private System.Windows.Forms.Label decayRateLabelY;
+        private System.Windows.Forms.Label decayRateLabelX;
+        private System.Windows.Forms.TextBox growthRateBoxY;
+        private System.Windows.Forms.TextBox growthRateBoxX;
+        private System.Windows.Forms.TextBox decayRateBoxY;
+        private System.Windows.Forms.TextBox decayRateBoxX;
+        private System.Windows.Forms.Label GrowthRateActiveYLabel;
+        private System.Windows.Forms.Label GrowthRateActiveXLabel;
+        private System.Windows.Forms.Label DecayRateActiveYLabel;
+        private System.Windows.Forms.Label DecayRateActiveXLabel;
+        private System.Windows.Forms.Label SmoothActiveYLabel;
+        private System.Windows.Forms.Label smoothLabelY;
+        private System.Windows.Forms.Label SmoothActiveXLabel;
+        private System.Windows.Forms.Label smoothLabelX;
+        private System.Windows.Forms.TextBox smoothBoxY;
+        private System.Windows.Forms.TextBox smoothBoxX;
     }
 }
 

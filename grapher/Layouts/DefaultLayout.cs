@@ -13,6 +13,9 @@ namespace grapher.Layouts
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);
             AccelLayout = new OptionLayout(true, Acceleration);
+            DecayRateLayout = new OptionLayout(true, DecayRate);
+            GrowthRateLayout = new OptionLayout(true, GrowthRate);
+            SmoothLayout = new OptionLayout(true, Smooth);
             ScaleLayout = new OptionLayout(true, Scale);
             CapLayout = new OptionLayout(true, Cap);
             WeightLayout = new OptionLayout(true, Weight);

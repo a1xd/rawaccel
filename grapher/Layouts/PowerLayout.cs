@@ -11,6 +11,9 @@
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);
             AccelLayout = new OptionLayout(false, string.Empty);
+            DecayRateLayout = new OptionLayout(false, string.Empty);
+            GrowthRateLayout = new OptionLayout(false, string.Empty);
+            SmoothLayout = new OptionLayout(false, string.Empty);
             ScaleLayout = new OptionLayout(true, Scale);
             CapLayout = new OptionLayout(true, Cap);
             WeightLayout = new OptionLayout(true, Weight);

@@ -31,6 +31,9 @@ namespace grapher
             ComboBox accelDropdown,
             CheckBoxOption gainSwitch,
             Option acceleration,
+            Option decayRate,
+            Option growthRate,
+            Option smooth,
             Option scale,
             Option cap,
             Option weight,
@@ -64,6 +67,9 @@ namespace grapher
 
             GainSwitch = gainSwitch;
             Acceleration = acceleration;
+            DecayRate = decayRate;
+            GrowthRate = growthRate;
+            Smooth = smooth;
             Scale = scale;
             Cap = cap;
             Weight = weight;
@@ -104,6 +110,12 @@ namespace grapher
         public ActiveValueLabel AccelTypeActiveValue { get; }
 
         public Option Acceleration { get; }
+
+        public Option DecayRate { get; }
+
+        public Option GrowthRate { get; }
+
+        public Option Smooth { get; }
 
         public Option Scale { get; }
 
@@ -218,6 +230,9 @@ namespace grapher
 
             GainSwitch.Hide();
             Acceleration.Hide();
+            DecayRate.Hide();
+            GrowthRate.Hide();
+            Smooth.Hide();
             Scale.Hide();
             Cap.Hide();
             Weight.Hide();
@@ -251,7 +266,10 @@ namespace grapher
             Weight.SetActiveValue(args.weight);
             Cap.SetActiveValue(args.cap);
             Offset.SetActiveValue(args.offset);
-            Acceleration.SetActiveValue(AccelerationParameterFromArgs(ref args));
+            Acceleration.SetActiveValue(args.accelClassic);
+            DecayRate.SetActiveValue(args.decayRate);
+            GrowthRate.SetActiveValue(args.growthRate);
+            Smooth.SetActiveValue(args.smooth);
             Scale.SetActiveValue(args.scale);
             Limit.SetActiveValue(args.limit);
             PowerClassic.SetActiveValue(args.power);
@@ -293,27 +311,12 @@ namespace grapher
             if (AccelerationType == Unsupported) throw new NotImplementedException();
 
             args.mode = AccelerationType.Mode;
-
-            if (Acceleration.Visible)
-            {
-                if (args.mode == AccelMode.natural)
-                {
-                    args.decayRate = Acceleration.Field.Data;
-                }
-                else if (args.mode == AccelMode.motivity)
-                {
-                    args.growthRate = Acceleration.Field.Data;
-                }
-                else
-                {
-                    args.accelClassic = Acceleration.Field.Data;
-                }
-
-                args.smooth = Acceleration.Field.Data;
-            }
-
             args.legacy = !GainSwitch.CheckBox.Checked;
 
+            if (Acceleration.Visible) args.accelClassic = Acceleration.Field.Data;
+            if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
+            if (GrowthRate.Visible) args.growthRate = DecayRate.Field.Data;
+            if (Smooth.Visible) args.smooth = DecayRate.Field.Data;
             if (Scale.Visible) args.scale = Scale.Field.Data;
             if (Cap.Visible) args.cap = Cap.Field.Data;
             if (Limit.Visible) args.limit = Limit.Field.Data;
@@ -372,6 +375,9 @@ namespace grapher
             AccelerationType.Layout(
                 GainSwitch,
                 Acceleration,
+                DecayRate,
+                GrowthRate,
+                Smooth,
                 Scale,
                 Cap,
                 Weight,

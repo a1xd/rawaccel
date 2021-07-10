@@ -50,6 +50,12 @@ namespace grapher.Models
             TextBox offsetBoxY,
             TextBox accelerationBoxX,
             TextBox accelerationBoxY,
+            TextBox decayRateBoxX,
+            TextBox decayRateBoxY,
+            TextBox growthRateBoxX,
+            TextBox growthRateBoxY,
+            TextBox smoothBoxX,
+            TextBox smoothBoxY,
             TextBox scaleBoxX,
             TextBox scaleBoxY,
             TextBox limitBoxX,
@@ -87,6 +93,12 @@ namespace grapher.Models
             Label offsetLabelY,
             Label constantOneLabelX,
             Label constantOneLabelY,
+            Label decayRateLabelX,
+            Label decayRateLabelY,
+            Label growthRateLabelX,
+            Label growthRateLabelY,
+            Label smoothLabelX,
+            Label smoothLabelY,
             Label scaleLabelX,
             Label scaleLabelY,
             Label limitLabelX,
@@ -112,6 +124,12 @@ namespace grapher.Models
             Label offsetActiveLabelY,
             Label accelerationActiveLabelX,
             Label accelerationActiveLabelY,
+            Label decayRateActiveLabelX,
+            Label decayRateActiveLabelY,
+            Label growthRateActiveLabelX,
+            Label growthRateActiveLabelY,
+            Label smoothActiveLabelX,
+            Label smoothActiveLabelY,
             Label scaleActiveLabelX,
             Label scaleActiveLabelY,
             Label limitActiveLabelX,
@@ -255,6 +273,42 @@ namespace grapher.Models
                 new ActiveValueLabel(accelerationActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
+            var decayRateX = new Option(
+                new Field(decayRateBoxX, form, 0),
+                decayRateLabelX,
+                new ActiveValueLabel(decayRateActiveLabelX, activeValueTitleX),
+                0);
+
+            var decayRateY = new Option(
+                new Field(decayRateBoxY, form, 0),
+                decayRateLabelY,
+                new ActiveValueLabel(decayRateActiveLabelY, activeValueTitleY),
+                0);
+
+            var growthRateX = new Option(
+                new Field(growthRateBoxX, form, 0),
+                growthRateLabelX,
+                new ActiveValueLabel(growthRateActiveLabelX, activeValueTitleX),
+                0);
+
+            var growthRateY = new Option(
+                new Field(growthRateBoxY, form, 0),
+                growthRateLabelY,
+                new ActiveValueLabel(growthRateActiveLabelY, activeValueTitleY),
+                0);
+
+            var smoothX = new Option(
+                new Field(smoothBoxX, form, 0),
+                smoothLabelX,
+                new ActiveValueLabel(smoothActiveLabelX, activeValueTitleX),
+                0);
+
+            var smoothY = new Option(
+                new Field(smoothBoxY, form, 0),
+                smoothLabelY,
+                new ActiveValueLabel(smoothActiveLabelY, activeValueTitleY),
+                0);
+
             var scaleX = new Option(
                 new Field(scaleBoxX, form, 0),
                 scaleLabelX,
@@ -359,6 +413,9 @@ namespace grapher.Models
                 accelTypeDropX,
                 gainSwitchOptionX,
                 accelerationX,
+                decayRateX,
+                growthRateX,
+                smoothX,
                 scaleX,
                 capX,
                 weightX,
@@ -380,6 +437,9 @@ namespace grapher.Models
                 accelTypeDropY,
                 gainSwitchOptionY,
                 accelerationY,
+                decayRateY,
+                growthRateY,
+                smoothY,
                 scaleY,
                 capY,
                 weightY,
