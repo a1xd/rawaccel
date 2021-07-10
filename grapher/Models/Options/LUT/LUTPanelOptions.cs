@@ -116,6 +116,11 @@ namespace grapher.Models.Options.LUT
             if (length > 0 && activePoints.First().x != 0)
             {
                 ActiveValuesTextBox.Text = PointsToActiveValuesText(activePoints, length);
+
+                if (string.IsNullOrWhiteSpace(PointsTextBox.Text))
+                {
+                    PointsTextBox.Text = PointsToEntryTextBoxText(activePoints, length);
+                }
             }
             else
             {
@@ -209,6 +214,19 @@ namespace grapher.Models.Options.LUT
             {
                 var point = points.ElementAt(i);
                 builder.AppendLine($"{point.x},{point.y};");
+            }
+
+            return builder.ToString();
+        }
+
+        private string PointsToEntryTextBoxText(IEnumerable<Vec2<float>> points, int length)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            for(int i = 0; i < length; i++)
+            {
+                var point = points.ElementAt(i);
+                builder.Append($"{point.x},{point.y};");
             }
 
             return builder.ToString();

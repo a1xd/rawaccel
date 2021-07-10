@@ -385,7 +385,7 @@ namespace grapher.Models
                 weightY,
                 offsetY,
                 limitY,
-                powerClassicX,
+                powerClassicY,
                 exponentY,
                 midpointY,
                 lutTextY,
