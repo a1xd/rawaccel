@@ -339,6 +339,9 @@ namespace grapher
             AccelTypeActiveValue.Align();
             GainSwitch.AlignActiveValues();
             Acceleration.AlignActiveValues();
+            DecayRate.AlignActiveValues();
+            GrowthRate.AlignActiveValues();
+            Smooth.AlignActiveValues();
             Scale.AlignActiveValues();
             Cap.AlignActiveValues();
             Offset.AlignActiveValues();

@@ -203,7 +203,7 @@ namespace grapher.Models
                 new ActiveValueLabel(rotationActiveLabel, activeValueTitleX),
                 "Rotation");
 
-            var optionSetYLeft = rotation.Left + rotation.Width;
+            var optionSetYLeft = activeValueTitleX.Left + activeValueTitleX.Width;
 
             var directionalityLeft = directionalityPanel.Left;
 
@@ -283,7 +283,7 @@ namespace grapher.Models
                 new Field(decayRateBoxY, form, 0),
                 decayRateLabelY,
                 new ActiveValueLabel(decayRateActiveLabelY, activeValueTitleY),
-                0);
+                optionSetYLeft);
 
             var growthRateX = new Option(
                 new Field(growthRateBoxX, form, 0),
@@ -295,7 +295,7 @@ namespace grapher.Models
                 new Field(growthRateBoxY, form, 0),
                 growthRateLabelY,
                 new ActiveValueLabel(growthRateActiveLabelY, activeValueTitleY),
-                0);
+                optionSetYLeft);
 
             var smoothX = new Option(
                 new Field(smoothBoxX, form, 0),
@@ -307,7 +307,7 @@ namespace grapher.Models
                 new Field(smoothBoxY, form, 0),
                 smoothLabelY,
                 new ActiveValueLabel(smoothActiveLabelY, activeValueTitleY),
-                0);
+                optionSetYLeft);
 
             var scaleX = new Option(
                 new Field(scaleBoxX, form, 0),

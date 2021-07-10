@@ -397,7 +397,7 @@ namespace grapher
             // growthRateLabelY
             // 
             this.growthRateLabelY.AutoSize = true;
-            this.growthRateLabelY.Location = new System.Drawing.Point(262, 648);
+            this.growthRateLabelY.Location = new System.Drawing.Point(263, 648);
             this.growthRateLabelY.Name = "growthRateLabelY";
             this.growthRateLabelY.Size = new System.Drawing.Size(67, 13);
             this.growthRateLabelY.TabIndex = 183;
@@ -415,7 +415,7 @@ namespace grapher
             // decayRateLabelY
             // 
             this.decayRateLabelY.AutoSize = true;
-            this.decayRateLabelY.Location = new System.Drawing.Point(262, 626);
+            this.decayRateLabelY.Location = new System.Drawing.Point(262, 622);
             this.decayRateLabelY.Name = "decayRateLabelY";
             this.decayRateLabelY.Size = new System.Drawing.Size(64, 13);
             this.decayRateLabelY.TabIndex = 181;
@@ -1870,7 +1870,7 @@ namespace grapher
             // SmoothActiveYLabel
             // 
             this.SmoothActiveYLabel.AutoSize = true;
-            this.SmoothActiveYLabel.Location = new System.Drawing.Point(420, 678);
+            this.SmoothActiveYLabel.Location = new System.Drawing.Point(414, 677);
             this.SmoothActiveYLabel.Name = "SmoothActiveYLabel";
             this.SmoothActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.SmoothActiveYLabel.TabIndex = 193;
