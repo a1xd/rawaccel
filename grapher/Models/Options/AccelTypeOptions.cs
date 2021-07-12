@@ -315,8 +315,8 @@ namespace grapher
 
             if (Acceleration.Visible) args.accelClassic = Acceleration.Field.Data;
             if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
-            if (GrowthRate.Visible) args.growthRate = DecayRate.Field.Data;
-            if (Smooth.Visible) args.smooth = DecayRate.Field.Data;
+            if (GrowthRate.Visible) args.growthRate = GrowthRate.Field.Data;
+            if (Smooth.Visible) args.smooth = Smooth.Field.Data;
             if (Scale.Visible) args.scale = Scale.Field.Data;
             if (Cap.Visible) args.cap = Cap.Field.Data;
             if (Limit.Visible) args.limit = Limit.Field.Data;
