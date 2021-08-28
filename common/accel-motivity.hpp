@@ -6,39 +6,50 @@
 
 namespace rawaccel {
 
-	struct sigmoid {
+	template <bool Gain> struct loglog_sigmoid;
+
+	template <>
+	struct loglog_sigmoid<LEGACY> {
 		double accel;
 		double motivity;
 		double midpoint;
 		double constant;
 
-		sigmoid(const accel_args& args) :
+		loglog_sigmoid(const accel_args& args) :
 			accel(exp(args.growth_rate)),
 			motivity(2 * log(args.motivity)),
 			midpoint(log(args.midpoint)),
 			constant(-motivity / 2) {}
 
-		double operator()(double x) const
+		double operator()(double x, const accel_args&) const
 		{
 			double denom = exp(accel * (midpoint - log(x))) + 1;
 			return exp(motivity / denom + constant);
 		}
+
 	};
 
-	/// <summary> Struct to hold sigmoid (s-shaped) gain implementation. </summary>
-	struct motivity : binlog_lut {
+	template <>
+	struct loglog_sigmoid<GAIN> {
+		enum { capacity = LUT_RAW_DATA_CAPACITY };
 
-		using binlog_lut::operator();
+		bool velocity;
+		fp_rep_range range;
+		double x_start;
 
-		motivity(const accel_args& args) :
-			binlog_lut(args)
+		loglog_sigmoid(const accel_args& args) 
 		{
+			init({ 0, 8, 8 }, args.gain);
+
 			double sum = 0;
 			double a = 0;
-			auto sigmoid_sum = [&, sig = sigmoid(args)](double b) mutable {
-				double interval = (b - a) / args.spaced_args.partitions;
-				for (int i = 1; i <= args.spaced_args.partitions; i++) {
-					sum += sig(a + i * interval) * interval;
+			auto sig = loglog_sigmoid<LEGACY>(args);
+			auto sigmoid_sum = [&](double b) {
+				int partitions = 2;
+
+				double interval = (b - a) / partitions;
+				for (int i = 1; i <= partitions; i++) {
+					sum += sig(a + i * interval, args) * interval;
 				}
 				a = b;
 				return sum;
@@ -46,9 +57,49 @@ namespace rawaccel {
 
 			fill([&](double x) {
 				double y = sigmoid_sum(x);
-				if (!this->transfer) y /= x;
+				if (!velocity) y /= x;
 				return y;
-			});
+			}, args, range);
+		}
+
+		double operator()(double x, const accel_args& args) const
+		{
+			auto* data = args.data;
+
+			int e = min(ilogb(x), range.stop - 1);
+
+			if (e >= range.start) {
+				int idx_int_log_part = e - range.start;
+				double idx_frac_lin_part = scalbn(x, -e) - 1;
+				double idx_f = range.num * (idx_int_log_part + idx_frac_lin_part);
+
+				unsigned idx = min(static_cast<int>(idx_f), range.size() - 2);
+
+				if (idx < capacity - 1) {
+					double y = lerp(data[idx], data[idx + 1], idx_f - idx);
+					if (velocity) y /= x;
+					return y;
+				}
+			}
+
+			double y = data[0];
+			if (velocity) y /= x_start;
+			return y;
+		}
+
+		void init(const fp_rep_range& r, bool vel) 
+		{
+			velocity = vel;
+			range = r;
+			x_start = scalbn(1, range.start);
+		}
+
+		template <typename Func>
+		static void fill(Func fn, const accel_args& args, const fp_rep_range& range)
+		{
+			range.for_each([&, fn, i = 0](double x) mutable {
+					args.data[i++] = static_cast<float>(fn(x));
+				});
 		}
 
 	};
