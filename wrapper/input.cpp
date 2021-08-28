@@ -1,79 +1,90 @@
 #include "input.h"
-#include "interop-exception.h"
-
-#include <msclr\marshal_cppstd.h>
-#include <algorithm>
 
 using namespace System;
 using namespace System::Collections::Generic;
+using namespace System::Runtime::InteropServices;
 
-std::vector<HANDLE> rawinput_handles_from_id(const std::wstring& device_id)
-{
-    std::vector<HANDLE> handles;
+[StructLayout(LayoutKind::Sequential, CharSet = CharSet::Unicode)]
+public ref struct RawInputDevice {
+    System::IntPtr handle;
 
-    rawinput_foreach([&](const auto& dev) {
-        if (dev.id == device_id) handles.push_back(dev.handle);
-    });
+    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = MAX_NAME_LEN)]
+    System::String^ name;
 
-    return handles;
-}
-
-std::vector<std::wstring> rawinput_id_list()
-{
-    std::vector<std::wstring> ids;
-
-    rawinput_foreach([&](const auto& dev) {
-        ids.push_back(dev.id);
-    });
-
-    std::sort(ids.begin(), ids.end());
-    ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
-    return ids;
-}
-
-public ref struct RawInputInteropException : InteropException {
-    RawInputInteropException(System::String^ what) :
-        InteropException(what) {}
-    RawInputInteropException(const char* what) :
-        InteropException(what) {}
-    RawInputInteropException(const std::exception& e) :
-        InteropException(e) {}
+    [MarshalAs(UnmanagedType::ByValTStr, SizeConst = MAX_DEV_ID_LEN)]
+    System::String^ id;
 };
 
-public ref struct RawInputInterop
+static int CompareByID(RawInputDevice^ x, RawInputDevice^ y)
 {
-    static void AddHandlesFromID(String^ deviceID, List<IntPtr>^ rawInputHandles)
-    {
-        try
-        {
-            std::vector<HANDLE> nativeHandles = rawinput_handles_from_id(
-                msclr::interop::marshal_as<std::wstring>(deviceID));
+    return String::Compare(x->id, y->id);
+}
 
-            for (auto nh : nativeHandles) rawInputHandles->Add(IntPtr(nh));
-        }
-        catch (const std::exception& e)
-        {
-            throw gcnew RawInputInteropException(e);
-        }
+public ref struct MultiHandleDevice {
+    System::String^ name;
+    System::String^ id;
+    List<System::IntPtr>^ handles;
+
+    // Each element in the list returned has a distinct id
+    // https://docs.microsoft.com/en-us/windows-hardware/drivers/install/device-ids
+    static List<MultiHandleDevice^>^ GetList()
+    {
+        return ListMaker::MakeList();
     }
 
-    static List<String^>^ GetDeviceIDs()
-    {
-        try
-        {
-            auto ids = gcnew List<String^>();
+    ref class ListMaker {
+        List<RawInputDevice^>^ devices = gcnew List<RawInputDevice^>();
 
-            for (auto&& name : rawinput_id_list())
-            {
-                ids->Add(msclr::interop::marshal_as<String^>(name));
+        delegate void NativeDevHandler(rawinput_device&);
+
+        void Add(rawinput_device& dev)
+        {
+            devices->Add(Marshal::PtrToStructure<RawInputDevice^>(IntPtr(&dev)));
+        }
+
+        ListMaker() {}
+    public:
+        static List<MultiHandleDevice^>^ MakeList()
+        {
+            auto maker = gcnew ListMaker();
+            NativeDevHandler^ del = gcnew NativeDevHandler(maker, &Add);
+            GCHandle gch = GCHandle::Alloc(del);
+            auto fp = static_cast<void (*)(rawinput_device&)>(
+                Marshal::GetFunctionPointerForDelegate(del).ToPointer());
+            rawinput_foreach(fp);
+            gch.Free();
+
+            auto ret = gcnew List<MultiHandleDevice^>();
+            auto count = maker->devices->Count;
+            auto first = 0;
+            auto last = 0;
+
+            if (count > 0) {
+                maker->devices->Sort(gcnew Comparison<RawInputDevice^>(&CompareByID));
+                while (++last != count) {
+                    if (!String::Equals(maker->devices[first]->id, maker->devices[last]->id)) {
+                        auto range = maker->devices->GetRange(first, last - first);
+                        ret->Add(gcnew MultiHandleDevice(range));
+                        first = last;
+                    }
+                }
+                auto range = maker->devices->GetRange(first, last - first);
+                ret->Add(gcnew MultiHandleDevice(range));
             }
 
-            return ids;
+            return ret;
         }
-        catch (const std::exception& e)
-        {
-            throw gcnew RawInputInteropException(e);
+    };
+
+private:
+    MultiHandleDevice(IEnumerable<RawInputDevice^>^ seq)
+    {
+        auto it = seq->GetEnumerator();
+        if (it->MoveNext()) {
+            name = it->Current->name;
+            id = it->Current->id;
+            handles = gcnew List<IntPtr>();
+            do handles->Add(it->Current->handle); while (it->MoveNext());
         }
     }
-
 };

@@ -10,7 +10,7 @@ namespace rawaccel {
 		accel_noaccel(const accel_args&) {}
 		accel_noaccel() = default;
 
-		double operator()(double) const { return 1; }
+		double operator()(double, const accel_args&) const { return 1; }
 	};
 
 }

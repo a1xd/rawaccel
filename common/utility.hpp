@@ -85,4 +85,10 @@ namespace rawaccel {
     template <typename T, typename U>
     inline constexpr bool is_same_v = is_same<T, U>::value;
 
+    template <class T> struct is_rvalue_ref { static constexpr bool value = false; };
+    template <class T> struct is_rvalue_ref<T&&> { static constexpr bool value = true; };
+
+    template <class T>
+    inline constexpr bool is_rvalue_ref_v = is_rvalue_ref<T>::value;
+
 }
