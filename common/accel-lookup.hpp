@@ -7,27 +7,6 @@
 
 namespace rawaccel {
 
-	struct linear_range {
-		double start;
-		double stop;
-		int num;
-
-		template <typename Func>
-		void for_each(Func fn) const
-		{
-			double interval = (stop - start) / (num - 1);
-			for (int i = 0; i < num; i++) {
-				fn(i * interval + start);
-			}
-		}
-
-		int size() const
-		{
-			return num;
-		}
-	};
-
-
 	// represents the range [2^start, 2^stop], with num - 1
 	// elements linearly spaced between each exponential step
 	struct fp_rep_range {
@@ -55,103 +34,7 @@ namespace rawaccel {
 		}
 	};
 
-	template <typename Lookup>
-	struct lut_base {
-		enum { capacity = SPACED_LUT_CAPACITY };
-		using value_t = float;
-
-		template <typename Func>
-		void fill(Func fn)
-		{
-			auto* self = static_cast<Lookup*>(this);
-
-			self->range.for_each([&, fn, i = 0](double x) mutable {
-				self->data[i++] = static_cast<value_t>(fn(x));
-			});
-		}
-
-	};
-
-	struct linear_lut : lut_base<linear_lut> {
-		linear_range range;
-		bool transfer = false;
-		value_t data[capacity] = {};
-
-		double operator()(double x) const
-		{
-			if (x > range.start) {
-				double range_dist = range.stop - range.start;
-				double idx_f = (x - range.start) * (range.num - 1) / range_dist;
-
-				unsigned idx = min(static_cast<int>(idx_f), range.size() - 2);
-
-				if (idx < capacity - 1) {
-					double y = lerp(data[idx], data[idx + 1], idx_f - idx);
-					if (transfer) y /= x;
-					return y;
-				}
-			}
-
-			double y = data[0];
-			if (transfer) y /= range.start;
-			return y;
-		}
-
-		linear_lut(const spaced_lut_args& args) :
-			range({
-				args.start,
-				args.stop,
-				args.num_elements
-				}),
-			transfer(args.transfer) {}
-
-		linear_lut(const accel_args& args) :
-			linear_lut(args.spaced_args) {}
-	};
-
-	struct binlog_lut : lut_base<binlog_lut> {
-		fp_rep_range range;
-		double x_start;
-		bool transfer = false;
-		value_t data[capacity] = {};
-
-		double operator()(double x) const
-		{
-			int e = min(ilogb(x), range.stop - 1);
-
-			if (e >= range.start) {
-				int idx_int_log_part = e - range.start;
-				double idx_frac_lin_part = scalbn(x, -e) - 1;
-				double idx_f = range.num * (idx_int_log_part + idx_frac_lin_part);
-
-				unsigned idx = min(static_cast<int>(idx_f), range.size() - 2);
-
-				if (idx < capacity - 1) {
-					double y = lerp(data[idx], data[idx + 1], idx_f - idx);
-					if (transfer) y /= x;
-					return y;
-				}
-			}
-
-			double y = data[0];
-			if (transfer) y /= x_start;
-			return y;
-		}
-
-		binlog_lut(const spaced_lut_args& args) :
-			range({
-				static_cast<int>(args.start),
-				static_cast<int>(args.stop),
-				args.num_elements
-				}),
-			x_start(scalbn(1, range.start)),
-			transfer(args.transfer) {}
-
-		binlog_lut(const accel_args& args) :
-			binlog_lut(args.spaced_args) {}
-	};
-
-	struct si_pair { 
+	struct si_pair {
 		float slope = 0;
 		float intercept = 0;
 	};
@@ -161,10 +44,11 @@ namespace rawaccel {
 		si_pair slope_intercept = {};
 	};
 
-	struct arbitrary_lut {
-		enum { capacity = ARB_LUT_CAPACITY };
+	struct lookup {
+		enum { capacity = LUT_POINTS_CAPACITY };
 
 		fp_rep_range range;
+		bool velocity_points;
 		arbitrary_lut_point data[capacity] = {};
 		int log_lookup[capacity] = {};
 		double first_point_speed;
@@ -173,9 +57,8 @@ namespace rawaccel {
 		int last_log_lookup_index;
 		double last_log_lookup_speed;
 		double first_log_lookup_speed;
-		bool velocity_points;
 
-		double operator()(double speed) const
+		double operator()(double speed, const accel_args&) const
 		{
 			int index = 0;
 			int last_arb_index = last_arbitrary_index;
@@ -247,8 +130,11 @@ namespace rawaccel {
 			}
 		}
 
-		void fill(const vec2<float>* points, int length)
+		void fill(const float* raw_data, int raw_length)
 		{
+			auto* points = reinterpret_cast<const vec2<float>*>(raw_data);
+			int length = raw_length / 2;
+
 			first_point_speed = points[0].x;
 			last_arbitrary_index = length - 1;
 			// -2 because the last index in the arbitrary array is used for slope-intercept only
@@ -297,10 +183,11 @@ namespace rawaccel {
 			}
 		}
 
-		arbitrary_lut(const accel_args& args)
+		lookup(const accel_args& args)
 		{
-			velocity_points = args.arb_args.velocity;
-			fill(args.arb_args.data, args.arb_args.length);
+			velocity_points = args.gain;
+			fill(args.data, args.length);
 		}
 	};
+
 }

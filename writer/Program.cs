@@ -11,72 +11,14 @@ namespace writer
 
     class Program
     {
+        static readonly string DefaultPath = "settings.json";
+        static readonly string Usage = 
+            $"Usage: {AppDomain.CurrentDomain.FriendlyName} <settings file path>\n";
 
-        static void ExitWithMessage(string msg)
+        static void Exit(string msg)
         {
             MessageBox.Show(msg, "Raw Accel writer");
             Environment.Exit(1);
-        }
-
-        static void ExitWithUsage()
-        {
-            ExitWithMessage($"Usage: {System.AppDomain.CurrentDomain.FriendlyName} <settings file path>");
-        }
-
-        delegate string PopOption(params string[] aliases);
-
-        static string Read(string path)
-        {
-            return path == null ? null : File.ReadAllText(path);
-        }
-
-        static ExtendedSettings Parse(List<string> args)
-        {
-            PopOption maybePop = aliases =>
-            {
-                int idx = args.FindIndex(aliases.Contains);
-
-                if (idx == -1) return null;
-
-                if (idx == args.Count - 1) ExitWithUsage();
-
-                string val = args[idx + 1];
-                args.RemoveRange(idx, 2);
-                return val;
-            };
-
-            string settingsPath = null;
-
-            string tablePath = maybePop("/table", "/t");
-
-            if (tablePath != null)
-            {
-                if (args.Count > 1) ExitWithUsage();
-                else if (args.Count == 1) settingsPath = args[0];
-
-                return new ExtendedSettings(Read(settingsPath), Read(tablePath));
-            }
-
-            string xTablePath = maybePop("/xtable", "/xt");
-            string yTablePath = maybePop("/ytable", "/yt");
-
-            if (args.Count > 1) ExitWithUsage();
-            else if (args.Count == 1) settingsPath = args[0];
-            else if (xTablePath == null && yTablePath == null) ExitWithUsage();
-
-            string xTableJson = Read(xTablePath);
-            string yTableJson = null;
-
-            if (xTablePath != null && xTablePath.Equals(yTablePath))
-            {
-                yTableJson = xTableJson;
-            }
-            else
-            {
-                yTableJson = Read(yTablePath);
-            }
-
-            return new ExtendedSettings(Read(settingsPath), xTableJson, yTableJson);
         }
 
         static void Main(string[] args)
@@ -87,34 +29,47 @@ namespace writer
             }
             catch (InteropException e)
             {
-                ExitWithMessage(e.Message);
+                Exit(e.Message);
             }
 
             try
             {
-                var settings = Parse(new List<string>(args));
-                var errors = new SettingsErrors(settings);
-
-                if (errors.Empty())
+                if (args.Length != 1)
                 {
-                    new ManagedAccel(settings).Activate();
+                    if (File.Exists(DefaultPath))
+                    {
+                        Exit(Usage);
+                    }
+                    else
+                    {
+                        File.WriteAllText(DefaultPath, DriverConfig.GetDefault().ToJSON());
+                        Exit($"{Usage}\n(generated default settings file '{DefaultPath}')");
+                    }
                 }
                 else
                 {
-                    ExitWithMessage($"Bad settings:\n\n{errors}");
+                    var result = DriverConfig.Convert(File.ReadAllText(args[0]));
+                    if (result.Item2 == null)
+                    {
+                        result.Item1.Activate();
+                    }
+                    else
+                    {
+                        Exit($"Bad settings:\n\n{result.Item2}");
+                    }
                 }
             }
-            catch (System.IO.FileNotFoundException e)
+            catch (FileNotFoundException e)
             {
-                ExitWithMessage(e.Message);
+                Exit(e.Message);
             }
             catch (JsonException e)
             {
-                ExitWithMessage($"Settings invalid:\n\n{e.Message}");
+                Exit($"Settings format invalid:\n\n{e.Message}");
             }
             catch (Exception e)
             {
-                ExitWithMessage($"Error:\n\n{e}");
+                Exit($"Error:\n\n{e}");
             }
         }
     }

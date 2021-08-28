@@ -10,77 +10,135 @@ namespace rawaccel {
 
     /// <summary> Struct to hold "classic" (linear raised to power) acceleration implementation. </summary>
     struct classic_base {
-        double offset;
-        double power;
-        double accel_raised;
-
-        classic_base(const accel_args& args) :
-            offset(args.offset),
-            power(args.power),
-            accel_raised(pow(args.accel_classic, power - 1)) {}
-
-        double base_fn(double x) const
+        double base_fn(double x, double accel_raised, const accel_args& args) const
         {
-            return accel_raised * pow(x - offset, power) / x;
+            return accel_raised * pow(x - args.offset, args.exponent_classic) / x;
+        }
+
+        static double base_accel(double x, double y, double power, double offset)
+        {
+            return pow(x * y * pow(x - offset, -power), 1 / (power + 1));
         }
     };
 
-    struct classic_legacy : classic_base {
-        double sens_cap = DBL_MAX;
+    template <bool Gain> struct classic;
+
+    template<>
+    struct classic<LEGACY> : classic_base {
+        double accel_raised;
+        double cap = DBL_MAX;
         double sign = 1;
 
-        classic_legacy(const accel_args& args) :
-            classic_base(args) 
+        classic(const accel_args& args)
         {
-            if (args.cap > 0) {
-                sens_cap = args.cap - 1;
+            switch (args.cap_mode) {
+            case classic_cap_mode::io:
+                cap = args.cap.y - 1;
 
-                if (sens_cap < 0) {
-                    sens_cap = -sens_cap;
+                if (cap < 0) {
+                    cap = -cap;
                     sign = -sign;
                 }
+
+                {
+                    double a = base_accel(args.cap.x, cap, args.exponent_classic, args.offset);
+                    accel_raised = pow(a, args.exponent_classic - 1);
+                }
+                break;
+            case classic_cap_mode::in:
+                accel_raised = pow(args.acceleration, args.exponent_classic - 1);
+                if (args.cap.x > 0) {
+                    cap = base_fn(args.cap.x, accel_raised, args);
+                }
+                break;
+            case classic_cap_mode::out:
+            default:
+                accel_raised = pow(args.acceleration, args.exponent_classic - 1);
+
+                if (args.cap.y > 0) {
+                    cap = args.cap.y - 1;
+
+                    if (cap < 0) {
+                        cap = -cap;
+                        sign = -sign;
+                    }
+                }
+
+                break;
             }
         }
 
-        double operator()(double x) const 
+        double operator()(double x, const accel_args& args) const
         {
-            if (x <= offset) return 1;
-            return sign * minsd(base_fn(x), sens_cap) + 1;
-        }   
+            if (x <= args.offset) return 1;
+            return sign * minsd(base_fn(x, accel_raised, args), cap) + 1;
+        }
+
     };
 
-    struct classic : classic_base {
-        vec2d gain_cap = { DBL_MAX, DBL_MAX };
+    template<>
+    struct classic<GAIN> : classic_base {
+        double accel_raised;
+        vec2d cap = { DBL_MAX, DBL_MAX };
         double constant = 0;
         double sign = 1;
 
-        classic(const accel_args& args) :
-            classic_base(args) 
+        classic(const accel_args& args)
         {
-            if (args.cap > 0) {
-                gain_cap.y = args.cap - 1;
+            switch (args.cap_mode) {
+            case classic_cap_mode::io:
+                cap.x = args.cap.x;
+                cap.y = args.cap.y - 1;
 
-                if (gain_cap.y < 0) {
-                    gain_cap.y = -gain_cap.y;
+                if (cap.y < 0) {
+                    cap.y = -cap.y;
                     sign = -sign;
                 }
 
-                gain_cap.x = gain_inverse(gain_cap.y, args.accel_classic, power, offset);
-                constant = (base_fn(gain_cap.x) - gain_cap.y) * gain_cap.x;
+                {
+                    double a = gain_accel(cap.x, cap.y, args.exponent_classic, args.offset);
+                    accel_raised = pow(a, args.exponent_classic - 1);
+                }
+                constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
+                break;
+            case classic_cap_mode::in:
+                if (args.cap.x > 0) {
+                    cap.x = args.cap.x;
+                    cap.y = gain(cap.x, args.acceleration, args.exponent_classic, args.offset);
+                    constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
+                }
+                accel_raised = pow(args.acceleration, args.exponent_classic - 1);
+                break;
+            case classic_cap_mode::out:
+            default:
+                accel_raised = pow(args.acceleration, args.exponent_classic - 1);
+
+                if (args.cap.y > 0) {
+                    cap.y = args.cap.y - 1;
+
+                    if (cap.y < 0) {
+                        cap.y = -cap.y;
+                        sign = -sign;
+                    }
+
+                    cap.x = gain_inverse(cap.y, args.acceleration, args.exponent_classic, args.offset);
+                    constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
+                }
+                break;
             }
         }
 
-        double operator()(double x) const 
+        double operator()(double x, const accel_args& args) const
         {
             double output;
 
-            if (x <= offset) return 1;
+            if (x <= args.offset) return 1;
 
-            if (x < gain_cap.x) {
-                output = base_fn(x);
+            if (x < cap.x) {
+                output = base_fn(x, accel_raised, args);
             }
             else {
-                output = constant / x + gain_cap.y;
+                output = constant / x + cap.y;
             }
 
             return sign * output + 1;
@@ -100,6 +158,7 @@ namespace rawaccel {
         {
             return -pow(y / power, 1 / (power - 1)) / (offset - x);
         }
+
     };
 
 }
