@@ -72,59 +72,39 @@ namespace grapher.Models.Options.Directionality
 
         public DomainArgs GetDomainArgs()
         {
-            if (!ByComponentCheckBox.Checked)
+            return new DomainArgs
             {
-                return new DomainArgs
+                domainXY = new Vec2<double>
                 {
-                    domainXY = new Vec2<double>
-                    {
-                        x = Domain.Fields.X,
-                        y = Domain.Fields.Y,
-                    },
-                    lpNorm = LpNorm.Field.Data,
-                };
-            }
-            else
-            {
-                return new DomainArgs
-                {
-                    domainXY = new Vec2<double>
-                    {
-                        x = 1,
-                        y = 1,
-                    },
-                    lpNorm = 2,
-                };
-
-            }
+                    x = Domain.Fields.X,
+                    y = Domain.Fields.Y,
+                },
+                lpNorm = ByComponentCheckBox.Checked ? 2 : LpNorm.Field.Data
+            };
         }
 
         public Vec2<double> GetRangeXY()
         {
-            if (!ByComponentCheckBox.Checked)
+            return new Vec2<double>
             {
-                return new Vec2<double>
-                {
-                    x = Range.Fields.X,
-                    y = Range.Fields.Y,
-                };
-            }
-            else
-            {
-                return new Vec2<double>
-                {
-                    x = 1,
-                    y = 1,
-                };
-            }
-
+                x = Range.Fields.X,
+                y = Range.Fields.Y,
+            };
         }
 
         public void SetActiveValues(DriverSettings settings)
         {
             Domain.SetActiveValues(settings.domainArgs.domainXY.x, settings.domainArgs.domainXY.y);
-            LpNorm.SetActiveValue(settings.domainArgs.lpNorm);
             Range.SetActiveValues(settings.rangeXY.x, settings.rangeXY.y);
+
+            if (settings.combineMagnitudes)
+            {
+                LpNorm.SetActiveValue(settings.domainArgs.lpNorm);
+            }
+            else
+            {
+                LpNorm.SetToUnavailable();
+            }
         }
 
         public void Hide()
@@ -167,15 +147,11 @@ namespace grapher.Models.Options.Directionality
         public void ToByComponent()
         {
             LpNorm.SetToUnavailable();
-            Domain.SetToUnavailable();
-            Range.SetToUnavailable();
         }
 
         public void ToWhole()
         {
             LpNorm.SetToAvailable();
-            Domain.SetToAvailable();
-            Range.SetToAvailable();
         }
 
         private void DrawHidden()
