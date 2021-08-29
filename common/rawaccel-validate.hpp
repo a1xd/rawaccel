@@ -82,9 +82,15 @@ namespace rawaccel {
 			if (args.offset < 0) {
 				error("offset can not be negative");
 			}
+			else if (args.mode == accel_mode::jump && args.offset == 0) {
+				error("offset can not be 0");
+			}
 
 			if (args.cap < 0) {
 				error("cap"" must not be negative");
+			}
+			else if (args.mode == accel_mode::jump && args.cap == 0) {
+				error("cap can not be 0");
 			}
 
 			if (args.growth_rate <= 0 ||
