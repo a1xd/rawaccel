@@ -17,7 +17,7 @@ namespace grapher.Layouts
             SmoothLayout = new OptionLayout(false, string.Empty);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(true, Cap);
-            WeightLayout = new OptionLayout(true, Weight);
+            WeightLayout = new OptionLayout(false, string.Empty);
             OffsetLayout = new OptionLayout(true, Offset);
             LimitLayout = new OptionLayout(false, string.Empty);
             PowerClassicLayout = new OptionLayout(true, PowerClassic);
