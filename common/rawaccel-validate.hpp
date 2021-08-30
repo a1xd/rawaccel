@@ -6,8 +6,8 @@
 namespace rawaccel {
 
 	struct valid_ret_t {
-		int count_x = 0;
-		int count_y = 0;
+		int last_x = 0;
+		int last_y = 0;
 		int count = 0;
 
 		explicit operator bool() const
@@ -136,9 +136,9 @@ namespace rawaccel {
 		check_accel(args.argsv.x);
 
 		if (!args.combine_mags) {
-			ret.count_x = ret.count;
+			ret.last_x = ret.count;
 			check_accel(args.argsv.y);
-			ret.count_y = ret.count;
+			ret.last_y = ret.count;
 		}
 
 		if (args.dpi <= 0) {

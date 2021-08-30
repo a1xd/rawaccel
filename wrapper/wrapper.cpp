@@ -462,8 +462,8 @@ public ref class SettingsErrors
 public:
 
     List<String^>^ list;
-    int countX;
-    int countY;
+    int lastX;
+    int lastY;
 
     delegate void MsgHandler(const char*);
 
@@ -486,9 +486,9 @@ public:
         Marshal::StructureToPtr(settings, (IntPtr)args_ptr, false);
 
         list = gcnew List<String^>();
-        auto [cx, cy, _] = ra::valid(*args_ptr, fp);
-        countX = cx;
-        countY = cy;
+        auto [last_x, last_y, _] = ra::valid(*args_ptr, fp);
+        lastX = last_x;
+        lastY = last_y;
 
         gch.Free();
         delete args_ptr;
@@ -503,15 +503,15 @@ public:
     {
         Text::StringBuilder^ sb = gcnew Text::StringBuilder();
 
-        for each (auto s in list->GetRange(0, countX))
+        for each (auto s in list->GetRange(0, lastX))
         {
             sb->AppendFormat("x: {0}\n", s);
         }
-        for each (auto s in list->GetRange(countX, countY))
+        for each (auto s in list->GetRange(lastX, lastY - lastX))
         {
             sb->AppendFormat("y: {0}\n", s);
         }
-        for each (auto s in list->GetRange(countY, list->Count))
+        for each (auto s in list->GetRange(lastY, list->Count - lastY))
         {
             sb->AppendLine(s);
         }
