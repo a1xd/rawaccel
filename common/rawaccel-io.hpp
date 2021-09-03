@@ -5,9 +5,6 @@
 #include "rawaccel-error.hpp"
 #include "rawaccel.hpp"
 
-#pragma warning(push)
-#pragma warning(disable:4245) // int -> DWORD conversion while passing CTL_CODE
-
 namespace rawaccel {
 
     inline void io_control(DWORD code, void* in, DWORD in_size, void* out, DWORD out_size) 
@@ -42,12 +39,12 @@ namespace rawaccel {
 
     inline void read(io_t& args)
     {
-        io_control(RA_READ, NULL, 0, &args, sizeof(io_t));
+        io_control(READ, NULL, 0, &args, sizeof(io_t));
     }
 
     inline void write(const io_t& args) 
     {
-        io_control(RA_WRITE, const_cast<io_t*>(&args), sizeof(io_t), NULL, 0);
+        io_control(WRITE, const_cast<io_t*>(&args), sizeof(io_t), NULL, 0);
     }
 
     inline version_t get_version() 
@@ -55,7 +52,7 @@ namespace rawaccel {
         version_t v;
 
         try {
-            io_control(RA_GET_VERSION, NULL, 0, &v, sizeof(version_t));
+            io_control(GET_VERSION, NULL, 0, &v, sizeof(version_t));
         }
         catch (const sys_error&) {
             // assume request is not implemented (< 1.3)
@@ -81,5 +78,3 @@ namespace rawaccel {
     }
 
 }
-
-#pragma warning(pop)
