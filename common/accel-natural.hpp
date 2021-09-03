@@ -2,8 +2,6 @@
 
 #include "rawaccel-base.hpp"
 
-#include <math.h>
-
 namespace rawaccel {
 
 	/// <summary> Struct to hold "natural" (vanishing difference) acceleration implementation. </summary>
