@@ -2,7 +2,6 @@
 
 #include "rawaccel-base.hpp"
 
-#include <math.h>
 #include <float.h>
 
 namespace rawaccel {

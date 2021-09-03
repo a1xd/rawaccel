@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vec2.h"
+#include "math-vec2.hpp"
 
 namespace rawaccel {
     using milliseconds = double;
@@ -22,7 +22,6 @@ namespace rawaccel {
     inline constexpr size_t LUT_POINTS_CAPACITY = LUT_RAW_DATA_CAPACITY / 2;
 
     inline constexpr double MAX_NORM = 16;
-    inline constexpr double PI = 3.14159265358979323846;
 
     inline constexpr bool LEGACY = 0;
     inline constexpr bool GAIN = 1;

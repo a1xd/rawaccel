@@ -2,8 +2,6 @@
 
 #include "accel-lookup.hpp"
 
-#include <math.h>
-
 namespace rawaccel {
 
 	template <bool Gain> struct loglog_sigmoid;
