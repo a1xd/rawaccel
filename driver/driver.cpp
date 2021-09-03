@@ -183,7 +183,7 @@ Return Value:
     }
 
     switch (IoControlCode) {
-    case RA_READ:
+    case ra::READ:
         status = WdfRequestRetrieveOutputBuffer(
             Request,
             sizeof(ra::io_t),
@@ -207,7 +207,7 @@ Return Value:
             bytes_out = sizeof(ra::io_t);
         }
         break;
-    case RA_WRITE:
+    case ra::WRITE:
         status = WdfRequestRetrieveInputBuffer(
             Request,
             sizeof(ra::io_t),
@@ -251,7 +251,7 @@ Return Value:
         }
 
         break;
-    case RA_GET_VERSION:
+    case ra::GET_VERSION:
         status = WdfRequestRetrieveOutputBuffer(
             Request,
             sizeof(ra::version_t),
