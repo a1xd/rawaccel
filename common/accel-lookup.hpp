@@ -3,8 +3,6 @@
 #include "rawaccel-base.hpp"
 #include "utility.hpp"
 
-#include <math.h>
-
 namespace rawaccel {
 
 	// represents the range [2^start, 2^stop], with num - 1

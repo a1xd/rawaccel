@@ -2,12 +2,10 @@
 
 #include "rawaccel-base.hpp"
 
-#include <math.h>
-
 namespace rawaccel {
 
 	struct jump_base {
-		static constexpr double smooth_scale = 2 * PI;
+		static constexpr double smooth_scale = 2 * M_PI;
 
 		vec2d step;
 		double smooth_rate;

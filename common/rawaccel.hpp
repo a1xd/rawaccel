@@ -4,30 +4,6 @@
 
 namespace rawaccel {
 
-    inline vec2d direction(double degrees)
-    {
-        double radians = degrees * PI / 180;
-        return { cos(radians), sin(radians) };
-    }
-
-    constexpr vec2d rotate(const vec2d& v, const vec2d& direction)
-    {
-        return {
-            v.x * direction.x - v.y * direction.y,
-            v.x * direction.y + v.y * direction.x
-        };
-    }
-
-    inline double magnitude(const vec2d& v)
-    {
-        return sqrt(v.x * v.x + v.y * v.y);
-    }
-
-    inline double lp_distance(const vec2d& v, double p)
-    {
-        return pow(pow(v.x, p) + pow(v.y, p), 1 / p);
-    }
-
     struct time_clamp {
         milliseconds min = DEFAULT_TIME_MIN;
         milliseconds max = DEFAULT_TIME_MAX;
@@ -100,16 +76,16 @@ namespace rawaccel {
 
             if (compute_ref_angle && in.y != 0) {
                 if (in.x == 0) {
-                    reference_angle = PI / 2;
+                    reference_angle = M_PI / 2;
                 }
                 else {
                     reference_angle = atan(fabs(in.y / in.x));
 
                     if (apply_snap) {
-                        double snap = args.degrees_snap * PI / 180;
+                        double snap = args.degrees_snap * M_PI / 180;
 
-                        if (reference_angle > PI / 2 - snap) {
-                            reference_angle = PI / 2;
+                        if (reference_angle > M_PI / 2 - snap) {
+                            reference_angle = M_PI / 2;
                             in = { 0, _copysign(magnitude(in), in.y) };
                         }
                         else if (reference_angle < snap) {
@@ -153,7 +129,7 @@ namespace rawaccel {
 
                 if (apply_directional_weight) {
                     double diff = args.range_weights.y - args.range_weights.x;
-                    weight += 2 / PI * reference_angle * diff;
+                    weight += 2 / M_PI * reference_angle * diff;
                 }
 
                 double scale = (*cb_x)(data.accel_x, args.accel_x, speed, weight);
