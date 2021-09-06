@@ -25,10 +25,10 @@ typedef struct _DEVICE_EXTENSION {
     double dpi_factor;
     counter_t counter;
     ra::time_clamp clamp;
-    ra::driver_settings* drv_ptr;
-    ra::modifier* mod_ptr;
+    ra::modifier mod;
     vec2d carry;
     CONNECT_DATA UpperConnectData;
+    ra::driver_settings drv_settings;
     WCHAR dev_id[ra::MAX_DEV_ID_LEN];
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
