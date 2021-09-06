@@ -48,16 +48,13 @@ namespace rawaccel {
         settings.data.rot_direction = direction(settings.prof.degrees_rotation);
     }
 
-    inline constexpr unsigned DRIVER_CAPACITY = POOL_SIZE / sizeof(driver_settings);
-    inline constexpr unsigned DEVICE_CAPACITY = POOL_SIZE / sizeof(device_settings);
-
-    struct io_t {
+    struct io_base {
         device_config default_dev_cfg;
-        unsigned driver_data_size;
-        unsigned device_data_size;
-        driver_settings driver_data[DRIVER_CAPACITY];
-        device_settings device_data[DEVICE_CAPACITY];
+        unsigned driver_data_size = 0;
+        unsigned device_data_size = 0;
     };
+
+    static_assert(alignof(io_base) == alignof(driver_settings) && alignof(driver_settings) == alignof(device_settings));
 
     class modifier {
     public:

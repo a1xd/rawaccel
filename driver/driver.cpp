@@ -20,23 +20,16 @@
 using milliseconds = double;
 
 struct {
+    bool initialized;
     WDFCOLLECTION device_collection;
     WDFWAITLOCK collection_lock;
-    ra::device_config default_dev_cfg;
-    unsigned device_data_size;
-    unsigned driver_data_size;
-    ra::device_settings* device_data;
+    ra::io_base base_data;
     ra::driver_settings* driver_data;
+    ra::device_settings* device_data;
     milliseconds tick_interval;
-    ra::modifier modifier_data[ra::DRIVER_CAPACITY];
 } global = {};
 
 extern "C" PULONG InitSafeBootMode;
-
-bool init_failed() 
-{ 
-    return global.driver_data_size == 0; 
-};
 
 __declspec(guard(ignore))
 VOID
@@ -105,7 +98,7 @@ Arguments:
                     static_cast<double>(it->LastY)
                 };
 
-                devExt->mod_ptr->modify(input, *devExt->drv_ptr, devExt->dpi_factor, time);
+                devExt->mod.modify(input, devExt->drv_settings, devExt->dpi_factor, time);
 
                 double carried_result_x = input.x + devExt->carry.x;
                 double carried_result_y = input.y + devExt->carry.y;
@@ -167,7 +160,7 @@ Return Value:
 {
     NTSTATUS status;
     void* buffer;
-
+    size_t buffer_length;
     size_t bytes_out = 0;
 
     UNREFERENCED_PARAMETER(Queue);
@@ -177,42 +170,50 @@ Return Value:
 
     DebugPrint(("Ioctl received into filter control object.\n"));
 
-    if (init_failed()) {
+    if (!global.initialized) {
         WdfRequestCompleteWithInformation(Request, STATUS_CANCELLED, 0);
         return;
     }
+
+    const auto SIZEOF_BASE = sizeof(ra::io_base);
 
     switch (IoControlCode) {
     case ra::READ:
         status = WdfRequestRetrieveOutputBuffer(
             Request,
-            sizeof(ra::io_t),
+            SIZEOF_BASE,
             &buffer,
-            NULL
+            &buffer_length
         );
         if (!NT_SUCCESS(status)) {
             DebugPrint(("RetrieveOutputBuffer failed: 0x%x\n", status));
         }
         else {
-            ra::io_t& output = *static_cast<ra::io_t*>(buffer);
+            *static_cast<ra::io_base*>(buffer) = global.base_data;
 
-            output.default_dev_cfg = global.default_dev_cfg;
+            size_t driver_bytes = global.base_data.driver_data_size * sizeof(ra::driver_settings);
+            size_t device_bytes = global.base_data.device_data_size * sizeof(ra::device_settings);
+            size_t total_bytes = SIZEOF_BASE + driver_bytes + device_bytes;
 
-            output.device_data_size = global.device_data_size;
-            output.driver_data_size = global.driver_data_size;
+            if (buffer_length < total_bytes) {
+                bytes_out = SIZEOF_BASE;
+            }
+            else {
+                BYTE* output_ptr = static_cast<BYTE*>(buffer) + SIZEOF_BASE;
 
-            RtlCopyMemory(output.device_data, global.device_data, sizeof(output.device_data));
-            RtlCopyMemory(output.driver_data, global.driver_data, sizeof(output.driver_data));
-
-            bytes_out = sizeof(ra::io_t);
+                if (global.driver_data) RtlCopyMemory(output_ptr, global.driver_data, driver_bytes);
+                output_ptr += driver_bytes;
+                if (global.device_data) RtlCopyMemory(output_ptr, global.device_data, device_bytes);
+                bytes_out = total_bytes;
+            }
         }
         break;
     case ra::WRITE:
         status = WdfRequestRetrieveInputBuffer(
             Request,
-            sizeof(ra::io_t),
+            SIZEOF_BASE,
             &buffer,
-            NULL
+            &buffer_length
         );
         if (!NT_SUCCESS(status)) {
             DebugPrint(("RetrieveInputBuffer failed: 0x%x\n", status));
@@ -220,36 +221,73 @@ Return Value:
         else {
             WriteDelay();
 
-            ra::io_t& input = *static_cast<ra::io_t*>(buffer);
+            ra::io_base& input = *static_cast<ra::io_base*>(buffer);
 
-            if (input.driver_data_size == 0) {
+            auto driver_bytes = size_t(input.driver_data_size) * sizeof(ra::driver_settings);
+            auto device_bytes = size_t(input.device_data_size) * sizeof(ra::device_settings);
+            auto alloc_size = driver_bytes + device_bytes;
+            auto total_size = alloc_size + SIZEOF_BASE;
+
+            auto max_u32 = unsigned(-1);
+            if (driver_bytes > max_u32 || device_bytes > max_u32 || total_size > max_u32) {
                 status = STATUS_CANCELLED;
                 break;
             }
 
-            WdfWaitLockAcquire(global.collection_lock, NULL);
+            if (input.driver_data_size == 0) {
+                // clear data and disable all devices
+                WdfWaitLockAcquire(global.collection_lock, NULL);
 
-            global.default_dev_cfg = input.default_dev_cfg;
+                global.base_data = {};
 
-            global.device_data_size = ra::min(input.device_data_size, ra::DEVICE_CAPACITY);
-            global.driver_data_size = ra::min(input.driver_data_size, ra::DRIVER_CAPACITY);
+                if (global.driver_data) {
+                    ExFreePoolWithTag(global.driver_data, 'g');
+                    global.driver_data = NULL;
+                    global.device_data = NULL;
+                }
 
-            RtlCopyMemory(global.device_data, input.device_data, sizeof(input.device_data));
-            RtlCopyMemory(global.driver_data, input.driver_data, sizeof(input.driver_data));
+                auto count = WdfCollectionGetCount(global.device_collection);
 
-            for (auto i = 0u; i < global.driver_data_size; i++) {
-                global.modifier_data[i] = { global.driver_data[i] };
+                for (auto i = 0u; i < count; i++) {
+                    DeviceSetup(WdfCollectionGetItem(global.device_collection, i));
+                }
+
+                WdfWaitLockRelease(global.collection_lock);
             }
+            else if (buffer_length == total_size) {
+                void* pool = ExAllocatePoolWithTag(PagedPool, alloc_size, 'g');
+                if (!pool) {
+                    DebugPrint(("ExAllocatePoolWithTag (PagedPool) failed"));
+                    status = STATUS_UNSUCCESSFUL;
+                    break;
+                }
+                RtlCopyMemory(pool, static_cast<BYTE*>(buffer) + SIZEOF_BASE, alloc_size);
 
-            auto count = WdfCollectionGetCount(global.device_collection);
+                WdfWaitLockAcquire(global.collection_lock, NULL);
 
-            for (auto i = 0u; i < count; i++) {
-                DeviceSetup(WdfCollectionGetItem(global.device_collection, i));
+                if (global.driver_data) {
+                    ExFreePoolWithTag(global.driver_data, 'g');
+                }
+
+                void* dev_data = static_cast<BYTE*>(pool) + driver_bytes;
+                global.device_data = input.device_data_size > 0 ?
+                    static_cast<ra::device_settings*>(dev_data) :
+                    NULL;
+                global.driver_data = static_cast<ra::driver_settings*>(pool);
+                global.base_data = input;
+
+                auto count = WdfCollectionGetCount(global.device_collection);
+
+                for (auto i = 0u; i < count; i++) {
+                    DeviceSetup(WdfCollectionGetItem(global.device_collection, i));
+                }
+
+                WdfWaitLockRelease(global.collection_lock);
             }
-
-            WdfWaitLockRelease(global.collection_lock);
+            else {
+                status = STATUS_CANCELLED;
+            }
         }
-
         break;
     case ra::GET_VERSION:
         status = WdfRequestRetrieveOutputBuffer(
@@ -310,34 +348,11 @@ RawaccelInit(WDFDRIVER driver)
         return;
     }
 
-    void* paged_p = ExAllocatePoolWithTag(PagedPool, ra::POOL_SIZE, 'g');
-    if (paged_p) {
-        RtlZeroMemory(paged_p, ra::POOL_SIZE);
-        global.device_data = static_cast<ra::device_settings*>(paged_p);
-    }
-    else {
-        DebugPrint(("ExAllocatePoolWithTag (PagedPool) failed"));
-        return;
-    }
-
-    void* nonpaged_p = ExAllocatePoolWithTag(NonPagedPool, ra::POOL_SIZE, 'g');
-    if (nonpaged_p) {
-        RtlZeroMemory(nonpaged_p, ra::POOL_SIZE);
-        global.driver_data = static_cast<ra::driver_settings*>(nonpaged_p);
-        global.driver_data->prof.domain_weights = { 1, 1 };
-        global.driver_data->prof.range_weights = { 1, 1 };
-        global.driver_data->prof.sensitivity = 1;
-        global.driver_data->prof.yx_sens_ratio = 1;
-        global.driver_data_size = 1;
-    }
-    else {
-        DebugPrint(("ExAllocatePoolWithTag (NonPagedPool) failed"));
-        return;
-    }
-
     LARGE_INTEGER freq;
     KeQueryPerformanceCounter(&freq);
     global.tick_interval = 1e3 / freq.QuadPart;
+
+    global.initialized = true;
 }
 
 VOID
@@ -360,25 +375,29 @@ DeviceSetup(WDFOBJECT hDevice)
         }
     };
 
-    set_ext_from_cfg(global.default_dev_cfg);
-    devExt->counter = 0;
-    devExt->carry = {};
-    devExt->drv_ptr = global.driver_data;
-    devExt->mod_ptr = global.modifier_data;
-
-    for (auto i = 0u; i < global.device_data_size; i++) {
+    if (!global.driver_data) {
+        devExt->enable = false;
+        devExt->mod = {};
+        return;
+    }
+    
+    set_ext_from_cfg(global.base_data.default_dev_cfg);
+    devExt->drv_settings = *global.driver_data;
+    devExt->mod = { devExt->drv_settings };
+    
+    for (auto i = 0u; i < global.base_data.device_data_size; i++) {
         auto& dev_settings = global.device_data[i];
 
         if (wcsncmp(devExt->dev_id, dev_settings.id, ra::MAX_DEV_ID_LEN) == 0) {
             set_ext_from_cfg(dev_settings.config);
 
             if (dev_settings.profile[0] != L'\0') {
-                for (auto j = 0u; j < global.driver_data_size; j++) {
+                for (auto j = 0u; j < global.base_data.driver_data_size; j++) {
                     auto& profile = global.driver_data[j].prof;
 
                     if (wcsncmp(dev_settings.profile, profile.name, ra::MAX_NAME_LEN) == 0) {
-                        devExt->drv_ptr = &global.driver_data[j];
-                        devExt->mod_ptr = &global.modifier_data[j];
+                        devExt->drv_settings = global.driver_data[j];
+                        devExt->mod = { devExt->drv_settings };
                         return;
                     }
                 }
@@ -624,7 +643,7 @@ Return Value:
 
     DebugPrint(("Enter FilterEvtDeviceAdd \n"));
 
-    if (init_failed()) {
+    if (!global.initialized) {
         return STATUS_SUCCESS;
     }
 
