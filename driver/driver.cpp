@@ -324,8 +324,10 @@ RawaccelInit(WDFDRIVER driver)
     if (nonpaged_p) {
         RtlZeroMemory(nonpaged_p, ra::POOL_SIZE);
         global.driver_data = static_cast<ra::driver_settings*>(nonpaged_p);
-        *global.driver_data = {};
-        *global.modifier_data = { *global.driver_data };
+        global.driver_data->prof.domain_weights = { 1, 1 };
+        global.driver_data->prof.range_weights = { 1, 1 };
+        global.driver_data->prof.sensitivity = 1;
+        global.driver_data->prof.yx_sens_ratio = 1;
         global.driver_data_size = 1;
     }
     else {
