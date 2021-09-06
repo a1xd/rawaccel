@@ -13,12 +13,10 @@ namespace rawaccel {
 
     inline constexpr milliseconds WRITE_DELAY = 1000;
 
-    inline constexpr size_t POOL_SIZE = 1024 * 512;
-
     inline constexpr size_t MAX_DEV_ID_LEN = 200;
     inline constexpr size_t MAX_NAME_LEN = 256;
 
-    inline constexpr size_t LUT_RAW_DATA_CAPACITY = 258;
+    inline constexpr size_t LUT_RAW_DATA_CAPACITY = 514;
     inline constexpr size_t LUT_POINTS_CAPACITY = LUT_RAW_DATA_CAPACITY / 2;
 
     inline constexpr double MAX_NORM = 16;
