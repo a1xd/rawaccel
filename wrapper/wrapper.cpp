@@ -462,7 +462,7 @@ public:
 
     }
 
-    ra::driver_settings GetSettings()
+    ra::driver_settings NativeSettings()
     {
         return instance->settings;
     }
@@ -474,8 +474,6 @@ public:
 public ref class DriverConfig {
 public:
     literal double WriteDelayMs = ra::WRITE_DELAY;
-    literal int MaxProfiles = ra::DRIVER_CAPACITY;
-    literal int MaxDevices = ra::DEVICE_CAPACITY;
     literal String^ Key = "Driver settings";
 
     String^ version = RA_VER_STRING;
@@ -491,36 +489,56 @@ public:
 
     void Activate()
     {
-        ra::io_t* data = static_cast<ra::io_t*>(malloc(sizeof(ra::io_t)));
-
-        if (!data) throw gcnew Exception("bad alloc");
-        
-        data->default_dev_cfg.disable = defaultDeviceConfig.disable;
-        data->default_dev_cfg.set_extra_info = defaultDeviceConfig.setExtraInfo;
-        data->default_dev_cfg.dpi = defaultDeviceConfig.dpi;
-        data->default_dev_cfg.polling_rate = defaultDeviceConfig.pollingRate;
-        data->default_dev_cfg.clamp.min = defaultDeviceConfig.minimumTime;
-        data->default_dev_cfg.clamp.max = defaultDeviceConfig.maximumTime;
-
-        data->driver_data_size = profiles->Count;
-        data->device_data_size = devices->Count;
-
-        for (auto i = 0; i < profiles->Count; i++) {
-            auto& drv_settings = data->driver_data[i];
-            drv_settings = accels[i]->GetSettings();
+        if (accels->Count != profiles->Count) {
+            throw gcnew Exception("Profile count does not match ManagedAccel");
         }
 
+        std::byte* buffer;
+
+        auto driver_data_bytes = accels->Count * sizeof(ra::driver_settings);
+        auto device_data_bytes = devices->Count * sizeof(ra::device_settings);
+
+        try {
+            buffer = new std::byte[sizeof(ra::io_base) + driver_data_bytes + device_data_bytes];
+        }
+        catch (const std::exception& e) {
+            throw gcnew InteropException(e);
+        }
+
+        auto* byte_ptr = buffer;
+
+        auto* base_data = reinterpret_cast<ra::io_base*>(byte_ptr);
+        base_data->default_dev_cfg.disable = defaultDeviceConfig.disable;
+        base_data->default_dev_cfg.set_extra_info = defaultDeviceConfig.setExtraInfo;
+        base_data->default_dev_cfg.dpi = defaultDeviceConfig.dpi;
+        base_data->default_dev_cfg.polling_rate = defaultDeviceConfig.pollingRate;
+        base_data->default_dev_cfg.clamp.min = defaultDeviceConfig.minimumTime;
+        base_data->default_dev_cfg.clamp.max = defaultDeviceConfig.maximumTime;
+        base_data->driver_data_size = accels->Count;
+        base_data->device_data_size = devices->Count;
+
+        byte_ptr += sizeof(ra::io_base);
+
+        auto* driver_data = reinterpret_cast<ra::driver_settings*>(byte_ptr);
+        for (auto i = 0; i < accels->Count; i++) {
+            auto& drv_settings = driver_data[i];
+            drv_settings = accels[i]->NativeSettings();
+        }
+
+        byte_ptr += driver_data_bytes;
+
+        auto* device_data = reinterpret_cast<ra::device_settings*>(byte_ptr);
         for (auto i = 0; i < devices->Count; i++) {
-            auto& dev_settings = data->device_data[i];
+            auto& dev_settings = device_data[i];
             Marshal::StructureToPtr(devices[i], IntPtr(&dev_settings), false);
         }
 
         try {
-            ra::write(*data);
-            free(data);
+            ra::write(buffer);
+            delete[] buffer;
         }
-        catch (const ra::error& e) {
-            free(data);
+        catch (const std::exception& e) {
+            delete[] buffer;
             throw gcnew InteropException(e);
         }
     }
@@ -529,14 +547,6 @@ public:
     String^ Errors()
     {
         Text::StringBuilder^ sb = gcnew Text::StringBuilder();
-
-        if (profiles->Count > MaxProfiles) {
-            sb->AppendFormat("Number of profiles ({0}) exceeds max ({1})\n", profiles->Count, MaxProfiles);
-        }
-
-        if (devices->Count > MaxDevices) {
-            sb->AppendFormat("Number of devices ({0}) exceeds max ({1})\n", devices->Count, MaxDevices);
-        }
 
         ProfileErrors^ profErrors = gcnew ProfileErrors(profiles);
         if (!profErrors->Empty()) {
@@ -648,15 +658,11 @@ public:
 
     static DriverConfig^ GetActive()
     {
-        ra::io_t* data = static_cast<ra::io_t*>(malloc(sizeof(ra::io_t)));
-
-        if (!data) throw gcnew Exception("io_t alloc failed");
-
+        std::unique_ptr<std::byte[]> bytes;
         try {
-            ra::read(*data);
+            bytes = ra::read();
         }
-        catch (const ra::error& e) {
-            free(data);
+        catch (const std::exception& e) {
             throw gcnew InteropException(e);
         } 
 
@@ -665,20 +671,27 @@ public:
         cfg->accels = gcnew List<ManagedAccel^>();
         cfg->devices = gcnew List<DeviceSettings^>();
 
-        for (auto i = 0u; i < data->driver_data_size; i++) {
-            auto& drv_settings = data->driver_data[i];
+        auto* byte_ptr = bytes.get();
+        ra::io_base* base_data = reinterpret_cast<ra::io_base*>(byte_ptr);
+        cfg->defaultDeviceConfig.Init(base_data->default_dev_cfg);
+
+        byte_ptr += sizeof(ra::io_base);
+
+        ra::driver_settings* driver_data = reinterpret_cast<ra::driver_settings*>(byte_ptr);
+        for (auto i = 0u; i < base_data->driver_data_size; i++) {
+            auto& drv_settings = driver_data[i];
             cfg->profiles->Add(gcnew Profile(drv_settings.prof));
             cfg->accels->Add(gcnew ManagedAccel(drv_settings));
         }
 
-        for (auto i = 0u; i < data->device_data_size; i++) {
-            auto& dev_settings = data->device_data[i];
+        byte_ptr += base_data->driver_data_size * sizeof(ra::driver_settings);
+
+        ra::device_settings* device_data = reinterpret_cast<ra::device_settings*>(byte_ptr);
+        for (auto i = 0u; i < base_data->device_data_size; i++) {
+            auto& dev_settings = device_data[i];
             cfg->devices->Add(gcnew DeviceSettings(dev_settings));
         }
 
-        cfg->defaultDeviceConfig.Init(data->default_dev_cfg);
-
-        free(data);
         return cfg;
     }
 
