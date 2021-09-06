@@ -36,14 +36,14 @@ namespace rawaccel {
 		};
 
 		auto check_accel = [&error](const accel_args& args) {
-			static_assert(LUT_POINTS_CAPACITY == 129, "update error msg");
+			static_assert(LUT_POINTS_CAPACITY == 257, "update error msg");
 
 			if (args.mode == accel_mode::lookup) {
 				if (args.length < 4) {
 					error("lookup mode requires at least 2 points");
 				}
 				else if (args.length > ra::LUT_RAW_DATA_CAPACITY) {
-					error("too many data points (max=129)");
+					error("too many data points (max=257)");
 				}
 			}
 			else if (args.length > ra::LUT_RAW_DATA_CAPACITY) {
