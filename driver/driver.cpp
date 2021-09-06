@@ -319,8 +319,6 @@ RawaccelInit(WDFDRIVER driver)
 {
     NTSTATUS status;
 
-    if (*InitSafeBootMode > 0) return;
-
     status = CreateControlDevice(driver);
 
     if (!NT_SUCCESS(status)) {
@@ -472,7 +470,7 @@ Routine Description:
 
 
     if (NT_SUCCESS(status)) {
-        RawaccelInit(driver);
+        if (*InitSafeBootMode == 0) RawaccelInit(driver);
     }
     else {
         DebugPrint(("WdfDriverCreate failed with status 0x%x\n", status));
