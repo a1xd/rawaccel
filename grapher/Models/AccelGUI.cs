@@ -130,9 +130,7 @@ namespace grapher
 
             ButtonDelay(WriteButton);
 
-            var cfg = DriverConfig.FromProfile(settings);
-
-            if (!Settings.TryActivate(cfg, out string errors))
+            if (!Settings.TryActivate(settings, out string errors))
             {
                 new MessageDialog(errors, "bad input").ShowDialog();
             }

@@ -542,6 +542,12 @@ public:
             throw gcnew InteropException(e);
         }
     }
+    
+    void SetProfileAt(int index, Profile^ val)
+    {
+        profiles[index] = val;
+        accels[index]->Settings = val;
+    }
 
     // returns null or a joined list of error messages
     String^ Errors()
