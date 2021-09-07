@@ -54,11 +54,12 @@ namespace grapher.Models.Calculations.Data
             Y.Clear();
         }
 
-        public void CreateGraphData(ManagedAccel accel, DriverSettings settings)
+        public void CreateGraphData(ManagedAccel accel, Profile settings)
         {
             Clear();
-            Calculator.Calculate(X, accel, settings.sensitivity.x, Calculator.SimulatedInputX);
-            Calculator.Calculate(Y, accel, settings.sensitivity.y, Calculator.SimulatedInputY);
+            var sensY = settings.sensitivity * settings.yxSensRatio;
+            Calculator.Calculate(X, accel, settings.sensitivity, Calculator.SimulatedInputX);
+            Calculator.Calculate(Y, accel, sensY, Calculator.SimulatedInputY);
         }
     }
 }

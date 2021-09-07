@@ -50,14 +50,14 @@ namespace grapher.Models.Charts.ChartState
         private XYTwoGraphState XYTwoGraphState { get; }
 
 
-        public ChartState DetermineState(DriverSettings settings)
+        public ChartState DetermineState(Profile settings)
         {
             ChartState chartState;
 
             if (settings.combineMagnitudes)
             {
-                if (settings.sensitivity.x != settings.sensitivity.y ||
-                    settings.domainArgs.domainXY.x != settings.domainArgs.domainXY.y ||
+                if (settings.yxSensRatio != 1 ||
+                    settings.domainXY.x != settings.domainXY.y ||
                     settings.rangeXY.x != settings.rangeXY.y)
                 {
                     chartState = XYOneGraphState;

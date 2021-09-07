@@ -46,7 +46,7 @@ namespace grapher.Models.Devices
 
             if (found) SetActive(anyDevice);
 
-            foreach (string id in RawInputInterop.GetDeviceIDs())
+/*            foreach (string id in RawInputInterop.GetDeviceIDs())
             {
                 var deviceItem = new DeviceIDItem(string.Empty, id, this);
                 if (!found && deviceItem.ID.Equals(devID))
@@ -54,7 +54,7 @@ namespace grapher.Models.Devices
                     SetActive(deviceItem);
                     found = true;
                 }
-            }
+            }*/
 
             if (!found)
             {

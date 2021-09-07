@@ -111,15 +111,26 @@ namespace grapher.Models.Options.LUT
             // Nothing to do here.
         }
 
-        public void SetActiveValues(IEnumerable<Vec2<float>> activePoints, int length)
+        public void SetActiveValues(IEnumerable<float> rawData, int length, AccelMode mode)
         {
-            if (length > 0 && activePoints.First().x != 0)
+            if (mode == AccelMode.lut && length > 1 && rawData.First() != 0)
             {
-                ActiveValuesTextBox.Text = PointsToActiveValuesText(activePoints, length);
+                var pointsLen = length / 2;
+                var points = new Vec2<float>[pointsLen];
+                for (int i = 0; i < pointsLen; i++)
+                {
+                    var data_idx = i * 2;
+                    points[i] = new Vec2<float>
+                    {
+                        x = rawData.ElementAt(data_idx),
+                        y = rawData.ElementAt(data_idx + 1)
+                    };
+                }
+                ActiveValuesTextBox.Text = PointsToActiveValuesText(points, length);
 
                 if (string.IsNullOrWhiteSpace(PointsTextBox.Text))
                 {
-                    PointsTextBox.Text = PointsToEntryTextBoxText(activePoints, length);
+                    PointsTextBox.Text = PointsToEntryTextBoxText(points, length);
                 }
             }
             else
@@ -140,7 +151,7 @@ namespace grapher.Models.Options.LUT
                 throw new ApplicationException("Text must be entered in text box to fill Look Up Table.");
             }
 
-            Vec2<float>[] points = new Vec2<float>[256];
+            Vec2<float>[] points = new Vec2<float>[AccelArgs.MaxLutPoints];
 
             var userTextSplit = userText.Trim().Trim(';').Split(';');
             int index = 0;
