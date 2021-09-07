@@ -7,6 +7,7 @@ using System.Text;
 using System.Drawing;
 using grapher.Models.Devices;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace grapher.Models.Serialized
 {
@@ -34,10 +35,6 @@ namespace grapher.Models.Serialized
             SystemDevices = new List<MultiHandleDevice>();
             ActiveHandles = new List<IntPtr>();
 
-            // TODO - remove ActiveConfig/AutoWrite entirely?
-            // shouldn't be needed with internal profiles support
-            ActiveConfig = DriverConfig.GetActive();
-
             GuiSettings = GUISettings.MaybeLoad();
 
             if (GuiSettings is null)
@@ -50,20 +47,39 @@ namespace grapher.Models.Serialized
                 UpdateFieldsFromGUISettings();
             }
 
-            UserConfig = InitUserSettings();
+            UserConfig = InitActiveAndGetUserConfig();
         }
 
         #endregion Constructors
+
+        #region Fields
+
+        private DriverConfig ActiveConfigField;
+
+        #endregion Fields
 
         #region Properties
 
         public GUISettings GuiSettings { get; private set; }
 
-        public DriverConfig ActiveConfig { get; private set; }
+        public DriverConfig ActiveConfig 
+        {
+            get => ActiveConfigField;
+
+            private set
+            {
+                if (ActiveConfigField != value)
+                {
+                    ActiveConfigField = value;
+                    ActiveProfileNamesSet = new HashSet<string>(value.profiles.Select(p => p.name));
+                }
+            }
+        }
 
         public Profile ActiveProfile 
         {
-            get => ActiveConfig.profiles[0];
+            get => ActiveConfigField.profiles[0];
+            private set => ActiveConfigField.SetProfileAt(0, value);
         }
 
         public ManagedAccel ActiveAccel
@@ -78,13 +94,15 @@ namespace grapher.Models.Serialized
             get => UserConfig.profiles[0];
         }
 
+        public HashSet<string> ActiveProfileNamesSet { get; private set; }
+
         public Field DpiField { get; private set; }
 
         public Field PollRateField { get; private set; }
 
         public IList<MultiHandleDevice> SystemDevices { get; private set; }
 
-        public List<IntPtr> ActiveHandles { get; private set; }
+        public List<IntPtr> ActiveHandles { get; }
 
         private ToolStripMenuItem AutoWriteMenuItem { get; set; }
 
@@ -111,6 +129,18 @@ namespace grapher.Models.Serialized
             ShowVelocityAndGainMoveMenuItem.Checked = GuiSettings.ShowVelocityAndGain;
             StreamingModeMenuItem.Checked = GuiSettings.StreamingMode;
             AutoWriteMenuItem.Checked = GuiSettings.AutoWriteToDriverOnStartup;
+        }
+
+        public bool TryActivate(Profile settings, out string errors)
+        {
+            var old = ActiveProfile;
+            ActiveProfile = settings;
+            bool success = TryActivate(ActiveConfig, out errors);
+            if (!success)
+            {
+                ActiveProfile = old;
+            }
+            return success;
         }
 
         public bool TryActivate(DriverConfig settings, out string errors)
@@ -156,14 +186,38 @@ namespace grapher.Models.Serialized
         private void SetActiveHandles()
         {
             ActiveHandles.Clear();
-            // TODO
-            foreach (var sysDev in SystemDevices)
+
+            bool ActiveProfileIsFirst = ActiveProfile == ActiveConfig.profiles[0];
+
+            foreach (var dev in SystemDevices) MaybeAdd(dev);
+
+            void MaybeAdd(MultiHandleDevice dev)
             {
-                ActiveHandles.AddRange(sysDev.handles);
+                foreach (var settings in ActiveConfig.devices)
+                {
+                    if (settings.id == dev.id)
+                    {
+                        if (!settings.config.disable && 
+                            ((ActiveProfileIsFirst &&
+                                    (string.IsNullOrEmpty(settings.profile) || 
+                                        !ActiveProfileNamesSet.Contains(settings.profile))) || 
+                                ActiveProfile.name == settings.profile))
+                        {
+                            ActiveHandles.AddRange(dev.handles);
+                        }
+
+                        return;
+                    }
+                }
+
+                if (ActiveProfileIsFirst && !ActiveConfig.defaultDeviceConfig.disable)
+                {
+                    ActiveHandles.AddRange(dev.handles);
+                }
             }
         }
 
-        private void OnProfileSwitch()
+        public void OnProfileSelectionChange()
         {
             SetActiveHandles();
         }
@@ -174,7 +228,7 @@ namespace grapher.Models.Serialized
             SetActiveHandles();
         }
 
-        private DriverConfig InitUserSettings()
+        private DriverConfig InitActiveAndGetUserConfig()
         {
             var path = Constants.DefaultSettingsFileName;
             if (File.Exists(path))
@@ -183,12 +237,22 @@ namespace grapher.Models.Serialized
                 {
                     var (cfg, err) = DriverConfig.Convert(File.ReadAllText(path));
 
-                    if (!GuiSettings.AutoWriteToDriverOnStartup || 
-                        (err == null && TryActivate(cfg, out string _)))
+                    if (err == null)
                     {
+                        if (GuiSettings.AutoWriteToDriverOnStartup)
+                        {
+                            if (!TryActivate(cfg, out string _))
+                            {
+                                throw new Exception("deserialization succeeded but TryActivate failed");
+                            }
+                        }
+                        else
+                        {
+                            ActiveConfig = DriverConfig.GetActive();
+                        }
+
                         return cfg;
                     }
-
                 }
                 catch (JsonException e)
                 {
@@ -196,6 +260,7 @@ namespace grapher.Models.Serialized
                 }
             }
 
+            ActiveConfig = DriverConfig.GetActive();
             File.WriteAllText(path, ActiveConfig.ToJSON());
             return ActiveConfig;
         }

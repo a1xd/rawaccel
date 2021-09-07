@@ -139,8 +139,7 @@ namespace grapher
             {
                 ButtonDelay(WriteButton);
 
-                var cfg = DriverConfig.FromProfile(MakeSettingsFromFields());
-                if (!Settings.TryActivate(cfg, out string errors))
+                if (!Settings.TryActivate(MakeSettingsFromFields(), out string errors))
                 {
                     error_message = errors.ToString();
                 }
