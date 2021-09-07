@@ -695,17 +695,32 @@ public:
         return cfg;
     }
 
-    static DriverConfig^ GetDefault()
+    static DriverConfig^ FromProfile(Profile^ prof)
     {
         auto cfg = gcnew DriverConfig();
         cfg->profiles = gcnew List<Profile^>();
         cfg->accels = gcnew List<ManagedAccel^>();
         cfg->devices = gcnew List<DeviceSettings^>();
 
-        cfg->profiles->Add(gcnew Profile());
-        cfg->accels->Add(gcnew ManagedAccel(default_driver_settings));
+        cfg->profiles->Add(prof);
+        cfg->accels->Add(gcnew ManagedAccel(prof));
         cfg->defaultDeviceConfig.Init(default_device_settings.config);
         return cfg;
+    }
+
+    static DriverConfig^ GetDefault()
+    {
+        return FromProfile(gcnew Profile());
+    }
+
+    static void Deactivate() 
+    {
+        try {
+            ra::reset();
+        }
+        catch (const std::exception& e) {
+            throw gcnew InteropException(e);
+        }
     }
 
 private: 

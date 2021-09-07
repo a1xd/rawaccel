@@ -21,7 +21,6 @@ namespace grapher
         public static readonly LayoutBase Power = new PowerLayout();
         public static readonly LayoutBase LUT = new LUTLayout();
         public static readonly LayoutBase Off = new OffLayout();
-        public static readonly LayoutBase Unsupported = new UnsupportedLayout();
 
         #endregion Fields
 
@@ -262,21 +261,22 @@ namespace grapher
         {
             AccelerationType = AccelTypeFromSettings(ref args);
             AccelTypeActiveValue.SetValue(AccelerationType.ActiveName);
-            GainSwitch.SetActiveValue(args.legacy);
+            GainSwitch.SetActiveValue(args.gain);
             Weight.SetActiveValue(args.weight);
-            Cap.SetActiveValue(args.cap);
+            Cap.SetActiveValue(args.cap.x);
             Offset.SetActiveValue(args.offset);
-            Acceleration.SetActiveValue(args.accelClassic);
+            Acceleration.SetActiveValue(args.acceleration);
             DecayRate.SetActiveValue(args.decayRate);
             GrowthRate.SetActiveValue(args.growthRate);
             Smooth.SetActiveValue(args.smooth);
             Scale.SetActiveValue(args.scale);
             Limit.SetActiveValue((args.mode == AccelMode.motivity) ? args.motivity : args.limit);
-            PowerClassic.SetActiveValue(args.power);
-            Exponent.SetActiveValue(args.exponent);
+            PowerClassic.SetActiveValue(args.exponentClassic);
+            Exponent.SetActiveValue(args.exponentPower);
             Midpoint.SetActiveValue(args.midpoint);
-            LutPanel.SetActiveValues(args.tableData.points, args.tableData.length);
-            LutApply.SetActiveValue(args.tableData.velocity);
+            LutPanel.SetActiveValues(args.data, args.length, args.mode);
+            // TODO - use GainSwitch only?
+            LutApply.SetActiveValue(args.gain);
         }
 
         public void ShowFull()
@@ -308,17 +308,16 @@ namespace grapher
 
         public void SetArgs(ref AccelArgs args)
         {
-            if (AccelerationType == Unsupported) throw new NotImplementedException();
-
             args.mode = AccelerationType.Mode;
-            args.legacy = !GainSwitch.CheckBox.Checked;
+            args.gain = GainSwitch.CheckBox.Checked;
 
-            if (Acceleration.Visible) args.accelClassic = Acceleration.Field.Data;
+            if (Acceleration.Visible) args.acceleration = Acceleration.Field.Data;
             if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
             if (GrowthRate.Visible) args.growthRate = GrowthRate.Field.Data;
             if (Smooth.Visible) args.smooth = Smooth.Field.Data;
             if (Scale.Visible) args.scale = Scale.Field.Data;
-            if (Cap.Visible) args.cap = Cap.Field.Data;
+            // TODO - make field for output and in_out cap
+            if (Cap.Visible) args.cap.x = Cap.Field.Data;
             if (Limit.Visible)
             {
                 if (args.mode == AccelMode.motivity)
@@ -328,20 +327,27 @@ namespace grapher
                 else
                 {
                     args.limit = Limit.Field.Data;
-                }   
+                }
             }
-            if (PowerClassic.Visible) args.power = PowerClassic.Field.Data;
-            if (Exponent.Visible)args.exponent = Exponent.Field.Data;
+            if (PowerClassic.Visible) args.exponentClassic = PowerClassic.Field.Data;
+            if (Exponent.Visible) args.exponentPower = Exponent.Field.Data;
             if (Offset.Visible) args.offset = Offset.Field.Data;
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
             if (Weight.Visible) args.weight = Weight.Field.Data;
             if (LutPanel.Visible)
             {
                 (var points, var length) = LutPanel.GetPoints();
-                args.tableData.points = points;
-                args.tableData.length = length;
+                args.length = length * 2;
+
+                for (int i = 0; i < length; i++)
+                {
+                    ref var p = ref points[i];
+                    var data_idx = i * 2;
+                    args.data[data_idx] = p.x;
+                    args.data[data_idx + 1] = p.y;
+                }
             }
-            if (LutApply.Visible) args.tableData.velocity = LutApply.ApplyType == LutApplyOptions.LutApplyType.Velocity;
+
         }
 
         public override void AlignActiveValues()
@@ -407,19 +413,9 @@ namespace grapher
 
         private LayoutBase AccelTypeFromSettings(ref AccelArgs args)
         { 
-            if (args.spacedTableArgs.mode != SpacedTableMode.off)
-            {
-                if (!AccelDropdown.Items.Contains(Unsupported))
-                {
-                    AccelDropdown.Items.Add(Unsupported);
-                }
-
-                return Unsupported;
-            }
-
             switch (args.mode)
             {
-                case AccelMode.classic:  return (args.power == 2) ? Linear : Classic;
+                case AccelMode.classic:  return (args.exponentClassic == 2) ? Linear : Classic;
                 case AccelMode.jump:     return Jump;
                 case AccelMode.natural:  return Natural;
                 case AccelMode.motivity: return Motivity;

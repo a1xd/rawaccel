@@ -23,7 +23,7 @@ namespace grapher.Models.Charts.ChartState
             Data = new AccelDataXYComponential(xPoints, yPoints, accelCalculator);
         }
 
-        public override DriverSettings Settings { get; set; }
+        public override Profile Settings { get; set; }
 
         public override void Activate()
         {

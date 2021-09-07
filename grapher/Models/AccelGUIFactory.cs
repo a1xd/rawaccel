@@ -17,7 +17,6 @@ namespace grapher.Models
 
         public static AccelGUI Construct(
             RawAcceleration form,
-            ManagedAccel activeAccel,
             Chart accelerationChart,
             Chart accelerationChartY,
             Chart velocityChart,
@@ -34,7 +33,7 @@ namespace grapher.Models
             ToolStripMenuItem showLastMouseMoveMenuItem,
             ToolStripMenuItem streamingModeToolStripMenuItem,
             ToolStripMenuItem autoWriteMenuItem,
-            ToolStripMenuItem useSpecificDeviceMenuItem,
+            ToolStripMenuItem deviceMenuItem,
             ToolStripMenuItem scaleMenuItem,
             ToolStripTextBox dpiTextBox,
             ToolStripTextBox pollRateTextBox,
@@ -492,17 +491,14 @@ namespace grapher.Models
                 lockXYLabel,
                 accelCharts);
 
-            var deviceIdManager = new DeviceIDManager(useSpecificDeviceMenuItem);
-
             var settings = new SettingsManager(
-                activeAccel,
                 accelCalculator.DPI,
                 accelCalculator.PollRate,
                 autoWriteMenuItem,
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem,
                 streamingModeToolStripMenuItem,
-                deviceIdManager);
+                deviceMenuItem);
 
             var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
 
@@ -515,8 +511,7 @@ namespace grapher.Models
                 writeButton,
                 toggleButton,
                 mouseWatcher,
-                scaleMenuItem,
-                deviceIdManager);
+                scaleMenuItem);
         }
 
         #endregion Methods

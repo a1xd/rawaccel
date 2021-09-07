@@ -81,30 +81,30 @@ namespace grapher.Models.Options
 
         #region Methods
 
-        public void SetArgs(ref Vec2<AccelArgs> args)
+        public void SetArgs(ref AccelArgs argsX, ref AccelArgs argsY)
         {
-            OptionSetX.SetArgs(ref args.x);
+            OptionSetX.SetArgs(ref argsX);
 
             if (ByComponentVectorXYLock.Checked)
             {
-                OptionSetX.SetArgs(ref args.y);
+                OptionSetX.SetArgs(ref argsY);
             }
             else
             {
-                OptionSetY.SetArgs(ref args.y);
+                OptionSetY.SetArgs(ref argsY);
             }
         }
 
-        public void SetActiveValues(DriverSettings settings)
+        public void SetActiveValues(Profile settings)
         {
-            Sensitivity.SetActiveValues(settings.sensitivity.x, settings.sensitivity.y);
+            Sensitivity.SetActiveValues(settings.sensitivity, settings.yxSensRatio);
             Rotation.SetActiveValue(settings.rotation);
             
             WholeVectorCheckBox.Checked = settings.combineMagnitudes;
             ByComponentVectorCheckBox.Checked = !settings.combineMagnitudes;
-            ByComponentVectorXYLock.Checked = settings.args.x.Equals(settings.args.y);
-            OptionSetX.SetActiveValues(ref settings.args.x);
-            OptionSetY.SetActiveValues(ref settings.args.y);
+            ByComponentVectorXYLock.Checked = settings.argsX.Equals(settings.argsY);
+            OptionSetX.SetActiveValues(ref settings.argsX);
+            OptionSetY.SetActiveValues(ref settings.argsY);
 
             Directionality.SetActiveValues(settings);
 

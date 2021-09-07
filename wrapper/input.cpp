@@ -25,11 +25,12 @@ public ref struct MultiHandleDevice {
     System::String^ id;
     List<System::IntPtr>^ handles;
 
-    // Each element in the list returned has a distinct id
+    // Returned list represents the current connected raw input devices,
+    // where each device has a distinct device id
     // https://docs.microsoft.com/en-us/windows-hardware/drivers/install/device-ids
-    static List<MultiHandleDevice^>^ GetList()
+    static IList<MultiHandleDevice^>^ GetList()
     {
-        return ListMaker::MakeList();
+        return ListMaker::MakeList()->AsReadOnly();
     }
 
     ref class ListMaker {

@@ -71,6 +71,12 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.SmoothActiveYLabel = new System.Windows.Forms.Label();
+            this.smoothLabelY = new System.Windows.Forms.Label();
+            this.SmoothActiveXLabel = new System.Windows.Forms.Label();
+            this.smoothLabelX = new System.Windows.Forms.Label();
+            this.smoothBoxY = new System.Windows.Forms.TextBox();
+            this.smoothBoxX = new System.Windows.Forms.TextBox();
             this.GrowthRateActiveYLabel = new System.Windows.Forms.Label();
             this.GrowthRateActiveXLabel = new System.Windows.Forms.Label();
             this.DecayRateActiveYLabel = new System.Windows.Forms.Label();
@@ -209,7 +215,7 @@ namespace grapher
             this.streamingModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.UseSpecificDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartsPanel = new System.Windows.Forms.Panel();
             this.GainChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -217,12 +223,6 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.smoothBoxX = new System.Windows.Forms.TextBox();
-            this.smoothBoxY = new System.Windows.Forms.TextBox();
-            this.smoothLabelX = new System.Windows.Forms.Label();
-            this.SmoothActiveXLabel = new System.Windows.Forms.Label();
-            this.smoothLabelY = new System.Windows.Forms.Label();
-            this.SmoothActiveYLabel = new System.Windows.Forms.Label();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -357,6 +357,56 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // SmoothActiveYLabel
+            // 
+            this.SmoothActiveYLabel.AutoSize = true;
+            this.SmoothActiveYLabel.Location = new System.Drawing.Point(414, 677);
+            this.SmoothActiveYLabel.Name = "SmoothActiveYLabel";
+            this.SmoothActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.SmoothActiveYLabel.TabIndex = 193;
+            this.SmoothActiveYLabel.Text = "0";
+            // 
+            // smoothLabelY
+            // 
+            this.smoothLabelY.AutoSize = true;
+            this.smoothLabelY.Location = new System.Drawing.Point(266, 677);
+            this.smoothLabelY.Name = "smoothLabelY";
+            this.smoothLabelY.Size = new System.Drawing.Size(43, 13);
+            this.smoothLabelY.TabIndex = 192;
+            this.smoothLabelY.Text = "Smooth";
+            // 
+            // SmoothActiveXLabel
+            // 
+            this.SmoothActiveXLabel.AutoSize = true;
+            this.SmoothActiveXLabel.Location = new System.Drawing.Point(200, 677);
+            this.SmoothActiveXLabel.Name = "SmoothActiveXLabel";
+            this.SmoothActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.SmoothActiveXLabel.TabIndex = 191;
+            this.SmoothActiveXLabel.Text = "0";
+            // 
+            // smoothLabelX
+            // 
+            this.smoothLabelX.AutoSize = true;
+            this.smoothLabelX.Location = new System.Drawing.Point(38, 677);
+            this.smoothLabelX.Name = "smoothLabelX";
+            this.smoothLabelX.Size = new System.Drawing.Size(43, 13);
+            this.smoothLabelX.TabIndex = 190;
+            this.smoothLabelX.Text = "Smooth";
+            // 
+            // smoothBoxY
+            // 
+            this.smoothBoxY.Location = new System.Drawing.Point(332, 671);
+            this.smoothBoxY.Name = "smoothBoxY";
+            this.smoothBoxY.Size = new System.Drawing.Size(76, 20);
+            this.smoothBoxY.TabIndex = 189;
+            // 
+            // smoothBoxX
+            // 
+            this.smoothBoxX.Location = new System.Drawing.Point(106, 672);
+            this.smoothBoxX.Name = "smoothBoxX";
+            this.smoothBoxX.Size = new System.Drawing.Size(76, 20);
+            this.smoothBoxX.TabIndex = 188;
             // 
             // GrowthRateActiveYLabel
             // 
@@ -1554,7 +1604,7 @@ namespace grapher
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AutoWriteMenuItem,
-            this.UseSpecificDeviceMenuItem});
+            this.DeviceMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
@@ -1568,11 +1618,11 @@ namespace grapher
             this.AutoWriteMenuItem.Size = new System.Drawing.Size(210, 22);
             this.AutoWriteMenuItem.Text = "Apply Settings On Startup";
             // 
-            // UseSpecificDeviceMenuItem
+            // DeviceMenuItem
             // 
-            this.UseSpecificDeviceMenuItem.Name = "UseSpecificDeviceMenuItem";
-            this.UseSpecificDeviceMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.UseSpecificDeviceMenuItem.Text = "Use Specific Device";
+            this.DeviceMenuItem.Name = "DeviceMenuItem";
+            this.DeviceMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.DeviceMenuItem.Text = "Device Menu";
             // 
             // chartsPanel
             // 
@@ -1826,56 +1876,6 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // smoothBoxX
-            // 
-            this.smoothBoxX.Location = new System.Drawing.Point(106, 672);
-            this.smoothBoxX.Name = "smoothBoxX";
-            this.smoothBoxX.Size = new System.Drawing.Size(76, 20);
-            this.smoothBoxX.TabIndex = 188;
-            // 
-            // smoothBoxY
-            // 
-            this.smoothBoxY.Location = new System.Drawing.Point(332, 671);
-            this.smoothBoxY.Name = "smoothBoxY";
-            this.smoothBoxY.Size = new System.Drawing.Size(76, 20);
-            this.smoothBoxY.TabIndex = 189;
-            // 
-            // smoothLabelX
-            // 
-            this.smoothLabelX.AutoSize = true;
-            this.smoothLabelX.Location = new System.Drawing.Point(38, 677);
-            this.smoothLabelX.Name = "smoothLabelX";
-            this.smoothLabelX.Size = new System.Drawing.Size(43, 13);
-            this.smoothLabelX.TabIndex = 190;
-            this.smoothLabelX.Text = "Smooth";
-            // 
-            // SmoothActiveXLabel
-            // 
-            this.SmoothActiveXLabel.AutoSize = true;
-            this.SmoothActiveXLabel.Location = new System.Drawing.Point(200, 677);
-            this.SmoothActiveXLabel.Name = "SmoothActiveXLabel";
-            this.SmoothActiveXLabel.Size = new System.Drawing.Size(13, 13);
-            this.SmoothActiveXLabel.TabIndex = 191;
-            this.SmoothActiveXLabel.Text = "0";
-            // 
-            // smoothLabelY
-            // 
-            this.smoothLabelY.AutoSize = true;
-            this.smoothLabelY.Location = new System.Drawing.Point(266, 677);
-            this.smoothLabelY.Name = "smoothLabelY";
-            this.smoothLabelY.Size = new System.Drawing.Size(43, 13);
-            this.smoothLabelY.TabIndex = 192;
-            this.smoothLabelY.Text = "Smooth";
-            // 
-            // SmoothActiveYLabel
-            // 
-            this.SmoothActiveYLabel.AutoSize = true;
-            this.SmoothActiveYLabel.Location = new System.Drawing.Point(414, 677);
-            this.SmoothActiveYLabel.Name = "SmoothActiveYLabel";
-            this.SmoothActiveYLabel.Size = new System.Drawing.Size(13, 13);
-            this.SmoothActiveYLabel.TabIndex = 193;
-            this.SmoothActiveYLabel.Text = "0";
-            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2016,7 +2016,7 @@ namespace grapher
         private System.Windows.Forms.Label LpNormActiveValue;
         private System.Windows.Forms.Label RangeActiveValueY;
         private System.Windows.Forms.CheckBox FakeBox;
-        private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DeviceMenuItem;
         private System.Windows.Forms.Label LUTTextLabelX;
         private System.Windows.Forms.Label LUTTextLabelY;
         private System.Windows.Forms.CheckBox gainSwitchX;

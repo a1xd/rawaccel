@@ -40,7 +40,6 @@ namespace grapher
 
             AccelGUI = AccelGUIFactory.Construct(
                 this,
-                ManagedAccel.GetActive(),
                 AccelerationChart,
                 AccelerationChartY,
                 VelocityChart,
@@ -57,7 +56,7 @@ namespace grapher
                 showLastMouseMoveToolStripMenuItem,
                 streamingModeToolStripMenuItem,
                 AutoWriteMenuItem,
-                UseSpecificDeviceMenuItem,
+                DeviceMenuItem,
                 ScaleMenuItem,
                 DPITextBox,
                 PollRateTextBox,
@@ -210,7 +209,7 @@ namespace grapher
                 }
                 else if (m.Msg == 0x00fe) // WM_INPUT_DEVICE_CHANGE
                 {
-                    AccelGUI.UpdateInputManagers();
+                    AccelGUI.Settings.OnDeviceChangeMessage();
                 }
             }
 
