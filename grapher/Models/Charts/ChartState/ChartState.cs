@@ -35,7 +35,7 @@ namespace grapher.Models.Charts.ChartState
 
         public AccelCalculator Calculator { get; }
 
-        public virtual DriverSettings Settings { get; set; }
+        public virtual Profile Settings { get; set; }
 
         internal bool TwoDotsPerGraph { get; set; }
 
@@ -48,7 +48,7 @@ namespace grapher.Models.Charts.ChartState
 
         public abstract void Activate();
 
-        public virtual void Calculate(ManagedAccel accel, DriverSettings settings)
+        public virtual void Calculate(ManagedAccel accel, Profile settings)
         {
             Data.CreateGraphData(accel, settings);
         }
@@ -60,7 +60,7 @@ namespace grapher.Models.Charts.ChartState
             GainChart.Update();
         }
 
-        public virtual void SetUpCalculate(DriverSettings settings)
+        public virtual void SetUpCalculate()
         {
             Data.Clear();
             Calculator.ScaleByMouseSettings();

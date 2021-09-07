@@ -10,7 +10,7 @@ namespace grapher.Models.Calculations.Data
     {
         void CalculateDots(double x, double y, double timeInMs);
 
-        void CreateGraphData(ManagedAccel accel, DriverSettings settings);
+        void CreateGraphData(ManagedAccel accel, Profile settings);
 
         void Clear();
 

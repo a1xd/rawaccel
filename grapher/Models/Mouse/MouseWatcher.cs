@@ -691,7 +691,6 @@ namespace grapher.Models.Mouse
             AccelCharts = accelCharts;
             SettingsManager = setMngr;
             MouseData = new MouseData();
-            DeviceHandles = new List<IntPtr>();
 
             RAWINPUTDEVICE device = new RAWINPUTDEVICE();
             device.WindowHandle = ContainingForm.Handle;
@@ -722,10 +721,6 @@ namespace grapher.Models.Mouse
 
         private Stopwatch Stopwatch { get; }
 
-        private List<IntPtr> DeviceHandles { get; }
-
-        private bool AnyDevice { get; set; }
-
         private double PollTime
         {
             get => 1000 / SettingsManager.PollRateField.Data;
@@ -734,16 +729,6 @@ namespace grapher.Models.Mouse
         #endregion Properties
 
         #region Methods
-
-        public void UpdateHandles(string devID)
-        {
-            DeviceHandles.Clear();
-            AnyDevice = string.IsNullOrEmpty(devID);
-            if (!AnyDevice)
-            {
-                RawInputInterop.AddHandlesFromID(devID, DeviceHandles);
-            }
-        }
 
         public void UpdateLastMove()
         {
@@ -758,7 +743,7 @@ namespace grapher.Models.Mouse
             _ = GetRawInputData(message.LParam, RawInputCommand.Input, out rawInput, ref size, Marshal.SizeOf(typeof(RAWINPUTHEADER)));
 
             bool relative = !rawInput.Data.Mouse.Flags.HasFlag(RawMouseFlags.MoveAbsolute);
-            bool deviceMatch = AnyDevice || DeviceHandles.Contains(rawInput.Header.Device);
+            bool deviceMatch = SettingsManager.ActiveHandles.Contains(rawInput.Header.Device);
 
             if (relative && deviceMatch && (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0))
             {
@@ -772,8 +757,7 @@ namespace grapher.Models.Mouse
 
                 // strip negative directional multipliers, charts calculated from positive input
 
-                Vec2<double> dirMults = SettingsManager.ActiveSettings.baseSettings
-                    .directionalMultipliers;
+                Vec2<double> dirMults = SettingsManager.ActiveProfile.directionalMultipliers;
 
                 if (dirMults.x > 0 && x < 0)
                 {

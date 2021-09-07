@@ -70,17 +70,16 @@ namespace grapher.Models.Options.Directionality
 
         private bool IsHidden { get; set; }
 
-        public DomainArgs GetDomainArgs()
+        public Tuple<Vec2<double>, double> GetDomainArgs()
         {
-            return new DomainArgs
+            var weights = new Vec2<double>
             {
-                domainXY = new Vec2<double>
-                {
-                    x = Domain.Fields.X,
-                    y = Domain.Fields.Y,
-                },
-                lpNorm = ByComponentCheckBox.Checked ? 2 : LpNorm.Field.Data
+                x = Domain.Fields.X,
+                y = Domain.Fields.Y
             };
+            double p = ByComponentCheckBox.Checked ? 2 : LpNorm.Field.Data;
+
+            return new Tuple<Vec2<double>, double>(weights, p);
         }
 
         public Vec2<double> GetRangeXY()
@@ -92,14 +91,14 @@ namespace grapher.Models.Options.Directionality
             };
         }
 
-        public void SetActiveValues(DriverSettings settings)
+        public void SetActiveValues(Profile settings)
         {
-            Domain.SetActiveValues(settings.domainArgs.domainXY.x, settings.domainArgs.domainXY.y);
+            Domain.SetActiveValues(settings.domainXY.x, settings.domainXY.y);
             Range.SetActiveValues(settings.rangeXY.x, settings.rangeXY.y);
 
             if (settings.combineMagnitudes)
             {
-                LpNorm.SetActiveValue(settings.domainArgs.lpNorm);
+                LpNorm.SetActiveValue(settings.lpNorm);
             }
             else
             {

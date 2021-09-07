@@ -40,10 +40,10 @@ namespace grapher.Models.Calculations.Data
             X.Clear();
         }
 
-        public void CreateGraphData(ManagedAccel accel, DriverSettings settings)
+        public void CreateGraphData(ManagedAccel accel, Profile settings)
         {
             Clear();
-            Calculator.Calculate(X, accel, settings.sensitivity.x, Calculator.SimulatedInputCombined);
+            Calculator.Calculate(X, accel, settings.sensitivity, Calculator.SimulatedInputCombined);
         }
     }
 }

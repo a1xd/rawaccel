@@ -24,8 +24,7 @@ namespace grapher
             Button writeButton,
             ButtonBase toggleButton,
             MouseWatcher mouseWatcher,
-            ToolStripMenuItem scaleMenuItem,
-            DeviceIDManager deviceIDManager)
+            ToolStripMenuItem scaleMenuItem)
         {
             AccelForm = accelForm;
             AccelCalculator = accelCalculator;
@@ -38,14 +37,13 @@ namespace grapher
             DefaultButtonFont = WriteButton.Font;
             SmallButtonFont = new Font(WriteButton.Font.Name, WriteButton.Font.Size * Constants.SmallButtonSizeFactor);
             MouseWatcher = mouseWatcher;
-            DeviceIDManager = deviceIDManager;
 
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
             WriteButton.Click += new System.EventHandler(OnWriteButtonClick);
             DisableButton.Click += new System.EventHandler(DisableDriverEventHandler);
             AccelForm.FormClosing += new FormClosingEventHandler(SaveGUISettingsOnClose);
 
-            ButtonTimerInterval = Convert.ToInt32(DriverSettings.WriteDelayMs);
+            ButtonTimerInterval = Convert.ToInt32(DriverConfig.WriteDelayMs);
             ButtonTimer = new Timer();
             ButtonTimer.Tick += new System.EventHandler(OnButtonTimerTick);
 
@@ -85,8 +83,6 @@ namespace grapher
 
         public ToolStripMenuItem ScaleMenuItem { get; }
 
-        public DeviceIDManager DeviceIDManager { get; }
-
         private Timer ChartRefresh { get; }
 
         private Font SmallButtonFont { get; }
@@ -114,62 +110,56 @@ namespace grapher
 
         public void UpdateActiveSettingsFromFields()
         {
-            var settings = new DriverSettings();
+            var settings = new Profile();
 
             settings.rotation = ApplyOptions.Rotation.Field.Data;
-            settings.sensitivity = new Vec2<double>
-            {
-                x = ApplyOptions.Sensitivity.Fields.X,
-                y = ApplyOptions.Sensitivity.Fields.Y
-            };
+            settings.sensitivity = ApplyOptions.Sensitivity.Fields.X;
+
+            // TODO - separate sensitivity fields, add new label for ratio
+            settings.yxSensRatio = ApplyOptions.Sensitivity.Fields.Y;
             settings.combineMagnitudes = ApplyOptions.IsWhole;
-            ApplyOptions.SetArgs(ref settings.args);
-            settings.domainArgs = ApplyOptions.Directionality.GetDomainArgs();
+            ApplyOptions.SetArgs(ref settings.argsX, ref settings.argsY);
+
+            var (domWeights, lpNorm) = ApplyOptions.Directionality.GetDomainArgs();
+            settings.domainXY = domWeights;
+            settings.lpNorm = lpNorm;
+
             settings.rangeXY = ApplyOptions.Directionality.GetRangeXY();
-            settings.deviceID = DeviceIDManager.ID;
 
             Settings.SetHiddenOptions(settings);
 
             ButtonDelay(WriteButton);
 
-            SettingsErrors errors = Settings.TryActivate(settings);
-            if (errors.Empty())
+            var cfg = DriverConfig.FromProfile(settings);
+
+            if (!Settings.TryActivate(cfg, out string errors))
             {
-                RefreshActive();
+                new MessageDialog(errors, "bad input").ShowDialog();
             }
             else
             {
-                new MessageDialog(errors.ToString(), "bad input").ShowDialog();
+                RefreshActive();
             }
-        }
-
-        public void UpdateInputManagers()
-        {
-            MouseWatcher.UpdateHandles(Settings.ActiveSettings.baseSettings.deviceID);
-            DeviceIDManager.Update(Settings.ActiveSettings.baseSettings.deviceID);
         }
 
         public void RefreshActive()
         {
-            UpdateShownActiveValues(Settings.UserSettings);
+            UpdateShownActiveValues(Settings.ActiveProfile);
             UpdateGraph();
-            UpdateInputManagers();
         }
 
         public void RefreshUser()
         {
-            UpdateShownActiveValues(Settings.UserSettings);
+            UpdateShownActiveValues(Settings.UserProfile);
         }
 
         public void UpdateGraph()
         {
-            AccelCharts.Calculate(
-                Settings.ActiveAccel,
-                Settings.ActiveSettings.baseSettings);
+            AccelCharts.Calculate(Settings.ActiveAccel, Settings.ActiveProfile);
             AccelCharts.Bind();
         }
 
-        public void UpdateShownActiveValues(DriverSettings args)
+        public void UpdateShownActiveValues(Profile args)
         {
             AccelForm.ResetAutoScroll();
             AccelCharts.ShowActive(args);
