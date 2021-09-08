@@ -24,11 +24,11 @@ namespace rawaccel {
         loglog_sigmoid<GAIN> loglog_sigmoid_g;
         loglog_sigmoid<LEGACY> loglog_sigmoid_l;
 
-        void init(const accel_args& args)
+        template <template <bool> class AccelTemplate, typename Visitor>
+        auto visit_helper(Visitor vis, bool gain)
         {
-            visit([&](auto& impl) {
-                impl = { args };
-            }, args);
+            if (gain) return vis(reinterpret_cast<AccelTemplate<GAIN>&>(*this));
+            else  return vis(reinterpret_cast<AccelTemplate<LEGACY>&>(*this));
         }
 
         template <typename Visitor>
@@ -41,17 +41,17 @@ namespace rawaccel {
             case accel_mode::motivity: return visit_helper<loglog_sigmoid>(vis, args.gain);
             case accel_mode::power:    return visit_helper<power>(vis, args.gain);
             case accel_mode::lookup:   return vis(lut);
-            default:                    return vis(noaccel);
+            default:                   return vis(noaccel);
             }
         }
 
-    private:
-        template <template <bool> class AccelTemplate, typename Visitor>
-        auto visit_helper(Visitor vis, bool gain)
+        void init(const accel_args& args)
         {
-            if (gain) return vis(reinterpret_cast<AccelTemplate<GAIN>&>(*this));
-            else  return vis(reinterpret_cast<AccelTemplate<LEGACY>&>(*this));
+            visit([&](auto& impl) {
+                impl = { args };
+            }, args);
         }
+
     };
 
 }
