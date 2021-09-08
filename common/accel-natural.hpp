@@ -54,6 +54,5 @@ namespace rawaccel {
 			natural_base(args),
 			constant(-limit / accel) {}
 
-		natural() = default;
 	};
 }
