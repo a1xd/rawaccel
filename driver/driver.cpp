@@ -24,7 +24,7 @@ struct {
     WDFCOLLECTION device_collection;
     WDFWAITLOCK collection_lock;
     ra::io_base base_data;
-    ra::driver_settings* driver_data;
+    ra::modifier_settings* modifier_data;
     ra::device_settings* device_data;
     milliseconds tick_interval;
 } global = {};
@@ -98,7 +98,7 @@ Arguments:
                     static_cast<double>(it->LastY)
                 };
 
-                devExt->mod.modify(input, devExt->drv_settings, devExt->dpi_factor, time);
+                devExt->mod.modify(input, devExt->mod_settings, devExt->dpi_factor, time);
 
                 double carried_result_x = input.x + devExt->carry.x;
                 double carried_result_y = input.y + devExt->carry.y;
@@ -191,9 +191,9 @@ Return Value:
         else {
             *static_cast<ra::io_base*>(buffer) = global.base_data;
 
-            size_t driver_bytes = global.base_data.driver_data_size * sizeof(ra::driver_settings);
+            size_t modifier_bytes = global.base_data.modifier_data_size * sizeof(ra::modifier_settings);
             size_t device_bytes = global.base_data.device_data_size * sizeof(ra::device_settings);
-            size_t total_bytes = SIZEOF_BASE + driver_bytes + device_bytes;
+            size_t total_bytes = SIZEOF_BASE + modifier_bytes + device_bytes;
 
             if (buffer_length < total_bytes) {
                 bytes_out = SIZEOF_BASE;
@@ -201,8 +201,8 @@ Return Value:
             else {
                 BYTE* output_ptr = static_cast<BYTE*>(buffer) + SIZEOF_BASE;
 
-                if (global.driver_data) RtlCopyMemory(output_ptr, global.driver_data, driver_bytes);
-                output_ptr += driver_bytes;
+                if (global.modifier_data) RtlCopyMemory(output_ptr, global.modifier_data, modifier_bytes);
+                output_ptr += modifier_bytes;
                 if (global.device_data) RtlCopyMemory(output_ptr, global.device_data, device_bytes);
                 bytes_out = total_bytes;
             }
@@ -223,26 +223,26 @@ Return Value:
 
             ra::io_base& input = *static_cast<ra::io_base*>(buffer);
 
-            auto driver_bytes = size_t(input.driver_data_size) * sizeof(ra::driver_settings);
+            auto modifier_bytes = size_t(input.modifier_data_size) * sizeof(ra::modifier_settings);
             auto device_bytes = size_t(input.device_data_size) * sizeof(ra::device_settings);
-            auto alloc_size = driver_bytes + device_bytes;
+            auto alloc_size = modifier_bytes + device_bytes;
             auto total_size = alloc_size + SIZEOF_BASE;
 
             auto max_u32 = unsigned(-1);
-            if (driver_bytes > max_u32 || device_bytes > max_u32 || total_size > max_u32) {
+            if (modifier_bytes > max_u32 || device_bytes > max_u32 || total_size > max_u32) {
                 status = STATUS_CANCELLED;
                 break;
             }
 
-            if (input.driver_data_size == 0) {
+            if (input.modifier_data_size == 0) {
                 // clear data and disable all devices
                 WdfWaitLockAcquire(global.collection_lock, NULL);
 
                 global.base_data = {};
 
-                if (global.driver_data) {
-                    ExFreePoolWithTag(global.driver_data, 'g');
-                    global.driver_data = NULL;
+                if (global.modifier_data) {
+                    ExFreePoolWithTag(global.modifier_data, 'g');
+                    global.modifier_data = NULL;
                     global.device_data = NULL;
                 }
 
@@ -265,15 +265,15 @@ Return Value:
 
                 WdfWaitLockAcquire(global.collection_lock, NULL);
 
-                if (global.driver_data) {
-                    ExFreePoolWithTag(global.driver_data, 'g');
+                if (global.modifier_data) {
+                    ExFreePoolWithTag(global.modifier_data, 'g');
                 }
 
-                void* dev_data = static_cast<BYTE*>(pool) + driver_bytes;
+                void* dev_data = static_cast<BYTE*>(pool) + modifier_bytes;
                 global.device_data = input.device_data_size > 0 ?
                     static_cast<ra::device_settings*>(dev_data) :
                     NULL;
-                global.driver_data = static_cast<ra::driver_settings*>(pool);
+                global.modifier_data = static_cast<ra::modifier_settings*>(pool);
                 global.base_data = input;
 
                 auto count = WdfCollectionGetCount(global.device_collection);
@@ -373,15 +373,27 @@ DeviceSetup(WDFOBJECT hDevice)
         }
     };
 
-    if (!global.driver_data) {
+    auto set_mod_if_found = [devExt](auto* prof_name) {
+        for (auto i = 0u; i < global.base_data.modifier_data_size; i++) {
+            auto& profile = global.modifier_data[i].prof;
+
+            if (wcsncmp(prof_name, profile.name, ra::MAX_NAME_LEN) == 0) {
+                devExt->mod_settings = global.modifier_data[i];
+                devExt->mod = { devExt->mod_settings };
+                return;
+            }
+        }
+    };
+
+    if (!global.modifier_data) {
         devExt->enable = false;
         devExt->mod = {};
         return;
     }
     
     set_ext_from_cfg(global.base_data.default_dev_cfg);
-    devExt->drv_settings = *global.driver_data;
-    devExt->mod = { devExt->drv_settings };
+    devExt->mod_settings = *global.modifier_data;
+    devExt->mod = { devExt->mod_settings };
     
     for (auto i = 0u; i < global.base_data.device_data_size; i++) {
         auto& dev_settings = global.device_data[i];
@@ -390,18 +402,10 @@ DeviceSetup(WDFOBJECT hDevice)
             set_ext_from_cfg(dev_settings.config);
 
             if (dev_settings.profile[0] != L'\0') {
-                for (auto j = 0u; j < global.base_data.driver_data_size; j++) {
-                    auto& profile = global.driver_data[j].prof;
-
-                    if (wcsncmp(dev_settings.profile, profile.name, ra::MAX_NAME_LEN) == 0) {
-                        devExt->drv_settings = global.driver_data[j];
-                        devExt->mod = { devExt->drv_settings };
-                        return;
-                    }
-                }
+                set_mod_if_found(dev_settings.profile);
             }
 
-            return;
+            break;
         }
     }
 }

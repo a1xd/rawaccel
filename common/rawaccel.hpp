@@ -24,7 +24,7 @@ namespace rawaccel {
         device_config config;
     };
 
-    struct driver_settings {
+    struct modifier_settings {
         profile prof;
 
         struct data_t {
@@ -34,7 +34,7 @@ namespace rawaccel {
         } data = {};
     };
 
-    inline void init_data(driver_settings& settings)
+    inline void init_data(modifier_settings& settings)
     {
         auto set_accel = [](accel_union& u, const accel_args& args) {
             u.visit([&](auto& impl) {
@@ -50,18 +50,18 @@ namespace rawaccel {
 
     struct io_base {
         device_config default_dev_cfg;
-        unsigned driver_data_size = 0;
+        unsigned modifier_data_size = 0;
         unsigned device_data_size = 0;
     };
 
-    static_assert(alignof(io_base) == alignof(driver_settings) && alignof(driver_settings) == alignof(device_settings));
+    static_assert(alignof(io_base) == alignof(modifier_settings) && alignof(modifier_settings) == alignof(device_settings));
 
     class modifier {
     public:
 #ifdef _KERNEL_MODE
         __forceinline
 #endif
-        void modify(vec2d& in, const driver_settings& settings, double dpi_factor, milliseconds time) const
+        void modify(vec2d& in, const modifier_settings& settings, double dpi_factor, milliseconds time) const
         {
             auto& args = settings.prof;
             auto& data = settings.data;
@@ -147,7 +147,7 @@ namespace rawaccel {
             }
         }
 
-        modifier(driver_settings& settings)
+        modifier(modifier_settings& settings)
         {
             auto& args = settings.prof;
 

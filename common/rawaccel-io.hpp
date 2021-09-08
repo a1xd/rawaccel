@@ -47,19 +47,19 @@ namespace rawaccel {
 
         size_t size = sizeof(base_data);
 
-        if (base_data.driver_data_size == 0) {
+        if (base_data.modifier_data_size == 0) {
             // driver has no data, but it's more useful to return something, 
-            // so return a default driver_settings object along with base data
+            // so return a default modifier_settings object along with base data
              
-            size += sizeof(driver_settings);
-            base_data.driver_data_size = 1;
+            size += sizeof(modifier_settings);
+            base_data.modifier_data_size = 1;
             auto bytes = std::make_unique<std::byte[]>(size);
             *reinterpret_cast<io_base*>(bytes.get()) = base_data;
-            *reinterpret_cast<driver_settings*>(bytes.get() + sizeof(io_base)) = {};
+            *reinterpret_cast<modifier_settings*>(bytes.get() + sizeof(io_base)) = {};
             return bytes;
         }
         else {
-            size += sizeof(driver_settings) * base_data.driver_data_size;
+            size += sizeof(modifier_settings) * base_data.modifier_data_size;
             size += sizeof(device_settings) * base_data.device_data_size;
             auto bytes = std::make_unique<std::byte[]>(size);
             io_control(READ, NULL, 0, bytes.get(), DWORD(size));
@@ -74,7 +74,7 @@ namespace rawaccel {
 
         auto* base_ptr = static_cast<const io_base*>(buffer);
         auto size = sizeof(io_base);
-        size += base_ptr->driver_data_size * sizeof(driver_settings);
+        size += base_ptr->modifier_data_size * sizeof(modifier_settings);
         size += base_ptr->device_data_size * sizeof(device_settings);
 
         if (size > DWORD(-1)) throw io_error("write buffer is too large");
@@ -85,7 +85,7 @@ namespace rawaccel {
     inline void reset()
     {
         io_base base_data{};
-        // all driver/device data is cleared when a default io_base is passed
+        // all modifier/device data is cleared when a default io_base is passed
         io_control(WRITE, &base_data, sizeof(io_base), NULL, 0);
     }
 
