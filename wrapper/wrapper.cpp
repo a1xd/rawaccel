@@ -15,7 +15,7 @@ using namespace Newtonsoft::Json::Linq;
 
 namespace ra = rawaccel;
 
-ra::driver_settings default_driver_settings;
+ra::modifier_settings default_modifier_settings;
 ra::device_settings default_device_settings;
 
 public ref struct VersionHelper
@@ -147,7 +147,7 @@ public ref struct Profile
     }
 
     Profile() :
-        Profile(default_driver_settings.prof) {}
+        Profile(default_modifier_settings.prof) {}
 };
 
 [JsonObject(ItemRequired = Required::Always)]
@@ -395,11 +395,11 @@ public:
 
 struct accel_instance_t {
     ra::modifier mod;
-    ra::driver_settings settings;
+    ra::modifier_settings settings;
 
     accel_instance_t() = default;
 
-    accel_instance_t(ra::driver_settings& args) :
+    accel_instance_t(ra::modifier_settings& args) :
         settings(args),
         mod(args) {}
 
@@ -418,7 +418,7 @@ public:
 
     ManagedAccel() {}
 
-    ManagedAccel(ra::driver_settings& settings) : 
+    ManagedAccel(ra::modifier_settings& settings) : 
         instance(new accel_instance_t(settings)) {}
 
     ManagedAccel(Profile^ settings)
@@ -462,7 +462,7 @@ public:
 
     }
 
-    ra::driver_settings NativeSettings()
+    ra::modifier_settings NativeSettings()
     {
         return instance->settings;
     }
@@ -495,11 +495,11 @@ public:
 
         std::byte* buffer;
 
-        auto driver_data_bytes = accels->Count * sizeof(ra::driver_settings);
+        auto modifier_data_bytes = accels->Count * sizeof(ra::modifier_settings);
         auto device_data_bytes = devices->Count * sizeof(ra::device_settings);
 
         try {
-            buffer = new std::byte[sizeof(ra::io_base) + driver_data_bytes + device_data_bytes];
+            buffer = new std::byte[sizeof(ra::io_base) + modifier_data_bytes + device_data_bytes];
         }
         catch (const std::exception& e) {
             throw gcnew InteropException(e);
@@ -514,18 +514,18 @@ public:
         base_data->default_dev_cfg.polling_rate = defaultDeviceConfig.pollingRate;
         base_data->default_dev_cfg.clamp.min = defaultDeviceConfig.minimumTime;
         base_data->default_dev_cfg.clamp.max = defaultDeviceConfig.maximumTime;
-        base_data->driver_data_size = accels->Count;
+        base_data->modifier_data_size = accels->Count;
         base_data->device_data_size = devices->Count;
 
         byte_ptr += sizeof(ra::io_base);
 
-        auto* driver_data = reinterpret_cast<ra::driver_settings*>(byte_ptr);
+        auto* modifier_data = reinterpret_cast<ra::modifier_settings*>(byte_ptr);
         for (auto i = 0; i < accels->Count; i++) {
-            auto& drv_settings = driver_data[i];
-            drv_settings = accels[i]->NativeSettings();
+            auto& mod_settings = modifier_data[i];
+            mod_settings = accels[i]->NativeSettings();
         }
 
-        byte_ptr += driver_data_bytes;
+        byte_ptr += modifier_data_bytes;
 
         auto* device_data = reinterpret_cast<ra::device_settings*>(byte_ptr);
         for (auto i = 0; i < devices->Count; i++) {
@@ -683,14 +683,14 @@ public:
 
         byte_ptr += sizeof(ra::io_base);
 
-        ra::driver_settings* driver_data = reinterpret_cast<ra::driver_settings*>(byte_ptr);
-        for (auto i = 0u; i < base_data->driver_data_size; i++) {
-            auto& drv_settings = driver_data[i];
-            cfg->profiles->Add(gcnew Profile(drv_settings.prof));
-            cfg->accels->Add(gcnew ManagedAccel(drv_settings));
+        ra::modifier_settings* modifier_data = reinterpret_cast<ra::modifier_settings*>(byte_ptr);
+        for (auto i = 0u; i < base_data->modifier_data_size; i++) {
+            auto& mod_settings = modifier_data[i];
+            cfg->profiles->Add(gcnew Profile(mod_settings.prof));
+            cfg->accels->Add(gcnew ManagedAccel(mod_settings));
         }
 
-        byte_ptr += base_data->driver_data_size * sizeof(ra::driver_settings);
+        byte_ptr += base_data->modifier_data_size * sizeof(ra::modifier_settings);
 
         ra::device_settings* device_data = reinterpret_cast<ra::device_settings*>(byte_ptr);
         for (auto i = 0u; i < base_data->device_data_size; i++) {
