@@ -30,7 +30,6 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>False</UseDebugLibraries>
     <DriverTargetPlatform>Desktop</DriverTargetPlatform>
     <DriverType>KMDF</DriverType>
@@ -41,7 +40,6 @@
     <Driver_SpectreMitigation>Spectre</Driver_SpectreMitigation>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
-    <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>False</UseDebugLibraries>
     <DriverTargetPlatform>Desktop</DriverTargetPlatform>
     <DriverType>KMDF</DriverType>
@@ -52,7 +50,6 @@
     <Driver_SpectreMitigation>Spectre</Driver_SpectreMitigation>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>True</UseDebugLibraries>
     <DriverTargetPlatform>Desktop</DriverTargetPlatform>
     <DriverType>KMDF</DriverType>
@@ -61,7 +58,6 @@
     <Driver_SpectreMitigation>Spectre</Driver_SpectreMitigation>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
-    <TargetVersion>Windows7</TargetVersion>
     <UseDebugLibraries>True</UseDebugLibraries>
     <DriverTargetPlatform>Desktop</DriverTargetPlatform>
     <DriverType>KMDF</DriverType>
@@ -159,7 +155,6 @@
       <RuntimeLibrary>
       </RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <CallingConvention>StdCall</CallingConvention>
       <AssemblerOutput>AssemblyCode</AssemblerOutput>
       <ExpandAttributedSource>false</ExpandAttributedSource>
       <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
@@ -232,7 +227,6 @@
       </RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <CallingConvention>StdCall</CallingConvention>
       <Optimization>MaxSpeed</Optimization>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <BufferSecurityCheck>true</BufferSecurityCheck>
