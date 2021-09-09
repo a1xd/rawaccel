@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Threading;
-using System.Text;
-using System.Drawing;
-using grapher.Models.Devices;
+using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
 

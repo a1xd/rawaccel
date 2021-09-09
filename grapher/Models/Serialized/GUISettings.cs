@@ -1,11 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace grapher.Models.Serialized
 {
     [Serializable]
-    [JsonObject(ItemRequired = Required.Always)]
     public class GUISettings
     {
         #region Constructors
@@ -17,22 +16,16 @@ namespace grapher.Models.Serialized
         #region Properties
 
 
-        [JsonProperty(Order = 1)]
         public int DPI { get; set; }
 
-        [JsonProperty(Order = 2)]
         public int PollRate { get; set; }
 
-        [JsonProperty(Order = 3)]
         public bool ShowLastMouseMove { get; set; }
 
-        [JsonProperty(Order = 4)]
         public bool ShowVelocityAndGain { get; set; }
 
-        [JsonProperty(Order = 5)]
         public bool AutoWriteToDriverOnStartup { get; set; }
 
-        [JsonProperty(Order = 6)]
         public bool StreamingMode { get; set; }
 
         #endregion Properties
@@ -41,9 +34,7 @@ namespace grapher.Models.Serialized
 
         public override bool Equals(object obj)
         {
-            var other = obj as GUISettings;
-
-            if (other == null)
+            if (obj is not GUISettings other)
             {
                 return false;
             }
@@ -73,7 +64,7 @@ namespace grapher.Models.Serialized
 
         public void Save()
         {
-            File.WriteAllText(Constants.GuiConfigFileName, JsonConvert.SerializeObject(this));
+            File.WriteAllText(Constants.GuiConfigFileName, JsonSerializer.Serialize(this));
         }
 
         public static GUISettings MaybeLoad()
@@ -82,7 +73,7 @@ namespace grapher.Models.Serialized
 
             try
             {
-                settings = JsonConvert.DeserializeObject<GUISettings>(
+                settings = JsonSerializer.Deserialize<GUISettings>(
                     File.ReadAllText(Constants.GuiConfigFileName));
             }
             catch (Exception ex)

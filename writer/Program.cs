@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace writer
@@ -12,7 +9,7 @@ namespace writer
     class Program
     {
         static readonly string DefaultPath = "settings.json";
-        static readonly string Usage = 
+        static readonly string Usage =
             $"Usage: {AppDomain.CurrentDomain.FriendlyName} <settings file path>\n";
 
         static void Exit(string msg)

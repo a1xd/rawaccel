@@ -10,9 +10,8 @@ using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
 using namespace System::Reflection;
 using namespace System::Runtime::Serialization;
-using namespace Newtonsoft::Json;
-using namespace Newtonsoft::Json::Linq;
-
+using namespace System::Text::Json;
+using namespace System::Text::Json::Serialization;
 namespace ra = rawaccel;
 
 ra::modifier_settings default_modifier_settings;
@@ -34,13 +33,13 @@ public ref struct VersionHelper
     }
 };
 
-[JsonConverter(Converters::StringEnumConverter::typeid)]
+[JsonConverter(JsonStringEnumConverter::typeid)]
 public enum class AccelMode
 {
     classic, jump, natural, motivity, power, lut, noaccel
 };
 
-[JsonConverter(Converters::StringEnumConverter::typeid)]
+[JsonConverter(JsonStringEnumConverter::typeid)]
 public enum class ClassicCapMode {
     in_out, input, output
 };
@@ -49,7 +48,10 @@ generic <typename T>
 [StructLayout(LayoutKind::Sequential)]
 public value struct Vec2
 {
+    [JsonInclude]
     T x;
+
+    [JsonInclude]
     T y;
 };
 
@@ -58,87 +60,201 @@ public value struct AccelArgs
 {
     literal int MaxLutPoints = ra::LUT_POINTS_CAPACITY;
 
+    [JsonInclude]
     AccelMode mode;
 
-    [JsonProperty("Gain / Velocity")]
+    [JsonPropertyName("Gain / Velocity")]
     [MarshalAs(UnmanagedType::U1)]
+    [JsonInclude]
     bool gain;
 
+    [JsonInclude]
     double offset;
+
+    [JsonInclude]
     double acceleration;
+
+    [JsonInclude]
     double decayRate;
+
+    [JsonInclude]
     double growthRate;
+
+    [JsonInclude]
     double motivity;
+
+    [JsonInclude]
     double exponentClassic;
+
+    [JsonInclude]
     double scale;
+
+    [JsonInclude]
     double weight;
+
+    [JsonInclude]
     double exponentPower;
+
+    [JsonInclude]
     double limit;
+
+    [JsonInclude]
     double midpoint;
+
+    [JsonInclude]
     double smooth;
 
-    [JsonProperty("Cap / Jump")]
+    [JsonInclude]
+    [JsonPropertyName("Cap / Jump")]
     Vec2<double> cap;
 
-    [JsonProperty("Cap mode")]
+    [JsonInclude]
+    [JsonPropertyName("Cap mode")]
     ClassicCapMode capMode;
 
     [JsonIgnore]
     int length;
 
+    [JsonInclude]
     [MarshalAs(UnmanagedType::ByValArray, SizeConst = ra::LUT_RAW_DATA_CAPACITY)]
     array<float>^ data;
+};
 
-    [OnDeserialized]
-    void OnDeserializedMethod(StreamingContext context)
+public ref struct AccelArgsConverter : JsonConverter<AccelArgs>
+{
+    virtual void Write(Utf8JsonWriter^ writer, AccelArgs args, JsonSerializerOptions^ options) override
     {
-        // data->Length must match SizeConst when marshalling
-        length = data->Length;
-        array<float>::Resize(data, ra::LUT_RAW_DATA_CAPACITY);
+        if (args.mode == AccelMode::lut) {
+            // data->Length must be fixed for interop, 
+            // temporary resize avoids serializing a bunch of zeros
+            Array::Resize(args.data, args.length);
+            JsonSerializer::Serialize(writer, args, options);
+            Array::Resize(args.data, ra::LUT_RAW_DATA_CAPACITY);
+        }
+        else {
+            // data may be used internally in any mode, 
+            // so hide it when it's not needed for deserialization 
+            auto tmp = args.data;
+            args.data = Array::Empty<float>();
+            JsonSerializer::Serialize(writer, args, options);
+            args.data = tmp;
+        }
+    }
+
+    virtual AccelArgs Read(Utf8JsonReader% reader, Type^ type, JsonSerializerOptions^ options) override
+    {
+        AccelArgs args = JsonSerializer::Deserialize<AccelArgs>(reader, options);
+
+        if (args.data == nullptr) args.data = Array::Empty<float>();
+
+        args.length = args.data->Length;
+        array<float>::Resize(args.data, ra::LUT_RAW_DATA_CAPACITY);
+
+        return args;
     }
 };
 
-[JsonObject(ItemRequired = Required::Always)]
+public ref struct NullToEmptyStringConverter : JsonConverter<String^>
+{
+    virtual String^ Read(Utf8JsonReader% reader, Type^ type, JsonSerializerOptions^ options) override
+    {
+        String^ s = JsonSerializer::Deserialize<String^>(reader, options);
+        return s ? s : String::Empty;
+    }
+
+    virtual void Write(Utf8JsonWriter^ writer, String^ s, JsonSerializerOptions^ options) override
+    {
+        JsonSerializer::Serialize(writer, s, options);
+    }
+
+    property bool HandleNull
+    {
+        virtual bool get() override { return true; }
+    }
+};
+
+template <typename T>
+public ref struct NullToDefaultRefClassConverter : JsonConverter<T^>
+{
+    virtual T^ Read(Utf8JsonReader% reader, Type^ type, JsonSerializerOptions^ options) override
+    {
+        T^ val = JsonSerializer::Deserialize<T^>(reader, options);
+        return val ? val : gcnew T();
+    }
+
+    virtual void Write(Utf8JsonWriter^ writer, T^ val, JsonSerializerOptions^ options) override
+    {
+        JsonSerializer::Serialize(writer, val, options);
+    }
+
+    property bool HandleNull
+    {
+        virtual bool get() override { return true; }
+    }
+};
+
+template <typename T>
+using NullToEmptyListConverter = NullToDefaultRefClassConverter<List<T>>;
+
 [StructLayout(LayoutKind::Sequential, CharSet = CharSet::Unicode)]
 public ref struct Profile
 {
+    [JsonInclude]
+    [JsonConverter(NullToEmptyStringConverter::typeid)]
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_NAME_LEN)]
     System::String^ name;
 
-    [JsonProperty("Whole/combined accel (set false for 'by component' mode)")]
+    [JsonInclude]
+    [JsonPropertyName("Whole/combined accel (set false for By-component mode)")]
     [MarshalAs(UnmanagedType::U1)]
     bool combineMagnitudes;
 
+    [JsonInclude]
     double lpNorm;
 
-    [JsonProperty("Stretches domain for horizontal vs vertical inputs")]
+    [JsonInclude]
+    [JsonPropertyName("Stretches domain for horizontal vs vertical inputs")]
     Vec2<double> domainXY;
-    [JsonProperty("Stretches accel range for horizontal vs vertical inputs")]
+
+    [JsonInclude]
+    [JsonPropertyName("Stretches accel range for horizontal vs vertical inputs")]
     Vec2<double> rangeXY;
 
-    [JsonProperty("Sensitivity multiplier")]
+    [JsonInclude]
+    [JsonPropertyName("Sensitivity multiplier")]
     double sensitivity;
 
-    [JsonProperty("Y/X sensitivity ratio (vertical sens multiplier)")]
+    [JsonInclude]
+    [JsonPropertyName("Y/X sensitivity ratio (vertical sens multiplier)")]
     double yxSensRatio;
 
-    [JsonProperty("Whole or horizontal accel parameters")]
+    [JsonConverter(AccelArgsConverter::typeid)]
+    [JsonInclude]
+    [JsonPropertyName("Whole or horizontal accel parameters")]
     AccelArgs argsX;
-    [JsonProperty("Vertical accel parameters")]
+
+    [JsonConverter(AccelArgsConverter::typeid)]
+    [JsonInclude]
+    [JsonPropertyName("Vertical accel parameters")]
     AccelArgs argsY;
 
     [JsonIgnore]
     double minimumSpeed;
-    [JsonProperty("Input Speed Cap")]
+
+    [JsonInclude]
+    [JsonPropertyName("Input Speed Cap")]
     double maximumSpeed;
 
-    [JsonProperty("Negative directional multipliers")]
+    [JsonInclude]
+    [JsonPropertyName("Negative directional multipliers")]
     Vec2<double> directionalMultipliers;
 
-    [JsonProperty("Degrees of rotation")]
+    [JsonInclude]
+    [JsonPropertyName("Degrees of rotation")]
     double rotation;
 
-    [JsonProperty("Degrees of angle snapping")]
+    [JsonInclude]
+    [JsonPropertyName("Degrees of angle snapping")]
     double snap;
 
     Profile(ra::profile& args)
@@ -150,44 +266,35 @@ public ref struct Profile
         Profile(default_modifier_settings.prof) {}
 };
 
-[JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential)]
 public value struct DeviceConfig {
+    literal String^ dpiProperty = 
+        "DPI (normalizes sens to 1000dpi and converts input speed unit (counts/ms to in/s)";
+    literal String^ pollingRateProperty =
+        "Polling rate Hz (keep at 0 for automatic adjustment)";
+
+    [JsonInclude]
     [MarshalAs(UnmanagedType::U1)]
     bool disable;
 
+
     [MarshalAs(UnmanagedType::U1)]
-    [JsonProperty(Required = Required::Default)]
+    [JsonInclude]
     bool setExtraInfo;
 
-    [JsonProperty("DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)")]
+    [JsonInclude]
+    [JsonPropertyName(dpiProperty)]
     int dpi;
 
-    [JsonProperty("Polling rate Hz (keep at 0 for automatic adjustment)")]
+    [JsonInclude]
+    [JsonPropertyName(pollingRateProperty)]
     int pollingRate;
-    
-    [ComponentModel::DefaultValue(ra::DEFAULT_TIME_MIN)]
-    [JsonProperty(Required = Required::Default)]
+
+    [JsonInclude]
     double minimumTime;
 
-    [ComponentModel::DefaultValue(ra::DEFAULT_TIME_MAX)]
-    [JsonProperty(Required = Required::Default)]
+    [JsonInclude]
     double maximumTime;
-
-    bool ShouldSerializesetExtraInfo()
-    {
-        return setExtraInfo == true;
-    }
-
-    bool ShouldSerializeminimumTime()
-    {
-        return minimumTime != ra::DEFAULT_TIME_MIN;
-    }
-
-    bool ShouldSerializemaximumTime()
-    {
-        return maximumTime != ra::DEFAULT_TIME_MAX;
-    }
 
     void Init(const ra::device_config& cfg) 
     {
@@ -200,19 +307,64 @@ public value struct DeviceConfig {
     }
 };
 
-[JsonObject(ItemRequired = Required::Always)]
+public ref struct DeviceConfigConverter : JsonConverter<DeviceConfig>
+{
+    virtual DeviceConfig Read(Utf8JsonReader% reader, Type^ type, JsonSerializerOptions^ options) override
+    {
+        DeviceConfig cfg = JsonSerializer::Deserialize<DeviceConfig>(reader, options);
+
+        if (cfg.maximumTime == 0) cfg.maximumTime = ra::DEFAULT_TIME_MAX;
+        if (cfg.minimumTime == 0) cfg.minimumTime = ra::DEFAULT_TIME_MIN;
+
+        return cfg;
+    }
+
+    virtual void Write(Utf8JsonWriter^ writer, DeviceConfig cfg, JsonSerializerOptions^ options) override
+    {
+        writer->WriteStartObject();
+
+        writer->WriteBoolean("disable", cfg.disable);
+
+        if (cfg.setExtraInfo) {
+            writer->WriteBoolean("setExtraInfo", cfg.setExtraInfo);
+        }
+
+        writer->WriteNumber(DeviceConfig::dpiProperty, cfg.dpi);
+        writer->WriteNumber(DeviceConfig::pollingRateProperty, cfg.pollingRate);
+
+        if (cfg.minimumTime != ra::DEFAULT_TIME_MIN) {
+            writer->WriteNumber("minimumTime", cfg.minimumTime);
+        }
+
+        if (cfg.maximumTime != ra::DEFAULT_TIME_MAX) {
+            writer->WriteNumber("maximumTime", cfg.maximumTime);
+        }
+
+       writer->WriteEndObject();
+    }
+};
+
+
 [StructLayout(LayoutKind::Sequential, CharSet = CharSet::Unicode)]
 public ref struct DeviceSettings
 {
+    [JsonInclude]
+    [JsonConverter(NullToEmptyStringConverter::typeid)]
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_NAME_LEN)]
     String^ name;
 
+    [JsonInclude]
+    [JsonConverter(NullToEmptyStringConverter::typeid)]
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_NAME_LEN)]
     String^ profile;
 
+    [JsonInclude]
+    [JsonConverter(NullToEmptyStringConverter::typeid)]
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_DEV_ID_LEN)]
     String^ id;
 
+    [JsonInclude]
+    [JsonConverter(DeviceConfigConverter::typeid)]
     DeviceConfig config;
 
     DeviceSettings(ra::device_settings& args)
@@ -470,21 +622,28 @@ public:
 };
 
 
-[JsonObject(ItemRequired = Required::Always)]
 public ref class DriverConfig {
 public:
     literal double WriteDelayMs = ra::WRITE_DELAY;
-    literal String^ Key = "Driver settings";
+    initonly static JsonSerializerOptions^ DefaultOptions = DefaultSerializerOptions();
 
+    [JsonInclude]
+    [JsonConverter(NullToEmptyStringConverter::typeid)]
     String^ version = RA_VER_STRING;
 
+    [JsonInclude]
+    [JsonConverter(DeviceConfigConverter::typeid)]
     DeviceConfig defaultDeviceConfig;
 
+    [JsonInclude]
+    [JsonConverter(NullToEmptyListConverter<Profile^>::typeid)]
     List<Profile^>^ profiles;
 
-    [NonSerialized]
+    [JsonIgnore]
     List<ManagedAccel^>^ accels;
 
+    [JsonInclude]
+    [JsonConverter(NullToEmptyListConverter<DeviceSettings^>::typeid)]
     List<DeviceSettings^>^ devices;
 
     void Activate()
@@ -579,69 +738,22 @@ public:
         }
     }
 
-    JObject^ ToJObject()
-    {
-        auto dataQueue = gcnew Queue<array<float>^>();
-        auto empty = Array::Empty<float>();
-
-        for each (auto prof in profiles) {
-            if (prof->argsX.mode == AccelMode::lut) {
-                // data->Length is fixed for interop, 
-                // temporary resize avoids serializing a bunch of zeros
-                Array::Resize(prof->argsX.data, prof->argsX.length);
-            }
-            else {
-                // table data may be used internally in any mode, 
-                // so hide it when it's not needed for deserialization 
-                dataQueue->Enqueue(prof->argsX.data);
-                prof->argsX.data = empty;
-            }
-
-            if (prof->argsY.mode == AccelMode::lut) {
-                Array::Resize(prof->argsY.data, prof->argsY.length);
-            }
-            else {
-                dataQueue->Enqueue(prof->argsY.data);
-                prof->argsY.data = empty;
-            }
-        }
-
-        JObject^ jObject = JObject::FromObject(this);
-        String^ capModes = String::Join(" | ", Enum::GetNames(ClassicCapMode::typeid));
-        String^ accelModes = String::Join(" | ", Enum::GetNames(AccelMode::typeid));
-        jObject->AddFirst(gcnew JProperty("### Cap modes (applies to classic only) ###", capModes));
-        jObject->AddFirst(gcnew JProperty("### Accel modes ###", accelModes));
-
-        for each (auto prof in profiles) {
-            if (prof->argsX.mode == AccelMode::lut) {
-                Array::Resize(prof->argsX.data, ra::LUT_RAW_DATA_CAPACITY);
-            }
-            else {
-                prof->argsX.data = dataQueue->Dequeue();
-            }
-
-            if (prof->argsY.mode == AccelMode::lut) {
-                Array::Resize(prof->argsY.data, ra::LUT_RAW_DATA_CAPACITY);
-            }
-            else {
-                prof->argsY.data = dataQueue->Dequeue();
-            }
-        }
-
-        return jObject;
-    }
-
     String^ ToJSON()
     {
-        return ToJObject()->ToString();
+        using namespace System::Text;
+        StringBuilder^ sb = gcnew StringBuilder();
+        sb->AppendFormat(
+            "/*\n* Accel modes: {0}\n* Cap modes (classic only): {1}\n*/\n",
+            String::Join(" | ", Enum::GetNames(AccelMode::typeid)),
+            String::Join(" | ", Enum::GetNames(ClassicCapMode::typeid)));
+        sb->Append(JsonSerializer::Serialize(this, DefaultOptions));
+        return sb->ToString();
     }
 
     // returns (config, null) or (null, error message)
     static Tuple<DriverConfig^, String^>^ Convert(String^ json)
     {
-        auto jss = gcnew JsonSerializerSettings();
-        jss->DefaultValueHandling = DefaultValueHandling::Populate;
-        auto cfg = JsonConvert::DeserializeObject<DriverConfig^>(json, jss);
+        auto cfg = JsonSerializer::Deserialize<DriverConfig^>(json, DefaultOptions);
         if (cfg == nullptr) throw gcnew JsonException("invalid JSON");
 
         auto message = cfg->Errors();
@@ -673,9 +785,6 @@ public:
         } 
 
         auto cfg = gcnew DriverConfig();
-        cfg->profiles = gcnew List<Profile^>();
-        cfg->accels = gcnew List<ManagedAccel^>();
-        cfg->devices = gcnew List<DeviceSettings^>();
 
         auto* byte_ptr = bytes.get();
         ra::io_base* base_data = reinterpret_cast<ra::io_base*>(byte_ptr);
@@ -704,9 +813,6 @@ public:
     static DriverConfig^ FromProfile(Profile^ prof)
     {
         auto cfg = gcnew DriverConfig();
-        cfg->profiles = gcnew List<Profile^>();
-        cfg->accels = gcnew List<ManagedAccel^>();
-        cfg->devices = gcnew List<DeviceSettings^>();
 
         cfg->profiles->Add(prof);
         cfg->accels->Add(gcnew ManagedAccel(prof));
@@ -729,7 +835,21 @@ public:
         }
     }
 
-private: 
-    DriverConfig() {}
-};
+    DriverConfig()
+    {
+        profiles = gcnew List<Profile^>();
+        accels = gcnew List<ManagedAccel^>();
+        devices = gcnew List<DeviceSettings^>();
+        defaultDeviceConfig.Init(default_device_settings.config);
+    }
 
+private:
+    static JsonSerializerOptions^ DefaultSerializerOptions()
+    {
+        JsonSerializerOptions^ options = gcnew JsonSerializerOptions();
+        options->WriteIndented = true;
+        options->ReadCommentHandling = JsonCommentHandling::Skip;
+        options->AllowTrailingCommas = true;
+        return options;
+    }
+};
