@@ -58,6 +58,7 @@ There are anisotropic settings for whole mode.
 - **Lp Norm**. The distance calculation can be generalized to ((in_x)^p + (in_y)^p)^(1/p)), bringing the calculation into [Lp space](https://en.wikipedia.org/wiki/Lp_space).  
     - p = 2 is then the "real world" value, yielding the pythagorean theorem as the distance calculation.  
     - Increasing p makes distances for diagonal movements (where in_x and in_y are close) smaller, and increases the dominance of the larger of the two in determining the distance.  
+    - As p gets large, the above calculation approaches max(inx, iny). Raw Accel uses this formula when given any p > 64.
     - We recommend almost everyone leave this at 2.  
 
 ![AnisotropyExample](images/anisotropy_example.png)
