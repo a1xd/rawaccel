@@ -2,6 +2,9 @@
 
 namespace grapher.Models.Options
 {
+    /// <summary>
+    /// This is an option type that is just a checkbox.
+    /// </summary>
     public class CheckBoxOption : OptionBase
     {
         public CheckBoxOption(

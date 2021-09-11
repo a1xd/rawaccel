@@ -65,7 +65,9 @@ namespace grapher.Models.Options
 
         public DirectionalityOptions Directionality { get; }
 
-        public OptionXY Sensitivity { get; }
+        public Option Sensitivity { get; }
+
+        public Option YToXRatio { get; }
 
         public Option Rotation { get; }
 
@@ -81,23 +83,24 @@ namespace grapher.Models.Options
 
         #region Methods
 
-        public void SetArgs(ref AccelArgs argsX, ref AccelArgs argsY)
+        public void SetArgsFromActiveValues(ref AccelArgs argsX, ref AccelArgs argsY)
         {
-            OptionSetX.SetArgs(ref argsX);
+            OptionSetX.SetArgsFromActiveValues(ref argsX);
 
             if (ByComponentVectorXYLock.Checked)
             {
-                OptionSetX.SetArgs(ref argsY);
+                OptionSetX.SetArgsFromActiveValues(ref argsY);
             }
             else
             {
-                OptionSetY.SetArgs(ref argsY);
+                OptionSetY.SetArgsFromActiveValues(ref argsY);
             }
         }
 
         public void SetActiveValues(Profile settings)
         {
-            Sensitivity.SetActiveValues(settings.sensitivity, settings.yxSensRatio);
+            Sensitivity.SetActiveValue(settings.sensitivity);
+            YToXRatio.SetActiveValue(settings.yxSensRatio);
             Rotation.SetActiveValue(settings.rotation);
             
             WholeVectorCheckBox.Checked = settings.combineMagnitudes;

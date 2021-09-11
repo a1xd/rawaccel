@@ -113,12 +113,12 @@ namespace grapher
             var settings = new Profile();
 
             settings.rotation = ApplyOptions.Rotation.Field.Data;
-            settings.sensitivity = ApplyOptions.Sensitivity.Fields.X;
+            settings.sensitivity = ApplyOptions.Sensitivity.Field.Data;
 
             // TODO - separate sensitivity fields, add new label for ratio
             settings.yxSensRatio = ApplyOptions.Sensitivity.Fields.Y;
             settings.combineMagnitudes = ApplyOptions.IsWhole;
-            ApplyOptions.SetArgs(ref settings.argsX, ref settings.argsY);
+            ApplyOptions.SetArgsFromActiveValues(ref settings.argsX, ref settings.argsY);
 
             var (domWeights, lpNorm) = ApplyOptions.Directionality.GetDomainArgs();
             settings.domainXY = domWeights;
