@@ -137,6 +137,7 @@
     <Compile Include="Layouts\PowerLayout.cs" />
     <Compile Include="Models\Options\CheckBoxOption.cs" />
     <Compile Include="Models\Options\Directionality\DirectionalityOptions.cs" />
+    <Compile Include="Models\Options\LockableOption.cs" />
     <Compile Include="Models\Options\LUT\LutApplyOptions.cs" />
     <Compile Include="Models\Options\IOption.cs" />
     <Compile Include="Models\Options\LUT\LUTPanelOptions.cs" />
