@@ -20,6 +20,12 @@ namespace grapher.Models.Options
             Option = option;
             LockBox = checkBox;
             LockedValue = lockedvalue;
+
+            LockBox.Click += OnLockedBoxClicked;
+            LockBox.AutoCheck = false;
+
+            Option.Field.SetNewDefault(LockedValue);
+            SetLocked();
         }
 
         public Option Option { get; }
@@ -69,6 +75,25 @@ namespace grapher.Models.Options
             get => Option.Visible;
         }
 
+        public double Value
+        {
+            get => LockBox.Checked ? LockedValue : Option.Field.Data;
+        }
+
+        public void SetActiveValue(double activeValue)
+        {
+            Option.SetActiveValue(activeValue);
+
+            if (activeValue == LockedValue)
+            {
+                SetLocked();
+            }
+            else
+            {
+                SetUnlocked();
+            }
+        }
+
         public override void AlignActiveValues()
         {
             Option.AlignActiveValues();
@@ -84,6 +109,29 @@ namespace grapher.Models.Options
         {
             Option.Show(Name);
             LockBox.Show();
+        }
+        private void SetLocked()
+        {
+            LockBox.Checked = true;
+            Option.Field.SetToUnavailable();
+        }
+
+        private void SetUnlocked()
+        {
+            LockBox.Checked = false;
+            Option.Field.SetToDefault();
+        }
+
+        private void OnLockedBoxClicked(object sender, EventArgs e)
+        {
+            if (LockBox.Checked)
+            {
+                SetUnlocked();
+            }
+            else
+            {
+                SetLocked();
+            }
         }
     }
 }

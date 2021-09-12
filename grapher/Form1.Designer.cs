@@ -71,6 +71,7 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.VertHorzRatioLabel = new System.Windows.Forms.Label();
             this.SmoothActiveYLabel = new System.Windows.Forms.Label();
             this.smoothLabelY = new System.Windows.Forms.Label();
             this.SmoothActiveXLabel = new System.Windows.Forms.Label();
@@ -223,7 +224,6 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.VertHorzRatioLabel = new System.Windows.Forms.Label();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -359,6 +359,15 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // VertHorzRatioLabel
+            // 
+            this.VertHorzRatioLabel.AutoSize = true;
+            this.VertHorzRatioLabel.Location = new System.Drawing.Point(28, 79);
+            this.VertHorzRatioLabel.Name = "VertHorzRatioLabel";
+            this.VertHorzRatioLabel.Size = new System.Drawing.Size(59, 13);
+            this.VertHorzRatioLabel.TabIndex = 194;
+            this.VertHorzRatioLabel.Text = "Y to X ratio";
             // 
             // SmoothActiveYLabel
             // 
@@ -1157,7 +1166,7 @@ namespace grapher
             // accelTypeDropY
             // 
             this.accelTypeDropY.FormattingEnabled = true;
-            this.accelTypeDropY.Location = new System.Drawing.Point(332, 140);
+            this.accelTypeDropY.Location = new System.Drawing.Point(332, 138);
             this.accelTypeDropY.Name = "accelTypeDropY";
             this.accelTypeDropY.Size = new System.Drawing.Size(76, 21);
             this.accelTypeDropY.TabIndex = 99;
@@ -1505,7 +1514,7 @@ namespace grapher
             // accelTypeDropX
             // 
             this.accelTypeDropX.FormattingEnabled = true;
-            this.accelTypeDropX.Location = new System.Drawing.Point(106, 140);
+            this.accelTypeDropX.Location = new System.Drawing.Point(106, 138);
             this.accelTypeDropX.Name = "accelTypeDropX";
             this.accelTypeDropX.Size = new System.Drawing.Size(76, 21);
             this.accelTypeDropX.TabIndex = 84;
@@ -1877,15 +1886,6 @@ namespace grapher
             title6.Name = "Title";
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
-            // 
-            // VertHorzRatioLabel
-            // 
-            this.VertHorzRatioLabel.AutoSize = true;
-            this.VertHorzRatioLabel.Location = new System.Drawing.Point(28, 79);
-            this.VertHorzRatioLabel.Name = "VertHorzRatioLabel";
-            this.VertHorzRatioLabel.Size = new System.Drawing.Size(59, 13);
-            this.VertHorzRatioLabel.TabIndex = 194;
-            this.VertHorzRatioLabel.Text = "Y to X ratio";
             // 
             // RawAcceleration
             // 
