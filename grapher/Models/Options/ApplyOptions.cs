@@ -15,7 +15,8 @@ namespace grapher.Models.Options
             AccelOptionSet optionSetX,
             AccelOptionSet optionSetY,
             DirectionalityOptions directionalityOptions,
-            OptionXY sensitivity,
+            Option sensitivity,
+            LockableOption yxRatio,
             Option rotation,
             Label lockXYLabel,
             AccelCharts accelCharts)
@@ -34,6 +35,7 @@ namespace grapher.Models.Options
             OptionSetX = optionSetX;
             OptionSetY = optionSetY;
             Sensitivity = sensitivity;
+            YToXRatio = yxRatio;
             Rotation = rotation;
             LockXYLabel = lockXYLabel;
             AccelCharts = accelCharts;
@@ -44,7 +46,8 @@ namespace grapher.Models.Options
             ByComponentVectorXYLock.CheckedChanged += new System.EventHandler(OnByComponentXYLockChecked);
             ByComponentVectorXYLock.Checked = true;
 
-            Rotation.SnapTo(Sensitivity);
+            YToXRatio.SnapTo(Sensitivity);
+            Rotation.SnapTo(YToXRatio);
 
             EnableWholeApplication();
         }
@@ -67,7 +70,7 @@ namespace grapher.Models.Options
 
         public Option Sensitivity { get; }
 
-        public Option YToXRatio { get; }
+        public LockableOption YToXRatio { get; }
 
         public Option Rotation { get; }
 
@@ -213,8 +216,8 @@ namespace grapher.Models.Options
             LockXYLabel.Width = (AccelCharts.Left - OptionSetX.ActiveValuesTitle.Left) / 2;
             OptionSetX.ActiveValuesTitle.Width = LockXYLabel.Width;
             LockXYLabel.Left = OptionSetX.ActiveValuesTitle.Left + OptionSetX.ActiveValuesTitle.Width;
-            Sensitivity.Fields.LockCheckBox.Left = LockXYLabel.Left + LockXYLabel.Width / 2 - Sensitivity.Fields.LockCheckBox.Width / 2;
-            ByComponentVectorXYLock.Left = Sensitivity.Fields.LockCheckBox.Left;
+            YToXRatio.LockBox.Left = LockXYLabel.Left + LockXYLabel.Width / 2 - YToXRatio.LockBox.Width / 2;
+            ByComponentVectorXYLock.Left = YToXRatio.LockBox.Left;
             AlignActiveValues();
         }
 

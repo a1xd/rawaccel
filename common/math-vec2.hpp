@@ -30,6 +30,11 @@ inline double magnitude(const vec2d& v)
     return sqrt(v.x * v.x + v.y * v.y);
 }
 
+inline double lp_infinite_distance(const vec2d& v)
+{
+    return abs(v.x) > abs(v.y) ? abs(v.x) : abs(v.y);
+}
+
 inline double lp_distance(const vec2d& v, double p)
 {
     if (p > 64) {
@@ -37,9 +42,4 @@ inline double lp_distance(const vec2d& v, double p)
     }
 
     return pow(pow(v.x, p) + pow(v.y, p), 1 / p);
-}
-
-inline double lp_infinite_distance(const vec2d& v)
-{
-    return abs(v.x) > abs(v.y) ? abs(v.x) : abs(v.y);
 }

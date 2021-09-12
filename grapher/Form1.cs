@@ -106,6 +106,7 @@ namespace grapher
                 YLutPointsBox,
                 LockXYLabel,
                 sensitivityLabel,
+                VertHorzRatioLabel,
                 rotationLabel,
                 weightLabelX,
                 weightLabelY,

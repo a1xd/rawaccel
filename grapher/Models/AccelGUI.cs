@@ -116,7 +116,7 @@ namespace grapher
             settings.sensitivity = ApplyOptions.Sensitivity.Field.Data;
 
             // TODO - separate sensitivity fields, add new label for ratio
-            settings.yxSensRatio = ApplyOptions.Sensitivity.Fields.Y;
+            settings.yxSensRatio = ApplyOptions.YToXRatio.Value;
             settings.combineMagnitudes = ApplyOptions.IsWhole;
             ApplyOptions.SetArgsFromActiveValues(ref settings.argsX, ref settings.argsY);
 

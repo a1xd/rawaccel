@@ -83,6 +83,7 @@ namespace grapher.Models
             RichTextBox yLutPointsBox,
             Label lockXYLabel,
             Label sensitivityLabel,
+            Label yxRatioLabel,
             Label rotationLabel,
             Label weightLabelX,
             Label weightLabelY,
@@ -112,8 +113,8 @@ namespace grapher.Models
             Label constantThreeLabelY,
             Label activeValueTitleX,
             Label activeValueTitleY,
-            Label sensitivityActiveXLabel,
-            Label sensitivityActiveYLabel,
+            Label sensitivityActiveLabel,
+            Label yxRatioActiveLabel,
             Label rotationActiveLabel,
             Label weightActiveXLabel,
             Label weightActiveYLabel,
@@ -181,17 +182,26 @@ namespace grapher.Models
                                 writeButton,
                                 accelCalculator);
 
-            var sensitivity = new OptionXY(
+            var sensitivity = new Option(
                 sensitivityBoxX,
-                sensitivityBoxY,
-                sensXYLock,
                 form,
                 1,
                 sensitivityLabel,
-                new ActiveValueLabelXY(
-                    new ActiveValueLabel(sensitivityActiveXLabel, activeValueTitleX),
-                    new ActiveValueLabel(sensitivityActiveYLabel, activeValueTitleX)),
+                0,
+                new ActiveValueLabel(sensitivityActiveLabel, activeValueTitleX),
                 "Sens Multiplier");
+
+            var yxRatio = new LockableOption(
+                new Option(
+                    sensitivityBoxY,
+                    form,
+                    1,
+                    yxRatioLabel,
+                    0,
+                    new ActiveValueLabel(yxRatioActiveLabel, activeValueTitleX),
+                    "Y/X Ratio"),
+                sensXYLock,
+                1);
 
             var rotation = new Option(
                 rotationBox,
@@ -487,6 +497,7 @@ namespace grapher.Models
                 optionsSetY,
                 directionalOptions,
                 sensitivity,
+                yxRatio,
                 rotation,
                 lockXYLabel,
                 accelCharts);
