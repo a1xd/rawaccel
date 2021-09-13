@@ -135,7 +135,10 @@
     <Compile Include="Layouts\NaturalLayout.cs" />
     <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
+    <Compile Include="Models\Options\Cap\CapOptions.cs" />
+    <Compile Include="Models\Options\Cap\CapTypeOptions.cs" />
     <Compile Include="Models\Options\CheckBoxOption.cs" />
+    <Compile Include="Models\Options\ComboBoxOptionsBase.cs" />
     <Compile Include="Models\Options\Directionality\DirectionalityOptions.cs" />
     <Compile Include="Models\Options\LockableOption.cs" />
     <Compile Include="Models\Options\LUT\LutApplyOptions.cs" />
