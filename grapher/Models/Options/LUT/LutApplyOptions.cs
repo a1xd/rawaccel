@@ -7,16 +7,19 @@ using System.Windows.Forms;
 
 namespace grapher.Models.Options.LUT
 {
-    public class LutApplyOptions : OptionBase
+    public class LutApplyOptions : ComboBoxOptionsBase
     {
-        public const string LUTApplyOptionsLabelText = "Apply as:";
-        public const int LUTApplyLabelDropdownSeparation = 4;
+        #region Enum
 
         public enum LutApplyType
         {
             Sensitivity,
             Velocity
         }
+
+        #endregion Enum
+
+        #region Classes
 
         public class LutApplyOption
         {
@@ -26,6 +29,10 @@ namespace grapher.Models.Options.LUT
 
             public override string ToString() => Name;
         }
+
+        #endregion Classes
+
+        #region Static
 
         public static readonly LutApplyOption Sensitivity = new LutApplyOption
         {
@@ -37,138 +44,49 @@ namespace grapher.Models.Options.LUT
             Type = LutApplyType.Velocity,
         };
 
+        #endregion Static
+
+        #region Constructors
+
         public LutApplyOptions(
             Label label,
             ComboBox applyOptionsDropdown,
             ActiveValueLabel lutApplyActiveValue)
+            : base(
+                  label,
+                  applyOptionsDropdown,
+                  lutApplyActiveValue)
         {
-            ApplyOptions = applyOptionsDropdown;
-            ApplyOptions.Items.Clear();
-            ApplyOptions.Items.AddRange(
+            OptionsDropdown.Items.AddRange(
                 new LutApplyOption[]
                 {
                     Sensitivity,
                     Velocity,
                 });
-
-            Label = label;
-            Label.Text = LUTApplyOptionsLabelText;
-            Label.AutoSize = false;
-            Label.Width = 50;
-
-            ActiveValueLabel = lutApplyActiveValue;
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public LutApplyType ApplyType { get => ApplyOption.Type; }
 
         public LutApplyOption ApplyOption {
             get
             {
-                return ApplyOptions.SelectedItem as LutApplyOption;
+                return OptionsDropdown.SelectedItem as LutApplyOption;
             }
             set
             {
-                ApplyOptions.SelectedItem = value;
+                OptionsDropdown.SelectedItem = value;
             }
         }
 
-        public Label Label { get; }
+        #endregion Properties
 
-        public ActiveValueLabel ActiveValueLabel { get; }
+        #region Methods
 
-        public ComboBox ApplyOptions { get; }
-
-        public override bool Visible
-        {
-            get
-            {
-                return Label.Visible || ShouldShow;
-            }
-        }
-
-        public override int Left
-        {
-            get
-            {
-                return Label.Left;
-            }
-            set
-            {
-                Label.Left = value;
-                ApplyOptions.Left = Label.Left + Label.Width + LUTApplyLabelDropdownSeparation;
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                return Label.Height;
-            }
-        }
-
-        public override int Top
-        {
-            get
-            {
-                return Label.Top;
-            }
-            set
-            {
-                ApplyOptions.Top = value;
-                Label.Top = (ApplyOptions.Height - Label.Height) / 2 + ApplyOptions.Top;
-                ActiveValueLabel.Top = value;
-            }
-        }
-
-        public override int Width
-        {
-            get
-            {
-                return Label.Width;
-            }
-            set
-            {
-                ApplyOptions.Width = value - Label.Width - Constants.OptionLabelBoxSeperation;
-            }
-        }
-
-        private bool ShouldShow { get; set; }
-
-        public override void Hide()
-        {
-            Label.Hide();
-            ApplyOptions.Hide();
-            ActiveValueLabel.Hide();
-            ShouldShow = false;
-        }
-
-        public override void Show(string labelText)
-        {
-            Label.Show();
-            
-            if (!string.IsNullOrWhiteSpace(labelText))
-            {
-                Label.Text = labelText;
-            }
-
-            ApplyOptions.Show();
-            ActiveValueLabel.Show();
-            ShouldShow = true;
-        }
-
-        public override void AlignActiveValues()
-        {
-            ActiveValueLabel.Align();
-        }
-
-        public void SetActiveValue(bool applyAsVelocity)
-        {
-            ApplyOption = ApplyOptionFromSettings(applyAsVelocity);
-            ActiveValueLabel.SetValue(ApplyOption.Name);
-        }
-
-        public LutApplyOption ApplyOptionFromSettings(bool applyAsVelocity)
+        public static LutApplyOption ApplyOptionFromSettings(bool applyAsVelocity)
         {
             if (applyAsVelocity)
             {
@@ -179,5 +97,13 @@ namespace grapher.Models.Options.LUT
                 return Sensitivity;
             }
         }
+
+        public void SetActiveValue(bool applyAsVelocity)
+        {
+            ApplyOption = ApplyOptionFromSettings(applyAsVelocity);
+            ActiveValueLabel.SetValue(ApplyOption.Name);
+        }
+
+        #endregion Methods
     }
 }
