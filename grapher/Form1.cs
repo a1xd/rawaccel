@@ -15,6 +15,7 @@ using grapher.Models.Serialized;
 using grapher.Models;
 using System.Reflection;
 using System.Diagnostics;
+using System.IO;
 
 namespace grapher
 {
@@ -274,5 +275,67 @@ namespace grapher
         }
 
         #endregion Method
-    }
+
+        static void MakeStartupShortcut(bool gui)
+        {
+            var startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+
+            if (string.IsNullOrEmpty(startupFolder))
+            {
+                throw new Exception("Startup folder does not exist");
+            }
+
+            //Windows Script Host Shell Object
+            Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8"));
+            dynamic shell = Activator.CreateInstance(t);
+
+            try
+            {
+                // Delete any other RA related startup shortcuts
+                var candidates = new[] { "rawaccel", "raw accel", "writer" };
+
+                foreach (string path in Directory.EnumerateFiles(startupFolder, "*.lnk")
+                    .Where(f => candidates.Any(f.Substring(startupFolder.Length).ToLower().Contains)))
+                {
+                    var link = shell.CreateShortcut(path);
+                    try
+                    {
+                        string targetPath = link.TargetPath;
+
+                        if (!(targetPath is null) && 
+                            (targetPath.EndsWith("rawaccel.exe") ||
+                                targetPath.EndsWith("writer.exe") &&
+                                    new FileInfo(targetPath).Directory.GetFiles("rawaccel.exe").Any()))
+                        {
+                            File.Delete(path);
+                        }
+                    }
+                    finally
+                    {
+                        Marshal.FinalReleaseComObject(link);
+                    }
+                }
+
+                var name = gui ? "rawaccel" : "writer";
+
+                var lnk = shell.CreateShortcut($@"{startupFolder}\{name}.lnk");
+
+                try
+                {
+                    if (!gui) lnk.Arguments = Constants.DefaultSettingsFileName;
+                    lnk.TargetPath = $@"{Application.StartupPath}\{name}.exe";
+                    lnk.Save();
+                }
+                finally
+                {
+                    Marshal.FinalReleaseComObject(lnk);
+                }
+
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(shell);
+            }
+        }
+	}
 }
