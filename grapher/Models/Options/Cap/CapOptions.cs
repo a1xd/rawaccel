@@ -4,42 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static grapher.Models.Options.Cap.CapTypeOptions;
 
 namespace grapher.Models.Options.Cap
 {
     public class CapOptions : OptionBase
     {
-        public enum CapType
-        {
-            In,
-            Out,
-            Both,
-        }
 
         public CapOptions(
-            ComboBox capTypeDropDown,
+            CapTypeOptions capTypeOptions,
             Option capIn,
             Option capOut,
             Option slope)
         {
-            CapTypeDropdown = capTypeDropDown;
+            CapTypeOptions = capTypeOptions;
             In = capIn;
             Out = capOut;
             Slope = slope;
-
-            SetupCapTypeDropdown(CapTypeDropdown);
-            CapTypeDropdown.SelectedItem = CapType.In;
         }
 
-        public ComboBox CapTypeDropdown { get; }
+        public CapTypeOptions CapTypeOptions { get; }
 
         public Option In { get; }
 
         public Option Out { get; }
 
         public Option Slope { get; }
-
-        public CapType SelectedCapType { get; private set; }
 
         public override int Left
         {
@@ -55,26 +45,26 @@ namespace grapher.Models.Options.Cap
 
         public override int Top
         {
-            get => CapTypeDropdown.Top;
+            get => CapTypeOptions.Top;
             set
             {
-                CapTypeDropdown.Top = value;
+                CapTypeOptions.Top = value;
                 Layout();
             }
         }
 
         public override int Height
         {
-            get => BottomElement.Top + BottomElement.Height - CapTypeDropdown.Top;
+            get => BottomElement.Top + BottomElement.Height - CapTypeOptions.Top;
         }
 
         public override int Width
         {
-            get => CapTypeDropdown.Width;
+            get => CapTypeOptions.Width;
 
             set
             {
-                CapTypeDropdown.Width = value;
+                CapTypeOptions.Width = value;
                 In.Width = value;
                 Out.Width = value;
                 Slope.Width = value;
@@ -83,21 +73,21 @@ namespace grapher.Models.Options.Cap
 
         public override bool Visible
         {
-            get => CapTypeDropdown.Visible;
+            get => CapTypeOptions.Visible;
         }
 
         private Option BottomElement { get; set; }
 
         public void Layout()
         {
-            Layout(CapTypeDropdown.Top + CapTypeDropdown.Height + Constants.OptionVerticalSeperation);
+            Layout(CapTypeOptions.Top + CapTypeOptions.Height + Constants.OptionVerticalSeperation);
         }
 
         private void Layout(int top)
         {
-            switch (SelectedCapType)
+            switch (CapTypeOptions.SelectedCapType)
             {
-                case CapType.In:
+                case CapType.Input:
                     Slope.Show();
                     In.Show();
                     Out.Hide();
@@ -106,7 +96,7 @@ namespace grapher.Models.Options.Cap
                     In.SnapTo(Slope);
                     BottomElement = In;
                     break;
-                case CapType.Out:
+                case CapType.Output:
                     Slope.Show();
                     In.Hide();
                     Out.Show();
@@ -127,14 +117,8 @@ namespace grapher.Models.Options.Cap
             }
         }
 
-        private void FindSelectedTypeFromDropdown()
-        {
-            SelectedCapType = (CapType)CapTypeDropdown.SelectedItem;
-        }
-
         private void OnCapTypeDropdownSelectedItemChanged(object sender, EventArgs e)
         {
-            FindSelectedTypeFromDropdown();
             Layout();
         }
 

@@ -13,8 +13,8 @@ namespace grapher.Models.Options.Cap
 
         public enum CapType
         {
-            In,
-            Out,
+            Input,
+            Output,
             Both,
         }
 
@@ -37,12 +37,12 @@ namespace grapher.Models.Options.Cap
 
         public static readonly CapTypeOption InCap = new CapTypeOption
         {
-            Type = CapType.In,
+            Type = CapType.Input,
         };
 
         public static readonly CapTypeOption OutCap = new CapTypeOption
         {
-            Type = CapType.Out,
+            Type = CapType.Output,
         };
 
         public static readonly CapTypeOption BothCap = new CapTypeOption
@@ -70,13 +70,22 @@ namespace grapher.Models.Options.Cap
                   dropdown,
                   activeValueLabel)
         {
+            OptionsDropdown.Items.AddRange(
+                new CapTypeOption[]
+                {
+                    InCap,
+                    OutCap,
+                    BothCap
+                });
         }
 
         #endregion Constructors
 
         #region Properties
 
-        CapTypeOption CapOption
+        public CapType SelectedCapType => SelectedCapOption.Type;
+
+        public CapTypeOption SelectedCapOption
         {
             get
             {
@@ -89,5 +98,29 @@ namespace grapher.Models.Options.Cap
         }
 
         #endregion Properties
+
+        #region Methods
+
+        public static CapTypeOption CapTypeOptionFromSettings(ClassicCapMode capMode)
+        {
+            switch (capMode)
+            {
+                case ClassicCapMode.output:
+                    return OutCap;
+                case ClassicCapMode.in_out:
+                    return BothCap;
+                case ClassicCapMode.input:
+                default:
+                    return InCap;
+            }
+        }
+
+        public void SetActiveValue(ClassicCapMode capMode)
+        {
+            SelectedCapOption = CapTypeOptionFromSettings(capMode);
+            ActiveValueLabel.SetValue(SelectedCapOption.Name);
+        }
+
+        #endregion Methods
     }
 }
