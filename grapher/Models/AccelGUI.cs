@@ -154,7 +154,10 @@ namespace grapher
                 error_message = e.Message;
             }
 
-            new MessageDialog(error_message, "bad input").ShowDialog();
+            using (var form = new MessageDialog(error_message, "bad input"))
+            {
+                form.ShowDialog();
+            }
         }
 
         public void RefreshActive()
