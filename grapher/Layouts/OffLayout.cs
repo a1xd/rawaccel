@@ -12,12 +12,11 @@ namespace grapher.Layouts
             LogarithmicCharts = false;
 
             GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
-            AccelLayout = new OptionLayout(false, string.Empty);
+            ClassicCapLayout = new OptionLayout(false, string.Empty);
+            PowerCapLayout = new OptionLayout(false, string.Empty);
             DecayRateLayout = new OptionLayout(false, string.Empty);
             GrowthRateLayout = new OptionLayout(false, string.Empty);
             SmoothLayout = new OptionLayout(false, string.Empty);
-            ScaleLayout = new OptionLayout(false, string.Empty);
-            CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(false, string.Empty);
             OffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(false, string.Empty);

@@ -17,12 +17,11 @@ namespace grapher.Layouts
             Mode = AccelMode.noaccel + 1;
 
             GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
-            AccelLayout = new OptionLayout(false, Acceleration);
+            ClassicCapLayout = new OptionLayout(false, string.Empty);
+            PowerCapLayout = new OptionLayout(false, string.Empty);
             DecayRateLayout = new OptionLayout(false, string.Empty);
             GrowthRateLayout = new OptionLayout(false, string.Empty);
             SmoothLayout = new OptionLayout(false, string.Empty);
-            ScaleLayout = new OptionLayout(false, string.Empty);
-            CapLayout = new OptionLayout(false, Cap);
             WeightLayout = new OptionLayout(false, Weight);
             OffsetLayout = new OptionLayout(false, Offset);
             LimitLayout = new OptionLayout(false, string.Empty);

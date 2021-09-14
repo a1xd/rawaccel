@@ -21,6 +21,11 @@ namespace grapher.Models.Options.Cap
             In = capIn;
             Out = capOut;
             Slope = slope;
+
+            ShouldShow = true;
+            TopElement = Slope;
+            BottomElement = In;
+            CapTypeOptions.OptionsDropdown.SelectedIndexChanged += OnCapTypeDropdownSelectedItemChanged;
         }
 
         public CapTypeOptions CapTypeOptions { get; }
@@ -45,17 +50,16 @@ namespace grapher.Models.Options.Cap
 
         public override int Top
         {
-            get => CapTypeOptions.Top;
+            get => TopElement.Top;
             set
             {
-                CapTypeOptions.Top = value;
-                Layout();
+                Layout(value);
             }
         }
 
         public override int Height
         {
-            get => BottomElement.Top + BottomElement.Height - CapTypeOptions.Top;
+            get => BottomElement.Top + BottomElement.Height - TopElement.Top;
         }
 
         public override int Width
@@ -73,45 +77,100 @@ namespace grapher.Models.Options.Cap
 
         public override bool Visible
         {
-            get => CapTypeOptions.Visible;
+            get => ShouldShow;
         }
 
-        private Option BottomElement { get; set; }
+        private bool ShouldShow { get; set; }
 
-        public void Layout()
+        private IOption BottomElement { get; set; }
+
+        private IOption TopElement { get; set; }
+
+        public override void AlignActiveValues()
         {
-            Layout(CapTypeOptions.Top + CapTypeOptions.Height + Constants.OptionVerticalSeperation);
+            Slope.AlignActiveValues();
+            CapTypeOptions.AlignActiveValues();
+            In.AlignActiveValues();
+            Out.AlignActiveValues();
         }
 
-        private void Layout(int top)
+        public override void Show(string name)
+        {
+            ShouldShow = true;
+            Layout(Top, name);
+        }
+
+        public override void Hide()
+        {
+            ShouldShow = false;
+            CapTypeOptions.Hide();
+            Slope.Hide();
+            In.Hide();
+            Out.Hide();
+        }
+
+        public void SetActiveValues(
+            double scale,
+            double inCap,
+            double outCap,
+            ClassicCapMode capMode)
+        {
+            Slope.SetActiveValue(scale);
+            In.SetActiveValue(inCap);
+            Out.SetActiveValue(outCap);
+            CapTypeOptions.SetActiveValue(capMode);
+        }
+
+        private void Layout(int top, string name = null)
         {
             switch (CapTypeOptions.SelectedCapType)
             {
                 case CapType.Input:
-                    Slope.Show();
-                    In.Show();
-                    Out.Hide();
+                    if (ShouldShow)
+                    {
+                        Slope.Show();
+                        CapTypeOptions.Show(name);
+                        In.Show();
+                        Out.Hide();
+                    }
 
                     Slope.Top = top;
-                    In.SnapTo(Slope);
+                    CapTypeOptions.SnapTo(Slope);
+                    In.SnapTo(CapTypeOptions);
+
+                    TopElement = CapTypeOptions;
                     BottomElement = In;
                     break;
                 case CapType.Output:
-                    Slope.Show();
-                    In.Hide();
-                    Out.Show();
+                    if (ShouldShow)
+                    {
+                        Slope.Show();
+                        CapTypeOptions.Show(name);
+                        In.Hide();
+                        Out.Show();
+                    }
 
                     Slope.Top = top;
-                    In.SnapTo(Slope);
-                    BottomElement = In;
+                    CapTypeOptions.SnapTo(Slope);
+                    Out.SnapTo(CapTypeOptions);
+
+                    TopElement = CapTypeOptions;
+                    BottomElement = Out;
                     break;
                 case CapType.Both:
-                    Slope.Hide();
-                    In.Show();
-                    Out.Show();
+                    if (ShouldShow)
+                    {
+                        CapTypeOptions.Show(name);
+                        Slope.Hide();
+                        In.Show();
+                        Out.Show();
+                    }
 
-                    In.Top = top;
+                    CapTypeOptions.Top = top;
+                    In.SnapTo(CapTypeOptions);
                     Out.SnapTo(In);
+
+                    TopElement = In;
                     BottomElement = Out;
                     break;
             }
@@ -119,7 +178,7 @@ namespace grapher.Models.Options.Cap
 
         private void OnCapTypeDropdownSelectedItemChanged(object sender, EventArgs e)
         {
-            Layout();
+            Layout(Top);
         }
 
         private void SetupCapTypeDropdown(ComboBox capTypeDropDown)
