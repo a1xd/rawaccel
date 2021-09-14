@@ -15,18 +15,18 @@ namespace grapher.Layouts
         public const string Motivity = "Motivity";
         public const string Offset = "Offset";
         public const string Cap = "Cap";
+        public const string CapType = "Cap Type";
         public const string Weight = "Weight";
         public const string Smooth = "Smooth";
         public const string Gain = "Gain";
 
         public LayoutBase()
         {
-            AccelLayout = new OptionLayout(false, string.Empty);
             DecayRateLayout = new OptionLayout(false, string.Empty);
             GrowthRateLayout = new OptionLayout(false, string.Empty);
             SmoothLayout = new OptionLayout(false, string.Empty);
-            ScaleLayout = new OptionLayout(false, string.Empty);
-            CapLayout = new OptionLayout(false, string.Empty);
+            ClassicCapLayout = new OptionLayout(false, string.Empty);
+            PowerCapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(false, string.Empty);
             OffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(false, string.Empty);
@@ -49,17 +49,15 @@ namespace grapher.Layouts
 
         public bool LogarithmicCharts { get; protected set; }
 
-        protected OptionLayout AccelLayout { get; set; }
-
         protected OptionLayout DecayRateLayout { get; set; }
 
         protected OptionLayout GrowthRateLayout { get; set; }
 
         protected OptionLayout SmoothLayout { get; set; }
 
-        protected OptionLayout ScaleLayout { get; set; }
+        protected OptionLayout ClassicCapLayout { get; set; }
 
-        protected OptionLayout CapLayout { get; set; }
+        protected OptionLayout PowerCapLayout { get; set; }
 
         protected OptionLayout WeightLayout { get; set; }
 
@@ -88,12 +86,11 @@ namespace grapher.Layouts
 
         public void Layout(
             IOption gainSwitchOption,
-            IOption accelOption,
+            IOption classicCapOption,
+            IOption powerCapOption,
             IOption decayRateOption,
             IOption growthRateOption,
             IOption smoothOption,
-            IOption scaleOption,
-            IOption capOption,
             IOption weightOption,
             IOption offsetOption,
             IOption limitOption,
@@ -110,12 +107,12 @@ namespace grapher.Layouts
 
             foreach (var option in new (OptionLayout, IOption)[] {
                 (GainSwitchOptionLayout, gainSwitchOption),
-                (AccelLayout, accelOption),
+                (ClassicCapLayout, classicCapOption),
+                (PowerCapLayout, powerCapOption),
+                (GainSwitchOptionLayout, gainSwitchOption),
                 (DecayRateLayout, decayRateOption),
                 (GrowthRateLayout, growthRateOption),
                 (SmoothLayout, smoothOption),
-                (ScaleLayout, scaleOption),
-                (CapLayout, capOption),
                 (WeightLayout, weightOption),
                 (OffsetLayout, offsetOption),
                 (LimitLayout, limitOption),
@@ -146,12 +143,11 @@ namespace grapher.Layouts
 
         public void Layout(
             IOption gainSwitchOption,
-            IOption accelOption,
+            IOption classicCapOption,
+            IOption powerCapOption,
             IOption decayRateOption,
             IOption growthRateOption,
             IOption smoothOption,
-            IOption scaleOption,
-            IOption capOption,
             IOption weightOption,
             IOption offsetOption,
             IOption limitOption,
@@ -163,12 +159,11 @@ namespace grapher.Layouts
             IOption lutApplyOption)
         {
             Layout(gainSwitchOption,
-                accelOption,
+                classicCapOption,
+                powerCapOption,
                 decayRateOption,
                 growthRateOption,
                 smoothOption,
-                scaleOption,
-                capOption,
                 weightOption,
                 offsetOption,
                 limitOption,
@@ -178,7 +173,7 @@ namespace grapher.Layouts
                 lutTextOption,
                 lutPanelOption,
                 lutApplyOption,
-                accelOption.Top);
+                gainSwitchOption.Top);
         }
     }
 }

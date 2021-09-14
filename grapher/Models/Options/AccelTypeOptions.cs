@@ -1,5 +1,6 @@
 ﻿using grapher.Layouts;
 using grapher.Models.Options;
+using grapher.Models.Options.Cap;
 using grapher.Models.Options.LUT;
 using grapher.Models.Serialized;
 using System;
@@ -29,12 +30,11 @@ namespace grapher
         public AccelTypeOptions(
             ComboBox accelDropdown,
             CheckBoxOption gainSwitch,
-            Option acceleration,
+            CapOptions classicCap,
+            CapOptions powerCap,
             Option decayRate,
             Option growthRate,
             Option smooth,
-            Option scale,
-            Option cap,
             Option weight,
             Option offset,
             Option limit,
@@ -65,12 +65,11 @@ namespace grapher
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
             GainSwitch = gainSwitch;
-            Acceleration = acceleration;
             DecayRate = decayRate;
             GrowthRate = growthRate;
             Smooth = smooth;
-            Scale = scale;
-            Cap = cap;
+            ClassicCap = classicCap;
+            PowerCap = powerCap;
             Weight = weight;
             Offset = offset;
             Limit = limit;
@@ -85,7 +84,7 @@ namespace grapher
 
             AccelTypeActiveValue.Left = AccelDropdown.Left + AccelDropdown.Width;
             AccelTypeActiveValue.Height = AccelDropdown.Height;
-            GainSwitch.Left = Acceleration.Field.Left;
+            GainSwitch.Left = DecayRate.Field.Left;
 
             LutPanel.Left = AccelDropdown.Left;
             LutPanel.Width = AccelDropdown.Width + AccelTypeActiveValue.Width;
@@ -108,17 +107,15 @@ namespace grapher
 
         public ActiveValueLabel AccelTypeActiveValue { get; }
 
-        public Option Acceleration { get; }
-
         public Option DecayRate { get; }
 
         public Option GrowthRate { get; }
 
         public Option Smooth { get; }
 
-        public Option Scale { get; }
+        public CapOptions ClassicCap { get; }
 
-        public Option Cap { get; }
+        public CapOptions PowerCap { get; }
 
         public Option Weight { get; }
 
@@ -228,12 +225,11 @@ namespace grapher
             AccelTypeActiveValue.Hide();
 
             GainSwitch.Hide();
-            Acceleration.Hide();
             DecayRate.Hide();
             GrowthRate.Hide();
             Smooth.Hide();
-            Scale.Hide();
-            Cap.Hide();
+            ClassicCap.Hide();
+            PowerCap.Hide();
             Weight.Hide();
             Offset.Hide();
             Limit.Hide();
@@ -263,13 +259,20 @@ namespace grapher
             AccelTypeActiveValue.SetValue(AccelerationType.ActiveName);
             GainSwitch.SetActiveValue(args.gain);
             Weight.SetActiveValue(args.weight);
-            Cap.SetActiveValue(args.cap.x);
+            ClassicCap.SetActiveValues(
+                args.acceleration,
+                args.cap.x,
+                args.cap.y,
+                args.capMode);
+            PowerCap.SetActiveValues(
+                args.scale,
+                args.cap.x,
+                args.cap.y,
+                args.capMode);
             Offset.SetActiveValue(args.offset);
-            Acceleration.SetActiveValue(args.acceleration);
             DecayRate.SetActiveValue(args.decayRate);
             GrowthRate.SetActiveValue(args.growthRate);
             Smooth.SetActiveValue(args.smooth);
-            Scale.SetActiveValue(args.scale);
             Limit.SetActiveValue(args.limit);
             PowerClassic.SetActiveValue(args.exponentClassic);
             Exponent.SetActiveValue(args.exponentPower);
@@ -286,8 +289,8 @@ namespace grapher
                 AccelDropdown.Text = Constants.AccelDropDownDefaultFullText;
             }
 
-            Left = Acceleration.Left + Constants.DropDownLeftSeparation;
-            Width = Acceleration.Width - Constants.DropDownLeftSeparation;
+            Left = DecayRate.Left + Constants.DropDownLeftSeparation;
+            Width = DecayRate.Width - Constants.DropDownLeftSeparation;
 
             LutText.Expand();
             HandleLUTOptionsOnResize();
@@ -300,8 +303,8 @@ namespace grapher
                 AccelDropdown.Text = Constants.AccelDropDownDefaultShortText;
             }
 
-            Left = Acceleration.Field.Left;
-            Width = Acceleration.Field.Width;
+            Left = DecayRate.Field.Left;
+            Width = DecayRate.Field.Width;
 
             LutText.Shorten();
         }
@@ -311,13 +314,23 @@ namespace grapher
             args.mode = AccelerationType.Mode;
             args.gain = GainSwitch.CheckBox.Checked;
 
-            if (Acceleration.Visible) args.acceleration = Acceleration.Field.Data;
             if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
             if (GrowthRate.Visible) args.growthRate = GrowthRate.Field.Data;
             if (Smooth.Visible) args.smooth = Smooth.Field.Data;
-            if (Scale.Visible) args.scale = Scale.Field.Data;
-            // TODO - make field for output and in_out cap
-            if (Cap.Visible) args.cap.x = Cap.Field.Data;
+            if (ClassicCap.Visible)
+            {
+                args.acceleration = ClassicCap.Slope.Field.Data;
+                args.cap.x = ClassicCap.In.Field.Data;
+                args.cap.y = ClassicCap.Out.Field.Data;
+                args.capMode = ClassicCap.CapTypeOptions.GetSelectedCapMode();
+            }
+            if (PowerCap.Visible)
+            {
+                args.scale = ClassicCap.Slope.Field.Data;
+                args.cap.x = PowerCap.In.Field.Data;
+                args.cap.y = PowerCap.Out.Field.Data;
+                args.capMode = PowerCap.CapTypeOptions.GetSelectedCapMode();
+            }
             if (Limit.Visible) args.limit = Limit.Field.Data;
             if (PowerClassic.Visible) args.exponentClassic = PowerClassic.Field.Data;
             if (Exponent.Visible) args.exponentPower = Exponent.Field.Data;
@@ -344,12 +357,11 @@ namespace grapher
         {
             AccelTypeActiveValue.Align();
             GainSwitch.AlignActiveValues();
-            Acceleration.AlignActiveValues();
             DecayRate.AlignActiveValues();
             GrowthRate.AlignActiveValues();
             Smooth.AlignActiveValues();
-            Scale.AlignActiveValues();
-            Cap.AlignActiveValues();
+            ClassicCap.AlignActiveValues();
+            PowerCap.AlignActiveValues();
             Offset.AlignActiveValues();
             Weight.AlignActiveValues();
             Limit.AlignActiveValues();
@@ -363,7 +375,7 @@ namespace grapher
         {
             LutText.Left = AccelDropdown.Left;
             LutPanel.Left = GainSwitch.Left - 100;
-            LutPanel.Width = Acceleration.ActiveValueLabel.CenteringLabel.Right - LutPanel.Left;
+            LutPanel.Width = DecayRate.ActiveValueLabel.CenteringLabel.Right - LutPanel.Left;
             LutApply.Left = LutPanel.Left;
             LutApply.Width = AccelDropdown.Right - LutPanel.Left;
         }
@@ -383,12 +395,11 @@ namespace grapher
 
             AccelerationType.Layout(
                 GainSwitch,
-                Acceleration,
+                ClassicCap,
+                PowerCap,
                 DecayRate,
                 GrowthRate,
                 Smooth,
-                Scale,
-                Cap,
                 Weight,
                 Offset,
                 Limit,

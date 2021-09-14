@@ -97,6 +97,17 @@ namespace grapher.Models.Options.Cap
             }
         }
 
+        public ClassicCapMode GetSelectedCapMode()
+        {
+            switch(SelectedCapType)
+            {
+                case CapType.Output: return ClassicCapMode.output;
+                case CapType.Both: return ClassicCapMode.in_out;
+                case CapType.Input:
+                default: return ClassicCapMode.input;
+            }
+        }
+
         #endregion Properties
 
         #region Methods

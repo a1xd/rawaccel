@@ -50,6 +50,8 @@ namespace grapher
                 accelTypeDropY,
                 XLutApplyDropdown,
                 YLutApplyDropdown,
+                CapTypeDropdownX,
+                CapTypeDropdownY,
                 writeButton,
                 toggleButton,
                 showVelocityGainToolStripMenuItem,
@@ -66,8 +68,10 @@ namespace grapher
                 rotationBox,
                 weightBoxX,
                 weightBoxY,
-                capBoxX,
-                capBoxY,
+                inCapBoxX,
+                inCapBoxY,
+                outCapBoxX,
+                outCapBoxY,
                 offsetBoxX,
                 offsetBoxY,
                 accelerationBoxX,
@@ -110,8 +114,12 @@ namespace grapher
                 rotationLabel,
                 weightLabelX,
                 weightLabelY,
-                capLabelX,
-                capLabelY,
+                inCapLabelX,
+                inCapLabelY,
+                outCapLabelX,
+                outCapLabelY,
+                CapTypeLabelX,
+                CapTypeLabelY,
                 offsetLabelX,
                 offsetLabelY,
                 constantOneLabelX,
@@ -141,8 +149,12 @@ namespace grapher
                 RotationActiveLabel,
                 WeightActiveXLabel,
                 WeightActiveYLabel,
-                CapActiveXLabel,
-                CapActiveYLabel,
+                InCapActiveXLabel,
+                InCapActiveYLabel,
+                OutCapActiveXLabel,
+                OutCapActiveYLabel,
+                CapTypeActiveXLabel,
+                CapTypeActiveYLabel,
                 OffsetActiveXLabel,
                 OffsetActiveYLabel,
                 AccelerationActiveLabelX,
@@ -243,6 +255,6 @@ namespace grapher
 
         }
 
-		#endregion Method
-	}
+        #endregion Method
+    }
 }

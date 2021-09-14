@@ -2,6 +2,7 @@
 using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
+using grapher.Models.Options.Cap;
 using grapher.Models.Options.Directionality;
 using grapher.Models.Options.LUT;
 using grapher.Models.Serialized;
@@ -27,6 +28,8 @@ namespace grapher.Models
             ComboBox accelTypeDropY,
             ComboBox lutApplyDropdownX,
             ComboBox lutApplyDropdownY,
+            ComboBox capTypeDropdownX,
+            ComboBox capTypeDropdownY,
             Button writeButton,
             ButtonBase toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
@@ -43,8 +46,10 @@ namespace grapher.Models
             TextBox rotationBox,
             TextBox weightBoxX,
             TextBox weightBoxY,
-            TextBox capBoxX,
-            TextBox capBoxY,
+            TextBox inCapBoxX,
+            TextBox inCapBoxY,
+            TextBox outCapBoxX,
+            TextBox outCapBoxY,
             TextBox offsetBoxX,
             TextBox offsetBoxY,
             TextBox accelerationBoxX,
@@ -87,8 +92,12 @@ namespace grapher.Models
             Label rotationLabel,
             Label weightLabelX,
             Label weightLabelY,
-            Label capLabelX,
-            Label capLabelY,
+            Label inCapLabelX,
+            Label inCapLabelY,
+            Label outCapLabelX,
+            Label outCapLabelY,
+            Label capTypeLabelX,
+            Label capTypeLabelY,
             Label offsetLabelX,
             Label offsetLabelY,
             Label constantOneLabelX,
@@ -118,8 +127,12 @@ namespace grapher.Models
             Label rotationActiveLabel,
             Label weightActiveXLabel,
             Label weightActiveYLabel,
-            Label capActiveXLabel,
-            Label capActiveYLabel,
+            Label inCapActiveXLabel,
+            Label inCapActiveYLabel,
+            Label outCapActiveXLabel,
+            Label outCapActiveYLabel,
+            Label capTypeActiveXLabel,
+            Label capTypeActiveYLabel,
             Label offsetActiveLabelX,
             Label offsetActiveLabelY,
             Label accelerationActiveLabelX,
@@ -233,24 +246,6 @@ namespace grapher.Models
                 optionSetYLeft,
                 new ActiveValueLabel(weightActiveYLabel, activeValueTitleY),
                 "Weight");
-
-            var capX = new Option(
-                capBoxX,
-                form,
-                0,
-                capLabelX,
-                0,
-                new ActiveValueLabel(capActiveXLabel, activeValueTitleX),
-                "Cap");
-
-            var capY = new Option(
-                capBoxY,
-                form,
-                0,
-                capLabelY,
-                optionSetYLeft,
-                new ActiveValueLabel(capActiveYLabel, activeValueTitleY),
-                "Cap");
 
             var offsetX = new Option(
                 offsetBoxX,
@@ -378,6 +373,76 @@ namespace grapher.Models
                 new ActiveValueLabel(midpointActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
+            var inCapX = new Option(
+                inCapBoxX,
+                form,
+                0,
+                inCapLabelX,
+                0,
+                new ActiveValueLabel(inCapActiveXLabel, activeValueTitleX),
+                "Cap: Input");
+
+            var inCapY = new Option(
+                inCapBoxY,
+                form,
+                0,
+                inCapLabelY,
+                optionSetYLeft,
+                new ActiveValueLabel(inCapActiveYLabel, activeValueTitleY),
+                "Cap");
+
+            var outCapX = new Option(
+                outCapBoxX,
+                form,
+                0,
+                outCapLabelX,
+                0,
+                new ActiveValueLabel(outCapActiveXLabel, activeValueTitleX),
+                "Cap: Input");
+
+            var outCapY = new Option(
+                outCapBoxY,
+                form,
+                0,
+                outCapLabelY,
+                optionSetYLeft,
+                new ActiveValueLabel(outCapActiveYLabel, activeValueTitleY),
+                "Cap");
+
+            var capTypeX = new CapTypeOptions(
+                capTypeLabelX,
+                capTypeDropdownX,
+                new ActiveValueLabel(capTypeActiveXLabel, activeValueTitleX));
+
+            var capTypeY = new CapTypeOptions(
+                capTypeLabelY,
+                capTypeDropdownY,
+                new ActiveValueLabel(capTypeActiveYLabel, activeValueTitleY));
+
+            var accelCapOptionsX = new CapOptions(
+                capTypeX,
+                inCapX,
+                outCapX,
+                accelerationX);
+
+            var accelCapOptionsY = new CapOptions(
+                capTypeY,
+                inCapY,
+                outCapY,
+                accelerationY);
+
+            var powerCapOptionsX = new CapOptions(
+                capTypeX,
+                inCapX,
+                outCapX,
+                accelerationX);
+
+            var powerCapOptionsY = new CapOptions(
+                capTypeY,
+                inCapY,
+                outCapY,
+                accelerationY);
+
             var lpNorm = new Option(
                 new Field(lpNormBox, form, 2),
                 lpNormLabel,
@@ -421,12 +486,11 @@ namespace grapher.Models
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,
                 gainSwitchOptionX,
-                accelerationX,
+                accelCapOptionsX,
+                powerCapOptionsX,
                 decayRateX,
                 growthRateX,
                 smoothX,
-                scaleX,
-                capX,
                 weightX,
                 offsetX,
                 limitX,
@@ -445,12 +509,11 @@ namespace grapher.Models
             var accelerationOptionsY = new AccelTypeOptions(
                 accelTypeDropY,
                 gainSwitchOptionY,
-                accelerationY,
+                accelCapOptionsY,
+                powerCapOptionsY,
                 decayRateY,
                 growthRateY,
                 smoothY,
-                scaleY,
-                capY,
                 weightY,
                 offsetY,
                 limitY,
