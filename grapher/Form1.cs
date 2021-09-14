@@ -34,7 +34,12 @@ namespace grapher
             ToolStripMenuItem HelpMenuItem = new ToolStripMenuItem("&Help");
 
             HelpMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
-                    new ToolStripMenuItem("&About", null, (s, e) => new AboutBox(driverVersion).ShowDialog())
+                    new ToolStripMenuItem("&About", null, (s, e) => {
+                        using (var form = new AboutBox(driverVersion))
+                        {
+                            form.ShowDialog();
+                        }
+                    })
             });
 
             menuStrip1.Items.AddRange(new ToolStripItem[] { HelpMenuItem });
