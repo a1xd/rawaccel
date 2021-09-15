@@ -14,9 +14,10 @@ namespace rawaccel {
             return accel_raised * pow(x - args.offset, args.exponent_classic) / x;
         }
 
-        static double base_accel(double x, double y, double power, double offset)
+        static double base_accel(double x, double y, const accel_args& args)
         {
-            return pow(x * y * pow(x - offset, -power), 1 / (power + 1));
+            auto power = args.exponent_classic;
+            return pow(x * y * pow(x - args.offset, -power), 1 / (power - 1));
         }
     };
 
@@ -40,7 +41,7 @@ namespace rawaccel {
                 }
 
                 {
-                    double a = base_accel(args.cap.x, cap, args.exponent_classic, args.offset);
+                    double a = base_accel(args.cap.x, cap, args);
                     accel_raised = pow(a, args.exponent_classic - 1);
                 }
                 break;
