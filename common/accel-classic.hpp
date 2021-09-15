@@ -102,12 +102,12 @@ namespace rawaccel {
                 constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
                 break;
             case classic_cap_mode::in:
+                accel_raised = pow(args.acceleration, args.exponent_classic - 1);
                 if (args.cap.x > 0) {
                     cap.x = args.cap.x;
                     cap.y = gain(cap.x, args.acceleration, args.exponent_classic, args.offset);
                     constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
                 }
-                accel_raised = pow(args.acceleration, args.exponent_classic - 1);
                 break;
             case classic_cap_mode::out:
             default:
