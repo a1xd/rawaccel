@@ -81,9 +81,6 @@
     <Compile Include="DeviceMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DeviceMenuForm.Designer.cs">
-      <DependentUpon>DeviceMenuForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Layouts\LUTLayout.cs" />
     <Compile Include="Layouts\MotivityLayout.cs" />
     <Compile Include="Layouts\JumpLayout.cs" />
@@ -109,8 +106,7 @@
     <Compile Include="Models\Charts\EstimatedPoints.cs" />
     <Compile Include="Models\Charts\ChartState\XYOneGraphState.cs" />
     <Compile Include="Models\Charts\ChartState\XYTwoGraphState.cs" />
-    <Compile Include="Models\Devices\DeviceIDItem.cs" />
-    <Compile Include="Models\Devices\DeviceIDManager.cs" />
+    <Compile Include="Models\Devices\DeviceDialogItem.cs" />
     <Compile Include="Models\Mouse\MouseData.cs" />
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
@@ -157,9 +153,6 @@
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DeviceMenuForm.resx">
-      <DependentUpon>DeviceMenuForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
