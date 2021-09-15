@@ -21,8 +21,7 @@ namespace grapher.Models.Serialized
             ToolStripMenuItem autoWrite,
             ToolStripMenuItem showLastMouseMove,
             ToolStripMenuItem showVelocityAndGain,
-            ToolStripMenuItem streamingMode,
-            ToolStripMenuItem deviceMenuItem)
+            ToolStripMenuItem streamingMode)
         {
             DpiField = dpiField;
             PollRateField = pollRateField;
@@ -30,7 +29,6 @@ namespace grapher.Models.Serialized
             ShowLastMouseMoveMenuItem = showLastMouseMove;
             ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
             StreamingModeMenuItem = streamingMode;
-            deviceMenuItem.Click += (s, e) => new DeviceMenuForm(this).ShowDialog();
 
             SystemDevices = new List<MultiHandleDevice>();
             ActiveHandles = new List<IntPtr>();
@@ -47,20 +45,29 @@ namespace grapher.Models.Serialized
                 UpdateFieldsFromGUISettings();
             }
 
-            UserConfig = InitActiveAndGetUserConfig();
+            UserConfigField = InitActiveAndGetUserConfig();
         }
 
         #endregion Constructors
 
         #region Fields
 
+        private EventHandler DeviceChangeField;
+
         private DriverConfig ActiveConfigField;
+        private DriverConfig UserConfigField;
 
         #endregion Fields
 
         #region Properties
 
         public GUISettings GuiSettings { get; private set; }
+
+        public event EventHandler DeviceChange
+        {
+            add => DeviceChangeField += value;
+            remove => DeviceChangeField -= value;
+        }
 
         public DriverConfig ActiveConfig 
         {
@@ -87,11 +94,16 @@ namespace grapher.Models.Serialized
             get => ActiveConfig.accels[0];
         }
 
-        public DriverConfig UserConfig { get; private set; }
+        public DriverConfig UserConfig 
+        { 
+            get => UserConfigField;
+            private set => UserConfigField = value;
+        }
 
         public Profile UserProfile 
         {
-            get => UserConfig.profiles[0];
+            get => UserConfigField.profiles[0];
+            private set => UserConfigField.SetProfileAt(0, value);
         }
 
         public HashSet<string> ActiveProfileNamesSet { get; private set; }
@@ -133,12 +145,12 @@ namespace grapher.Models.Serialized
 
         public bool TryActivate(Profile settings, out string errors)
         {
-            var old = ActiveProfile;
-            ActiveProfile = settings;
-            bool success = TryActivate(ActiveConfig, out errors);
+            var old = UserProfile;
+            UserProfile = settings;
+            bool success = TryActivate(UserConfig, out errors);
             if (!success)
             {
-                ActiveProfile = old;
+                UserProfile = old;
             }
             return success;
         }
@@ -183,7 +195,7 @@ namespace grapher.Models.Serialized
             };
         }
 
-        private void SetActiveHandles()
+        public void SetActiveHandles()
         {
             ActiveHandles.Clear();
 
@@ -217,6 +229,37 @@ namespace grapher.Models.Serialized
             }
         }
 
+        public void Submit(DeviceConfig newDefaultConfig, DeviceDialogItem[] items)
+        {
+            UserConfig.defaultDeviceConfig = newDefaultConfig;
+            foreach (var item in items)
+            {
+                if (item.overrideDefaultConfig)
+                {
+                    if (item.oldSettings is null)
+                    {
+                        UserConfig.devices.Add(
+                            new DeviceSettings
+                            {
+                                name = item.device.name,
+                                profile = item.newProfile,
+                                id = item.device.id,
+                                config = item.newConfig
+                            });
+                    }
+                    else
+                    {
+                        item.oldSettings.config = item.newConfig;
+                        item.oldSettings.profile = item.newProfile;
+                    }
+                }
+                else if (!(item.oldSettings is null))
+                {
+                    UserConfig.devices.Remove(item.oldSettings);
+                }
+            }
+        }
+
         public void OnProfileSelectionChange()
         {
             SetActiveHandles();
@@ -226,6 +269,8 @@ namespace grapher.Models.Serialized
         {
             SystemDevices = MultiHandleDevice.GetList();
             SetActiveHandles();
+
+            DeviceChangeField?.Invoke(this, EventArgs.Empty);
         }
 
         private DriverConfig InitActiveAndGetUserConfig()

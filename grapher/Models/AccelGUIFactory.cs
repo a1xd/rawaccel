@@ -639,8 +639,7 @@ namespace grapher.Models
                 autoWriteMenuItem,
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem,
-                streamingModeToolStripMenuItem,
-                deviceMenuItem);
+                streamingModeToolStripMenuItem);
 
             var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
 
@@ -653,7 +652,8 @@ namespace grapher.Models
                 writeButton,
                 toggleButton,
                 mouseWatcher,
-                scaleMenuItem);
+                scaleMenuItem,
+                deviceMenuItem);
         }
 
         #endregion Methods
