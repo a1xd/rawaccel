@@ -32,7 +32,6 @@ namespace grapher
             Option decayRate,
             Option growthRate,
             Option smooth,
-            Option weight,
             Option offset,
             Option limit,
             Option powerClassic,
@@ -67,7 +66,6 @@ namespace grapher
             Smooth = smooth;
             ClassicCap = classicCap;
             PowerCap = powerCap;
-            Weight = weight;
             Offset = offset;
             Limit = limit;
             PowerClassic = powerClassic;
@@ -113,8 +111,6 @@ namespace grapher
         public CapOptions ClassicCap { get; }
 
         public CapOptions PowerCap { get; }
-
-        public Option Weight { get; }
 
         public Option Offset { get; }
 
@@ -227,7 +223,6 @@ namespace grapher
             Smooth.Hide();
             ClassicCap.Hide();
             PowerCap.Hide();
-            Weight.Hide();
             Offset.Hide();
             Limit.Hide();
             PowerClassic.Hide();
@@ -255,7 +250,6 @@ namespace grapher
             AccelerationType = AccelTypeFromSettings(ref args);
             AccelTypeActiveValue.SetValue(AccelerationType.ActiveName);
             GainSwitch.SetActiveValue(args.gain);
-            Weight.SetActiveValue(args.weight);
             ClassicCap.SetActiveValues(
                 args.acceleration,
                 args.cap.x,
@@ -333,7 +327,6 @@ namespace grapher
             if (Exponent.Visible) args.exponentPower = Exponent.Field.Data;
             if (Offset.Visible) args.offset = Offset.Field.Data;
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
-            if (Weight.Visible) args.weight = Weight.Field.Data;
             if (LutPanel.Visible)
             {
                 (var points, var length) = LutPanel.GetPoints();
@@ -360,7 +353,6 @@ namespace grapher
             ClassicCap.AlignActiveValues();
             PowerCap.AlignActiveValues();
             Offset.AlignActiveValues();
-            Weight.AlignActiveValues();
             Limit.AlignActiveValues();
             PowerClassic.AlignActiveValues();
             Exponent.AlignActiveValues();
@@ -397,7 +389,6 @@ namespace grapher
                 DecayRate,
                 GrowthRate,
                 Smooth,
-                Weight,
                 Offset,
                 Limit,
                 PowerClassic,

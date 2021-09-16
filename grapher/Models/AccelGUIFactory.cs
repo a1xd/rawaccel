@@ -46,8 +46,6 @@ namespace grapher.Models
             TextBox sensitivityBoxX,
             TextBox sensitivityBoxY,
             TextBox rotationBox,
-            TextBox weightBoxX,
-            TextBox weightBoxY,
             TextBox inCapBoxXClassic,
             TextBox inCapBoxYClassic,
             TextBox outCapBoxXClassic,
@@ -96,8 +94,6 @@ namespace grapher.Models
             Label sensitivityLabel,
             Label yxRatioLabel,
             Label rotationLabel,
-            Label weightLabelX,
-            Label weightLabelY,
             Label inCapLabelXClassic,
             Label inCapLabelYClassic,
             Label outCapLabelXClassic,
@@ -137,8 +133,6 @@ namespace grapher.Models
             Label sensitivityActiveLabel,
             Label yxRatioActiveLabel,
             Label rotationActiveLabel,
-            Label weightActiveXLabel,
-            Label weightActiveYLabel,
             Label inCapActiveXLabelClassic,
             Label inCapActiveYLabelClassic,
             Label outCapActiveXLabelClassic,
@@ -246,24 +240,6 @@ namespace grapher.Models
             var optionSetYLeft = activeValueTitleX.Left + activeValueTitleX.Width;
 
             var directionalityLeft = directionalityPanel.Left;
-
-            var weightX = new Option(
-                weightBoxX,
-                form,
-                1,
-                weightLabelX,
-                0,
-                new ActiveValueLabel(weightActiveXLabel, activeValueTitleX),
-                "Weight");
-
-            var weightY = new Option(
-                weightBoxY,
-                form,
-                1,
-                weightLabelY,
-                optionSetYLeft,
-                new ActiveValueLabel(weightActiveYLabel, activeValueTitleY),
-                "Weight");
 
             var offsetX = new Option(
                 offsetBoxX,
@@ -559,7 +535,6 @@ namespace grapher.Models
                 decayRateX,
                 growthRateX,
                 smoothX,
-                weightX,
                 offsetX,
                 limitX,
                 powerClassicX,
@@ -582,7 +557,6 @@ namespace grapher.Models
                 decayRateY,
                 growthRateY,
                 smoothY,
-                weightY,
                 offsetY,
                 limitY,
                 powerClassicY,

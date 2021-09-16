@@ -71,7 +71,6 @@ public value struct AccelArgs
     double motivity;
     double exponentClassic;
     double scale;
-    double weight;
     double exponentPower;
     double limit;
     double midpoint;

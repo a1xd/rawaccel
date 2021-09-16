@@ -10,7 +10,7 @@ namespace rawaccel {
 		static double base_fn(double x, double scale, const accel_args& args)
 		{
 			// f(x) = w(mx)^k
-			return args.weight * pow(scale * x, args.exponent_power);
+			return pow(scale * x, args.exponent_power);
 		}
 	};
 
