@@ -2,10 +2,7 @@
 using grapher.Models.Options;
 using grapher.Models.Options.Cap;
 using grapher.Models.Options.LUT;
-using grapher.Models.Serialized;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace grapher

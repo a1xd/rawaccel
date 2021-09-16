@@ -14,7 +14,6 @@ namespace grapher.Layouts
         public const string Midpoint = "Midpoint";
         public const string Motivity = "Motivity";
         public const string Offset = "Offset";
-        public const string Cap = "Cap";
         public const string CapType = "Cap Type";
         public const string Weight = "Weight";
         public const string Smooth = "Smooth";
@@ -109,7 +108,6 @@ namespace grapher.Layouts
                 (GainSwitchOptionLayout, gainSwitchOption),
                 (ClassicCapLayout, classicCapOption),
                 (PowerCapLayout, powerCapOption),
-                (GainSwitchOptionLayout, gainSwitchOption),
                 (DecayRateLayout, decayRateOption),
                 (GrowthRateLayout, growthRateOption),
                 (SmoothLayout, smoothOption),

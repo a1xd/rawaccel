@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static grapher.Models.Options.Cap.CapTypeOptions;
 
@@ -10,6 +6,20 @@ namespace grapher.Models.Options.Cap
 {
     public class CapOptions : OptionBase
     {
+        #region Constants
+
+        public const string InCapLabel = "Cap: Input";
+        public const string OutCapLabel = "Cap: Output";
+
+        #endregion Constants
+
+        #region Fields
+
+        private int _top;
+
+        #endregion Fields
+
+        #region Constructors
 
         public CapOptions(
             CapTypeOptions capTypeOptions,
@@ -23,10 +33,15 @@ namespace grapher.Models.Options.Cap
             Slope = slope;
 
             ShouldShow = true;
-            TopElement = Slope;
+            _top = Slope.Top;
             BottomElement = In;
             CapTypeOptions.OptionsDropdown.SelectedIndexChanged += OnCapTypeDropdownSelectedItemChanged;
+            CapTypeOptions.SelectedCapOption = InCap;
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         public CapTypeOptions CapTypeOptions { get; }
 
@@ -50,16 +65,17 @@ namespace grapher.Models.Options.Cap
 
         public override int Top
         {
-            get => TopElement.Top;
+            get => _top;
             set
             {
+                _top = value;
                 Layout(value);
             }
         }
 
         public override int Height
         {
-            get => BottomElement.Top + BottomElement.Height - TopElement.Top;
+            get => BottomElement.Top + BottomElement.Height - Top;
         }
 
         public override int Width
@@ -84,7 +100,9 @@ namespace grapher.Models.Options.Cap
 
         private IOption BottomElement { get; set; }
 
-        private IOption TopElement { get; set; }
+        #endregion Properties
+
+        #region Methods
 
         public override void AlignActiveValues()
         {
@@ -130,7 +148,7 @@ namespace grapher.Models.Options.Cap
                     {
                         Slope.Show();
                         CapTypeOptions.Show(name);
-                        In.Show();
+                        ShowInCap();
                         Out.Hide();
                     }
 
@@ -138,7 +156,6 @@ namespace grapher.Models.Options.Cap
                     CapTypeOptions.SnapTo(Slope);
                     In.SnapTo(CapTypeOptions);
 
-                    TopElement = CapTypeOptions;
                     BottomElement = In;
                     break;
                 case CapType.Output:
@@ -147,14 +164,13 @@ namespace grapher.Models.Options.Cap
                         Slope.Show();
                         CapTypeOptions.Show(name);
                         In.Hide();
-                        Out.Show();
+                        ShowOutCap();
                     }
 
                     Slope.Top = top;
                     CapTypeOptions.SnapTo(Slope);
                     Out.SnapTo(CapTypeOptions);
 
-                    TopElement = CapTypeOptions;
                     BottomElement = Out;
                     break;
                 case CapType.Both:
@@ -162,29 +178,35 @@ namespace grapher.Models.Options.Cap
                     {
                         CapTypeOptions.Show(name);
                         Slope.Hide();
-                        In.Show();
-                        Out.Show();
+                        ShowInCap();
+                        ShowOutCap();
                     }
 
                     CapTypeOptions.Top = top;
                     In.SnapTo(CapTypeOptions);
                     Out.SnapTo(In);
 
-                    TopElement = In;
                     BottomElement = Out;
                     break;
             }
         }
 
+        private void ShowInCap()
+        {
+            In.Show(InCapLabel);
+        }
+
+        private void ShowOutCap()
+        {
+            Out.Show(OutCapLabel);
+        }
+
         private void OnCapTypeDropdownSelectedItemChanged(object sender, EventArgs e)
         {
             Layout(Top);
+            CapTypeOptions.CheckIfDefault();
         }
 
-        private void SetupCapTypeDropdown(ComboBox capTypeDropDown)
-        {
-            capTypeDropDown.Items.Clear();
-            capTypeDropDown.DataSource = Enum.GetValues(typeof(CapType));
-        }
+        #endregion Methods
     }
 }

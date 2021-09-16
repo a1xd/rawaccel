@@ -11,7 +11,6 @@ namespace grapher.Layouts
         {
             Name = LinearName;
             Mode = AccelMode.classic;
-            LogarithmicCharts = false;
 
             GainSwitchOptionLayout = new OptionLayout(true, Gain);
             ClassicCapLayout = new OptionLayout(true, CapType);

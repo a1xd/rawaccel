@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace grapher.Models.Options
 {
@@ -61,7 +56,7 @@ namespace grapher.Models.Options
         {
             get
             {
-                return Label.Height;
+                return OptionsDropdown.Height;
             }
         }
 
@@ -69,7 +64,7 @@ namespace grapher.Models.Options
         {
             get
             {
-                return Label.Top;
+                return OptionsDropdown.Top;
             }
             set
             {
