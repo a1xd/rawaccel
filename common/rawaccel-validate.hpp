@@ -94,10 +94,6 @@ namespace rawaccel {
 				error("scale"" must be positive");
 			}
 
-			if (args.weight <= 0) {
-				error("weight"" must be positive");
-			}
-
 			if (args.exponent_power <= 0) {
 				error("exponent"" must be positive");
 			}

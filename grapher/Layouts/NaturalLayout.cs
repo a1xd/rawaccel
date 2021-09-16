@@ -17,7 +17,6 @@ namespace grapher.Layouts
             DecayRateLayout = new OptionLayout(true, DecayRate);
             GrowthRateLayout = new OptionLayout(false, string.Empty);
             SmoothLayout = new OptionLayout(false, string.Empty);
-            WeightLayout = new OptionLayout(false, string.Empty);
             OffsetLayout = new OptionLayout(true, Offset);
             LimitLayout = new OptionLayout(true, Limit);
             PowerClassicLayout = new OptionLayout(false, string.Empty);

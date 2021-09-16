@@ -49,7 +49,6 @@ namespace rawaccel {
         double motivity = 1.5;
         double exponent_classic = 2;
         double scale = 1;
-        double weight = 1;
         double exponent_power = 0.05;
         double limit = 1.5;
         double midpoint = 5;

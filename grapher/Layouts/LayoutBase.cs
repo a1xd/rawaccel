@@ -26,7 +26,6 @@ namespace grapher.Layouts
             SmoothLayout = new OptionLayout(false, string.Empty);
             ClassicCapLayout = new OptionLayout(false, string.Empty);
             PowerCapLayout = new OptionLayout(false, string.Empty);
-            WeightLayout = new OptionLayout(false, string.Empty);
             OffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(false, string.Empty);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
@@ -58,8 +57,6 @@ namespace grapher.Layouts
 
         protected OptionLayout PowerCapLayout { get; set; }
 
-        protected OptionLayout WeightLayout { get; set; }
-
         protected OptionLayout OffsetLayout { get; set; }
 
         protected OptionLayout LimitLayout { get; set; }
@@ -90,7 +87,6 @@ namespace grapher.Layouts
             IOption decayRateOption,
             IOption growthRateOption,
             IOption smoothOption,
-            IOption weightOption,
             IOption offsetOption,
             IOption limitOption,
             IOption powerClassicOption,
@@ -111,7 +107,6 @@ namespace grapher.Layouts
                 (DecayRateLayout, decayRateOption),
                 (GrowthRateLayout, growthRateOption),
                 (SmoothLayout, smoothOption),
-                (WeightLayout, weightOption),
                 (OffsetLayout, offsetOption),
                 (LimitLayout, limitOption),
                 (PowerClassicLayout, powerClassicOption),
@@ -146,7 +141,6 @@ namespace grapher.Layouts
             IOption decayRateOption,
             IOption growthRateOption,
             IOption smoothOption,
-            IOption weightOption,
             IOption offsetOption,
             IOption limitOption,
             IOption powerClassicOption,
@@ -162,7 +156,6 @@ namespace grapher.Layouts
                 decayRateOption,
                 growthRateOption,
                 smoothOption,
-                weightOption,
                 offsetOption,
                 limitOption,
                 powerClassicOption,
