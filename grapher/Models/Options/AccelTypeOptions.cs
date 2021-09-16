@@ -275,7 +275,6 @@ namespace grapher
             Exponent.SetActiveValue(args.exponentPower);
             Midpoint.SetActiveValue(args.midpoint);
             LutPanel.SetActiveValues(args.data, args.length, args.mode);
-            // TODO - use GainSwitch only?
             LutApply.SetActiveValue(args.gain);
         }
 
@@ -309,7 +308,9 @@ namespace grapher
         public void SetArgs(ref AccelArgs args)
         {
             args.mode = AccelerationType.Mode;
-            args.gain = GainSwitch.CheckBox.Checked;
+            args.gain = LutPanel.Visible ?
+                LutApply.ApplyType == LutApplyOptions.LutApplyType.Velocity :
+                GainSwitch.CheckBox.Checked;
 
             if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
             if (GrowthRate.Visible) args.growthRate = GrowthRate.Field.Data;
