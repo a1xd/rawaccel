@@ -37,7 +37,7 @@ namespace rawaccel {
 
 		loglog_sigmoid(const accel_args& args) 
 		{
-			init({ 0, 8, 8 }, args.gain);
+			init({ -3, 9, 8 }, true);
 
 			double sum = 0;
 			double a = 0;
