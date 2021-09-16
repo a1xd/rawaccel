@@ -102,10 +102,10 @@ namespace grapher.Models.Options
             ActiveValueLabel.Show();
         }
 
-        public void SetActiveValue(bool legacy)
+        public void SetActiveValue(bool gain)
         {
-            CheckBox.Checked = !legacy;
-            var activeValueString = legacy ? "Legacy" : "Gain";
+            CheckBox.Checked = gain;
+            var activeValueString = gain ? "Gain" : "Legacy";
             ActiveValueLabel.SetValue(activeValueString);
         }
     }
