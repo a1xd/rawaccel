@@ -28,8 +28,10 @@ namespace grapher.Models
             ComboBox accelTypeDropY,
             ComboBox lutApplyDropdownX,
             ComboBox lutApplyDropdownY,
-            ComboBox capTypeDropdownX,
-            ComboBox capTypeDropdownY,
+            ComboBox capTypeDropdownXClassic,
+            ComboBox capTypeDropdownYClassic,
+            ComboBox capTypeDropdownXPower,
+            ComboBox capTypeDropdownYPower,
             Button writeButton,
             ButtonBase toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
@@ -46,10 +48,14 @@ namespace grapher.Models
             TextBox rotationBox,
             TextBox weightBoxX,
             TextBox weightBoxY,
-            TextBox inCapBoxX,
-            TextBox inCapBoxY,
-            TextBox outCapBoxX,
-            TextBox outCapBoxY,
+            TextBox inCapBoxXClassic,
+            TextBox inCapBoxYClassic,
+            TextBox outCapBoxXClassic,
+            TextBox outCapBoxYClassic,
+            TextBox inCapBoxXPower,
+            TextBox inCapBoxYPower,
+            TextBox outCapBoxXPower,
+            TextBox outCapBoxYPower,
             TextBox offsetBoxX,
             TextBox offsetBoxY,
             TextBox accelerationBoxX,
@@ -92,12 +98,18 @@ namespace grapher.Models
             Label rotationLabel,
             Label weightLabelX,
             Label weightLabelY,
-            Label inCapLabelX,
-            Label inCapLabelY,
-            Label outCapLabelX,
-            Label outCapLabelY,
-            Label capTypeLabelX,
-            Label capTypeLabelY,
+            Label inCapLabelXClassic,
+            Label inCapLabelYClassic,
+            Label outCapLabelXClassic,
+            Label outCapLabelYClassic,
+            Label capTypeLabelXClassic,
+            Label capTypeLabelYClassic,
+            Label inCapLabelXPower,
+            Label inCapLabelYPower,
+            Label outCapLabelXPower,
+            Label outCapLabelYPower,
+            Label capTypeLabelXPower,
+            Label capTypeLabelYPower,
             Label offsetLabelX,
             Label offsetLabelY,
             Label constantOneLabelX,
@@ -127,12 +139,18 @@ namespace grapher.Models
             Label rotationActiveLabel,
             Label weightActiveXLabel,
             Label weightActiveYLabel,
-            Label inCapActiveXLabel,
-            Label inCapActiveYLabel,
-            Label outCapActiveXLabel,
-            Label outCapActiveYLabel,
-            Label capTypeActiveXLabel,
-            Label capTypeActiveYLabel,
+            Label inCapActiveXLabelClassic,
+            Label inCapActiveYLabelClassic,
+            Label outCapActiveXLabelClassic,
+            Label outCapActiveYLabelClassic,
+            Label capTypeActiveXLabelClassic,
+            Label capTypeActiveYLabelClassic,
+            Label inCapActiveXLabelPower,
+            Label inCapActiveYLabelPower,
+            Label outCapActiveXLabelPower,
+            Label outCapActiveYLabelPower,
+            Label capTypeActiveXLabelPower,
+            Label capTypeActiveYLabelPower,
             Label offsetActiveLabelX,
             Label offsetActiveLabelY,
             Label accelerationActiveLabelX,
@@ -373,75 +391,125 @@ namespace grapher.Models
                 new ActiveValueLabel(midpointActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
-            var inCapX = new Option(
-                inCapBoxX,
+            var inCapXClassic = new Option(
+                inCapBoxXClassic,
                 form,
                 0,
-                inCapLabelX,
+                inCapLabelXClassic,
                 0,
-                new ActiveValueLabel(inCapActiveXLabel, activeValueTitleX),
+                new ActiveValueLabel(inCapActiveXLabelClassic, activeValueTitleX),
                 "Cap: Input");
 
-            var inCapY = new Option(
-                inCapBoxY,
+            var inCapYClassic = new Option(
+                inCapBoxYClassic,
                 form,
                 0,
-                inCapLabelY,
+                inCapLabelYClassic,
                 optionSetYLeft,
-                new ActiveValueLabel(inCapActiveYLabel, activeValueTitleY),
+                new ActiveValueLabel(inCapActiveYLabelClassic, activeValueTitleY),
                 "Cap");
 
-            var outCapX = new Option(
-                outCapBoxX,
+            var outCapXClassic = new Option(
+                outCapBoxXClassic,
                 form,
                 0,
-                outCapLabelX,
+                outCapLabelXClassic,
                 0,
-                new ActiveValueLabel(outCapActiveXLabel, activeValueTitleX),
+                new ActiveValueLabel(outCapActiveXLabelClassic, activeValueTitleX),
                 "Cap: Input");
 
-            var outCapY = new Option(
-                outCapBoxY,
+            var outCapYClassic = new Option(
+                outCapBoxYClassic,
                 form,
                 0,
-                outCapLabelY,
+                outCapLabelYClassic,
                 optionSetYLeft,
-                new ActiveValueLabel(outCapActiveYLabel, activeValueTitleY),
+                new ActiveValueLabel(outCapActiveYLabelClassic, activeValueTitleY),
                 "Cap");
 
-            var capTypeX = new CapTypeOptions(
-                capTypeLabelX,
-                capTypeDropdownX,
-                new ActiveValueLabel(capTypeActiveXLabel, activeValueTitleX));
+            var capTypeXClassic = new CapTypeOptions(
+                capTypeLabelXClassic,
+                capTypeDropdownXClassic,
+                new ActiveValueLabel(capTypeActiveXLabelClassic, activeValueTitleX),
+                0);
 
-            var capTypeY = new CapTypeOptions(
-                capTypeLabelY,
-                capTypeDropdownY,
-                new ActiveValueLabel(capTypeActiveYLabel, activeValueTitleY));
+            var capTypeYClassic = new CapTypeOptions(
+                capTypeLabelYClassic,
+                capTypeDropdownYClassic,
+                new ActiveValueLabel(capTypeActiveYLabelClassic, activeValueTitleY),
+                optionSetYLeft);
 
-            var accelCapOptionsX = new CapOptions(
-                capTypeX,
-                inCapX,
-                outCapX,
+            var classicCapOptionsX = new CapOptions(
+                capTypeXClassic,
+                inCapXClassic,
+                outCapXClassic,
                 accelerationX);
 
-            var accelCapOptionsY = new CapOptions(
-                capTypeY,
-                inCapY,
-                outCapY,
+            var classicCapOptionsY = new CapOptions(
+                capTypeYClassic,
+                inCapYClassic,
+                outCapYClassic,
                 accelerationY);
+
+            var inCapXPower = new Option(
+                inCapBoxXPower,
+                form,
+                0,
+                inCapLabelXPower,
+                0,
+                new ActiveValueLabel(inCapActiveXLabelPower, activeValueTitleX),
+                "Cap: Input");
+
+            var inCapYPower = new Option(
+                inCapBoxYPower,
+                form,
+                0,
+                inCapLabelYPower,
+                optionSetYLeft,
+                new ActiveValueLabel(inCapActiveYLabelPower, activeValueTitleY),
+                "Cap");
+
+            var outCapXPower = new Option(
+                outCapBoxXPower,
+                form,
+                0,
+                outCapLabelXPower,
+                0,
+                new ActiveValueLabel(outCapActiveXLabelPower, activeValueTitleX),
+                "Cap: Input");
+
+            var outCapYPower = new Option(
+                outCapBoxYPower,
+                form,
+                0,
+                outCapLabelYPower,
+                optionSetYLeft,
+                new ActiveValueLabel(outCapActiveYLabelPower, activeValueTitleY),
+                "Cap");
+
+            var capTypeXPower = new CapTypeOptions(
+                capTypeLabelXPower,
+                capTypeDropdownXPower,
+                new ActiveValueLabel(capTypeActiveXLabelPower, activeValueTitleX),
+                0);
+
+            var capTypeYPower = new CapTypeOptions(
+                capTypeLabelYPower,
+                capTypeDropdownYPower,
+                new ActiveValueLabel(capTypeActiveYLabelPower, activeValueTitleY),
+                optionSetYLeft);
 
             var powerCapOptionsX = new CapOptions(
-                capTypeX,
-                inCapX,
-                outCapX,
-                accelerationX);
+                capTypeXPower,
+                inCapXPower,
+                outCapXPower,
+                scaleX);
 
             var powerCapOptionsY = new CapOptions(
-                capTypeY,
-                inCapY,
-                outCapY,
-                accelerationY);
+                capTypeYPower,
+                inCapYPower,
+                outCapYPower,
+                scaleY);
 
             var lpNorm = new Option(
                 new Field(lpNormBox, form, 2),
@@ -486,7 +554,7 @@ namespace grapher.Models
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,
                 gainSwitchOptionX,
-                accelCapOptionsX,
+                classicCapOptionsX,
                 powerCapOptionsX,
                 decayRateX,
                 growthRateX,
@@ -509,7 +577,7 @@ namespace grapher.Models
             var accelerationOptionsY = new AccelTypeOptions(
                 accelTypeDropY,
                 gainSwitchOptionY,
-                accelCapOptionsY,
+                classicCapOptionsY,
                 powerCapOptionsY,
                 decayRateY,
                 growthRateY,

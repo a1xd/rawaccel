@@ -64,7 +64,8 @@ namespace grapher.Models.Options.Cap
         public CapTypeOptions(
             Label label,
             ComboBox dropdown,
-            ActiveValueLabel activeValueLabel)
+            ActiveValueLabel activeValueLabel,
+            int left)
             : base(
                   label,
                   dropdown,
@@ -77,6 +78,13 @@ namespace grapher.Models.Options.Cap
                     OutCap,
                     BothCap
                 });
+
+            Default = OutCap;
+
+            label.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            label.Left = left;
+            label.Width = OptionsDropdown.Left - left - Constants.OptionLabelBoxSeperation;
+            label.Height = OptionsDropdown.Height;
         }
 
         #endregion Constructors
@@ -96,6 +104,8 @@ namespace grapher.Models.Options.Cap
                 OptionsDropdown.SelectedItem = value;
             }
         }
+
+        private CapTypeOption Default { get; set; }
 
         public ClassicCapMode GetSelectedCapMode()
         {
@@ -128,8 +138,21 @@ namespace grapher.Models.Options.Cap
 
         public void SetActiveValue(ClassicCapMode capMode)
         {
-            SelectedCapOption = CapTypeOptionFromSettings(capMode);
+            Default = CapTypeOptionFromSettings(capMode);
+            SelectedCapOption = Default;
             ActiveValueLabel.SetValue(SelectedCapOption.Name);
+        }
+
+        public void CheckIfDefault()
+        {
+            if (SelectedCapOption.Equals(Default))
+            {
+                OptionsDropdown.ForeColor = System.Drawing.Color.Gray;
+            }
+            else
+            {
+                OptionsDropdown.ForeColor = System.Drawing.Color.Black;
+            }
         }
 
         #endregion Methods
