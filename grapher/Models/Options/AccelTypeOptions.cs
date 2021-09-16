@@ -323,7 +323,7 @@ namespace grapher
             }
             if (PowerCap.Visible)
             {
-                args.scale = ClassicCap.Slope.Field.Data;
+                args.scale = PowerCap.Slope.Field.Data;
                 args.cap.x = PowerCap.In.Field.Data;
                 args.cap.y = PowerCap.Out.Field.Data;
                 args.capMode = PowerCap.CapTypeOptions.GetSelectedCapMode();
