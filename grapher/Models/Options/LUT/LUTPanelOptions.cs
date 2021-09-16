@@ -126,11 +126,11 @@ namespace grapher.Models.Options.LUT
                         y = rawData.ElementAt(data_idx + 1)
                     };
                 }
-                ActiveValuesTextBox.Text = PointsToActiveValuesText(points, length);
+                ActiveValuesTextBox.Text = PointsToActiveValuesText(points, pointsLen);
 
                 if (string.IsNullOrWhiteSpace(PointsTextBox.Text))
                 {
-                    PointsTextBox.Text = PointsToEntryTextBoxText(points, length);
+                    PointsTextBox.Text = PointsToEntryTextBoxText(points, pointsLen);
                 }
             }
             else
