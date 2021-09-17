@@ -201,30 +201,24 @@ namespace grapher.Models.Serialized
 
             bool ActiveProfileIsFirst = ActiveProfile == ActiveConfig.profiles[0];
 
-            foreach (var dev in SystemDevices) MaybeAdd(dev);
-
-            void MaybeAdd(MultiHandleDevice dev)
+            foreach (var sysDev in SystemDevices)
             {
-                foreach (var settings in ActiveConfig.devices)
-                {
-                    if (settings.id == dev.id)
-                    {
-                        if (!settings.config.disable && 
-                            ((ActiveProfileIsFirst &&
-                                    (string.IsNullOrEmpty(settings.profile) || 
-                                        !ActiveProfileNamesSet.Contains(settings.profile))) || 
-                                ActiveProfile.name == settings.profile))
-                        {
-                            ActiveHandles.AddRange(dev.handles);
-                        }
+                var settings = ActiveConfig.devices.Find(d => d.id == sysDev.id);
 
-                        return;
+                if (settings is null)
+                {
+                    if (ActiveProfileIsFirst && !ActiveConfig.defaultDeviceConfig.disable)
+                    {
+                        ActiveHandles.AddRange(sysDev.handles);
                     }
                 }
-
-                if (ActiveProfileIsFirst && !ActiveConfig.defaultDeviceConfig.disable)
+                else if (!settings.config.disable &&
+                            ((ActiveProfileIsFirst &&
+                                    (string.IsNullOrEmpty(settings.profile) ||
+                                        !ActiveProfileNamesSet.Contains(settings.profile))) ||
+                                ActiveProfile.name == settings.profile))
                 {
-                    ActiveHandles.AddRange(dev.handles);
+                    ActiveHandles.AddRange(sysDev.handles);
                 }
             }
         }
