@@ -137,7 +137,7 @@ namespace grapher.Models.Options.LUT
         {
             if (string.IsNullOrWhiteSpace(userText))
             {
-                throw new Exception("Text must be entered in text box to fill Look Up Table.");
+                throw new ApplicationException("Text must be entered in text box to fill Look Up Table.");
             }
 
             Vec2<float>[] points = new Vec2<float>[256];
@@ -152,7 +152,7 @@ namespace grapher.Models.Options.LUT
 
                 if (pointSplit.Length != 2)
                 {
-                    throw new Exception($"Point at index {index} is malformed. Expected format: x,y; Given: {pointEntry.Trim()}");
+                    throw new ApplicationException($"Point at index {index} is malformed. Expected format: x,y; Given: {pointEntry.Trim()}");
                 }
 
                 float x;
@@ -164,17 +164,17 @@ namespace grapher.Models.Options.LUT
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"X-value for point at index {index} is malformed. Expected: float. Given: {pointSplit[0]}", ex);
+                    throw new ApplicationException($"X-value for point at index {index} is malformed. Expected: float. Given: {pointSplit[0]}", ex);
                 }
 
                 if (x <= 0)
                 {
-                    throw new Exception($"X-value for point at index {index} is less than or equal to 0. Point (0,0) is implied and should not be specified in points text.");
+                    throw new ApplicationException($"X-value for point at index {index} is less than or equal to 0. Point (0,0) is implied and should not be specified in points text.");
                 }
 
                 if (x <= lastX)
                 {
-                    throw new Exception($"X-value for point at index {index} is less than or equal to previous x-value. Value: {x} Previous: {lastX}");
+                    throw new ApplicationException($"X-value for point at index {index} is less than or equal to previous x-value. Value: {x} Previous: {lastX}");
                 }
 
                 lastX = x;
@@ -185,12 +185,12 @@ namespace grapher.Models.Options.LUT
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"Y-value for point at index {index} is malformed. Expected: float. Given: {pointSplit[1]}", ex);
+                    throw new ApplicationException($"Y-value for point at index {index} is malformed. Expected: float. Given: {pointSplit[1]}", ex);
                 }
 
                 if (y <= 0)
                 {
-                    throw new Exception($"Y-value for point at index {index} is less than or equal to 0. Value: {y}");
+                    throw new ApplicationException($"Y-value for point at index {index} is less than or equal to 0. Value: {y}");
                 }
 
                 points[index] = new Vec2<float> { x = x, y = y };

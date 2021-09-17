@@ -112,7 +112,7 @@ namespace grapher
             }
         }
 
-        public void UpdateActiveSettingsFromFields()
+        public DriverSettings MakeSettingsFromFields()
         {
             var settings = new DriverSettings();
 
@@ -130,18 +130,37 @@ namespace grapher
 
             Settings.SetHiddenOptions(settings);
 
-            ButtonDelay(WriteButton);
-
-            SettingsErrors errors = Settings.TryActivate(settings);
-            if (errors.Empty())
-            {
-                RefreshActive();
-            }
-            else
-            {
-                new MessageDialog(errors.ToString(), "bad input").ShowDialog();
-            }
+            return settings;
         }
+
+        public void UpdateActiveSettingsFromFields()
+        {
+            string error_message;
+
+            try
+            {
+                ButtonDelay(WriteButton);
+
+                var settings = MakeSettingsFromFields();
+                SettingsErrors errors = Settings.TryActivate(settings);
+                if (errors.Empty())
+                {
+                    RefreshActive();
+                    return;
+                }
+                else
+                {
+                    error_message = errors.ToString();
+                }
+            }
+            catch (ApplicationException e)
+            {
+                error_message = e.Message;
+            }
+
+            new MessageDialog(error_message, "bad input").ShowDialog();
+        }
+
 
         public void UpdateInputManagers()
         {
