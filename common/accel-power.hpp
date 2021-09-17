@@ -23,7 +23,7 @@ namespace rawaccel {
 
 		power(const accel_args& args)
 		{
-			// Note that cap types may overwrite this below. 
+			// Note that cap types may overwrite scale below. 
 			scale = args.scale;
 
 			switch (args.cap_mode){
@@ -65,7 +65,12 @@ namespace rawaccel {
 
 		double operator()(double speed, const accel_args& args) const
 		{
-            return minsd(base_fn(speed, scale, args), cap);
+			if (args.powerStartFromOne) {
+				return minsd(maxsd(base_fn(speed, scale, args), 1), cap);
+			}
+			else {
+				return minsd(base_fn(speed, scale, args), cap);
+			}
 		}
 
 		double static scale_from_sens_point(double sens, double input, double power)
@@ -79,6 +84,7 @@ namespace rawaccel {
 		vec2d cap = { DBL_MAX, DBL_MAX };
 		double constant = 0;
 		double scale = 0;
+		vec2d startFromOne{ 0, 0 };
 
 		power(const accel_args& args) 
 		{
@@ -102,12 +108,8 @@ namespace rawaccel {
 								args.cap.x,
 								args.exponent_power,
 								scale);
-
-					constant = integration_constant(
-								cap.x,
-								cap.y,
-								base_fn(cap.x, scale, args));
 				}
+				break;
 			case classic_cap_mode::io:
 				if (args.cap.x > 0 &&
 					args.cap.y > 1) {
@@ -117,12 +119,8 @@ namespace rawaccel {
 						args.cap.x,
 						args.cap.y,
 						args.exponent_power);
-
-					constant = integration_constant(
-								cap.x,
-								cap.y,
-								base_fn(cap.x, scale, args));
 				}
+				break;
 			case classic_cap_mode::out:
 			default:
 				if (args.cap.y > 1) {
@@ -131,23 +129,74 @@ namespace rawaccel {
 								args.cap.y,
 								args.exponent_power,
 								scale);
+				}
+				break;
+			}
 
+			if (args.powerStartFromOne)
+			{
+				startFromOne.x = gain_inverse(
+									1,
+									args.exponent_power,
+									scale);
+				startFromOne.y = -1 * integration_constant(startFromOne.x,
+										1,
+										base_fn(startFromOne.x, scale, args));
+			}
+
+			if (cap.x < DBL_MAX && cap.y < DBL_MAX)
+			{
+				if (args.powerStartFromOne) {
+					constant = integration_constant(
+								cap.x,
+								cap.y,
+								startFromOneOutput(
+									startFromOne,
+									cap.x,
+									scale,
+									args));
+				}
+				else {
 					constant = integration_constant(
 								cap.x,
 								cap.y,
 								base_fn(cap.x, scale, args));
 				}
-				break;
 			}
+
 		}
 
 		double operator()(double speed, const accel_args& args) const
 		{
 			if (speed < cap.x) {
-				return base_fn(speed, scale, args);
+				if (args.powerStartFromOne) {
+					return startFromOneOutput(
+							startFromOne,
+							speed,
+							scale,
+							args);
+				}
+				else {
+					return base_fn(speed, scale, args);
+				}
 			}
 			else {
 				return cap.y + constant / speed;
+			}
+		}
+
+		double static startFromOneOutput(
+						const vec2d& startFromOne,
+						double speed,
+						double scale,
+						const accel_args& args)
+		{
+			if (speed > startFromOne.x) {
+				return base_fn(speed, scale, args) + startFromOne.y / speed;
+			}
+			else
+			{
+				return 1;
 			}
 		}
 

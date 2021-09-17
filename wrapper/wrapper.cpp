@@ -75,6 +75,7 @@ public value struct AccelArgs
     double limit;
     double midpoint;
     double smooth;
+    bool powerStartFromOne;
 
     [JsonProperty("Cap / Jump")]
     Vec2<double> cap;

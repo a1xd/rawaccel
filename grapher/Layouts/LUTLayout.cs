@@ -28,6 +28,7 @@ namespace grapher.Layouts
             OffsetLayout = new OptionLayout(false, Offset);
             LimitLayout = new OptionLayout(false, string.Empty);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
+            PowerStartsFromLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, Exponent);
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(true, string.Empty);

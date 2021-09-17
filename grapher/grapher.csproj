@@ -145,6 +145,7 @@
     <Compile Include="Layouts\OptionLayout.cs" />
     <Compile Include="Models\Options\OptionBase.cs" />
     <Compile Include="Models\Options\OptionXY.cs" />
+    <Compile Include="Models\Options\SwitchOption.cs" />
     <Compile Include="Models\Options\TextOption.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
     <Compile Include="Models\Serialized\SettingsManager.cs" />

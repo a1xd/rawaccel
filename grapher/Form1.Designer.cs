@@ -71,6 +71,12 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.powerStartsFromOneBoxY = new System.Windows.Forms.CheckBox();
+            this.powerStartsFromZeroBoxY = new System.Windows.Forms.CheckBox();
+            this.powerStartsFromOneBoxX = new System.Windows.Forms.CheckBox();
+            this.powerStartsFromZeroBoxX = new System.Windows.Forms.CheckBox();
+            this.powerStartFromLabelY = new System.Windows.Forms.Label();
+            this.powerStartFromLabelX = new System.Windows.Forms.Label();
             this.OutCapActiveYLabelPower = new System.Windows.Forms.Label();
             this.InCapActiveYLabelPower = new System.Windows.Forms.Label();
             this.OutCapActiveXLabelPower = new System.Windows.Forms.Label();
@@ -248,6 +254,8 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.powerStartFromActiveLabelX = new System.Windows.Forms.Label();
+            this.powerStartFromActiveLabelY = new System.Windows.Forms.Label();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -263,6 +271,14 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.powerStartFromActiveLabelY);
+            this.optionsPanel.Controls.Add(this.powerStartFromActiveLabelX);
+            this.optionsPanel.Controls.Add(this.powerStartsFromOneBoxY);
+            this.optionsPanel.Controls.Add(this.powerStartsFromZeroBoxY);
+            this.optionsPanel.Controls.Add(this.powerStartsFromOneBoxX);
+            this.optionsPanel.Controls.Add(this.powerStartsFromZeroBoxX);
+            this.optionsPanel.Controls.Add(this.powerStartFromLabelY);
+            this.optionsPanel.Controls.Add(this.powerStartFromLabelX);
             this.optionsPanel.Controls.Add(this.OutCapActiveYLabelPower);
             this.optionsPanel.Controls.Add(this.InCapActiveYLabelPower);
             this.optionsPanel.Controls.Add(this.OutCapActiveXLabelPower);
@@ -407,6 +423,58 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // powerStartsFromOneBoxY
+            // 
+            this.powerStartsFromOneBoxY.Location = new System.Drawing.Point(363, 220);
+            this.powerStartsFromOneBoxY.Name = "powerStartsFromOneBoxY";
+            this.powerStartsFromOneBoxY.Size = new System.Drawing.Size(32, 17);
+            this.powerStartsFromOneBoxY.TabIndex = 0;
+            this.powerStartsFromOneBoxY.Text = "1";
+            this.powerStartsFromOneBoxY.UseVisualStyleBackColor = true;
+            // 
+            // powerStartsFromZeroBoxY
+            // 
+            this.powerStartsFromZeroBoxY.Location = new System.Drawing.Point(332, 220);
+            this.powerStartsFromZeroBoxY.Name = "powerStartsFromZeroBoxY";
+            this.powerStartsFromZeroBoxY.Size = new System.Drawing.Size(32, 17);
+            this.powerStartsFromZeroBoxY.TabIndex = 0;
+            this.powerStartsFromZeroBoxY.Text = "0";
+            this.powerStartsFromZeroBoxY.UseVisualStyleBackColor = true;
+            // 
+            // powerStartsFromOneBoxX
+            // 
+            this.powerStartsFromOneBoxX.Location = new System.Drawing.Point(136, 220);
+            this.powerStartsFromOneBoxX.Name = "powerStartsFromOneBoxX";
+            this.powerStartsFromOneBoxX.Size = new System.Drawing.Size(32, 17);
+            this.powerStartsFromOneBoxX.TabIndex = 0;
+            this.powerStartsFromOneBoxX.Text = "1";
+            this.powerStartsFromOneBoxX.UseVisualStyleBackColor = true;
+            // 
+            // powerStartsFromZeroBoxX
+            // 
+            this.powerStartsFromZeroBoxX.Location = new System.Drawing.Point(106, 220);
+            this.powerStartsFromZeroBoxX.Name = "powerStartsFromZeroBoxX";
+            this.powerStartsFromZeroBoxX.Size = new System.Drawing.Size(32, 17);
+            this.powerStartsFromZeroBoxX.TabIndex = 0;
+            this.powerStartsFromZeroBoxX.Text = "0";
+            this.powerStartsFromZeroBoxX.UseVisualStyleBackColor = true;
+            // 
+            // powerStartFromLabelY
+            // 
+            this.powerStartFromLabelY.Location = new System.Drawing.Point(266, 220);
+            this.powerStartFromLabelY.Name = "powerStartFromLabelY";
+            this.powerStartFromLabelY.Size = new System.Drawing.Size(52, 13);
+            this.powerStartFromLabelY.TabIndex = 0;
+            this.powerStartFromLabelY.Text = "Start from";
+            // 
+            // powerStartFromLabelX
+            // 
+            this.powerStartFromLabelX.Location = new System.Drawing.Point(38, 220);
+            this.powerStartFromLabelX.Name = "powerStartFromLabelX";
+            this.powerStartFromLabelX.Size = new System.Drawing.Size(55, 13);
+            this.powerStartFromLabelX.TabIndex = 0;
+            this.powerStartFromLabelX.Text = "Start from";
             // 
             // OutCapActiveYLabelPower
             // 
@@ -2138,6 +2206,24 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
+            // powerStartFromActiveLabelX
+            // 
+            this.powerStartFromActiveLabelX.AutoSize = true;
+            this.powerStartFromActiveLabelX.Location = new System.Drawing.Point(197, 220);
+            this.powerStartFromActiveLabelX.Name = "powerStartFromActiveLabelX";
+            this.powerStartFromActiveLabelX.Size = new System.Drawing.Size(13, 13);
+            this.powerStartFromActiveLabelX.TabIndex = 225;
+            this.powerStartFromActiveLabelX.Text = "0";
+            // 
+            // powerStartFromActiveLabelY
+            // 
+            this.powerStartFromActiveLabelY.AutoSize = true;
+            this.powerStartFromActiveLabelY.Location = new System.Drawing.Point(414, 221);
+            this.powerStartFromActiveLabelY.Name = "powerStartFromActiveLabelY";
+            this.powerStartFromActiveLabelY.Size = new System.Drawing.Size(13, 13);
+            this.powerStartFromActiveLabelY.TabIndex = 226;
+            this.powerStartFromActiveLabelY.Text = "0";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2345,6 +2431,14 @@ namespace grapher
         private System.Windows.Forms.TextBox outCapBoxXPower;
         private System.Windows.Forms.TextBox inCapBoxYPower;
         private System.Windows.Forms.TextBox inCapBoxXPower;
+        private System.Windows.Forms.CheckBox powerStartsFromOneBoxY;
+        private System.Windows.Forms.CheckBox powerStartsFromZeroBoxY;
+        private System.Windows.Forms.CheckBox powerStartsFromOneBoxX;
+        private System.Windows.Forms.CheckBox powerStartsFromZeroBoxX;
+        private System.Windows.Forms.Label powerStartFromLabelY;
+        private System.Windows.Forms.Label powerStartFromLabelX;
+        private System.Windows.Forms.Label powerStartFromActiveLabelX;
+        private System.Windows.Forms.Label powerStartFromActiveLabelY;
     }
 }
 

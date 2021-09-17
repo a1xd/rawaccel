@@ -86,6 +86,10 @@ namespace grapher.Models
             CheckBox byComponentCheckBox,
             CheckBox gainSwitchX,
             CheckBox gainSwitchY,
+            CheckBox powerStartsFromZeroBoxX,
+            CheckBox powerStartsFromOneBoxX,
+            CheckBox powerStartsFromZeroBoxY,
+            CheckBox powerStartsFromOneBoxY,
             RichTextBox xLutActiveValuesBox,
             RichTextBox yLutActiveValuesBox,
             RichTextBox xLutPointsBox,
@@ -124,6 +128,8 @@ namespace grapher.Models
             Label powerClassicLabelY,
             Label expLabelX,
             Label expLabelY,
+            Label powerStartsFromLabelX,
+            Label powerStartsFromLabelY,
             Label lutTextLabelX,
             Label lutTextLabelY,
             Label constantThreeLabelX,
@@ -163,6 +169,8 @@ namespace grapher.Models
             Label powerClassicActiveLabelY,
             Label expActiveLabelX,
             Label expActiveLabelY,
+            Label powerStartsFromActiveLabelX,
+            Label powerStartsFromActiveLabelY,
             Label midpointActiveLabelX,
             Label midpointActiveLabelY,
             Label accelTypeActiveLabelX,
@@ -487,6 +495,20 @@ namespace grapher.Models
                 outCapYPower,
                 scaleY);
 
+            var powerStartsFromX = new SwitchOption(
+                powerStartsFromLabelX,
+                powerStartsFromZeroBoxX,
+                powerStartsFromOneBoxX,
+                new ActiveValueLabel(powerStartsFromActiveLabelX, activeValueTitleX),
+                0);
+
+            var powerStartsFromY = new SwitchOption(
+                powerStartsFromLabelY,
+                powerStartsFromZeroBoxY,
+                powerStartsFromOneBoxY,
+                new ActiveValueLabel(powerStartsFromActiveLabelY, activeValueTitleY),
+                optionSetYLeft);
+
             var lpNorm = new Option(
                 new Field(lpNormBox, form, 2),
                 lpNormLabel,
@@ -532,6 +554,7 @@ namespace grapher.Models
                 gainSwitchOptionX,
                 classicCapOptionsX,
                 powerCapOptionsX,
+                powerStartsFromX,
                 decayRateX,
                 growthRateX,
                 smoothX,
@@ -554,6 +577,7 @@ namespace grapher.Models
                 gainSwitchOptionY,
                 classicCapOptionsY,
                 powerCapOptionsY,
+                powerStartsFromY,
                 decayRateY,
                 growthRateY,
                 smoothY,
