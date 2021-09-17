@@ -53,6 +53,7 @@ namespace rawaccel {
         double limit = 1.5;
         double midpoint = 5;
         double smooth = 0.5;
+        bool powerStartFromOne = true;
         vec2d cap = { 15, 1.5 };
         classic_cap_mode cap_mode = classic_cap_mode::out;
 

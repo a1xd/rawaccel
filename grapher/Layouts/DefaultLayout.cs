@@ -21,6 +21,7 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(true, Limit);
             PowerClassicLayout = new OptionLayout(true, PowerClassic);
             ExponentLayout = new OptionLayout(true, Exponent);
+            PowerStartsFromLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(true, Midpoint);
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);

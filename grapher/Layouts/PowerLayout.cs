@@ -19,6 +19,7 @@
             LimitLayout = new OptionLayout(false, string.Empty);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(true, Exponent);
+            PowerStartsFromLayout = new OptionLayout(true, StartsFrom);
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);

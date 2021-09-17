@@ -9,6 +9,7 @@ namespace grapher.Layouts
         public const string DecayRate = "Decay Rate";
         public const string Scale = "Scale";
         public const string Exponent = "Exponent";
+        public const string StartsFrom = "Start from";
         public const string PowerClassic = "Power";
         public const string Limit = "Limit";
         public const string Midpoint = "Midpoint";
@@ -30,6 +31,7 @@ namespace grapher.Layouts
             LimitLayout = new OptionLayout(false, string.Empty);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, string.Empty);
+            PowerStartsFromLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);
@@ -65,6 +67,8 @@ namespace grapher.Layouts
 
         protected OptionLayout ExponentLayout { get; set; }
 
+        protected OptionLayout PowerStartsFromLayout { get; set; }
+
         protected OptionLayout MidpointLayout { get; set; }
 
         protected OptionLayout LutTextLayout { get; set; }
@@ -91,6 +95,7 @@ namespace grapher.Layouts
             IOption limitOption,
             IOption powerClassicOption,
             IOption expOption,
+            IOption startsFromOption,
             IOption midpointOption,
             IOption lutTextOption,
             IOption lutPanelOption,
@@ -111,6 +116,7 @@ namespace grapher.Layouts
                 (LimitLayout, limitOption),
                 (PowerClassicLayout, powerClassicOption),
                 (ExponentLayout, expOption),
+                (PowerStartsFromLayout, startsFromOption),
                 (MidpointLayout, midpointOption),
                 (LutTextLayout, lutTextOption),
                 (LutPanelLayout, lutPanelOption),
@@ -145,6 +151,7 @@ namespace grapher.Layouts
             IOption limitOption,
             IOption powerClassicOption,
             IOption expOption,
+            IOption startsFromOption,
             IOption midpointOption,
             IOption lutTextOption,
             IOption lutPanelOption,
@@ -160,6 +167,7 @@ namespace grapher.Layouts
                 limitOption,
                 powerClassicOption,
                 expOption,
+                startsFromOption,
                 midpointOption,
                 lutTextOption,
                 lutPanelOption,
