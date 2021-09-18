@@ -757,7 +757,11 @@ namespace grapher.Models.Mouse
 
                 // strip negative directional multipliers, charts calculated from positive input
 
-                Vec2<double> dirMults = SettingsManager.ActiveProfile.directionalMultipliers;
+                Vec2<double> dirMults = new Vec2<double>
+                {
+                    x = SettingsManager.ActiveProfile.lrSensRatio,
+                    y = SettingsManager.ActiveProfile.udSensRatio
+                };
 
                 if (dirMults.x > 0 && x < 0)
                 {

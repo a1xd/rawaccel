@@ -139,11 +139,11 @@ namespace rawaccel {
             in.y *= dpi_adjusted_sens * args.yx_sens_ratio;
 
             if (apply_dir_mul_x && in.x < 0) {
-                in.x *= args.dir_multipliers.x;
+                in.x *= args.lr_sens_ratio;
             }
 
             if (apply_dir_mul_y && in.y < 0) {
-                in.y *= args.dir_multipliers.y;
+                in.y *= args.ud_sens_ratio;
             }
         }
 
@@ -156,8 +156,8 @@ namespace rawaccel {
             apply_snap = args.degrees_snap != 0;
             apply_directional_weight = args.range_weights.x != args.range_weights.y;
             compute_ref_angle = apply_snap || apply_directional_weight;
-            apply_dir_mul_x = args.dir_multipliers.x != 1;
-            apply_dir_mul_y = args.dir_multipliers.y != 1;
+            apply_dir_mul_x = args.lr_sens_ratio != 1;
+            apply_dir_mul_y = args.ud_sens_ratio != 1;
 
             if (!args.whole) {
                 distance_mode = distance_mode::separate;
