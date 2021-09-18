@@ -116,30 +116,30 @@ public ref struct Profile
     [JsonProperty("Stretches accel range for horizontal vs vertical inputs")]
     Vec2<double> rangeXY;
 
-    [JsonProperty("Sensitivity multiplier")]
-    double sensitivity;
-
-    [JsonProperty("Y/X sensitivity ratio (vertical sens multiplier)")]
-    double yxSensRatio;
-
     [JsonProperty("Whole or horizontal accel parameters")]
     AccelArgs argsX;
     [JsonProperty("Vertical accel parameters")]
     AccelArgs argsY;
 
-    [JsonIgnore]
-    double minimumSpeed;
-    [JsonProperty("Input Speed Cap")]
-    double maximumSpeed;
-
-    [JsonProperty("Negative directional multipliers")]
-    Vec2<double> directionalMultipliers;
+    [JsonProperty("Sensitivity multiplier")]
+    double sensitivity;
+    [JsonProperty("Y/X sensitivity ratio (vertical sens multiplier)")]
+    double yxSensRatio;
+    [JsonProperty("L/R sensitivity ratio (left sens multiplier)")]
+    double lrSensRatio;
+    [JsonProperty("U/D sensitivity ratio (up sens multiplier)")]
+    double udSensRatio;
 
     [JsonProperty("Degrees of rotation")]
     double rotation;
 
     [JsonProperty("Degrees of angle snapping")]
     double snap;
+
+    [JsonIgnore]
+    double minimumSpeed;
+    [JsonProperty("Input Speed Cap")]
+    double maximumSpeed;
 
     Profile(ra::profile& args)
     {

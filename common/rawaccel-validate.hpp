@@ -157,8 +157,8 @@ namespace rawaccel {
 			error("domain weights"" must be positive");
 		}
 
-		if (args.dir_multipliers.x <= 0 || args.dir_multipliers.y <= 0) {
-			error("negative directional multipliers must be positive");
+		if (args.lr_sens_ratio <= 0 || args.ud_sens_ratio <= 0) {
+			error("sens ratio must be positive");
 		}
 
 		if (args.lp_norm <= 0) {

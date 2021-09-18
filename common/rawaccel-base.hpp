@@ -71,20 +71,20 @@ namespace rawaccel {
         vec2d domain_weights = { 1, 1 };
         vec2d range_weights = { 1, 1 };
 
-        double sensitivity = 1;
-        double yx_sens_ratio = 1;
-
         accel_args accel_x;
         accel_args accel_y;
 
-        double speed_min = 0;
-        double speed_max = 0;
-
-        vec2d dir_multipliers = { 1, 1 };
+        double sensitivity = 1;
+        double yx_sens_ratio = 1;
+        double lr_sens_ratio = 1;
+        double ud_sens_ratio = 1;
 
         double degrees_rotation = 0;
 
         double degrees_snap = 0;
+
+        double speed_min = 0;
+        double speed_max = 0;
     };
 
 
