@@ -7,10 +7,66 @@
 namespace rawaccel {
 
 	struct power_base {
-		static double base_fn(double x, double scale, const accel_args& args)
+		vec2d offset;
+		double scale;
+		double constant;
+
+		power_base(const accel_args& args)
 		{
-			// f(x) = w(mx)^k
-			return pow(scale * x, args.exponent_power);
+			auto n = args.exponent_power;
+
+			if (args.cap_mode != classic_cap_mode::io) {
+				scale = args.scale;
+			}
+			else if (args.gain) {
+				scale = scale_from_gain_point(args.cap.x, args.cap.y, n);
+			}
+			else {
+				/* 
+				* special case for legacy + io cap mode
+				* 
+				* offset is ignored because of the circular dependency:
+				*     scale -> constant -> offset
+				*/
+				offset = {};
+				constant = 0;
+				scale = scale_from_sens_point(args.cap.x, args.cap.y, n, constant);
+				return;
+			}
+
+			offset.x = gain_inverse(args.output_offset, n, scale);
+			offset.y = args.output_offset;
+			constant = offset.x * offset.y * n / (n + 1);
+		}
+
+		double base_fn(double x, const accel_args& args) const
+		{
+			if (x <= offset.x) {
+				return offset.y;
+			}
+			else {     
+				return pow(scale * x, args.exponent_power) + constant / x;
+			}
+		}
+
+		static double gain(double input, double power, double scale)
+		{
+			return (power + 1) * pow(input * scale, power);
+		}
+
+		static double gain_inverse(double gain, double power, double scale)
+		{
+			return pow(gain / (power + 1), 1 / power) / scale;
+		}
+
+		static double scale_from_gain_point(double input, double gain, double power)
+		{
+			return pow(gain / (power + 1), 1 / power) / input;
+		}
+
+		static double scale_from_sens_point(double input, double sens, double power, double C)
+		{
+			return pow(sens - C / input, 1 / power) / input;
 		}
 	};
 
@@ -19,88 +75,44 @@ namespace rawaccel {
 	template <>
 	struct power<LEGACY> : power_base {
 		double cap = DBL_MAX;
-		double scale = 0;
 
-		power(const accel_args& args)
+		power(const accel_args& args) : 
+			power_base(args)
 		{
-			// Note that cap types may overwrite scale below. 
-			scale = args.scale;
 
 			switch (args.cap_mode){
-			case classic_cap_mode::in:
-				if (args.cap.x > 0)
-				{
-					cap = base_fn(
-							args.cap.x,
-							args.scale,
-							args);
-				}
-				break;
 			case classic_cap_mode::io:
-				if (args.cap.x > 0 &&
-					args.cap.y > 1)
-				{
-					cap = args.cap.y;
-					scale = scale_from_sens_point(
-								args.cap.y,
-								args.cap.x,
-								args.exponent_power);
-				}
+				cap = args.cap.y;
+				break;
+			case classic_cap_mode::in:
+				if (args.cap.x > 0) cap = base_fn(args.cap.x, args);
 				break;
 			case classic_cap_mode::out:
 			default:
-				if (args.cap.y > 1)
-				{
-					cap = args.cap.y;
-				}
+				if (args.cap.y > 0) cap = args.cap.y;
 				break;
 			}
-			/*
-			if (args.cap.x > 0) {
-				cap.x = args.cap.x;
-				cap.y = base_fn(cap.x, args);
-			}
-			*/
 		}
 
 		double operator()(double speed, const accel_args& args) const
 		{
-			if (args.powerStartFromOne) {
-				return minsd(maxsd(base_fn(speed, scale, args), 1), cap);
-			}
-			else {
-				return minsd(base_fn(speed, scale, args), cap);
-			}
+			return minsd(base_fn(speed, args), cap);
 		}
 
-		double static scale_from_sens_point(double sens, double input, double power)
-		{
-			return pow(sens, 1 / power) / input;
-		}
 	};
 
 	template <>
 	struct power<GAIN> : power_base {
 		vec2d cap = { DBL_MAX, DBL_MAX };
-		double constant = 0;
-		double scale = 0;
-		vec2d startFromOne{ 0, 0 };
+		double constant_b;
 
-		power(const accel_args& args) 
+		power(const accel_args& args) :
+			power_base(args)
 		{
-			/*
-			if (args.cap.x > 0) {
-				cap.x = args.cap.x;
-				double output = base_fn(cap.x, args);
-				cap.y = output * (args.exponent_power + 1);
-				constant = -args.exponent_power * output * args.cap.x;
-			}
-			*/
-
-			// Note that cap types may overwrite this below. 
-			scale = args.scale;
-
 			switch (args.cap_mode) {
+			case classic_cap_mode::io:
+				cap = args.cap;
+				break;
 			case classic_cap_mode::in:
 				if (args.cap.x > 0) {
 					cap.x = args.cap.x;
@@ -110,111 +122,32 @@ namespace rawaccel {
 								scale);
 				}
 				break;
-			case classic_cap_mode::io:
-				if (args.cap.x > 0 &&
-					args.cap.y > 1) {
-					cap.x = args.cap.x;
-					cap.y = args.cap.y;
-					scale = scale_from_gain_point(
-						args.cap.x,
-						args.cap.y,
-						args.exponent_power);
-				}
-				break;
 			case classic_cap_mode::out:
 			default:
-				if (args.cap.y > 1) {
-					cap.y = args.cap.y;
+				if (args.cap.y > 0) {
 					cap.x = gain_inverse(
 								args.cap.y,
 								args.exponent_power,
 								scale);
+					cap.y = args.cap.y;
 				}
 				break;
 			}
 
-			if (args.powerStartFromOne)
-			{
-				startFromOne.x = gain_inverse(
-									1,
-									args.exponent_power,
-									scale);
-				startFromOne.y = -1 * integration_constant(startFromOne.x,
-										1,
-										base_fn(startFromOne.x, scale, args));
-			}
-
-			if (cap.x < DBL_MAX && cap.y < DBL_MAX)
-			{
-				if (args.powerStartFromOne) {
-					constant = integration_constant(
-								cap.x,
-								cap.y,
-								startFromOneOutput(
-									startFromOne,
-									cap.x,
-									scale,
-									args));
-				}
-				else {
-					constant = integration_constant(
-								cap.x,
-								cap.y,
-								base_fn(cap.x, scale, args));
-				}
-			}
-
+			constant_b = integration_constant(cap.x, cap.y, base_fn(cap.x, args));
 		}
 
 		double operator()(double speed, const accel_args& args) const
 		{
 			if (speed < cap.x) {
-				if (args.powerStartFromOne) {
-					return startFromOneOutput(
-							startFromOne,
-							speed,
-							scale,
-							args);
-				}
-				else {
-					return base_fn(speed, scale, args);
-				}
+				return base_fn(speed, args);
 			}
 			else {
-				return cap.y + constant / speed;
+				return cap.y + constant_b / speed;
 			}
 		}
 
-		double static startFromOneOutput(
-						const vec2d& startFromOne,
-						double speed,
-						double scale,
-						const accel_args& args)
-		{
-			if (speed > startFromOne.x) {
-				return base_fn(speed, scale, args) + startFromOne.y / speed;
-			}
-			else
-			{
-				return 1;
-			}
-		}
-
-		double static gain_inverse(double gain, double power, double scale)
-		{
-			return pow(gain / (power + 1), 1 / power) / scale;
-		}
-		double static gain(double input, double power, double scale)
-		{
-			return (power + 1) * pow(input * scale, power);
-		}
-
-		double static scale_from_gain_point(double input, double gain, double power)
-		{
-			return pow(gain / (power + 1), 1 / power) / input;
-		}
-
-		double static integration_constant(double input, double gain, double output)
+		static double integration_constant(double input, double gain, double output)
 		{
 			return (output - gain) * input;
 		}

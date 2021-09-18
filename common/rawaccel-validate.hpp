@@ -50,16 +50,20 @@ namespace rawaccel {
 				error("data size > max");
 			}
 
-			if (args.offset < 0) {
+			if (args.input_offset < 0) {
 				error("offset can not be negative");
 			}
-			else if (args.mode == accel_mode::jump && args.offset == 0) {
+			else if (args.mode == accel_mode::jump && args.input_offset == 0) {
 				error("offset can not be 0");
+			}
+
+			if (args.output_offset < 0) {
+				error("offset can not be negative");
 			}
 
 			bool jump_or_io_cap = 
 				(args.mode == accel_mode::jump || 
-					(args.mode == accel_mode::classic && 
+					((args.mode == accel_mode::classic || args.mode == accel_mode::power) &&
 						args.cap_mode == classic_cap_mode::io));
 
 			if (args.cap.x < 0) {
@@ -74,6 +78,11 @@ namespace rawaccel {
 			}
 			else if (args.cap.y == 0 && jump_or_io_cap) {
 				error("cap (output) can not be 0");
+			}
+
+			if (args.cap.x > 0 && args.cap.x < args.input_offset ||
+				args.cap.y > 0 && args.cap.y < args.output_offset) {
+				error("cap < offset");
 			}
 
 			if (args.growth_rate <= 0 ||

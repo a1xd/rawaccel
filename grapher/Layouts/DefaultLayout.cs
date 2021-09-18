@@ -17,11 +17,11 @@ namespace grapher.Layouts
             DecayRateLayout = new OptionLayout(true, DecayRate);
             GrowthRateLayout = new OptionLayout(true, GrowthRate);
             SmoothLayout = new OptionLayout(true, Smooth);
-            OffsetLayout = new OptionLayout(true, Offset);
+            InputOffsetLayout = new OptionLayout(true, InputOffset);
             LimitLayout = new OptionLayout(true, Limit);
             PowerClassicLayout = new OptionLayout(true, PowerClassic);
             ExponentLayout = new OptionLayout(true, Exponent);
-            PowerStartsFromLayout = new OptionLayout(false, string.Empty);
+            OutputOffsetLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(true, Midpoint);
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);

@@ -54,8 +54,10 @@ namespace grapher.Models
             TextBox inCapBoxYPower,
             TextBox outCapBoxXPower,
             TextBox outCapBoxYPower,
-            TextBox offsetBoxX,
-            TextBox offsetBoxY,
+            TextBox inputOffsetBoxX,
+            TextBox inputOffsetBoxY,
+            TextBox outputOffsetBoxX,
+            TextBox outputOffsetBoxY,
             TextBox accelerationBoxX,
             TextBox accelerationBoxY,
             TextBox decayRateBoxX,
@@ -86,10 +88,6 @@ namespace grapher.Models
             CheckBox byComponentCheckBox,
             CheckBox gainSwitchX,
             CheckBox gainSwitchY,
-            CheckBox powerStartsFromZeroBoxX,
-            CheckBox powerStartsFromOneBoxX,
-            CheckBox powerStartsFromZeroBoxY,
-            CheckBox powerStartsFromOneBoxY,
             RichTextBox xLutActiveValuesBox,
             RichTextBox yLutActiveValuesBox,
             RichTextBox xLutPointsBox,
@@ -110,8 +108,10 @@ namespace grapher.Models
             Label outCapLabelYPower,
             Label capTypeLabelXPower,
             Label capTypeLabelYPower,
-            Label offsetLabelX,
-            Label offsetLabelY,
+            Label inputOffsetLabelX,
+            Label inputOffsetLabelY,
+            Label outputOffsetLabelX,
+            Label outputOffsetLabelY,
             Label constantOneLabelX,
             Label constantOneLabelY,
             Label decayRateLabelX,
@@ -128,8 +128,6 @@ namespace grapher.Models
             Label powerClassicLabelY,
             Label expLabelX,
             Label expLabelY,
-            Label powerStartsFromLabelX,
-            Label powerStartsFromLabelY,
             Label lutTextLabelX,
             Label lutTextLabelY,
             Label constantThreeLabelX,
@@ -151,8 +149,10 @@ namespace grapher.Models
             Label outCapActiveYLabelPower,
             Label capTypeActiveXLabelPower,
             Label capTypeActiveYLabelPower,
-            Label offsetActiveLabelX,
-            Label offsetActiveLabelY,
+            Label inputOffsetActiveLabelX,
+            Label inputOffsetActiveLabelY,
+            Label outputOffsetActiveLabelX,
+            Label outputOffsetActiveLabelY,
             Label accelerationActiveLabelX,
             Label accelerationActiveLabelY,
             Label decayRateActiveLabelX,
@@ -169,8 +169,6 @@ namespace grapher.Models
             Label powerClassicActiveLabelY,
             Label expActiveLabelX,
             Label expActiveLabelY,
-            Label powerStartsFromActiveLabelX,
-            Label powerStartsFromActiveLabelY,
             Label midpointActiveLabelX,
             Label midpointActiveLabelY,
             Label accelTypeActiveLabelX,
@@ -249,22 +247,40 @@ namespace grapher.Models
 
             var directionalityLeft = directionalityPanel.Left;
 
-            var offsetX = new Option(
-                offsetBoxX,
+            var inputOffsetX = new Option(
+                inputOffsetBoxX,
                 form,
                 0,
-                offsetLabelX,
+                inputOffsetLabelX,
                 0,
-                new ActiveValueLabel(offsetActiveLabelX, activeValueTitleX),
+                new ActiveValueLabel(inputOffsetActiveLabelX, activeValueTitleX),
                 "Offset");
 
-            var offsetY = new Option(
-                offsetBoxY,
+            var inputOffsetY = new Option(
+                inputOffsetBoxY,
                 form,
                 0,
-                offsetLabelY,
+                inputOffsetLabelY,
                 optionSetYLeft,
-                new ActiveValueLabel(offsetActiveLabelY, activeValueTitleY),
+                new ActiveValueLabel(inputOffsetActiveLabelY, activeValueTitleY),
+                "Offset");
+
+            var outputOffsetX = new Option(
+                outputOffsetBoxX,
+                form,
+                0,
+                outputOffsetLabelX,
+                0,
+                new ActiveValueLabel(outputOffsetActiveLabelX, activeValueTitleX),
+                "Offset");
+
+            var outputOffsetY = new Option(
+                outputOffsetBoxY,
+                form,
+                0,
+                outputOffsetLabelY,
+                optionSetYLeft,
+                new ActiveValueLabel(outputOffsetActiveLabelY, activeValueTitleY),
                 "Offset");
 
             var accelerationX = new Option(
@@ -495,20 +511,6 @@ namespace grapher.Models
                 outCapYPower,
                 scaleY);
 
-            var powerStartsFromX = new SwitchOption(
-                powerStartsFromLabelX,
-                powerStartsFromZeroBoxX,
-                powerStartsFromOneBoxX,
-                new ActiveValueLabel(powerStartsFromActiveLabelX, activeValueTitleX),
-                0);
-
-            var powerStartsFromY = new SwitchOption(
-                powerStartsFromLabelY,
-                powerStartsFromZeroBoxY,
-                powerStartsFromOneBoxY,
-                new ActiveValueLabel(powerStartsFromActiveLabelY, activeValueTitleY),
-                optionSetYLeft);
-
             var lpNorm = new Option(
                 new Field(lpNormBox, form, 2),
                 lpNormLabel,
@@ -554,11 +556,11 @@ namespace grapher.Models
                 gainSwitchOptionX,
                 classicCapOptionsX,
                 powerCapOptionsX,
-                powerStartsFromX,
+                outputOffsetX,
                 decayRateX,
                 growthRateX,
                 smoothX,
-                offsetX,
+                inputOffsetX,
                 limitX,
                 powerClassicX,
                 exponentX,
@@ -577,11 +579,11 @@ namespace grapher.Models
                 gainSwitchOptionY,
                 classicCapOptionsY,
                 powerCapOptionsY,
-                powerStartsFromY,
+                outputOffsetY,
                 decayRateY,
                 growthRateY,
                 smoothY,
-                offsetY,
+                inputOffsetY,
                 limitY,
                 powerClassicY,
                 exponentY,

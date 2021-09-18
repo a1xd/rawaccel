@@ -11,13 +11,13 @@ namespace rawaccel {
     struct classic_base {
         double base_fn(double x, double accel_raised, const accel_args& args) const
         {
-            return accel_raised * pow(x - args.offset, args.exponent_classic) / x;
+            return accel_raised * pow(x - args.input_offset, args.exponent_classic) / x;
         }
 
         static double base_accel(double x, double y, const accel_args& args)
         {
             auto power = args.exponent_classic;
-            return pow(x * y * pow(x - args.offset, -power), 1 / (power - 1));
+            return pow(x * y * pow(x - args.input_offset, -power), 1 / (power - 1));
         }
     };
 
@@ -70,7 +70,7 @@ namespace rawaccel {
 
         double operator()(double x, const accel_args& args) const
         {
-            if (x <= args.offset) return 1;
+            if (x <= args.input_offset) return 1;
             return sign * minsd(base_fn(x, accel_raised, args), cap) + 1;
         }
 
@@ -96,7 +96,7 @@ namespace rawaccel {
                 }
 
                 {
-                    double a = gain_accel(cap.x, cap.y, args.exponent_classic, args.offset);
+                    double a = gain_accel(cap.x, cap.y, args.exponent_classic, args.input_offset);
                     accel_raised = pow(a, args.exponent_classic - 1);
                 }
                 constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
@@ -105,7 +105,7 @@ namespace rawaccel {
                 accel_raised = pow(args.acceleration, args.exponent_classic - 1);
                 if (args.cap.x > 0) {
                     cap.x = args.cap.x;
-                    cap.y = gain(cap.x, args.acceleration, args.exponent_classic, args.offset);
+                    cap.y = gain(cap.x, args.acceleration, args.exponent_classic, args.input_offset);
                     constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
                 }
                 break;
@@ -121,7 +121,7 @@ namespace rawaccel {
                         sign = -sign;
                     }
 
-                    cap.x = gain_inverse(cap.y, args.acceleration, args.exponent_classic, args.offset);
+                    cap.x = gain_inverse(cap.y, args.acceleration, args.exponent_classic, args.input_offset);
                     constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
                 }
                 break;
@@ -132,7 +132,7 @@ namespace rawaccel {
         {
             double output;
 
-            if (x <= args.offset) return 1;
+            if (x <= args.input_offset) return 1;
 
             if (x < cap.x) {
                 output = base_fn(x, accel_raised, args);

@@ -29,11 +29,11 @@ namespace grapher
             CheckBoxOption gainSwitch,
             CapOptions classicCap,
             CapOptions powerCap,
-            SwitchOption powerStartsFrom,
+            Option outputOffset,
             Option decayRate,
             Option growthRate,
             Option smooth,
-            Option offset,
+            Option inputOffset,
             Option limit,
             Option powerClassic,
             Option exponent,
@@ -67,11 +67,11 @@ namespace grapher
             Smooth = smooth;
             ClassicCap = classicCap;
             PowerCap = powerCap;
-            Offset = offset;
+            InputOffset = inputOffset;
             Limit = limit;
             PowerClassic = powerClassic;
             Exponent = exponent;
-            PowerStartsFrom = powerStartsFrom;
+            OutputOffset = outputOffset;
             Midpoint = midpoint;
             WriteButton = writeButton;
             AccelTypeActiveValue = accelTypeActiveValue;
@@ -114,9 +114,9 @@ namespace grapher
 
         public CapOptions PowerCap { get; }
 
-        public SwitchOption PowerStartsFrom { get; }
+        public Option InputOffset { get; }
 
-        public Option Offset { get; }
+        public Option OutputOffset { get; }
 
         public Option Limit { get; }
 
@@ -227,8 +227,8 @@ namespace grapher
             Smooth.Hide();
             ClassicCap.Hide();
             PowerCap.Hide();
-            PowerStartsFrom.Hide();
-            Offset.Hide();
+            OutputOffset.Hide();
+            InputOffset.Hide();
             Limit.Hide();
             PowerClassic.Hide();
             Exponent.Hide();
@@ -265,8 +265,8 @@ namespace grapher
                 args.cap.x,
                 args.cap.y,
                 args.capMode);
-            PowerStartsFrom.SetActiveValue(!args.powerStartFromOne);
-            Offset.SetActiveValue(args.offset);
+            OutputOffset.SetActiveValue(args.outputOffset);
+            InputOffset.SetActiveValue(args.inputOffset);
             DecayRate.SetActiveValue(args.decayRate);
             GrowthRate.SetActiveValue(args.growthRate);
             Smooth.SetActiveValue(args.smooth);
@@ -328,11 +328,11 @@ namespace grapher
                 args.cap.y = PowerCap.Out.Field.Data;
                 args.capMode = PowerCap.CapTypeOptions.GetSelectedCapMode();
             }
-            if (PowerStartsFrom.Visible) args.powerStartFromOne = PowerStartsFrom.Second.Checked;
             if (Limit.Visible) args.limit = Limit.Field.Data;
             if (PowerClassic.Visible) args.exponentClassic = PowerClassic.Field.Data;
             if (Exponent.Visible) args.exponentPower = Exponent.Field.Data;
-            if (Offset.Visible) args.offset = Offset.Field.Data;
+            if (InputOffset.Visible) args.inputOffset = InputOffset.Field.Data;
+            if (OutputOffset.Visible) args.outputOffset = OutputOffset.Field.Data;
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
             if (LutPanel.Visible)
             {
@@ -359,8 +359,8 @@ namespace grapher
             Smooth.AlignActiveValues();
             ClassicCap.AlignActiveValues();
             PowerCap.AlignActiveValues();
-            PowerStartsFrom.AlignActiveValues();
-            Offset.AlignActiveValues();
+            OutputOffset.AlignActiveValues();
+            InputOffset.AlignActiveValues();
             Limit.AlignActiveValues();
             PowerClassic.AlignActiveValues();
             Exponent.AlignActiveValues();
@@ -397,11 +397,11 @@ namespace grapher
                 DecayRate,
                 GrowthRate,
                 Smooth,
-                Offset,
+                InputOffset,
                 Limit,
                 PowerClassic,
                 Exponent,
-                PowerStartsFrom,
+                OutputOffset,
                 Midpoint,
                 LutText,
                 LutPanel,
