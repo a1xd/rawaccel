@@ -131,7 +131,7 @@ namespace grapher.Models.Options.Cap
             double scale,
             double inCap,
             double outCap,
-            ClassicCapMode capMode)
+            CapMode capMode)
         {
             Slope.SetActiveValue(scale);
             In.SetActiveValue(inCap);

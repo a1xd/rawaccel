@@ -34,7 +34,7 @@ namespace rawaccel {
         noaccel
     };
 
-    enum class classic_cap_mode {
+    enum class cap_mode {
         io, in, out
     };
 
@@ -56,7 +56,7 @@ namespace rawaccel {
         double smooth = 0.5;
 
         vec2d cap = { 15, 1.5 };
-        classic_cap_mode cap_mode = classic_cap_mode::out;
+        cap_mode cap_mode = cap_mode::out;
 
         int length = 0;
         mutable float data[LUT_RAW_DATA_CAPACITY] = {};

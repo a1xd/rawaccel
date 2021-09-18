@@ -64,7 +64,7 @@ namespace rawaccel {
 			bool jump_or_io_cap = 
 				(args.mode == accel_mode::jump || 
 					((args.mode == accel_mode::classic || args.mode == accel_mode::power) &&
-						args.cap_mode == classic_cap_mode::io));
+						args.cap_mode == cap_mode::io));
 
 			if (args.cap.x < 0) {
 				error("cap (input) can not be negative");

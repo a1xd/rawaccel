@@ -41,7 +41,7 @@ public enum class AccelMode
 };
 
 [JsonConverter(Converters::StringEnumConverter::typeid)]
-public enum class ClassicCapMode {
+public enum class CapMode {
     in_out, input, output
 };
 
@@ -81,7 +81,7 @@ public value struct AccelArgs
     Vec2<double> cap;
 
     [JsonProperty("Cap mode")]
-    ClassicCapMode capMode;
+    CapMode capMode;
 
     [JsonIgnore]
     int length;
@@ -607,9 +607,9 @@ public:
         }
 
         JObject^ jObject = JObject::FromObject(this);
-        String^ capModes = String::Join(" | ", Enum::GetNames(ClassicCapMode::typeid));
+        String^ capModes = String::Join(" | ", Enum::GetNames(CapMode::typeid));
         String^ accelModes = String::Join(" | ", Enum::GetNames(AccelMode::typeid));
-        jObject->AddFirst(gcnew JProperty("### Cap modes (applies to classic only) ###", capModes));
+        jObject->AddFirst(gcnew JProperty("### Cap modes ###", capModes));
         jObject->AddFirst(gcnew JProperty("### Accel modes ###", accelModes));
 
         for each (auto prof in profiles) {
