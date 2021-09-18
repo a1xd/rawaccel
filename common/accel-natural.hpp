@@ -11,7 +11,7 @@ namespace rawaccel {
 		double limit;
 
 		natural_base(const accel_args& args) :
-			offset(args.offset),
+			offset(args.input_offset),
 			limit(args.limit - 1)
 		{
 			accel = args.decay_rate / fabs(limit);

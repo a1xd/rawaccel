@@ -64,7 +64,8 @@ public value struct AccelArgs
     [MarshalAs(UnmanagedType::U1)]
     bool gain;
 
-    double offset;
+    double inputOffset;
+    double outputOffset;
     double acceleration;
     double decayRate;
     double growthRate;
@@ -75,7 +76,6 @@ public value struct AccelArgs
     double limit;
     double midpoint;
     double smooth;
-    bool powerStartFromOne;
 
     [JsonProperty("Cap / Jump")]
     Vec2<double> cap;

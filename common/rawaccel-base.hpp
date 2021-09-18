@@ -42,7 +42,8 @@ namespace rawaccel {
         accel_mode mode = accel_mode::noaccel;
         bool gain = 1;
 
-        double offset = 0;
+        double input_offset = 0;
+        double output_offset = 0;
         double acceleration = 0.005;
         double decay_rate = 0.1;
         double growth_rate = 1;
@@ -53,7 +54,7 @@ namespace rawaccel {
         double limit = 1.5;
         double midpoint = 5;
         double smooth = 0.5;
-        bool powerStartFromOne = true;
+
         vec2d cap = { 15, 1.5 };
         classic_cap_mode cap_mode = classic_cap_mode::out;
 

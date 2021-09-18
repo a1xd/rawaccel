@@ -15,11 +15,11 @@
             DecayRateLayout = new OptionLayout(false, string.Empty);
             GrowthRateLayout = new OptionLayout(false, string.Empty);
             SmoothLayout = new OptionLayout(false, string.Empty);
-            OffsetLayout = new OptionLayout(false, string.Empty);
+            InputOffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(false, string.Empty);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(true, Exponent);
-            PowerStartsFromLayout = new OptionLayout(true, StartsFrom);
+            OutputOffsetLayout = new OptionLayout(true, OutputOffset);
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);
