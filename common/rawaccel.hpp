@@ -24,10 +24,55 @@ namespace rawaccel {
         device_config config;
     };
 
+    enum class distance_mode : unsigned char {
+        separate,
+        max,
+        Lp,
+        euclidean,
+    };
+
+    struct modifier_flags {
+        bool apply_rotate = 0;
+        bool compute_ref_angle = 0;
+        bool apply_snap = 0;
+        bool clamp_speed = 0;
+        distance_mode dist_mode = {};
+        bool apply_directional_weight = 0;
+        bool apply_dir_mul_x = 0;
+        bool apply_dir_mul_y = 0;
+
+        modifier_flags(const profile& args) 
+        {
+            clamp_speed = args.speed_max > 0 && args.speed_min <= args.speed_max;
+            apply_rotate = args.degrees_rotation != 0;
+            apply_snap = args.degrees_snap != 0;
+            apply_directional_weight = args.range_weights.x != args.range_weights.y;
+            compute_ref_angle = apply_snap || apply_directional_weight;
+            apply_dir_mul_x = args.lr_sens_ratio != 1;
+            apply_dir_mul_y = args.ud_sens_ratio != 1;
+
+            if (!args.whole) {
+                dist_mode = distance_mode::separate;
+            }
+            else if (args.lp_norm >= MAX_NORM || args.lp_norm <= 0) {
+                dist_mode = distance_mode::max;
+            }
+            else if (args.lp_norm != 2) {
+                dist_mode = distance_mode::Lp;
+            }
+            else {
+                dist_mode = distance_mode::euclidean;
+            }
+        }
+
+        modifier_flags() = default;
+    };
+
     struct modifier_settings {
         profile prof;
 
         struct data_t {
+            modifier_flags flags;
             vec2d rot_direction;
             accel_union accel_x;
             accel_union accel_y;
@@ -46,6 +91,8 @@ namespace rawaccel {
         set_accel(settings.data.accel_y, settings.prof.accel_y);
 
         settings.data.rot_direction = direction(settings.prof.degrees_rotation);
+
+        settings.data.flags = modifier_flags(settings.prof);
     }
 
     struct io_base {
@@ -65,20 +112,21 @@ namespace rawaccel {
         {
             auto& args = settings.prof;
             auto& data = settings.data;
+            auto& flags = settings.data.flags;
 
             double reference_angle = 0;
             double ips_factor = dpi_factor / time;
 
-            if (apply_rotate) in = rotate(in, data.rot_direction);
+            if (flags.apply_rotate) in = rotate(in, data.rot_direction);
 
-            if (compute_ref_angle && in.y != 0) {
+            if (flags.compute_ref_angle && in.y != 0) {
                 if (in.x == 0) {
                     reference_angle = M_PI / 2;
                 }
                 else {
                     reference_angle = atan(fabs(in.y / in.x));
 
-                    if (apply_snap) {
+                    if (flags.apply_snap) {
                         double snap = args.degrees_snap * M_PI / 180;
 
                         if (reference_angle > M_PI / 2 - snap) {
@@ -93,7 +141,7 @@ namespace rawaccel {
                 }
             }
 
-            if (clamp_speed) {
+            if (flags.clamp_speed) {
                 double speed = magnitude(in) * ips_factor;
                 double ratio = clampsd(speed, args.speed_min, args.speed_max) / speed;
                 in.x *= ratio;
@@ -105,17 +153,17 @@ namespace rawaccel {
                 fabs(in.y * ips_factor * args.domain_weights.y)
             };
 
-            if (distance_mode == separate) {
+            if (flags.dist_mode == distance_mode::separate) {
                 in.x *= (*cb_x)(data.accel_x, args.accel_x, abs_weighted_vel.x, args.range_weights.x);
                 in.y *= (*cb_y)(data.accel_y, args.accel_y, abs_weighted_vel.y, args.range_weights.y);
             }
             else {
                 double speed;
 
-                if (distance_mode == max) {
+                if (flags.dist_mode == distance_mode::max) {
                     speed = maxsd(abs_weighted_vel.x, abs_weighted_vel.y);
                 }
-                else if (distance_mode == Lp) {
+                else if (flags.dist_mode == distance_mode::Lp) {
                     speed = lp_distance(abs_weighted_vel, args.lp_norm);
                 }
                 else {
@@ -124,7 +172,7 @@ namespace rawaccel {
 
                 double weight = args.range_weights.x;
 
-                if (apply_directional_weight) {
+                if (flags.apply_directional_weight) {
                     double diff = args.range_weights.y - args.range_weights.x;
                     weight += 2 / M_PI * reference_angle * diff;
                 }
@@ -138,42 +186,19 @@ namespace rawaccel {
             in.x *= dpi_adjusted_sens;
             in.y *= dpi_adjusted_sens * args.yx_sens_ratio;
 
-            if (apply_dir_mul_x && in.x < 0) {
+            if (flags.apply_dir_mul_x && in.x < 0) {
                 in.x *= args.lr_sens_ratio;
             }
 
-            if (apply_dir_mul_y && in.y < 0) {
+            if (flags.apply_dir_mul_y && in.y < 0) {
                 in.y *= args.ud_sens_ratio;
             }
         }
 
         modifier(modifier_settings& settings)
         {
-            auto& args = settings.prof;
-
-            clamp_speed = args.speed_max > 0 && args.speed_min <= args.speed_max;
-            apply_rotate = args.degrees_rotation != 0;
-            apply_snap = args.degrees_snap != 0;
-            apply_directional_weight = args.range_weights.x != args.range_weights.y;
-            compute_ref_angle = apply_snap || apply_directional_weight;
-            apply_dir_mul_x = args.lr_sens_ratio != 1;
-            apply_dir_mul_y = args.ud_sens_ratio != 1;
-
-            if (!args.whole) {
-                distance_mode = distance_mode::separate;
-            }
-            else if (args.lp_norm >= MAX_NORM || args.lp_norm <= 0) {
-                distance_mode = distance_mode::max;
-            }
-            else if (args.lp_norm != 2) {
-                distance_mode = distance_mode::Lp;
-            }
-            else {
-                distance_mode = distance_mode::euclidean;
-            }
-
-            set_callback(cb_x, settings.data.accel_x, args.accel_x);
-            set_callback(cb_y, settings.data.accel_y, args.accel_y);
+            set_callback(cb_x, settings.data.accel_x, settings.prof.accel_x);
+            set_callback(cb_y, settings.data.accel_y, settings.prof.accel_y);
         }
 
         modifier() = default;
@@ -197,20 +222,6 @@ namespace rawaccel {
             auto& accel_fn = reinterpret_cast<const AccelFunc&>(u);
             return 1 + (accel_fn(x, args) - 1) * range_weight;
         }
-
-        bool apply_rotate = 0;
-        bool compute_ref_angle = 0;
-        bool apply_snap = 0;
-        bool clamp_speed = 0;
-        enum distance_mode : unsigned char {
-            separate,
-            max,
-            Lp,
-            euclidean,
-        } distance_mode = {};
-        bool apply_directional_weight = 0;
-        bool apply_dir_mul_x = 0;
-        bool apply_dir_mul_y = 0;
 
         callback_t cb_x = &callback_template<accel_noaccel>;
         callback_t cb_y = &callback_template<accel_noaccel>;
