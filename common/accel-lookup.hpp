@@ -32,6 +32,16 @@ namespace rawaccel {
 		}
 	};
 
+	__forceinline
+	constexpr double lerp(double a, double b, double t)
+	{
+		double x = a + t * (b - a);
+		if ((t > 1) == (a < b)) {
+			return maxsd(x, b);
+		}
+		return minsd(x, b);
+	}
+
 	struct lookup {
 		enum { capacity = LUT_POINTS_CAPACITY };
 
