@@ -32,7 +32,7 @@ namespace rawaccel {
         classic(const accel_args& args)
         {
             switch (args.cap_mode) {
-            case classic_cap_mode::io:
+            case cap_mode::io:
                 cap = args.cap.y - 1;
 
                 if (cap < 0) {
@@ -45,13 +45,13 @@ namespace rawaccel {
                     accel_raised = pow(a, args.exponent_classic - 1);
                 }
                 break;
-            case classic_cap_mode::in:
+            case cap_mode::in:
                 accel_raised = pow(args.acceleration, args.exponent_classic - 1);
                 if (args.cap.x > 0) {
                     cap = base_fn(args.cap.x, accel_raised, args);
                 }
                 break;
-            case classic_cap_mode::out:
+            case cap_mode::out:
             default:
                 accel_raised = pow(args.acceleration, args.exponent_classic - 1);
 
@@ -86,7 +86,7 @@ namespace rawaccel {
         classic(const accel_args& args)
         {
             switch (args.cap_mode) {
-            case classic_cap_mode::io:
+            case cap_mode::io:
                 cap.x = args.cap.x;
                 cap.y = args.cap.y - 1;
 
@@ -101,7 +101,7 @@ namespace rawaccel {
                 }
                 constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
                 break;
-            case classic_cap_mode::in:
+            case cap_mode::in:
                 accel_raised = pow(args.acceleration, args.exponent_classic - 1);
                 if (args.cap.x > 0) {
                     cap.x = args.cap.x;
@@ -109,7 +109,7 @@ namespace rawaccel {
                     constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
                 }
                 break;
-            case classic_cap_mode::out:
+            case cap_mode::out:
             default:
                 accel_raised = pow(args.acceleration, args.exponent_classic - 1);
 

@@ -107,14 +107,14 @@ namespace grapher.Models.Options.Cap
 
         private CapTypeOption Default { get; set; }
 
-        public ClassicCapMode GetSelectedCapMode()
+        public CapMode GetSelectedCapMode()
         {
             switch(SelectedCapType)
             {
-                case CapType.Output: return ClassicCapMode.output;
-                case CapType.Both: return ClassicCapMode.in_out;
+                case CapType.Output: return CapMode.output;
+                case CapType.Both: return CapMode.in_out;
                 case CapType.Input:
-                default: return ClassicCapMode.input;
+                default: return CapMode.input;
             }
         }
 
@@ -122,21 +122,21 @@ namespace grapher.Models.Options.Cap
 
         #region Methods
 
-        public static CapTypeOption CapTypeOptionFromSettings(ClassicCapMode capMode)
+        public static CapTypeOption CapTypeOptionFromSettings(CapMode capMode)
         {
             switch (capMode)
             {
-                case ClassicCapMode.output:
+                case CapMode.output:
                     return OutCap;
-                case ClassicCapMode.in_out:
+                case CapMode.in_out:
                     return BothCap;
-                case ClassicCapMode.input:
+                case CapMode.input:
                 default:
                     return InCap;
             }
         }
 
-        public void SetActiveValue(ClassicCapMode capMode)
+        public void SetActiveValue(CapMode capMode)
         {
             Default = CapTypeOptionFromSettings(capMode);
             SelectedCapOption = Default;

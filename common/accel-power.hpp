@@ -15,7 +15,7 @@ namespace rawaccel {
 		{
 			auto n = args.exponent_power;
 
-			if (args.cap_mode != classic_cap_mode::io) {
+			if (args.cap_mode != cap_mode::io) {
 				scale = args.scale;
 			}
 			else if (args.gain) {
@@ -81,13 +81,13 @@ namespace rawaccel {
 		{
 
 			switch (args.cap_mode){
-			case classic_cap_mode::io:
+			case cap_mode::io:
 				cap = args.cap.y;
 				break;
-			case classic_cap_mode::in:
+			case cap_mode::in:
 				if (args.cap.x > 0) cap = base_fn(args.cap.x, args);
 				break;
-			case classic_cap_mode::out:
+			case cap_mode::out:
 			default:
 				if (args.cap.y > 0) cap = args.cap.y;
 				break;
@@ -110,10 +110,10 @@ namespace rawaccel {
 			power_base(args)
 		{
 			switch (args.cap_mode) {
-			case classic_cap_mode::io:
+			case cap_mode::io:
 				cap = args.cap;
 				break;
-			case classic_cap_mode::in:
+			case cap_mode::in:
 				if (args.cap.x > 0) {
 					cap.x = args.cap.x;
 					cap.y = gain(
@@ -122,7 +122,7 @@ namespace rawaccel {
 								scale);
 				}
 				break;
-			case classic_cap_mode::out:
+			case cap_mode::out:
 			default:
 				if (args.cap.y > 0) {
 					cap.x = gain_inverse(
