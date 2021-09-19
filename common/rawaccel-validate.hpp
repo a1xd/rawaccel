@@ -77,8 +77,14 @@ namespace rawaccel {
 				error("cap (output) can not be 0");
 			}
 
-			if (args.cap.x > 0 && args.cap.x < args.input_offset ||
-				args.cap.y > 0 && args.cap.y < args.output_offset) {
+			if ((args.mode == accel_mode::classic && 
+					args.cap.x > 0 && 
+					args.cap.x < args.input_offset && 
+					args.cap_mode != cap_mode::out) ||
+				(args.mode == accel_mode::power &&
+					args.cap.y > 0 &&
+					args.cap.y < args.output_offset &&
+					args.cap_mode != cap_mode::in)) {
 				error("cap < offset");
 			}
 
