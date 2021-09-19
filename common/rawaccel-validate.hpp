@@ -53,9 +53,6 @@ namespace rawaccel {
 			if (args.input_offset < 0) {
 				error("offset can not be negative");
 			}
-			else if (args.mode == accel_mode::jump && args.input_offset == 0) {
-				error("offset can not be 0");
-			}
 
 			if (args.output_offset < 0) {
 				error("offset can not be negative");
@@ -85,10 +82,20 @@ namespace rawaccel {
 				error("cap < offset");
 			}
 
-			if (args.growth_rate <= 0 ||
-				args.decay_rate <= 0 ||
-				args.acceleration <= 0) {
+			if (args.acceleration <= 0) {
 				error("acceleration"" must be positive");
+			}
+
+			if (args.scale <= 0) {
+				error("scale"" must be positive");
+			}
+
+			if (args.growth_rate <= 0) {
+				error("growth rate"" must be positive");
+			}
+
+			if (args.decay_rate <= 0) {
+				error("decay rate"" must be positive");
 			}
 
 			if (args.motivity <= 1) {
@@ -97,10 +104,6 @@ namespace rawaccel {
 
 			if (args.exponent_classic <= 1) {
 				error("exponent must be greater than 1");
-			}
-
-			if (args.scale <= 0) {
-				error("scale"" must be positive");
 			}
 
 			if (args.exponent_power <= 0) {
