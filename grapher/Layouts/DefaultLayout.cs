@@ -26,6 +26,8 @@ namespace grapher.Layouts
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);
             LutApplyOptionsLayout = new OptionLayout(false, string.Empty);
+            InputJumpLayout = new OptionLayout(false, string.Empty);
+            OutputJumpLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

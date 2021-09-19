@@ -29,10 +29,12 @@ namespace grapher
             CheckBoxOption gainSwitch,
             CapOptions classicCap,
             CapOptions powerCap,
+            Option outputJump,
             Option outputOffset,
             Option decayRate,
             Option growthRate,
             Option smooth,
+            Option inputJump,
             Option inputOffset,
             Option limit,
             Option powerClassic,
@@ -67,10 +69,12 @@ namespace grapher
             Smooth = smooth;
             ClassicCap = classicCap;
             PowerCap = powerCap;
+            InputJump = inputJump;
             InputOffset = inputOffset;
             Limit = limit;
             PowerClassic = powerClassic;
             Exponent = exponent;
+            OutputJump = outputJump;
             OutputOffset = outputOffset;
             Midpoint = midpoint;
             WriteButton = writeButton;
@@ -113,6 +117,10 @@ namespace grapher
         public CapOptions ClassicCap { get; }
 
         public CapOptions PowerCap { get; }
+
+        public Option InputJump { get; }
+
+        public Option OutputJump { get; }
 
         public Option InputOffset { get; }
 
@@ -229,6 +237,8 @@ namespace grapher
             PowerCap.Hide();
             OutputOffset.Hide();
             InputOffset.Hide();
+            InputJump.Hide();
+            OutputJump.Hide();
             Limit.Hide();
             PowerClassic.Hide();
             Exponent.Hide();
@@ -265,6 +275,8 @@ namespace grapher
                 args.cap.x,
                 args.cap.y,
                 args.capMode);
+            InputJump.SetActiveValue(args.cap.x);
+            OutputJump.SetActiveValue(args.cap.y);
             OutputOffset.SetActiveValue(args.outputOffset);
             InputOffset.SetActiveValue(args.inputOffset);
             DecayRate.SetActiveValue(args.decayRate);
@@ -329,11 +341,14 @@ namespace grapher
                 args.cap.y = PowerCap.Out.Field.Data;
                 args.capMode = PowerCap.CapTypeOptions.GetSelectedCapMode();
             }
+            if (InputJump.Visible) args.cap.x = InputJump.Field.Data;
+            if (OutputJump.Visible) args.cap.y = OutputJump.Field.Data;
             if (Limit.Visible) args.limit = Limit.Field.Data;
             if (PowerClassic.Visible) args.exponentClassic = PowerClassic.Field.Data;
             if (Exponent.Visible) args.exponentPower = Exponent.Field.Data;
             if (InputOffset.Visible) args.inputOffset = InputOffset.Field.Data;
             if (OutputOffset.Visible) args.outputOffset = OutputOffset.Field.Data;
+
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
             if (LutPanel.Visible)
             {
@@ -362,6 +377,8 @@ namespace grapher
             PowerCap.AlignActiveValues();
             OutputOffset.AlignActiveValues();
             InputOffset.AlignActiveValues();
+            OutputJump.AlignActiveValues();
+            InputJump.AlignActiveValues();
             Limit.AlignActiveValues();
             PowerClassic.AlignActiveValues();
             Exponent.AlignActiveValues();
@@ -398,10 +415,12 @@ namespace grapher
                 DecayRate,
                 GrowthRate,
                 Smooth,
+                InputJump,
                 InputOffset,
                 Limit,
                 PowerClassic,
                 Exponent,
+                OutputJump,
                 OutputOffset,
                 Midpoint,
                 LutText,

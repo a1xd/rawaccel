@@ -19,6 +19,8 @@ namespace grapher.Layouts
         public const string Weight = "Weight";
         public const string Smooth = "Smooth";
         public const string Gain = "Gain";
+        public const string Input = "Input";
+        public const string Output = "Output";
 
         public LayoutBase()
         {
@@ -27,10 +29,12 @@ namespace grapher.Layouts
             SmoothLayout = new OptionLayout(false, string.Empty);
             ClassicCapLayout = new OptionLayout(false, string.Empty);
             PowerCapLayout = new OptionLayout(false, string.Empty);
+            InputJumpLayout = new OptionLayout(false, string.Empty);
             InputOffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(false, string.Empty);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, string.Empty);
+            OutputJumpLayout = new OptionLayout(false, string.Empty);
             OutputOffsetLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(false, string.Empty);
@@ -59,6 +63,8 @@ namespace grapher.Layouts
 
         protected OptionLayout PowerCapLayout { get; set; }
 
+        protected OptionLayout InputJumpLayout { get; set; }
+
         protected OptionLayout InputOffsetLayout { get; set; }
 
         protected OptionLayout LimitLayout { get; set; }
@@ -66,6 +72,8 @@ namespace grapher.Layouts
         protected OptionLayout PowerClassicLayout { get; set; }
 
         protected OptionLayout ExponentLayout { get; set; }
+
+        protected OptionLayout OutputJumpLayout { get; set; }
 
         protected OptionLayout OutputOffsetLayout { get; set; }
 
@@ -91,10 +99,12 @@ namespace grapher.Layouts
             IOption decayRateOption,
             IOption growthRateOption,
             IOption smoothOption,
+            IOption inputJumpOption,
             IOption inputOffsetOption,
             IOption limitOption,
             IOption powerClassicOption,
             IOption expOption,
+            IOption outputJumpOption,
             IOption outputOffsetOption,
             IOption midpointOption,
             IOption lutTextOption,
@@ -112,10 +122,12 @@ namespace grapher.Layouts
                 (DecayRateLayout, decayRateOption),
                 (GrowthRateLayout, growthRateOption),
                 (SmoothLayout, smoothOption),
+                (InputJumpLayout, inputJumpOption),
                 (InputOffsetLayout, inputOffsetOption),
                 (LimitLayout, limitOption),
                 (PowerClassicLayout, powerClassicOption),
                 (ExponentLayout, expOption),
+                (OutputJumpLayout, outputJumpOption),
                 (OutputOffsetLayout, outputOffsetOption),
                 (MidpointLayout, midpointOption),
                 (LutTextLayout, lutTextOption),
@@ -147,10 +159,12 @@ namespace grapher.Layouts
             IOption decayRateOption,
             IOption growthRateOption,
             IOption smoothOption,
+            IOption inputJumpOption,
             IOption inputOffsetOption,
             IOption limitOption,
             IOption powerClassicOption,
             IOption expOption,
+            IOption outputJumpOption,
             IOption outputOffsetOption,
             IOption midpointOption,
             IOption lutTextOption,
@@ -163,10 +177,12 @@ namespace grapher.Layouts
                 decayRateOption,
                 growthRateOption,
                 smoothOption,
+                inputJumpOption,
                 inputOffsetOption,
                 limitOption,
                 powerClassicOption,
                 expOption,
+                outputJumpOption,
                 outputOffsetOption,
                 midpointOption,
                 lutTextOption,

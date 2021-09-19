@@ -182,6 +182,8 @@ namespace grapher
             this.OptionSetXTitle = new System.Windows.Forms.Label();
             this.constantThreeLabelY = new System.Windows.Forms.Label();
             this.limitLabelY = new System.Windows.Forms.Label();
+            this.inputJumpLabelY = new System.Windows.Forms.Label();
+            this.outputJumpLabelY = new System.Windows.Forms.Label();
             this.inputOffsetLabelY = new System.Windows.Forms.Label();
             this.outputOffsetLabelY = new System.Windows.Forms.Label();
             this.inCapLabelYClassic = new System.Windows.Forms.Label();
@@ -189,17 +191,23 @@ namespace grapher
             this.ByComponentXYLock = new System.Windows.Forms.CheckBox();
             this.MidpointActiveYLabel = new System.Windows.Forms.Label();
             this.LimitActiveYLabel = new System.Windows.Forms.Label();
+            this.InputJumpActiveYLabel = new System.Windows.Forms.Label();
+            this.OutputJumpActiveYLabel = new System.Windows.Forms.Label();
             this.InputOffsetActiveYLabel = new System.Windows.Forms.Label();
             this.OutputOffsetActiveYLabel = new System.Windows.Forms.Label();
             this.AccelerationActiveLabelY = new System.Windows.Forms.Label();
             this.accelTypeDropY = new System.Windows.Forms.ComboBox();
             this.midpointBoxY = new System.Windows.Forms.TextBox();
             this.limitBoxY = new System.Windows.Forms.TextBox();
+            this.inputJumpBoxY = new System.Windows.Forms.TextBox();
+            this.outputJumpBoxY = new System.Windows.Forms.TextBox();
             this.inputOffsetBoxY = new System.Windows.Forms.TextBox();
             this.outputOffsetBoxY = new System.Windows.Forms.TextBox();
             this.accelerationBoxY = new System.Windows.Forms.TextBox();
             this.MidpointActiveXLabel = new System.Windows.Forms.Label();
             this.LimitActiveXLabel = new System.Windows.Forms.Label();
+            this.InputJumpActiveXLabel = new System.Windows.Forms.Label();
+            this.OutputJumpActiveXLabel = new System.Windows.Forms.Label();
             this.InputOffsetActiveXLabel = new System.Windows.Forms.Label();
             this.OutputOffsetActiveXLabel = new System.Windows.Forms.Label();
             this.InCapActiveYLabelClassic = new System.Windows.Forms.Label();
@@ -216,6 +224,10 @@ namespace grapher
             this.inCapBoxYClassic = new System.Windows.Forms.TextBox();
             this.VertHorzRatioBox = new System.Windows.Forms.TextBox();
             this.writeButton = new System.Windows.Forms.Button();
+            this.inputJumpLabelX = new System.Windows.Forms.Label();
+            this.outputJumpLabelX = new System.Windows.Forms.Label();
+            this.inputJumpBoxX = new System.Windows.Forms.TextBox();
+            this.outputJumpBoxX = new System.Windows.Forms.TextBox();
             this.inputOffsetLabelX = new System.Windows.Forms.Label();
             this.outputOffsetLabelX = new System.Windows.Forms.Label();
             this.inputOffsetBoxX = new System.Windows.Forms.TextBox();
@@ -361,6 +373,8 @@ namespace grapher
             this.optionsPanel.Controls.Add(this.OptionSetXTitle);
             this.optionsPanel.Controls.Add(this.constantThreeLabelY);
             this.optionsPanel.Controls.Add(this.limitLabelY);
+            this.optionsPanel.Controls.Add(this.inputJumpLabelY);
+            this.optionsPanel.Controls.Add(this.outputJumpLabelY);
             this.optionsPanel.Controls.Add(this.inputOffsetLabelY);
             this.optionsPanel.Controls.Add(this.outputOffsetLabelY);
             this.optionsPanel.Controls.Add(this.inCapLabelYClassic);
@@ -368,17 +382,23 @@ namespace grapher
             this.optionsPanel.Controls.Add(this.ByComponentXYLock);
             this.optionsPanel.Controls.Add(this.MidpointActiveYLabel);
             this.optionsPanel.Controls.Add(this.LimitActiveYLabel);
+            this.optionsPanel.Controls.Add(this.InputJumpActiveYLabel);
+            this.optionsPanel.Controls.Add(this.OutputJumpActiveYLabel);
             this.optionsPanel.Controls.Add(this.InputOffsetActiveYLabel);
             this.optionsPanel.Controls.Add(this.OutputOffsetActiveYLabel);
             this.optionsPanel.Controls.Add(this.AccelerationActiveLabelY);
             this.optionsPanel.Controls.Add(this.accelTypeDropY);
             this.optionsPanel.Controls.Add(this.midpointBoxY);
             this.optionsPanel.Controls.Add(this.limitBoxY);
+            this.optionsPanel.Controls.Add(this.inputJumpBoxY);
+            this.optionsPanel.Controls.Add(this.outputJumpBoxY);
             this.optionsPanel.Controls.Add(this.inputOffsetBoxY);
             this.optionsPanel.Controls.Add(this.outputOffsetBoxY);
             this.optionsPanel.Controls.Add(this.accelerationBoxY);
             this.optionsPanel.Controls.Add(this.MidpointActiveXLabel);
             this.optionsPanel.Controls.Add(this.LimitActiveXLabel);
+            this.optionsPanel.Controls.Add(this.InputJumpActiveXLabel);
+            this.optionsPanel.Controls.Add(this.OutputJumpActiveXLabel);
             this.optionsPanel.Controls.Add(this.InputOffsetActiveXLabel);
             this.optionsPanel.Controls.Add(this.OutputOffsetActiveXLabel);
             this.optionsPanel.Controls.Add(this.InCapActiveYLabelClassic);
@@ -395,6 +415,10 @@ namespace grapher
             this.optionsPanel.Controls.Add(this.inCapBoxYClassic);
             this.optionsPanel.Controls.Add(this.VertHorzRatioBox);
             this.optionsPanel.Controls.Add(this.writeButton);
+            this.optionsPanel.Controls.Add(this.inputJumpLabelX);
+            this.optionsPanel.Controls.Add(this.outputJumpLabelX);
+            this.optionsPanel.Controls.Add(this.inputJumpBoxX);
+            this.optionsPanel.Controls.Add(this.outputJumpBoxX);
             this.optionsPanel.Controls.Add(this.inputOffsetLabelX);
             this.optionsPanel.Controls.Add(this.outputOffsetLabelX);
             this.optionsPanel.Controls.Add(this.inputOffsetBoxX);
@@ -1393,9 +1417,22 @@ namespace grapher
             this.limitLabelY.Size = new System.Drawing.Size(28, 13);
             this.limitLabelY.TabIndex = 136;
             this.limitLabelY.Text = "Limit";
-            // 
-            // offsetLabelY
-            // 
+
+            this.inputJumpLabelY.AutoSize = true;
+            this.inputJumpLabelY.Location = new System.Drawing.Point(263, 248);
+            this.inputJumpLabelY.Name = "inputJumpLabelY";
+            this.inputJumpLabelY.Size = new System.Drawing.Size(35, 13);
+            this.inputJumpLabelY.TabIndex = 135;
+            this.inputJumpLabelY.Text = "Input";
+
+            this.outputJumpLabelY.AutoSize = true;
+            this.outputJumpLabelY.Location = new System.Drawing.Point(263, 248);
+            this.outputJumpLabelY.Name = "outputJumpLabelY";
+            this.outputJumpLabelY.Size = new System.Drawing.Size(35, 13);
+            this.outputJumpLabelY.TabIndex = 135;
+            this.outputJumpLabelY.Text = "Output";
+
+
             this.inputOffsetLabelY.AutoSize = true;
             this.inputOffsetLabelY.Location = new System.Drawing.Point(263, 248);
             this.inputOffsetLabelY.Name = "inputOffsetLabelY";
@@ -1456,9 +1493,21 @@ namespace grapher
             this.LimitActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.LimitActiveYLabel.TabIndex = 130;
             this.LimitActiveYLabel.Text = "0";
-            // 
-            // OffsetActiveYLabel
-            // 
+
+            this.InputJumpActiveYLabel.AutoSize = true;
+            this.InputJumpActiveYLabel.Location = new System.Drawing.Point(414, 248);
+            this.InputJumpActiveYLabel.Name = "InputJumpActiveYLabel";
+            this.InputJumpActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.InputJumpActiveYLabel.TabIndex = 129;
+            this.InputJumpActiveYLabel.Text = "0";
+
+            this.OutputJumpActiveYLabel.AutoSize = true;
+            this.OutputJumpActiveYLabel.Location = new System.Drawing.Point(414, 248);
+            this.OutputJumpActiveYLabel.Name = "OutputJumpActiveYLabel";
+            this.OutputJumpActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.OutputJumpActiveYLabel.TabIndex = 129;
+            this.OutputJumpActiveYLabel.Text = "0";
+
             this.InputOffsetActiveYLabel.AutoSize = true;
             this.InputOffsetActiveYLabel.Location = new System.Drawing.Point(414, 248);
             this.InputOffsetActiveYLabel.Name = "InputOffsetActiveYLabel";
@@ -1504,9 +1553,17 @@ namespace grapher
             this.limitBoxY.Name = "limitBoxY";
             this.limitBoxY.Size = new System.Drawing.Size(76, 20);
             this.limitBoxY.TabIndex = 108;
-            // 
-            // offsetBoxY
-            // 
+
+            this.inputJumpBoxY.Location = new System.Drawing.Point(332, 245);
+            this.inputJumpBoxY.Name = "inputJumpBoxY";
+            this.inputJumpBoxY.Size = new System.Drawing.Size(76, 20);
+            this.inputJumpBoxY.TabIndex = 106;
+
+            this.outputJumpBoxY.Location = new System.Drawing.Point(332, 245);
+            this.outputJumpBoxY.Name = "outputJumpBoxY";
+            this.outputJumpBoxY.Size = new System.Drawing.Size(76, 20);
+            this.outputJumpBoxY.TabIndex = 106;
+
             this.inputOffsetBoxY.Location = new System.Drawing.Point(332, 245);
             this.inputOffsetBoxY.Name = "inputOffsetBoxY";
             this.inputOffsetBoxY.Size = new System.Drawing.Size(76, 20);
@@ -1541,9 +1598,21 @@ namespace grapher
             this.LimitActiveXLabel.Size = new System.Drawing.Size(13, 13);
             this.LimitActiveXLabel.TabIndex = 126;
             this.LimitActiveXLabel.Text = "0";
-            // 
-            // OffsetActiveXLabel
-            // 
+
+            this.InputJumpActiveXLabel.AutoSize = true;
+            this.InputJumpActiveXLabel.Location = new System.Drawing.Point(197, 248);
+            this.InputJumpActiveXLabel.Name = "InputJumpActiveXLabel";
+            this.InputJumpActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.InputJumpActiveXLabel.TabIndex = 125;
+            this.InputJumpActiveXLabel.Text = "0";
+
+            this.OutputJumpActiveXLabel.AutoSize = true;
+            this.OutputJumpActiveXLabel.Location = new System.Drawing.Point(197, 248);
+            this.OutputJumpActiveXLabel.Name = "OutputJumpActiveXLabel";
+            this.OutputJumpActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.OutputJumpActiveXLabel.TabIndex = 125;
+            this.OutputJumpActiveXLabel.Text = "0";
+
             this.InputOffsetActiveXLabel.AutoSize = true;
             this.InputOffsetActiveXLabel.Location = new System.Drawing.Point(197, 248);
             this.InputOffsetActiveXLabel.Name = "InputOffsetActiveXLabel";
@@ -1682,9 +1751,33 @@ namespace grapher
             this.writeButton.TabIndex = 111;
             this.writeButton.Text = "Apply";
             this.writeButton.UseVisualStyleBackColor = true;
-            // 
-            // offsetLabelX
-            // 
+
+            this.inputJumpLabelX.AutoSize = true;
+            this.inputJumpLabelX.Location = new System.Drawing.Point(37, 248);
+            this.inputJumpLabelX.Name = "inputJumpLabelX";
+            this.inputJumpLabelX.Size = new System.Drawing.Size(35, 13);
+            this.inputJumpLabelX.TabIndex = 107;
+            this.inputJumpLabelX.Text = "Input Jump";
+            this.inputJumpLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+
+            this.outputJumpLabelX.AutoSize = true;
+            this.outputJumpLabelX.Location = new System.Drawing.Point(37, 248);
+            this.outputJumpLabelX.Name = "outputJumpLabelX";
+            this.outputJumpLabelX.Size = new System.Drawing.Size(35, 13);
+            this.outputJumpLabelX.TabIndex = 107;
+            this.outputJumpLabelX.Text = "Output Jump";
+            this.outputJumpLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+
+            this.inputJumpBoxX.Location = new System.Drawing.Point(106, 245);
+            this.inputJumpBoxX.Name = "inputJumpBoxX";
+            this.inputJumpBoxX.Size = new System.Drawing.Size(76, 20);
+            this.inputJumpBoxX.TabIndex = 92;
+
+            this.outputJumpBoxX.Location = new System.Drawing.Point(106, 245);
+            this.outputJumpBoxX.Name = "outputJumpBoxX";
+            this.outputJumpBoxX.Size = new System.Drawing.Size(76, 20);
+            this.outputJumpBoxX.TabIndex = 92;
+
             this.inputOffsetLabelX.AutoSize = true;
             this.inputOffsetLabelX.Location = new System.Drawing.Point(37, 248);
             this.inputOffsetLabelX.Name = "inputOffsetLabelX";
@@ -1700,9 +1793,7 @@ namespace grapher
             this.outputOffsetLabelX.TabIndex = 107;
             this.outputOffsetLabelX.Text = "Output Offset";
             this.outputOffsetLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // offsetBoxX
-            // 
+
             this.inputOffsetBoxX.Location = new System.Drawing.Point(106, 245);
             this.inputOffsetBoxX.Name = "inputOffsetBoxX";
             this.inputOffsetBoxX.Size = new System.Drawing.Size(76, 20);
@@ -2238,6 +2329,8 @@ namespace grapher
         private System.Windows.Forms.Label OptionSetXTitle;
         private System.Windows.Forms.Label constantThreeLabelY;
         private System.Windows.Forms.Label limitLabelY;
+        private System.Windows.Forms.Label inputJumpLabelY;
+        private System.Windows.Forms.Label outputJumpLabelY;
         private System.Windows.Forms.Label inputOffsetLabelY;
         private System.Windows.Forms.Label outputOffsetLabelY;
         private System.Windows.Forms.Label inCapLabelYClassic;
@@ -2245,17 +2338,23 @@ namespace grapher
         private System.Windows.Forms.CheckBox ByComponentXYLock;
         private System.Windows.Forms.Label MidpointActiveYLabel;
         private System.Windows.Forms.Label LimitActiveYLabel;
+        private System.Windows.Forms.Label InputJumpActiveYLabel;
+        private System.Windows.Forms.Label OutputJumpActiveYLabel;
         private System.Windows.Forms.Label InputOffsetActiveYLabel;
         private System.Windows.Forms.Label OutputOffsetActiveYLabel;
         private System.Windows.Forms.Label AccelerationActiveLabelY;
         private System.Windows.Forms.ComboBox accelTypeDropY;
         private System.Windows.Forms.TextBox midpointBoxY;
         private System.Windows.Forms.TextBox limitBoxY;
+        private System.Windows.Forms.TextBox inputJumpBoxY;
+        private System.Windows.Forms.TextBox outputJumpBoxY;
         private System.Windows.Forms.TextBox inputOffsetBoxY;
         private System.Windows.Forms.TextBox outputOffsetBoxY;
         private System.Windows.Forms.TextBox accelerationBoxY;
         private System.Windows.Forms.Label MidpointActiveXLabel;
         private System.Windows.Forms.Label LimitActiveXLabel;
+        private System.Windows.Forms.Label InputJumpActiveXLabel;
+        private System.Windows.Forms.Label OutputJumpActiveXLabel;
         private System.Windows.Forms.Label InputOffsetActiveXLabel;
         private System.Windows.Forms.Label OutputOffsetActiveXLabel;
         private System.Windows.Forms.Label InCapActiveYLabelClassic;
@@ -2276,6 +2375,10 @@ namespace grapher
         private System.Windows.Forms.Label outputOffsetLabelX;
         private System.Windows.Forms.TextBox inputOffsetBoxX;
         private System.Windows.Forms.TextBox outputOffsetBoxX;
+        private System.Windows.Forms.Label inputJumpLabelX;
+        private System.Windows.Forms.Label outputJumpLabelX;
+        private System.Windows.Forms.TextBox inputJumpBoxX;
+        private System.Windows.Forms.TextBox outputJumpBoxX;
         private System.Windows.Forms.Label constantThreeLabelX;
         private System.Windows.Forms.TextBox midpointBoxX;
         private System.Windows.Forms.Label limitLabelX;
