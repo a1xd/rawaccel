@@ -34,6 +34,8 @@ namespace grapher.Layouts
             LutTextLayout = new OptionLayout(true, string.Empty);
             LutPanelLayout = new OptionLayout(true, string.Empty);
             LutApplyOptionsLayout = new OptionLayout(true, string.Empty);
+            InputJumpLayout = new OptionLayout(false, string.Empty);
+            OutputJumpLayout = new OptionLayout(false, string.Empty);
         }
 
         public override string ActiveName => LUTActiveName;

@@ -54,6 +54,10 @@ namespace grapher.Models
             TextBox inCapBoxYPower,
             TextBox outCapBoxXPower,
             TextBox outCapBoxYPower,
+            TextBox inputJumpBoxX,
+            TextBox inputJumpBoxY,
+            TextBox outputJumpBoxX,
+            TextBox outputJumpBoxY,
             TextBox inputOffsetBoxX,
             TextBox inputOffsetBoxY,
             TextBox outputOffsetBoxX,
@@ -108,6 +112,10 @@ namespace grapher.Models
             Label outCapLabelYPower,
             Label capTypeLabelXPower,
             Label capTypeLabelYPower,
+            Label inputJumpLabelX,
+            Label inputJumpLabelY,
+            Label outputJumpLabelX,
+            Label outputJumpLabelY,
             Label inputOffsetLabelX,
             Label inputOffsetLabelY,
             Label outputOffsetLabelX,
@@ -149,6 +157,10 @@ namespace grapher.Models
             Label outCapActiveYLabelPower,
             Label capTypeActiveXLabelPower,
             Label capTypeActiveYLabelPower,
+            Label inputJumpActiveLabelX,
+            Label inputJumpActiveLabelY,
+            Label outputJumpActiveLabelX,
+            Label outputJumpActiveLabelY,
             Label inputOffsetActiveLabelX,
             Label inputOffsetActiveLabelY,
             Label outputOffsetActiveLabelX,
@@ -246,6 +258,42 @@ namespace grapher.Models
             var optionSetYLeft = activeValueTitleX.Left + activeValueTitleX.Width;
 
             var directionalityLeft = directionalityPanel.Left;
+
+            var inputJumpX = new Option(
+                inputJumpBoxX,
+                form,
+                0,
+                inputJumpLabelX,
+                0,
+                new ActiveValueLabel(inputJumpActiveLabelX, activeValueTitleX),
+                "Jump");
+
+            var inputJumpY = new Option(
+                inputJumpBoxY,
+                form,
+                0,
+                inputJumpLabelY,
+                optionSetYLeft,
+                new ActiveValueLabel(inputJumpActiveLabelY, activeValueTitleY),
+                "Jump");
+
+            var outputJumpX = new Option(
+                outputJumpBoxX,
+                form,
+                0,
+                outputJumpLabelX,
+                0,
+                new ActiveValueLabel(outputJumpActiveLabelX, activeValueTitleX),
+                "Jump");
+
+            var outputJumpY = new Option(
+                outputJumpBoxY,
+                form,
+                0,
+                outputJumpLabelY,
+                optionSetYLeft,
+                new ActiveValueLabel(outputJumpActiveLabelY, activeValueTitleY),
+                "Jump");
 
             var inputOffsetX = new Option(
                 inputOffsetBoxX,
@@ -556,10 +604,12 @@ namespace grapher.Models
                 gainSwitchOptionX,
                 classicCapOptionsX,
                 powerCapOptionsX,
+                outputJumpX,
                 outputOffsetX,
                 decayRateX,
                 growthRateX,
                 smoothX,
+                inputJumpX,
                 inputOffsetX,
                 limitX,
                 powerClassicX,
@@ -579,10 +629,12 @@ namespace grapher.Models
                 gainSwitchOptionY,
                 classicCapOptionsY,
                 powerCapOptionsY,
+                outputJumpY,
                 outputOffsetY,
                 decayRateY,
                 growthRateY,
                 smoothY,
+                inputJumpY,
                 inputOffsetY,
                 limitY,
                 powerClassicY,

@@ -17,7 +17,7 @@ namespace grapher.Layouts
             DecayRateLayout = new OptionLayout(false, string.Empty);
             GrowthRateLayout = new OptionLayout(false, string.Empty);
             SmoothLayout = new OptionLayout(true, Smooth);
-            InputOffsetLayout = new OptionLayout(true, InputOffset);
+            InputOffsetLayout = new OptionLayout(false, InputOffset);
             LimitLayout = new OptionLayout(false, Limit);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, string.Empty);
@@ -26,6 +26,8 @@ namespace grapher.Layouts
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);
             LutApplyOptionsLayout = new OptionLayout(false, string.Empty);
+            InputJumpLayout = new OptionLayout(true, Input);
+            OutputJumpLayout = new OptionLayout(true, Output);
         }
     }
 }
