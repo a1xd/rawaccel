@@ -443,7 +443,7 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
-            //
+            // 
             // OutCapActiveYLabelPower
             // 
             this.OutCapActiveYLabelPower.AutoSize = true;
@@ -1417,33 +1417,40 @@ namespace grapher
             this.limitLabelY.Size = new System.Drawing.Size(28, 13);
             this.limitLabelY.TabIndex = 136;
             this.limitLabelY.Text = "Limit";
-
+            // 
+            // inputJumpLabelY
+            // 
             this.inputJumpLabelY.AutoSize = true;
             this.inputJumpLabelY.Location = new System.Drawing.Point(263, 248);
             this.inputJumpLabelY.Name = "inputJumpLabelY";
-            this.inputJumpLabelY.Size = new System.Drawing.Size(35, 13);
+            this.inputJumpLabelY.Size = new System.Drawing.Size(31, 13);
             this.inputJumpLabelY.TabIndex = 135;
             this.inputJumpLabelY.Text = "Input";
-
+            // 
+            // outputJumpLabelY
+            // 
             this.outputJumpLabelY.AutoSize = true;
             this.outputJumpLabelY.Location = new System.Drawing.Point(263, 248);
             this.outputJumpLabelY.Name = "outputJumpLabelY";
-            this.outputJumpLabelY.Size = new System.Drawing.Size(35, 13);
+            this.outputJumpLabelY.Size = new System.Drawing.Size(39, 13);
             this.outputJumpLabelY.TabIndex = 135;
             this.outputJumpLabelY.Text = "Output";
-
-
+            // 
+            // inputOffsetLabelY
+            // 
             this.inputOffsetLabelY.AutoSize = true;
             this.inputOffsetLabelY.Location = new System.Drawing.Point(263, 248);
             this.inputOffsetLabelY.Name = "inputOffsetLabelY";
-            this.inputOffsetLabelY.Size = new System.Drawing.Size(35, 13);
+            this.inputOffsetLabelY.Size = new System.Drawing.Size(62, 13);
             this.inputOffsetLabelY.TabIndex = 135;
             this.inputOffsetLabelY.Text = "Input Offset";
-
+            // 
+            // outputOffsetLabelY
+            // 
             this.outputOffsetLabelY.AutoSize = true;
             this.outputOffsetLabelY.Location = new System.Drawing.Point(263, 248);
             this.outputOffsetLabelY.Name = "outputOffsetLabelY";
-            this.outputOffsetLabelY.Size = new System.Drawing.Size(35, 13);
+            this.outputOffsetLabelY.Size = new System.Drawing.Size(70, 13);
             this.outputOffsetLabelY.TabIndex = 135;
             this.outputOffsetLabelY.Text = "Output Offset";
             // 
@@ -1493,28 +1500,36 @@ namespace grapher
             this.LimitActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.LimitActiveYLabel.TabIndex = 130;
             this.LimitActiveYLabel.Text = "0";
-
+            // 
+            // InputJumpActiveYLabel
+            // 
             this.InputJumpActiveYLabel.AutoSize = true;
             this.InputJumpActiveYLabel.Location = new System.Drawing.Point(414, 248);
             this.InputJumpActiveYLabel.Name = "InputJumpActiveYLabel";
             this.InputJumpActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.InputJumpActiveYLabel.TabIndex = 129;
             this.InputJumpActiveYLabel.Text = "0";
-
+            // 
+            // OutputJumpActiveYLabel
+            // 
             this.OutputJumpActiveYLabel.AutoSize = true;
             this.OutputJumpActiveYLabel.Location = new System.Drawing.Point(414, 248);
             this.OutputJumpActiveYLabel.Name = "OutputJumpActiveYLabel";
             this.OutputJumpActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.OutputJumpActiveYLabel.TabIndex = 129;
             this.OutputJumpActiveYLabel.Text = "0";
-
+            // 
+            // InputOffsetActiveYLabel
+            // 
             this.InputOffsetActiveYLabel.AutoSize = true;
             this.InputOffsetActiveYLabel.Location = new System.Drawing.Point(414, 248);
             this.InputOffsetActiveYLabel.Name = "InputOffsetActiveYLabel";
             this.InputOffsetActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.InputOffsetActiveYLabel.TabIndex = 129;
             this.InputOffsetActiveYLabel.Text = "0";
-
+            // 
+            // OutputOffsetActiveYLabel
+            // 
             this.OutputOffsetActiveYLabel.AutoSize = true;
             this.OutputOffsetActiveYLabel.Location = new System.Drawing.Point(414, 248);
             this.OutputOffsetActiveYLabel.Name = "OutputOffsetActiveYLabel";
@@ -1553,22 +1568,30 @@ namespace grapher
             this.limitBoxY.Name = "limitBoxY";
             this.limitBoxY.Size = new System.Drawing.Size(76, 20);
             this.limitBoxY.TabIndex = 108;
-
+            // 
+            // inputJumpBoxY
+            // 
             this.inputJumpBoxY.Location = new System.Drawing.Point(332, 245);
             this.inputJumpBoxY.Name = "inputJumpBoxY";
             this.inputJumpBoxY.Size = new System.Drawing.Size(76, 20);
             this.inputJumpBoxY.TabIndex = 106;
-
+            // 
+            // outputJumpBoxY
+            // 
             this.outputJumpBoxY.Location = new System.Drawing.Point(332, 245);
             this.outputJumpBoxY.Name = "outputJumpBoxY";
             this.outputJumpBoxY.Size = new System.Drawing.Size(76, 20);
             this.outputJumpBoxY.TabIndex = 106;
-
+            // 
+            // inputOffsetBoxY
+            // 
             this.inputOffsetBoxY.Location = new System.Drawing.Point(332, 245);
             this.inputOffsetBoxY.Name = "inputOffsetBoxY";
             this.inputOffsetBoxY.Size = new System.Drawing.Size(76, 20);
             this.inputOffsetBoxY.TabIndex = 106;
-
+            // 
+            // outputOffsetBoxY
+            // 
             this.outputOffsetBoxY.Location = new System.Drawing.Point(332, 245);
             this.outputOffsetBoxY.Name = "outputOffsetBoxY";
             this.outputOffsetBoxY.Size = new System.Drawing.Size(76, 20);
@@ -1598,28 +1621,36 @@ namespace grapher
             this.LimitActiveXLabel.Size = new System.Drawing.Size(13, 13);
             this.LimitActiveXLabel.TabIndex = 126;
             this.LimitActiveXLabel.Text = "0";
-
+            // 
+            // InputJumpActiveXLabel
+            // 
             this.InputJumpActiveXLabel.AutoSize = true;
             this.InputJumpActiveXLabel.Location = new System.Drawing.Point(197, 248);
             this.InputJumpActiveXLabel.Name = "InputJumpActiveXLabel";
             this.InputJumpActiveXLabel.Size = new System.Drawing.Size(13, 13);
             this.InputJumpActiveXLabel.TabIndex = 125;
             this.InputJumpActiveXLabel.Text = "0";
-
+            // 
+            // OutputJumpActiveXLabel
+            // 
             this.OutputJumpActiveXLabel.AutoSize = true;
             this.OutputJumpActiveXLabel.Location = new System.Drawing.Point(197, 248);
             this.OutputJumpActiveXLabel.Name = "OutputJumpActiveXLabel";
             this.OutputJumpActiveXLabel.Size = new System.Drawing.Size(13, 13);
             this.OutputJumpActiveXLabel.TabIndex = 125;
             this.OutputJumpActiveXLabel.Text = "0";
-
+            // 
+            // InputOffsetActiveXLabel
+            // 
             this.InputOffsetActiveXLabel.AutoSize = true;
             this.InputOffsetActiveXLabel.Location = new System.Drawing.Point(197, 248);
             this.InputOffsetActiveXLabel.Name = "InputOffsetActiveXLabel";
             this.InputOffsetActiveXLabel.Size = new System.Drawing.Size(13, 13);
             this.InputOffsetActiveXLabel.TabIndex = 125;
             this.InputOffsetActiveXLabel.Text = "0";
-
+            // 
+            // OutputOffsetActiveXLabel
+            // 
             this.OutputOffsetActiveXLabel.AutoSize = true;
             this.OutputOffsetActiveXLabel.Location = new System.Drawing.Point(197, 248);
             this.OutputOffsetActiveXLabel.Name = "OutputOffsetActiveXLabel";
@@ -1751,54 +1782,70 @@ namespace grapher
             this.writeButton.TabIndex = 111;
             this.writeButton.Text = "Apply";
             this.writeButton.UseVisualStyleBackColor = true;
-
+            // 
+            // inputJumpLabelX
+            // 
             this.inputJumpLabelX.AutoSize = true;
             this.inputJumpLabelX.Location = new System.Drawing.Point(37, 248);
             this.inputJumpLabelX.Name = "inputJumpLabelX";
-            this.inputJumpLabelX.Size = new System.Drawing.Size(35, 13);
+            this.inputJumpLabelX.Size = new System.Drawing.Size(59, 13);
             this.inputJumpLabelX.TabIndex = 107;
             this.inputJumpLabelX.Text = "Input Jump";
             this.inputJumpLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
+            // 
+            // outputJumpLabelX
+            // 
             this.outputJumpLabelX.AutoSize = true;
             this.outputJumpLabelX.Location = new System.Drawing.Point(37, 248);
             this.outputJumpLabelX.Name = "outputJumpLabelX";
-            this.outputJumpLabelX.Size = new System.Drawing.Size(35, 13);
+            this.outputJumpLabelX.Size = new System.Drawing.Size(67, 13);
             this.outputJumpLabelX.TabIndex = 107;
             this.outputJumpLabelX.Text = "Output Jump";
             this.outputJumpLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
+            // 
+            // inputJumpBoxX
+            // 
             this.inputJumpBoxX.Location = new System.Drawing.Point(106, 245);
             this.inputJumpBoxX.Name = "inputJumpBoxX";
             this.inputJumpBoxX.Size = new System.Drawing.Size(76, 20);
             this.inputJumpBoxX.TabIndex = 92;
-
+            // 
+            // outputJumpBoxX
+            // 
             this.outputJumpBoxX.Location = new System.Drawing.Point(106, 245);
             this.outputJumpBoxX.Name = "outputJumpBoxX";
             this.outputJumpBoxX.Size = new System.Drawing.Size(76, 20);
             this.outputJumpBoxX.TabIndex = 92;
-
+            // 
+            // inputOffsetLabelX
+            // 
             this.inputOffsetLabelX.AutoSize = true;
             this.inputOffsetLabelX.Location = new System.Drawing.Point(37, 248);
             this.inputOffsetLabelX.Name = "inputOffsetLabelX";
-            this.inputOffsetLabelX.Size = new System.Drawing.Size(35, 13);
+            this.inputOffsetLabelX.Size = new System.Drawing.Size(62, 13);
             this.inputOffsetLabelX.TabIndex = 107;
             this.inputOffsetLabelX.Text = "Input Offset";
             this.inputOffsetLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
+            // 
+            // outputOffsetLabelX
+            // 
             this.outputOffsetLabelX.AutoSize = true;
             this.outputOffsetLabelX.Location = new System.Drawing.Point(37, 248);
             this.outputOffsetLabelX.Name = "outputOffsetLabelX";
-            this.outputOffsetLabelX.Size = new System.Drawing.Size(35, 13);
+            this.outputOffsetLabelX.Size = new System.Drawing.Size(70, 13);
             this.outputOffsetLabelX.TabIndex = 107;
             this.outputOffsetLabelX.Text = "Output Offset";
             this.outputOffsetLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
+            // 
+            // inputOffsetBoxX
+            // 
             this.inputOffsetBoxX.Location = new System.Drawing.Point(106, 245);
             this.inputOffsetBoxX.Name = "inputOffsetBoxX";
             this.inputOffsetBoxX.Size = new System.Drawing.Size(76, 20);
             this.inputOffsetBoxX.TabIndex = 92;
-
+            // 
+            // outputOffsetBoxX
+            // 
             this.outputOffsetBoxX.Location = new System.Drawing.Point(106, 245);
             this.outputOffsetBoxX.Name = "outputOffsetBoxX";
             this.outputOffsetBoxX.Size = new System.Drawing.Size(76, 20);
@@ -2019,13 +2066,13 @@ namespace grapher
             this.AutoWriteMenuItem.CheckOnClick = true;
             this.AutoWriteMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.AutoWriteMenuItem.Name = "AutoWriteMenuItem";
-            this.AutoWriteMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.AutoWriteMenuItem.Text = "Apply Settings On Startup";
+            this.AutoWriteMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.AutoWriteMenuItem.Text = "Apply Settings.json On GUI Startup";
             // 
             // DeviceMenuItem
             // 
             this.DeviceMenuItem.Name = "DeviceMenuItem";
-            this.DeviceMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.DeviceMenuItem.Size = new System.Drawing.Size(257, 22);
             this.DeviceMenuItem.Text = "Device Menu";
             // 
             // chartsPanel
