@@ -92,6 +92,8 @@ An offset, sometimes called a threshold, is a speed in counts before acceleratio
 ### Caps
 A cap is a point after which acceleration is not applied. The legacy way of applying an offset is simply applying the minimum of the cap sensitivity and the calculated sensitivity for any acceleration calculation. Thus, for the legacy "sensitivity cap" the value given is a sensitivity. This cap style is still available but causes a large discontinuity at the point of offset, leading to a non-smooth feeling at cap cross. The new default "gain cap" effectively caps the gain, but for internal calculation reasons, does so for a given speed rather than a given gain value. This feels much smoother but might have a large effect on sensitivity as gain generally raises faster than sensitivity. We recommend that users use a gain cap and simply adjust it to hit at the gain equivalent to the sensitivity they'd like to cap at. The theory behind "gain caps" is developed in [this document](https://docs.google.com/document/d/1FCpkqRxUaCP7J258SupbxNxvdPfljb16AKMs56yDucA).
 
+Caps are only applicable to the Classic, Linear, and Power modes. The capping point can be defined in terms of an input speed, an output ratio, or both (which will then set other acceleration parameters for the mode.)
+
 ### Anisotropy
 See "Horizontal and Vertical" in the philosophy section to understand what these options do.
 
@@ -113,7 +115,9 @@ This is the style found in Quake 3, Quake Live, and countless inspired followers
 ![ClassicExample](images/classic_example.png)
 
 ### Power
-This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multiplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps).
+This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multiplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1). The  formula for this curve starts at 0 for an input of 0, so the user can also set a ratio of the sens multiplier for the curve to start at, effectively an output offset.
+
+In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps) and the output offset to 1.
 ![PowerExample](images/power_example.png)
 
 ### Natural

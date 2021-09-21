@@ -203,7 +203,7 @@ namespace grapher
         private void SetupButtons()
         {
             WriteButton.Top = Constants.SensitivityChartAloneHeight - Constants.ButtonVerticalOffset;
-
+            
             ResetButton.Appearance = Appearance.Button;
             ResetButton.FlatStyle = FlatStyle.System;
             ResetButton.TextAlign = ContentAlignment.MiddleCenter;
@@ -239,7 +239,7 @@ namespace grapher
         private void ResetDriverEventHandler(object sender, EventArgs e)
         {
             ButtonDelay(ResetButton);
-            Settings.DisableDriver();
+            Settings.ResetDriver();
             RefreshActive();
         }
 
