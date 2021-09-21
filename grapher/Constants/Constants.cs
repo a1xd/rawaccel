@@ -104,10 +104,10 @@ namespace grapher
 
         /// <summary> Default text to be displayed on button delay. </summary>
         public const string ButtonDelayText = "Delay";
-
+        
         /// <summary> Default text to be displayed on button delay. </summary>
         public const string ResetButtonText = "Reset";
-
+        
         /// <summary> Title of sensitivity chart. </summary>
         public const string SensitivityChartTitle = "Sensitivity";
 

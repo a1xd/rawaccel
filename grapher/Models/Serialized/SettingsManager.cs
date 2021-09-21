@@ -127,7 +127,7 @@ namespace grapher.Models.Serialized
 
         #region Methods
 
-        public void DisableDriver()
+        public void ResetDriver()
         {
             ActiveConfig = DriverConfig.GetDefault();
             new Thread(() => DriverConfig.Deactivate()).Start();
