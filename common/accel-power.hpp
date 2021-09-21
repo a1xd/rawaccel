@@ -115,6 +115,14 @@ namespace rawaccel {
 				break;
 			case cap_mode::in:
 				if (args.cap.x > 0) {
+
+					if (args.cap.x <= offset.x) {
+						cap.x = 0;
+						cap.y = offset.y;
+						constant_b = 0;
+						return;
+					}
+
 					cap.x = args.cap.x;
 					cap.y = gain(
 								args.cap.x,
