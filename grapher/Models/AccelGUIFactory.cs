@@ -547,18 +547,6 @@ namespace grapher.Models
                 new ActiveValueLabel(capTypeActiveYLabelPower, activeValueTitleY),
                 optionSetYLeft);
 
-            var powerCapOptionsX = new CapOptions(
-                capTypeXPower,
-                inCapXPower,
-                outCapXPower,
-                scaleX);
-
-            var powerCapOptionsY = new CapOptions(
-                capTypeYPower,
-                inCapYPower,
-                outCapYPower,
-                scaleY);
-
             var lpNorm = new Option(
                 new Field(lpNormBox, form, 2),
                 lpNormLabel,
@@ -598,6 +586,22 @@ namespace grapher.Models
             var gainSwitchOptionY = new CheckBoxOption(
                                             gainSwitchY,
                                             new ActiveValueLabel(gainSwitchActiveLabelY, activeValueTitleY));
+
+            var powerCapOptionsX = new CapOptions(
+                capTypeXPower,
+                inCapXPower,
+                outCapXPower,
+                scaleX,
+                outputOffsetX,
+                gainSwitchOptionX);
+
+            var powerCapOptionsY = new CapOptions(
+                capTypeYPower,
+                inCapYPower,
+                outCapYPower,
+                scaleY,
+                outputOffsetY,
+                gainSwitchOptionY);
 
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,

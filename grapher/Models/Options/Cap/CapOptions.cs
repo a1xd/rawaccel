@@ -25,18 +25,27 @@ namespace grapher.Models.Options.Cap
             CapTypeOptions capTypeOptions,
             Option capIn,
             Option capOut,
-            Option slope)
+            Option slope,
+            Option disableOptionInBoth = null,
+            CheckBoxOption disableInBoth = null)
         {
             CapTypeOptions = capTypeOptions;
             In = capIn;
             Out = capOut;
             Slope = slope;
+            DisableOptionInBoth = disableOptionInBoth;
+            DisableInBoth = disableInBoth;
 
             ShouldShow = true;
             _top = Slope.Top;
             BottomElement = In;
             CapTypeOptions.OptionsDropdown.SelectedIndexChanged += OnCapTypeDropdownSelectedItemChanged;
             CapTypeOptions.SelectedCapOption = InCap;
+
+            if (DisableInBoth != null)
+            {
+                DisableInBoth.CheckBox.CheckedChanged += OnDisableInBothCheckedChange;
+            }
         }
 
         #endregion Constructors
@@ -50,6 +59,10 @@ namespace grapher.Models.Options.Cap
         public Option Out { get; }
 
         public Option Slope { get; }
+
+        private Option DisableOptionInBoth { get; }
+
+        private CheckBoxOption DisableInBoth { get; }
 
         public override int Left
         {
@@ -189,6 +202,25 @@ namespace grapher.Models.Options.Cap
                     BottomElement = Out;
                     break;
             }
+
+            DisableBuggedOptionIfApplicable();
+        }
+
+        private void DisableBuggedOptionIfApplicable()
+        {
+            if (DisableOptionInBoth != null)
+            {
+                if (CapTypeOptions.SelectedCapType == CapType.Both &&
+                    DisableInBoth != null &&
+                    !DisableInBoth.CheckBox.Checked)
+                {
+                    DisableOptionInBoth.Field.SetToUnavailable();
+                }
+                else
+                {
+                    DisableOptionInBoth.Field.SetToDefault();
+                }
+            }
         }
 
         private void ShowInCap()
@@ -205,6 +237,11 @@ namespace grapher.Models.Options.Cap
         {
             Layout(Top);
             CapTypeOptions.CheckIfDefault();
+        }
+
+        private void OnDisableInBothCheckedChange(object sender, EventArgs e)
+        {
+            DisableBuggedOptionIfApplicable();
         }
 
         #endregion Methods
