@@ -115,12 +115,11 @@ ra::accel_args convert_natural(const ia_settings_t& ia_settings, bool legacy) {
     double accel = get("Acceleration").value_or(0);
     double cap = get("SensitivityCap").value_or(0);
     double sens = get("Sensitivity").value_or(1);
-    double prescale = get("Pre-ScaleX").value_or(1);
 
     ra::accel_args args;
 
     args.limit = 1 + std::abs(cap - sens) / sens;
-    args.decay_rate = accel * prescale / sens;
+    args.decay_rate = accel / sens;
     args.offset = get("Offset").value_or(0);
     args.mode = ra::accel_mode::natural;
     args.legacy = legacy;
@@ -135,11 +134,10 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
     double accel = get("Acceleration").value_or(0);
     double cap = get("SensitivityCap").value_or(0);
     double sens = get("Sensitivity").value_or(1);
-    double prescale = get("Pre-ScaleX").value_or(1);
     
     ra::accel_args args;
 
-    double accel_b = std::pow(accel * prescale, power - 1) / sens;
+    double accel_b = std::pow(accel, power - 1) / sens;
     args.accel_classic = std::pow(accel_b, 1 / (power - 1));
     args.cap = cap / sens;
     args.power = power;
@@ -155,10 +153,14 @@ bool try_convert(const ia_settings_t& ia_settings) {
 
     ra::settings& ra_settings = *(new ra::settings());
 
-    ra_settings.degrees_rotation = get("Angle", "AngleAdjustment").value_or(0);
+    vec2d prescale = { get("Pre-ScaleX").value_or(1), get("Pre-ScaleY").value_or(1) };
+
+    ra_settings.dom_args.domain_weights = prescale;
+    ra_settings.degrees_rotation = -1 * get("Angle", "AngleAdjustment").value_or(0);
+    ra_settings.degrees_snap = get("AngleSnapping").value_or(0);
     ra_settings.sens = {
-        get("Post-ScaleX").value_or(1) * get("Pre-ScaleX").value_or(1),
-        get("Post-ScaleY").value_or(1) * get("Pre-ScaleY").value_or(1)
+        get("Post-ScaleX").value_or(1) * prescale.x,
+        get("Post-ScaleY").value_or(1) * prescale.y
     };
 
     double mode = get("AccelMode").value_or(IA_QL);

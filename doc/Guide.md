@@ -132,4 +132,4 @@ This curve style is a blank canvas on which to create a curve. It allows the use
 ![LUTExample](images/LUT_example.png)
 
 ## Further Help
-Further help and frequently asked questions can be found in the [FAQ](https://github.com/a1xd/rawaccel/blob/master/doc/FAQ.md).
+Further help and frequently asked questions can be found in the [FAQ](FAQ.md).
