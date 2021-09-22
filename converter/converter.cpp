@@ -214,12 +214,25 @@ bool try_convert(const ia_settings_t& ia_settings) {
     return true;
 }
 
-int main()
+int main(int argc, char** argv)
 {
     auto close_prompt = [] {
         std::cout << "Press any key to close this window . . ." << std::endl;
         _getwch();
         std::exit(0);
+    };
+
+    auto convert_or_print_error = [](auto&& path) {
+        try {
+            if (!try_convert(parse_ia_settings(path)))
+                std::cout << "Unable to convert settings.\n";
+        }
+        catch (Exception^ e) {
+            Console::WriteLine("\nError: {0}", e);
+        }
+        catch (const std::exception& e) {
+            std::cout << "Error: " << e.what() << '\n';
+        }
     };
 
     try {
@@ -230,42 +243,38 @@ int main()
         close_prompt();
     }
 
-    std::optional<fs::path> opt_path;
+    if (argc == 2 && fs::exists(argv[1])) {
+        convert_or_print_error(argv[1]);
+    }
+    else {
+        std::optional<fs::path> opt_path;
 
-    if (fs::exists(IA_SETTINGS_NAME)) {
-        opt_path = IA_SETTINGS_NAME;
-    }
-    else {
-        for (auto&& entry : fs::directory_iterator(".")) {
-            if (fs::is_regular_file(entry) &&
-                entry.path().extension() == IA_PROFILE_EXT) {
-                opt_path = entry;
-                break;
+        if (fs::exists(IA_SETTINGS_NAME)) {
+            opt_path = IA_SETTINGS_NAME;
+        }
+        else {
+            for (auto&& entry : fs::directory_iterator(".")) {
+                if (fs::is_regular_file(entry) &&
+                    entry.path().extension() == IA_PROFILE_EXT) {
+                    opt_path = entry;
+                    break;
+                }
             }
         }
-    }
-    
-    if (opt_path) {
-        std::string path = opt_path->filename().generic_string();
-        std::stringstream ss;
-        ss << "Found " << path << 
-            "\n\nConvert and send settings generated from " << path << '?';
-        if (ask(ss.str())) {
-            try {
-                if (!try_convert(parse_ia_settings(opt_path.value())))
-                    std::cout << "Unable to convert settings.\n";
-            }
-            catch (Exception^ e) {
-                Console::WriteLine("\nError: {0}", e);
-            }
-            catch (const std::exception& e) {
-                std::cout << "Error: " << e.what() << '\n';
+
+        if (opt_path) {
+            std::string path = opt_path->filename().generic_string();
+            std::stringstream ss;
+            ss << "Found " << path <<
+                "\n\nConvert and send settings generated from " << path << '?';
+            if (ask(ss.str())) {
+                convert_or_print_error(opt_path.value());
             }
         }
-    }
-    else {
-        std::cout << "Drop your InterAccel settings/profile into this directory.\n"
-            "Then run this program to generate the equivalent Raw Accel settings.\n";
+        else {
+            std::cout << "Drop your InterAccel settings/profile into this directory.\n"
+                "Then run this program to generate the equivalent Raw Accel settings.\n";
+        }
     }
 
     close_prompt();
