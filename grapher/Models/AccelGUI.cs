@@ -22,7 +22,7 @@ namespace grapher
             SettingsManager settings,
             ApplyOptions applyOptions,
             Button writeButton,
-            ButtonBase toggleButton,
+            ButtonBase resetButton,
             MouseWatcher mouseWatcher,
             ToolStripMenuItem scaleMenuItem,
             DeviceIDManager deviceIDManager)
@@ -32,7 +32,7 @@ namespace grapher
             AccelCharts = accelCharts;
             ApplyOptions = applyOptions;
             WriteButton = writeButton;
-            DisableButton = (CheckBox)toggleButton;
+            ResetButton = (CheckBox)resetButton;
             ScaleMenuItem = scaleMenuItem;
             Settings = settings;
             DefaultButtonFont = WriteButton.Font;
@@ -42,7 +42,7 @@ namespace grapher
 
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
             WriteButton.Click += new System.EventHandler(OnWriteButtonClick);
-            DisableButton.Click += new System.EventHandler(DisableDriverEventHandler);
+            ResetButton.Click += new System.EventHandler(ResetDriverEventHandler);
             AccelForm.FormClosing += new FormClosingEventHandler(SaveGUISettingsOnClose);
 
             ButtonTimerInterval = Convert.ToInt32(DriverSettings.WriteDelayMs);
@@ -77,7 +77,7 @@ namespace grapher
 
         public Button WriteButton { get; }
 
-        public CheckBox DisableButton { get; }
+        public CheckBox ResetButton { get; }
 
         public Timer ButtonTimer { get; }
 
@@ -188,22 +188,22 @@ namespace grapher
         private void SetupButtons()
         {
             WriteButton.Top = Constants.SensitivityChartAloneHeight - Constants.ButtonVerticalOffset;
-            
-            DisableButton.Appearance = Appearance.Button;
-            DisableButton.FlatStyle = FlatStyle.System;
-            DisableButton.TextAlign = ContentAlignment.MiddleCenter;
-            DisableButton.Size = WriteButton.Size;
-            DisableButton.Top = WriteButton.Top;
+
+            ResetButton.Appearance = Appearance.Button;
+            ResetButton.FlatStyle = FlatStyle.System;
+            ResetButton.TextAlign = ContentAlignment.MiddleCenter;
+            ResetButton.Size = WriteButton.Size;
+            ResetButton.Top = WriteButton.Top;
 
             SetButtonDefaults();
         }
 
         private void SetButtonDefaults()
         {
-            DisableButton.Font = DefaultButtonFont;
-            DisableButton.Text = "Disable";
-            DisableButton.Enabled = true;
-            DisableButton.Update();
+            ResetButton.Font = DefaultButtonFont;
+            ResetButton.Text = Constants.ResetButtonText;
+            ResetButton.Enabled = true;
+            ResetButton.Update();
 
             WriteButton.Font = DefaultButtonFont;
             WriteButton.Text = Constants.WriteButtonDefaultText;
@@ -221,9 +221,9 @@ namespace grapher
             UpdateActiveSettingsFromFields();
         }
 
-        private void DisableDriverEventHandler(object sender, EventArgs e)
+        private void ResetDriverEventHandler(object sender, EventArgs e)
         {
-            ButtonDelay(DisableButton);
+            ButtonDelay(ResetButton);
             Settings.DisableDriver();
             RefreshActive();
         }
@@ -242,13 +242,13 @@ namespace grapher
 
         private void ButtonDelay(ButtonBase btn)
         {
-            DisableButton.Enabled = false;
+            ResetButton.Enabled = false;
             WriteButton.Enabled = false;
 
             btn.Font = SmallButtonFont;
             btn.Text = $"{Constants.ButtonDelayText} : {ButtonTimerInterval} ms";
 
-            DisableButton.Update();
+            ResetButton.Update();
             WriteButton.Update();
 
             StartButtonTimer();
