@@ -86,15 +86,10 @@ The authors of this program feel that Whole is the best style for most users, bu
 The acceleration curve styles below (see "Acceleration Styles") each describe a certain shape mathematically. The gain switch determines whether that shape is applied in the sensitivity graph or the gain graph. For styles Linear, Classic, and Power, this setting does not change the possible shapes of the velocity curve - that is, for any particular settings with the gain switch set to Sensitivity, there is a different set of settings that will replicate the exact same velocity curve (output for a given hand motion) with the switch set to Gain. For styles Natural, Jump, and Motivity, this is not true, and the gain switch allows new velocity curves for each style. 
 
 ### Offsets
-An offset, sometimes called a threshold, is a speed in counts before acceleration "kicks in". The legacy way of applying an offset is having a multiplier of 1 below and at the offset, and applying the sensitivity of (speed-offset) above. This legacy "sensitivity offset" is still available but causes a large discontuinity in gain at the point of offset, leading to non-smooth feeling at offset cross. The new default "gain offset" does a little extra math to simply shift the gain graph by the offset amount without any discontinuity. This feels smoother and has almost no effect on sensitivity. The theory behind "gain offsets" is developed in [this document](https://docs.google.com/document/d/1P6LygpeEazyHfjVmaEygCsyBjwwW2A-eMBl81ZfxXZk).
+An offset, sometimes called a threshold, is a speed in counts before acceleration "kicks in". The legacy way of applying an offset is having a multiplier of 1 below and at the offset, and applying the sensitivity of (speed-offset) above. This legacy "sensitivity offset" is not available because it causes a discontinuity in gain at the point of offset, leading to non-smooth feeling at offset cross. The new "gain offset" does a little extra math to simply shift the gain graph by the offset amount without any discontinuity. This feels smoother and has almost no effect on sensitivity. The theory behind "gain offsets" is developed in [this document](https://docs.google.com/document/d/1P6LygpeEazyHfjVmaEygCsyBjwwW2A-eMBl81ZfxXZk).
 
 ### Caps
 A cap is a point after which acceleration is not applied. The legacy way of applying an offset is simply applying the minimum of the cap sensitivity and the calculated sensitivity for any acceleration calculation. Thus, for the legacy "sensitivity cap" the value given is a sensitivity. This cap style is still available but causes a large discontinuity at the point of offset, leading to a non-smooth feeling at cap cross. The new default "gain cap" effectively caps the gain, but for internal calculation reasons, does so for a given speed rather than a given gain value. This feels much smoother but might have a large effect on sensitivity as gain generally raises faster than sensitivity. We recommend that users use a gain cap and simply adjust it to hit at the gain equivalent to the sensitivity they'd like to cap at. The theory behind "gain caps" is developed in [this document](https://docs.google.com/document/d/1FCpkqRxUaCP7J258SupbxNxvdPfljb16AKMs56yDucA).
-
-### Weight
-Our acceleration functions generally have sensitivity functions that start at 1 and then increase. A weight is a multiplier of that increase before it is added to 1. For instance, if we would have had accelerated sensitivity 1.5, weight of 0.5 will result in accelerated sensitivity 1.25 (1 + 0.5\*0.5), and a weight of 3 would have resulted in a sensitivity of 2.5 (1 + 0.5\*3).
-
-Weight is primarily a quick and dirty way to test a new curve. It also can be given a negative value to allow negative acceleration. Most acceleration styles could just change the parameters to have the same affect as setting a weight. Some curves, like the logarithm style, can achieve a greater range of shapes by changing weight.
 
 ### Anisotropy
 See "Horizontal and Vertical" in the philosophy section to understand what these options do.
@@ -113,14 +108,14 @@ This is simplest style used by most; it is simply a line rising at a given rate.
 ![LinearExample](images/linear_example.png)
 
 ### Classic
-This is the style found in Quake 3, Quake Live, and countless inspired followers, including the InterAccel program. It mulplies the speed by a given rate and then raises the product to a given exponent. Any particular linear style curve can be replicated in classic style with an exponent of 2.
+This is the style found in Quake 3, Quake Live, and countless inspired followers, including the InterAccel program. It multiplies the speed by a given rate and then raises the product to a given exponent. Any particular linear style curve can be replicated in classic style with an exponent of 2.
 ![ClassicExample](images/classic_example.png)
 
 ### Power
 This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multiplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps).
 ![PowerExample](images/power_example.png)
 
-### Natural & NaturalGain
+### Natural
 Natural features a concave curve which starts at 1 and approaches some maximum sensitivity. The sensitivity version of this curve can be found in the game Diabotical. This style is unique and useful but causes an ugly dip in the gain graph. The gain version of this curve recreates the Natural style shape in the gain graph without any dips and therefore we recommend this version. Natural is an excellent choice for new users due to only needing a two intuitive parameters which achieve what many users are looking for.
 ![NaturalGainExample](images/natural_gain_example.png)
 
@@ -133,7 +128,7 @@ This curve looks like an "S" with the top half bigger than the bottom. Mathemati
 ![MotivityExample](images/motivity_example.png)
 
 ### Look Up Table
-This curve style is a blank canvas on which to create a curve. It allows the user to define the points which will make up the curve. For this reason, this mode is only for experts who know exactly what they want. Points can be supplied in the GUI according to format x1,y1;x2,y2;...xn.yn or in the settings.json in json format. The default Windows mouse acceleration settings (Enhanced Pointer Precision) can be very closely emulated with this style, using points: "1.505035,0.85549892;4.375,3.30972978;13.51,15.17478447;140,354.7026875;".
+This curve style is a blank canvas on which to create a curve. It allows the user to define the points which will make up the curve. For this reason, this mode is only for experts who know exactly what they want. Points can be supplied in the GUI according to format x1,y1;x2,y2;...xn.yn or in the settings.json in json format. The default Windows mouse acceleration settings (Enhanced Pointer Precision) can be very closely emulated with this style, using velocity points: "1.505035,0.85549892;4.375,3.30972978;13.51,15.17478447;140,354.7026875;".
 ![LUTExample](images/LUT_example.png)
 
 ## Further Help
