@@ -165,15 +165,11 @@ bool try_convert(const ia_settings_t& ia_settings) {
 
     switch (static_cast<IA_MODES_ENUM>(mode)) {
     case IA_QL: {
-        bool legacy = !ask("We recommend trying out a new smooth cap style.\n"
-                           "Use new cap style?");
-        ra_settings.argsv.x = convert_quake(ia_settings, legacy);
+        ra_settings.argsv.x = convert_quake(ia_settings, 1);
         break;
     }
     case IA_NAT: {
-        bool legacy = !ask("Raw Accel offers a new mode that you might like more than Natural.\n"
-                            "Wanna try it out now?");
-        ra_settings.argsv.x = convert_natural(ia_settings, legacy);
+        ra_settings.argsv.x = convert_natural(ia_settings, 1);
         break;
     }
     case IA_LOG: {
@@ -182,13 +178,29 @@ bool try_convert(const ia_settings_t& ia_settings) {
     }
     default: return false;
     }
-    
+
     DriverSettings^ new_settings = Marshal::PtrToStructure<DriverSettings^>((IntPtr)&ra_settings);
     SettingsErrors^ errors = gcnew SettingsErrors(new_settings);
 
     if (!errors->Empty()) {
         Console::WriteLine("Bad settings: {0}", errors);
         return false;
+    }
+
+    bool nat = ra_settings.argsv.x.mode == ra::accel_mode::natural;
+    bool nat_or_capped = nat || ra_settings.argsv.x.cap > 0;
+
+    if (nat_or_capped) {
+        Console::WriteLine("NOTE:\n"
+            "    Raw Accel features a new cap style that is preferred by many users.\n"
+            "    To test it out, run rawaccel.exe, check the 'Gain' option, and click 'Apply'.\n");
+    }
+
+    if (ra_settings.argsv.x.offset > 0) {
+        Console::WriteLine("NOTE:\n"
+            "    Offsets in Raw Accel work a bit differently compared to InterAccel,\n"
+            "    the '{0}' parameter may need adjustment to compensate.\n",
+            nat ? "decay rate" : "acceleration");
     }
 
     Console::Write("Sending to driver... ");
