@@ -5,9 +5,9 @@ Visit the [Releases page](https://github.com/a1xd/rawaccel/releases) and navigat
 
 ## Installation
 - **Prerequisites**
+  * Windows 10
   * Visual C++ 2019 runtime, [download here](https://aka.ms/vs/16/release/vc_redist.x64.exe)
   * .NET Framework 4.7.2+ runtime, [download here](https://dotnet.microsoft.com/download/dotnet-framework/net48)
-  * **For Windows 7 users only** — SHA-2 code signing support (download through Windows Update)
 
 - Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
 
@@ -69,7 +69,7 @@ With all anisotropic settings considered, the full formula looks like:
 This can be more easily understood as  
 - (out_x, out_y) = (in_x\*sens_x, in_y\*sens_y) \* ((f( domain-weighted lp-space speed) - 1) \* (directional weight) + 1), where f(v) is our sensitivity function
 
-This formula gaurantees the smooth transition from the horizontal to vertical curve and vice versa as the user moves their hand diagonally.
+This formula guarantees the smooth transition from the horizontal to vertical curve and vice versa as the user moves their hand diagonally.
 
 #### ***By Component***  
 In this case, the horizontal components are separated and each is given as input to the sensitivity calculation to multiplied by itself before being recombined at output.
