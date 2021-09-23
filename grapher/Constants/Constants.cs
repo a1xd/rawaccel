@@ -128,11 +128,17 @@ namespace grapher
 
         public const string GuiConfigFileName = ".config";
 
-        /// <summary> Text to direcitonality panel title when panel is closed. </summary>
+        /// <summary> Text to directionality panel title when panel is closed. </summary>
         public const string DirectionalityTitleClosed = "Anisotropy \u25BC";
 
-        /// <summary> Text to direcitonality panel title when panel is open. </summary>
+        /// <summary> Text to directionality panel title when panel is open. </summary>
         public const string DirectionalityTitleOpen = "Anisotropy \u25B2";
+
+        /// <summary> Default last mouse move label text format. </summary>
+        public const string MouseMoveDefaultFormat = "Last (x, y): ({0}, {1})";
+
+        /// <summary> Last mouse move label text format when last input was from a dpi normalized device. </summary>
+        public const string MouseMoveNormalizedFormat = MouseMoveDefaultFormat + "!";
 
         /// <summary> Style used by System.Double.Parse </summary>
         public const NumberStyles FloatStyle = NumberStyles.Float | NumberStyles.AllowThousands;

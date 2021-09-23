@@ -31,7 +31,7 @@ namespace grapher.Models.Serialized
             StreamingModeMenuItem = streamingMode;
 
             SystemDevices = new List<MultiHandleDevice>();
-            ActiveHandles = new List<IntPtr>();
+            ActiveNormTaggedHandles = new List<(IntPtr, bool)>();
 
             GuiSettings = GUISettings.MaybeLoad();
 
@@ -114,7 +114,7 @@ namespace grapher.Models.Serialized
 
         public IList<MultiHandleDevice> SystemDevices { get; private set; }
 
-        public List<IntPtr> ActiveHandles { get; }
+        public List<(IntPtr, bool)> ActiveNormTaggedHandles { get; }
 
         private ToolStripMenuItem AutoWriteMenuItem { get; set; }
 
@@ -198,19 +198,24 @@ namespace grapher.Models.Serialized
 
         public void SetActiveHandles()
         {
-            ActiveHandles.Clear();
+            ActiveNormTaggedHandles.Clear();
 
             bool ActiveProfileIsFirst = ActiveProfile == ActiveConfig.profiles[0];
 
             foreach (var sysDev in SystemDevices)
             {
+                void AddHandlesFromSysDev(bool normalized)
+                {
+                    ActiveNormTaggedHandles.AddRange(sysDev.handles.Select(h => (h, normalized)));
+                }
+
                 var settings = ActiveConfig.devices.Find(d => d.id == sysDev.id);
 
                 if (settings is null)
                 {
                     if (ActiveProfileIsFirst && !ActiveConfig.defaultDeviceConfig.disable)
                     {
-                        ActiveHandles.AddRange(sysDev.handles);
+                        AddHandlesFromSysDev(ActiveConfig.defaultDeviceConfig.dpi > 0);
                     }
                 }
                 else if (!settings.config.disable &&
@@ -219,7 +224,7 @@ namespace grapher.Models.Serialized
                                         !ActiveProfileNamesSet.Contains(settings.profile))) ||
                                 ActiveProfile.name == settings.profile))
                 {
-                    ActiveHandles.AddRange(sysDev.handles);
+                    AddHandlesFromSysDev(settings.config.dpi > 0);
                 }
             }
         }

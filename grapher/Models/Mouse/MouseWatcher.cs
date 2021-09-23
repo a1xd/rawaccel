@@ -692,6 +692,9 @@ namespace grapher.Models.Mouse
             SettingsManager = setMngr;
             MouseData = new MouseData();
 
+            LastMoveDisplayFormat = Constants.MouseMoveDefaultFormat;
+            LastMoveNormalized = false;
+
             RAWINPUTDEVICE device = new RAWINPUTDEVICE();
             device.WindowHandle = ContainingForm.Handle;
             device.UsagePage = HIDUsagePage.Generic;
@@ -721,6 +724,10 @@ namespace grapher.Models.Mouse
 
         private Stopwatch Stopwatch { get; }
 
+        private string LastMoveDisplayFormat { get; set; }
+
+        private bool LastMoveNormalized { get; set; }
+
         private double PollTime
         {
             get => 1000 / SettingsManager.PollRateField.Data;
@@ -733,7 +740,7 @@ namespace grapher.Models.Mouse
         public void UpdateLastMove()
         {
             MouseData.Get(out var x, out var y);
-            Display.Text = $"Last (x, y): ({x}, {y})";
+            Display.Text = string.Format(LastMoveDisplayFormat, x, y);
         }
 
         public void ReadMouseMove(Message message)
@@ -743,7 +750,25 @@ namespace grapher.Models.Mouse
             _ = GetRawInputData(message.LParam, RawInputCommand.Input, out rawInput, ref size, Marshal.SizeOf(typeof(RAWINPUTHEADER)));
 
             bool relative = !rawInput.Data.Mouse.Flags.HasFlag(RawMouseFlags.MoveAbsolute);
-            bool deviceMatch = SettingsManager.ActiveHandles.Contains(rawInput.Header.Device);
+
+            bool deviceMatch = false;
+            foreach (var (handle, normalized) in SettingsManager.ActiveNormTaggedHandles)
+            {
+                if (handle == rawInput.Header.Device)
+                {
+                    deviceMatch = true;
+
+                    if (normalized != LastMoveNormalized)
+                    {
+                        LastMoveDisplayFormat = normalized ?
+                            Constants.MouseMoveNormalizedFormat :
+                            Constants.MouseMoveDefaultFormat;
+                        LastMoveNormalized = normalized;
+                    }
+
+                    break;
+                }
+            }
 
             if (relative && deviceMatch && (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0))
             {
