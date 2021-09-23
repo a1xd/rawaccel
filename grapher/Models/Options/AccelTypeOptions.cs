@@ -271,7 +271,7 @@ namespace grapher
             GrowthRate.SetActiveValue(args.growthRate);
             Smooth.SetActiveValue(args.smooth);
             Scale.SetActiveValue(args.scale);
-            Limit.SetActiveValue(args.limit);
+            Limit.SetActiveValue((args.mode == AccelMode.motivity) ? args.motivity : args.limit);
             PowerClassic.SetActiveValue(args.power);
             Exponent.SetActiveValue(args.exponent);
             Midpoint.SetActiveValue(args.midpoint);
@@ -319,7 +319,17 @@ namespace grapher
             if (Smooth.Visible) args.smooth = Smooth.Field.Data;
             if (Scale.Visible) args.scale = Scale.Field.Data;
             if (Cap.Visible) args.cap = Cap.Field.Data;
-            if (Limit.Visible) args.limit = Limit.Field.Data;
+            if (Limit.Visible)
+            {
+                if (args.mode == AccelMode.motivity)
+                {
+                    args.motivity = Limit.Field.Data;
+                }
+                else
+                {
+                    args.limit = Limit.Field.Data;
+                }   
+            }
             if (PowerClassic.Visible) args.power = PowerClassic.Field.Data;
             if (Exponent.Visible)args.exponent = Exponent.Field.Data;
             if (Offset.Visible) args.offset = Offset.Field.Data;
