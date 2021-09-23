@@ -155,7 +155,7 @@ namespace grapher
 
             chart.Series[1].Points.Clear();
             chart.Series[1].Points.AddXY(0, 0);
-
+            
             area.AxisX.TitleFont = new System.Drawing.Font(area.AxisX.TitleFont.Name, Constants.ChartAxisFontSize, System.Drawing.FontStyle.Bold);
             area.AxisY.TitleFont = area.AxisX.TitleFont;
 
@@ -165,6 +165,11 @@ namespace grapher
             chart.Series[0].MarkerSize = Constants.ChartSeriesLineWidth * 2;
             chart.Series[2].BorderWidth = Constants.ChartSeriesLineWidth;
             chart.Series[2].MarkerSize = Constants.ChartSeriesLineWidth * 2;
+
+            for (int i = 1; i < chart.Series.Count; i += 2)
+            {
+                chart.Series[i].MarkerSize = Constants.DotMarkerSize;
+            }
 
             area.AxisX.MinorGrid.Enabled = true;
             area.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot;
