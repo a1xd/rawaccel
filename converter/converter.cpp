@@ -1,3 +1,5 @@
+#include <rawaccel-base.hpp>
+
 #include <array>
 #include <charconv>
 #include <filesystem>
@@ -7,9 +9,8 @@
 #include <sstream>
 #include <string>
 
-#include <rawaccel-settings.h>
-
 using namespace System;
+using namespace System::IO;
 using namespace System::Runtime::InteropServices;
 using namespace Newtonsoft::Json;
 
@@ -108,17 +109,21 @@ auto make_extractor(const ia_settings_t& ia_settings) {
     };
 }
 
-ra::accel_args convert_natural(const ia_settings_t& ia_settings) {
+ra::accel_args convert_natural(const ia_settings_t& ia_settings, bool legacy) {
     auto get = make_extractor(ia_settings);
 
     double accel = get("Acceleration").value_or(0);
     double cap = get("SensitivityCap").value_or(0);
     double sens = get("Sensitivity").value_or(1);
-    double prescale = get("Pre-ScaleX").value_or(1);
 
     ra::accel_args args;
+
     args.limit = 1 + std::abs(cap - sens) / sens;
-    args.accel = accel * prescale / sens;
+    args.decay_rate = accel / sens;
+    args.offset = get("Offset").value_or(0);
+    args.mode = ra::accel_mode::natural;
+    args.legacy = legacy;
+
     return args;
 }
 
@@ -129,26 +134,16 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
     double accel = get("Acceleration").value_or(0);
     double cap = get("SensitivityCap").value_or(0);
     double sens = get("Sensitivity").value_or(1);
-    double prescale = get("Pre-ScaleX").value_or(1);
-    double offset = get("Offset").value_or(0);
-
-    ra::accel_args args;
-    double powm1 = power - 1;
-    double rpowm1 = 1 / powm1;
-    double accel_b = std::pow(accel * prescale, powm1) / sens;
-    args.accel = std::pow(accel_b, rpowm1);
-    args.exponent = power;
-    args.legacy_offset = legacy;
-    args.offset = offset;
     
-    double cap_converted = cap / sens;
+    ra::accel_args args;
 
-    if (legacy || cap_converted <= 1) {
-        args.scale_cap = cap_converted;
-    }
-    else {
-        args.gain_cap = offset + std::pow(cap_converted - 1, rpowm1) / args.accel;
-    }
+    double accel_b = std::pow(accel, power - 1) / sens;
+    args.accel_classic = std::pow(accel_b, 1 / (power - 1));
+    args.cap = cap / sens;
+    args.power = power;
+    args.offset = get("Offset").value_or(0);
+    args.mode = ra::accel_mode::classic;
+    args.legacy = legacy;
 
     return args;
 }
@@ -156,29 +151,27 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
 bool try_convert(const ia_settings_t& ia_settings) {
     auto get = make_extractor(ia_settings);
 
-    ra::settings ra_settings;
+    ra::settings& ra_settings = *(new ra::settings());
 
-    ra_settings.degrees_rotation = get("Angle", "AngleAdjustment").value_or(0);
+    vec2d prescale = { get("Pre-ScaleX").value_or(1), get("Pre-ScaleY").value_or(1) };
+
+    ra_settings.dom_args.domain_weights = prescale;
+    ra_settings.degrees_rotation = -1 * get("Angle", "AngleAdjustment").value_or(0);
+    ra_settings.degrees_snap = get("AngleSnapping").value_or(0);
     ra_settings.sens = {
-        get("Post-ScaleX").value_or(1) * get("Pre-ScaleX").value_or(1),
-        get("Post-ScaleY").value_or(1) * get("Pre-ScaleY").value_or(1)
+        get("Post-ScaleX").value_or(1) * prescale.x,
+        get("Post-ScaleY").value_or(1) * prescale.y
     };
 
     double mode = get("AccelMode").value_or(IA_QL);
 
     switch (static_cast<IA_MODES_ENUM>(mode)) {
     case IA_QL: {
-        bool legacy = !ask("We recommend trying out our new cap and offset styles.\n"
-                           "Use new cap and offset?");
-        ra_settings.modes.x = ra::accel_mode::classic;
-        ra_settings.argsv.x = convert_quake(ia_settings, legacy);
+        ra_settings.argsv.x = convert_quake(ia_settings, 1);
         break;
     }
     case IA_NAT: {
-        bool nat_gain = ask("Raw Accel offers a new mode that you might like more than Natural.\n"
-                            "Wanna try it out now?");
-        ra_settings.modes.x = nat_gain ? ra::accel_mode::naturalgain : ra::accel_mode::natural;
-        ra_settings.argsv.x = convert_natural(ia_settings);
+        ra_settings.argsv.x = convert_natural(ia_settings, 1);
         break;
     }
     case IA_LOG: {
@@ -189,30 +182,41 @@ bool try_convert(const ia_settings_t& ia_settings) {
     }
 
     DriverSettings^ new_settings = Marshal::PtrToStructure<DriverSettings^>((IntPtr)&ra_settings);
-    auto errors = DriverInterop::GetSettingsErrors(new_settings);
+    SettingsErrors^ errors = gcnew SettingsErrors(new_settings);
 
     if (!errors->Empty()) {
         Console::WriteLine("Bad settings: {0}", errors);
         return false;
     }
 
+    bool nat = ra_settings.argsv.x.mode == ra::accel_mode::natural;
+    bool nat_or_capped = nat || ra_settings.argsv.x.cap > 0;
+
+    if (nat_or_capped) {
+        Console::WriteLine("NOTE:\n"
+            "    Raw Accel features a new cap style that is preferred by many users.\n"
+            "    To test it out, run rawaccel.exe, check the 'Gain' option, and click 'Apply'.\n");
+    }
+
+    if (ra_settings.argsv.x.offset > 0) {
+        Console::WriteLine("NOTE:\n"
+            "    Offsets in Raw Accel work a bit differently compared to InterAccel,\n"
+            "    the '{0}' parameter may need adjustment to compensate.\n",
+            nat ? "decay rate" : "acceleration");
+    }
+
     Console::Write("Sending to driver... ");
-    DriverInterop::Write(new_settings);
+    (gcnew ManagedAccel(gcnew ExtendedSettings(new_settings)))->Activate();
     Console::WriteLine("done");
 
     Console::Write("Generating settings.json... ");
-    auto json = JsonConvert::SerializeObject(new_settings, Formatting::Indented);
-    System::IO::File::WriteAllText("settings.json", json);
+    File::WriteAllText("settings.json", RaConvert::Settings(new_settings));
     Console::WriteLine("done");
 
     return true;
 }
 
-public ref struct ASSEMBLY {
-    static initonly Version^ VERSION = ASSEMBLY::typeid->Assembly->GetName()->Version;
-};
-
-int main()
+int main(int argc, char** argv)
 {
     auto close_prompt = [] {
         std::cout << "Press any key to close this window . . ." << std::endl;
@@ -220,50 +224,59 @@ int main()
         std::exit(0);
     };
 
+    auto convert_or_print_error = [](auto&& path) {
+        try {
+            if (!try_convert(parse_ia_settings(path)))
+                std::cout << "Unable to convert settings.\n";
+        }
+        catch (Exception^ e) {
+            Console::WriteLine("\nError: {0}", e);
+        }
+        catch (const std::exception& e) {
+            std::cout << "Error: " << e.what() << '\n';
+        }
+    };
+
     try {
-        VersionHelper::ValidateAndGetDriverVersion(ASSEMBLY::VERSION);
+        VersionHelper::ValidOrThrow();
     }
-    catch (VersionException^ ex) {
+    catch (InteropException^ ex) {
         Console::WriteLine(ex->Message);
         close_prompt();
     }
 
-    std::optional<fs::path> opt_path;
+    if (argc == 2 && fs::exists(argv[1])) {
+        convert_or_print_error(argv[1]);
+    }
+    else {
+        std::optional<fs::path> opt_path;
 
-    if (fs::exists(IA_SETTINGS_NAME)) {
-        opt_path = IA_SETTINGS_NAME;
-    }
-    else {
-        for (auto&& entry : fs::directory_iterator(".")) {
-            if (fs::is_regular_file(entry) &&
-                entry.path().extension() == IA_PROFILE_EXT) {
-                opt_path = entry;
-                break;
-            }    
+        if (fs::exists(IA_SETTINGS_NAME)) {
+            opt_path = IA_SETTINGS_NAME;
         }
-    }
-    
-    if (opt_path) {
-        std::string path = opt_path->filename().generic_string();
-        std::stringstream ss;
-        ss << "Found " << path << 
-            "\n\nConvert and send settings generated from " << path << '?';
-        if (ask(ss.str())) {
-            try {
-                if (!try_convert(parse_ia_settings(opt_path.value())))
-                    std::cout << "Unable to convert settings.\n";
-            }
-            catch (Exception^ e) {
-                Console::WriteLine("\nError: {0}", e);
-            }
-            catch (const std::exception& e) {
-                std::cout << "Error: " << e.what() << '\n';
+        else {
+            for (auto&& entry : fs::directory_iterator(".")) {
+                if (fs::is_regular_file(entry) &&
+                    entry.path().extension() == IA_PROFILE_EXT) {
+                    opt_path = entry;
+                    break;
+                }
             }
         }
-    }
-    else {
-        std::cout << "Drop your InterAccel settings/profile into this directory.\n"
-            "Then run this program to generate the equivalent Raw Accel settings.\n";
+
+        if (opt_path) {
+            std::string path = opt_path->filename().generic_string();
+            std::stringstream ss;
+            ss << "Found " << path <<
+                "\n\nConvert and send settings generated from " << path << '?';
+            if (ask(ss.str())) {
+                convert_or_print_error(opt_path.value());
+            }
+        }
+        else {
+            std::cout << "Drop your InterAccel settings/profile into this directory.\n"
+                "Then run this program to generate the equivalent Raw Accel settings.\n";
+        }
     }
 
     close_prompt();

@@ -2,13 +2,13 @@
 See the Guide to understand all options and features in-depth.
 
 ## What are the differences between Raw Accel and InterAccel?
-- The sensitivity and prescale fields in InterAccel are not present in Raw Accel. See the next question for helping converting your InterAccel settings to Raw Accel.
-- Separate x and y prescale values, which no one should have, are not supported in Raw Accel. For something similar but better, check out the "By Component" section of the guide.
-- Raw Accel uses a new kind of cap by default. See the guide for more information on this. It takes a value in counts/ms instead of max desired sensitivity. The old style is available for those who want it. See the next question for converting the old to new style.
-- There are many new features and curve types available. See the guide for information on all of these.
+- The sensitivity field in InterAccel, which was useful for converting from Quake's `cl_mouseAccel`, is not in Raw Accel.
+- Raw Accel uses a new kind of cap by default, see the [guide](Guide.md#caps) for more information. The old style is available for those who want it.
+- Raw Accel uses a new kind of offset. The difference is subtle in most cases, and ensures a continuous transition at speeds around the offset.
+- There are many new features and curve types available. See the [guide](Guide.md) for information on all of these.
 
 ## How do I convert InterAccel settings to Raw Accel?
-For a quick 'n dirty conversion, drop your InterAccel settings or profile into Raw Accel's directory and run `converter.exe`. For GUI differences see the image below:
+Drag 'n drop your InterAccel profile/settings.txt onto `converter.exe`. For GUI differences see the image below:
 ![ConvertExample](images/interaccel_to_rawaccel.png)
 See the guide to understand more about the Gain Cap option and other new features! 
 
@@ -16,7 +16,7 @@ See the guide to understand more about the Gain Cap option and other new feature
 Yes. That is one of the fundamental goals of this driver. It is fully signed and has a one-second delay on write, so it cannot be used to cheat and should be considered safe by AntiCheat programs. However, we can never guarantee that the humans in control over AntiCheat code make the right decisions. So far it is working in FaceIT, Valorant, and Diabotical matches.
 
 ## How do I install the driver, uninstall the driver, or start the GUI?
-Instructions for these are in the beginning of the guide.
+Instructions for these are in the beginning of the [guide](Guide.md#installation).
 
 ## Does the GUI need to be running for Raw Accel to work?
 No. Once settings are passed to the driver by the GUI, they stay in use until the computer is shut down.

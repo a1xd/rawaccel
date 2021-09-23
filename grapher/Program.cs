@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace grapher
@@ -18,6 +19,9 @@ namespace grapher
                 MessageBox.Show("Another instance of the Raw Accel Grapher is already running.");
                 return;
             }
+
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
             AppDomain.CurrentDomain.UnhandledException += GlobalUnhandledExceptionHandler;
 

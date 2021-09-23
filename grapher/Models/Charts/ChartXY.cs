@@ -7,6 +7,13 @@ namespace grapher
 {
     public class ChartXY
     {
+        #region Fields
+
+        public static ElementPosition DefaultLegendPosition = new ElementPosition(25, 0, 50, 25);
+        public static ElementPosition GainLegendPosition = new ElementPosition(25, -1, 50, 25);
+
+        #endregion Fields
+
         #region Constructors
 
         public ChartXY(Chart chartX, Chart chartY, string title)
@@ -166,8 +173,11 @@ namespace grapher
 
             legend.DockedToChartArea = area.Name;
             legend.LegendStyle = LegendStyle.Row;
+            legend.IsTextAutoFit = true;
+            legend.MaximumAutoSize = 100;
+            legend.AutoFitMinFontSize = 5;
             
-            ElementPosition legendPosNew = new ElementPosition(25, 0, 50, 25);
+            ElementPosition legendPosNew = DefaultLegendPosition;
             legend.Position = legendPosNew;
 
             System.Drawing.Color bgTrans = System.Drawing.Color.Transparent;
@@ -277,6 +287,12 @@ namespace grapher
             ChartX.Series[0].Points.DataBindXY(dataX.Keys, dataX.Values);
             ChartX.Series[2].Points.DataBindXY(dataY.Keys, dataY.Values);
             ChartX.Series[2].IsVisibleInLegend = true;
+        }
+
+        public void SetLegendPosition(ElementPosition position)
+        {
+            ChartX.Legends[0].Position = position;
+            ChartY.Legends[0].Position = position;
         }
 
         private void VerifyRange(double min, double max)

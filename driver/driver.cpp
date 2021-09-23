@@ -1,8 +1,9 @@
+#include "driver.h"
+
 #include <rawaccel.hpp>
 #include <rawaccel-io-def.h>
 #include <rawaccel-version.h>
 
-#include "driver.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -11,18 +12,18 @@
 #pragma alloc_text (PAGE, RawaccelControl)
 #endif
 
-namespace ra = rawaccel;
-
 using milliseconds = double;
-using lut_value_t = ra::si_pair;
 
 struct {
     ra::settings args;
-    milliseconds tick_interval = 0; // set in DriverEntry
+    milliseconds tick_interval;
+    vec2<ra::accel_invoker> invokers;
     ra::mouse_modifier modifier;
-    vec2<lut_value_t*> lookups = {};
-} global;
+} global = {};
 
+extern "C" PULONG InitSafeBootMode;
+
+__declspec(guard(ignore))
 VOID
 RawaccelCallback(
     IN PDEVICE_OBJECT DeviceObject,
@@ -56,52 +57,44 @@ Arguments:
 
     auto num_packets = InputDataEnd - InputDataStart;
 
-    bool any = num_packets > 0;
-    bool rel_move = !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE);
-    bool dev_match = global.args.device_id[0] == 0 ||
-        wcsncmp(devExt->dev_id, global.args.device_id, MAX_DEV_ID_LEN) == 0;
-
-    if (any && rel_move && dev_match) {
-        // if IO is backed up to the point where we get more than 1 packet here
-        // then applying accel is pointless as we can't get an accurate timing
-        bool enable_accel = num_packets == 1;
-
+    if (num_packets > 0 &&
+        !(InputDataStart->Flags & MOUSE_MOVE_ABSOLUTE) && 
+            (global.args.device_id[0] == 0 ||
+                bool(wcsncmp(devExt->dev_id, global.args.device_id, ra::MAX_DEV_ID_LEN)) == 
+                    global.args.ignore)) {
+        counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
+        counter_t ticks = now - devExt->counter;
+        devExt->counter = now;
+        milliseconds raw_elapsed = ticks * global.tick_interval;
+        milliseconds time = ra::clampsd(raw_elapsed / num_packets, 
+                                        global.args.time_min, 
+                                        global.args.time_max);
         auto it = InputDataStart;
         do {
-            vec2d input = {
-                static_cast<double>(it->LastX),
-                static_cast<double>(it->LastY)
-            };
-
-            global.modifier.apply_rotation(input);
-            global.modifier.apply_angle_snap(input);
-
-            if (enable_accel) {
-                auto time_supplier = [=] {
-                    counter_t now = KeQueryPerformanceCounter(NULL).QuadPart;
-                    counter_t ticks = now - devExt->counter;
-                    devExt->counter = now;
-                    milliseconds time = ticks * global.tick_interval;
-                    return clampsd(time, global.args.time_min, 100);
+            if (it->LastX || it->LastY) {
+                vec2d input = {
+                    static_cast<double>(it->LastX),
+                    static_cast<double>(it->LastY)
                 };
 
-                global.modifier.apply_acceleration(input, time_supplier);
+                global.modifier.modify(input, global.invokers, time);
+
+                double carried_result_x = input.x + devExt->carry.x;
+                double carried_result_y = input.y + devExt->carry.y;
+
+                LONG out_x = static_cast<LONG>(carried_result_x);
+                LONG out_y = static_cast<LONG>(carried_result_y);
+
+                double carry_x = carried_result_x - out_x;
+                double carry_y = carried_result_y - out_y;
+
+                if (!ra::infnan(carry_x + carry_y)) {
+                    devExt->carry.x = carried_result_x - out_x;
+                    devExt->carry.y = carried_result_y - out_y;
+                    it->LastX = out_x;
+                    it->LastY = out_y;
+                }
             }
-
-            global.modifier.apply_sensitivity(input);
-
-            double carried_result_x = input.x + devExt->carry.x;
-            double carried_result_y = input.y + devExt->carry.y;
-
-            LONG out_x = static_cast<LONG>(carried_result_x);
-            LONG out_y = static_cast<LONG>(carried_result_y);
-
-            devExt->carry.x = carried_result_x - out_x;
-            devExt->carry.y = carried_result_y - out_y;
-
-            it->LastX = out_x;
-            it->LastY = out_y;
-
         } while (++it != InputDataEnd);
 
     }
@@ -160,7 +153,7 @@ Return Value:
     case RA_READ:
         status = WdfRequestRetrieveOutputBuffer(
             Request,
-            sizeof(ra::settings),
+            sizeof(ra::io_t),
             &buffer,
             NULL
         );
@@ -168,14 +161,18 @@ Return Value:
             DebugPrint(("RetrieveOutputBuffer failed: 0x%x\n", status));
         }
         else {
-            *reinterpret_cast<ra::settings*>(buffer) = global.args;
-            bytes_out = sizeof(ra::settings);
+            ra::io_t& output = *reinterpret_cast<ra::io_t*>(buffer);
+
+            output.args = global.args;
+            output.mod = global.modifier;
+
+            bytes_out = sizeof(ra::io_t);
         }
         break;
     case RA_WRITE:
         status = WdfRequestRetrieveInputBuffer(
             Request,
-            sizeof(ra::settings),
+            sizeof(ra::io_t),
             &buffer,
             NULL
         );
@@ -187,14 +184,11 @@ Return Value:
             interval.QuadPart = static_cast<LONGLONG>(ra::WRITE_DELAY) * -10000;
             KeDelayExecutionThread(KernelMode, FALSE, &interval);
 
-            ra::settings new_settings = *reinterpret_cast<ra::settings*>(buffer);
+            ra::io_t& input = *reinterpret_cast<ra::io_t*>(buffer);
 
-            if (new_settings.time_min <= 0 || _isnanf(static_cast<float>(new_settings.time_min))) {
-                new_settings.time_min = ra::settings{}.time_min;
-            }
-
-            global.args = new_settings;
-            global.modifier = { global.args, global.lookups };
+            global.args = input.args;
+            global.invokers = ra::invokers(input.args);
+            global.modifier = input.mod;
         }
         break;
     case RA_GET_VERSION:
@@ -208,7 +202,7 @@ Return Value:
             DebugPrint(("RetrieveOutputBuffer failed: 0x%x\n", status));
         }
         else {
-            *reinterpret_cast<ra::version_t*>(buffer) = { RA_VER_MAJOR, RA_VER_MINOR, RA_VER_PATCH };
+            *reinterpret_cast<ra::version_t*>(buffer) = ra::version;
             bytes_out = sizeof(ra::version_t);
         }
         break;
@@ -271,23 +265,6 @@ Routine Description:
         LARGE_INTEGER freq;
         KeQueryPerformanceCounter(&freq);
         global.tick_interval = 1e3 / freq.QuadPart;
-
-        auto make_lut = [] {
-            const size_t POOL_SIZE = sizeof(lut_value_t) * ra::LUT_SIZE;
-
-            auto pool = ExAllocatePoolWithTag(NonPagedPool, POOL_SIZE, 'AR');
-
-            if (!pool) {
-                DebugPrint(("RA - failed to allocate LUT\n"));
-            }
-            else {
-                RtlZeroMemory(pool, POOL_SIZE);
-            }
-
-            return reinterpret_cast<lut_value_t*>(pool);
-        };
-
-        global.lookups = { make_lut(), make_lut() };
 
         CreateControlDevice(driver);
     }
@@ -453,12 +430,16 @@ Return Value:
     NTSTATUS status;
     WDFDEVICE hDevice;
     WDF_IO_QUEUE_CONFIG ioQueueConfig;
-    
+
     UNREFERENCED_PARAMETER(Driver);
 
     PAGED_CODE();
 
     DebugPrint(("Enter FilterEvtDeviceAdd \n"));
+
+    if (*InitSafeBootMode > 0) {
+        return STATUS_SUCCESS;
+    }
 
     //
     // Tell the framework that you are filter driver. Framework
@@ -507,7 +488,7 @@ Return Value:
 
     if (NT_SUCCESS(nts)) {
         auto* id_ptr = reinterpret_cast<WCHAR*>(iosb.Information); 
-        wcsncpy(FilterGetData(hDevice)->dev_id, id_ptr, MAX_DEV_ID_LEN);
+        wcsncpy(FilterGetData(hDevice)->dev_id, id_ptr, ra::MAX_DEV_ID_LEN);
         DebugPrint(("Device ID = %ws\n", id_ptr));
         ExFreePool(id_ptr);
     }

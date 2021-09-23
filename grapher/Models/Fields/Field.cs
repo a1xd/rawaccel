@@ -275,15 +275,9 @@ namespace grapher
             }
         }
 
-        public static bool TryParseDouble(string s, out double res)
-        {
-            return double.TryParse(s, Constants.FloatStyle, NumberFormatInfo.CurrentInfo, out res) ||
-                double.TryParse(s, Constants.FloatStyle, NumberFormatInfo.InvariantInfo, out res);
-        }
-
         private void TextToData()
         {
-            if (TryParseDouble(Box.Text, out double value) && 
+            if (double.TryParse(Box.Text, out double value) && 
                 value <= MaxData && value >= MinData)
             {
                 _data = value;

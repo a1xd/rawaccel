@@ -13,17 +13,25 @@ namespace grapher.Layouts
             : base()
         {
             Name = "Motivity";
-            Index = (int)AccelMode.motivity;
+            Mode = AccelMode.motivity;
             LogarithmicCharts = true;
 
-            AccelLayout = new OptionLayout(true, Acceleration);
+            GainSwitchOptionLayout = new OptionLayout(true, Gain);
+            AccelLayout = new OptionLayout(false, string.Empty);
+            DecayRateLayout = new OptionLayout(false, string.Empty);
+            GrowthRateLayout = new OptionLayout(true, GrowthRate);
+            SmoothLayout = new OptionLayout(false, string.Empty);
             ScaleLayout = new OptionLayout(false, string.Empty);
             CapLayout = new OptionLayout(false, string.Empty);
             WeightLayout = new OptionLayout(false, string.Empty);
             OffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(true, Motivity);
+            PowerClassicLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, string.Empty);
             MidpointLayout = new OptionLayout(true, Midpoint);
+            LutTextLayout = new OptionLayout(false, string.Empty);
+            LutPanelLayout = new OptionLayout(false, string.Empty);
+            LutApplyOptionsLayout = new OptionLayout(false, string.Empty);
         }
     }
 }

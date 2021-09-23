@@ -1,10 +1,10 @@
 #pragma once
 
-#include <ntddk.h>
+#include "rawaccel-base.hpp"
+#include "rawaccel-io-def.h"
+
 #include <kbdmou.h>
 #include <wdf.h>
-
-#include "rawaccel-settings.h"
 
 #if DBG
 #define DebugPrint(_x_) DbgPrint _x_
@@ -16,12 +16,13 @@
 #define SYMBOLIC_NAME_STRING  L"\\DosDevices\\rawaccel"
 
 using counter_t = long long;
+namespace ra = rawaccel;
 
 typedef struct _DEVICE_EXTENSION {
     counter_t counter;
     vec2d carry;
     CONNECT_DATA UpperConnectData;
-    WCHAR dev_id[MAX_DEV_ID_LEN];
+    WCHAR dev_id[ra::MAX_DEV_ID_LEN];
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_EXTENSION, FilterGetData)

@@ -71,6 +71,40 @@ namespace grapher
             System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
+            this.GrowthRateActiveYLabel = new System.Windows.Forms.Label();
+            this.GrowthRateActiveXLabel = new System.Windows.Forms.Label();
+            this.DecayRateActiveYLabel = new System.Windows.Forms.Label();
+            this.DecayRateActiveXLabel = new System.Windows.Forms.Label();
+            this.growthRateLabelY = new System.Windows.Forms.Label();
+            this.growthRateLabelX = new System.Windows.Forms.Label();
+            this.decayRateLabelY = new System.Windows.Forms.Label();
+            this.decayRateLabelX = new System.Windows.Forms.Label();
+            this.growthRateBoxY = new System.Windows.Forms.TextBox();
+            this.growthRateBoxX = new System.Windows.Forms.TextBox();
+            this.decayRateBoxY = new System.Windows.Forms.TextBox();
+            this.decayRateBoxX = new System.Windows.Forms.TextBox();
+            this.PowerClassicActiveYLabel = new System.Windows.Forms.Label();
+            this.PowerClassicActiveXLabel = new System.Windows.Forms.Label();
+            this.powerLabelY = new System.Windows.Forms.Label();
+            this.powerLabelX = new System.Windows.Forms.Label();
+            this.powerBoxY = new System.Windows.Forms.TextBox();
+            this.powerBoxX = new System.Windows.Forms.TextBox();
+            this.YLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
+            this.XLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
+            this.LutApplyActiveYLabel = new System.Windows.Forms.Label();
+            this.YLutApplyDropdown = new System.Windows.Forms.ComboBox();
+            this.XLutApplyDropdown = new System.Windows.Forms.ComboBox();
+            this.LutApplyActiveXLabel = new System.Windows.Forms.Label();
+            this.YLutApplyLabel = new System.Windows.Forms.Label();
+            this.XLutApplyLabel = new System.Windows.Forms.Label();
+            this.YLutPointsBox = new System.Windows.Forms.RichTextBox();
+            this.XLutPointsBox = new System.Windows.Forms.RichTextBox();
+            this.gainSwitchActiveLabelY = new System.Windows.Forms.Label();
+            this.gainSwitchActiveLabelX = new System.Windows.Forms.Label();
+            this.gainSwitchY = new System.Windows.Forms.CheckBox();
+            this.gainSwitchX = new System.Windows.Forms.CheckBox();
+            this.LUTTextLabelY = new System.Windows.Forms.Label();
+            this.LUTTextLabelX = new System.Windows.Forms.Label();
             this.FakeBox = new System.Windows.Forms.CheckBox();
             this.DirectionalityPanel = new System.Windows.Forms.Panel();
             this.LpNormActiveValue = new System.Windows.Forms.Label();
@@ -172,13 +206,8 @@ namespace grapher
             this.ScaleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.streamingModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.capStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gainCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.legacyCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.offsetStyleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gainOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.legacyOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UseSpecificDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chartsPanel = new System.Windows.Forms.Panel();
@@ -188,7 +217,12 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.streamingModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smoothBoxX = new System.Windows.Forms.TextBox();
+            this.smoothBoxY = new System.Windows.Forms.TextBox();
+            this.smoothLabelX = new System.Windows.Forms.Label();
+            this.SmoothActiveXLabel = new System.Windows.Forms.Label();
+            this.smoothLabelY = new System.Windows.Forms.Label();
+            this.SmoothActiveYLabel = new System.Windows.Forms.Label();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -204,6 +238,46 @@ namespace grapher
             // optionsPanel
             // 
             this.optionsPanel.AutoSize = true;
+            this.optionsPanel.Controls.Add(this.SmoothActiveYLabel);
+            this.optionsPanel.Controls.Add(this.smoothLabelY);
+            this.optionsPanel.Controls.Add(this.SmoothActiveXLabel);
+            this.optionsPanel.Controls.Add(this.smoothLabelX);
+            this.optionsPanel.Controls.Add(this.smoothBoxY);
+            this.optionsPanel.Controls.Add(this.smoothBoxX);
+            this.optionsPanel.Controls.Add(this.GrowthRateActiveYLabel);
+            this.optionsPanel.Controls.Add(this.GrowthRateActiveXLabel);
+            this.optionsPanel.Controls.Add(this.DecayRateActiveYLabel);
+            this.optionsPanel.Controls.Add(this.DecayRateActiveXLabel);
+            this.optionsPanel.Controls.Add(this.growthRateLabelY);
+            this.optionsPanel.Controls.Add(this.growthRateLabelX);
+            this.optionsPanel.Controls.Add(this.decayRateLabelY);
+            this.optionsPanel.Controls.Add(this.decayRateLabelX);
+            this.optionsPanel.Controls.Add(this.growthRateBoxY);
+            this.optionsPanel.Controls.Add(this.growthRateBoxX);
+            this.optionsPanel.Controls.Add(this.decayRateBoxY);
+            this.optionsPanel.Controls.Add(this.decayRateBoxX);
+            this.optionsPanel.Controls.Add(this.PowerClassicActiveYLabel);
+            this.optionsPanel.Controls.Add(this.PowerClassicActiveXLabel);
+            this.optionsPanel.Controls.Add(this.powerLabelY);
+            this.optionsPanel.Controls.Add(this.powerLabelX);
+            this.optionsPanel.Controls.Add(this.powerBoxY);
+            this.optionsPanel.Controls.Add(this.powerBoxX);
+            this.optionsPanel.Controls.Add(this.YLutActiveValuesBox);
+            this.optionsPanel.Controls.Add(this.XLutActiveValuesBox);
+            this.optionsPanel.Controls.Add(this.LutApplyActiveYLabel);
+            this.optionsPanel.Controls.Add(this.YLutApplyDropdown);
+            this.optionsPanel.Controls.Add(this.XLutApplyDropdown);
+            this.optionsPanel.Controls.Add(this.LutApplyActiveXLabel);
+            this.optionsPanel.Controls.Add(this.YLutApplyLabel);
+            this.optionsPanel.Controls.Add(this.XLutApplyLabel);
+            this.optionsPanel.Controls.Add(this.YLutPointsBox);
+            this.optionsPanel.Controls.Add(this.XLutPointsBox);
+            this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelY);
+            this.optionsPanel.Controls.Add(this.gainSwitchActiveLabelX);
+            this.optionsPanel.Controls.Add(this.gainSwitchY);
+            this.optionsPanel.Controls.Add(this.gainSwitchX);
+            this.optionsPanel.Controls.Add(this.LUTTextLabelY);
+            this.optionsPanel.Controls.Add(this.LUTTextLabelX);
             this.optionsPanel.Controls.Add(this.FakeBox);
             this.optionsPanel.Controls.Add(this.DirectionalityPanel);
             this.optionsPanel.Controls.Add(this.toggleButton);
@@ -283,6 +357,300 @@ namespace grapher
             this.optionsPanel.Name = "optionsPanel";
             this.optionsPanel.Size = new System.Drawing.Size(483, 956);
             this.optionsPanel.TabIndex = 34;
+            // 
+            // GrowthRateActiveYLabel
+            // 
+            this.GrowthRateActiveYLabel.AutoSize = true;
+            this.GrowthRateActiveYLabel.Location = new System.Drawing.Point(417, 647);
+            this.GrowthRateActiveYLabel.Name = "GrowthRateActiveYLabel";
+            this.GrowthRateActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.GrowthRateActiveYLabel.TabIndex = 187;
+            this.GrowthRateActiveYLabel.Text = "0";
+            // 
+            // GrowthRateActiveXLabel
+            // 
+            this.GrowthRateActiveXLabel.AutoSize = true;
+            this.GrowthRateActiveXLabel.Location = new System.Drawing.Point(200, 647);
+            this.GrowthRateActiveXLabel.Name = "GrowthRateActiveXLabel";
+            this.GrowthRateActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.GrowthRateActiveXLabel.TabIndex = 186;
+            this.GrowthRateActiveXLabel.Text = "0";
+            // 
+            // DecayRateActiveYLabel
+            // 
+            this.DecayRateActiveYLabel.AutoSize = true;
+            this.DecayRateActiveYLabel.Location = new System.Drawing.Point(417, 626);
+            this.DecayRateActiveYLabel.Name = "DecayRateActiveYLabel";
+            this.DecayRateActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.DecayRateActiveYLabel.TabIndex = 185;
+            this.DecayRateActiveYLabel.Text = "0";
+            // 
+            // DecayRateActiveXLabel
+            // 
+            this.DecayRateActiveXLabel.AutoSize = true;
+            this.DecayRateActiveXLabel.Location = new System.Drawing.Point(200, 622);
+            this.DecayRateActiveXLabel.Name = "DecayRateActiveXLabel";
+            this.DecayRateActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.DecayRateActiveXLabel.TabIndex = 184;
+            this.DecayRateActiveXLabel.Text = "0";
+            // 
+            // growthRateLabelY
+            // 
+            this.growthRateLabelY.AutoSize = true;
+            this.growthRateLabelY.Location = new System.Drawing.Point(263, 648);
+            this.growthRateLabelY.Name = "growthRateLabelY";
+            this.growthRateLabelY.Size = new System.Drawing.Size(67, 13);
+            this.growthRateLabelY.TabIndex = 183;
+            this.growthRateLabelY.Text = "Growth Rate";
+            // 
+            // growthRateLabelX
+            // 
+            this.growthRateLabelX.AutoSize = true;
+            this.growthRateLabelX.Location = new System.Drawing.Point(37, 648);
+            this.growthRateLabelX.Name = "growthRateLabelX";
+            this.growthRateLabelX.Size = new System.Drawing.Size(67, 13);
+            this.growthRateLabelX.TabIndex = 182;
+            this.growthRateLabelX.Text = "Growth Rate";
+            // 
+            // decayRateLabelY
+            // 
+            this.decayRateLabelY.AutoSize = true;
+            this.decayRateLabelY.Location = new System.Drawing.Point(262, 622);
+            this.decayRateLabelY.Name = "decayRateLabelY";
+            this.decayRateLabelY.Size = new System.Drawing.Size(64, 13);
+            this.decayRateLabelY.TabIndex = 181;
+            this.decayRateLabelY.Text = "Decay Rate";
+            // 
+            // decayRateLabelX
+            // 
+            this.decayRateLabelX.AutoSize = true;
+            this.decayRateLabelX.Location = new System.Drawing.Point(37, 622);
+            this.decayRateLabelX.Name = "decayRateLabelX";
+            this.decayRateLabelX.Size = new System.Drawing.Size(64, 13);
+            this.decayRateLabelX.TabIndex = 180;
+            this.decayRateLabelX.Text = "Decay Rate";
+            // 
+            // growthRateBoxY
+            // 
+            this.growthRateBoxY.Location = new System.Drawing.Point(332, 644);
+            this.growthRateBoxY.Name = "growthRateBoxY";
+            this.growthRateBoxY.Size = new System.Drawing.Size(76, 20);
+            this.growthRateBoxY.TabIndex = 179;
+            // 
+            // growthRateBoxX
+            // 
+            this.growthRateBoxX.Location = new System.Drawing.Point(106, 645);
+            this.growthRateBoxX.Name = "growthRateBoxX";
+            this.growthRateBoxX.Size = new System.Drawing.Size(76, 20);
+            this.growthRateBoxX.TabIndex = 178;
+            // 
+            // decayRateBoxY
+            // 
+            this.decayRateBoxY.Location = new System.Drawing.Point(332, 619);
+            this.decayRateBoxY.Name = "decayRateBoxY";
+            this.decayRateBoxY.Size = new System.Drawing.Size(76, 20);
+            this.decayRateBoxY.TabIndex = 177;
+            // 
+            // decayRateBoxX
+            // 
+            this.decayRateBoxX.Location = new System.Drawing.Point(106, 619);
+            this.decayRateBoxX.Name = "decayRateBoxX";
+            this.decayRateBoxX.Size = new System.Drawing.Size(76, 20);
+            this.decayRateBoxX.TabIndex = 176;
+            // 
+            // PowerClassicActiveYLabel
+            // 
+            this.PowerClassicActiveYLabel.AutoSize = true;
+            this.PowerClassicActiveYLabel.Location = new System.Drawing.Point(417, 599);
+            this.PowerClassicActiveYLabel.Name = "PowerClassicActiveYLabel";
+            this.PowerClassicActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.PowerClassicActiveYLabel.TabIndex = 175;
+            this.PowerClassicActiveYLabel.Text = "0";
+            // 
+            // PowerClassicActiveXLabel
+            // 
+            this.PowerClassicActiveXLabel.AutoSize = true;
+            this.PowerClassicActiveXLabel.Location = new System.Drawing.Point(200, 599);
+            this.PowerClassicActiveXLabel.Name = "PowerClassicActiveXLabel";
+            this.PowerClassicActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.PowerClassicActiveXLabel.TabIndex = 174;
+            this.PowerClassicActiveXLabel.Text = "0";
+            // 
+            // powerLabelY
+            // 
+            this.powerLabelY.AutoSize = true;
+            this.powerLabelY.Location = new System.Drawing.Point(263, 599);
+            this.powerLabelY.Name = "powerLabelY";
+            this.powerLabelY.Size = new System.Drawing.Size(37, 13);
+            this.powerLabelY.TabIndex = 173;
+            this.powerLabelY.Text = "Power";
+            // 
+            // powerLabelX
+            // 
+            this.powerLabelX.AutoSize = true;
+            this.powerLabelX.Location = new System.Drawing.Point(35, 595);
+            this.powerLabelX.Name = "powerLabelX";
+            this.powerLabelX.Size = new System.Drawing.Size(37, 13);
+            this.powerLabelX.TabIndex = 172;
+            this.powerLabelX.Text = "Power";
+            // 
+            // powerBoxY
+            // 
+            this.powerBoxY.Location = new System.Drawing.Point(332, 594);
+            this.powerBoxY.Name = "powerBoxY";
+            this.powerBoxY.Size = new System.Drawing.Size(76, 20);
+            this.powerBoxY.TabIndex = 171;
+            // 
+            // powerBoxX
+            // 
+            this.powerBoxX.Location = new System.Drawing.Point(106, 595);
+            this.powerBoxX.Name = "powerBoxX";
+            this.powerBoxX.Size = new System.Drawing.Size(76, 20);
+            this.powerBoxX.TabIndex = 170;
+            // 
+            // YLutActiveValuesBox
+            // 
+            this.YLutActiveValuesBox.Location = new System.Drawing.Point(397, 369);
+            this.YLutActiveValuesBox.Name = "YLutActiveValuesBox";
+            this.YLutActiveValuesBox.Size = new System.Drawing.Size(73, 72);
+            this.YLutActiveValuesBox.TabIndex = 169;
+            this.YLutActiveValuesBox.Text = "";
+            // 
+            // XLutActiveValuesBox
+            // 
+            this.XLutActiveValuesBox.Location = new System.Drawing.Point(317, 369);
+            this.XLutActiveValuesBox.Name = "XLutActiveValuesBox";
+            this.XLutActiveValuesBox.Size = new System.Drawing.Size(68, 72);
+            this.XLutActiveValuesBox.TabIndex = 168;
+            this.XLutActiveValuesBox.Text = "";
+            // 
+            // LutApplyActiveYLabel
+            // 
+            this.LutApplyActiveYLabel.AutoSize = true;
+            this.LutApplyActiveYLabel.Location = new System.Drawing.Point(417, 565);
+            this.LutApplyActiveYLabel.Name = "LutApplyActiveYLabel";
+            this.LutApplyActiveYLabel.Size = new System.Drawing.Size(35, 13);
+            this.LutApplyActiveYLabel.TabIndex = 167;
+            this.LutApplyActiveYLabel.Text = "label1";
+            // 
+            // YLutApplyDropdown
+            // 
+            this.YLutApplyDropdown.FormattingEnabled = true;
+            this.YLutApplyDropdown.Location = new System.Drawing.Point(397, 527);
+            this.YLutApplyDropdown.Name = "YLutApplyDropdown";
+            this.YLutApplyDropdown.Size = new System.Drawing.Size(73, 21);
+            this.YLutApplyDropdown.TabIndex = 166;
+            // 
+            // XLutApplyDropdown
+            // 
+            this.XLutApplyDropdown.FormattingEnabled = true;
+            this.XLutApplyDropdown.Location = new System.Drawing.Point(320, 527);
+            this.XLutApplyDropdown.Name = "XLutApplyDropdown";
+            this.XLutApplyDropdown.Size = new System.Drawing.Size(65, 21);
+            this.XLutApplyDropdown.TabIndex = 165;
+            // 
+            // LutApplyActiveXLabel
+            // 
+            this.LutApplyActiveXLabel.AutoSize = true;
+            this.LutApplyActiveXLabel.Location = new System.Drawing.Point(200, 565);
+            this.LutApplyActiveXLabel.Name = "LutApplyActiveXLabel";
+            this.LutApplyActiveXLabel.Size = new System.Drawing.Size(35, 13);
+            this.LutApplyActiveXLabel.TabIndex = 164;
+            this.LutApplyActiveXLabel.Text = "label1";
+            // 
+            // YLutApplyLabel
+            // 
+            this.YLutApplyLabel.AutoSize = true;
+            this.YLutApplyLabel.Location = new System.Drawing.Point(397, 510);
+            this.YLutApplyLabel.Name = "YLutApplyLabel";
+            this.YLutApplyLabel.Size = new System.Drawing.Size(47, 13);
+            this.YLutApplyLabel.TabIndex = 163;
+            this.YLutApplyLabel.Text = "Apply as";
+            // 
+            // XLutApplyLabel
+            // 
+            this.XLutApplyLabel.AutoSize = true;
+            this.XLutApplyLabel.Location = new System.Drawing.Point(317, 511);
+            this.XLutApplyLabel.Name = "XLutApplyLabel";
+            this.XLutApplyLabel.Size = new System.Drawing.Size(47, 13);
+            this.XLutApplyLabel.TabIndex = 162;
+            this.XLutApplyLabel.Text = "Apply as";
+            // 
+            // YLutPointsBox
+            // 
+            this.YLutPointsBox.Location = new System.Drawing.Point(397, 447);
+            this.YLutPointsBox.Name = "YLutPointsBox";
+            this.YLutPointsBox.Size = new System.Drawing.Size(73, 57);
+            this.YLutPointsBox.TabIndex = 161;
+            this.YLutPointsBox.Text = "";
+            // 
+            // XLutPointsBox
+            // 
+            this.XLutPointsBox.Location = new System.Drawing.Point(317, 447);
+            this.XLutPointsBox.Name = "XLutPointsBox";
+            this.XLutPointsBox.Size = new System.Drawing.Size(68, 57);
+            this.XLutPointsBox.TabIndex = 160;
+            this.XLutPointsBox.Text = "";
+            // 
+            // gainSwitchActiveLabelY
+            // 
+            this.gainSwitchActiveLabelY.AutoSize = true;
+            this.gainSwitchActiveLabelY.Location = new System.Drawing.Point(417, 95);
+            this.gainSwitchActiveLabelY.Name = "gainSwitchActiveLabelY";
+            this.gainSwitchActiveLabelY.Size = new System.Drawing.Size(29, 13);
+            this.gainSwitchActiveLabelY.TabIndex = 157;
+            this.gainSwitchActiveLabelY.Text = "Gain";
+            // 
+            // gainSwitchActiveLabelX
+            // 
+            this.gainSwitchActiveLabelX.AutoSize = true;
+            this.gainSwitchActiveLabelX.Location = new System.Drawing.Point(200, 96);
+            this.gainSwitchActiveLabelX.Name = "gainSwitchActiveLabelX";
+            this.gainSwitchActiveLabelX.Size = new System.Drawing.Size(29, 13);
+            this.gainSwitchActiveLabelX.TabIndex = 156;
+            this.gainSwitchActiveLabelX.Text = "Gain";
+            // 
+            // gainSwitchY
+            // 
+            this.gainSwitchY.AutoSize = true;
+            this.gainSwitchY.Checked = true;
+            this.gainSwitchY.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainSwitchY.Location = new System.Drawing.Point(283, 116);
+            this.gainSwitchY.Name = "gainSwitchY";
+            this.gainSwitchY.Size = new System.Drawing.Size(48, 17);
+            this.gainSwitchY.TabIndex = 155;
+            this.gainSwitchY.Text = "Gain";
+            this.gainSwitchY.UseVisualStyleBackColor = true;
+            // 
+            // gainSwitchX
+            // 
+            this.gainSwitchX.AutoSize = true;
+            this.gainSwitchX.Checked = true;
+            this.gainSwitchX.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gainSwitchX.Location = new System.Drawing.Point(38, 116);
+            this.gainSwitchX.Name = "gainSwitchX";
+            this.gainSwitchX.Size = new System.Drawing.Size(48, 17);
+            this.gainSwitchX.TabIndex = 154;
+            this.gainSwitchX.Text = "Gain";
+            this.gainSwitchX.UseVisualStyleBackColor = true;
+            // 
+            // LUTTextLabelY
+            // 
+            this.LUTTextLabelY.AutoSize = true;
+            this.LUTTextLabelY.Location = new System.Drawing.Point(266, 350);
+            this.LUTTextLabelY.Name = "LUTTextLabelY";
+            this.LUTTextLabelY.Size = new System.Drawing.Size(52, 13);
+            this.LUTTextLabelY.TabIndex = 153;
+            this.LUTTextLabelY.Text = "LUT Text";
+            // 
+            // LUTTextLabelX
+            // 
+            this.LUTTextLabelX.AutoSize = true;
+            this.LUTTextLabelX.Location = new System.Drawing.Point(38, 350);
+            this.LUTTextLabelX.Name = "LUTTextLabelX";
+            this.LUTTextLabelX.Size = new System.Drawing.Size(52, 13);
+            this.LUTTextLabelX.TabIndex = 152;
+            this.LUTTextLabelX.Text = "LUT Text";
             // 
             // FakeBox
             // 
@@ -1175,60 +1543,21 @@ namespace grapher
             this.showLastMouseMoveToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.showLastMouseMoveToolStripMenuItem.Text = "Show Last Mouse Move";
             // 
+            // streamingModeToolStripMenuItem
+            // 
+            this.streamingModeToolStripMenuItem.CheckOnClick = true;
+            this.streamingModeToolStripMenuItem.Name = "streamingModeToolStripMenuItem";
+            this.streamingModeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.streamingModeToolStripMenuItem.Text = "Streaming Mode";
+            // 
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.capStyleToolStripMenuItem,
-            this.offsetStyleToolStripMenuItem,
             this.AutoWriteMenuItem,
             this.UseSpecificDeviceMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "Advanced";
-            // 
-            // capStyleToolStripMenuItem
-            // 
-            this.capStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gainCapToolStripMenuItem,
-            this.legacyCapToolStripMenuItem});
-            this.capStyleToolStripMenuItem.Name = "capStyleToolStripMenuItem";
-            this.capStyleToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.capStyleToolStripMenuItem.Text = "Cap Style";
-            // 
-            // gainCapToolStripMenuItem
-            // 
-            this.gainCapToolStripMenuItem.Checked = true;
-            this.gainCapToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.gainCapToolStripMenuItem.Name = "gainCapToolStripMenuItem";
-            this.gainCapToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.gainCapToolStripMenuItem.Text = "Gain (Default)";
-            // 
-            // legacyCapToolStripMenuItem
-            // 
-            this.legacyCapToolStripMenuItem.Name = "legacyCapToolStripMenuItem";
-            this.legacyCapToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.legacyCapToolStripMenuItem.Text = "Legacy";
-            // 
-            // offsetStyleToolStripMenuItem
-            // 
-            this.offsetStyleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gainOffsetToolStripMenuItem,
-            this.legacyOffsetToolStripMenuItem});
-            this.offsetStyleToolStripMenuItem.Name = "offsetStyleToolStripMenuItem";
-            this.offsetStyleToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.offsetStyleToolStripMenuItem.Text = "Offset Style";
-            // 
-            // gainOffsetToolStripMenuItem
-            // 
-            this.gainOffsetToolStripMenuItem.Name = "gainOffsetToolStripMenuItem";
-            this.gainOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.gainOffsetToolStripMenuItem.Text = "Gain (Default)";
-            // 
-            // legacyOffsetToolStripMenuItem
-            // 
-            this.legacyOffsetToolStripMenuItem.Name = "legacyOffsetToolStripMenuItem";
-            this.legacyOffsetToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.legacyOffsetToolStripMenuItem.Text = "Legacy";
             // 
             // AutoWriteMenuItem
             // 
@@ -1497,12 +1826,55 @@ namespace grapher
             title6.Text = "Sensitivity";
             this.AccelerationChart.Titles.Add(title6);
             // 
-            // streamingModeToolStripMenuItem
+            // smoothBoxX
             // 
-            this.streamingModeToolStripMenuItem.CheckOnClick = true;
-            this.streamingModeToolStripMenuItem.Name = "streamingModeToolStripMenuItem";
-            this.streamingModeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.streamingModeToolStripMenuItem.Text = "Streaming Mode";
+            this.smoothBoxX.Location = new System.Drawing.Point(106, 672);
+            this.smoothBoxX.Name = "smoothBoxX";
+            this.smoothBoxX.Size = new System.Drawing.Size(76, 20);
+            this.smoothBoxX.TabIndex = 188;
+            // 
+            // smoothBoxY
+            // 
+            this.smoothBoxY.Location = new System.Drawing.Point(332, 671);
+            this.smoothBoxY.Name = "smoothBoxY";
+            this.smoothBoxY.Size = new System.Drawing.Size(76, 20);
+            this.smoothBoxY.TabIndex = 189;
+            // 
+            // smoothLabelX
+            // 
+            this.smoothLabelX.AutoSize = true;
+            this.smoothLabelX.Location = new System.Drawing.Point(38, 677);
+            this.smoothLabelX.Name = "smoothLabelX";
+            this.smoothLabelX.Size = new System.Drawing.Size(43, 13);
+            this.smoothLabelX.TabIndex = 190;
+            this.smoothLabelX.Text = "Smooth";
+            // 
+            // SmoothActiveXLabel
+            // 
+            this.SmoothActiveXLabel.AutoSize = true;
+            this.SmoothActiveXLabel.Location = new System.Drawing.Point(200, 677);
+            this.SmoothActiveXLabel.Name = "SmoothActiveXLabel";
+            this.SmoothActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.SmoothActiveXLabel.TabIndex = 191;
+            this.SmoothActiveXLabel.Text = "0";
+            // 
+            // smoothLabelY
+            // 
+            this.smoothLabelY.AutoSize = true;
+            this.smoothLabelY.Location = new System.Drawing.Point(266, 677);
+            this.smoothLabelY.Name = "smoothLabelY";
+            this.smoothLabelY.Size = new System.Drawing.Size(43, 13);
+            this.smoothLabelY.TabIndex = 192;
+            this.smoothLabelY.Text = "Smooth";
+            // 
+            // SmoothActiveYLabel
+            // 
+            this.SmoothActiveYLabel.AutoSize = true;
+            this.SmoothActiveYLabel.Location = new System.Drawing.Point(414, 677);
+            this.SmoothActiveYLabel.Name = "SmoothActiveYLabel";
+            this.SmoothActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.SmoothActiveYLabel.TabIndex = 193;
+            this.SmoothActiveYLabel.Text = "0";
             // 
             // RawAcceleration
             // 
@@ -1615,12 +1987,6 @@ namespace grapher
         private System.Windows.Forms.ToolStripMenuItem showVelocityGainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLastMouseMoveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem capStyleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gainCapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem legacyCapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem offsetStyleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gainOffsetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem legacyOffsetToolStripMenuItem;
         private System.Windows.Forms.Panel chartsPanel;
         private System.Windows.Forms.DataVisualization.Charting.Chart GainChartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart VelocityChartY;
@@ -1651,7 +2017,47 @@ namespace grapher
         private System.Windows.Forms.Label RangeActiveValueY;
         private System.Windows.Forms.CheckBox FakeBox;
         private System.Windows.Forms.ToolStripMenuItem UseSpecificDeviceMenuItem;
+        private System.Windows.Forms.Label LUTTextLabelX;
+        private System.Windows.Forms.Label LUTTextLabelY;
+        private System.Windows.Forms.CheckBox gainSwitchX;
+        private System.Windows.Forms.CheckBox gainSwitchY;
+        private System.Windows.Forms.Label gainSwitchActiveLabelY;
+        private System.Windows.Forms.Label gainSwitchActiveLabelX;
+        private System.Windows.Forms.RichTextBox YLutPointsBox;
+        private System.Windows.Forms.RichTextBox XLutPointsBox;
+        private System.Windows.Forms.Label LutApplyActiveYLabel;
+        private System.Windows.Forms.ComboBox YLutApplyDropdown;
+        private System.Windows.Forms.ComboBox XLutApplyDropdown;
+        private System.Windows.Forms.Label LutApplyActiveXLabel;
+        private System.Windows.Forms.Label YLutApplyLabel;
+        private System.Windows.Forms.Label XLutApplyLabel;
+        private System.Windows.Forms.RichTextBox YLutActiveValuesBox;
+        private System.Windows.Forms.RichTextBox XLutActiveValuesBox;
         private System.Windows.Forms.ToolStripMenuItem streamingModeToolStripMenuItem;
+        private System.Windows.Forms.Label powerLabelY;
+        private System.Windows.Forms.Label powerLabelX;
+        private System.Windows.Forms.TextBox powerBoxY;
+        private System.Windows.Forms.TextBox powerBoxX;
+        private System.Windows.Forms.Label PowerClassicActiveYLabel;
+        private System.Windows.Forms.Label PowerClassicActiveXLabel;
+        private System.Windows.Forms.Label growthRateLabelY;
+        private System.Windows.Forms.Label growthRateLabelX;
+        private System.Windows.Forms.Label decayRateLabelY;
+        private System.Windows.Forms.Label decayRateLabelX;
+        private System.Windows.Forms.TextBox growthRateBoxY;
+        private System.Windows.Forms.TextBox growthRateBoxX;
+        private System.Windows.Forms.TextBox decayRateBoxY;
+        private System.Windows.Forms.TextBox decayRateBoxX;
+        private System.Windows.Forms.Label GrowthRateActiveYLabel;
+        private System.Windows.Forms.Label GrowthRateActiveXLabel;
+        private System.Windows.Forms.Label DecayRateActiveYLabel;
+        private System.Windows.Forms.Label DecayRateActiveXLabel;
+        private System.Windows.Forms.Label SmoothActiveYLabel;
+        private System.Windows.Forms.Label smoothLabelY;
+        private System.Windows.Forms.Label SmoothActiveXLabel;
+        private System.Windows.Forms.Label smoothLabelX;
+        private System.Windows.Forms.TextBox smoothBoxY;
+        private System.Windows.Forms.TextBox smoothBoxX;
     }
 }
 

@@ -162,6 +162,7 @@ namespace grapher
             velocityChart.SetTop(sensitivityChart.Height + Constants.ChartSeparationVertical);
             gainChart.SetHeight(sensitivityChart.Height);
             gainChart.SetTop(velocityChart.Top + velocityChart.Height + Constants.ChartSeparationVertical);
+            gainChart.SetLegendPosition(ChartXY.GainLegendPosition);
         }
 
         private void OnEnableClick(object sender, EventArgs e)
