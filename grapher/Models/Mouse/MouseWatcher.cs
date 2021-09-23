@@ -761,8 +761,8 @@ namespace grapher.Models.Mouse
                     if (normalized != LastMoveNormalized)
                     {
                         LastMoveDisplayFormat = normalized ?
-                            Constants.MouseMoveNormalizedFormat :
-                            Constants.MouseMoveDefaultFormat;
+                                                Constants.MouseMoveNormalizedFormat :
+                                                Constants.MouseMoveDefaultFormat;
                         LastMoveNormalized = normalized;
                     }
 

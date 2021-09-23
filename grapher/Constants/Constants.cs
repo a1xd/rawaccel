@@ -134,12 +134,6 @@ namespace grapher
         /// <summary> Text to directionality panel title when panel is open. </summary>
         public const string DirectionalityTitleOpen = "Anisotropy \u25B2";
 
-        /// <summary> Default last mouse move label text format. </summary>
-        public const string MouseMoveDefaultFormat = "Last (x, y): ({0}, {1})";
-
-        /// <summary> Last mouse move label text format when last input was from a dpi normalized device. </summary>
-        public const string MouseMoveNormalizedFormat = MouseMoveDefaultFormat + "!";
-
         /// <summary> Style used by System.Double.Parse </summary>
         public const NumberStyles FloatStyle = NumberStyles.Float | NumberStyles.AllowThousands;
 
@@ -151,6 +145,15 @@ namespace grapher
 
         /// <summary> Line Width For Series data on chart </summary>
         public const int ChartSeriesLineWidth = 3;
+        #endregion Constants
+
+        #region ReadOnly
+
+        /// <summary> Default last mouse move label text format. </summary>
+        public static readonly string MouseMoveDefaultFormat = "Last (x, y): ({0}, {1})";
+
+        /// <summary> Last mouse move label text format when last input was from a dpi normalized device. </summary>
+        public static readonly string MouseMoveNormalizedFormat = $"{MouseMoveDefaultFormat} (n)";
 
         /// <summary> Marker size for last-mouse-move chart series. </summary>
         public const int DotMarkerSize = 7;
@@ -166,10 +169,6 @@ namespace grapher
 
         /// <summary> Background Color When Streamer Mode Inactive </summary>
         public static readonly System.Drawing.Color bgNoStreamer = System.Drawing.Color.White;
-
-        #endregion Constants
-
-        #region ReadOnly
 
         /// <summary> Color of font in active value labels. </summary>
         public static readonly Color ActiveValueFontColor = Color.FromArgb(255, 65, 65, 65);
