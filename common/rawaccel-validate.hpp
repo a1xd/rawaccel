@@ -169,8 +169,8 @@ namespace rawaccel {
 			error("directional multipliers must be positive");
 		}
 
-		if (args.dom_args.lp_norm < 2) {
-			error("Lp norm is less than 2 (default=2)");
+		if (args.dom_args.lp_norm <= 0) {
+			error("Lp norm must be positive (default=2)");
 		}
 
 		if (args.range_weights.x <= 0 || args.range_weights.y <= 0) {
