@@ -105,11 +105,19 @@ See "Horizontal and Vertical" in the philosophy section to understand what these
 ### Last Mouse Move
 The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calulations should be fast and your graph responsive, but it comes at the cost of higher CPU usage due to needing to refresh the graph often. This feature can be turned off in the "Charts" menu.
 
-### Scale by DPI and Poll Rate
-This option does not scale your acceleration curve in any way. Rather, DPI scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI. The poll rate is used as a safeguard for the Last Mouse Move points and therefore should be set for accuracy in that measurement.
+### Menu Options
+
+#### Charts >> Scale by DPI and Poll Rate
+These options does not scale your acceleration curve in any way. Rather, DPI scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI. The poll rate is used as a safeguard for the Last Mouse Move points and therefore should be set for accuracy in that measurement.
+
+#### Advanced >> Device Menu
+This menu provides options for individually disabling devices, and normalizing device DPI (see next section). Here you will also find an option for setting polling rate, which signals the driver to forgo the standard automatic rate adjustment. Leave this at 0 unless you are experiencing cursor stutters that only occur with acceleration enabled.
+
+#### DPI Normalization
+Setting the DPI option for a device to its actual DPI will scale its input so that the sensitivity and acceleration feels as if it were set to 1000 dpi. For example, with a sens multiplier of 0.8, mice with their DPI set in the device menu will have the equivalent sensitivity of an 800 DPI mouse with a sens multiplier of 1. Ignoring device-specific factors like weight, friction, and sensor position, normalization provides an easy method to synchronize settings across different setups.
 
 ## Acceleration Styles
-The examples of various types below show some typical settings, without a cap or offset, for a mouse at 1600 DPI and 1000 hz.
+The examples of various types below show some typical settings for a mouse at, or normalized to, 1000 DPI.
 
 ### Linear
 This is simplest style used by most; it is simply a line rising at a given rate. This is a good choice for new users.
