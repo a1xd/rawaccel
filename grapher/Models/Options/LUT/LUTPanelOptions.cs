@@ -135,16 +135,30 @@ namespace grapher.Models.Options.LUT
 
         private static (Vec2<float>[], int length) UserTextToPoints(string userText)
         {
+            const int MaxPoints = 256;
+
             if (string.IsNullOrWhiteSpace(userText))
             {
                 throw new ApplicationException("Text must be entered in text box to fill Look Up Table.");
             }
 
-            Vec2<float>[] points = new Vec2<float>[256];
+            Vec2<float>[] points = new Vec2<float>[MaxPoints];
 
             var userTextSplit = userText.Trim().Trim(';').Split(';');
             int index = 0;
             float lastX = 0;
+
+            int pointsCount = userTextSplit.Count();
+
+            if (pointsCount < 2)
+            {
+                throw new ApplicationException("At least 2 points required");
+            }
+
+            if (pointsCount > MaxPoints)
+            {
+                throw new ApplicationException($"Number of points exceeds max ({MaxPoints})");
+            }
 
             foreach(var pointEntry in userTextSplit)
             {

@@ -146,6 +146,9 @@ namespace grapher
         /// <summary> Line Width For Series data on chart </summary>
         public const int ChartSeriesLineWidth = 3;
 
+        /// <summary> Marker size for last-mouse-move chart series. </summary>
+        public const int DotMarkerSize = 7;
+
         /// <summary> Foreground Color When Streamer Mode Active </summary>
         public static readonly System.Drawing.Color fgStreamer = System.Drawing.Color.White;
 
