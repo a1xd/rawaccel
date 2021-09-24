@@ -20,21 +20,22 @@ namespace grapher.Layouts
             Mode = AccelMode.lut;
 
             GainSwitchOptionLayout = new OptionLayout(false, string.Empty);
-            AccelLayout = new OptionLayout(false, Acceleration);
+            ClassicCapLayout = new OptionLayout(false, string.Empty);
+            PowerCapLayout = new OptionLayout(false, string.Empty);
             DecayRateLayout = new OptionLayout(false, string.Empty);
             GrowthRateLayout = new OptionLayout(false, string.Empty);
             SmoothLayout = new OptionLayout(false, string.Empty);
-            ScaleLayout = new OptionLayout(false, string.Empty);
-            CapLayout = new OptionLayout(false, Cap);
-            WeightLayout = new OptionLayout(false, Weight);
-            OffsetLayout = new OptionLayout(false, Offset);
+            InputOffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(false, string.Empty);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
+            OutputOffsetLayout = new OptionLayout(false, string.Empty);
             ExponentLayout = new OptionLayout(false, Exponent);
             MidpointLayout = new OptionLayout(false, string.Empty);
             LutTextLayout = new OptionLayout(true, string.Empty);
             LutPanelLayout = new OptionLayout(true, string.Empty);
             LutApplyOptionsLayout = new OptionLayout(true, string.Empty);
+            InputJumpLayout = new OptionLayout(false, string.Empty);
+            OutputJumpLayout = new OptionLayout(false, string.Empty);
         }
 
         public override string ActiveName => LUTActiveName;

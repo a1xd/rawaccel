@@ -5,7 +5,7 @@
 
 namespace rawaccel {
 
-	struct valid_ret_t {
+	struct valid_profile_ret_t {
 		int last_x = 0;
 		int last_y = 0;
 		int count = 0;
@@ -16,10 +16,19 @@ namespace rawaccel {
 		}
 	};
 
+	struct valid_device_ret_t {
+		int count = 0;
+
+		explicit operator bool() const
+		{
+			return count == 0;
+		}
+	};
+
 	template <typename MsgHandler = noop>
-	valid_ret_t valid(const settings& args, MsgHandler fn = {})
+	valid_profile_ret_t valid(const profile& args, MsgHandler fn = {})
 	{
-		valid_ret_t ret;
+		valid_profile_ret_t ret;
 
 		auto error = [&](auto msg) {
 			++ret.count;
@@ -27,95 +36,83 @@ namespace rawaccel {
 		};
 
 		auto check_accel = [&error](const accel_args& args) {
-			static_assert(SPACED_LUT_CAPACITY == 1025, "update error msg");
+			static_assert(LUT_POINTS_CAPACITY == 257, "update error msg");
 
-			const auto& lut_args = args.spaced_args;
-
-			if (lut_args.partitions <= 0) {
-				error("lut partitions"" must be positive");
-			}
-
-			if (lut_args.mode == spaced_lut_mode::linear) {
-				if (lut_args.start <= 0) {
-					error("start"" must be positive");
-				}
-
-				if (lut_args.stop <= lut_args.start) {
-					error("stop must be greater than start");
-				}
-
-				if (lut_args.num_elements < 2 ||
-					lut_args.num_elements > 1025) {
-					error("num must be between 2 and 1025");
-				}
-			}
-			else if (lut_args.mode == spaced_lut_mode::binlog) {
-				int istart = static_cast<int>(lut_args.start);
-				int istop = static_cast<int>(lut_args.stop);
-
-				if (lut_args.start < -99) {
-					error("start is too small");
-				}
-				else if (lut_args.stop > 99) {
-					error("stop is too large");
-				}
-				else if (istart != lut_args.start || istop != lut_args.stop) {
-					error("start and stop must be integers");
-				}
-				else if (istop <= istart) {
-					error("stop must be greater than start");
-				}
-				else if (lut_args.num_elements <= 0) {
-					error("num"" must be positive");
-				}
-				else if (((lut_args.stop - lut_args.start) * lut_args.num_elements) >= 1025) {
-					error("binlog mode requires (num * (stop - start)) < 1025");
-				}
-			}
-
-			if (args.mode == accel_mode::arb_lookup) {
-				if (args.arb_args.length < 2) {
+			if (args.mode == accel_mode::lookup) {
+				if (args.length < 4) {
 					error("lookup mode requires at least 2 points");
 				}
+				else if (args.length > ra::LUT_RAW_DATA_CAPACITY) {
+					error("too many data points (max=257)");
+				}
+			}
+			else if (args.length > ra::LUT_RAW_DATA_CAPACITY) {
+				error("data size > max");
 			}
 
-			if (args.offset < 0) {
+			if (args.input_offset < 0) {
 				error("offset can not be negative");
 			}
-			else if (args.mode == accel_mode::jump && args.offset == 0) {
-				error("offset can not be 0");
+
+			if (args.output_offset < 0) {
+				error("offset can not be negative");
 			}
 
-			if (args.cap < 0) {
-				error("cap"" must not be negative");
+			bool jump_or_io_cap = 
+				(args.mode == accel_mode::jump || 
+					((args.mode == accel_mode::classic || args.mode == accel_mode::power) &&
+						args.cap_mode == cap_mode::io));
+
+			if (args.cap.x < 0) {
+				error("cap (input) can not be negative");
 			}
-			else if (args.mode == accel_mode::jump && args.cap == 0) {
-				error("cap can not be 0");
+			else if (args.cap.x == 0 && jump_or_io_cap) {
+				error("cap (input) can not be 0");
 			}
 
-			if (args.growth_rate <= 0 ||
-				args.decay_rate <= 0 ||
-				args.accel_classic <= 0) {
+			if (args.cap.y < 0) {
+				error("cap (output) can not be negative");
+			}
+			else if (args.cap.y == 0 && jump_or_io_cap) {
+				error("cap (output) can not be 0");
+			}
+
+			if ((args.mode == accel_mode::classic && 
+					args.cap.x > 0 && 
+					args.cap.x < args.input_offset && 
+					args.cap_mode != cap_mode::out) ||
+				(args.mode == accel_mode::power &&
+					args.cap.y > 0 &&
+					args.cap.y < args.output_offset &&
+					args.cap_mode != cap_mode::in)) {
+				error("cap < offset");
+			}
+
+			if (args.acceleration <= 0) {
 				error("acceleration"" must be positive");
-			}
-
-			if (args.motivity <= 1) {
-				error("motivity must be greater than 1");
-			}
-
-			if (args.power <= 1) {
-				error("power must be greater than 1");
 			}
 
 			if (args.scale <= 0) {
 				error("scale"" must be positive");
 			}
 
-			if (args.weight <= 0) {
-				error("weight"" must be positive");
+			if (args.growth_rate <= 0) {
+				error("growth rate"" must be positive");
 			}
 
-			if (args.exponent <= 0) {
+			if (args.decay_rate <= 0) {
+				error("decay rate"" must be positive");
+			}
+
+			if (args.motivity <= 1) {
+				error("motivity must be greater than 1");
+			}
+
+			if (args.exponent_classic <= 1) {
+				error("exponent must be greater than 1");
+			}
+
+			if (args.exponent_power <= 0) {
 				error("exponent"" must be positive");
 			}
 
@@ -133,16 +130,16 @@ namespace rawaccel {
 
 		};
 
-		check_accel(args.argsv.x);
+		check_accel(args.accel_x);
 
-		if (!args.combine_mags) {
+		if (!args.whole) {
 			ret.last_x = ret.count;
-			check_accel(args.argsv.y);
+			check_accel(args.accel_y);
 			ret.last_y = ret.count;
 		}
 
-		if (args.dpi <= 0) {
-			error("dpi"" must be positive");
+		if (args.name[0] == L'\0') {
+			error("profile name can not be empty");
 		}
 
 		if (args.speed_max < 0) {
@@ -156,36 +153,61 @@ namespace rawaccel {
 			error("snap angle must be between 0 and 45 degrees");
 		}
 
-		if (args.sens.x == 0 || args.sens.y == 0) {
+		if (args.sensitivity == 0) {
 			error("sens multiplier is 0");
 		}
+	
+		if (args.yx_sens_ratio == 0) {
+			error("Y/X sens ratio is 0");
+		}
 
-		if (args.dom_args.domain_weights.x <= 0 ||
-			args.dom_args.domain_weights.y <= 0) {
+		if (args.domain_weights.x <= 0 ||
+			args.domain_weights.y <= 0) {
 			error("domain weights"" must be positive");
 		}
 
-		if (args.dir_multipliers.x <= 0 || args.dir_multipliers.y <= 0) {
-			error("directional multipliers must be positive");
+		if (args.lr_sens_ratio <= 0 || args.ud_sens_ratio <= 0) {
+			error("sens ratio must be positive");
 		}
 
-		if (args.dom_args.lp_norm < 2) {
-			error("Lp norm is less than 2 (default=2)");
+		if (args.lp_norm <= 0) {
+			error("Lp norm must be positive (default=2)");
 		}
 
 		if (args.range_weights.x <= 0 || args.range_weights.y <= 0) {
 			error("range weights"" must be positive");
 		}
 
-		if (args.time_min <= 0) {
+		return ret;
+	}
+
+	template <typename MsgHandler = noop>
+	valid_device_ret_t valid(const device_settings& args, MsgHandler fn = {})
+	{
+		valid_device_ret_t ret;
+
+		auto error = [&](auto msg) {
+			++ret.count;
+			fn(msg);
+		};
+
+
+		if (args.config.dpi < 0) {
+			error("dpi"" can not be negative");
+		}
+
+		if (args.config.polling_rate < 0) {
+			error("polling rate"" can not be negative");
+		}
+
+		if (args.config.clamp.min <= 0) {
 			error("minimum time"" must be positive");
 		}
 
-		if (args.time_max < args.time_min) {
+		if (args.config.clamp.max < args.config.clamp.min) {
 			error("max time is less than min time");
 		}
 
 		return ret;
 	}
-
 }

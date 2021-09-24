@@ -78,6 +78,9 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="DeviceMenuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Layouts\LUTLayout.cs" />
     <Compile Include="Layouts\MotivityLayout.cs" />
     <Compile Include="Layouts\JumpLayout.cs" />
@@ -103,8 +106,7 @@
     <Compile Include="Models\Charts\EstimatedPoints.cs" />
     <Compile Include="Models\Charts\ChartState\XYOneGraphState.cs" />
     <Compile Include="Models\Charts\ChartState\XYTwoGraphState.cs" />
-    <Compile Include="Models\Devices\DeviceIDItem.cs" />
-    <Compile Include="Models\Devices\DeviceIDManager.cs" />
+    <Compile Include="Models\Devices\DeviceDialogItem.cs" />
     <Compile Include="Models\Mouse\MouseData.cs" />
     <Compile Include="Models\Mouse\MouseWatcher.cs" />
     <Compile Include="Models\Mouse\PointData.cs" />
@@ -129,8 +131,12 @@
     <Compile Include="Layouts\NaturalLayout.cs" />
     <Compile Include="Layouts\OffLayout.cs" />
     <Compile Include="Layouts\PowerLayout.cs" />
+    <Compile Include="Models\Options\Cap\CapOptions.cs" />
+    <Compile Include="Models\Options\Cap\CapTypeOptions.cs" />
     <Compile Include="Models\Options\CheckBoxOption.cs" />
+    <Compile Include="Models\Options\ComboBoxOptionsBase.cs" />
     <Compile Include="Models\Options\Directionality\DirectionalityOptions.cs" />
+    <Compile Include="Models\Options\LockableOption.cs" />
     <Compile Include="Models\Options\LUT\LutApplyOptions.cs" />
     <Compile Include="Models\Options\IOption.cs" />
     <Compile Include="Models\Options\LUT\LUTPanelOptions.cs" />
@@ -139,6 +145,7 @@
     <Compile Include="Layouts\OptionLayout.cs" />
     <Compile Include="Models\Options\OptionBase.cs" />
     <Compile Include="Models\Options\OptionXY.cs" />
+    <Compile Include="Models\Options\SwitchOption.cs" />
     <Compile Include="Models\Options\TextOption.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
     <Compile Include="Models\Serialized\SettingsManager.cs" />

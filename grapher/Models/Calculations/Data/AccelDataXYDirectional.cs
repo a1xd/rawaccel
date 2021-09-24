@@ -67,7 +67,7 @@ namespace grapher.Models.Calculations.Data
             }
         }
 
-        public void CreateGraphData(ManagedAccel accel, DriverSettings settings)
+        public void CreateGraphData(ManagedAccel accel, Profile settings)
         {
             Clear();
             Calculator.CalculateDirectional(AngleToData, accel, settings, Calculator.SimulatedDirectionalInput);

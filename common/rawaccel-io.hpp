@@ -5,8 +5,7 @@
 #include "rawaccel-error.hpp"
 #include "rawaccel.hpp"
 
-#pragma warning(push)
-#pragma warning(disable:4245) // int -> DWORD conversion while passing CTL_CODE
+#include <memory>
 
 namespace rawaccel {
 
@@ -40,14 +39,54 @@ namespace rawaccel {
         }
     }
 
-    inline void read(io_t& args)
+    inline std::unique_ptr<std::byte[]> read()
     {
-        io_control(RA_READ, NULL, 0, &args, sizeof(io_t));
+        io_base base_data;
+
+        io_control(READ, NULL, 0, &base_data, sizeof(io_base));
+
+        size_t size = sizeof(base_data);
+
+        if (base_data.modifier_data_size == 0) {
+            // driver has no data, but it's more useful to return something, 
+            // so return a default modifier_settings object along with base data
+             
+            size += sizeof(modifier_settings);
+            base_data.modifier_data_size = 1;
+            auto bytes = std::make_unique<std::byte[]>(size);
+            *reinterpret_cast<io_base*>(bytes.get()) = base_data;
+            *reinterpret_cast<modifier_settings*>(bytes.get() + sizeof(io_base)) = {};
+            return bytes;
+        }
+        else {
+            size += sizeof(modifier_settings) * base_data.modifier_data_size;
+            size += sizeof(device_settings) * base_data.device_data_size;
+            auto bytes = std::make_unique<std::byte[]>(size);
+            io_control(READ, NULL, 0, bytes.get(), DWORD(size));
+            return bytes;
+        }
     }
 
-    inline void write(const io_t& args) 
+    // buffer must point to at least sizeof(io_base) bytes
+    inline void write(const void* buffer)
     {
-        io_control(RA_WRITE, const_cast<io_t*>(&args), sizeof(io_t), NULL, 0);
+        if (buffer == nullptr) throw io_error("write buffer is null");
+
+        auto* base_ptr = static_cast<const io_base*>(buffer);
+        auto size = sizeof(io_base);
+        size += base_ptr->modifier_data_size * sizeof(modifier_settings);
+        size += base_ptr->device_data_size * sizeof(device_settings);
+
+        if (size > DWORD(-1)) throw io_error("write buffer is too large");
+
+        io_control(WRITE, const_cast<void*>(buffer), DWORD(size), NULL, 0);
+    }
+
+    inline void reset()
+    {
+        io_base base_data{};
+        // all modifier/device data is cleared when a default io_base is passed
+        io_control(WRITE, &base_data, sizeof(io_base), NULL, 0);
     }
 
     inline version_t get_version() 
@@ -55,7 +94,7 @@ namespace rawaccel {
         version_t v;
 
         try {
-            io_control(RA_GET_VERSION, NULL, 0, &v, sizeof(version_t));
+            io_control(GET_VERSION, NULL, 0, &v, sizeof(version_t));
         }
         catch (const sys_error&) {
             // assume request is not implemented (< 1.3)
@@ -81,5 +120,3 @@ namespace rawaccel {
     }
 
 }
-
-#pragma warning(pop)

@@ -6,6 +6,8 @@ using System.Threading;
 using System.Text;
 using System.Drawing;
 using grapher.Models.Devices;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace grapher.Models.Serialized
 {
@@ -14,14 +16,12 @@ namespace grapher.Models.Serialized
         #region Constructors
 
         public SettingsManager(
-            ManagedAccel activeAccel,
             Field dpiField,
             Field pollRateField,
             ToolStripMenuItem autoWrite,
             ToolStripMenuItem showLastMouseMove,
             ToolStripMenuItem showVelocityAndGain,
-            ToolStripMenuItem streamingMode,
-            DeviceIDManager deviceIDManager)
+            ToolStripMenuItem streamingMode)
         {
             DpiField = dpiField;
             PollRateField = pollRateField;
@@ -29,9 +29,9 @@ namespace grapher.Models.Serialized
             ShowLastMouseMoveMenuItem = showLastMouseMove;
             ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
             StreamingModeMenuItem = streamingMode;
-            DeviceIDManager = deviceIDManager;
 
-            SetActiveFields(activeAccel);
+            SystemDevices = new List<MultiHandleDevice>();
+            ActiveNormTaggedHandles = new List<(IntPtr, bool)>();
 
             GuiSettings = GUISettings.MaybeLoad();
 
@@ -45,43 +45,92 @@ namespace grapher.Models.Serialized
                 UpdateFieldsFromGUISettings();
             }
 
-            UserSettings = InitUserSettings();
+            UserConfigField = InitActiveAndGetUserConfig();
         }
 
         #endregion Constructors
+
+        #region Fields
+
+        private EventHandler DeviceChangeField;
+
+        private DriverConfig ActiveConfigField;
+        private DriverConfig UserConfigField;
+
+        #endregion Fields
 
         #region Properties
 
         public GUISettings GuiSettings { get; private set; }
 
-        public ManagedAccel ActiveAccel { get; private set; }
+        public event EventHandler DeviceChange
+        {
+            add => DeviceChangeField += value;
+            remove => DeviceChangeField -= value;
+        }
 
-        public ExtendedSettings ActiveSettings { get; private set; }
+        public DriverConfig ActiveConfig 
+        {
+            get => ActiveConfigField;
 
-        public DriverSettings UserSettings { get; private set; }
+            private set
+            {
+                if (ActiveConfigField != value)
+                {
+                    ActiveConfigField = value;
+                    ActiveProfileNamesSet = new HashSet<string>(value.profiles.Select(p => p.name));
+                }
+            }
+        }
+
+        public Profile ActiveProfile 
+        {
+            get => ActiveConfigField.profiles[0];
+            private set => ActiveConfigField.SetProfileAt(0, value);
+        }
+
+        public ManagedAccel ActiveAccel
+        {
+            get => ActiveConfig.accels[0];
+        }
+
+        public DriverConfig UserConfig 
+        { 
+            get => UserConfigField;
+            private set => UserConfigField = value;
+        }
+
+        public Profile UserProfile 
+        {
+            get => UserConfigField.profiles[0];
+            private set => UserConfigField.SetProfileAt(0, value);
+        }
+
+        public HashSet<string> ActiveProfileNamesSet { get; private set; }
 
         public Field DpiField { get; private set; }
 
         public Field PollRateField { get; private set; }
 
-        public DeviceIDManager DeviceIDManager { get; }
+        public IList<MultiHandleDevice> SystemDevices { get; private set; }
+
+        public List<(IntPtr, bool)> ActiveNormTaggedHandles { get; }
 
         private ToolStripMenuItem AutoWriteMenuItem { get; set; }
 
         private ToolStripMenuItem ShowLastMouseMoveMenuItem { get; set; }
 
         private ToolStripMenuItem ShowVelocityAndGainMoveMenuItem { get; set; }
+
         private ToolStripMenuItem StreamingModeMenuItem{ get; set; }
         #endregion Properties
 
         #region Methods
 
-        public void DisableDriver()
+        public void ResetDriver()
         {
-            var defaultSettings = new ExtendedSettings();
-            ActiveSettings = defaultSettings;
-            ActiveAccel.Settings = defaultSettings;
-            new Thread(() => ActiveAccel.Activate()).Start();
+            ActiveConfig = DriverConfig.GetDefault();
+            new Thread(() => DriverConfig.Deactivate()).Start();
         }
 
         public void UpdateFieldsFromGUISettings()
@@ -94,36 +143,44 @@ namespace grapher.Models.Serialized
             AutoWriteMenuItem.Checked = GuiSettings.AutoWriteToDriverOnStartup;
         }
 
-        public SettingsErrors TryActivate(DriverSettings settings)
+        public bool TryActivate(Profile settings, out string errors)
         {
-            var errors = new SettingsErrors(settings);
+            var old = UserProfile;
+            UserProfile = settings;
+            bool success = TryActivate(UserConfig, out errors);
+            if (!success)
+            {
+                UserProfile = old;
+            }
+            return success;
+        }
 
-            if (errors.Empty())
+        public bool TryActivate(DriverConfig settings, out string errors)
+        {
+            errors = settings.Errors();
+
+            if (errors == null)
             {
                 GuiSettings = MakeGUISettingsFromFields();
                 GuiSettings.Save();
 
-                UserSettings = settings;
-                File.WriteAllText(Constants.DefaultSettingsFileName, RaConvert.Settings(settings));
+                UserConfig = settings;
+                ActiveConfig = settings;
+                File.WriteAllText(Constants.DefaultSettingsFileName, settings.ToJSON());
 
-                ActiveSettings = new ExtendedSettings(settings);
-                ActiveAccel.Settings = ActiveSettings;
-
-                new Thread(() => ActiveAccel.Activate()).Start();
+                new Thread(() => ActiveConfig.Activate()).Start();
             }
 
-            return errors;
+            return errors == null;
         }
 
-        public void SetHiddenOptions(DriverSettings settings)
+        public void SetHiddenOptions(Profile settings)
         {
-            settings.snap = UserSettings.snap;
-            settings.maximumSpeed = UserSettings.maximumSpeed;
-            settings.minimumSpeed = UserSettings.minimumSpeed;
-            settings.minimumTime = UserSettings.minimumTime;
-            settings.maximumTime = UserSettings.maximumTime;
-            settings.ignore = UserSettings.ignore;
-            settings.directionalMultipliers = UserSettings.directionalMultipliers;
+            settings.snap = UserProfile.snap;
+            settings.maximumSpeed = UserProfile.maximumSpeed;
+            settings.minimumSpeed = UserProfile.minimumSpeed;
+            settings.lrSensRatio = UserProfile.lrSensRatio;
+            settings.udSensRatio = UserProfile.udSensRatio;
         }
 
         public GUISettings MakeGUISettingsFromFields()
@@ -139,33 +196,108 @@ namespace grapher.Models.Serialized
             };
         }
 
-        public bool TableActive()
+        public void SetActiveHandles()
         {
-            return ActiveSettings.tables.x != null || ActiveSettings.tables.y != null;
+            ActiveNormTaggedHandles.Clear();
+
+            bool ActiveProfileIsFirst = ActiveProfile == ActiveConfig.profiles[0];
+
+            foreach (var sysDev in SystemDevices)
+            {
+                void AddHandlesFromSysDev(bool normalized)
+                {
+                    ActiveNormTaggedHandles.AddRange(sysDev.handles.Select(h => (h, normalized)));
+                }
+
+                var settings = ActiveConfig.devices.Find(d => d.id == sysDev.id);
+
+                if (settings is null)
+                {
+                    if (ActiveProfileIsFirst && !ActiveConfig.defaultDeviceConfig.disable)
+                    {
+                        AddHandlesFromSysDev(ActiveConfig.defaultDeviceConfig.dpi > 0);
+                    }
+                }
+                else if (!settings.config.disable &&
+                            ((ActiveProfileIsFirst &&
+                                    (string.IsNullOrEmpty(settings.profile) ||
+                                        !ActiveProfileNamesSet.Contains(settings.profile))) ||
+                                ActiveProfile.name == settings.profile))
+                {
+                    AddHandlesFromSysDev(settings.config.dpi > 0);
+                }
+            }
         }
 
-        public void SetActiveFields(ManagedAccel activeAccel)
+        public void Submit(DeviceConfig newDefaultConfig, DeviceDialogItem[] items)
         {
-            ActiveAccel = activeAccel;
-            ActiveSettings = activeAccel.Settings;
+            UserConfig.defaultDeviceConfig = newDefaultConfig;
+            foreach (var item in items)
+            {
+                if (item.overrideDefaultConfig)
+                {
+                    if (item.oldSettings is null)
+                    {
+                        UserConfig.devices.Add(
+                            new DeviceSettings
+                            {
+                                name = item.device.name,
+                                profile = item.newProfile,
+                                id = item.device.id,
+                                config = item.newConfig
+                            });
+                    }
+                    else
+                    {
+                        item.oldSettings.config = item.newConfig;
+                        item.oldSettings.profile = item.newProfile;
+                    }
+                }
+                else if (!(item.oldSettings is null))
+                {
+                    UserConfig.devices.Remove(item.oldSettings);
+                }
+            }
         }
 
-        private DriverSettings InitUserSettings()
+        public void OnProfileSelectionChange()
+        {
+            SetActiveHandles();
+        }
+
+        public void OnDeviceChangeMessage()
+        {
+            SystemDevices = MultiHandleDevice.GetList();
+            SetActiveHandles();
+
+            DeviceChangeField?.Invoke(this, EventArgs.Empty);
+        }
+
+        private DriverConfig InitActiveAndGetUserConfig()
         {
             var path = Constants.DefaultSettingsFileName;
             if (File.Exists(path))
             {
                 try
                 {
-                    DriverSettings settings = RaConvert.Settings(File.ReadAllText(path));
+                    var (cfg, err) = DriverConfig.Convert(File.ReadAllText(path));
 
-                    if (!GuiSettings.AutoWriteToDriverOnStartup || 
-                        TableActive() || 
-                        TryActivate(settings).Empty())
+                    if (err == null)
                     {
-                        return settings;
-                    }
+                        if (GuiSettings.AutoWriteToDriverOnStartup)
+                        {
+                            if (!TryActivate(cfg, out string _))
+                            {
+                                throw new Exception("deserialization succeeded but TryActivate failed");
+                            }
+                        }
+                        else
+                        {
+                            ActiveConfig = DriverConfig.GetActive();
+                        }
 
+                        return cfg;
+                    }
                 }
                 catch (JsonException e)
                 {
@@ -173,17 +305,9 @@ namespace grapher.Models.Serialized
                 }
             }
 
-            if (!TableActive())
-            {
-                File.WriteAllText(path, RaConvert.Settings(ActiveSettings.baseSettings));
-                return ActiveSettings.baseSettings;
-            }
-            else
-            {
-                var defaultSettings = new DriverSettings();
-                File.WriteAllText(path, RaConvert.Settings(defaultSettings));
-                return defaultSettings;
-            }
+            ActiveConfig = DriverConfig.GetActive();
+            File.WriteAllText(path, ActiveConfig.ToJSON());
+            return ActiveConfig;
         }
 
         #endregion Methods

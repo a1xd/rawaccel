@@ -44,7 +44,7 @@ namespace grapher
         public const int DropDownLeftSeparation = 10;
 
         /// <summary> Height of sensitivity chart when displayed alone. </summary>
-        public const int SensitivityChartAloneHeight = 480;
+        public const int SensitivityChartAloneHeight = 510;
 
         /// <summary> Height of sensitivity chart when displayed alongside Velocity and Gain charts. </summary>
         public const int SensitivityChartTogetherHeight = 328;
@@ -65,7 +65,7 @@ namespace grapher
         public const int ButtonVerticalOffset = 60;
 
         /// <summary> Vertical placement of directionality panel below top of containing form </summary>
-        public const int DirectionalityVerticalOffset = 285;
+        public const int DirectionalityVerticalOffset = 315;
 
         /// <summary> Padding between directionality title and containing panel </summary>
         public const int DirectionalityTitlePad = 8;
@@ -104,10 +104,10 @@ namespace grapher
 
         /// <summary> Default text to be displayed on button delay. </summary>
         public const string ButtonDelayText = "Delay";
-
+        
         /// <summary> Default text to be displayed on button delay. </summary>
         public const string ResetButtonText = "Reset";
-
+        
         /// <summary> Title of sensitivity chart. </summary>
         public const string SensitivityChartTitle = "Sensitivity";
 
@@ -128,10 +128,10 @@ namespace grapher
 
         public const string GuiConfigFileName = ".config";
 
-        /// <summary> Text to direcitonality panel title when panel is closed. </summary>
+        /// <summary> Text to directionality panel title when panel is closed. </summary>
         public const string DirectionalityTitleClosed = "Anisotropy \u25BC";
 
-        /// <summary> Text to direcitonality panel title when panel is open. </summary>
+        /// <summary> Text to directionality panel title when panel is open. </summary>
         public const string DirectionalityTitleOpen = "Anisotropy \u25B2";
 
         /// <summary> Style used by System.Double.Parse </summary>
@@ -145,6 +145,15 @@ namespace grapher
 
         /// <summary> Line Width For Series data on chart </summary>
         public const int ChartSeriesLineWidth = 3;
+        #endregion Constants
+
+        #region ReadOnly
+
+        /// <summary> Default last mouse move label text format. </summary>
+        public static readonly string MouseMoveDefaultFormat = "Last (x, y): ({0}, {1})";
+
+        /// <summary> Last mouse move label text format when last input was from a dpi normalized device. </summary>
+        public static readonly string MouseMoveNormalizedFormat = $"{MouseMoveDefaultFormat} (n)";
 
         /// <summary> Marker size for last-mouse-move chart series. </summary>
         public const int DotMarkerSize = 7;
@@ -160,10 +169,6 @@ namespace grapher
 
         /// <summary> Background Color When Streamer Mode Inactive </summary>
         public static readonly System.Drawing.Color bgNoStreamer = System.Drawing.Color.White;
-
-        #endregion Constants
-
-        #region ReadOnly
 
         /// <summary> Color of font in active value labels. </summary>
         public static readonly Color ActiveValueFontColor = Color.FromArgb(255, 65, 65, 65);

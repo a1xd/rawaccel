@@ -35,15 +35,6 @@ namespace rawaccel {
         return (v < lo) ? lo : (hi < v) ? hi : v;
     }
 
-    constexpr double lerp(double a, double b, double t)
-    {
-        double x = a + t * (b - a);
-        if ((t > 1) == (a < b)) {
-            return maxsd(x, b);
-        }
-        return minsd(x, b);
-    }
-
     // returns the unbiased exponent of x if x is normal 
     inline int ilogb(double x)
     {
@@ -84,5 +75,11 @@ namespace rawaccel {
 
     template <typename T, typename U>
     inline constexpr bool is_same_v = is_same<T, U>::value;
+
+    template <class T> struct is_rvalue_ref { static constexpr bool value = false; };
+    template <class T> struct is_rvalue_ref<T&&> { static constexpr bool value = true; };
+
+    template <class T>
+    inline constexpr bool is_rvalue_ref_v = is_rvalue_ref<T>::value;
 
 }

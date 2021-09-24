@@ -121,9 +121,9 @@ namespace grapher
             ChartState.Bind();
         }
 
-        public void ShowActive(DriverSettings driverSettings)
+        public void ShowActive(Profile args)
         {
-            ChartState = ChartStateManager.DetermineState(driverSettings);
+            ChartState = ChartStateManager.DetermineState(args);
             ChartState.Activate();
             Bind();
         }
@@ -134,9 +134,9 @@ namespace grapher
             ChartState.Redraw();
         }
 
-        public void Calculate(ManagedAccel accel, DriverSettings settings)
+        public void Calculate(ManagedAccel accel, Profile settings)
         {
-            ChartState.SetUpCalculate(settings);
+            ChartState.SetUpCalculate();
             ChartState.Calculate(accel, settings);
         }
 

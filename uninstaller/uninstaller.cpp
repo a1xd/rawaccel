@@ -14,22 +14,22 @@ int main() {
             }
         });
 
-        fs::path target = get_target_path();
+        fs::path target = expand(DRIVER_ENV_PATH);
         fs::path tmp = make_temp_path(target);
 
-        if (fs::exists(target) || fs::exists(tmp)) {
+        if (fs::exists(target)) {
             reboot_required = true;
-        }
 
-        // schedule tmp to be deleted if rename target -> tmp is successful
-        if (MoveFileExW(target.c_str(), tmp.c_str(), MOVEFILE_REPLACE_EXISTING)) {
-            MoveFileExW(tmp.c_str(), NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
-        }
-        else { // tmp is in use and delete is already scheduled
-            if (fs::exists(target)) fs::remove(target);
+            // schedule tmp to be deleted if rename target -> tmp is successful
+            if (MoveFileExW(target.c_str(), tmp.c_str(), MOVEFILE_REPLACE_EXISTING)) {
+                MoveFileExW(tmp.c_str(), NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
+            }
+            else { // tmp is in use and delete is already scheduled
+                fs::remove(target);
+            }
         }
         
-        if (reboot_required) {
+        if (reboot_required || fs::exists(tmp)) {
             std::cout << "Removal complete, change will take effect after restart.\n";
         }
         else {

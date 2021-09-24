@@ -4,6 +4,7 @@ using grapher.Models.Mouse;
 using grapher.Models.Options;
 using grapher.Models.Serialized;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -25,7 +26,7 @@ namespace grapher
             ButtonBase resetButton,
             MouseWatcher mouseWatcher,
             ToolStripMenuItem scaleMenuItem,
-            DeviceIDManager deviceIDManager)
+            ToolStripMenuItem deviceMenuItem)
         {
             AccelForm = accelForm;
             AccelCalculator = accelCalculator;
@@ -34,18 +35,19 @@ namespace grapher
             WriteButton = writeButton;
             ResetButton = (CheckBox)resetButton;
             ScaleMenuItem = scaleMenuItem;
+            DeviceMenuItem = deviceMenuItem;
             Settings = settings;
             DefaultButtonFont = WriteButton.Font;
             SmallButtonFont = new Font(WriteButton.Font.Name, WriteButton.Font.Size * Constants.SmallButtonSizeFactor);
             MouseWatcher = mouseWatcher;
-            DeviceIDManager = deviceIDManager;
 
+            DeviceMenuItem.Click += DeviceMenuItemClick;
             ScaleMenuItem.Click += new System.EventHandler(OnScaleMenuItemClick);
             WriteButton.Click += new System.EventHandler(OnWriteButtonClick);
             ResetButton.Click += new System.EventHandler(ResetDriverEventHandler);
             AccelForm.FormClosing += new FormClosingEventHandler(SaveGUISettingsOnClose);
 
-            ButtonTimerInterval = Convert.ToInt32(DriverSettings.WriteDelayMs);
+            ButtonTimerInterval = Convert.ToInt32(DriverConfig.WriteDelayMs);
             ButtonTimer = new Timer();
             ButtonTimer.Tick += new System.EventHandler(OnButtonTimerTick);
 
@@ -85,7 +87,7 @@ namespace grapher
 
         public ToolStripMenuItem ScaleMenuItem { get; }
 
-        public DeviceIDManager DeviceIDManager { get; }
+        public ToolStripMenuItem DeviceMenuItem { get; }
 
         private Timer ChartRefresh { get; }
 
@@ -112,21 +114,23 @@ namespace grapher
             }
         }
 
-        public DriverSettings MakeSettingsFromFields()
+        public Profile MakeSettingsFromFields()
         {
-            var settings = new DriverSettings();
+            var settings = new Profile();
 
             settings.rotation = ApplyOptions.Rotation.Field.Data;
-            settings.sensitivity = new Vec2<double>
-            {
-                x = ApplyOptions.Sensitivity.Fields.X,
-                y = ApplyOptions.Sensitivity.Fields.Y
-            };
+            settings.sensitivity = ApplyOptions.Sensitivity.Field.Data;
+
+            // TODO - separate sensitivity fields, add new label for ratio
+            settings.yxSensRatio = ApplyOptions.YToXRatio.Value;
             settings.combineMagnitudes = ApplyOptions.IsWhole;
-            ApplyOptions.SetArgs(ref settings.args);
-            settings.domainArgs = ApplyOptions.Directionality.GetDomainArgs();
+            ApplyOptions.SetArgsFromActiveValues(ref settings.argsX, ref settings.argsY);
+
+            var (domWeights, lpNorm) = ApplyOptions.Directionality.GetDomainArgs();
+            settings.domainXY = domWeights;
+            settings.lpNorm = lpNorm;
+
             settings.rangeXY = ApplyOptions.Directionality.GetRangeXY();
-            settings.deviceID = DeviceIDManager.ID;
 
             Settings.SetHiddenOptions(settings);
 
@@ -141,16 +145,15 @@ namespace grapher
             {
                 ButtonDelay(WriteButton);
 
-                var settings = MakeSettingsFromFields();
-                SettingsErrors errors = Settings.TryActivate(settings);
-                if (errors.Empty())
+                if (!Settings.TryActivate(MakeSettingsFromFields(), out string errors))
                 {
-                    RefreshActive();
-                    return;
+                    error_message = errors.ToString();
                 }
                 else
                 {
-                    error_message = errors.ToString();
+                    RefreshActive();
+                    Settings.SetActiveHandles();
+                    return;
                 }
             }
             catch (ApplicationException e)
@@ -158,37 +161,30 @@ namespace grapher
                 error_message = e.Message;
             }
 
-            new MessageDialog(error_message, "bad input").ShowDialog();
-        }
-
-
-        public void UpdateInputManagers()
-        {
-            MouseWatcher.UpdateHandles(Settings.ActiveSettings.baseSettings.deviceID);
-            DeviceIDManager.Update(Settings.ActiveSettings.baseSettings.deviceID);
+            using (var form = new MessageDialog(error_message, "bad input"))
+            {
+                form.ShowDialog();
+            }
         }
 
         public void RefreshActive()
         {
-            UpdateShownActiveValues(Settings.UserSettings);
+            UpdateShownActiveValues(Settings.ActiveProfile);
             UpdateGraph();
-            UpdateInputManagers();
         }
 
         public void RefreshUser()
         {
-            UpdateShownActiveValues(Settings.UserSettings);
+            UpdateShownActiveValues(Settings.UserProfile);
         }
 
         public void UpdateGraph()
         {
-            AccelCharts.Calculate(
-                Settings.ActiveAccel,
-                Settings.ActiveSettings.baseSettings);
+            AccelCharts.Calculate(Settings.ActiveAccel, Settings.ActiveProfile);
             AccelCharts.Bind();
         }
 
-        public void UpdateShownActiveValues(DriverSettings args)
+        public void UpdateShownActiveValues(Profile args)
         {
             AccelForm.ResetAutoScroll();
             AccelCharts.ShowActive(args);
@@ -207,7 +203,7 @@ namespace grapher
         private void SetupButtons()
         {
             WriteButton.Top = Constants.SensitivityChartAloneHeight - Constants.ButtonVerticalOffset;
-
+            
             ResetButton.Appearance = Appearance.Button;
             ResetButton.FlatStyle = FlatStyle.System;
             ResetButton.TextAlign = ContentAlignment.MiddleCenter;
@@ -243,7 +239,7 @@ namespace grapher
         private void ResetDriverEventHandler(object sender, EventArgs e)
         {
             ButtonDelay(ResetButton);
-            Settings.DisableDriver();
+            Settings.ResetDriver();
             RefreshActive();
         }
 
@@ -251,10 +247,12 @@ namespace grapher
         {
             ButtonTimer.Stop();
             SetButtonDefaults();
+            DeviceMenuItem.Enabled = true;
         }
 
         private void StartButtonTimer()
         {
+            DeviceMenuItem.Enabled = false;
             ButtonTimer.Interval = ButtonTimerInterval;
             ButtonTimer.Start();
         }
@@ -277,6 +275,18 @@ namespace grapher
         {
             AccelCharts.DrawLastMovement();
             MouseWatcher.UpdateLastMove();
+        }
+
+        private void DeviceMenuItemClick(object sender, EventArgs e)
+        {
+            using (var devMenu = new DeviceMenuForm(Settings))
+            {
+                if (devMenu.ShowDialog() == DialogResult.OK)
+                {
+                    Settings.Submit(devMenu.defaultConfig, devMenu.Items);
+                    UpdateActiveSettingsFromFields();
+                }
+            }
         }
 
         #endregion Methods

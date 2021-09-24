@@ -2,6 +2,7 @@
 using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
+using grapher.Models.Options.Cap;
 using grapher.Models.Options.Directionality;
 using grapher.Models.Options.LUT;
 using grapher.Models.Serialized;
@@ -17,7 +18,6 @@ namespace grapher.Models
 
         public static AccelGUI Construct(
             RawAcceleration form,
-            ManagedAccel activeAccel,
             Chart accelerationChart,
             Chart accelerationChartY,
             Chart velocityChart,
@@ -28,13 +28,17 @@ namespace grapher.Models
             ComboBox accelTypeDropY,
             ComboBox lutApplyDropdownX,
             ComboBox lutApplyDropdownY,
+            ComboBox capTypeDropdownXClassic,
+            ComboBox capTypeDropdownYClassic,
+            ComboBox capTypeDropdownXPower,
+            ComboBox capTypeDropdownYPower,
             Button writeButton,
             ButtonBase toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem showLastMouseMoveMenuItem,
             ToolStripMenuItem streamingModeToolStripMenuItem,
             ToolStripMenuItem autoWriteMenuItem,
-            ToolStripMenuItem useSpecificDeviceMenuItem,
+            ToolStripMenuItem deviceMenuItem,
             ToolStripMenuItem scaleMenuItem,
             ToolStripTextBox dpiTextBox,
             ToolStripTextBox pollRateTextBox,
@@ -42,12 +46,22 @@ namespace grapher.Models
             TextBox sensitivityBoxX,
             TextBox sensitivityBoxY,
             TextBox rotationBox,
-            TextBox weightBoxX,
-            TextBox weightBoxY,
-            TextBox capBoxX,
-            TextBox capBoxY,
-            TextBox offsetBoxX,
-            TextBox offsetBoxY,
+            TextBox inCapBoxXClassic,
+            TextBox inCapBoxYClassic,
+            TextBox outCapBoxXClassic,
+            TextBox outCapBoxYClassic,
+            TextBox inCapBoxXPower,
+            TextBox inCapBoxYPower,
+            TextBox outCapBoxXPower,
+            TextBox outCapBoxYPower,
+            TextBox inputJumpBoxX,
+            TextBox inputJumpBoxY,
+            TextBox outputJumpBoxX,
+            TextBox outputJumpBoxY,
+            TextBox inputOffsetBoxX,
+            TextBox inputOffsetBoxY,
+            TextBox outputOffsetBoxX,
+            TextBox outputOffsetBoxY,
             TextBox accelerationBoxX,
             TextBox accelerationBoxY,
             TextBox decayRateBoxX,
@@ -84,13 +98,28 @@ namespace grapher.Models
             RichTextBox yLutPointsBox,
             Label lockXYLabel,
             Label sensitivityLabel,
+            Label yxRatioLabel,
             Label rotationLabel,
-            Label weightLabelX,
-            Label weightLabelY,
-            Label capLabelX,
-            Label capLabelY,
-            Label offsetLabelX,
-            Label offsetLabelY,
+            Label inCapLabelXClassic,
+            Label inCapLabelYClassic,
+            Label outCapLabelXClassic,
+            Label outCapLabelYClassic,
+            Label capTypeLabelXClassic,
+            Label capTypeLabelYClassic,
+            Label inCapLabelXPower,
+            Label inCapLabelYPower,
+            Label outCapLabelXPower,
+            Label outCapLabelYPower,
+            Label capTypeLabelXPower,
+            Label capTypeLabelYPower,
+            Label inputJumpLabelX,
+            Label inputJumpLabelY,
+            Label outputJumpLabelX,
+            Label outputJumpLabelY,
+            Label inputOffsetLabelX,
+            Label inputOffsetLabelY,
+            Label outputOffsetLabelX,
+            Label outputOffsetLabelY,
             Label constantOneLabelX,
             Label constantOneLabelY,
             Label decayRateLabelX,
@@ -113,15 +142,29 @@ namespace grapher.Models
             Label constantThreeLabelY,
             Label activeValueTitleX,
             Label activeValueTitleY,
-            Label sensitivityActiveXLabel,
-            Label sensitivityActiveYLabel,
+            Label sensitivityActiveLabel,
+            Label yxRatioActiveLabel,
             Label rotationActiveLabel,
-            Label weightActiveXLabel,
-            Label weightActiveYLabel,
-            Label capActiveXLabel,
-            Label capActiveYLabel,
-            Label offsetActiveLabelX,
-            Label offsetActiveLabelY,
+            Label inCapActiveXLabelClassic,
+            Label inCapActiveYLabelClassic,
+            Label outCapActiveXLabelClassic,
+            Label outCapActiveYLabelClassic,
+            Label capTypeActiveXLabelClassic,
+            Label capTypeActiveYLabelClassic,
+            Label inCapActiveXLabelPower,
+            Label inCapActiveYLabelPower,
+            Label outCapActiveXLabelPower,
+            Label outCapActiveYLabelPower,
+            Label capTypeActiveXLabelPower,
+            Label capTypeActiveYLabelPower,
+            Label inputJumpActiveLabelX,
+            Label inputJumpActiveLabelY,
+            Label outputJumpActiveLabelX,
+            Label outputJumpActiveLabelY,
+            Label inputOffsetActiveLabelX,
+            Label inputOffsetActiveLabelY,
+            Label outputOffsetActiveLabelX,
+            Label outputOffsetActiveLabelY,
             Label accelerationActiveLabelX,
             Label accelerationActiveLabelY,
             Label decayRateActiveLabelX,
@@ -182,17 +225,26 @@ namespace grapher.Models
                                 writeButton,
                                 accelCalculator);
 
-            var sensitivity = new OptionXY(
+            var sensitivity = new Option(
                 sensitivityBoxX,
-                sensitivityBoxY,
-                sensXYLock,
                 form,
                 1,
                 sensitivityLabel,
-                new ActiveValueLabelXY(
-                    new ActiveValueLabel(sensitivityActiveXLabel, activeValueTitleX),
-                    new ActiveValueLabel(sensitivityActiveYLabel, activeValueTitleX)),
+                0,
+                new ActiveValueLabel(sensitivityActiveLabel, activeValueTitleX),
                 "Sens Multiplier");
+
+            var yxRatio = new LockableOption(
+                new Option(
+                    sensitivityBoxY,
+                    form,
+                    1,
+                    yxRatioLabel,
+                    0,
+                    new ActiveValueLabel(yxRatioActiveLabel, activeValueTitleX),
+                    "Y/X Ratio"),
+                sensXYLock,
+                1);
 
             var rotation = new Option(
                 rotationBox,
@@ -207,58 +259,76 @@ namespace grapher.Models
 
             var directionalityLeft = directionalityPanel.Left;
 
-            var weightX = new Option(
-                weightBoxX,
+            var inputJumpX = new Option(
+                inputJumpBoxX,
                 form,
-                1,
-                weightLabelX,
                 0,
-                new ActiveValueLabel(weightActiveXLabel, activeValueTitleX),
-                "Weight");
+                inputJumpLabelX,
+                0,
+                new ActiveValueLabel(inputJumpActiveLabelX, activeValueTitleX),
+                "Jump");
 
-            var weightY = new Option(
-                weightBoxY,
+            var inputJumpY = new Option(
+                inputJumpBoxY,
                 form,
-                1,
-                weightLabelY,
+                0,
+                inputJumpLabelY,
                 optionSetYLeft,
-                new ActiveValueLabel(weightActiveYLabel, activeValueTitleY),
-                "Weight");
+                new ActiveValueLabel(inputJumpActiveLabelY, activeValueTitleY),
+                "Jump");
 
-            var capX = new Option(
-                capBoxX,
+            var outputJumpX = new Option(
+                outputJumpBoxX,
                 form,
                 0,
-                capLabelX,
+                outputJumpLabelX,
                 0,
-                new ActiveValueLabel(capActiveXLabel, activeValueTitleX),
-                "Cap");
+                new ActiveValueLabel(outputJumpActiveLabelX, activeValueTitleX),
+                "Jump");
 
-            var capY = new Option(
-                capBoxY,
+            var outputJumpY = new Option(
+                outputJumpBoxY,
                 form,
                 0,
-                capLabelY,
+                outputJumpLabelY,
                 optionSetYLeft,
-                new ActiveValueLabel(capActiveYLabel, activeValueTitleY),
-                "Cap");
+                new ActiveValueLabel(outputJumpActiveLabelY, activeValueTitleY),
+                "Jump");
 
-            var offsetX = new Option(
-                offsetBoxX,
+            var inputOffsetX = new Option(
+                inputOffsetBoxX,
                 form,
                 0,
-                offsetLabelX,
+                inputOffsetLabelX,
                 0,
-                new ActiveValueLabel(offsetActiveLabelX, activeValueTitleX),
+                new ActiveValueLabel(inputOffsetActiveLabelX, activeValueTitleX),
                 "Offset");
 
-            var offsetY = new Option(
-                offsetBoxY,
+            var inputOffsetY = new Option(
+                inputOffsetBoxY,
                 form,
                 0,
-                offsetLabelY,
+                inputOffsetLabelY,
                 optionSetYLeft,
-                new ActiveValueLabel(offsetActiveLabelY, activeValueTitleY),
+                new ActiveValueLabel(inputOffsetActiveLabelY, activeValueTitleY),
+                "Offset");
+
+            var outputOffsetX = new Option(
+                outputOffsetBoxX,
+                form,
+                0,
+                outputOffsetLabelX,
+                0,
+                new ActiveValueLabel(outputOffsetActiveLabelX, activeValueTitleX),
+                "Offset");
+
+            var outputOffsetY = new Option(
+                outputOffsetBoxY,
+                form,
+                0,
+                outputOffsetLabelY,
+                optionSetYLeft,
+                new ActiveValueLabel(outputOffsetActiveLabelY, activeValueTitleY),
                 "Offset");
 
             var accelerationX = new Option(
@@ -369,6 +439,114 @@ namespace grapher.Models
                 new ActiveValueLabel(midpointActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
+            var inCapXClassic = new Option(
+                inCapBoxXClassic,
+                form,
+                0,
+                inCapLabelXClassic,
+                0,
+                new ActiveValueLabel(inCapActiveXLabelClassic, activeValueTitleX),
+                "Cap: Input");
+
+            var inCapYClassic = new Option(
+                inCapBoxYClassic,
+                form,
+                0,
+                inCapLabelYClassic,
+                optionSetYLeft,
+                new ActiveValueLabel(inCapActiveYLabelClassic, activeValueTitleY),
+                "Cap");
+
+            var outCapXClassic = new Option(
+                outCapBoxXClassic,
+                form,
+                0,
+                outCapLabelXClassic,
+                0,
+                new ActiveValueLabel(outCapActiveXLabelClassic, activeValueTitleX),
+                "Cap: Input");
+
+            var outCapYClassic = new Option(
+                outCapBoxYClassic,
+                form,
+                0,
+                outCapLabelYClassic,
+                optionSetYLeft,
+                new ActiveValueLabel(outCapActiveYLabelClassic, activeValueTitleY),
+                "Cap");
+
+            var capTypeXClassic = new CapTypeOptions(
+                capTypeLabelXClassic,
+                capTypeDropdownXClassic,
+                new ActiveValueLabel(capTypeActiveXLabelClassic, activeValueTitleX),
+                0);
+
+            var capTypeYClassic = new CapTypeOptions(
+                capTypeLabelYClassic,
+                capTypeDropdownYClassic,
+                new ActiveValueLabel(capTypeActiveYLabelClassic, activeValueTitleY),
+                optionSetYLeft);
+
+            var classicCapOptionsX = new CapOptions(
+                capTypeXClassic,
+                inCapXClassic,
+                outCapXClassic,
+                accelerationX);
+
+            var classicCapOptionsY = new CapOptions(
+                capTypeYClassic,
+                inCapYClassic,
+                outCapYClassic,
+                accelerationY);
+
+            var inCapXPower = new Option(
+                inCapBoxXPower,
+                form,
+                0,
+                inCapLabelXPower,
+                0,
+                new ActiveValueLabel(inCapActiveXLabelPower, activeValueTitleX),
+                "Cap: Input");
+
+            var inCapYPower = new Option(
+                inCapBoxYPower,
+                form,
+                0,
+                inCapLabelYPower,
+                optionSetYLeft,
+                new ActiveValueLabel(inCapActiveYLabelPower, activeValueTitleY),
+                "Cap");
+
+            var outCapXPower = new Option(
+                outCapBoxXPower,
+                form,
+                0,
+                outCapLabelXPower,
+                0,
+                new ActiveValueLabel(outCapActiveXLabelPower, activeValueTitleX),
+                "Cap: Input");
+
+            var outCapYPower = new Option(
+                outCapBoxYPower,
+                form,
+                0,
+                outCapLabelYPower,
+                optionSetYLeft,
+                new ActiveValueLabel(outCapActiveYLabelPower, activeValueTitleY),
+                "Cap");
+
+            var capTypeXPower = new CapTypeOptions(
+                capTypeLabelXPower,
+                capTypeDropdownXPower,
+                new ActiveValueLabel(capTypeActiveXLabelPower, activeValueTitleX),
+                0);
+
+            var capTypeYPower = new CapTypeOptions(
+                capTypeLabelYPower,
+                capTypeDropdownYPower,
+                new ActiveValueLabel(capTypeActiveYLabelPower, activeValueTitleY),
+                optionSetYLeft);
+
             var lpNorm = new Option(
                 new Field(lpNormBox, form, 2),
                 lpNormLabel,
@@ -409,17 +587,34 @@ namespace grapher.Models
                                             gainSwitchY,
                                             new ActiveValueLabel(gainSwitchActiveLabelY, activeValueTitleY));
 
+            var powerCapOptionsX = new CapOptions(
+                capTypeXPower,
+                inCapXPower,
+                outCapXPower,
+                scaleX,
+                outputOffsetX,
+                gainSwitchOptionX);
+
+            var powerCapOptionsY = new CapOptions(
+                capTypeYPower,
+                inCapYPower,
+                outCapYPower,
+                scaleY,
+                outputOffsetY,
+                gainSwitchOptionY);
+
             var accelerationOptionsX = new AccelTypeOptions(
                 accelTypeDropX,
                 gainSwitchOptionX,
-                accelerationX,
+                classicCapOptionsX,
+                powerCapOptionsX,
+                outputJumpX,
+                outputOffsetX,
                 decayRateX,
                 growthRateX,
                 smoothX,
-                scaleX,
-                capX,
-                weightX,
-                offsetX,
+                inputJumpX,
+                inputOffsetX,
                 limitX,
                 powerClassicX,
                 exponentX,
@@ -436,14 +631,15 @@ namespace grapher.Models
             var accelerationOptionsY = new AccelTypeOptions(
                 accelTypeDropY,
                 gainSwitchOptionY,
-                accelerationY,
+                classicCapOptionsY,
+                powerCapOptionsY,
+                outputJumpY,
+                outputOffsetY,
                 decayRateY,
                 growthRateY,
                 smoothY,
-                scaleY,
-                capY,
-                weightY,
-                offsetY,
+                inputJumpY,
+                inputOffsetY,
                 limitY,
                 powerClassicY,
                 exponentY,
@@ -488,21 +684,18 @@ namespace grapher.Models
                 optionsSetY,
                 directionalOptions,
                 sensitivity,
+                yxRatio,
                 rotation,
                 lockXYLabel,
                 accelCharts);
 
-            var deviceIdManager = new DeviceIDManager(useSpecificDeviceMenuItem);
-
             var settings = new SettingsManager(
-                activeAccel,
                 accelCalculator.DPI,
                 accelCalculator.PollRate,
                 autoWriteMenuItem,
                 showLastMouseMoveMenuItem,
                 showVelocityGainToolStripMenuItem,
-                streamingModeToolStripMenuItem,
-                deviceIdManager);
+                streamingModeToolStripMenuItem);
 
             var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
 
@@ -516,7 +709,7 @@ namespace grapher.Models
                 toggleButton,
                 mouseWatcher,
                 scaleMenuItem,
-                deviceIdManager);
+                deviceMenuItem);
         }
 
         #endregion Methods

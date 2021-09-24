@@ -1,10 +1,8 @@
 ﻿using grapher.Layouts;
 using grapher.Models.Options;
+using grapher.Models.Options.Cap;
 using grapher.Models.Options.LUT;
-using grapher.Models.Serialized;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace grapher
@@ -21,7 +19,6 @@ namespace grapher
         public static readonly LayoutBase Power = new PowerLayout();
         public static readonly LayoutBase LUT = new LUTLayout();
         public static readonly LayoutBase Off = new OffLayout();
-        public static readonly LayoutBase Unsupported = new UnsupportedLayout();
 
         #endregion Fields
 
@@ -30,14 +27,15 @@ namespace grapher
         public AccelTypeOptions(
             ComboBox accelDropdown,
             CheckBoxOption gainSwitch,
-            Option acceleration,
+            CapOptions classicCap,
+            CapOptions powerCap,
+            Option outputJump,
+            Option outputOffset,
             Option decayRate,
             Option growthRate,
             Option smooth,
-            Option scale,
-            Option cap,
-            Option weight,
-            Option offset,
+            Option inputJump,
+            Option inputOffset,
             Option limit,
             Option powerClassic,
             Option exponent,
@@ -66,17 +64,18 @@ namespace grapher
             AccelDropdown.SelectedIndexChanged += new System.EventHandler(OnIndexChanged);
 
             GainSwitch = gainSwitch;
-            Acceleration = acceleration;
             DecayRate = decayRate;
             GrowthRate = growthRate;
             Smooth = smooth;
-            Scale = scale;
-            Cap = cap;
-            Weight = weight;
-            Offset = offset;
+            ClassicCap = classicCap;
+            PowerCap = powerCap;
+            InputJump = inputJump;
+            InputOffset = inputOffset;
             Limit = limit;
             PowerClassic = powerClassic;
             Exponent = exponent;
+            OutputJump = outputJump;
+            OutputOffset = outputOffset;
             Midpoint = midpoint;
             WriteButton = writeButton;
             AccelTypeActiveValue = accelTypeActiveValue;
@@ -86,7 +85,7 @@ namespace grapher
 
             AccelTypeActiveValue.Left = AccelDropdown.Left + AccelDropdown.Width;
             AccelTypeActiveValue.Height = AccelDropdown.Height;
-            GainSwitch.Left = Acceleration.Field.Left;
+            GainSwitch.Left = DecayRate.Field.Left;
 
             LutPanel.Left = AccelDropdown.Left;
             LutPanel.Width = AccelDropdown.Width + AccelTypeActiveValue.Width;
@@ -109,21 +108,23 @@ namespace grapher
 
         public ActiveValueLabel AccelTypeActiveValue { get; }
 
-        public Option Acceleration { get; }
-
         public Option DecayRate { get; }
 
         public Option GrowthRate { get; }
 
         public Option Smooth { get; }
 
-        public Option Scale { get; }
+        public CapOptions ClassicCap { get; }
 
-        public Option Cap { get; }
+        public CapOptions PowerCap { get; }
 
-        public Option Weight { get; }
+        public Option InputJump { get; }
 
-        public Option Offset { get; }
+        public Option OutputJump { get; }
+
+        public Option InputOffset { get; }
+
+        public Option OutputOffset { get; }
 
         public Option Limit { get; }
 
@@ -229,14 +230,15 @@ namespace grapher
             AccelTypeActiveValue.Hide();
 
             GainSwitch.Hide();
-            Acceleration.Hide();
             DecayRate.Hide();
             GrowthRate.Hide();
             Smooth.Hide();
-            Scale.Hide();
-            Cap.Hide();
-            Weight.Hide();
-            Offset.Hide();
+            ClassicCap.Hide();
+            PowerCap.Hide();
+            OutputOffset.Hide();
+            InputOffset.Hide();
+            InputJump.Hide();
+            OutputJump.Hide();
             Limit.Hide();
             PowerClassic.Hide();
             Exponent.Hide();
@@ -262,21 +264,30 @@ namespace grapher
         {
             AccelerationType = AccelTypeFromSettings(ref args);
             AccelTypeActiveValue.SetValue(AccelerationType.ActiveName);
-            GainSwitch.SetActiveValue(args.legacy);
-            Weight.SetActiveValue(args.weight);
-            Cap.SetActiveValue(args.cap);
-            Offset.SetActiveValue(args.offset);
-            Acceleration.SetActiveValue(args.accelClassic);
+            GainSwitch.SetActiveValue(args.gain);
+            ClassicCap.SetActiveValues(
+                args.acceleration,
+                args.cap.x,
+                args.cap.y,
+                args.capMode);
+            PowerCap.SetActiveValues(
+                args.scale,
+                args.cap.x,
+                args.cap.y,
+                args.capMode);
+            InputJump.SetActiveValue(args.cap.x);
+            OutputJump.SetActiveValue(args.cap.y);
+            OutputOffset.SetActiveValue(args.outputOffset);
+            InputOffset.SetActiveValue(args.inputOffset);
             DecayRate.SetActiveValue(args.decayRate);
             GrowthRate.SetActiveValue(args.growthRate);
             Smooth.SetActiveValue(args.smooth);
-            Scale.SetActiveValue(args.scale);
             Limit.SetActiveValue((args.mode == AccelMode.motivity) ? args.motivity : args.limit);
-            PowerClassic.SetActiveValue(args.power);
-            Exponent.SetActiveValue(args.exponent);
+            PowerClassic.SetActiveValue(args.exponentClassic);
+            Exponent.SetActiveValue(args.exponentPower);
             Midpoint.SetActiveValue(args.midpoint);
-            LutPanel.SetActiveValues(args.tableData.points, args.tableData.length);
-            LutApply.SetActiveValue(args.tableData.velocity);
+            LutPanel.SetActiveValues(args.data, args.length, args.mode);
+            LutApply.SetActiveValue(args.gain);
         }
 
         public void ShowFull()
@@ -286,8 +297,8 @@ namespace grapher
                 AccelDropdown.Text = Constants.AccelDropDownDefaultFullText;
             }
 
-            Left = Acceleration.Left + Constants.DropDownLeftSeparation;
-            Width = Acceleration.Width - Constants.DropDownLeftSeparation;
+            Left = DecayRate.Left + Constants.DropDownLeftSeparation;
+            Width = DecayRate.Width - Constants.DropDownLeftSeparation;
 
             LutText.Expand();
             HandleLUTOptionsOnResize();
@@ -300,25 +311,38 @@ namespace grapher
                 AccelDropdown.Text = Constants.AccelDropDownDefaultShortText;
             }
 
-            Left = Acceleration.Field.Left;
-            Width = Acceleration.Field.Width;
+            Left = DecayRate.Field.Left;
+            Width = DecayRate.Field.Width;
 
             LutText.Shorten();
         }
 
         public void SetArgs(ref AccelArgs args)
         {
-            if (AccelerationType == Unsupported) throw new NotImplementedException();
-
             args.mode = AccelerationType.Mode;
-            args.legacy = !GainSwitch.CheckBox.Checked;
+            args.gain = LutPanel.Visible ?
+                LutApply.ApplyType == LutApplyOptions.LutApplyType.Velocity :
+                GainSwitch.CheckBox.Checked;
 
-            if (Acceleration.Visible) args.accelClassic = Acceleration.Field.Data;
             if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
             if (GrowthRate.Visible) args.growthRate = GrowthRate.Field.Data;
             if (Smooth.Visible) args.smooth = Smooth.Field.Data;
-            if (Scale.Visible) args.scale = Scale.Field.Data;
-            if (Cap.Visible) args.cap = Cap.Field.Data;
+            if (ClassicCap.Visible)
+            {
+                args.acceleration = ClassicCap.Slope.Field.Data;
+                args.cap.x = ClassicCap.In.Field.Data;
+                args.cap.y = ClassicCap.Out.Field.Data;
+                args.capMode = ClassicCap.CapTypeOptions.GetSelectedCapMode();
+            }
+            if (PowerCap.Visible)
+            {
+                args.scale = PowerCap.Slope.Field.Data;
+                args.cap.x = PowerCap.In.Field.Data;
+                args.cap.y = PowerCap.Out.Field.Data;
+                args.capMode = PowerCap.CapTypeOptions.GetSelectedCapMode();
+            }
+            if (InputJump.Visible) args.cap.x = InputJump.Field.Data;
+            if (OutputJump.Visible) args.cap.y = OutputJump.Field.Data;
             if (Limit.Visible)
             {
                 if (args.mode == AccelMode.motivity)
@@ -328,34 +352,43 @@ namespace grapher
                 else
                 {
                     args.limit = Limit.Field.Data;
-                }   
+                }
             }
-            if (PowerClassic.Visible) args.power = PowerClassic.Field.Data;
-            if (Exponent.Visible)args.exponent = Exponent.Field.Data;
-            if (Offset.Visible) args.offset = Offset.Field.Data;
+            if (PowerClassic.Visible) args.exponentClassic = PowerClassic.Field.Data;
+            if (Exponent.Visible) args.exponentPower = Exponent.Field.Data;
+            if (InputOffset.Visible) args.inputOffset = InputOffset.Field.Data;
+            if (OutputOffset.Visible) args.outputOffset = OutputOffset.Field.Data;
+
             if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
-            if (Weight.Visible) args.weight = Weight.Field.Data;
             if (LutPanel.Visible)
             {
                 (var points, var length) = LutPanel.GetPoints();
-                args.tableData.points = points;
-                args.tableData.length = length;
+                args.length = length * 2;
+
+                for (int i = 0; i < length; i++)
+                {
+                    ref var p = ref points[i];
+                    var data_idx = i * 2;
+                    args.data[data_idx] = p.x;
+                    args.data[data_idx + 1] = p.y;
+                }
             }
-            if (LutApply.Visible) args.tableData.velocity = LutApply.ApplyType == LutApplyOptions.LutApplyType.Velocity;
+
         }
 
         public override void AlignActiveValues()
         {
             AccelTypeActiveValue.Align();
             GainSwitch.AlignActiveValues();
-            Acceleration.AlignActiveValues();
             DecayRate.AlignActiveValues();
             GrowthRate.AlignActiveValues();
             Smooth.AlignActiveValues();
-            Scale.AlignActiveValues();
-            Cap.AlignActiveValues();
-            Offset.AlignActiveValues();
-            Weight.AlignActiveValues();
+            ClassicCap.AlignActiveValues();
+            PowerCap.AlignActiveValues();
+            OutputOffset.AlignActiveValues();
+            InputOffset.AlignActiveValues();
+            OutputJump.AlignActiveValues();
+            InputJump.AlignActiveValues();
             Limit.AlignActiveValues();
             PowerClassic.AlignActiveValues();
             Exponent.AlignActiveValues();
@@ -367,7 +400,7 @@ namespace grapher
         {
             LutText.Left = AccelDropdown.Left;
             LutPanel.Left = GainSwitch.Left - 100;
-            LutPanel.Width = Acceleration.ActiveValueLabel.CenteringLabel.Right - LutPanel.Left;
+            LutPanel.Width = DecayRate.ActiveValueLabel.CenteringLabel.Right - LutPanel.Left;
             LutApply.Left = LutPanel.Left;
             LutApply.Width = AccelDropdown.Right - LutPanel.Left;
         }
@@ -387,17 +420,18 @@ namespace grapher
 
             AccelerationType.Layout(
                 GainSwitch,
-                Acceleration,
+                ClassicCap,
+                PowerCap,
                 DecayRate,
                 GrowthRate,
                 Smooth,
-                Scale,
-                Cap,
-                Weight,
-                Offset,
+                InputJump,
+                InputOffset,
                 Limit,
                 PowerClassic,
                 Exponent,
+                OutputJump,
+                OutputOffset,
                 Midpoint,
                 LutText,
                 LutPanel,
@@ -407,19 +441,9 @@ namespace grapher
 
         private LayoutBase AccelTypeFromSettings(ref AccelArgs args)
         { 
-            if (args.spacedTableArgs.mode != SpacedTableMode.off)
-            {
-                if (!AccelDropdown.Items.Contains(Unsupported))
-                {
-                    AccelDropdown.Items.Add(Unsupported);
-                }
-
-                return Unsupported;
-            }
-
             switch (args.mode)
             {
-                case AccelMode.classic:  return (args.power == 2) ? Linear : Classic;
+                case AccelMode.classic:  return (args.exponentClassic == 2) ? Linear : Classic;
                 case AccelMode.jump:     return Jump;
                 case AccelMode.natural:  return Natural;
                 case AccelMode.motivity: return Motivity;

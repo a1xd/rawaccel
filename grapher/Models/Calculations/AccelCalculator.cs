@@ -107,7 +107,7 @@ namespace grapher.Models.Calculations
                     continue;
                 }
 
-                var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
+                var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, 1, simulatedInputDatum.time);
                 var outMagnitude = DecimalCheck(Velocity(output.Item1, output.Item2, simulatedInputDatum.time));
                 var inDiff = Math.Round(simulatedInputDatum.velocity - lastInputMagnitude, 5);
                 var outDiff = Math.Round(outMagnitude - lastOutputMagnitude, 5);
@@ -193,7 +193,7 @@ namespace grapher.Models.Calculations
             data.MinGain = minSlope;
         }
 
-        public void CalculateDirectional(AccelChartData[] dataByAngle, ManagedAccel accel, DriverSettings settings, IReadOnlyCollection<IReadOnlyCollection<SimulatedMouseInput>> simulatedInputData)
+        public void CalculateDirectional(AccelChartData[] dataByAngle, ManagedAccel accel, Profile settings, IReadOnlyCollection<IReadOnlyCollection<SimulatedMouseInput>> simulatedInputData)
         {
             double maxRatio = 0.0;
             double minRatio = Double.MaxValue;
@@ -219,7 +219,7 @@ namespace grapher.Models.Calculations
                         continue;
                     }
 
-                    var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, simulatedInputDatum.time);
+                    var output = accel.Accelerate(simulatedInputDatum.x, simulatedInputDatum.y, 1, simulatedInputDatum.time);
                     var magnitude = DecimalCheck(Velocity(output.Item1, output.Item2, simulatedInputDatum.time));
                     var inDiff = Math.Round(simulatedInputDatum.velocity - lastInputMagnitude, 5);
                     var outDiff = Math.Round(magnitude - lastOutputMagnitude, 5);
@@ -246,7 +246,7 @@ namespace grapher.Models.Calculations
                     }
 
                     var ratio = DecimalCheck(magnitude / simulatedInputDatum.velocity);
-                    var slope = DecimalCheck(inDiff > 0 ? outDiff / inDiff : settings.sensitivity.x);
+                    var slope = DecimalCheck(inDiff > 0 ? outDiff / inDiff : settings.sensitivity);
 
                     bool indexToMeasureExtrema = (angleIndex == 0) || (angleIndex == (Constants.AngleDivisions - 1));
                     
@@ -477,16 +477,16 @@ namespace grapher.Models.Calculations
             return Magnitude(x, y) / time;
         }
 
-        public static bool ShouldStripSens(ref DriverSettings settings) =>
-            settings.sensitivity.x != settings.sensitivity.y;
+        public static bool ShouldStripSens(Profile settings) =>
+            settings.yxSensRatio != 1;
 
-        public static bool ShouldStripRot(ref DriverSettings settings) =>
+        public static bool ShouldStripRot(Profile settings) =>
             settings.rotation > 0;
 
-        public static (double, double) GetSens(ref DriverSettings settings) =>
-            (settings.sensitivity.x, settings.sensitivity.y);
+        public static (double, double) GetSens(Profile settings) =>
+            (settings.sensitivity, settings.sensitivity * settings.yxSensRatio);
 
-        public static (double, double) GetRotVector(ref DriverSettings settings) =>
+        public static (double, double) GetRotVector(Profile settings) =>
             (Math.Cos(settings.rotation), Math.Sin(settings.rotation));
 
         public static (double, double) StripSens(double outputX, double outputY, double sensitivityX, double sensitivityY) =>

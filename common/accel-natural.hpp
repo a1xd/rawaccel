@@ -2,8 +2,6 @@
 
 #include "rawaccel-base.hpp"
 
-#include <math.h>
-
 namespace rawaccel {
 
 	/// <summary> Struct to hold "natural" (vanishing difference) acceleration implementation. </summary>
@@ -13,16 +11,20 @@ namespace rawaccel {
 		double limit;
 
 		natural_base(const accel_args& args) :
-			offset(args.offset),
+			offset(args.input_offset),
 			limit(args.limit - 1)
 		{
 			accel = args.decay_rate / fabs(limit);
 		}
+
 	};
 
-	struct natural_legacy : natural_base {
+	template<bool Gain> struct natural;
 
-		double operator()(double x) const 
+	template<>
+	struct natural<LEGACY> : natural_base {
+
+		double operator()(double x, const accel_args&) const
 		{
 			if (x <= offset) return 1;
 
@@ -34,10 +36,11 @@ namespace rawaccel {
 		using natural_base::natural_base;
 	};
 
-	struct natural : natural_base {
+	template<>
+	struct natural<GAIN> : natural_base {
 		double constant;
 
-		double operator()(double x) const 
+		double operator()(double x, const accel_args&) const
 		{
 			if (x <= offset) return 1;
 
@@ -50,6 +53,6 @@ namespace rawaccel {
 		natural(const accel_args& args) :
 			natural_base(args),
 			constant(-limit / accel) {}
-	};
 
+	};
 }

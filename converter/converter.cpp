@@ -1,4 +1,4 @@
-#include <rawaccel-base.hpp>
+#include <rawaccel.hpp>
 
 #include <array>
 #include <charconv>
@@ -120,9 +120,9 @@ ra::accel_args convert_natural(const ia_settings_t& ia_settings, bool legacy) {
 
     args.limit = 1 + std::abs(cap - sens) / sens;
     args.decay_rate = accel / sens;
-    args.offset = get("Offset").value_or(0);
+    args.input_offset = get("Offset").value_or(0);
     args.mode = ra::accel_mode::natural;
-    args.legacy = legacy;
+    args.gain = !legacy;
 
     return args;
 }
@@ -138,12 +138,13 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
     ra::accel_args args;
 
     double accel_b = std::pow(accel, power - 1) / sens;
-    args.accel_classic = std::pow(accel_b, 1 / (power - 1));
-    args.cap = cap / sens;
-    args.power = power;
-    args.offset = get("Offset").value_or(0);
+    args.acceleration = std::pow(accel_b, 1 / (power - 1));
+    args.cap.y = cap / sens;
+    args.exponent_classic = power;
+    args.input_offset = get("Offset").value_or(0);
     args.mode = ra::accel_mode::classic;
-    args.legacy = legacy;
+    args.cap_mode = ra::cap_mode::out;
+    args.gain = !legacy;
 
     return args;
 }
@@ -151,27 +152,25 @@ ra::accel_args convert_quake(const ia_settings_t& ia_settings, bool legacy) {
 bool try_convert(const ia_settings_t& ia_settings) {
     auto get = make_extractor(ia_settings);
 
-    ra::settings& ra_settings = *(new ra::settings());
+    auto& prof = *(new ra::profile());
 
     vec2d prescale = { get("Pre-ScaleX").value_or(1), get("Pre-ScaleY").value_or(1) };
 
-    ra_settings.dom_args.domain_weights = prescale;
-    ra_settings.degrees_rotation = -1 * get("Angle", "AngleAdjustment").value_or(0);
-    ra_settings.degrees_snap = get("AngleSnapping").value_or(0);
-    ra_settings.sens = {
-        get("Post-ScaleX").value_or(1) * prescale.x,
-        get("Post-ScaleY").value_or(1) * prescale.y
-    };
+    prof.domain_weights = prescale;
+    prof.degrees_rotation = -1 * get("Angle", "AngleAdjustment").value_or(0);
+    prof.sensitivity = get("Post-ScaleX").value_or(1) * prescale.x;
+    prof.yx_sens_ratio = get("Post-ScaleY").value_or(1) * prescale.y / prof.sensitivity;
+    prof.degrees_snap = get("AngleSnapping").value_or(0);
 
     double mode = get("AccelMode").value_or(IA_QL);
 
     switch (static_cast<IA_MODES_ENUM>(mode)) {
     case IA_QL: {
-        ra_settings.argsv.x = convert_quake(ia_settings, 1);
+        prof.accel_x = convert_quake(ia_settings, 1);
         break;
     }
     case IA_NAT: {
-        ra_settings.argsv.x = convert_natural(ia_settings, 1);
+        prof.accel_x = convert_natural(ia_settings, 1);
         break;
     }
     case IA_LOG: {
@@ -181,16 +180,15 @@ bool try_convert(const ia_settings_t& ia_settings) {
     default: return false;
     }
 
-    DriverSettings^ new_settings = Marshal::PtrToStructure<DriverSettings^>((IntPtr)&ra_settings);
-    SettingsErrors^ errors = gcnew SettingsErrors(new_settings);
+    auto cfg = DriverConfig::FromProfile(Marshal::PtrToStructure<Profile^>(IntPtr(&prof)));
 
-    if (!errors->Empty()) {
+    if (String^ errors = cfg->Errors(); errors) {
         Console::WriteLine("Bad settings: {0}", errors);
         return false;
     }
 
-    bool nat = ra_settings.argsv.x.mode == ra::accel_mode::natural;
-    bool nat_or_capped = nat || ra_settings.argsv.x.cap > 0;
+    bool nat = prof.accel_x.mode == ra::accel_mode::natural;
+    bool nat_or_capped = nat || prof.accel_x.cap.y > 0;
 
     if (nat_or_capped) {
         Console::WriteLine("NOTE:\n"
@@ -198,7 +196,7 @@ bool try_convert(const ia_settings_t& ia_settings) {
             "    To test it out, run rawaccel.exe, check the 'Gain' option, and click 'Apply'.\n");
     }
 
-    if (ra_settings.argsv.x.offset > 0) {
+    if (prof.accel_x.input_offset > 0) {
         Console::WriteLine("NOTE:\n"
             "    Offsets in Raw Accel work a bit differently compared to InterAccel,\n"
             "    the '{0}' parameter may need adjustment to compensate.\n",
@@ -206,11 +204,11 @@ bool try_convert(const ia_settings_t& ia_settings) {
     }
 
     Console::Write("Sending to driver... ");
-    (gcnew ManagedAccel(gcnew ExtendedSettings(new_settings)))->Activate();
+    cfg->Activate();
     Console::WriteLine("done");
 
     Console::Write("Generating settings.json... ");
-    File::WriteAllText("settings.json", RaConvert::Settings(new_settings));
+    File::WriteAllText("settings.json", cfg->ToJSON());
     Console::WriteLine("done");
 
     return true;

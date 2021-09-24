@@ -5,14 +5,14 @@
 namespace rawaccel {
 
 	struct jump_base {
-		static constexpr double smooth_scale = 2 * PI;
+		static constexpr double smooth_scale = 2 * M_PI;
 
 		vec2d step;
 		double smooth_rate;
 
 		// requirements: args.smooth in range [0, 1]
 		jump_base(const accel_args& args) :
-			step({ args.offset, args.cap - 1 })
+			step({ args.cap.x, args.cap.y - 1 })
 		{
 			double rate_inverse = args.smooth * step.x;
 
@@ -43,12 +43,16 @@ namespace rawaccel {
 		{
 			return step.y * (x + log(1 + decay(x)) / smooth_rate);
 		}
+
 	};
 
-	struct jump_legacy : jump_base {
+	template <bool Gain> struct jump;
+
+	template<>
+	struct jump<LEGACY> : jump_base {
 		using jump_base::jump_base;
 
-		double operator()(double x) const
+		double operator()(double x, const accel_args&) const
 		{
 			if (is_smooth()) return smooth(x) + 1;
 			else if (x < step.x) return 1;
@@ -56,14 +60,15 @@ namespace rawaccel {
 		}
 	};
 
-	struct jump : jump_base {
+	template<>
+	struct jump<GAIN> : jump_base {
 		double C;
 
 		jump(const accel_args& args) :
 			jump_base(args),
 			C(-smooth_antideriv(0)) {}
 
-		double operator()(double x) const
+		double operator()(double x, const accel_args&) const
 		{
 			if (x <= 0) return 1;
 
@@ -72,6 +77,7 @@ namespace rawaccel {
 			if (x < step.x) return 1;
 			else return 1 + step.y * (x - step.x) / x;
 		}
+
 	};
 
 }

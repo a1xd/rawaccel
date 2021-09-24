@@ -691,7 +691,9 @@ namespace grapher.Models.Mouse
             AccelCharts = accelCharts;
             SettingsManager = setMngr;
             MouseData = new MouseData();
-            DeviceHandles = new List<IntPtr>();
+
+            LastMoveDisplayFormat = Constants.MouseMoveDefaultFormat;
+            LastMoveNormalized = false;
 
             RAWINPUTDEVICE device = new RAWINPUTDEVICE();
             device.WindowHandle = ContainingForm.Handle;
@@ -722,9 +724,9 @@ namespace grapher.Models.Mouse
 
         private Stopwatch Stopwatch { get; }
 
-        private List<IntPtr> DeviceHandles { get; }
+        private string LastMoveDisplayFormat { get; set; }
 
-        private bool AnyDevice { get; set; }
+        private bool LastMoveNormalized { get; set; }
 
         private double PollTime
         {
@@ -735,20 +737,10 @@ namespace grapher.Models.Mouse
 
         #region Methods
 
-        public void UpdateHandles(string devID)
-        {
-            DeviceHandles.Clear();
-            AnyDevice = string.IsNullOrEmpty(devID);
-            if (!AnyDevice)
-            {
-                RawInputInterop.AddHandlesFromID(devID, DeviceHandles);
-            }
-        }
-
         public void UpdateLastMove()
         {
             MouseData.Get(out var x, out var y);
-            Display.Text = $"Last (x, y): ({x}, {y})";
+            Display.Text = string.Format(LastMoveDisplayFormat, x, y);
         }
 
         public void ReadMouseMove(Message message)
@@ -758,7 +750,25 @@ namespace grapher.Models.Mouse
             _ = GetRawInputData(message.LParam, RawInputCommand.Input, out rawInput, ref size, Marshal.SizeOf(typeof(RAWINPUTHEADER)));
 
             bool relative = !rawInput.Data.Mouse.Flags.HasFlag(RawMouseFlags.MoveAbsolute);
-            bool deviceMatch = AnyDevice || DeviceHandles.Contains(rawInput.Header.Device);
+
+            bool deviceMatch = false;
+            foreach (var (handle, normalized) in SettingsManager.ActiveNormTaggedHandles)
+            {
+                if (handle == rawInput.Header.Device)
+                {
+                    deviceMatch = true;
+
+                    if (normalized != LastMoveNormalized)
+                    {
+                        LastMoveDisplayFormat = normalized ?
+                                                Constants.MouseMoveNormalizedFormat :
+                                                Constants.MouseMoveDefaultFormat;
+                        LastMoveNormalized = normalized;
+                    }
+
+                    break;
+                }
+            }
 
             if (relative && deviceMatch && (rawInput.Data.Mouse.LastX != 0 || rawInput.Data.Mouse.LastY != 0))
             {
@@ -772,8 +782,11 @@ namespace grapher.Models.Mouse
 
                 // strip negative directional multipliers, charts calculated from positive input
 
-                Vec2<double> dirMults = SettingsManager.ActiveSettings.baseSettings
-                    .directionalMultipliers;
+                Vec2<double> dirMults = new Vec2<double>
+                {
+                    x = SettingsManager.ActiveProfile.lrSensRatio,
+                    y = SettingsManager.ActiveProfile.udSensRatio
+                };
 
                 if (dirMults.x > 0 && x < 0)
                 {

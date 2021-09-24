@@ -99,7 +99,7 @@ namespace grapher.Models.Options
             Options.Top = TopAnchor;
         }
 
-        public void SetArgs(ref AccelArgs args)
+        public void SetArgsFromActiveValues(ref AccelArgs args)
         {
             Options.SetArgs(ref args);
         }

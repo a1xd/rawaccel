@@ -2,6 +2,9 @@
 
 namespace grapher.Models.Options
 {
+    /// <summary>
+    /// This is an option type that is just a checkbox.
+    /// </summary>
     public class CheckBoxOption : OptionBase
     {
         public CheckBoxOption(
@@ -99,10 +102,10 @@ namespace grapher.Models.Options
             ActiveValueLabel.Show();
         }
 
-        public void SetActiveValue(bool legacy)
+        public void SetActiveValue(bool gain)
         {
-            CheckBox.Checked = !legacy;
-            var activeValueString = legacy ? "Legacy" : "Gain";
+            CheckBox.Checked = gain;
+            var activeValueString = gain ? "Gain" : "Legacy";
             ActiveValueLabel.SetValue(activeValueString);
         }
     }

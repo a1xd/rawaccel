@@ -5,9 +5,9 @@ Visit the [Releases page](https://github.com/a1xd/rawaccel/releases) and navigat
 
 ## Installation
 - **Prerequisites**
+  * Windows 10
   * Visual C++ 2019 runtime, [download here](https://aka.ms/vs/16/release/vc_redist.x64.exe)
   * .NET Framework 4.7.2+ runtime, [download here](https://dotnet.microsoft.com/download/dotnet-framework/net48)
-  * **For Windows 7 users only** — SHA-2 code signing support (download through Windows Update)
 
 - Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
 
@@ -58,6 +58,7 @@ There are anisotropic settings for whole mode.
 - **Lp Norm**. The distance calculation can be generalized to ((in_x)^p + (in_y)^p)^(1/p)), bringing the calculation into [Lp space](https://en.wikipedia.org/wiki/Lp_space).  
     - p = 2 is then the "real world" value, yielding the pythagorean theorem as the distance calculation.  
     - Increasing p makes distances for diagonal movements (where in_x and in_y are close) smaller, and increases the dominance of the larger of the two in determining the distance.  
+    - As p gets large, the above calculation approaches max(inx, iny). Raw Accel uses this formula when given any p > 64.
     - We recommend almost everyone leave this at 2.  
 
 ![AnisotropyExample](images/anisotropy_example.png)
@@ -68,7 +69,7 @@ With all anisotropic settings considered, the full formula looks like:
 This can be more easily understood as  
 - (out_x, out_y) = (in_x\*sens_x, in_y\*sens_y) \* ((f( domain-weighted lp-space speed) - 1) \* (directional weight) + 1), where f(v) is our sensitivity function
 
-This formula gaurantees the smooth transition from the horizontal to vertical curve and vice versa as the user moves their hand diagonally.
+This formula guarantees the smooth transition from the horizontal to vertical curve and vice versa as the user moves their hand diagonally.
 
 #### ***By Component***  
 In this case, the horizontal components are separated and each is given as input to the sensitivity calculation to multiplied by itself before being recombined at output.
@@ -82,14 +83,21 @@ The authors of this program feel that Whole is the best style for most users, bu
   
 ## Features
 
+### Sensitivity Multiplier
+As described above, the "sensitivity multiplier" parameter is a multiplier used on the post-calculation output vector. The "Y/X Ratio" parameter is then only applied to the Y component of the output, so that it defines the ratio of vertical to horizontal output sensitivity without acceleration.
+
 ### Gain Switch
 The acceleration curve styles below (see "Acceleration Styles") each describe a certain shape mathematically. The gain switch determines whether that shape is applied in the sensitivity graph or the gain graph. For styles Linear, Classic, and Power, this setting does not change the possible shapes of the velocity curve - that is, for any particular settings with the gain switch set to Sensitivity, there is a different set of settings that will replicate the exact same velocity curve (output for a given hand motion) with the switch set to Gain. For styles Natural, Jump, and Motivity, this is not true, and the gain switch allows new velocity curves for each style. 
 
 ### Offsets
 An offset, sometimes called a threshold, is a speed in counts before acceleration "kicks in". The legacy way of applying an offset is having a multiplier of 1 below and at the offset, and applying the sensitivity of (speed-offset) above. This legacy "sensitivity offset" is not available because it causes a discontinuity in gain at the point of offset, leading to non-smooth feeling at offset cross. The new "gain offset" does a little extra math to simply shift the gain graph by the offset amount without any discontinuity. This feels smoother and has almost no effect on sensitivity. The theory behind "gain offsets" is developed in [this document](https://docs.google.com/document/d/1P6LygpeEazyHfjVmaEygCsyBjwwW2A-eMBl81ZfxXZk).
 
+Offsets are only applicable to the Classic, Linear, and Natural modes, where they are defined in terms of an input speed. Power mode has a special "output offset", where the curve "starts from" some ratio of the sens multiplier, described in its section.
+
 ### Caps
 A cap is a point after which acceleration is not applied. The legacy way of applying an offset is simply applying the minimum of the cap sensitivity and the calculated sensitivity for any acceleration calculation. Thus, for the legacy "sensitivity cap" the value given is a sensitivity. This cap style is still available but causes a large discontinuity at the point of offset, leading to a non-smooth feeling at cap cross. The new default "gain cap" effectively caps the gain, but for internal calculation reasons, does so for a given speed rather than a given gain value. This feels much smoother but might have a large effect on sensitivity as gain generally raises faster than sensitivity. We recommend that users use a gain cap and simply adjust it to hit at the gain equivalent to the sensitivity they'd like to cap at. The theory behind "gain caps" is developed in [this document](https://docs.google.com/document/d/1FCpkqRxUaCP7J258SupbxNxvdPfljb16AKMs56yDucA).
+
+Caps are only applicable to the Classic, Linear, and Power modes. The capping point can be defined in terms of an input speed, an output ratio, or both (which will then set other acceleration parameters for the mode.)
 
 ### Anisotropy
 See "Horizontal and Vertical" in the philosophy section to understand what these options do.
@@ -97,11 +105,21 @@ See "Horizontal and Vertical" in the philosophy section to understand what these
 ### Last Mouse Move
 The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calulations should be fast and your graph responsive, but it comes at the cost of higher CPU usage due to needing to refresh the graph often. This feature can be turned off in the "Charts" menu.
 
-### Scale by DPI and Poll Rate
-This option does not scale your acceleration curve in any way. Rather, DPI scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI. The poll rate is used as a safeguard for the Last Mouse Move points and therefore should be set for accuracy in that measurement.
+### Menu Options
+
+#### Charts >> Scale by DPI and Poll Rate
+These options does not scale your acceleration curve in any way. Rather, DPI scales the set of points used to graph your curve, and shows you a window of input speed relevant for your chosen DPI. The poll rate is used as a safeguard for the Last Mouse Move points and therefore should be set for accuracy in that measurement.
+
+#### Advanced >> Device Menu
+This menu provides options for individually disabling devices, and normalizing device DPI (see next section). Here you will also find an option for setting polling rate, which signals the driver to forgo the standard automatic rate adjustment. Leave this at 0 unless you are experiencing cursor stutters that only occur with acceleration enabled.
+
+#### DPI Normalization
+Setting the DPI option for a device to its actual DPI will scale its input so that the sensitivity and acceleration feels as if it were set to 1000 dpi. For example, with a sens multiplier of 0.8, mice with their DPI set in the device menu will have the equivalent sensitivity of an 800 DPI mouse with a sens multiplier of 1. Ignoring device-specific factors like weight, friction, and sensor position, normalization provides an easy method to synchronize settings across different setups.
+
+This is still an experimental setting, which perhaps will be more clearly presented in the future. For now, users should set their sensitivity multiplier to no greater than their DPI divided by 1000 to avoid pixel skipping on desktop (with 6/11 window sensitivity.)
 
 ## Acceleration Styles
-The examples of various types below show some typical settings, without a cap or offset, for a mouse at 1600 DPI and 1000 hz.
+The examples of various types below show some typical settings for a mouse at, or normalized to, 1000 DPI.
 
 ### Linear
 This is simplest style used by most; it is simply a line rising at a given rate. This is a good choice for new users.
@@ -112,7 +130,9 @@ This is the style found in Quake 3, Quake Live, and countless inspired followers
 ![ClassicExample](images/classic_example.png)
 
 ### Power
-This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multiplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1). In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps).
+This is the style found in CS:GO and Source Engine games (m_customaccel 3). The user can set a rate by which the speed is multiplied, and then an exponent to which the product is raised, which is then the final multiplier (no adding to 1). The  formula for this curve starts at 0 for an input of 0, so the user can also set a ratio of the sens multiplier for the curve to start at, effectively an output offset.
+
+In the aforementioned games the default m_customaccel_exponent value of 1.05 would be a value of 0.05 in Raw Accel, leading to a concave slowly rising curve. CS:GO and Source Engine games apply acceleration in an fps-dependent manner, so Raw Accel can only simulate acceleration from these games at a given fps. To do so, set scale to 1000/(in-game fps) and the output offset to 1.
 ![PowerExample](images/power_example.png)
 
 ### Natural
@@ -120,7 +140,7 @@ Natural features a concave curve which starts at 1 and approaches some maximum s
 ![NaturalGainExample](images/natural_gain_example.png)
 
 ### Jump
- This style applies one sensitivity below a certain threshold, and another above it. It can be useful for those who want one constant sensitivity and gain for slow hand motions and a different constant sensitivity or gain for fast hand motions. Users can set a "smooth" parameter which dictates whether the jump happens instaneously (at smooth 0) or with a slight tailing in and out (smooth 1) leading to a small sigmoid shape (s-shape). (Note that this "smooth" parameter has nothing to do with averaging over mouse counts like in sensor smoothing on mice or mouse smoothing in games.)
+ This style applies one sensitivity or gain below a certain threshold, and another above it. It can be useful for those who want one constant sensitivity and gain for slow hand motions and a different constant sensitivity or gain for fast hand motions. Users can set a "smooth" parameter which dictates whether the jump happens instaneously (at smooth 0) or with a slight tailing in and out (smooth 1) leading to a small sigmoid shape (s-shape). (Note that this "smooth" parameter has nothing to do with averaging over mouse counts like in sensor smoothing on mice or mouse smoothing in games.)
 ![NaturalGainExample](images/jump_example.png)
 
 ### Motivity
