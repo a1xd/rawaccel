@@ -116,6 +116,8 @@ This menu provides options for individually disabling devices, and normalizing d
 #### DPI Normalization
 Setting the DPI option for a device to its actual DPI will scale its input so that the sensitivity and acceleration feels as if it were set to 1000 dpi. For example, with a sens multiplier of 0.8, mice with their DPI set in the device menu will have the equivalent sensitivity of an 800 DPI mouse with a sens multiplier of 1. Ignoring device-specific factors like weight, friction, and sensor position, normalization provides an easy method to synchronize settings across different setups.
 
+This is still an experimental setting, which perhaps will be more clearly presented in the future. For now, users with DPI less than 1000 should set their sensitivity multiplier to no greater than their DPI divided by 1000 to avoid pixel skipping on desktop (with 6/11 window sensitivity.)
+
 ## Acceleration Styles
 The examples of various types below show some typical settings for a mouse at, or normalized to, 1000 DPI.
 
