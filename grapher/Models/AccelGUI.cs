@@ -23,7 +23,7 @@ namespace grapher
             SettingsManager settings,
             ApplyOptions applyOptions,
             Button writeButton,
-            ButtonBase resetButton,
+            Button resetButton,
             MouseWatcher mouseWatcher,
             ToolStripMenuItem scaleMenuItem,
             ToolStripMenuItem deviceMenuItem)
@@ -33,7 +33,7 @@ namespace grapher
             AccelCharts = accelCharts;
             ApplyOptions = applyOptions;
             WriteButton = writeButton;
-            ResetButton = (CheckBox)resetButton;
+            ResetButton = resetButton;
             ScaleMenuItem = scaleMenuItem;
             DeviceMenuItem = deviceMenuItem;
             Settings = settings;
@@ -79,7 +79,7 @@ namespace grapher
 
         public Button WriteButton { get; }
 
-        public CheckBox ResetButton { get; }
+        public Button ResetButton { get; }
 
         public Timer ButtonTimer { get; }
 
@@ -204,7 +204,6 @@ namespace grapher
         {
             WriteButton.Top = Constants.SensitivityChartAloneHeight - Constants.ButtonVerticalOffset;
             
-            ResetButton.Appearance = Appearance.Button;
             ResetButton.FlatStyle = FlatStyle.System;
             ResetButton.TextAlign = ContentAlignment.MiddleCenter;
             ResetButton.Size = WriteButton.Size;

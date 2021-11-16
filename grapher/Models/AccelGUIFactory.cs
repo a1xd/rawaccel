@@ -33,7 +33,7 @@ namespace grapher.Models
             ComboBox capTypeDropdownXPower,
             ComboBox capTypeDropdownYPower,
             Button writeButton,
-            ButtonBase toggleButton,
+            Button toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem showLastMouseMoveMenuItem,
             ToolStripMenuItem streamingModeToolStripMenuItem,

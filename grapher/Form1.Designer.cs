@@ -163,7 +163,7 @@ namespace grapher
             this.DomainBoxY = new System.Windows.Forms.TextBox();
             this.DomainBoxX = new System.Windows.Forms.TextBox();
             this.DirectionalityLabel = new System.Windows.Forms.Label();
-            this.toggleButton = new System.Windows.Forms.CheckBox();
+            this.toggleButton = new System.Windows.Forms.Button();
             this.scaleLabelY = new System.Windows.Forms.Label();
             this.ScaleActiveYLabel = new System.Windows.Forms.Label();
             this.scaleBoxY = new System.Windows.Forms.TextBox();
@@ -2357,7 +2357,7 @@ namespace grapher
 
         #endregion
         private System.Windows.Forms.Panel optionsPanel;
-        private System.Windows.Forms.CheckBox toggleButton;
+        private System.Windows.Forms.Button toggleButton;
         private System.Windows.Forms.Label scaleLabelY;
         private System.Windows.Forms.Label ScaleActiveYLabel;
         private System.Windows.Forms.TextBox scaleBoxY;
