@@ -165,7 +165,6 @@ namespace grapher
 
             _data = DefaultData;
             Box.Text = DefaultText;
-            ContainingForm.ActiveControl = null;
         }
 
         public void SetToTyping()
@@ -192,8 +191,6 @@ namespace grapher
                 PreviousState = State;
                 State = FieldState.Entered;
             }
-
-            ContainingForm.ActiveControl = null;
         }
 
         public void SetToEntered(double value)
@@ -221,19 +218,14 @@ namespace grapher
         {
             switch(State)
             {
-                case FieldState.Default:
+                case FieldState.Default: 
+                    // fallthrough
+                case FieldState.Entered:
                     if (e.KeyCode == Keys.Enter)
                     {
-                        SetToDefault();
+                        Box.Parent.SelectNextControl(ContainingForm.ActiveControl, true, true, true, true);
                     }
                     else
-                    {
-                        SetToTyping();
-                    }
-                    break;
-
-                case FieldState.Entered:
-                    if (e.KeyCode != Keys.Enter)
                     {
                         SetToTyping();
                     }
@@ -266,6 +258,7 @@ namespace grapher
 
                 e.Handled = true;
                 e.SuppressKeyPress = true;
+                Box.Parent.SelectNextControl(ContainingForm.ActiveControl, true, true, true, true);
             }
             else if (e.KeyCode == Keys.Escape)
             {
