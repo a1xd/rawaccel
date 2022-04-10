@@ -190,7 +190,7 @@ namespace grapher.Models
             Label optionSetXTitle,
             Label optionSetYTitle,
             Label mouseLabel,
-            Label directionalityLabel,
+            Button directionalityLabel,
             Label directionalityX,
             Label directionalityY,
             Label direcionalityActiveValueTitle,

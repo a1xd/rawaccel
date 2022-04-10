@@ -162,7 +162,7 @@ namespace grapher
             this.RangeBoxX = new System.Windows.Forms.TextBox();
             this.DomainBoxY = new System.Windows.Forms.TextBox();
             this.DomainBoxX = new System.Windows.Forms.TextBox();
-            this.DirectionalityLabel = new System.Windows.Forms.Label();
+            this.DirectionalityLabel = new System.Windows.Forms.Button();
             this.toggleButton = new System.Windows.Forms.Button();
             this.scaleLabelY = new System.Windows.Forms.Label();
             this.ScaleActiveYLabel = new System.Windows.Forms.Label();
@@ -2469,7 +2469,7 @@ namespace grapher
         private System.Windows.Forms.TextBox RangeBoxX;
         private System.Windows.Forms.TextBox DomainBoxY;
         private System.Windows.Forms.TextBox DomainBoxX;
-        private System.Windows.Forms.Label DirectionalityLabel;
+        private System.Windows.Forms.Button DirectionalityLabel;
         private System.Windows.Forms.CheckBox ByComponentCheckBox;
         private System.Windows.Forms.CheckBox WholeCheckBox;
         private System.Windows.Forms.Label DirectionalityActiveValueTitle;

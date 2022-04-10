@@ -12,7 +12,7 @@ namespace grapher.Models.Options.Directionality
     {
         public DirectionalityOptions(
             Panel containingPanel,
-            Label directionalityLabel,
+            Button directionalityLabel,
             Label directionalityX,
             Label directionalityY,
             Label directionalityActiveValueTitle,
@@ -24,7 +24,14 @@ namespace grapher.Models.Options.Directionality
             int top)
         {
             ContainingPanel = containingPanel;
+
             DirectionalityLabel = directionalityLabel;
+            DirectionalityLabel.FlatStyle = FlatStyle.Flat;
+            DirectionalityLabel.FlatAppearance.BorderSize = 0;
+            DirectionalityLabel.FlatAppearance.MouseDownBackColor = Control.DefaultBackColor;
+            DirectionalityLabel.FlatAppearance.CheckedBackColor = Control.DefaultBackColor;
+            DirectionalityLabel.FlatAppearance.MouseOverBackColor = Control.DefaultBackColor;
+
             DirectionalityX = directionalityX;
             DirectionalityY = directionalityY;
             DirectionalityActiveValueTitle = directionalityActiveValueTitle;
@@ -46,7 +53,7 @@ namespace grapher.Models.Options.Directionality
 
         public Panel ContainingPanel { get; }
 
-        public Label DirectionalityLabel { get; }
+        public Button DirectionalityLabel { get; }
 
         public Label DirectionalityX { get; }
 
