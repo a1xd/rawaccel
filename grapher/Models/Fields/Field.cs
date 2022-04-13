@@ -28,8 +28,8 @@ namespace grapher
 
         #region Constructors
 
-        public Field(TextBox box, Form containingForm, double defaultData, 
-                                                       double minData = double.MinValue, 
+        public Field(TextBox box, Form containingForm, double defaultData,
+                                                       double minData = double.MinValue,
                                                        double maxData = double.MaxValue)
         {
             DefaultText = DecimalString(defaultData);
@@ -64,7 +64,7 @@ namespace grapher
         public FieldState PreviousState { get; private set; }
 
         public double Data {
-            get 
+            get
             {
                 if (Box.Enabled)
                 {
@@ -82,7 +82,7 @@ namespace grapher
             get
             {
                 return Box.Top;
-            } 
+            }
             set
             {
                 Box.Top = value;
@@ -94,7 +94,7 @@ namespace grapher
             get
             {
                 return Box.Height;
-            } 
+            }
             set
             {
                 Box.Height = value;
@@ -218,8 +218,8 @@ namespace grapher
         {
             switch(State)
             {
-                case FieldState.Default: 
-                    // fallthrough
+                case FieldState.Default:
+                // fallthrough
                 case FieldState.Entered:
                     if (e.KeyCode == Keys.Enter)
                     {
@@ -242,12 +242,17 @@ namespace grapher
             }
         }
 
-        private void FocusLeave(object sender, EventArgs e)
+        public void NewInputToData()
         {
             if (State == FieldState.Typing)
             {
                 TextToData();
             }
+        }
+
+        private void FocusLeave(object sender, EventArgs e)
+        {
+            NewInputToData();
         }
 
         private void HandleTyping(object sender, KeyEventArgs e)

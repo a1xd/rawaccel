@@ -227,6 +227,8 @@ namespace grapher
 
         private void OnScaleMenuItemClick(object sender, EventArgs e)
         {
+            AccelCalculator.DPI.NewInputToData();
+            AccelCalculator.PollRate.NewInputToData();
             UpdateGraph();
         }
 
