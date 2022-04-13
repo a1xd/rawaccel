@@ -174,7 +174,7 @@ namespace rawaccel {
 			error("Lp norm must be positive (default=2)");
 		}
 
-		if (args.range_weights.x <= 0 || args.range_weights.y <= 0) {
+		if (args.range_weights.x < 0 || args.range_weights.y < 0) {
 			error("range weights"" must be positive");
 		}
 
