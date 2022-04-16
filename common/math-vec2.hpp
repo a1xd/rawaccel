@@ -33,5 +33,5 @@ inline double magnitude(const vec2d& v)
 
 inline double lp_distance(const vec2d& v, double p)
 {
-    return pow(pow(v.x, p) + pow(v.y, p), 1 / p);
+    return pow(pow(fabs(v.x), p) + pow(fabs(v.y), p), 1 / p);
 }
