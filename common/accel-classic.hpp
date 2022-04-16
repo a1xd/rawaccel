@@ -116,13 +116,21 @@ namespace rawaccel {
                 if (args.cap.y > 0) {
                     cap.y = args.cap.y - 1;
 
-                    if (cap.y < 0) {
-                        cap.y = -cap.y;
-                        sign = -sign;
+                    if (cap.y == 0) {
+                        cap.x = 0;
                     }
+                    else {
+                        if (cap.y < 0) {
+                            cap.y = -cap.y;
+                            sign = -sign;
+                        }
 
-                    cap.x = gain_inverse(cap.y, args.acceleration, args.exponent_classic, args.input_offset);
-                    constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
+                        cap.x = gain_inverse(cap.y, 
+                                            args.acceleration, 
+                                            args.exponent_classic, 
+                                            args.input_offset);
+                        constant = (base_fn(cap.x, accel_raised, args) - cap.y) * cap.x;
+                    }
                 }
                 break;
             }
