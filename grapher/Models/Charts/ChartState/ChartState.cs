@@ -1,11 +1,6 @@
 ﻿using grapher.Models.Calculations;
 using grapher.Models.Calculations.Data;
-using grapher.Models.Serialized;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace grapher.Models.Charts.ChartState
@@ -16,11 +11,13 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
+            TableLayoutPanel chartContainer,
             AccelCalculator calculator)
         {
             SensitivityChart = sensitivityChart;
             VelocityChart = velocityChart;
             GainChart = gainChart;
+            ChartContainer = chartContainer;
             Calculator = calculator;
             TwoDotsPerGraph = false;
         }
@@ -30,6 +27,8 @@ namespace grapher.Models.Charts.ChartState
         public ChartXY VelocityChart { get; }
 
         public ChartXY GainChart { get; }
+
+        public TableLayoutPanel ChartContainer { get; }
 
         public IAccelData Data { get; protected set; }
 
@@ -82,13 +81,16 @@ namespace grapher.Models.Charts.ChartState
 
         public void ShowVelocityAndGain()
         {
-            SensitivityChart.SetHeight(Constants.SensitivityChartTogetherHeight);
+            ChartContainer.RowCount = 3;
+            ChartContainer.RowStyles[0].Height = 33.3f;
             VelocityChart.Show();
             GainChart.Show();
         }
 
         public void HideVelocityAndGain()
         {
+            ChartContainer.RowCount = 1;
+            ChartContainer.RowStyles[0].Height = 100f;
             SensitivityChart.SetHeight(Constants.SensitivityChartAloneHeight);
             VelocityChart.Hide();
             GainChart.Hide();

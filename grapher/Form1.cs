@@ -52,6 +52,7 @@ namespace grapher
                 VelocityChartY,
                 GainChart,
                 GainChartY,
+                chartContainer,
                 accelTypeDropX,
                 accelTypeDropY,
                 XLutApplyDropdown,
