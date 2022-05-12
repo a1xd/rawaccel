@@ -125,6 +125,5 @@ namespace grapher.Models.Theming
             Surface = Color.FromArgb(48, 48, 48),
             SurfaceVariant = Color.FromArgb(35, 35, 35)
         };
-
     }
 }

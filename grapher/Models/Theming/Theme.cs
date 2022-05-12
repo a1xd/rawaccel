@@ -46,7 +46,6 @@ namespace grapher.Models.Theming
                         control.BackColor = Scheme.Control;
                         control.ForeColor = Scheme.OnControl;
                         comboBox.FlatStyle = FlatStyle.Flat;
-                        comboBox.Paint += this.ComboBox_Paint;
                         comboBox.DrawItem += this.ComboBox_DrawItem;
 
                         break;
@@ -75,12 +74,6 @@ namespace grapher.Models.Theming
                     ApplyTheme(control.Controls);
                 }
             }
-        }
-
-        private void ComboBox_Paint(object sender, PaintEventArgs e)
-        {
-            
-
         }
 
         private void ComboBox_DrawItem(object sender, DrawItemEventArgs args)
