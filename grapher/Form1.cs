@@ -16,6 +16,7 @@ using grapher.Models;
 using System.Reflection;
 using System.Diagnostics;
 using System.IO;
+using grapher.Models.Theming;
 
 namespace grapher
 {
@@ -28,6 +29,13 @@ namespace grapher
         public RawAcceleration()
         {
             InitializeComponent();
+
+            var scheme = ColorScheme.DarkTheme;
+            var theme = new Theme
+            {
+                Scheme = scheme
+            };
+            theme.Apply(this);
 
             Version driverVersion = VersionHelper.ValidOrThrow();
 
