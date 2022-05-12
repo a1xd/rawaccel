@@ -149,6 +149,7 @@
     <Compile Include="Models\Options\TextOption.cs" />
     <Compile Include="Models\Serialized\GUISettings.cs" />
     <Compile Include="Models\Serialized\SettingsManager.cs" />
+    <Compile Include="Models\Theming\Theme.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutBox.resx">
