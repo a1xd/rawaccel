@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Serialization;
+using grapher.Models.Theming.Controls;
 
 namespace grapher.Models.Theming
 {
@@ -41,18 +42,26 @@ namespace grapher.Models.Theming
                         chart.Series[2].Color = Scheme.Secondary;
                         break;
                     }
-                    case ComboBox comboBox:
                     {
-                        control.BackColor = Scheme.Control;
-                        control.ForeColor = Scheme.OnControl;
-                        comboBox.FlatStyle = FlatStyle.Flat;
-                        comboBox.DrawItem += this.ComboBox_DrawItem;
 
                         break;
                     }
                     case Label _:
+                    case ThemeableComboBox comboBox:
+                    {
+                        comboBox.BackColor = CurrentScheme.Field;
+                        comboBox.ForeColor = CurrentScheme.OnField;
+                        comboBox.BorderColor = CurrentScheme.ControlBorder;
+                        comboBox.ButtonColor = CurrentScheme.Control;
+                        break;
+                    }
                     {
                         control.ForeColor = Scheme.OnBackground;
+                    case ComboBox _:
+                    {
+                        Console.WriteLine(
+                            "Please replace all ComboBoxes with the ThemeambleComboBox, so theming can be applied"
+                        );
                         break;
                     }
                     case TextBox _:
@@ -76,35 +85,7 @@ namespace grapher.Models.Theming
             }
         }
 
-        private void ComboBox_DrawItem(object sender, DrawItemEventArgs args)
         {
-            var index = args.Index >= 0 ? args.Index : 0;
-
-            args.DrawBackground();
-            const int padding = 0;
-            var backgroundBoundingBox = new Rectangle(
-                padding,
-                args.Bounds.Top + padding,
-                args.Bounds.Height,
-                args.Bounds.Height + (padding * 2)
-            );
-            args.Graphics.FillRectangle(
-                new SolidBrush(Scheme.Surface),
-                backgroundBoundingBox
-            );
-
-            var textBoundingBox = new RectangleF(
-                args.Bounds.X + backgroundBoundingBox.Width,
-                args.Bounds.Y,
-                args.Bounds.Width,
-                args.Bounds.Height
-            );
-
-            var currentEntry = (sender as ComboBox)?.Items[index];
-
-            args.Graphics.DrawString(currentEntry?.ToString(), args.Font, new SolidBrush(Scheme.OnBackground), textBoundingBox);
-
-            args.DrawFocusRectangle();
         }
     }
 }

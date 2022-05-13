@@ -9,6 +9,7 @@ using grapher.Models.Serialized;
 using System;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using grapher.Models.Theming.Controls;
 
 namespace grapher.Models
 {
@@ -24,14 +25,14 @@ namespace grapher.Models
             Chart velocityChartY,
             Chart gainChart,
             Chart gainChartY,
-            ComboBox accelTypeDropX,
-            ComboBox accelTypeDropY,
-            ComboBox lutApplyDropdownX,
-            ComboBox lutApplyDropdownY,
-            ComboBox capTypeDropdownXClassic,
-            ComboBox capTypeDropdownYClassic,
-            ComboBox capTypeDropdownXPower,
-            ComboBox capTypeDropdownYPower,
+            ThemeableComboBox accelTypeDropX,
+            ThemeableComboBox accelTypeDropY,
+            ThemeableComboBox lutApplyDropdownX,
+            ThemeableComboBox lutApplyDropdownY,
+            ThemeableComboBox capTypeDropdownXClassic,
+            ThemeableComboBox capTypeDropdownYClassic,
+            ThemeableComboBox capTypeDropdownXPower,
+            ThemeableComboBox capTypeDropdownYPower,
             Button writeButton,
             Button toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,

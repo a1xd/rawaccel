@@ -150,6 +150,9 @@
     <Compile Include="Models\Serialized\GUISettings.cs" />
     <Compile Include="Models\Serialized\SettingsManager.cs" />
     <Compile Include="Models\Theming\ColorScheme.cs" />
+    <Compile Include="Models\Theming\Controls\ThemeableComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Models\Theming\Theme.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

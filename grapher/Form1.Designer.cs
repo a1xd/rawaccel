@@ -87,8 +87,8 @@ namespace grapher
             this.outCapBoxXPower = new System.Windows.Forms.TextBox();
             this.inCapBoxYPower = new System.Windows.Forms.TextBox();
             this.inCapBoxXPower = new System.Windows.Forms.TextBox();
-            this.CapTypeDropdownYPower = new System.Windows.Forms.ComboBox();
-            this.CapTypeDropdownXPower = new System.Windows.Forms.ComboBox();
+            this.CapTypeDropdownYPower = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.CapTypeDropdownXPower = new grapher.Models.Theming.Controls.ThemeableComboBox();
             this.CapTypeActiveYLabelClassic = new System.Windows.Forms.Label();
             this.CapTypeActiveXLabelClassic = new System.Windows.Forms.Label();
             this.OutCapActiveYLabelClassic = new System.Windows.Forms.Label();
@@ -99,8 +99,8 @@ namespace grapher
             this.outCapBoxXClassic = new System.Windows.Forms.TextBox();
             this.CapTypeLabelYClassic = new System.Windows.Forms.Label();
             this.CapTypeLabelXClassic = new System.Windows.Forms.Label();
-            this.CapTypeDropdownYClassic = new System.Windows.Forms.ComboBox();
-            this.CapTypeDropdownXClassic = new System.Windows.Forms.ComboBox();
+            this.CapTypeDropdownYClassic = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.CapTypeDropdownXClassic = new grapher.Models.Theming.Controls.ThemeableComboBox();
             this.VertHorzRatioLabel = new System.Windows.Forms.Label();
             this.SmoothActiveYLabel = new System.Windows.Forms.Label();
             this.smoothLabelY = new System.Windows.Forms.Label();
@@ -129,8 +129,8 @@ namespace grapher
             this.YLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
             this.XLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
             this.LutApplyActiveYLabel = new System.Windows.Forms.Label();
-            this.YLutApplyDropdown = new System.Windows.Forms.ComboBox();
-            this.XLutApplyDropdown = new System.Windows.Forms.ComboBox();
+            this.YLutApplyDropdown = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.XLutApplyDropdown = new grapher.Models.Theming.Controls.ThemeableComboBox();
             this.LutApplyActiveXLabel = new System.Windows.Forms.Label();
             this.YLutApplyLabel = new System.Windows.Forms.Label();
             this.XLutApplyLabel = new System.Windows.Forms.Label();
@@ -196,7 +196,6 @@ namespace grapher
             this.InputOffsetActiveYLabel = new System.Windows.Forms.Label();
             this.OutputOffsetActiveYLabel = new System.Windows.Forms.Label();
             this.AccelerationActiveLabelY = new System.Windows.Forms.Label();
-            this.accelTypeDropY = new System.Windows.Forms.ComboBox();
             this.midpointBoxY = new System.Windows.Forms.TextBox();
             this.limitBoxY = new System.Windows.Forms.TextBox();
             this.inputJumpBoxY = new System.Windows.Forms.TextBox();
@@ -204,6 +203,7 @@ namespace grapher
             this.inputOffsetBoxY = new System.Windows.Forms.TextBox();
             this.outputOffsetBoxY = new System.Windows.Forms.TextBox();
             this.accelerationBoxY = new System.Windows.Forms.TextBox();
+            this.accelTypeDropY = new grapher.Models.Theming.Controls.ThemeableComboBox();
             this.MidpointActiveXLabel = new System.Windows.Forms.Label();
             this.LimitActiveXLabel = new System.Windows.Forms.Label();
             this.InputJumpActiveXLabel = new System.Windows.Forms.Label();
@@ -244,7 +244,7 @@ namespace grapher
             this.rotationBox = new System.Windows.Forms.TextBox();
             this.sensitivityLabel = new System.Windows.Forms.Label();
             this.sensitivityBoxX = new System.Windows.Forms.TextBox();
-            this.accelTypeDropX = new System.Windows.Forms.ComboBox();
+            this.accelTypeDropX = new grapher.Models.Theming.Controls.ThemeableComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.graphsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scaleByDPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -2393,7 +2393,6 @@ namespace grapher
         private System.Windows.Forms.Label InputOffsetActiveYLabel;
         private System.Windows.Forms.Label OutputOffsetActiveYLabel;
         private System.Windows.Forms.Label AccelerationActiveLabelY;
-        private System.Windows.Forms.ComboBox accelTypeDropY;
         private System.Windows.Forms.TextBox midpointBoxY;
         private System.Windows.Forms.TextBox limitBoxY;
         private System.Windows.Forms.TextBox inputJumpBoxY;
@@ -2401,6 +2400,7 @@ namespace grapher
         private System.Windows.Forms.TextBox inputOffsetBoxY;
         private System.Windows.Forms.TextBox outputOffsetBoxY;
         private System.Windows.Forms.TextBox accelerationBoxY;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox accelTypeDropY;
         private System.Windows.Forms.Label MidpointActiveXLabel;
         private System.Windows.Forms.Label LimitActiveXLabel;
         private System.Windows.Forms.Label InputJumpActiveXLabel;
@@ -2441,7 +2441,7 @@ namespace grapher
         private System.Windows.Forms.TextBox rotationBox;
         private System.Windows.Forms.Label sensitivityLabel;
         private System.Windows.Forms.TextBox sensitivityBoxX;
-        private System.Windows.Forms.ComboBox accelTypeDropX;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox accelTypeDropX;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem graphsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scaleByDPIToolStripMenuItem;
@@ -2492,8 +2492,8 @@ namespace grapher
         private System.Windows.Forms.RichTextBox YLutPointsBox;
         private System.Windows.Forms.RichTextBox XLutPointsBox;
         private System.Windows.Forms.Label LutApplyActiveYLabel;
-        private System.Windows.Forms.ComboBox YLutApplyDropdown;
-        private System.Windows.Forms.ComboBox XLutApplyDropdown;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox YLutApplyDropdown;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox XLutApplyDropdown;
         private System.Windows.Forms.Label LutApplyActiveXLabel;
         private System.Windows.Forms.Label YLutApplyLabel;
         private System.Windows.Forms.Label XLutApplyLabel;
@@ -2525,8 +2525,8 @@ namespace grapher
         private System.Windows.Forms.TextBox smoothBoxY;
         private System.Windows.Forms.TextBox smoothBoxX;
         private System.Windows.Forms.Label VertHorzRatioLabel;
-        private System.Windows.Forms.ComboBox CapTypeDropdownYClassic;
-        private System.Windows.Forms.ComboBox CapTypeDropdownXClassic;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox CapTypeDropdownYClassic;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox CapTypeDropdownXClassic;
         private System.Windows.Forms.Label CapTypeLabelYClassic;
         private System.Windows.Forms.Label CapTypeLabelXClassic;
         private System.Windows.Forms.Label outCapLabelYClassic;
@@ -2537,8 +2537,8 @@ namespace grapher
         private System.Windows.Forms.Label OutCapActiveYLabelClassic;
         private System.Windows.Forms.Label CapTypeActiveYLabelClassic;
         private System.Windows.Forms.Label CapTypeActiveXLabelClassic;
-        private System.Windows.Forms.ComboBox CapTypeDropdownYPower;
-        private System.Windows.Forms.ComboBox CapTypeDropdownXPower;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox CapTypeDropdownYPower;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox CapTypeDropdownXPower;
         private System.Windows.Forms.Label OutCapActiveYLabelPower;
         private System.Windows.Forms.Label InCapActiveYLabelPower;
         private System.Windows.Forms.Label OutCapActiveXLabelPower;
