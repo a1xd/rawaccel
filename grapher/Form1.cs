@@ -28,7 +28,7 @@ namespace grapher
 
         public RawAcceleration()
         {
-            var scheme = ColorScheme.DarkStreamerTheme;
+            var scheme = ColorScheme.AccentedDarkTheme;
             Theme.CurrentScheme = scheme;
 
             InitializeComponent();

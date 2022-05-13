@@ -30,13 +30,7 @@ namespace grapher.Models.Theming
         /// Mouse movement color which is shown on the charts.
         /// </summary>
         [XmlAttribute]
-        public Color PrimaryMouseMovement { get; internal set; }
-
-        /// <summary>
-        /// Mouse movement color which is shown on the charts.
-        /// </summary>
-        [XmlAttribute]
-        public Color SecondaryMouseMovement { get; internal set; }
+        public Color MouseMovement { get; internal set; }
 
         [XmlAttribute] public Color Field { get; internal set; }
         [XmlAttribute] public Color OnField { get; internal set; }
@@ -44,6 +38,7 @@ namespace grapher.Models.Theming
         [XmlAttribute] public Color EditedField { get; internal set; }
         [XmlAttribute] public Color OnEditedField { get; internal set; }
         [XmlAttribute] public Color ButtonFace { get; internal set; }
+        [XmlAttribute] public Color ButtonBorder { get; internal set; }
         [XmlAttribute] public Color Control { get; internal set; }
         [XmlAttribute] public Color ControlBorder { get; internal set; }
         [XmlAttribute] public Color OnControl { get; internal set; }
@@ -53,7 +48,12 @@ namespace grapher.Models.Theming
         [XmlAttribute] public Color OnBackground { get; internal set; }
         [XmlAttribute] public Color Surface { get; internal set; }
         [XmlAttribute] public Color SurfaceVariant { get; internal set; }
-
+        
+        /// <summary>
+        /// Will create gradients between <see cref="Primary"/> and <see cref="Secondary"/>,
+        /// instead of just the solid colors for Checkbox checked states.
+        /// </summary>
+        [XmlAttribute] public bool UseAccentGradientsForCheckboxes { get; internal set; }
 
         public static ColorScheme LightTheme = new ColorScheme
         {
@@ -61,19 +61,19 @@ namespace grapher.Models.Theming
             Secondary = Color.Orange,
             ChartBackground = Color.White,
             ChartForeground = Color.Black,
-            PrimaryMouseMovement = Color.FromArgb(192, 0, 0),
-            SecondaryMouseMovement = Color.FromArgb(0, 99, 192),
+            MouseMovement = Color.FromArgb(192, 0, 0),
             Field = SystemColors.Window,
             OnFocusedField = Color.FromArgb(16, 16, 16),
             OnField = Color.FromArgb(64, 64, 64),
             EditedField = Color.AntiqueWhite,
             OnEditedField = Color.DarkGray,
             ButtonFace = Color.DarkGray,
+            ButtonBorder = Color.Gray,
             Control = SystemColors.Control,
             ControlBorder = Color.FromArgb(122, 122, 122),
             OnControl = Color.FromArgb(64, 64, 64),
-            DisabledControl = Color.Gray,
-            OnDisabledControl = Color.LightGray,
+            DisabledControl = Color.FromArgb(238, 238, 238),
+            OnDisabledControl = Color.Gray,
             Background = SystemColors.Window,
             OnBackground = Color.FromArgb(64, 64, 64),
             Surface = SystemColors.Control,
@@ -86,19 +86,19 @@ namespace grapher.Models.Theming
             Secondary = Color.Orange,
             ChartBackground = Color.Green,
             ChartForeground = Color.White,
-            PrimaryMouseMovement = Color.FromArgb(192, 0, 0),
-            SecondaryMouseMovement = Color.FromArgb(0, 99, 192),
+            MouseMovement = Color.FromArgb(192, 0, 0),
             Field = SystemColors.Window,
             OnFocusedField = Color.FromArgb(16, 16, 16),
             OnField = Color.FromArgb(64, 64, 64),
             EditedField = Color.AntiqueWhite,
             OnEditedField = Color.DarkGray,
             ButtonFace = Color.DarkGray,
+            ButtonBorder = Color.Gray,
             Control = SystemColors.Control,
             ControlBorder = Color.FromArgb(122, 122, 122),
             OnControl = Color.FromArgb(64, 64, 64),
-            DisabledControl = Color.Gray,
-            OnDisabledControl = Color.LightGray,
+            DisabledControl = Color.LightGray,
+            OnDisabledControl = Color.Gray,
             Background = SystemColors.Window,
             OnBackground = Color.FromArgb(64, 64, 64),
             Surface = SystemColors.Control,
@@ -109,9 +109,8 @@ namespace grapher.Models.Theming
         {
             Primary = Color.FromArgb(147, 110, 227),
             Secondary = Color.FromArgb(223, 185, 136),
-            PrimaryMouseMovement = Color.FromArgb(237, 103, 103),
-            SecondaryMouseMovement = Color.FromArgb(103, 184, 237),
-            ChartBackground = Color.FromArgb(48, 48, 48),
+            MouseMovement = Color.FromArgb(237, 103, 103),
+            ChartBackground = Color.FromArgb(57, 57, 57),
             ChartForeground = Color.FromArgb(234, 234, 234),
             Field = Color.FromArgb(81, 81, 81),
             OnFocusedField = Color.FromArgb(240, 240, 240),
@@ -119,23 +118,50 @@ namespace grapher.Models.Theming
             EditedField = Color.FromArgb(116, 101, 31),
             OnEditedField = Color.FromArgb(232, 227, 222),
             ButtonFace = Color.FromArgb(100, 100, 100),
+            ButtonBorder = Color.Gray,
             Control = Color.FromArgb(64, 64, 64),
             ControlBorder = Color.Gray,
             OnControl = Color.FromArgb(234, 234, 234),
             DisabledControl = Color.FromArgb(126, 126, 126),
             OnDisabledControl = Color.LightGray,
-            Background = Color.FromArgb(8, 8, 8),
+            Background = Color.FromArgb(57, 57, 57),
             OnBackground = Color.FromArgb(234, 234, 234),
             Surface = Color.FromArgb(48, 48, 48),
-            SurfaceVariant = Color.FromArgb(35, 35, 35)
+            SurfaceVariant = Color.FromArgb(35, 35, 35),
+            UseAccentGradientsForCheckboxes = true
+        };
+
+        public static ColorScheme AccentedDarkTheme = new ColorScheme
+        {
+            Primary = Color.FromArgb(147, 110, 227),
+            Secondary = Color.FromArgb(223, 185, 136),
+            MouseMovement = Color.FromArgb(237, 103, 103),
+            ChartBackground = Color.FromArgb(57, 57, 57),
+            ChartForeground = Color.FromArgb(234, 234, 234),
+            Field = Color.FromArgb(81, 81, 81),
+            OnFocusedField = Color.FromArgb(240, 240, 240),
+            OnField = Color.FromArgb(184, 184, 184),
+            EditedField = Color.FromArgb(116, 101, 31),
+            OnEditedField = Color.FromArgb(232, 227, 222),
+            ButtonFace = Color.FromArgb(147, 110, 227),
+            ButtonBorder = Color.Gray,
+            Control = Color.FromArgb(64, 64, 64),
+            ControlBorder = Color.FromArgb(223, 185, 136),
+            OnControl = Color.FromArgb(234, 234, 234),
+            DisabledControl = Color.FromArgb(126, 126, 126),
+            OnDisabledControl = Color.LightGray,
+            Background = Color.FromArgb(57, 57, 57),
+            OnBackground = Color.FromArgb(234, 234, 234),
+            Surface = Color.FromArgb(48, 48, 48),
+            SurfaceVariant = Color.FromArgb(35, 35, 35),
+            UseAccentGradientsForCheckboxes = true
         };
 
         public static ColorScheme DarkStreamerTheme = new ColorScheme
         {
             Primary = Color.FromArgb(147, 110, 227),
             Secondary = Color.FromArgb(223, 185, 136),
-            PrimaryMouseMovement = Color.FromArgb(237, 103, 103),
-            SecondaryMouseMovement = Color.FromArgb(103, 184, 237),
+            MouseMovement = Color.FromArgb(237, 103, 103),
             ChartBackground = Color.Green,
             ChartForeground = Color.White,
             Field = Color.FromArgb(81, 81, 81),
@@ -143,15 +169,17 @@ namespace grapher.Models.Theming
             EditedField = Color.FromArgb(116, 101, 31),
             OnEditedField = Color.FromArgb(232, 227, 222),
             ButtonFace = Color.FromArgb(100, 100, 100),
+            ButtonBorder = Color.Gray,
             Control = Color.FromArgb(64, 64, 64),
             ControlBorder = Color.Gray,
             OnControl = Color.FromArgb(234, 234, 234),
             DisabledControl = Color.FromArgb(126, 126, 126),
             OnDisabledControl = Color.LightGray,
-            Background = Color.FromArgb(8, 8, 8),
+            Background = Color.FromArgb(57, 57, 57),
             OnBackground = Color.FromArgb(234, 234, 234),
             Surface = Color.FromArgb(48, 48, 48),
-            SurfaceVariant = Color.FromArgb(35, 35, 35)
+            SurfaceVariant = Color.FromArgb(35, 35, 35),
+            UseAccentGradientsForCheckboxes = true
         };
     }
 }

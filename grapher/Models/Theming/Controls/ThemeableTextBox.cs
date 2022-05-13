@@ -33,7 +33,7 @@ namespace grapher.Models.Theming.Controls
                 if (_borderColor == value) return;
                 _borderColor = value;
                 Invalidate();
-                //RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero, RDW_FRAME | RDW_IUPDATENOW | RDW_INVALIDATE);
+                RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero, RDW_FRAME | RDW_IUPDATENOW | RDW_INVALIDATE);
             }
         }
 
@@ -68,7 +68,7 @@ namespace grapher.Models.Theming.Controls
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            //RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero, RDW_FRAME | RDW_IUPDATENOW | RDW_INVALIDATE);
+            RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero, RDW_FRAME | RDW_IUPDATENOW | RDW_INVALIDATE);
         }
 
         [DllImport("user32.dll")]

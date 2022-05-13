@@ -45,98 +45,101 @@ namespace grapher.Models.Theming.Controls
             }
         }
 
-        private int _borderWidth = 1;
+        private const int BorderWidth = 1;
 
         protected override void WndProc(ref Message message)
         {
-            if (message.Msg == WM_PAINT && DropDownStyle != ComboBoxStyle.Simple)
+            if (message.Msg != WM_PAINT || DropDownStyle == ComboBoxStyle.Simple)
             {
-                var clientRect = ClientRectangle;
-                var dropDownButtonWidth = SystemInformation.HorizontalScrollBarArrowWidth;
-                var outerBorder = new Rectangle(clientRect.Location,
-                    new Size(clientRect.Width - _borderWidth, clientRect.Height - _borderWidth)
-                );
-                var innerBorder = new Rectangle(outerBorder.X + _borderWidth, outerBorder.Y + _borderWidth,
-                    outerBorder.Width - dropDownButtonWidth - (_borderWidth * 2), outerBorder.Height - (_borderWidth * 2)
-                );
-                var innerInnerBorder = new Rectangle(innerBorder.X + _borderWidth, innerBorder.Y + _borderWidth,
-                    innerBorder.Width - (_borderWidth * 2), innerBorder.Height - (_borderWidth * 2)
-                );
-                var dropDownRect = new Rectangle(innerBorder.Right + _borderWidth, innerBorder.Y,
-                    dropDownButtonWidth, innerBorder.Height + _borderWidth
-                );
-                if (RightToLeft == RightToLeft.Yes)
-                {
-                    innerBorder.X = clientRect.Width - innerBorder.Right;
-                    innerInnerBorder.X = clientRect.Width - innerInnerBorder.Right;
-                    dropDownRect.X = clientRect.Width - dropDownRect.Right;
-                    dropDownRect.Width += _borderWidth;
-                }
+                base.WndProc(ref message);
+                return;
+            }
 
-                var innerBorderColor = Enabled ? BackColor : SystemColors.Control;
-                var outerBorderColor = Enabled ? BorderColor : SystemColors.ControlDark;
-                var buttonColor = Enabled ? ButtonColor : SystemColors.Control;
-                var middle = new Point(dropDownRect.Left + dropDownRect.Width / 2,
-                    dropDownRect.Top + dropDownRect.Height / 2);
-                var arrow = new Point[]
-                {
-                    new Point(middle.X - 3, middle.Y - 2),
-                    new Point(middle.X + 4, middle.Y - 2),
-                    new Point(middle.X, middle.Y + 2)
-                };
-                var ps = new PAINTSTRUCT();
-                var shouldEndPaint = false;
-                IntPtr dc;
-                if (message.WParam == IntPtr.Zero)
-                {
-                    dc = BeginPaint(Handle, ref ps);
-                    message.WParam = dc;
-                    shouldEndPaint = true;
-                }
-                else
-                {
-                    dc = message.WParam;
-                }
+            var clientRect = ClientRectangle;
+            var dropDownButtonWidth = SystemInformation.HorizontalScrollBarArrowWidth;
+            var outerBorder = new Rectangle(clientRect.Location,
+                new Size(clientRect.Width - BorderWidth, clientRect.Height - BorderWidth)
+            );
+            var innerBorder = new Rectangle(outerBorder.X + BorderWidth, outerBorder.Y + BorderWidth,
+                outerBorder.Width - dropDownButtonWidth - (BorderWidth * 2),
+                outerBorder.Height - (BorderWidth * 2)
+            );
+            var innerInnerBorder = new Rectangle(innerBorder.X + BorderWidth, innerBorder.Y + BorderWidth,
+                innerBorder.Width - (BorderWidth * 2), innerBorder.Height - (BorderWidth * 2)
+            );
+            var dropDownRect = new Rectangle(innerBorder.Right + BorderWidth, innerBorder.Y,
+                dropDownButtonWidth, innerBorder.Height + BorderWidth
+            );
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                innerBorder.X = clientRect.Width - innerBorder.Right;
+                innerInnerBorder.X = clientRect.Width - innerInnerBorder.Right;
+                dropDownRect.X = clientRect.Width - dropDownRect.Right;
+                dropDownRect.Width += BorderWidth;
+            }
 
-                var rgn = CreateRectRgn(innerInnerBorder.Left, innerInnerBorder.Top,
-                    innerInnerBorder.Right, innerInnerBorder.Bottom);
-                SelectClipRgn(dc, rgn);
-
-                DefWndProc(ref message);
-                DeleteObject(rgn);
-                rgn = CreateRectRgn(clientRect.Left, clientRect.Top,
-                    clientRect.Right, clientRect.Bottom);
-                SelectClipRgn(dc, rgn);
-                using (var g = Graphics.FromHdc(dc))
-                {
-                    using (var b = new SolidBrush(buttonColor))
-                    {
-                        g.FillRectangle(b, dropDownRect);
-                    }
-
-                    using (var b = new SolidBrush(outerBorderColor))
-                    {
-                        g.FillPolygon(b, arrow);
-                    }
-
-                    using (var p = new Pen(innerBorderColor))
-                    {
-                        g.DrawRectangle(p, innerBorder);
-                        g.DrawRectangle(p, innerInnerBorder);
-                    }
-
-                    using (var p = new Pen(outerBorderColor))
-                    {
-                        g.DrawRectangle(p, outerBorder);
-                    }
-                }
-
-                if (shouldEndPaint)
-                    EndPaint(Handle, ref ps);
-                DeleteObject(rgn);
+            var innerBorderColor = Enabled ? BackColor : SystemColors.Control;
+            var outerBorderColor = Enabled ? BorderColor : SystemColors.ControlDark;
+            var buttonColor = Enabled ? ButtonColor : SystemColors.Control;
+            var middle = new Point(dropDownRect.Left + dropDownRect.Width / 2,
+                dropDownRect.Top + dropDownRect.Height / 2);
+            var arrow = new[]
+            {
+                new Point(middle.X - 3, middle.Y - 2),
+                new Point(middle.X + 4, middle.Y - 2),
+                new Point(middle.X, middle.Y + 2)
+            };
+            var ps = new PAINTSTRUCT();
+            var shouldEndPaint = false;
+            IntPtr dc;
+            if (message.WParam == IntPtr.Zero)
+            {
+                dc = BeginPaint(Handle, ref ps);
+                message.WParam = dc;
+                shouldEndPaint = true;
             }
             else
-                base.WndProc(ref message);
+            {
+                dc = message.WParam;
+            }
+
+            var rgn = CreateRectRgn(innerInnerBorder.Left, innerInnerBorder.Top, innerInnerBorder.Right, innerInnerBorder.Bottom);
+            SelectClipRgn(dc, rgn);
+
+            DefWndProc(ref message);
+            DeleteObject(rgn);
+            rgn = CreateRectRgn(clientRect.Left, clientRect.Top, clientRect.Right, clientRect.Bottom);
+            SelectClipRgn(dc, rgn);
+            using (var g = Graphics.FromHdc(dc))
+            {
+                using (var b = new SolidBrush(buttonColor))
+                {
+                    g.FillRectangle(b, dropDownRect);
+                }
+
+                using (var b = new SolidBrush(outerBorderColor))
+                {
+                    g.FillPolygon(b, arrow);
+                }
+
+                using (var p = new Pen(innerBorderColor))
+                {
+                    g.DrawRectangle(p, innerBorder);
+                    g.DrawRectangle(p, innerInnerBorder);
+                }
+
+                using (var p = new Pen(outerBorderColor))
+                {
+                    g.DrawRectangle(p, outerBorder);
+                }
+            }
+
+            if (shouldEndPaint)
+            {
+                EndPaint(Handle, ref ps);
+            }
+            
+            DeleteObject(rgn);
         }
 
         [StructLayout(LayoutKind.Sequential)]
