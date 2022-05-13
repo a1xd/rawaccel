@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
+using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using System.Xml.Serialization;
 using grapher.Models.Theming.Controls;
 
 namespace grapher.Models.Theming
@@ -35,11 +33,15 @@ namespace grapher.Models.Theming
                 {
                     case Chart chart:
                     {
-                        chart.BackColor = Scheme.ChartBackground;
-                        chart.ForeColor = Scheme.ChartForeground;
-                        chart.Series[0].Color = Scheme.Primary;
-                        chart.Series[1].Color = Scheme.MouseMovement;
-                        chart.Series[2].Color = Scheme.Secondary;
+                        SetChartColors(chart);
+
+                        chart.Series[0].Color = CurrentScheme.Primary;
+                        chart.Series[1].Color = CurrentScheme.PrimaryMouseMovement;
+                        chart.Series[2].Color = CurrentScheme.Secondary;
+                        if (chart.Series.Count > 3)
+                        {
+                            chart.Series[3].Color = CurrentScheme.SecondaryMouseMovement;
+                        }
                         break;
                     }
                     {
@@ -86,6 +88,31 @@ namespace grapher.Models.Theming
         }
 
         {
+        private static void SetChartColors(Chart chart)
+        {
+            chart.ForeColor = CurrentScheme.ChartForeground;
+            chart.BackColor = CurrentScheme.ChartBackground;
+
+            chart.Titles[0].ForeColor = CurrentScheme.ChartForeground;
+
+            chart.ChartAreas[0].AxisX.LabelStyle.ForeColor = CurrentScheme.ChartForeground;
+            chart.ChartAreas[0].AxisY.LabelStyle.ForeColor = CurrentScheme.ChartForeground;
+
+            chart.ChartAreas[0].AxisX.LineColor = CurrentScheme.ChartForeground;
+            chart.ChartAreas[0].AxisY.LineColor = CurrentScheme.ChartForeground;
+            chart.ChartAreas[0].AxisY.MajorTickMark.LineColor = CurrentScheme.ChartForeground;
+            chart.ChartAreas[0].AxisX.MajorTickMark.LineColor = CurrentScheme.ChartForeground;
+
+            chart.ChartAreas[0].AxisX.MajorGrid.LineColor = CurrentScheme.ChartForeground;
+            chart.ChartAreas[0].AxisY.MajorGrid.LineColor = CurrentScheme.ChartForeground;
+
+            chart.ChartAreas[0].AxisX.MinorGrid.LineColor = CurrentScheme.ChartForeground;
+            chart.Legends[0].ForeColor = CurrentScheme.ChartForeground;
+
+            chart.ChartAreas[0].AxisX.TitleForeColor = CurrentScheme.ChartForeground;
+            chart.ChartAreas[0].AxisY.TitleForeColor = CurrentScheme.ChartForeground;
+
+            chart.ChartAreas[0].BorderColor = CurrentScheme.ChartForeground;
         }
     }
 }

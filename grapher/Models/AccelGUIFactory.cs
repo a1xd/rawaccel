@@ -37,7 +37,6 @@ namespace grapher.Models
             Button toggleButton,
             ToolStripMenuItem showVelocityGainToolStripMenuItem,
             ToolStripMenuItem showLastMouseMoveMenuItem,
-            ToolStripMenuItem streamingModeToolStripMenuItem,
             ToolStripMenuItem autoWriteMenuItem,
             ToolStripMenuItem deviceMenuItem,
             ToolStripMenuItem scaleMenuItem,
@@ -222,7 +221,6 @@ namespace grapher.Models
                                 new ChartXY(gainChart, gainChartY, Constants.GainChartTitle),
                                 showVelocityGainToolStripMenuItem,
                                 showLastMouseMoveMenuItem,
-                                streamingModeToolStripMenuItem,
                                 writeButton,
                                 accelCalculator);
 
@@ -695,8 +693,8 @@ namespace grapher.Models
                 accelCalculator.PollRate,
                 autoWriteMenuItem,
                 showLastMouseMoveMenuItem,
-                showVelocityGainToolStripMenuItem,
-                streamingModeToolStripMenuItem);
+                showVelocityGainToolStripMenuItem
+                );
 
             var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
 

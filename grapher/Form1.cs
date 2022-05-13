@@ -28,14 +28,13 @@ namespace grapher
 
         public RawAcceleration()
         {
+            var scheme = ColorScheme.DarkStreamerTheme;
+            Theme.CurrentScheme = scheme;
+
             InitializeComponent();
 
-            var scheme = ColorScheme.DarkTheme;
-            var theme = new Theme
-            {
-                Scheme = scheme
-            };
-            theme.Apply(this);
+            Theme.Apply(this);
+
 
             Version driverVersion = VersionHelper.ValidOrThrow();
 
@@ -72,7 +71,6 @@ namespace grapher
                 toggleButton,
                 showVelocityGainToolStripMenuItem,
                 showLastMouseMoveToolStripMenuItem,
-                streamingModeToolStripMenuItem,
                 AutoWriteMenuItem,
                 DeviceMenuItem,
                 ScaleMenuItem,

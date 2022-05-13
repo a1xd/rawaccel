@@ -20,15 +20,14 @@ namespace grapher.Models.Serialized
             Field pollRateField,
             ToolStripMenuItem autoWrite,
             ToolStripMenuItem showLastMouseMove,
-            ToolStripMenuItem showVelocityAndGain,
-            ToolStripMenuItem streamingMode)
+            ToolStripMenuItem showVelocityAndGain
+            )
         {
             DpiField = dpiField;
             PollRateField = pollRateField;
             AutoWriteMenuItem = autoWrite;
             ShowLastMouseMoveMenuItem = showLastMouseMove;
             ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
-            StreamingModeMenuItem = streamingMode;
 
             SystemDevices = new List<MultiHandleDevice>();
             ActiveNormTaggedHandles = new List<(IntPtr, bool)>();
@@ -122,7 +121,6 @@ namespace grapher.Models.Serialized
 
         private ToolStripMenuItem ShowVelocityAndGainMoveMenuItem { get; set; }
 
-        private ToolStripMenuItem StreamingModeMenuItem{ get; set; }
         #endregion Properties
 
         #region Methods
@@ -139,7 +137,6 @@ namespace grapher.Models.Serialized
             PollRateField.SetToEntered(GuiSettings.PollRate);
             ShowLastMouseMoveMenuItem.Checked = GuiSettings.ShowLastMouseMove;
             ShowVelocityAndGainMoveMenuItem.Checked = GuiSettings.ShowVelocityAndGain;
-            StreamingModeMenuItem.Checked = GuiSettings.StreamingMode;
             AutoWriteMenuItem.Checked = GuiSettings.AutoWriteToDriverOnStartup;
         }
 
@@ -191,8 +188,7 @@ namespace grapher.Models.Serialized
                 PollRate = (int)PollRateField.Data,
                 ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
                 ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
-                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
-                StreamingMode = StreamingModeMenuItem.Checked
+                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked
             };
         }
 
