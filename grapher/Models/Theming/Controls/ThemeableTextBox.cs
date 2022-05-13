@@ -32,35 +32,51 @@ namespace grapher.Models.Theming.Controls
             {
                 if (_borderColor == value) return;
                 _borderColor = value;
-                RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero, RDW_FRAME | RDW_IUPDATENOW | RDW_INVALIDATE);
+                Invalidate();
+                //RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero, RDW_FRAME | RDW_IUPDATENOW | RDW_INVALIDATE);
             }
         }
 
-        private int _borderWidth = 1;
+        private const int BorderWidth = 1;
 
         protected override void WndProc(ref Message message)
         {
-            base.WndProc(ref message);
-            if (message.Msg != WM_NCPAINT || BorderColor == Color.Transparent) return; 
-
+            if (message.Msg != WM_NCPAINT || BorderColor == Color.Transparent || BorderStyle != BorderStyle.Fixed3D)
+            {
+                base.WndProc(ref message);
+                return;
+            }
+            
             var hdc = GetWindowDC(Handle);
             using (var graphics = Graphics.FromHdcInternal(hdc))
-            using (var pen = new Pen(BorderColor))
-                graphics.DrawRectangle(pen, new Rectangle(0, 0, Width - _borderWidth, Height - _borderWidth));
+            {
+                using (var pen = new Pen(BorderColor))
+                {
+                    var border = new Rectangle(0, 0, Width - BorderWidth, Height - BorderWidth);
+                    graphics.DrawRectangle(pen, border);
+                }
+                using (var pen = new Pen(BackColor))
+                {
+                    var backGround = new Rectangle(1, 1, Width - 3, Height - 3);
+                    graphics.DrawRectangle(pen, backGround);
+                }
+            }
+            
             ReleaseDC(Handle, hdc);
         }
 
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero,
-                RDW_FRAME | RDW_IUPDATENOW | RDW_INVALIDATE);
+            //RedrawWindow(Handle, IntPtr.Zero, IntPtr.Zero, RDW_FRAME | RDW_IUPDATENOW | RDW_INVALIDATE);
         }
 
         [DllImport("user32.dll")]
         static extern IntPtr GetWindowDC(IntPtr hWnd);
+
         [DllImport("user32.dll")]
         static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
         [DllImport("user32.dll")]
         static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprc, IntPtr hrgn, uint flags);
     }
