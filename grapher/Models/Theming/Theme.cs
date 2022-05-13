@@ -41,13 +41,16 @@ namespace grapher.Models.Theming
                         {
                             chart.Series[3].Color = CurrentScheme.SecondaryMouseMovement;
                         }
-                        break;
-                    }
-                    {
 
                         break;
                     }
                     case Label _:
+                    {
+                        control.ForeColor = CurrentScheme.OnBackground;
+                        break;
+                    }
+                        break;
+                    }
                     case ThemeableComboBox comboBox:
                     {
                         comboBox.BackColor = CurrentScheme.Field;
@@ -81,11 +84,12 @@ namespace grapher.Models.Theming
                     }
                     default:
                     {
-                        control.BackColor = Scheme.Control;
-                        control.ForeColor = Scheme.OnControl;
+                        control.BackColor = CurrentScheme.Control;
+                        control.ForeColor = CurrentScheme.OnControl;
                         break;
                     }
                 }
+
                 if (control.HasChildren)
                 {
                     ApplyTheme(control.Controls);
