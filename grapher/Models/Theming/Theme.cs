@@ -9,12 +9,12 @@ namespace grapher.Models.Theming
 {
     public class Theme
     {
-        public ColorScheme Scheme { get; set; }
+        public static ColorScheme CurrentScheme { get; set; }
 
-        public void Apply(Form form)
+        public static void Apply(Form form)
         {
-            form.BackColor = Scheme.Background;
-            form.ForeColor = Scheme.OnBackground;
+            form.BackColor = CurrentScheme.Background;
+            form.ForeColor = CurrentScheme.OnBackground;
 
             if (!form.HasChildren)
             {
@@ -24,11 +24,10 @@ namespace grapher.Models.Theming
             ApplyTheme(form.Controls);
         }
 
-        public void ApplyTheme(Control.ControlCollection container)
+        public static void ApplyTheme(Control.ControlCollection container)
         {
             foreach (Control control in container)
             {
-
                 switch (control)
                 {
                     case Chart chart:
