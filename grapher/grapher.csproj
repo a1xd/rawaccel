@@ -153,6 +153,9 @@
     <Compile Include="Models\Theming\Controls\ThemeableComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Models\Theming\Controls\ThemeableTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Models\Theming\Theme.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

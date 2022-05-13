@@ -56,8 +56,14 @@ namespace grapher.Models.Theming
                         comboBox.ButtonColor = CurrentScheme.Control;
                         break;
                     }
+                    case ThemeableTextBox textBox:
                     {
-                        control.ForeColor = Scheme.OnBackground;
+                        textBox.BackColor = CurrentScheme.Field;
+                        textBox.ForeColor = CurrentScheme.OnField;
+                        textBox.BorderStyle = BorderStyle.FixedSingle;
+                        textBox.BorderColor = CurrentScheme.ControlBorder;
+                        break;
+                    }
                     case ComboBox _:
                     {
                         Console.WriteLine(
@@ -67,8 +73,9 @@ namespace grapher.Models.Theming
                     }
                     case TextBox _:
                     {
-                        control.BackColor = Scheme.Field;
-                        control.ForeColor = Scheme.OnField;
+                        Console.WriteLine(
+                            "Please replace all TextBoxes with the ThemeambleTextBox, so theming can be correctly applied"
+                        );
 
                         break;
                     }
