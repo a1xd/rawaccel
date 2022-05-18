@@ -84,7 +84,6 @@ namespace grapher.Models.Theming
                         button.BackColor = CurrentScheme.ButtonFace;
                         break;
                     }
-                        break;
                     case ThemeableRichTextBox richTextBox:
                     {
                         control.BackColor = CurrentScheme.Field;

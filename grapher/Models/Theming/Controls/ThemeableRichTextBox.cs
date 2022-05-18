@@ -39,20 +39,6 @@ namespace grapher.Models.Theming.Controls
             }
         }
 
-        private Color _readOnlyBorderColor = Color.DarkSlateGray;
-
-        [DefaultValue(typeof(Color), "Gray")]
-        public Color ReadOnlyBorderColor
-        {
-            get => _readOnlyBorderColor;
-            set
-            {
-                if (_readOnlyBorderColor == value) return;
-                _readOnlyBorderColor = value;
-                Invalidate();
-            }
-        }
-
         private const int BorderWidth = 1;
 
         protected override void WndProc(ref Message message)
