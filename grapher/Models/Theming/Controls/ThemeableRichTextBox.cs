@@ -27,7 +27,7 @@ namespace grapher.Models.Theming.Controls
 
         private Color _readOnlyBackColor = Color.DarkSlateGray;
 
-        [DefaultValue(typeof(Color), "Gray")]
+        [DefaultValue(typeof(Color), "DarkSlateGray")]
         public Color ReadOnlyBackColor
         {
             get => _readOnlyBackColor;

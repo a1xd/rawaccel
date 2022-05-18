@@ -124,6 +124,14 @@ namespace grapher.Models.Theming
 
                         break;
                     }
+                    case RichTextBox _:
+                    {
+                        Console.WriteLine(
+                            "Please replace all RichTextBoxes with the ThemeambleRichTextBox, so theming can be correctly applied"
+                        );
+
+                        break;
+                    }
                     default:
                     {
                         control.BackColor = CurrentScheme.Control;
