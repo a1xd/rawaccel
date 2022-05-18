@@ -85,6 +85,14 @@ namespace grapher.Models.Theming
                         break;
                     }
                         break;
+                    case ThemeableRichTextBox richTextBox:
+                    {
+                        control.BackColor = CurrentScheme.Field;
+                        control.ForeColor = CurrentScheme.OnField;
+                        richTextBox.BorderStyle = BorderStyle.Fixed3D;
+                        richTextBox.BorderColor = CurrentScheme.ControlBorder;
+                        richTextBox.ReadOnlyBackColor = CurrentScheme.DisabledControl;
+                            break;
                     }
                     case ThemeableComboBox comboBox:
                     {
