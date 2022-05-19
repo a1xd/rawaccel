@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.IO;
 using grapher.Models.Theming;
+using grapher.Models.Theming.IO;
 
 namespace grapher
 {
@@ -28,9 +29,6 @@ namespace grapher
 
         public RawAcceleration()
         {
-            var scheme = ColorScheme.AccentedDarkTheme;
-            Theme.CurrentScheme = scheme;
-
             InitializeComponent();
 
             Version driverVersion = VersionHelper.ValidOrThrow();
@@ -48,7 +46,33 @@ namespace grapher
                     })
             });
 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { HelpMenuItem });
+            var themeOperations = new ThemeFileOperations();
+            var schemes = themeOperations.LoadThemes();
+            var themeMenuItem = new ToolStripMenuItem("&Themes");
+
+            themeMenuItem.DropDownItemClicked += (s, e) =>
+            {
+                if (e.ClickedItem == null) return;
+
+                foreach (ToolStripMenuItem item in themeMenuItem.DropDownItems)
+                {
+                    item.Checked = e.ClickedItem.Text == item.Text;
+                }
+            };
+
+            var settings = GUISettings.MaybeLoad();
+
+            Theme.CurrentScheme = ColorSchemeManager.GetSelected(settings, schemes);
+
+            foreach (var colorScheme in schemes)
+            {
+                var menuItem = new ToolStripMenuItem(colorScheme.Name);
+
+                menuItem.Checked = settings.CurrentColorScheme == colorScheme.Name;
+                themeMenuItem.DropDownItems.Add(menuItem);
+            }
+
+            menuStrip1.Items.AddRange(new ToolStripItem[] { themeMenuItem, HelpMenuItem });
 
             Theme.Apply(this, menuStrip1);
 
@@ -75,6 +99,7 @@ namespace grapher
                 AutoWriteMenuItem,
                 DeviceMenuItem,
                 ScaleMenuItem,
+                themeMenuItem,
                 DPITextBox,
                 PollRateTextBox,
                 DirectionalityPanel,

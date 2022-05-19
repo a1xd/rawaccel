@@ -7,7 +7,9 @@ using System.Text;
 using System.Drawing;
 using grapher.Models.Devices;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using grapher.Models.Theming;
 
 namespace grapher.Models.Serialized
 {
@@ -20,7 +22,9 @@ namespace grapher.Models.Serialized
             Field pollRateField,
             ToolStripMenuItem autoWrite,
             ToolStripMenuItem showLastMouseMove,
-            ToolStripMenuItem showVelocityAndGain
+            ToolStripMenuItem showVelocityAndGain,
+            ToolStripMenuItem themeMenu,
+            Form form
             )
         {
             DpiField = dpiField;
@@ -28,11 +32,15 @@ namespace grapher.Models.Serialized
             AutoWriteMenuItem = autoWrite;
             ShowLastMouseMoveMenuItem = showLastMouseMove;
             ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
+            ThemeMenu = themeMenu;
+            Form = form;
 
             SystemDevices = new List<MultiHandleDevice>();
             ActiveNormTaggedHandles = new List<(IntPtr, bool)>();
 
             GuiSettings = GUISettings.MaybeLoad();
+
+            DoaThing();
 
             if (GuiSettings is null)
             {
@@ -120,6 +128,9 @@ namespace grapher.Models.Serialized
         private ToolStripMenuItem ShowLastMouseMoveMenuItem { get; set; }
 
         private ToolStripMenuItem ShowVelocityAndGainMoveMenuItem { get; set; }
+        private ToolStripMenuItem ThemeMenu { get; set; }
+        private string SelectedTheme { get; set; } = "Light Theme";
+        private Form Form { get; set; }
 
         #endregion Properties
 
@@ -188,7 +199,8 @@ namespace grapher.Models.Serialized
                 PollRate = (int)PollRateField.Data,
                 ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
                 ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
-                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked
+                AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
+                CurrentColorScheme = SelectedTheme
             };
         }
 
@@ -304,6 +316,31 @@ namespace grapher.Models.Serialized
             ActiveConfig = DriverConfig.GetActive();
             File.WriteAllText(path, ActiveConfig.ToJSON());
             return ActiveConfig;
+        }
+
+        private void DoaThing()
+        {
+            foreach (ToolStripMenuItem item in ThemeMenu.DropDownItems)
+            {
+                item.Click += (s, e) =>
+                {
+                    if (GuiSettings.CurrentColorScheme == item.Name)
+                    {
+                        return;
+                    }
+
+                    SelectedTheme = item.Text;
+                    var colorScheme = ColorSchemeManager.FromName(item.Text);
+
+                    Theme.CurrentScheme = colorScheme;
+                    Theme.Apply(Form);
+                    GuiSettings.CurrentColorScheme = colorScheme.Name;
+                    GuiSettings.Save();
+
+                    MessageBox.Show(@"If you switched between a light and dark theme, some colors might be off. 
+If this is the case, please restart the app to apply all colors correctly."); 
+                };
+            }
         }
 
         #endregion Methods

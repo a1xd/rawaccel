@@ -40,6 +40,7 @@ namespace grapher.Models
             ToolStripMenuItem autoWriteMenuItem,
             ToolStripMenuItem deviceMenuItem,
             ToolStripMenuItem scaleMenuItem,
+            ToolStripMenuItem themeMenuItem,
             ToolStripTextBox dpiTextBox,
             ToolStripTextBox pollRateTextBox,
             Panel directionalityPanel,
@@ -693,7 +694,9 @@ namespace grapher.Models
                 accelCalculator.PollRate,
                 autoWriteMenuItem,
                 showLastMouseMoveMenuItem,
-                showVelocityGainToolStripMenuItem
+                showVelocityGainToolStripMenuItem,
+                themeMenuItem,
+                form
                 );
 
             var mouseWatcher = new MouseWatcher(form, mouseLabel, accelCharts, settings);
