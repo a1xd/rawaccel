@@ -175,7 +175,7 @@ namespace grapher.Models.Options.Directionality
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
-            Color col = Theme.CurrentScheme.Secondary;
+            Color col = Theme.CurrentScheme.ControlBorder;
             ButtonBorderStyle bbs = ButtonBorderStyle.Dashed;
             int thickness = 1;
             ControlPaint.DrawBorder(e.Graphics, this.ContainingPanel.ClientRectangle, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs);

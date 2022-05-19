@@ -15,7 +15,18 @@ namespace grapher.Models.Theming
                                                         System.Windows.Forms.TextFormatFlags.VerticalCenter |
                                                         System.Windows.Forms.TextFormatFlags.WordBreak;
 
-        public static ColorScheme CurrentScheme { get; set; }
+        public static ColorScheme CurrentScheme
+        {
+            get => _currentScheme;
+            set
+            {
+                _previousScheme = _currentScheme;
+                _currentScheme = value;
+            }
+        }
+
+        private static ColorScheme _previousScheme = null;
+        private static ColorScheme _currentScheme;
 
         public static void Apply(Form form, MenuStrip menu = null)
         {
@@ -24,6 +35,11 @@ namespace grapher.Models.Theming
 
             if (form.HasChildren)
             {
+                if (_previousScheme != null)
+                {
+                    RemoveEvents(form.Controls);
+                }
+
                 ApplyTheme(form.Controls);
             }
 
@@ -32,7 +48,7 @@ namespace grapher.Models.Theming
                 return;
             }
 
-            menu.BackColor = CurrentScheme.Background;
+            menu.BackColor = CurrentScheme.MenuBackground;
             menu.ForeColor = CurrentScheme.OnControl;
 
             var menuRenderer = new StyledMenuRenderer();
@@ -46,8 +62,8 @@ namespace grapher.Models.Theming
 
         private static void ApplyTheme(ToolStripDropDownItem item)
         {
+            item.BackColor = CurrentScheme.MenuBackground;
             item.ForeColor = CurrentScheme.OnControl;
-            item.BackColor = CurrentScheme.Background;
 
             if (!item.HasDropDownItems) return;
 
@@ -99,7 +115,7 @@ namespace grapher.Models.Theming
                     }
                     case Panel _:
                     {
-                        control.BackColor = CurrentScheme.Background;
+                        control.BackColor = CurrentScheme.Surface;
                         control.ForeColor = CurrentScheme.OnBackground;
                         break;
                     }
@@ -109,7 +125,7 @@ namespace grapher.Models.Theming
                         {
                             // Handle this button like a Label instead.
                             control.ForeColor = CurrentScheme.OnBackground;
-                            control.BackColor = CurrentScheme.Background;
+                            control.BackColor = CurrentScheme.Surface;
                             break;
                         }
 
@@ -175,6 +191,33 @@ namespace grapher.Models.Theming
                 if (control.HasChildren)
                 {
                     ApplyTheme(control.Controls);
+                }
+            }
+        }
+
+        private static void RemoveEvents(Control.ControlCollection container)
+        {
+            foreach (Control control in container)
+            {
+                switch (control)
+                {
+                    case CheckBox checkBox:
+                    {
+                        checkBox.Paint -= CheckBox_Paint;
+                        break;
+                    }
+                    case Button button:
+                    {
+                        button.Paint -= Button_Paint;
+                        button.EnabledChanged -= Button_EnabledChanged;
+
+                        break;
+                    }
+                }
+
+                if (control.HasChildren)
+                {
+                    RemoveEvents(control.Controls);
                 }
             }
         }
@@ -251,7 +294,7 @@ namespace grapher.Models.Theming
         {
             var checkBox = (CheckBox)sender;
 
-            e.Graphics.Clear(CurrentScheme.Background);
+            e.Graphics.Clear(CurrentScheme.Surface);
             const int checkBoxSize = 13;
             const int textSpacing = 5;
 
@@ -295,7 +338,7 @@ namespace grapher.Models.Theming
                 if (CurrentScheme.UseAccentGradientsForCheckboxes)
                 {
                     using (var brush = GetGradientBrush(rect,
-                               isHovering ? CurrentScheme.CheckBoxHover : CurrentScheme.Secondary,
+                               isHovering ? CurrentScheme.CheckBoxHover : CurrentScheme.CheckBoxChecked,
                                CurrentScheme.Primary)
                           )
                     {
@@ -304,14 +347,14 @@ namespace grapher.Models.Theming
                 }
                 else
                 {
-                    using (var brush = new SolidBrush(CurrentScheme.CheckBoxBackground))
+                    using (var brush = new SolidBrush(CurrentScheme.CheckBoxChecked))
                     {
                         e.Graphics.FillRectangle(brush, selectRect);
                     }
                 }
             }
 
-            using (var pen = new Pen(CurrentScheme.ControlBorder))
+            using (var pen = new Pen(CurrentScheme.CheckBoxBorder))
             {
                 e.Graphics.DrawRectangle(pen, rect);
             }
