@@ -5,11 +5,14 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using grapher.Models.Theming.Controls;
+using Cursor = System.Windows.Forms.Cursor;
 
 namespace grapher.Models.Theming
 {
     public class Theme
     {
+        private const TextFormatFlags TextFormatFlags = System.Windows.Forms.TextFormatFlags.HorizontalCenter | System.Windows.Forms.TextFormatFlags.VerticalCenter | System.Windows.Forms.TextFormatFlags.WordBreak;
+
         public static ColorScheme CurrentScheme { get; set; }
 
         public static void Apply(Form form, MenuStrip menu = null)
@@ -112,6 +115,9 @@ namespace grapher.Models.Theming
                         button.FlatAppearance.BorderColor = CurrentScheme.ButtonBorder;
                         button.ForeColor = CurrentScheme.OnControl;
                         button.BackColor = CurrentScheme.ButtonFace;
+                        button.Paint += Button_Paint;
+                        button.EnabledChanged += Button_EnabledChanged;
+
                         break;
                     }
                     case ThemeableRichTextBox richTextBox:
@@ -171,6 +177,26 @@ namespace grapher.Models.Theming
             }
         }
 
+        private static void Button_EnabledChanged(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+
+            button.BackColor = !button.Enabled ? CurrentScheme.DisabledControl : CurrentScheme.ButtonFace;
+        }
+
+        private static void Button_Paint(object sender, PaintEventArgs e)
+        {
+            var btn = (Button)sender;
+
+            if (btn.Enabled)
+            {
+                return;
+            }
+            e.Graphics.Clear(btn.BackColor);
+
+            TextRenderer.DrawText(e.Graphics, btn.Text, btn.Font, e.ClipRectangle, btn.ForeColor, TextFormatFlags);
+        }
+
         private static void CheckBox_Paint(object sender, PaintEventArgs e)
         {
             var checkBox = (CheckBox)sender;
@@ -179,11 +205,10 @@ namespace grapher.Models.Theming
             const int checkBoxSize = 13;
             const int textSpacing = 5;
 
-            using (var brush = new SolidBrush(checkBox.ForeColor))
-            {
-                e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-                e.Graphics.DrawString(checkBox.Text, checkBox.Font, brush, checkBoxSize + textSpacing, 1);
-            }
+            const int textOffset = checkBoxSize + textSpacing;
+            var textBounds = new Rectangle(textOffset, 0, e.ClipRectangle.Width - textOffset,
+                e.ClipRectangle.Height);
+            TextRenderer.DrawText(e.Graphics, checkBox.Text, checkBox.Font, textBounds, checkBox.ForeColor, TextFormatFlags);
 
             var pt = new Point(0, 0);
             var rect = new Rectangle(pt, new Size(checkBoxSize, checkBoxSize));
