@@ -33,9 +33,6 @@ namespace grapher
 
             InitializeComponent();
 
-            Theme.Apply(this);
-
-
             Version driverVersion = VersionHelper.ValidOrThrow();
 
             ToolStripMenuItem HelpMenuItem = new ToolStripMenuItem("&Help");
@@ -44,12 +41,16 @@ namespace grapher
                     new ToolStripMenuItem("&About", null, (s, e) => {
                         using (var form = new AboutBox(driverVersion))
                         {
+                            Theme.Apply(form);
+
                             form.ShowDialog();
                         }
                     })
             });
 
             menuStrip1.Items.AddRange(new ToolStripItem[] { HelpMenuItem });
+
+            Theme.Apply(this, menuStrip1);
 
             AccelGUI = AccelGUIFactory.Construct(
                 this,

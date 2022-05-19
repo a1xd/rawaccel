@@ -12,17 +12,41 @@ namespace grapher.Models.Theming
     {
         public static ColorScheme CurrentScheme { get; set; }
 
-        public static void Apply(Form form)
+        public static void Apply(Form form, MenuStrip menu = null)
         {
             form.BackColor = CurrentScheme.Background;
             form.ForeColor = CurrentScheme.OnBackground;
 
-            if (!form.HasChildren)
+            if (form.HasChildren)
+            {
+                ApplyTheme(form.Controls);
+            }
+
+            if (menu == null)
             {
                 return;
             }
 
-            ApplyTheme(form.Controls);
+            foreach (ToolStripMenuItem item in menu.Items)
+            {
+                ApplyTheme(item);
+            }
+        }
+
+        private static void ApplyTheme(ToolStripDropDownItem item)
+        {
+            item.ForeColor = CurrentScheme.OnControl;
+            item.BackColor = CurrentScheme.Background;
+
+            if (!item.HasDropDownItems) return;
+
+            foreach (ToolStripItem child in item.DropDownItems)
+            {
+                if (child is ToolStripMenuItem toolStripItem)
+                {
+                    ApplyTheme(toolStripItem);
+                }
+            }
         }
 
         public static void ApplyTheme(Control.ControlCollection container)
@@ -62,7 +86,16 @@ namespace grapher.Models.Theming
                         checkBox.Paint += Theme.CheckBox_Paint;
                         break;
                     }
-                    case Panel panel:
+                    case MenuStrip menu:
+                    {
+                        control.BackColor = CurrentScheme.Control;
+                        control.ForeColor = CurrentScheme.OnControl;
+                        menu.ForeColor = CurrentScheme.OnControl;
+                        menu.RenderMode = ToolStripRenderMode.ManagerRenderMode;
+                        menu.Renderer = new StyledMenuRenderer();
+                        break;
+                    }
+                    case Panel _:
                     {
                         control.BackColor = CurrentScheme.Background;
                         control.ForeColor = CurrentScheme.OnBackground;
@@ -130,12 +163,6 @@ namespace grapher.Models.Theming
                             "Please replace all RichTextBoxes with the ThemeambleRichTextBox, so theming can be correctly applied"
                         );
 
-                        break;
-                    }
-                    default:
-                    {
-                        control.BackColor = CurrentScheme.Control;
-                        control.ForeColor = CurrentScheme.OnControl;
                         break;
                     }
                 }
