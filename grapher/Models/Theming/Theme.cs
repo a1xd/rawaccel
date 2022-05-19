@@ -191,7 +191,6 @@ namespace grapher.Models.Theming
             var mousePos = checkBox.PointToClient(Cursor.Position);
             var isHovering = checkBox.ClientRectangle.Contains(mousePos);
 
-            // TODO: Update colors with newly added ones
             if (isHovering)
             {
                 using (var brush = new SolidBrush(CurrentScheme.CheckBoxHover))
