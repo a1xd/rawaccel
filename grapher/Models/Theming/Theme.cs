@@ -27,6 +27,12 @@ namespace grapher.Models.Theming
                 return;
             }
 
+            menu.BackColor = CurrentScheme.Background;
+            menu.ForeColor = CurrentScheme.OnControl;
+
+            var menuRenderer = new StyledMenuRenderer();
+            menu.Renderer = menuRenderer;
+
             foreach (ToolStripMenuItem item in menu.Items)
             {
                 ApplyTheme(item);
@@ -83,16 +89,7 @@ namespace grapher.Models.Theming
                         checkBox.AutoSize = false;
                         checkBox.BackColor = CurrentScheme.Background;
                         checkBox.ForeColor = CurrentScheme.OnControl;
-                        checkBox.Paint += Theme.CheckBox_Paint;
-                        break;
-                    }
-                    case MenuStrip menu:
-                    {
-                        control.BackColor = CurrentScheme.Control;
-                        control.ForeColor = CurrentScheme.OnControl;
-                        menu.ForeColor = CurrentScheme.OnControl;
-                        menu.RenderMode = ToolStripRenderMode.ManagerRenderMode;
-                        menu.Renderer = new StyledMenuRenderer();
+                        checkBox.Paint += CheckBox_Paint;
                         break;
                     }
                     case Panel _:
@@ -124,7 +121,7 @@ namespace grapher.Models.Theming
                         richTextBox.BorderStyle = BorderStyle.Fixed3D;
                         richTextBox.BorderColor = CurrentScheme.ControlBorder;
                         richTextBox.ReadOnlyBackColor = CurrentScheme.DisabledControl;
-                            break;
+                        break;
                     }
                     case ThemeableComboBox comboBox:
                     {
@@ -191,9 +188,23 @@ namespace grapher.Models.Theming
             var pt = new Point(0, 0);
             var rect = new Rectangle(pt, new Size(checkBoxSize, checkBoxSize));
 
-            using (var brush = new SolidBrush(checkBox.BackColor))
+            var mousePos = checkBox.PointToClient(Cursor.Position);
+            var isHovering = checkBox.ClientRectangle.Contains(mousePos);
+
+            // TODO: Update colors with newly added ones
+            if (isHovering)
             {
-                e.Graphics.FillRectangle(brush, rect);
+                using (var brush = new SolidBrush(CurrentScheme.CheckBoxHover))
+                {
+                    e.Graphics.FillRectangle(brush, rect);
+                }
+            }
+            else
+            {
+                using (var brush = new SolidBrush(CurrentScheme.CheckBoxBackground))
+                {
+                    e.Graphics.FillRectangle(brush, rect);
+                }
             }
 
             if (checkBox.Checked)
@@ -208,8 +219,9 @@ namespace grapher.Models.Theming
 
                 if (CurrentScheme.UseAccentGradientsForCheckboxes)
                 {
-                    using (var brush = new LinearGradientBrush(
-                               rect, CurrentScheme.Primary, CurrentScheme.Secondary, 315)
+                    using (var brush = GetGradientBrush(rect,
+                               isHovering ? CurrentScheme.CheckBoxHover : CurrentScheme.Secondary,
+                               CurrentScheme.Primary)
                           )
                     {
                         e.Graphics.FillRectangle(brush, selectRect);
@@ -217,7 +229,7 @@ namespace grapher.Models.Theming
                 }
                 else
                 {
-                    using (var brush = new SolidBrush(CurrentScheme.Primary))
+                    using (var brush = new SolidBrush(CurrentScheme.CheckBoxBackground))
                     {
                         e.Graphics.FillRectangle(brush, selectRect);
                     }
@@ -229,6 +241,18 @@ namespace grapher.Models.Theming
                 e.Graphics.DrawRectangle(pen, rect);
             }
         }
+
+        private static LinearGradientBrush GetGradientBrush(
+            Rectangle rect, Color primary, Color secondary, int angle = 315
+        )
+        {
+            return new LinearGradientBrush(rect,
+                primary,
+                secondary,
+                angle
+            );
+        }
+
         private static void SetChartColors(Chart chart)
         {
             chart.ForeColor = CurrentScheme.ChartForeground;

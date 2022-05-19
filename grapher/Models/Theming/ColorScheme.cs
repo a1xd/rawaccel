@@ -48,7 +48,12 @@ namespace grapher.Models.Theming
         [XmlAttribute] public Color OnBackground { get; internal set; }
         [XmlAttribute] public Color Surface { get; internal set; }
         [XmlAttribute] public Color SurfaceVariant { get; internal set; }
-        
+        [XmlAttribute] public Color MenuSelectedBorder { get; internal set; }
+        [XmlAttribute] public Color MenuSelected { get; internal set; }
+        [XmlAttribute] public Color CheckBoxBackground { get; internal set; }
+        [XmlAttribute] public Color CheckBoxBorder { get; internal set; }
+        [XmlAttribute] public Color CheckBoxHover { get; internal set; }
+
         /// <summary>
         /// Will create gradients between <see cref="Primary"/> and <see cref="Secondary"/>,
         /// instead of just the solid colors for Checkbox checked states.
@@ -77,7 +82,12 @@ namespace grapher.Models.Theming
             Background = SystemColors.Window,
             OnBackground = Color.FromArgb(64, 64, 64),
             Surface = SystemColors.Control,
-            SurfaceVariant = SystemColors.ControlLight
+            SurfaceVariant = SystemColors.ControlLight,
+            MenuSelectedBorder = Color.FromArgb(0, 120, 215),
+            MenuSelected = Color.FromArgb(179, 215, 243),
+            CheckBoxBackground = Color.FromArgb(179, 215, 243),
+            CheckBoxBorder = Color.FromArgb(0, 120, 215),
+            CheckBoxHover = Color.FromArgb(113, 166, 207)
         };
 
         public static ColorScheme LightStreamerTheme = new ColorScheme
@@ -102,7 +112,12 @@ namespace grapher.Models.Theming
             Background = SystemColors.Window,
             OnBackground = Color.FromArgb(64, 64, 64),
             Surface = SystemColors.Control,
-            SurfaceVariant = SystemColors.ControlLight
+            SurfaceVariant = SystemColors.ControlLight,
+            MenuSelectedBorder = Color.FromArgb(0, 120, 215),
+            MenuSelected = Color.FromArgb(179, 215, 243),
+            CheckBoxBackground = Color.FromArgb(179, 215, 243),
+            CheckBoxBorder = Color.FromArgb(0, 120, 215),
+            CheckBoxHover = Color.FromArgb(113, 166, 207),
         };
 
         public static ColorScheme DarkTheme = new ColorScheme
@@ -128,6 +143,11 @@ namespace grapher.Models.Theming
             OnBackground = Color.FromArgb(234, 234, 234),
             Surface = Color.FromArgb(48, 48, 48),
             SurfaceVariant = Color.FromArgb(35, 35, 35),
+            MenuSelectedBorder = Color.FromArgb(64, 64, 64),
+            MenuSelected = Color.FromArgb(77, 77, 77),
+            CheckBoxBackground = Color.FromArgb(87, 87, 87),
+            CheckBoxBorder = Color.FromArgb(102, 102, 102),
+            CheckBoxHover = Color.FromArgb(135, 135, 135),
             UseAccentGradientsForCheckboxes = true
         };
 
@@ -154,6 +174,11 @@ namespace grapher.Models.Theming
             OnBackground = Color.FromArgb(234, 234, 234),
             Surface = Color.FromArgb(48, 48, 48),
             SurfaceVariant = Color.FromArgb(35, 35, 35),
+            MenuSelectedBorder = Color.FromArgb(64, 64, 64),
+            MenuSelected = Color.FromArgb(77, 77, 77),
+            CheckBoxBackground = Color.FromArgb(87, 87, 87),
+            CheckBoxBorder = Color.FromArgb(223, 185, 136),
+            CheckBoxHover = Color.FromArgb(135, 135, 135),
             UseAccentGradientsForCheckboxes = true
         };
 
@@ -179,7 +204,12 @@ namespace grapher.Models.Theming
             OnBackground = Color.FromArgb(234, 234, 234),
             Surface = Color.FromArgb(48, 48, 48),
             SurfaceVariant = Color.FromArgb(35, 35, 35),
-            UseAccentGradientsForCheckboxes = true
+            MenuSelectedBorder = Color.FromArgb(64, 64, 64),
+            MenuSelected = Color.FromArgb(77, 77, 77),
+            CheckBoxBackground = Color.FromArgb(87, 87, 87),
+            CheckBoxBorder = Color.FromArgb(102, 102, 102),
+            CheckBoxHover = Color.FromArgb(135, 135, 135),
+            UseAccentGradientsForCheckboxes = true,
         };
     }
 }
