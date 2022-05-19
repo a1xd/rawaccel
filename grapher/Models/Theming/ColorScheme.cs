@@ -55,10 +55,16 @@ namespace grapher.Models.Theming
         [XmlAttribute] public Color CheckBoxHover { get; internal set; }
 
         /// <summary>
-        /// Will create gradients between <see cref="Primary"/> and <see cref="Secondary"/>,
+        /// Will create gradients between <see cref="CheckBoxBackground"/> and <see cref="Secondary"/>,
         /// instead of just the solid colors for Checkbox checked states.
         /// </summary>
         [XmlAttribute] public bool UseAccentGradientsForCheckboxes { get; internal set; }
+
+        /// <summary>
+        /// Will create gradients between <see cref="Primary"/> and <see cref="ButtonFace"/>,
+        /// instead of just the solid colors for Buttons.
+        /// </summary>
+        [XmlAttribute] public bool UseAccentGradientsForButtons { get; internal set; }
 
         public static ColorScheme LightTheme = new ColorScheme
         {
@@ -179,7 +185,8 @@ namespace grapher.Models.Theming
             CheckBoxBackground = Color.FromArgb(87, 87, 87),
             CheckBoxBorder = Color.FromArgb(223, 185, 136),
             CheckBoxHover = Color.FromArgb(135, 135, 135),
-            UseAccentGradientsForCheckboxes = true
+            UseAccentGradientsForCheckboxes = true,
+            UseAccentGradientsForButtons = true
         };
 
         public static ColorScheme DarkStreamerTheme = new ColorScheme
@@ -209,7 +216,7 @@ namespace grapher.Models.Theming
             CheckBoxBackground = Color.FromArgb(87, 87, 87),
             CheckBoxBorder = Color.FromArgb(102, 102, 102),
             CheckBoxHover = Color.FromArgb(135, 135, 135),
-            UseAccentGradientsForCheckboxes = true,
+            UseAccentGradientsForCheckboxes = true
         };
     }
 }

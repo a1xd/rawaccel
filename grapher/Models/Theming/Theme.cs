@@ -11,7 +11,9 @@ namespace grapher.Models.Theming
 {
     public class Theme
     {
-        private const TextFormatFlags TextFormatFlags = System.Windows.Forms.TextFormatFlags.HorizontalCenter | System.Windows.Forms.TextFormatFlags.VerticalCenter | System.Windows.Forms.TextFormatFlags.WordBreak;
+        private const TextFormatFlags TextFormatFlags = System.Windows.Forms.TextFormatFlags.HorizontalCenter |
+                                                        System.Windows.Forms.TextFormatFlags.VerticalCenter |
+                                                        System.Windows.Forms.TextFormatFlags.WordBreak;
 
         public static ColorScheme CurrentScheme { get; set; }
 
@@ -186,15 +188,63 @@ namespace grapher.Models.Theming
 
         private static void Button_Paint(object sender, PaintEventArgs e)
         {
-            var btn = (Button)sender;
+            var button = (Button)sender;
 
-            if (btn.Enabled)
+            if (!button.Enabled)
             {
+                e.Graphics.Clear(button.BackColor);
+
+                TextRenderer.DrawText(e.Graphics, button.Text, button.Font, e.ClipRectangle, button.ForeColor,
+                    TextFormatFlags);
+
                 return;
             }
-            e.Graphics.Clear(btn.BackColor);
 
-            TextRenderer.DrawText(e.Graphics, btn.Text, btn.Font, e.ClipRectangle, btn.ForeColor, TextFormatFlags);
+            if (!CurrentScheme.UseAccentGradientsForButtons) return;
+
+            DrawGradientButton(e, button);
+        }
+
+        private static void DrawGradientButton(PaintEventArgs e, Button button)
+        {
+            using (var brush = GetGradientBrush(button.ClientRectangle, CurrentScheme.Secondary,
+                       CurrentScheme.ButtonFace))
+            {
+                e.Graphics.FillRectangle(brush, button.ClientRectangle);
+            }
+
+            TextRenderer.DrawText(e.Graphics, button.Text, button.Font, e.ClipRectangle, button.ForeColor,
+                TextFormatFlags);
+
+
+            var mousePos = button.PointToClient(Cursor.Position);
+            var isHovering = button.ClientRectangle.Contains(mousePos);
+
+            if (isHovering)
+            {
+                if ((Control.MouseButtons & MouseButtons.Left) != 0)
+                {
+                    using (var brush = new SolidBrush(Color.FromArgb(63, 255, 255, 255)))
+                    {
+                        e.Graphics.FillRectangle(brush, button.ClientRectangle);
+                    }
+                }
+                else
+                {
+                    using (var brush = new SolidBrush(Color.FromArgb(63, 81, 81, 81)))
+                    {
+                        e.Graphics.FillRectangle(brush, button.ClientRectangle);
+                    }
+                }
+            }
+
+            const int borderWidth = 2;
+            using (var pen = new Pen(CurrentScheme.ButtonBorder, borderWidth))
+            {
+                var borderRect = new Rectangle(borderWidth / 2, borderWidth / 2,
+                    button.ClientRectangle.Width - borderWidth, button.ClientRectangle.Height - borderWidth);
+                e.Graphics.DrawRectangle(pen, borderRect);
+            }
         }
 
         private static void CheckBox_Paint(object sender, PaintEventArgs e)
@@ -208,7 +258,8 @@ namespace grapher.Models.Theming
             const int textOffset = checkBoxSize + textSpacing;
             var textBounds = new Rectangle(textOffset, 0, e.ClipRectangle.Width - textOffset,
                 e.ClipRectangle.Height);
-            TextRenderer.DrawText(e.Graphics, checkBox.Text, checkBox.Font, textBounds, checkBox.ForeColor, TextFormatFlags);
+            TextRenderer.DrawText(e.Graphics, checkBox.Text, checkBox.Font, textBounds, checkBox.ForeColor,
+                TextFormatFlags);
 
             var pt = new Point(0, 0);
             var rect = new Rectangle(pt, new Size(checkBoxSize, checkBoxSize));
