@@ -6,7 +6,7 @@ using System.IO;
 namespace grapher.Models.Serialized
 {
     [Serializable]
-    [JsonObject(ItemRequired = Required.Always)]
+    [JsonObject]
     public class GUISettings
     {
         #region Constructors
@@ -37,7 +37,8 @@ namespace grapher.Models.Serialized
             Order = 6,
             DefaultValueHandling = DefaultValueHandling.Populate
         )]
-        public string CurrentColorScheme { get; set; } = "Light Theme";
+        [DefaultValue("Light Theme")]
+        public string CurrentColorScheme { get; set; }
 
         #endregion Properties
 
