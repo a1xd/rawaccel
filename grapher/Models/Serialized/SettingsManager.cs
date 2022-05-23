@@ -321,7 +321,11 @@ namespace grapher.Models.Serialized
 
         private string GetSelectedTheme()
         {
-            return string.IsNullOrEmpty(GuiSettings.CurrentColorScheme) ? "Light Theme" : GuiSettings.CurrentColorScheme;
+            if (GuiSettings == null || string.IsNullOrEmpty(GuiSettings.CurrentColorScheme))
+            {
+                return "Light Theme";
+            }
+            return GuiSettings.CurrentColorScheme;
         }
 
         private void AddEventsToThemeMenu()

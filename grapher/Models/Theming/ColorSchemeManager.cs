@@ -41,6 +41,11 @@ namespace grapher.Models.Theming
 
         public static ColorScheme GetSelected(GUISettings settings, List<ColorScheme> schemes = null)
         {
+            if (settings == null)
+            {
+                return ColorScheme.LightTheme;
+            }
+
             if (schemes == null)
             {
                 var operations = new ThemeFileOperations();
