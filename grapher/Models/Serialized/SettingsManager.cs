@@ -40,7 +40,8 @@ namespace grapher.Models.Serialized
 
             GuiSettings = GUISettings.MaybeLoad();
 
-            DoaThing();
+            SelectedTheme = GetSelectedTheme();
+            AddEventsToThemeMenu();
 
             if (GuiSettings is null)
             {
@@ -129,7 +130,7 @@ namespace grapher.Models.Serialized
 
         private ToolStripMenuItem ShowVelocityAndGainMoveMenuItem { get; set; }
         private ToolStripMenuItem ThemeMenu { get; set; }
-        private string SelectedTheme { get; set; } = "Light Theme";
+        private string SelectedTheme { get; set; }
         private Form Form { get; set; }
 
         #endregion Properties
@@ -318,7 +319,12 @@ namespace grapher.Models.Serialized
             return ActiveConfig;
         }
 
-        private void DoaThing()
+        private string GetSelectedTheme()
+        {
+            return string.IsNullOrEmpty(GuiSettings.CurrentColorScheme) ? "Light Theme" : GuiSettings.CurrentColorScheme;
+        }
+
+        private void AddEventsToThemeMenu()
         {
             foreach (ToolStripMenuItem item in ThemeMenu.DropDownItems)
             {
