@@ -66,15 +66,15 @@ namespace grapher.Models.Charts.ChartState
                     chartState = CombinedState;
                 }
 
-                chartState.ChartContainer.ColumnCount = 1;
-                chartState.ChartContainer.ColumnStyles[0].Width = 100;
+                chartState.ChartContainer.ColumnCount = Constants.CombinedChartColumnCount;
+                chartState.ChartContainer.ColumnStyles[0].Width = Constants.CombinedChartColumnWidth;
             }
             else
             {
                 chartState = XYTwoGraphState;
-                chartState.ChartContainer.ColumnCount = 2;
-                chartState.ChartContainer.ColumnStyles[0].Width = 50;
-                chartState.ChartContainer.ColumnStyles[1].Width = 50;
+                chartState.ChartContainer.ColumnCount = Constants.SeparateChartColumnCount;
+                chartState.ChartContainer.ColumnStyles[0].Width = Constants.SeparateChartColumnWidth;
+                chartState.ChartContainer.ColumnStyles[1].Width = Constants.SeparateChartColumnWidth;
             }
 
             chartState.Settings = settings;

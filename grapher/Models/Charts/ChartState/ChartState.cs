@@ -81,16 +81,16 @@ namespace grapher.Models.Charts.ChartState
 
         public void ShowVelocityAndGain()
         {
-            ChartContainer.RowCount = 3;
-            ChartContainer.RowStyles[0].Height = 33.3f;
+            ChartContainer.RowCount = Constants.VelocityAndGainRowCount;
+            ChartContainer.RowStyles[0].Height = Constants.VelocityAndGainRowHeight;
             VelocityChart.Show();
             GainChart.Show();
         }
 
         public void HideVelocityAndGain()
         {
-            ChartContainer.RowCount = 1;
-            ChartContainer.RowStyles[0].Height = 100f;
+            ChartContainer.RowCount = Constants.RegularRowCount;
+            ChartContainer.RowStyles[0].Height = Constants.RegularRowHeight;
             SensitivityChart.SetHeight(Constants.SensitivityChartAloneHeight);
             VelocityChart.Hide();
             GainChart.Hide();
