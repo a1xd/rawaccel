@@ -45,9 +45,8 @@ namespace grapher
                         }
                     })
             });
-
-            var themeOperations = new ThemeFileOperations();
-            var schemes = themeOperations.LoadThemes();
+            
+            var schemes = ColorSchemeManager.LoadSchemes().ToList();
             var themeMenuItem = new ToolStripMenuItem("&Themes");
 
             themeMenuItem.DropDownItemClicked += (s, e) =>
@@ -63,7 +62,7 @@ namespace grapher
             var settings = GUISettings.MaybeLoad();
 
             Theme.CurrentScheme = ColorSchemeManager.GetSelected(settings, schemes);
-
+            
             foreach (var colorScheme in schemes)
             {
                 var menuItem = new ToolStripMenuItem(colorScheme.Name);
