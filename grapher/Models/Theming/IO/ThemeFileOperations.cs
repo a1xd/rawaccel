@@ -1,45 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
 namespace grapher.Models.Theming.IO
 {
-    internal class ThemeFileOperations
+    public class ThemeFileOperations
     {
         public string ThemePath { get; set; }
 
-        public List<ColorScheme> LoadThemes()
+        public IEnumerable<ColorScheme> LoadThemes()
         {
-            ThemePath = Environment.CurrentDirectory + "/themes";
+            ThemePath = Path.Combine(Environment.CurrentDirectory, "/themes");
 
             var pathFound = Directory.Exists(ThemePath);
 
             if (!pathFound)
             {
                 Directory.CreateDirectory(ThemePath);
-
-                // Save all the "preset" themes
-                var lightTheme = ColorScheme.LightTheme;
-                var lightStreamerTheme = ColorScheme.LightStreamerTheme;
-                var darkTheme = ColorScheme.DarkTheme;
-                var darkStreamerTheme = ColorScheme.DarkStreamerTheme;
-                var accentedDarkTheme = ColorScheme.AccentedDarkTheme;
-
-                SaveScheme(lightTheme, "LightTheme");
-                SaveScheme(lightStreamerTheme, "LightStreamerTheme");
-                SaveScheme(darkTheme, "DarkTheme");
-                SaveScheme(darkStreamerTheme, "DarkStreamerTheme");
-                SaveScheme(accentedDarkTheme, "AccentedDarkTheme");
+                CreateDefaultThemes();
             }
 
             var schemes = new List<ColorScheme>();
 
-            foreach (var filePath in Directory.GetFiles(ThemePath))
+            var files = Directory.GetFiles(ThemePath);
+            foreach (var filePath in files)
             {
                 var xmlDoc = new XmlDocument();
 
@@ -49,6 +35,22 @@ namespace grapher.Models.Theming.IO
             }
 
             return schemes;
+        }
+
+        private void CreateDefaultThemes()
+        {
+            // Save all the "preset" themes
+            var lightTheme = ColorScheme.LightTheme;
+            var lightStreamerTheme = ColorScheme.LightStreamerTheme;
+            var darkTheme = ColorScheme.DarkTheme;
+            var darkStreamerTheme = ColorScheme.DarkStreamerTheme;
+            var accentedDarkTheme = ColorScheme.AccentedDarkTheme;
+
+            SaveScheme(lightTheme, "LightTheme");
+            SaveScheme(lightStreamerTheme, "LightStreamerTheme");
+            SaveScheme(darkTheme, "DarkTheme");
+            SaveScheme(darkStreamerTheme, "DarkStreamerTheme");
+            SaveScheme(accentedDarkTheme, "AccentedDarkTheme");
         }
 
         public bool SaveScheme(ColorScheme scheme, string filename)
