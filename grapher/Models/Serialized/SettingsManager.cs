@@ -325,6 +325,7 @@ namespace grapher.Models.Serialized
             {
                 return "Light Theme";
             }
+
             return GuiSettings.CurrentColorScheme;
         }
 
