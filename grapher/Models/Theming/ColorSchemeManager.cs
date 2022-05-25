@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using grapher.Models.Serialized;
@@ -39,7 +36,10 @@ namespace grapher.Models.Theming
             return doc;
         }
 
-        public static ColorScheme GetSelected(GUISettings settings, List<ColorScheme> schemes = null)
+        /// <summary>
+        /// Retrieve the selected <see cref="ColorScheme"/> according to the <paramref name="settings"/>.
+        /// </summary>
+        public static ColorScheme GetSelected(GUISettings settings, IEnumerable<ColorScheme> schemes)
         {
             if (settings == null)
             {
@@ -48,16 +48,17 @@ namespace grapher.Models.Theming
 
             if (schemes == null)
             {
-                var operations = new ThemeFileOperations();
-                schemes = operations.LoadThemes();
+                schemes = LoadSchemes();
             }
 
-            foreach (var scheme in schemes.Where(scheme => scheme.Name == settings.CurrentColorScheme))
-            {
-                return scheme;
-            }
+            var scheme = schemes.FirstOrDefault(s => s.Name == settings.CurrentColorScheme);
+            return scheme ?? ColorScheme.LightTheme;
+        }
 
-            return ColorScheme.LightTheme;
+        public static IEnumerable<ColorScheme> LoadSchemes()
+        {
+            var operations = new ThemeFileOperations();
+            return operations.LoadThemes();
         }
 
         public static ColorScheme FromName(string name)
@@ -65,12 +66,8 @@ namespace grapher.Models.Theming
             var operations = new ThemeFileOperations();
             var schemes = operations.LoadThemes();
 
-            foreach (var scheme in schemes.Where(scheme => scheme.Name == name))
-            {
-                return scheme;
-            }
-
-            return ColorScheme.LightTheme;
+            var scheme = schemes.FirstOrDefault(s=> s.Name == name);
+            return scheme ?? ColorScheme.LightTheme;
         }
     }
 }
