@@ -13,7 +13,7 @@ namespace grapher.Models.Theming.IO
 
         public IEnumerable<ColorScheme> LoadThemes()
         {
-            ThemePath = Path.Combine(Environment.CurrentDirectory, "/themes");
+            ThemePath = Path.Combine(Environment.CurrentDirectory, "themes");
 
             var pathFound = Directory.Exists(ThemePath);
 
@@ -59,7 +59,7 @@ namespace grapher.Models.Theming.IO
                 xmlDoc.Load(reader);
             }
 
-            var fullPath = $"{ThemePath}/{filename}.xml";
+            var fullPath = Path.Combine(ThemePath, $"{filename}.xml");
 
             xmlDoc.Save(fullPath);
 
