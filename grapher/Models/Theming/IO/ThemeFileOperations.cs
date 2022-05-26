@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -22,19 +23,10 @@ namespace grapher.Models.Theming.IO
                 CreateDefaultThemes();
             }
 
-            var schemes = new List<ColorScheme>();
 
             var files = Directory.GetFiles(ThemePath);
-            foreach (var filePath in files)
-            {
-                var xmlDoc = new XmlDocument();
-
-                xmlDoc.Load(filePath);
-                var xml = XDocument.Parse(xmlDoc.OuterXml);
-                schemes.Add(ColorSchemeManager.FromXml(xml));
-            }
-
-            return schemes;
+            return files.Select(XDocument.Load)
+                .Select(ColorSchemeManager.FromXml);
         }
 
         private void CreateDefaultThemes()
