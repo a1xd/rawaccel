@@ -161,6 +161,26 @@ namespace grapher
         public static readonly Point Origin = new Point(0);
         public static readonly Size MaxSize = new Size(9999, 9999);
 
+        /// <summary> Amount of rows when only the sensitivity chart is shown. </summary>
+        public static readonly int RegularRowCount = 1;
+        /// <summary> Height of each row when only the sensitivity chart is shown. </summary>
+        public static readonly float RegularRowHeight = 100f;
+
+        /// <summary> Amount of rows when the sensitivity, velocity and gain charts are shown. </summary>
+        public static readonly int VelocityAndGainRowCount = 3;
+        /// <summary> Height of each row when the sensitivity, velocity and gain charts are shown. </summary>
+        public static readonly float VelocityAndGainRowHeight = 33.3f;
+
+        /// <summary> Amount of columns when the charts are combined. </summary>
+        public static readonly int CombinedChartColumnCount = 1;
+        /// <summary> Width of each column when the charts are combined. </summary>
+        public static readonly float CombinedChartColumnWidth = 100f;
+
+        /// <summary> Amount of columns when both the X and Y chart are shown. </summary>
+        public static readonly int SeparateChartColumnCount = 2;
+        /// <summary> Width of each column when both the X and Y chart are shown. </summary>
+        public static readonly float SeparateChartColumnWidth = 50f;
+
         #endregion ReadOnly
     }
 }

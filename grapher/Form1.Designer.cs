@@ -30,45 +30,45 @@ namespace grapher
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series19 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series20 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series21 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series19 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series20 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series21 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawAcceleration));
             this.optionsPanel = new System.Windows.Forms.Panel();
             this.OutCapActiveYLabelPower = new System.Windows.Forms.Label();
@@ -265,6 +265,7 @@ namespace grapher
             this.rotationBox = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.sensitivityBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.accelTypeDropX = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.chartContainer = new System.Windows.Forms.TableLayoutPanel();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -275,6 +276,7 @@ namespace grapher
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).BeginInit();
+            this.chartContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // optionsPanel
@@ -1711,12 +1713,7 @@ namespace grapher
             // chartsPanel
             // 
             this.chartsPanel.AutoScroll = true;
-            this.chartsPanel.Controls.Add(this.GainChartY);
-            this.chartsPanel.Controls.Add(this.VelocityChartY);
-            this.chartsPanel.Controls.Add(this.AccelerationChartY);
-            this.chartsPanel.Controls.Add(this.GainChart);
-            this.chartsPanel.Controls.Add(this.VelocityChart);
-            this.chartsPanel.Controls.Add(this.AccelerationChart);
+            this.chartsPanel.Controls.Add(this.chartContainer);
             this.chartsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartsPanel.Location = new System.Drawing.Point(483, 0);
             this.chartsPanel.Name = "chartsPanel";
@@ -1725,148 +1722,160 @@ namespace grapher
             // 
             // GainChartY
             // 
-            chartArea1.AxisX.Title = "Input Speed (counts/ms)";
-            chartArea1.AxisY.Title = "Slope of Velocity Chart";
-            chartArea1.Name = "ChartArea1";
-            this.GainChartY.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.GainChartY.Legends.Add(legend1);
-            this.GainChartY.Location = new System.Drawing.Point(699, 645);
+            this.GainChartY.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea2.AxisX.Title = "Input Speed (counts/ms)";
+            chartArea2.AxisY.Title = "Slope of Velocity Chart";
+            chartArea2.Name = "ChartArea1";
+            this.GainChartY.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.GainChartY.Legends.Add(legend2);
+            this.GainChartY.Location = new System.Drawing.Point(703, 639);
             this.GainChartY.Name = "GainChartY";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Velocity Gain";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series2.Legend = "Legend1";
-            series2.Name = "Last Mouse Move";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.IsVisibleInLegend = false;
-            series3.Legend = "Legend1";
-            series3.Name = "Placeholder";
-            this.GainChartY.Series.Add(series1);
-            this.GainChartY.Series.Add(series2);
-            this.GainChartY.Series.Add(series3);
-            this.GainChartY.Size = new System.Drawing.Size(698, 308);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Legend = "Legend1";
+            series5.Name = "Velocity Gain";
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series6.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series6.Legend = "Legend1";
+            series6.Name = "Last Mouse Move";
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series7.IsVisibleInLegend = false;
+            series7.Legend = "Legend1";
+            series7.Name = "Placeholder";
+            this.GainChartY.Series.Add(series5);
+            this.GainChartY.Series.Add(series6);
+            this.GainChartY.Series.Add(series7);
+            this.GainChartY.Size = new System.Drawing.Size(695, 314);
             this.GainChartY.TabIndex = 39;
             this.GainChartY.TabStop = false;
             this.GainChartY.Text = "chart1";
-            title1.DockedToChartArea = "ChartArea1";
-            title1.IsDockedInsideChartArea = false;
-            title1.Name = "Title";
-            title1.Text = "Gain";
-            this.GainChartY.Titles.Add(title1);
-            // 
-            // VelocityChartY
-            // 
-            chartArea2.AxisX.Title = "Input Speed (count/ms)";
-            chartArea2.AxisY.Title = "Output Speed (counts/ms)";
-            chartArea2.Name = "ChartArea1";
-            this.VelocityChartY.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.VelocityChartY.Legends.Add(legend2);
-            this.VelocityChartY.Location = new System.Drawing.Point(699, 332);
-            this.VelocityChartY.Name = "VelocityChartY";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Legend = "Legend1";
-            series4.Name = "Output Velocity";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series5.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series5.Legend = "Legend1";
-            series5.Name = "Last Mouse Move";
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.IsVisibleInLegend = false;
-            series6.Legend = "Legend1";
-            series6.Name = "Placeholder";
-            this.VelocityChartY.Series.Add(series4);
-            this.VelocityChartY.Series.Add(series5);
-            this.VelocityChartY.Series.Add(series6);
-            this.VelocityChartY.Size = new System.Drawing.Size(698, 308);
-            this.VelocityChartY.TabIndex = 38;
-            this.VelocityChartY.TabStop = false;
-            this.VelocityChartY.Text = "chart1";
             title2.DockedToChartArea = "ChartArea1";
             title2.IsDockedInsideChartArea = false;
             title2.Name = "Title";
-            title2.Text = "Velocity";
-            this.VelocityChartY.Titles.Add(title2);
+            title2.Text = "Gain";
+            this.GainChartY.Titles.Add(title2);
+            // 
+            // VelocityChartY
+            // 
+            this.VelocityChartY.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea5.AxisX.Title = "Input Speed (count/ms)";
+            chartArea5.AxisY.Title = "Output Speed (counts/ms)";
+            chartArea5.Name = "ChartArea1";
+            this.VelocityChartY.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.VelocityChartY.Legends.Add(legend5);
+            this.VelocityChartY.Location = new System.Drawing.Point(703, 321);
+            this.VelocityChartY.Name = "VelocityChartY";
+            series16.ChartArea = "ChartArea1";
+            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series16.Legend = "Legend1";
+            series16.Name = "Output Velocity";
+            series17.ChartArea = "ChartArea1";
+            series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series17.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series17.Legend = "Legend1";
+            series17.Name = "Last Mouse Move";
+            series18.ChartArea = "ChartArea1";
+            series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series18.IsVisibleInLegend = false;
+            series18.Legend = "Legend1";
+            series18.Name = "Placeholder";
+            this.VelocityChartY.Series.Add(series16);
+            this.VelocityChartY.Series.Add(series17);
+            this.VelocityChartY.Series.Add(series18);
+            this.VelocityChartY.Size = new System.Drawing.Size(695, 312);
+            this.VelocityChartY.TabIndex = 38;
+            this.VelocityChartY.TabStop = false;
+            this.VelocityChartY.Text = "chart1";
+            title5.DockedToChartArea = "ChartArea1";
+            title5.IsDockedInsideChartArea = false;
+            title5.Name = "Title";
+            title5.Text = "Velocity";
+            this.VelocityChartY.Titles.Add(title5);
             // 
             // AccelerationChartY
             // 
-            chartArea3.AxisX.Title = "Input Speed (counts/ms)";
-            chartArea3.AxisY.Title = "Ratio of Output to Input)";
-            chartArea3.Name = "ChartArea1";
-            this.AccelerationChartY.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.AccelerationChartY.Legends.Add(legend3);
-            this.AccelerationChartY.Location = new System.Drawing.Point(699, -2);
+            this.AccelerationChartY.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea6.AxisX.Title = "Input Speed (counts/ms)";
+            chartArea6.AxisY.Title = "Ratio of Output to Input)";
+            chartArea6.Name = "ChartArea1";
+            this.AccelerationChartY.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.AccelerationChartY.Legends.Add(legend6);
+            this.AccelerationChartY.Location = new System.Drawing.Point(703, 3);
             this.AccelerationChartY.Name = "AccelerationChartY";
-            series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series7.Legend = "Legend1";
-            series7.Name = "Accelerated Sensitivity";
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series8.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series8.Legend = "Legend1";
-            series8.Name = "Last Mouse Move";
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series9.IsVisibleInLegend = false;
-            series9.Legend = "Legend1";
-            series9.Name = "Placeholder";
-            this.AccelerationChartY.Series.Add(series7);
-            this.AccelerationChartY.Series.Add(series8);
-            this.AccelerationChartY.Series.Add(series9);
-            this.AccelerationChartY.Size = new System.Drawing.Size(698, 328);
+            series19.ChartArea = "ChartArea1";
+            series19.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series19.Legend = "Legend1";
+            series19.Name = "Accelerated Sensitivity";
+            series20.ChartArea = "ChartArea1";
+            series20.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series20.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series20.Legend = "Legend1";
+            series20.Name = "Last Mouse Move";
+            series21.ChartArea = "ChartArea1";
+            series21.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series21.IsVisibleInLegend = false;
+            series21.Legend = "Legend1";
+            series21.Name = "Placeholder";
+            this.AccelerationChartY.Series.Add(series19);
+            this.AccelerationChartY.Series.Add(series20);
+            this.AccelerationChartY.Series.Add(series21);
+            this.AccelerationChartY.Size = new System.Drawing.Size(695, 312);
             this.AccelerationChartY.TabIndex = 37;
             this.AccelerationChartY.TabStop = false;
             this.AccelerationChartY.Text = "chart1";
-            title3.DockedToChartArea = "ChartArea1";
-            title3.IsDockedInsideChartArea = false;
-            title3.Name = "Title";
-            title3.Text = "Sensitivity";
-            this.AccelerationChartY.Titles.Add(title3);
+            title6.DockedToChartArea = "ChartArea1";
+            title6.IsDockedInsideChartArea = false;
+            title6.Name = "Title";
+            title6.Text = "Sensitivity";
+            this.AccelerationChartY.Titles.Add(title6);
             // 
             // GainChart
             // 
+            this.GainChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea4.AxisX.Title = "Input Speed (counts/ms)";
             chartArea4.AxisY.Title = "Slope of Velocity Chart";
             chartArea4.Name = "ChartArea1";
             this.GainChart.ChartAreas.Add(chartArea4);
             legend4.Name = "Legend1";
             this.GainChart.Legends.Add(legend4);
-            this.GainChart.Location = new System.Drawing.Point(-5, 645);
+            this.GainChart.Location = new System.Drawing.Point(3, 639);
             this.GainChart.Name = "GainChart";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.Legend = "Legend1";
-            series10.Name = "Velocity Gain";
-            series11.ChartArea = "ChartArea1";
-            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series11.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series11.Legend = "Legend1";
-            series11.Name = "Last Mouse Move";
             series12.ChartArea = "ChartArea1";
             series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series12.Legend = "Legend1";
-            series12.Name = "Y: Velocity Gain";
+            series12.Name = "Velocity Gain";
             series13.ChartArea = "ChartArea1";
             series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series13.IsVisibleInLegend = false;
+            series13.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             series13.Legend = "Legend1";
-            series13.Name = "Y: Last Mouse Move";
-            this.GainChart.Series.Add(series10);
-            this.GainChart.Series.Add(series11);
+            series13.Name = "Last Mouse Move";
+            series14.ChartArea = "ChartArea1";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series14.Legend = "Legend1";
+            series14.Name = "Y: Velocity Gain";
+            series15.ChartArea = "ChartArea1";
+            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series15.IsVisibleInLegend = false;
+            series15.Legend = "Legend1";
+            series15.Name = "Y: Last Mouse Move";
             this.GainChart.Series.Add(series12);
             this.GainChart.Series.Add(series13);
-            this.GainChart.Size = new System.Drawing.Size(698, 308);
+            this.GainChart.Series.Add(series14);
+            this.GainChart.Series.Add(series15);
+            this.GainChart.Size = new System.Drawing.Size(694, 314);
             this.GainChart.TabIndex = 36;
             this.GainChart.TabStop = false;
             this.GainChart.Text = "chart1";
@@ -1878,87 +1887,116 @@ namespace grapher
             // 
             // VelocityChart
             // 
-            chartArea5.AxisX.Title = "Input Speed (count/ms)";
-            chartArea5.AxisY.Title = "Output Speed (counts/ms)";
-            chartArea5.Name = "ChartArea1";
-            this.VelocityChart.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.VelocityChart.Legends.Add(legend5);
-            this.VelocityChart.Location = new System.Drawing.Point(-5, 332);
+            this.VelocityChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea3.AxisX.Title = "Input Speed (count/ms)";
+            chartArea3.AxisY.Title = "Output Speed (counts/ms)";
+            chartArea3.Name = "ChartArea1";
+            this.VelocityChart.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.VelocityChart.Legends.Add(legend3);
+            this.VelocityChart.Location = new System.Drawing.Point(3, 321);
             this.VelocityChart.Name = "VelocityChart";
-            series14.ChartArea = "ChartArea1";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series14.Legend = "Legend1";
-            series14.Name = "Output Velocity";
-            series15.ChartArea = "ChartArea1";
-            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series15.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series15.Legend = "Legend1";
-            series15.Name = "Last Mouse Move";
-            series16.ChartArea = "ChartArea1";
-            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series16.Legend = "Legend1";
-            series16.Name = "Y: Output Velocity";
-            series17.ChartArea = "ChartArea1";
-            series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series17.IsVisibleInLegend = false;
-            series17.Legend = "Legend1";
-            series17.Name = "Y: Last Mouse Move";
-            this.VelocityChart.Series.Add(series14);
-            this.VelocityChart.Series.Add(series15);
-            this.VelocityChart.Series.Add(series16);
-            this.VelocityChart.Series.Add(series17);
-            this.VelocityChart.Size = new System.Drawing.Size(698, 308);
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series8.Legend = "Legend1";
+            series8.Name = "Output Velocity";
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series9.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series9.Legend = "Legend1";
+            series9.Name = "Last Mouse Move";
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series10.Legend = "Legend1";
+            series10.Name = "Y: Output Velocity";
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series11.IsVisibleInLegend = false;
+            series11.Legend = "Legend1";
+            series11.Name = "Y: Last Mouse Move";
+            this.VelocityChart.Series.Add(series8);
+            this.VelocityChart.Series.Add(series9);
+            this.VelocityChart.Series.Add(series10);
+            this.VelocityChart.Series.Add(series11);
+            this.VelocityChart.Size = new System.Drawing.Size(694, 312);
             this.VelocityChart.TabIndex = 35;
             this.VelocityChart.TabStop = false;
             this.VelocityChart.Text = "chart1";
-            title5.DockedToChartArea = "ChartArea1";
-            title5.IsDockedInsideChartArea = false;
-            title5.Name = "Title";
-            title5.Text = "Velocity";
-            this.VelocityChart.Titles.Add(title5);
+            title3.DockedToChartArea = "ChartArea1";
+            title3.IsDockedInsideChartArea = false;
+            title3.Name = "Title";
+            title3.Text = "Velocity";
+            this.VelocityChart.Titles.Add(title3);
             // 
             // AccelerationChart
             // 
-            chartArea6.AxisX.Title = "Input Speed (counts/ms)";
-            chartArea6.AxisY.Title = "Ratio of Output to Input";
-            chartArea6.Name = "ChartArea1";
-            this.AccelerationChart.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.AccelerationChart.Legends.Add(legend6);
-            this.AccelerationChart.Location = new System.Drawing.Point(-5, -2);
+            this.AccelerationChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea1.AxisX.Title = "Input Speed (counts/ms)";
+            chartArea1.AxisY.Title = "Ratio of Output to Input";
+            chartArea1.Name = "ChartArea1";
+            this.AccelerationChart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.AccelerationChart.Legends.Add(legend1);
+            this.AccelerationChart.Location = new System.Drawing.Point(3, 3);
             this.AccelerationChart.Name = "AccelerationChart";
-            series18.ChartArea = "ChartArea1";
-            series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series18.Legend = "Legend1";
-            series18.Name = "Accelerated Sensitivity";
-            series19.ChartArea = "ChartArea1";
-            series19.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series19.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series19.Legend = "Legend1";
-            series19.Name = "Last Mouse Move";
-            series20.ChartArea = "ChartArea1";
-            series20.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series20.Legend = "Legend1";
-            series20.Name = "Y: Accelerated Sensitivity";
-            series21.ChartArea = "ChartArea1";
-            series21.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series21.IsVisibleInLegend = false;
-            series21.Legend = "Legend1";
-            series21.Name = "Y - Last Mouse Move";
-            this.AccelerationChart.Series.Add(series18);
-            this.AccelerationChart.Series.Add(series19);
-            this.AccelerationChart.Series.Add(series20);
-            this.AccelerationChart.Series.Add(series21);
-            this.AccelerationChart.Size = new System.Drawing.Size(698, 328);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Accelerated Sensitivity";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series2.Legend = "Legend1";
+            series2.Name = "Last Mouse Move";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Legend = "Legend1";
+            series3.Name = "Y: Accelerated Sensitivity";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series4.IsVisibleInLegend = false;
+            series4.Legend = "Legend1";
+            series4.Name = "Y - Last Mouse Move";
+            this.AccelerationChart.Series.Add(series1);
+            this.AccelerationChart.Series.Add(series2);
+            this.AccelerationChart.Series.Add(series3);
+            this.AccelerationChart.Series.Add(series4);
+            this.AccelerationChart.Size = new System.Drawing.Size(694, 312);
             this.AccelerationChart.TabIndex = 34;
             this.AccelerationChart.TabStop = false;
             this.AccelerationChart.Text = "Sensitivity";
-            title6.DockedToChartArea = "ChartArea1";
-            title6.IsDockedInsideChartArea = false;
-            title6.Name = "Title";
-            title6.Text = "Sensitivity";
-            this.AccelerationChart.Titles.Add(title6);
+            title1.DockedToChartArea = "ChartArea1";
+            title1.IsDockedInsideChartArea = false;
+            title1.Name = "Title";
+            title1.Text = "Sensitivity";
+            this.AccelerationChart.Titles.Add(title1);
+            // 
+            // chartContainer
+            // 
+            this.chartContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chartContainer.ColumnCount = 2;
+            this.chartContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.chartContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.chartContainer.Controls.Add(this.AccelerationChart, 0, 0);
+            this.chartContainer.Controls.Add(this.GainChartY, 1, 2);
+            this.chartContainer.Controls.Add(this.VelocityChart, 0, 1);
+            this.chartContainer.Controls.Add(this.GainChart, 0, 2);
+            this.chartContainer.Controls.Add(this.VelocityChartY, 1, 1);
+            this.chartContainer.Controls.Add(this.AccelerationChartY, 1, 0);
+            this.chartContainer.Location = new System.Drawing.Point(0, 0);
+            this.chartContainer.Name = "chartContainer";
+            this.chartContainer.RowCount = 3;
+            this.chartContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.chartContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.chartContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.34F));
+            this.chartContainer.Size = new System.Drawing.Size(1401, 956);
+            this.chartContainer.TabIndex = 40;
             // 
             // outCapBoxYPower
             // 
@@ -2330,6 +2368,8 @@ namespace grapher
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RawAcceleration";
             this.Text = "Raw Accel";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RawAcceleration_FormClosing);
+            this.Load += new System.EventHandler(this.RawAcceleration_Load);
             this.optionsPanel.ResumeLayout(false);
             this.optionsPanel.PerformLayout();
             this.DirectionalityPanel.ResumeLayout(false);
@@ -2343,6 +2383,7 @@ namespace grapher
             ((System.ComponentModel.ISupportInitialize)(this.GainChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AccelerationChart)).EndInit();
+            this.chartContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2544,6 +2585,7 @@ namespace grapher
         private grapher.Models.Theming.Controls.ThemeableTextBox outCapBoxXPower;
         private grapher.Models.Theming.Controls.ThemeableTextBox inCapBoxYPower;
         private grapher.Models.Theming.Controls.ThemeableTextBox inCapBoxXPower;
+        private System.Windows.Forms.TableLayoutPanel chartContainer;
     }
 }
 

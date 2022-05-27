@@ -1,7 +1,6 @@
 ﻿using grapher.Models.Calculations;
 using grapher.Models.Calculations.Data;
-using grapher.Models.Serialized;
-using System;
+using System.Windows.Forms;
 
 namespace grapher.Models.Charts.ChartState
 {
@@ -11,6 +10,7 @@ namespace grapher.Models.Charts.ChartState
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
+            TableLayoutPanel chartContainer,
             EstimatedPoints xPoints,
             EstimatedPoints yPoints,
             AccelCalculator accelCalculator)
@@ -18,6 +18,7 @@ namespace grapher.Models.Charts.ChartState
                   sensitivityChart,
                   velocityChart,
                   gainChart,
+                  chartContainer,
                   accelCalculator)
         {
             Data = new AccelDataXYComponential(xPoints, yPoints, accelCalculator);

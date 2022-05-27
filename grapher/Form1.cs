@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using grapher.Models.Calculations;
-using grapher.Models.Options;
-using grapher.Models.Serialized;
 using grapher.Models;
-using System.Reflection;
-using System.Diagnostics;
 using System.IO;
+using grapher.Models.Serialized;
 using grapher.Models.Theming;
-using grapher.Models.Theming.IO;
 
 namespace grapher
 {
@@ -83,6 +73,7 @@ namespace grapher
                 VelocityChartY,
                 GainChart,
                 GainChartY,
+                chartContainer,
                 accelTypeDropX,
                 accelTypeDropY,
                 XLutApplyDropdown,
@@ -385,5 +376,19 @@ namespace grapher
                 Marshal.FinalReleaseComObject(shell);
             }
         }
-	}
+
+        private void RawAcceleration_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.Location = Location;
+            Properties.Settings.Default.Size = Size;
+
+            Properties.Settings.Default.Save();
+        }
+
+        private void RawAcceleration_Load(object sender, EventArgs e)
+        {
+            Location = Properties.Settings.Default.Location;
+            Size = Properties.Settings.Default.Size;
+        }
+    }
 }

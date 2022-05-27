@@ -16,6 +16,7 @@ namespace grapher
             ChartXY sensitivityChart,
             ChartXY velocityChart,
             ChartXY gainChart,
+            TableLayoutPanel chartContainer,
             ToolStripMenuItem enableVelocityAndGain,
             ToolStripMenuItem enableLastMouseMove,
             Button writeButton,
@@ -29,6 +30,7 @@ namespace grapher
                 sensitivityChart,
                 velocityChart,
                 gainChart,
+                chartContainer,
                 accelCalculator,
                 estimated,
                 estimatedX,
@@ -121,7 +123,6 @@ namespace grapher
             ChartState.Activate();
             Bind();
         }
-
 
         public void Redraw()
         {
