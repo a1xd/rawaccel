@@ -1,10 +1,5 @@
 ﻿using grapher.Models.Calculations;
-using grapher.Models.Serialized;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace grapher.Models.Charts.ChartState
 {
@@ -13,7 +8,8 @@ namespace grapher.Models.Charts.ChartState
         public ChartStateManager(
             ChartXY sensitivityChart,
             ChartXY velocityChart,
-            ChartXY gainChat,
+            ChartXY gainChart,
+            TableLayoutPanel chartContainer,
             AccelCalculator accelCalculator,
             EstimatedPoints combined,
             EstimatedPoints xPoints,
@@ -22,14 +18,16 @@ namespace grapher.Models.Charts.ChartState
             CombinedState = new CombinedState(
                 sensitivityChart,
                 velocityChart,
-                gainChat,
+                gainChart,
+                chartContainer,
                 combined,
                 accelCalculator);
 
             XYOneGraphState = new XYOneGraphState(
                 sensitivityChart,
                 velocityChart,
-                gainChat,
+                gainChart,
+                chartContainer,
                 xPoints,
                 yPoints,
                 accelCalculator);
@@ -37,7 +35,8 @@ namespace grapher.Models.Charts.ChartState
             XYTwoGraphState = new XYTwoGraphState(
                 sensitivityChart,
                 velocityChart,
-                gainChat,
+                gainChart,
+                chartContainer,
                 xPoints,
                 yPoints,
                 accelCalculator);
@@ -66,10 +65,16 @@ namespace grapher.Models.Charts.ChartState
                 {
                     chartState = CombinedState;
                 }
+
+                chartState.ChartContainer.ColumnCount = Constants.CombinedChartColumnCount;
+                chartState.ChartContainer.ColumnStyles[0].Width = Constants.CombinedChartColumnWidth;
             }
             else
             {
                 chartState = XYTwoGraphState;
+                chartState.ChartContainer.ColumnCount = Constants.SeparateChartColumnCount;
+                chartState.ChartContainer.ColumnStyles[0].Width = Constants.SeparateChartColumnWidth;
+                chartState.ChartContainer.ColumnStyles[1].Width = Constants.SeparateChartColumnWidth;
             }
 
             chartState.Settings = settings;
