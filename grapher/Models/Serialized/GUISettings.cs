@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
 using System.IO;
 
 namespace grapher.Models.Serialized
 {
     [Serializable]
-    [JsonObject(ItemRequired = Required.Always)]
+    [JsonObject]
     public class GUISettings
     {
         #region Constructors
@@ -32,8 +33,12 @@ namespace grapher.Models.Serialized
         [JsonProperty(Order = 5)]
         public bool AutoWriteToDriverOnStartup { get; set; }
 
-        [JsonProperty(Order = 6)]
-        public bool StreamingMode { get; set; }
+        [JsonProperty(
+            Order = 6,
+            DefaultValueHandling = DefaultValueHandling.Populate
+        )]
+        [DefaultValue("Light Theme")]
+        public string CurrentColorScheme { get; set; }
 
         #endregion Properties
 
@@ -58,7 +63,7 @@ namespace grapher.Models.Serialized
                 ShowLastMouseMove == other.ShowLastMouseMove &&
                 ShowVelocityAndGain == other.ShowVelocityAndGain &&
                 AutoWriteToDriverOnStartup == other.AutoWriteToDriverOnStartup &&
-                StreamingMode == other.StreamingMode;
+                CurrentColorScheme == other.CurrentColorScheme;
         }
 
         public override int GetHashCode()
@@ -68,7 +73,7 @@ namespace grapher.Models.Serialized
                 ShowLastMouseMove.GetHashCode() ^
                 ShowVelocityAndGain.GetHashCode() ^
                 AutoWriteToDriverOnStartup.GetHashCode() ^
-                StreamingMode.GetHashCode();
+                CurrentColorScheme.GetHashCode();
         }
 
         public void Save()

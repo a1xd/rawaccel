@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using grapher.Models.Theming;
 
 namespace grapher.Models.Options
 {
@@ -19,7 +20,7 @@ namespace grapher.Models.Options
             ValueLabel = valueLabel;
             ValueLabel.AutoSize = false;
             ValueLabel.TextAlign = ContentAlignment.MiddleCenter;
-            ValueLabel.ForeColor = Constants.ActiveValueFontColor;
+            ValueLabel.ForeColor = Theme.CurrentScheme.OnFocusedField;
 
             CenteringLabel = centeringLabel;
             Align();

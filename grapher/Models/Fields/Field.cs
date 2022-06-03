@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using grapher.Models.Theming;
 
 namespace grapher
 {
@@ -157,10 +158,11 @@ namespace grapher
         {
             if (State != FieldState.Default)
             {
-                Box.BackColor = Color.White;
-                Box.ForeColor = Color.Gray;
-                State = FieldState.Default;
+                Box.BackColor = Theme.CurrentScheme.Field;
+                Box.ForeColor = Theme.CurrentScheme.OnField;
+
                 PreviousState = FieldState.Default;
+                State = FieldState.Default;
             }
 
             _data = DefaultData;
@@ -171,8 +173,8 @@ namespace grapher
         {
             if (State != FieldState.Typing)
             {
-                Box.BackColor = Color.White;
-                Box.ForeColor = Color.Black;
+                Box.BackColor = Theme.CurrentScheme.Field;
+                Box.ForeColor = Theme.CurrentScheme.OnFocusedField;
 
                 PreviousState = State;
                 State = FieldState.Typing;
@@ -185,8 +187,8 @@ namespace grapher
         {
             if (State != FieldState.Entered)
             {
-                Box.BackColor = Color.AntiqueWhite;
-                Box.ForeColor = Color.DarkGray;
+                Box.BackColor = Theme.CurrentScheme.EditedField;
+                Box.ForeColor = Theme.CurrentScheme.OnEditedField;
 
                 PreviousState = State;
                 State = FieldState.Entered;
@@ -205,8 +207,8 @@ namespace grapher
         {
             if (State != FieldState.Unavailable)
             {
-                Box.BackColor = Color.LightGray;
-                Box.ForeColor = Color.LightGray;
+                Box.BackColor = Theme.CurrentScheme.DisabledControl;
+                Box.ForeColor = Theme.CurrentScheme.OnDisabledControl;
                 Box.Text = string.Empty;
 
                 PreviousState = State;

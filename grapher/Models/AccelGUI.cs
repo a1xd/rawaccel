@@ -203,8 +203,7 @@ namespace grapher
         private void SetupButtons()
         {
             WriteButton.Top = Constants.SensitivityChartAloneHeight - Constants.ButtonVerticalOffset;
-            
-            ResetButton.FlatStyle = FlatStyle.System;
+
             ResetButton.TextAlign = ContentAlignment.MiddleCenter;
             ResetButton.Size = WriteButton.Size;
             ResetButton.Top = WriteButton.Top;

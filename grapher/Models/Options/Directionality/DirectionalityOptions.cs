@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using grapher.Models.Theming;
 
 namespace grapher.Models.Options.Directionality
 {
@@ -28,9 +29,9 @@ namespace grapher.Models.Options.Directionality
             DirectionalityLabel = directionalityLabel;
             DirectionalityLabel.FlatStyle = FlatStyle.Flat;
             DirectionalityLabel.FlatAppearance.BorderSize = 0;
-            DirectionalityLabel.FlatAppearance.MouseDownBackColor = Control.DefaultBackColor;
-            DirectionalityLabel.FlatAppearance.CheckedBackColor = Control.DefaultBackColor;
-            DirectionalityLabel.FlatAppearance.MouseOverBackColor = Control.DefaultBackColor;
+            DirectionalityLabel.FlatAppearance.MouseDownBackColor = Theme.CurrentScheme.Control;
+            DirectionalityLabel.FlatAppearance.CheckedBackColor = Theme.CurrentScheme.Control;
+            DirectionalityLabel.FlatAppearance.MouseOverBackColor = Theme.CurrentScheme.Control;
 
             DirectionalityX = directionalityX;
             DirectionalityY = directionalityY;
@@ -174,9 +175,9 @@ namespace grapher.Models.Options.Directionality
 
         private void Panel_Paint(object sender, PaintEventArgs e)
         {
-            Color col = Color.DarkGray;
+            Color col = Theme.CurrentScheme.ControlBorder;
             ButtonBorderStyle bbs = ButtonBorderStyle.Dashed;
-            int thickness = 2;
+            int thickness = 1;
             ControlPaint.DrawBorder(e.Graphics, this.ContainingPanel.ClientRectangle, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs, col, thickness, bbs);
         }
 

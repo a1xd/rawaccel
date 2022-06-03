@@ -95,36 +95,7 @@ namespace grapher
         #endregion Properties
 
         #region Methods
-
-        public static void setChartColors(Chart chart, System.Drawing.Color fgColor, System.Drawing.Color bgColor)
-        {
-            chart.ForeColor = fgColor;
-            chart.BackColor = bgColor;
-
-            chart.Titles[0].ForeColor = fgColor;
-
-            chart.ChartAreas[0].AxisX.LabelStyle.ForeColor = fgColor;
-            chart.ChartAreas[0].AxisY.LabelStyle.ForeColor = fgColor;
-
-            chart.ChartAreas[0].AxisX.LineColor = fgColor;
-            chart.ChartAreas[0].AxisY.LineColor = fgColor;
-            chart.ChartAreas[0].AxisY.MajorTickMark.LineColor = fgColor;
-            chart.ChartAreas[0].AxisX.MajorTickMark.LineColor = fgColor;
-
-            chart.ChartAreas[0].AxisX.MajorGrid.LineColor = fgColor;
-            chart.ChartAreas[0].AxisY.MajorGrid.LineColor = fgColor;
-
-            chart.ChartAreas[0].AxisX.MinorGrid.LineColor = fgColor;
-            chart.Legends[0].ForeColor = fgColor;
-
-            chart.ChartAreas[0].AxisX.TitleForeColor = fgColor;
-            chart.ChartAreas[0].AxisY.TitleForeColor = fgColor;
-
-            chart.ChartAreas[0].BorderColor = fgColor;
-
-
-        }
-
+        
         public static void SetupChart(Chart chart)
         {
             ChartArea area = chart.ChartAreas[0];
@@ -389,22 +360,6 @@ namespace grapher
         {
             ChartX.Height = height;
             ChartY.Height = height;
-        }
-
-        public void SetStreaming(bool streaming)
-        {
-            var fgColor = Constants.fgNoStreamer;
-            var bgColor = Constants.bgNoStreamer;
-
-            if (streaming)
-            {
-                fgColor = Constants.fgStreamer;
-                bgColor = Constants.bgStreamer;
-            }
-
-            setChartColors(ChartX, fgColor, bgColor);
-            setChartColors(ChartY, fgColor, bgColor);
-            Update();
         }
 
         private string SetComponentTitle(string component)

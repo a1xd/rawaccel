@@ -7,7 +7,9 @@ using System.Text;
 using System.Drawing;
 using grapher.Models.Devices;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using grapher.Models.Theming;
 
 namespace grapher.Models.Serialized
 {
@@ -21,19 +23,25 @@ namespace grapher.Models.Serialized
             ToolStripMenuItem autoWrite,
             ToolStripMenuItem showLastMouseMove,
             ToolStripMenuItem showVelocityAndGain,
-            ToolStripMenuItem streamingMode)
+            ToolStripMenuItem themeMenu,
+            Form form
+            )
         {
             DpiField = dpiField;
             PollRateField = pollRateField;
             AutoWriteMenuItem = autoWrite;
             ShowLastMouseMoveMenuItem = showLastMouseMove;
             ShowVelocityAndGainMoveMenuItem = showVelocityAndGain;
-            StreamingModeMenuItem = streamingMode;
+            ThemeMenu = themeMenu;
+            Form = form;
 
             SystemDevices = new List<MultiHandleDevice>();
             ActiveNormTaggedHandles = new List<(IntPtr, bool)>();
 
             GuiSettings = GUISettings.MaybeLoad();
+
+            SelectedTheme = GetSelectedTheme();
+            AddEventsToThemeMenu();
 
             if (GuiSettings is null)
             {
@@ -121,8 +129,10 @@ namespace grapher.Models.Serialized
         private ToolStripMenuItem ShowLastMouseMoveMenuItem { get; set; }
 
         private ToolStripMenuItem ShowVelocityAndGainMoveMenuItem { get; set; }
+        private ToolStripMenuItem ThemeMenu { get; set; }
+        private string SelectedTheme { get; set; }
+        private Form Form { get; set; }
 
-        private ToolStripMenuItem StreamingModeMenuItem{ get; set; }
         #endregion Properties
 
         #region Methods
@@ -139,7 +149,6 @@ namespace grapher.Models.Serialized
             PollRateField.SetToEntered(GuiSettings.PollRate);
             ShowLastMouseMoveMenuItem.Checked = GuiSettings.ShowLastMouseMove;
             ShowVelocityAndGainMoveMenuItem.Checked = GuiSettings.ShowVelocityAndGain;
-            StreamingModeMenuItem.Checked = GuiSettings.StreamingMode;
             AutoWriteMenuItem.Checked = GuiSettings.AutoWriteToDriverOnStartup;
         }
 
@@ -192,7 +201,7 @@ namespace grapher.Models.Serialized
                 ShowLastMouseMove = ShowLastMouseMoveMenuItem.Checked,
                 ShowVelocityAndGain = ShowVelocityAndGainMoveMenuItem.Checked,
                 AutoWriteToDriverOnStartup = AutoWriteMenuItem.Checked,
-                StreamingMode = StreamingModeMenuItem.Checked
+                CurrentColorScheme = SelectedTheme
             };
         }
 
@@ -308,6 +317,41 @@ namespace grapher.Models.Serialized
             ActiveConfig = DriverConfig.GetActive();
             File.WriteAllText(path, ActiveConfig.ToJSON());
             return ActiveConfig;
+        }
+
+        private string GetSelectedTheme()
+        {
+            if (GuiSettings == null || string.IsNullOrEmpty(GuiSettings.CurrentColorScheme))
+            {
+                return "Light Theme";
+            }
+
+            return GuiSettings.CurrentColorScheme;
+        }
+
+        private void AddEventsToThemeMenu()
+        {
+            foreach (ToolStripMenuItem item in ThemeMenu.DropDownItems)
+            {
+                item.Click += (s, e) =>
+                {
+                    if (GuiSettings.CurrentColorScheme == item.Name)
+                    {
+                        return;
+                    }
+
+                    SelectedTheme = item.Text;
+                    var colorScheme = ColorSchemeManager.FromName(item.Text);
+
+                    Theme.CurrentScheme = colorScheme;
+                    Theme.Apply(Form);
+                    GuiSettings.CurrentColorScheme = colorScheme.Name;
+                    GuiSettings.Save();
+
+                    MessageBox.Show(@"If you switched between a light and dark theme, some colors might be off. 
+If this is the case, please restart the app to apply all colors correctly."); 
+                };
+            }
         }
 
         #endregion Methods

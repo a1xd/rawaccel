@@ -119,12 +119,5 @@ namespace grapher.Models.Charts.ChartState
                 ChartXY.SetStandard(GainChart.ChartY);
             }
         }
-
-        public void SetStreaming(bool streaming)
-        {
-            SensitivityChart.SetStreaming(streaming);
-            GainChart.SetStreaming(streaming);
-            VelocityChart.SetStreaming(streaming);
-        }
     }
 }

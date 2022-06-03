@@ -83,31 +83,19 @@ namespace grapher
             this.outCapLabelXPower = new System.Windows.Forms.Label();
             this.inCapLabelXPower = new System.Windows.Forms.Label();
             this.CapTypeLabelXPower = new System.Windows.Forms.Label();
-            this.outCapBoxYPower = new System.Windows.Forms.TextBox();
-            this.outCapBoxXPower = new System.Windows.Forms.TextBox();
-            this.inCapBoxYPower = new System.Windows.Forms.TextBox();
-            this.inCapBoxXPower = new System.Windows.Forms.TextBox();
-            this.CapTypeDropdownYPower = new System.Windows.Forms.ComboBox();
-            this.CapTypeDropdownXPower = new System.Windows.Forms.ComboBox();
             this.CapTypeActiveYLabelClassic = new System.Windows.Forms.Label();
             this.CapTypeActiveXLabelClassic = new System.Windows.Forms.Label();
             this.OutCapActiveYLabelClassic = new System.Windows.Forms.Label();
             this.OutCapActiveXLabelClassic = new System.Windows.Forms.Label();
             this.outCapLabelYClassic = new System.Windows.Forms.Label();
             this.outCapLabelXClassic = new System.Windows.Forms.Label();
-            this.outCapBoxYClassic = new System.Windows.Forms.TextBox();
-            this.outCapBoxXClassic = new System.Windows.Forms.TextBox();
             this.CapTypeLabelYClassic = new System.Windows.Forms.Label();
             this.CapTypeLabelXClassic = new System.Windows.Forms.Label();
-            this.CapTypeDropdownYClassic = new System.Windows.Forms.ComboBox();
-            this.CapTypeDropdownXClassic = new System.Windows.Forms.ComboBox();
             this.VertHorzRatioLabel = new System.Windows.Forms.Label();
             this.SmoothActiveYLabel = new System.Windows.Forms.Label();
             this.smoothLabelY = new System.Windows.Forms.Label();
             this.SmoothActiveXLabel = new System.Windows.Forms.Label();
             this.smoothLabelX = new System.Windows.Forms.Label();
-            this.smoothBoxY = new System.Windows.Forms.TextBox();
-            this.smoothBoxX = new System.Windows.Forms.TextBox();
             this.GrowthRateActiveYLabel = new System.Windows.Forms.Label();
             this.GrowthRateActiveXLabel = new System.Windows.Forms.Label();
             this.DecayRateActiveYLabel = new System.Windows.Forms.Label();
@@ -116,26 +104,18 @@ namespace grapher
             this.growthRateLabelX = new System.Windows.Forms.Label();
             this.decayRateLabelY = new System.Windows.Forms.Label();
             this.decayRateLabelX = new System.Windows.Forms.Label();
-            this.growthRateBoxY = new System.Windows.Forms.TextBox();
-            this.growthRateBoxX = new System.Windows.Forms.TextBox();
-            this.decayRateBoxY = new System.Windows.Forms.TextBox();
-            this.decayRateBoxX = new System.Windows.Forms.TextBox();
             this.PowerClassicActiveYLabel = new System.Windows.Forms.Label();
             this.PowerClassicActiveXLabel = new System.Windows.Forms.Label();
             this.powerLabelY = new System.Windows.Forms.Label();
             this.powerLabelX = new System.Windows.Forms.Label();
-            this.powerBoxY = new System.Windows.Forms.TextBox();
-            this.powerBoxX = new System.Windows.Forms.TextBox();
-            this.YLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
-            this.XLutActiveValuesBox = new System.Windows.Forms.RichTextBox();
+            this.YLutActiveValuesBox = new grapher.Models.Theming.Controls.ThemeableRichTextBox();
+            this.XLutActiveValuesBox = new grapher.Models.Theming.Controls.ThemeableRichTextBox();
             this.LutApplyActiveYLabel = new System.Windows.Forms.Label();
-            this.YLutApplyDropdown = new System.Windows.Forms.ComboBox();
-            this.XLutApplyDropdown = new System.Windows.Forms.ComboBox();
             this.LutApplyActiveXLabel = new System.Windows.Forms.Label();
             this.YLutApplyLabel = new System.Windows.Forms.Label();
             this.XLutApplyLabel = new System.Windows.Forms.Label();
-            this.YLutPointsBox = new System.Windows.Forms.RichTextBox();
-            this.XLutPointsBox = new System.Windows.Forms.RichTextBox();
+            this.YLutPointsBox = new grapher.Models.Theming.Controls.ThemeableRichTextBox();
+            this.XLutPointsBox = new grapher.Models.Theming.Controls.ThemeableRichTextBox();
             this.gainSwitchActiveLabelY = new System.Windows.Forms.Label();
             this.gainSwitchActiveLabelX = new System.Windows.Forms.Label();
             this.gainSwitchY = new System.Windows.Forms.CheckBox();
@@ -154,28 +134,19 @@ namespace grapher
             this.WholeCheckBox = new System.Windows.Forms.CheckBox();
             this.DirectionalityRangeLabel = new System.Windows.Forms.Label();
             this.DirectionalDomainLabel = new System.Windows.Forms.Label();
-            this.LpNormBox = new System.Windows.Forms.TextBox();
             this.LPNormLabel = new System.Windows.Forms.Label();
             this.DirectionalityY = new System.Windows.Forms.Label();
             this.DirectionalityX = new System.Windows.Forms.Label();
-            this.RangeBoxY = new System.Windows.Forms.TextBox();
-            this.RangeBoxX = new System.Windows.Forms.TextBox();
-            this.DomainBoxY = new System.Windows.Forms.TextBox();
-            this.DomainBoxX = new System.Windows.Forms.TextBox();
             this.DirectionalityLabel = new System.Windows.Forms.Button();
             this.toggleButton = new System.Windows.Forms.Button();
             this.scaleLabelY = new System.Windows.Forms.Label();
             this.ScaleActiveYLabel = new System.Windows.Forms.Label();
-            this.scaleBoxY = new System.Windows.Forms.TextBox();
             this.ScaleActiveXLabel = new System.Windows.Forms.Label();
             this.scaleLabelX = new System.Windows.Forms.Label();
-            this.scaleBoxX = new System.Windows.Forms.TextBox();
             this.expLabelY = new System.Windows.Forms.Label();
             this.ExpActiveYLabel = new System.Windows.Forms.Label();
-            this.expBoxY = new System.Windows.Forms.TextBox();
             this.ExpActiveXLabel = new System.Windows.Forms.Label();
             this.expLabelX = new System.Windows.Forms.Label();
-            this.expBoxX = new System.Windows.Forms.TextBox();
             this.ActiveValueTitleY = new System.Windows.Forms.Label();
             this.AccelTypeActiveLabelY = new System.Windows.Forms.Label();
             this.OptionSetYTitle = new System.Windows.Forms.Label();
@@ -196,14 +167,6 @@ namespace grapher
             this.InputOffsetActiveYLabel = new System.Windows.Forms.Label();
             this.OutputOffsetActiveYLabel = new System.Windows.Forms.Label();
             this.AccelerationActiveLabelY = new System.Windows.Forms.Label();
-            this.accelTypeDropY = new System.Windows.Forms.ComboBox();
-            this.midpointBoxY = new System.Windows.Forms.TextBox();
-            this.limitBoxY = new System.Windows.Forms.TextBox();
-            this.inputJumpBoxY = new System.Windows.Forms.TextBox();
-            this.outputJumpBoxY = new System.Windows.Forms.TextBox();
-            this.inputOffsetBoxY = new System.Windows.Forms.TextBox();
-            this.outputOffsetBoxY = new System.Windows.Forms.TextBox();
-            this.accelerationBoxY = new System.Windows.Forms.TextBox();
             this.MidpointActiveXLabel = new System.Windows.Forms.Label();
             this.LimitActiveXLabel = new System.Windows.Forms.Label();
             this.InputJumpActiveXLabel = new System.Windows.Forms.Label();
@@ -221,30 +184,17 @@ namespace grapher
             this.MouseLabel = new System.Windows.Forms.Label();
             this.LockXYLabel = new System.Windows.Forms.Label();
             this.sensXYLock = new System.Windows.Forms.CheckBox();
-            this.inCapBoxYClassic = new System.Windows.Forms.TextBox();
-            this.VertHorzRatioBox = new System.Windows.Forms.TextBox();
             this.writeButton = new System.Windows.Forms.Button();
             this.inputJumpLabelX = new System.Windows.Forms.Label();
             this.outputJumpLabelX = new System.Windows.Forms.Label();
-            this.inputJumpBoxX = new System.Windows.Forms.TextBox();
-            this.outputJumpBoxX = new System.Windows.Forms.TextBox();
             this.inputOffsetLabelX = new System.Windows.Forms.Label();
             this.outputOffsetLabelX = new System.Windows.Forms.Label();
-            this.inputOffsetBoxX = new System.Windows.Forms.TextBox();
-            this.outputOffsetBoxX = new System.Windows.Forms.TextBox();
             this.constantThreeLabelX = new System.Windows.Forms.Label();
-            this.midpointBoxX = new System.Windows.Forms.TextBox();
             this.limitLabelX = new System.Windows.Forms.Label();
-            this.limitBoxX = new System.Windows.Forms.TextBox();
             this.inCapLabelXClassic = new System.Windows.Forms.Label();
-            this.inCapBoxXClassic = new System.Windows.Forms.TextBox();
             this.constantOneLabelX = new System.Windows.Forms.Label();
-            this.accelerationBoxX = new System.Windows.Forms.TextBox();
             this.rotationLabel = new System.Windows.Forms.Label();
-            this.rotationBox = new System.Windows.Forms.TextBox();
             this.sensitivityLabel = new System.Windows.Forms.Label();
-            this.sensitivityBoxX = new System.Windows.Forms.TextBox();
-            this.accelTypeDropX = new System.Windows.Forms.ComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.graphsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scaleByDPIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -255,7 +205,6 @@ namespace grapher
             this.ScaleMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showVelocityGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLastMouseMoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.streamingModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AutoWriteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -266,6 +215,56 @@ namespace grapher
             this.GainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.VelocityChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AccelerationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.outCapBoxYPower = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.outCapBoxXPower = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.inCapBoxYPower = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.inCapBoxXPower = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.CapTypeDropdownYPower = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.CapTypeDropdownXPower = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.outCapBoxYClassic = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.outCapBoxXClassic = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.CapTypeDropdownYClassic = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.CapTypeDropdownXClassic = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.smoothBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.smoothBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.growthRateBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.growthRateBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.decayRateBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.decayRateBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.powerBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.powerBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.YLutApplyDropdown = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.XLutApplyDropdown = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.LpNormBox = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.RangeBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.RangeBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.DomainBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.DomainBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.scaleBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.scaleBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.expBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.expBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.accelTypeDropY = new grapher.Models.Theming.Controls.ThemeableComboBox();
+            this.midpointBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.limitBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.inputJumpBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.outputJumpBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.inputOffsetBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.outputOffsetBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.accelerationBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.inCapBoxYClassic = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.VertHorzRatioBox = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.inputJumpBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.outputJumpBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.inputOffsetBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.outputOffsetBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.midpointBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.limitBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.inCapBoxXClassic = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.accelerationBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.rotationBox = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.sensitivityBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.accelTypeDropX = new grapher.Models.Theming.Controls.ThemeableComboBox();
             this.chartContainer = new System.Windows.Forms.TableLayoutPanel();
             this.optionsPanel.SuspendLayout();
             this.DirectionalityPanel.SuspendLayout();
@@ -554,50 +553,6 @@ namespace grapher
             this.CapTypeLabelXPower.TabIndex = 213;
             this.CapTypeLabelXPower.Text = "Cap Type";
             // 
-            // outCapBoxYPower
-            // 
-            this.outCapBoxYPower.Location = new System.Drawing.Point(332, 834);
-            this.outCapBoxYPower.Name = "outCapBoxYPower";
-            this.outCapBoxYPower.Size = new System.Drawing.Size(76, 20);
-            this.outCapBoxYPower.TabIndex = 164;
-            // 
-            // outCapBoxXPower
-            // 
-            this.outCapBoxXPower.Location = new System.Drawing.Point(106, 833);
-            this.outCapBoxXPower.Name = "outCapBoxXPower";
-            this.outCapBoxXPower.Size = new System.Drawing.Size(76, 20);
-            this.outCapBoxXPower.TabIndex = 64;
-            // 
-            // inCapBoxYPower
-            // 
-            this.inCapBoxYPower.Location = new System.Drawing.Point(332, 807);
-            this.inCapBoxYPower.Name = "inCapBoxYPower";
-            this.inCapBoxYPower.Size = new System.Drawing.Size(76, 20);
-            this.inCapBoxYPower.TabIndex = 163;
-            // 
-            // inCapBoxXPower
-            // 
-            this.inCapBoxXPower.Location = new System.Drawing.Point(106, 807);
-            this.inCapBoxXPower.Name = "inCapBoxXPower";
-            this.inCapBoxXPower.Size = new System.Drawing.Size(76, 20);
-            this.inCapBoxXPower.TabIndex = 63;
-            // 
-            // CapTypeDropdownYPower
-            // 
-            this.CapTypeDropdownYPower.FormattingEnabled = true;
-            this.CapTypeDropdownYPower.Location = new System.Drawing.Point(332, 780);
-            this.CapTypeDropdownYPower.Name = "CapTypeDropdownYPower";
-            this.CapTypeDropdownYPower.Size = new System.Drawing.Size(76, 21);
-            this.CapTypeDropdownYPower.TabIndex = 162;
-            // 
-            // CapTypeDropdownXPower
-            // 
-            this.CapTypeDropdownXPower.FormattingEnabled = true;
-            this.CapTypeDropdownXPower.Location = new System.Drawing.Point(106, 780);
-            this.CapTypeDropdownXPower.Name = "CapTypeDropdownXPower";
-            this.CapTypeDropdownXPower.Size = new System.Drawing.Size(76, 21);
-            this.CapTypeDropdownXPower.TabIndex = 62;
-            // 
             // CapTypeActiveYLabelClassic
             // 
             this.CapTypeActiveYLabelClassic.AutoSize = true;
@@ -652,20 +607,6 @@ namespace grapher
             this.outCapLabelXClassic.TabIndex = 201;
             this.outCapLabelXClassic.Text = "Cap: Output";
             // 
-            // outCapBoxYClassic
-            // 
-            this.outCapBoxYClassic.Location = new System.Drawing.Point(332, 754);
-            this.outCapBoxYClassic.Name = "outCapBoxYClassic";
-            this.outCapBoxYClassic.Size = new System.Drawing.Size(76, 20);
-            this.outCapBoxYClassic.TabIndex = 154;
-            // 
-            // outCapBoxXClassic
-            // 
-            this.outCapBoxXClassic.Location = new System.Drawing.Point(106, 754);
-            this.outCapBoxXClassic.Name = "outCapBoxXClassic";
-            this.outCapBoxXClassic.Size = new System.Drawing.Size(76, 20);
-            this.outCapBoxXClassic.TabIndex = 54;
-            // 
             // CapTypeLabelYClassic
             // 
             this.CapTypeLabelYClassic.AutoSize = true;
@@ -683,22 +624,6 @@ namespace grapher
             this.CapTypeLabelXClassic.Size = new System.Drawing.Size(53, 13);
             this.CapTypeLabelXClassic.TabIndex = 197;
             this.CapTypeLabelXClassic.Text = "Cap Type";
-            // 
-            // CapTypeDropdownYClassic
-            // 
-            this.CapTypeDropdownYClassic.FormattingEnabled = true;
-            this.CapTypeDropdownYClassic.Location = new System.Drawing.Point(332, 725);
-            this.CapTypeDropdownYClassic.Name = "CapTypeDropdownYClassic";
-            this.CapTypeDropdownYClassic.Size = new System.Drawing.Size(76, 21);
-            this.CapTypeDropdownYClassic.TabIndex = 152;
-            // 
-            // CapTypeDropdownXClassic
-            // 
-            this.CapTypeDropdownXClassic.FormattingEnabled = true;
-            this.CapTypeDropdownXClassic.Location = new System.Drawing.Point(106, 726);
-            this.CapTypeDropdownXClassic.Name = "CapTypeDropdownXClassic";
-            this.CapTypeDropdownXClassic.Size = new System.Drawing.Size(76, 21);
-            this.CapTypeDropdownXClassic.TabIndex = 52;
             // 
             // VertHorzRatioLabel
             // 
@@ -744,20 +669,6 @@ namespace grapher
             this.smoothLabelX.Size = new System.Drawing.Size(43, 13);
             this.smoothLabelX.TabIndex = 190;
             this.smoothLabelX.Text = "Smooth";
-            // 
-            // smoothBoxY
-            // 
-            this.smoothBoxY.Location = new System.Drawing.Point(332, 698);
-            this.smoothBoxY.Name = "smoothBoxY";
-            this.smoothBoxY.Size = new System.Drawing.Size(76, 20);
-            this.smoothBoxY.TabIndex = 206;
-            // 
-            // smoothBoxX
-            // 
-            this.smoothBoxX.Location = new System.Drawing.Point(106, 699);
-            this.smoothBoxX.Name = "smoothBoxX";
-            this.smoothBoxX.Size = new System.Drawing.Size(76, 20);
-            this.smoothBoxX.TabIndex = 106;
             // 
             // GrowthRateActiveYLabel
             // 
@@ -831,34 +742,6 @@ namespace grapher
             this.decayRateLabelX.TabIndex = 180;
             this.decayRateLabelX.Text = "Decay Rate";
             // 
-            // growthRateBoxY
-            // 
-            this.growthRateBoxY.Location = new System.Drawing.Point(332, 671);
-            this.growthRateBoxY.Name = "growthRateBoxY";
-            this.growthRateBoxY.Size = new System.Drawing.Size(76, 20);
-            this.growthRateBoxY.TabIndex = 205;
-            // 
-            // growthRateBoxX
-            // 
-            this.growthRateBoxX.Location = new System.Drawing.Point(106, 672);
-            this.growthRateBoxX.Name = "growthRateBoxX";
-            this.growthRateBoxX.Size = new System.Drawing.Size(76, 20);
-            this.growthRateBoxX.TabIndex = 105;
-            // 
-            // decayRateBoxY
-            // 
-            this.decayRateBoxY.Location = new System.Drawing.Point(332, 646);
-            this.decayRateBoxY.Name = "decayRateBoxY";
-            this.decayRateBoxY.Size = new System.Drawing.Size(76, 20);
-            this.decayRateBoxY.TabIndex = 204;
-            // 
-            // decayRateBoxX
-            // 
-            this.decayRateBoxX.Location = new System.Drawing.Point(106, 646);
-            this.decayRateBoxX.Name = "decayRateBoxX";
-            this.decayRateBoxX.Size = new System.Drawing.Size(76, 20);
-            this.decayRateBoxX.TabIndex = 104;
-            // 
             // PowerClassicActiveYLabel
             // 
             this.PowerClassicActiveYLabel.AutoSize = true;
@@ -895,20 +778,6 @@ namespace grapher
             this.powerLabelX.TabIndex = 172;
             this.powerLabelX.Text = "Power";
             // 
-            // powerBoxY
-            // 
-            this.powerBoxY.Location = new System.Drawing.Point(332, 621);
-            this.powerBoxY.Name = "powerBoxY";
-            this.powerBoxY.Size = new System.Drawing.Size(76, 20);
-            this.powerBoxY.TabIndex = 210;
-            // 
-            // powerBoxX
-            // 
-            this.powerBoxX.Location = new System.Drawing.Point(106, 622);
-            this.powerBoxX.Name = "powerBoxX";
-            this.powerBoxX.Size = new System.Drawing.Size(76, 20);
-            this.powerBoxX.TabIndex = 110;
-            // 
             // YLutActiveValuesBox
             // 
             this.YLutActiveValuesBox.Location = new System.Drawing.Point(397, 396);
@@ -935,22 +804,6 @@ namespace grapher
             this.LutApplyActiveYLabel.Size = new System.Drawing.Size(35, 13);
             this.LutApplyActiveYLabel.TabIndex = 167;
             this.LutApplyActiveYLabel.Text = "label1";
-            // 
-            // YLutApplyDropdown
-            // 
-            this.YLutApplyDropdown.FormattingEnabled = true;
-            this.YLutApplyDropdown.Location = new System.Drawing.Point(397, 554);
-            this.YLutApplyDropdown.Name = "YLutApplyDropdown";
-            this.YLutApplyDropdown.Size = new System.Drawing.Size(73, 21);
-            this.YLutApplyDropdown.TabIndex = 221;
-            // 
-            // XLutApplyDropdown
-            // 
-            this.XLutApplyDropdown.FormattingEnabled = true;
-            this.XLutApplyDropdown.Location = new System.Drawing.Point(320, 554);
-            this.XLutApplyDropdown.Name = "XLutApplyDropdown";
-            this.XLutApplyDropdown.Size = new System.Drawing.Size(65, 21);
-            this.XLutApplyDropdown.TabIndex = 121;
             // 
             // LutApplyActiveXLabel
             // 
@@ -1185,13 +1038,6 @@ namespace grapher
             this.DirectionalDomainLabel.TabIndex = 9;
             this.DirectionalDomainLabel.Text = "Domain";
             // 
-            // LpNormBox
-            // 
-            this.LpNormBox.Location = new System.Drawing.Point(94, 78);
-            this.LpNormBox.Name = "LpNormBox";
-            this.LpNormBox.Size = new System.Drawing.Size(76, 20);
-            this.LpNormBox.TabIndex = 8;
-            // 
             // LPNormLabel
             // 
             this.LPNormLabel.AutoSize = true;
@@ -1219,41 +1065,14 @@ namespace grapher
             this.DirectionalityX.TabIndex = 5;
             this.DirectionalityX.Text = "X";
             // 
-            // RangeBoxY
-            // 
-            this.RangeBoxY.Location = new System.Drawing.Point(136, 52);
-            this.RangeBoxY.Name = "RangeBoxY";
-            this.RangeBoxY.Size = new System.Drawing.Size(34, 20);
-            this.RangeBoxY.TabIndex = 4;
-            // 
-            // RangeBoxX
-            // 
-            this.RangeBoxX.Location = new System.Drawing.Point(94, 52);
-            this.RangeBoxX.Name = "RangeBoxX";
-            this.RangeBoxX.Size = new System.Drawing.Size(34, 20);
-            this.RangeBoxX.TabIndex = 3;
-            // 
-            // DomainBoxY
-            // 
-            this.DomainBoxY.Location = new System.Drawing.Point(136, 25);
-            this.DomainBoxY.Name = "DomainBoxY";
-            this.DomainBoxY.Size = new System.Drawing.Size(34, 20);
-            this.DomainBoxY.TabIndex = 2;
-            // 
-            // DomainBoxX
-            // 
-            this.DomainBoxX.Location = new System.Drawing.Point(94, 25);
-            this.DomainBoxX.Name = "DomainBoxX";
-            this.DomainBoxX.Size = new System.Drawing.Size(34, 20);
-            this.DomainBoxX.TabIndex = 1;
-            // 
             // DirectionalityLabel
             // 
             this.DirectionalityLabel.AutoSize = true;
+            this.DirectionalityLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.DirectionalityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DirectionalityLabel.Location = new System.Drawing.Point(3, 9);
             this.DirectionalityLabel.Name = "DirectionalityLabel";
-            this.DirectionalityLabel.Size = new System.Drawing.Size(77, 23);
+            this.DirectionalityLabel.Size = new System.Drawing.Size(79, 25);
             this.DirectionalityLabel.TabIndex = 0;
             this.DirectionalityLabel.Text = "Directionality";
             // 
@@ -1284,13 +1103,6 @@ namespace grapher
             this.ScaleActiveYLabel.TabIndex = 148;
             this.ScaleActiveYLabel.Text = "0";
             // 
-            // scaleBoxY
-            // 
-            this.scaleBoxY.Location = new System.Drawing.Point(332, 357);
-            this.scaleBoxY.Name = "scaleBoxY";
-            this.scaleBoxY.Size = new System.Drawing.Size(76, 20);
-            this.scaleBoxY.TabIndex = 160;
-            // 
             // ScaleActiveXLabel
             // 
             this.ScaleActiveXLabel.AutoSize = true;
@@ -1310,13 +1122,6 @@ namespace grapher
             this.scaleLabelX.Text = "Scale";
             this.scaleLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // scaleBoxX
-            // 
-            this.scaleBoxX.Location = new System.Drawing.Point(106, 357);
-            this.scaleBoxX.Name = "scaleBoxX";
-            this.scaleBoxX.Size = new System.Drawing.Size(76, 20);
-            this.scaleBoxX.TabIndex = 60;
-            // 
             // expLabelY
             // 
             this.expLabelY.AutoSize = true;
@@ -1334,13 +1139,6 @@ namespace grapher
             this.ExpActiveYLabel.Size = new System.Drawing.Size(13, 13);
             this.ExpActiveYLabel.TabIndex = 144;
             this.ExpActiveYLabel.Text = "0";
-            // 
-            // expBoxY
-            // 
-            this.expBoxY.Location = new System.Drawing.Point(332, 300);
-            this.expBoxY.Name = "expBoxY";
-            this.expBoxY.Size = new System.Drawing.Size(76, 20);
-            this.expBoxY.TabIndex = 211;
             // 
             // ExpActiveXLabel
             // 
@@ -1360,13 +1158,6 @@ namespace grapher
             this.expLabelX.TabIndex = 142;
             this.expLabelX.Text = "Exponent";
             this.expLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // expBoxX
-            // 
-            this.expBoxX.Location = new System.Drawing.Point(106, 300);
-            this.expBoxX.Name = "expBoxX";
-            this.expBoxX.Size = new System.Drawing.Size(76, 20);
-            this.expBoxX.TabIndex = 111;
             // 
             // ActiveValueTitleY
             // 
@@ -1550,64 +1341,6 @@ namespace grapher
             this.AccelerationActiveLabelY.TabIndex = 128;
             this.AccelerationActiveLabelY.Text = "0";
             // 
-            // accelTypeDropY
-            // 
-            this.accelTypeDropY.FormattingEnabled = true;
-            this.accelTypeDropY.Location = new System.Drawing.Point(332, 138);
-            this.accelTypeDropY.Name = "accelTypeDropY";
-            this.accelTypeDropY.Size = new System.Drawing.Size(76, 21);
-            this.accelTypeDropY.TabIndex = 140;
-            this.accelTypeDropY.Text = "Accel Type";
-            // 
-            // midpointBoxY
-            // 
-            this.midpointBoxY.Location = new System.Drawing.Point(332, 327);
-            this.midpointBoxY.Name = "midpointBoxY";
-            this.midpointBoxY.Size = new System.Drawing.Size(76, 20);
-            this.midpointBoxY.TabIndex = 214;
-            // 
-            // limitBoxY
-            // 
-            this.limitBoxY.Location = new System.Drawing.Point(332, 271);
-            this.limitBoxY.Name = "limitBoxY";
-            this.limitBoxY.Size = new System.Drawing.Size(76, 20);
-            this.limitBoxY.TabIndex = 209;
-            // 
-            // inputJumpBoxY
-            // 
-            this.inputJumpBoxY.Location = new System.Drawing.Point(332, 245);
-            this.inputJumpBoxY.Name = "inputJumpBoxY";
-            this.inputJumpBoxY.Size = new System.Drawing.Size(76, 20);
-            this.inputJumpBoxY.TabIndex = 207;
-            // 
-            // outputJumpBoxY
-            // 
-            this.outputJumpBoxY.Location = new System.Drawing.Point(332, 245);
-            this.outputJumpBoxY.Name = "outputJumpBoxY";
-            this.outputJumpBoxY.Size = new System.Drawing.Size(76, 20);
-            this.outputJumpBoxY.TabIndex = 212;
-            // 
-            // inputOffsetBoxY
-            // 
-            this.inputOffsetBoxY.Location = new System.Drawing.Point(332, 245);
-            this.inputOffsetBoxY.Name = "inputOffsetBoxY";
-            this.inputOffsetBoxY.Size = new System.Drawing.Size(76, 20);
-            this.inputOffsetBoxY.TabIndex = 208;
-            // 
-            // outputOffsetBoxY
-            // 
-            this.outputOffsetBoxY.Location = new System.Drawing.Point(332, 245);
-            this.outputOffsetBoxY.Name = "outputOffsetBoxY";
-            this.outputOffsetBoxY.Size = new System.Drawing.Size(76, 20);
-            this.outputOffsetBoxY.TabIndex = 213;
-            // 
-            // accelerationBoxY
-            // 
-            this.accelerationBoxY.Location = new System.Drawing.Point(332, 167);
-            this.accelerationBoxY.Name = "accelerationBoxY";
-            this.accelerationBoxY.Size = new System.Drawing.Size(76, 20);
-            this.accelerationBoxY.TabIndex = 150;
-            // 
             // MidpointActiveXLabel
             // 
             this.MidpointActiveXLabel.AutoSize = true;
@@ -1763,20 +1496,6 @@ namespace grapher
             this.sensXYLock.TabIndex = 11;
             this.sensXYLock.UseVisualStyleBackColor = true;
             // 
-            // inCapBoxYClassic
-            // 
-            this.inCapBoxYClassic.Location = new System.Drawing.Point(332, 193);
-            this.inCapBoxYClassic.Name = "inCapBoxYClassic";
-            this.inCapBoxYClassic.Size = new System.Drawing.Size(76, 20);
-            this.inCapBoxYClassic.TabIndex = 153;
-            // 
-            // VertHorzRatioBox
-            // 
-            this.VertHorzRatioBox.Location = new System.Drawing.Point(106, 76);
-            this.VertHorzRatioBox.Name = "VertHorzRatioBox";
-            this.VertHorzRatioBox.Size = new System.Drawing.Size(76, 20);
-            this.VertHorzRatioBox.TabIndex = 12;
-            // 
             // writeButton
             // 
             this.writeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
@@ -1807,20 +1526,6 @@ namespace grapher
             this.outputJumpLabelX.Text = "Output Jump";
             this.outputJumpLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // inputJumpBoxX
-            // 
-            this.inputJumpBoxX.Location = new System.Drawing.Point(106, 245);
-            this.inputJumpBoxX.Name = "inputJumpBoxX";
-            this.inputJumpBoxX.Size = new System.Drawing.Size(76, 20);
-            this.inputJumpBoxX.TabIndex = 107;
-            // 
-            // outputJumpBoxX
-            // 
-            this.outputJumpBoxX.Location = new System.Drawing.Point(106, 245);
-            this.outputJumpBoxX.Name = "outputJumpBoxX";
-            this.outputJumpBoxX.Size = new System.Drawing.Size(76, 20);
-            this.outputJumpBoxX.TabIndex = 112;
-            // 
             // inputOffsetLabelX
             // 
             this.inputOffsetLabelX.AutoSize = true;
@@ -1841,20 +1546,6 @@ namespace grapher
             this.outputOffsetLabelX.Text = "Output Offset";
             this.outputOffsetLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // inputOffsetBoxX
-            // 
-            this.inputOffsetBoxX.Location = new System.Drawing.Point(106, 245);
-            this.inputOffsetBoxX.Name = "inputOffsetBoxX";
-            this.inputOffsetBoxX.Size = new System.Drawing.Size(76, 20);
-            this.inputOffsetBoxX.TabIndex = 108;
-            // 
-            // outputOffsetBoxX
-            // 
-            this.outputOffsetBoxX.Location = new System.Drawing.Point(106, 245);
-            this.outputOffsetBoxX.Name = "outputOffsetBoxX";
-            this.outputOffsetBoxX.Size = new System.Drawing.Size(76, 20);
-            this.outputOffsetBoxX.TabIndex = 113;
-            // 
             // constantThreeLabelX
             // 
             this.constantThreeLabelX.AutoSize = true;
@@ -1864,13 +1555,6 @@ namespace grapher
             this.constantThreeLabelX.TabIndex = 105;
             this.constantThreeLabelX.Text = "Midpoint";
             this.constantThreeLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // midpointBoxX
-            // 
-            this.midpointBoxX.Location = new System.Drawing.Point(106, 327);
-            this.midpointBoxX.Name = "midpointBoxX";
-            this.midpointBoxX.Size = new System.Drawing.Size(76, 20);
-            this.midpointBoxX.TabIndex = 114;
             // 
             // limitLabelX
             // 
@@ -1882,13 +1566,6 @@ namespace grapher
             this.limitLabelX.Text = "Limit";
             this.limitLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // limitBoxX
-            // 
-            this.limitBoxX.Location = new System.Drawing.Point(106, 271);
-            this.limitBoxX.Name = "limitBoxX";
-            this.limitBoxX.Size = new System.Drawing.Size(76, 20);
-            this.limitBoxX.TabIndex = 109;
-            // 
             // inCapLabelXClassic
             // 
             this.inCapLabelXClassic.AutoSize = true;
@@ -1898,13 +1575,6 @@ namespace grapher
             this.inCapLabelXClassic.TabIndex = 94;
             this.inCapLabelXClassic.Text = "Cap: Input";
             this.inCapLabelXClassic.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // inCapBoxXClassic
-            // 
-            this.inCapBoxXClassic.Location = new System.Drawing.Point(106, 193);
-            this.inCapBoxXClassic.Name = "inCapBoxXClassic";
-            this.inCapBoxXClassic.Size = new System.Drawing.Size(76, 20);
-            this.inCapBoxXClassic.TabIndex = 53;
             // 
             // constantOneLabelX
             // 
@@ -1916,13 +1586,6 @@ namespace grapher
             this.constantOneLabelX.Text = "Acceleration";
             this.constantOneLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // accelerationBoxX
-            // 
-            this.accelerationBoxX.Location = new System.Drawing.Point(106, 167);
-            this.accelerationBoxX.Name = "accelerationBoxX";
-            this.accelerationBoxX.Size = new System.Drawing.Size(76, 20);
-            this.accelerationBoxX.TabIndex = 50;
-            // 
             // rotationLabel
             // 
             this.rotationLabel.AutoSize = true;
@@ -1932,13 +1595,6 @@ namespace grapher
             this.rotationLabel.TabIndex = 87;
             this.rotationLabel.Text = "Rotation";
             // 
-            // rotationBox
-            // 
-            this.rotationBox.Location = new System.Drawing.Point(106, 102);
-            this.rotationBox.Name = "rotationBox";
-            this.rotationBox.Size = new System.Drawing.Size(76, 20);
-            this.rotationBox.TabIndex = 13;
-            // 
             // sensitivityLabel
             // 
             this.sensitivityLabel.AutoSize = true;
@@ -1947,22 +1603,6 @@ namespace grapher
             this.sensitivityLabel.Size = new System.Drawing.Size(75, 13);
             this.sensitivityLabel.TabIndex = 85;
             this.sensitivityLabel.Text = "Sens Multiplier";
-            // 
-            // sensitivityBoxX
-            // 
-            this.sensitivityBoxX.Location = new System.Drawing.Point(106, 49);
-            this.sensitivityBoxX.Name = "sensitivityBoxX";
-            this.sensitivityBoxX.Size = new System.Drawing.Size(76, 20);
-            this.sensitivityBoxX.TabIndex = 10;
-            // 
-            // accelTypeDropX
-            // 
-            this.accelTypeDropX.FormattingEnabled = true;
-            this.accelTypeDropX.Location = new System.Drawing.Point(106, 138);
-            this.accelTypeDropX.Name = "accelTypeDropX";
-            this.accelTypeDropX.Size = new System.Drawing.Size(76, 21);
-            this.accelTypeDropX.TabIndex = 40;
-            this.accelTypeDropX.Text = "Accel Type";
             // 
             // menuStrip1
             // 
@@ -1983,8 +1623,7 @@ namespace grapher
             this.graphsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.scaleByDPIToolStripMenuItem,
             this.showVelocityGainToolStripMenuItem,
-            this.showLastMouseMoveToolStripMenuItem,
-            this.streamingModeToolStripMenuItem});
+            this.showLastMouseMoveToolStripMenuItem});
             this.graphsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.graphsToolStripMenuItem.Name = "graphsToolStripMenuItem";
             this.graphsToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
@@ -2010,7 +1649,6 @@ namespace grapher
             // 
             // DPITextBox
             // 
-            this.DPITextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.DPITextBox.Name = "DPITextBox";
             this.DPITextBox.Size = new System.Drawing.Size(100, 23);
             // 
@@ -2024,7 +1662,6 @@ namespace grapher
             // 
             // PollRateTextBox
             // 
-            this.PollRateTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.PollRateTextBox.Name = "PollRateTextBox";
             this.PollRateTextBox.Size = new System.Drawing.Size(100, 23);
             // 
@@ -2048,13 +1685,6 @@ namespace grapher
             this.showLastMouseMoveToolStripMenuItem.Name = "showLastMouseMoveToolStripMenuItem";
             this.showLastMouseMoveToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.showLastMouseMoveToolStripMenuItem.Text = "Show Last Mouse Move";
-            // 
-            // streamingModeToolStripMenuItem
-            // 
-            this.streamingModeToolStripMenuItem.CheckOnClick = true;
-            this.streamingModeToolStripMenuItem.Name = "streamingModeToolStripMenuItem";
-            this.streamingModeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.streamingModeToolStripMenuItem.Text = "Streaming Mode";
             // 
             // advancedToolStripMenuItem
             // 
@@ -2368,6 +1998,366 @@ namespace grapher
             this.chartContainer.Size = new System.Drawing.Size(1401, 956);
             this.chartContainer.TabIndex = 40;
             // 
+            // outCapBoxYPower
+            // 
+            this.outCapBoxYPower.Location = new System.Drawing.Point(332, 834);
+            this.outCapBoxYPower.Name = "outCapBoxYPower";
+            this.outCapBoxYPower.Size = new System.Drawing.Size(76, 20);
+            this.outCapBoxYPower.TabIndex = 164;
+            // 
+            // outCapBoxXPower
+            // 
+            this.outCapBoxXPower.Location = new System.Drawing.Point(106, 833);
+            this.outCapBoxXPower.Name = "outCapBoxXPower";
+            this.outCapBoxXPower.Size = new System.Drawing.Size(76, 20);
+            this.outCapBoxXPower.TabIndex = 64;
+            // 
+            // inCapBoxYPower
+            // 
+            this.inCapBoxYPower.Location = new System.Drawing.Point(332, 807);
+            this.inCapBoxYPower.Name = "inCapBoxYPower";
+            this.inCapBoxYPower.Size = new System.Drawing.Size(76, 20);
+            this.inCapBoxYPower.TabIndex = 163;
+            // 
+            // inCapBoxXPower
+            // 
+            this.inCapBoxXPower.Location = new System.Drawing.Point(106, 807);
+            this.inCapBoxXPower.Name = "inCapBoxXPower";
+            this.inCapBoxXPower.Size = new System.Drawing.Size(76, 20);
+            this.inCapBoxXPower.TabIndex = 63;
+            // 
+            // CapTypeDropdownYPower
+            // 
+            this.CapTypeDropdownYPower.FormattingEnabled = true;
+            this.CapTypeDropdownYPower.Location = new System.Drawing.Point(332, 780);
+            this.CapTypeDropdownYPower.Name = "CapTypeDropdownYPower";
+            this.CapTypeDropdownYPower.Size = new System.Drawing.Size(76, 21);
+            this.CapTypeDropdownYPower.TabIndex = 162;
+            // 
+            // CapTypeDropdownXPower
+            // 
+            this.CapTypeDropdownXPower.FormattingEnabled = true;
+            this.CapTypeDropdownXPower.Location = new System.Drawing.Point(106, 780);
+            this.CapTypeDropdownXPower.Name = "CapTypeDropdownXPower";
+            this.CapTypeDropdownXPower.Size = new System.Drawing.Size(76, 21);
+            this.CapTypeDropdownXPower.TabIndex = 62;
+            // 
+            // outCapBoxYClassic
+            // 
+            this.outCapBoxYClassic.Location = new System.Drawing.Point(332, 754);
+            this.outCapBoxYClassic.Name = "outCapBoxYClassic";
+            this.outCapBoxYClassic.Size = new System.Drawing.Size(76, 20);
+            this.outCapBoxYClassic.TabIndex = 154;
+            // 
+            // outCapBoxXClassic
+            // 
+            this.outCapBoxXClassic.Location = new System.Drawing.Point(106, 754);
+            this.outCapBoxXClassic.Name = "outCapBoxXClassic";
+            this.outCapBoxXClassic.Size = new System.Drawing.Size(76, 20);
+            this.outCapBoxXClassic.TabIndex = 54;
+            // 
+            // CapTypeDropdownYClassic
+            // 
+            this.CapTypeDropdownYClassic.FormattingEnabled = true;
+            this.CapTypeDropdownYClassic.Location = new System.Drawing.Point(332, 725);
+            this.CapTypeDropdownYClassic.Name = "CapTypeDropdownYClassic";
+            this.CapTypeDropdownYClassic.Size = new System.Drawing.Size(76, 21);
+            this.CapTypeDropdownYClassic.TabIndex = 152;
+            // 
+            // CapTypeDropdownXClassic
+            // 
+            this.CapTypeDropdownXClassic.FormattingEnabled = true;
+            this.CapTypeDropdownXClassic.Location = new System.Drawing.Point(106, 726);
+            this.CapTypeDropdownXClassic.Name = "CapTypeDropdownXClassic";
+            this.CapTypeDropdownXClassic.Size = new System.Drawing.Size(76, 21);
+            this.CapTypeDropdownXClassic.TabIndex = 52;
+            // 
+            // smoothBoxY
+            // 
+            this.smoothBoxY.Location = new System.Drawing.Point(332, 698);
+            this.smoothBoxY.Name = "smoothBoxY";
+            this.smoothBoxY.Size = new System.Drawing.Size(76, 20);
+            this.smoothBoxY.TabIndex = 206;
+            // 
+            // smoothBoxX
+            // 
+            this.smoothBoxX.Location = new System.Drawing.Point(106, 699);
+            this.smoothBoxX.Name = "smoothBoxX";
+            this.smoothBoxX.Size = new System.Drawing.Size(76, 20);
+            this.smoothBoxX.TabIndex = 106;
+            // 
+            // growthRateBoxY
+            // 
+            this.growthRateBoxY.Location = new System.Drawing.Point(332, 671);
+            this.growthRateBoxY.Name = "growthRateBoxY";
+            this.growthRateBoxY.Size = new System.Drawing.Size(76, 20);
+            this.growthRateBoxY.TabIndex = 205;
+            // 
+            // growthRateBoxX
+            // 
+            this.growthRateBoxX.Location = new System.Drawing.Point(106, 672);
+            this.growthRateBoxX.Name = "growthRateBoxX";
+            this.growthRateBoxX.Size = new System.Drawing.Size(76, 20);
+            this.growthRateBoxX.TabIndex = 105;
+            // 
+            // decayRateBoxY
+            // 
+            this.decayRateBoxY.Location = new System.Drawing.Point(332, 646);
+            this.decayRateBoxY.Name = "decayRateBoxY";
+            this.decayRateBoxY.Size = new System.Drawing.Size(76, 20);
+            this.decayRateBoxY.TabIndex = 204;
+            // 
+            // decayRateBoxX
+            // 
+            this.decayRateBoxX.Location = new System.Drawing.Point(106, 646);
+            this.decayRateBoxX.Name = "decayRateBoxX";
+            this.decayRateBoxX.Size = new System.Drawing.Size(76, 20);
+            this.decayRateBoxX.TabIndex = 104;
+            // 
+            // powerBoxY
+            // 
+            this.powerBoxY.Location = new System.Drawing.Point(332, 621);
+            this.powerBoxY.Name = "powerBoxY";
+            this.powerBoxY.Size = new System.Drawing.Size(76, 20);
+            this.powerBoxY.TabIndex = 210;
+            // 
+            // powerBoxX
+            // 
+            this.powerBoxX.Location = new System.Drawing.Point(106, 622);
+            this.powerBoxX.Name = "powerBoxX";
+            this.powerBoxX.Size = new System.Drawing.Size(76, 20);
+            this.powerBoxX.TabIndex = 110;
+            // 
+            // YLutApplyDropdown
+            // 
+            this.YLutApplyDropdown.FormattingEnabled = true;
+            this.YLutApplyDropdown.Location = new System.Drawing.Point(397, 554);
+            this.YLutApplyDropdown.Name = "YLutApplyDropdown";
+            this.YLutApplyDropdown.Size = new System.Drawing.Size(73, 21);
+            this.YLutApplyDropdown.TabIndex = 221;
+            // 
+            // XLutApplyDropdown
+            // 
+            this.XLutApplyDropdown.FormattingEnabled = true;
+            this.XLutApplyDropdown.Location = new System.Drawing.Point(320, 554);
+            this.XLutApplyDropdown.Name = "XLutApplyDropdown";
+            this.XLutApplyDropdown.Size = new System.Drawing.Size(65, 21);
+            this.XLutApplyDropdown.TabIndex = 121;
+            // 
+            // LpNormBox
+            // 
+            this.LpNormBox.Location = new System.Drawing.Point(94, 78);
+            this.LpNormBox.Name = "LpNormBox";
+            this.LpNormBox.Size = new System.Drawing.Size(76, 20);
+            this.LpNormBox.TabIndex = 8;
+            // 
+            // RangeBoxY
+            // 
+            this.RangeBoxY.Location = new System.Drawing.Point(136, 52);
+            this.RangeBoxY.Name = "RangeBoxY";
+            this.RangeBoxY.Size = new System.Drawing.Size(34, 20);
+            this.RangeBoxY.TabIndex = 4;
+            // 
+            // RangeBoxX
+            // 
+            this.RangeBoxX.Location = new System.Drawing.Point(94, 52);
+            this.RangeBoxX.Name = "RangeBoxX";
+            this.RangeBoxX.Size = new System.Drawing.Size(34, 20);
+            this.RangeBoxX.TabIndex = 3;
+            // 
+            // DomainBoxY
+            // 
+            this.DomainBoxY.Location = new System.Drawing.Point(136, 25);
+            this.DomainBoxY.Name = "DomainBoxY";
+            this.DomainBoxY.Size = new System.Drawing.Size(34, 20);
+            this.DomainBoxY.TabIndex = 2;
+            // 
+            // DomainBoxX
+            // 
+            this.DomainBoxX.Location = new System.Drawing.Point(94, 25);
+            this.DomainBoxX.Name = "DomainBoxX";
+            this.DomainBoxX.Size = new System.Drawing.Size(34, 20);
+            this.DomainBoxX.TabIndex = 1;
+            // 
+            // scaleBoxY
+            // 
+            this.scaleBoxY.Location = new System.Drawing.Point(332, 357);
+            this.scaleBoxY.Name = "scaleBoxY";
+            this.scaleBoxY.Size = new System.Drawing.Size(76, 20);
+            this.scaleBoxY.TabIndex = 160;
+            // 
+            // scaleBoxX
+            // 
+            this.scaleBoxX.Location = new System.Drawing.Point(106, 357);
+            this.scaleBoxX.Name = "scaleBoxX";
+            this.scaleBoxX.Size = new System.Drawing.Size(76, 20);
+            this.scaleBoxX.TabIndex = 60;
+            // 
+            // expBoxY
+            // 
+            this.expBoxY.Location = new System.Drawing.Point(332, 300);
+            this.expBoxY.Name = "expBoxY";
+            this.expBoxY.Size = new System.Drawing.Size(76, 20);
+            this.expBoxY.TabIndex = 211;
+            // 
+            // expBoxX
+            // 
+            this.expBoxX.Location = new System.Drawing.Point(106, 300);
+            this.expBoxX.Name = "expBoxX";
+            this.expBoxX.Size = new System.Drawing.Size(76, 20);
+            this.expBoxX.TabIndex = 111;
+            // 
+            // accelTypeDropY
+            // 
+            this.accelTypeDropY.FormattingEnabled = true;
+            this.accelTypeDropY.Location = new System.Drawing.Point(332, 138);
+            this.accelTypeDropY.Name = "accelTypeDropY";
+            this.accelTypeDropY.Size = new System.Drawing.Size(76, 21);
+            this.accelTypeDropY.TabIndex = 140;
+            this.accelTypeDropY.Text = "Accel Type";
+            // 
+            // midpointBoxY
+            // 
+            this.midpointBoxY.Location = new System.Drawing.Point(332, 327);
+            this.midpointBoxY.Name = "midpointBoxY";
+            this.midpointBoxY.Size = new System.Drawing.Size(76, 20);
+            this.midpointBoxY.TabIndex = 214;
+            // 
+            // limitBoxY
+            // 
+            this.limitBoxY.Location = new System.Drawing.Point(332, 271);
+            this.limitBoxY.Name = "limitBoxY";
+            this.limitBoxY.Size = new System.Drawing.Size(76, 20);
+            this.limitBoxY.TabIndex = 209;
+            // 
+            // inputJumpBoxY
+            // 
+            this.inputJumpBoxY.Location = new System.Drawing.Point(332, 245);
+            this.inputJumpBoxY.Name = "inputJumpBoxY";
+            this.inputJumpBoxY.Size = new System.Drawing.Size(76, 20);
+            this.inputJumpBoxY.TabIndex = 207;
+            // 
+            // outputJumpBoxY
+            // 
+            this.outputJumpBoxY.Location = new System.Drawing.Point(332, 245);
+            this.outputJumpBoxY.Name = "outputJumpBoxY";
+            this.outputJumpBoxY.Size = new System.Drawing.Size(76, 20);
+            this.outputJumpBoxY.TabIndex = 212;
+            // 
+            // inputOffsetBoxY
+            // 
+            this.inputOffsetBoxY.Location = new System.Drawing.Point(332, 245);
+            this.inputOffsetBoxY.Name = "inputOffsetBoxY";
+            this.inputOffsetBoxY.Size = new System.Drawing.Size(76, 20);
+            this.inputOffsetBoxY.TabIndex = 208;
+            // 
+            // outputOffsetBoxY
+            // 
+            this.outputOffsetBoxY.Location = new System.Drawing.Point(332, 245);
+            this.outputOffsetBoxY.Name = "outputOffsetBoxY";
+            this.outputOffsetBoxY.Size = new System.Drawing.Size(76, 20);
+            this.outputOffsetBoxY.TabIndex = 213;
+            // 
+            // accelerationBoxY
+            // 
+            this.accelerationBoxY.Location = new System.Drawing.Point(332, 167);
+            this.accelerationBoxY.Name = "accelerationBoxY";
+            this.accelerationBoxY.Size = new System.Drawing.Size(76, 20);
+            this.accelerationBoxY.TabIndex = 150;
+            // 
+            // inCapBoxYClassic
+            // 
+            this.inCapBoxYClassic.Location = new System.Drawing.Point(332, 193);
+            this.inCapBoxYClassic.Name = "inCapBoxYClassic";
+            this.inCapBoxYClassic.Size = new System.Drawing.Size(76, 20);
+            this.inCapBoxYClassic.TabIndex = 153;
+            // 
+            // VertHorzRatioBox
+            // 
+            this.VertHorzRatioBox.Location = new System.Drawing.Point(106, 76);
+            this.VertHorzRatioBox.Name = "VertHorzRatioBox";
+            this.VertHorzRatioBox.Size = new System.Drawing.Size(76, 20);
+            this.VertHorzRatioBox.TabIndex = 12;
+            // 
+            // inputJumpBoxX
+            // 
+            this.inputJumpBoxX.Location = new System.Drawing.Point(106, 245);
+            this.inputJumpBoxX.Name = "inputJumpBoxX";
+            this.inputJumpBoxX.Size = new System.Drawing.Size(76, 20);
+            this.inputJumpBoxX.TabIndex = 107;
+            // 
+            // outputJumpBoxX
+            // 
+            this.outputJumpBoxX.Location = new System.Drawing.Point(106, 245);
+            this.outputJumpBoxX.Name = "outputJumpBoxX";
+            this.outputJumpBoxX.Size = new System.Drawing.Size(76, 20);
+            this.outputJumpBoxX.TabIndex = 112;
+            // 
+            // inputOffsetBoxX
+            // 
+            this.inputOffsetBoxX.Location = new System.Drawing.Point(106, 245);
+            this.inputOffsetBoxX.Name = "inputOffsetBoxX";
+            this.inputOffsetBoxX.Size = new System.Drawing.Size(76, 20);
+            this.inputOffsetBoxX.TabIndex = 108;
+            // 
+            // outputOffsetBoxX
+            // 
+            this.outputOffsetBoxX.Location = new System.Drawing.Point(106, 245);
+            this.outputOffsetBoxX.Name = "outputOffsetBoxX";
+            this.outputOffsetBoxX.Size = new System.Drawing.Size(76, 20);
+            this.outputOffsetBoxX.TabIndex = 113;
+            // 
+            // midpointBoxX
+            // 
+            this.midpointBoxX.Location = new System.Drawing.Point(106, 327);
+            this.midpointBoxX.Name = "midpointBoxX";
+            this.midpointBoxX.Size = new System.Drawing.Size(76, 20);
+            this.midpointBoxX.TabIndex = 114;
+            // 
+            // limitBoxX
+            // 
+            this.limitBoxX.Location = new System.Drawing.Point(106, 271);
+            this.limitBoxX.Name = "limitBoxX";
+            this.limitBoxX.Size = new System.Drawing.Size(76, 20);
+            this.limitBoxX.TabIndex = 109;
+            // 
+            // inCapBoxXClassic
+            // 
+            this.inCapBoxXClassic.Location = new System.Drawing.Point(106, 193);
+            this.inCapBoxXClassic.Name = "inCapBoxXClassic";
+            this.inCapBoxXClassic.Size = new System.Drawing.Size(76, 20);
+            this.inCapBoxXClassic.TabIndex = 53;
+            // 
+            // accelerationBoxX
+            // 
+            this.accelerationBoxX.Location = new System.Drawing.Point(106, 167);
+            this.accelerationBoxX.Name = "accelerationBoxX";
+            this.accelerationBoxX.Size = new System.Drawing.Size(76, 20);
+            this.accelerationBoxX.TabIndex = 50;
+            // 
+            // rotationBox
+            // 
+            this.rotationBox.Location = new System.Drawing.Point(106, 102);
+            this.rotationBox.Name = "rotationBox";
+            this.rotationBox.Size = new System.Drawing.Size(76, 20);
+            this.rotationBox.TabIndex = 13;
+            // 
+            // sensitivityBoxX
+            // 
+            this.sensitivityBoxX.Location = new System.Drawing.Point(106, 49);
+            this.sensitivityBoxX.Name = "sensitivityBoxX";
+            this.sensitivityBoxX.Size = new System.Drawing.Size(76, 20);
+            this.sensitivityBoxX.TabIndex = 10;
+            // 
+            // accelTypeDropX
+            // 
+            this.accelTypeDropX.FormattingEnabled = true;
+            this.accelTypeDropX.Location = new System.Drawing.Point(106, 138);
+            this.accelTypeDropX.Name = "accelTypeDropX";
+            this.accelTypeDropX.Size = new System.Drawing.Size(76, 21);
+            this.accelTypeDropX.TabIndex = 40;
+            this.accelTypeDropX.Text = "Accel Type";
+            // 
             // RawAcceleration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2404,16 +2394,16 @@ namespace grapher
         private System.Windows.Forms.Button toggleButton;
         private System.Windows.Forms.Label scaleLabelY;
         private System.Windows.Forms.Label ScaleActiveYLabel;
-        private System.Windows.Forms.TextBox scaleBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox scaleBoxY;
         private System.Windows.Forms.Label ScaleActiveXLabel;
         private System.Windows.Forms.Label scaleLabelX;
-        private System.Windows.Forms.TextBox scaleBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox scaleBoxX;
         private System.Windows.Forms.Label expLabelY;
         private System.Windows.Forms.Label ExpActiveYLabel;
-        private System.Windows.Forms.TextBox expBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox expBoxY;
         private System.Windows.Forms.Label ExpActiveXLabel;
         private System.Windows.Forms.Label expLabelX;
-        private System.Windows.Forms.TextBox expBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox expBoxX;
         private System.Windows.Forms.Label ActiveValueTitleY;
         private System.Windows.Forms.Label AccelTypeActiveLabelY;
         private System.Windows.Forms.Label OptionSetYTitle;
@@ -2434,14 +2424,14 @@ namespace grapher
         private System.Windows.Forms.Label InputOffsetActiveYLabel;
         private System.Windows.Forms.Label OutputOffsetActiveYLabel;
         private System.Windows.Forms.Label AccelerationActiveLabelY;
-        private System.Windows.Forms.ComboBox accelTypeDropY;
-        private System.Windows.Forms.TextBox midpointBoxY;
-        private System.Windows.Forms.TextBox limitBoxY;
-        private System.Windows.Forms.TextBox inputJumpBoxY;
-        private System.Windows.Forms.TextBox outputJumpBoxY;
-        private System.Windows.Forms.TextBox inputOffsetBoxY;
-        private System.Windows.Forms.TextBox outputOffsetBoxY;
-        private System.Windows.Forms.TextBox accelerationBoxY;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox accelTypeDropY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox midpointBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox limitBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox inputJumpBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox outputJumpBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox inputOffsetBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox outputOffsetBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox accelerationBoxY;
         private System.Windows.Forms.Label MidpointActiveXLabel;
         private System.Windows.Forms.Label LimitActiveXLabel;
         private System.Windows.Forms.Label InputJumpActiveXLabel;
@@ -2459,30 +2449,30 @@ namespace grapher
         private System.Windows.Forms.Label MouseLabel;
         private System.Windows.Forms.Label LockXYLabel;
         private System.Windows.Forms.CheckBox sensXYLock;
-        private System.Windows.Forms.TextBox inCapBoxYClassic;
-        private System.Windows.Forms.TextBox VertHorzRatioBox;
+        private grapher.Models.Theming.Controls.ThemeableTextBox inCapBoxYClassic;
+        private grapher.Models.Theming.Controls.ThemeableTextBox VertHorzRatioBox;
         private System.Windows.Forms.Button writeButton;
         private System.Windows.Forms.Label inputOffsetLabelX;
         private System.Windows.Forms.Label outputOffsetLabelX;
-        private System.Windows.Forms.TextBox inputOffsetBoxX;
-        private System.Windows.Forms.TextBox outputOffsetBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox inputOffsetBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox outputOffsetBoxX;
         private System.Windows.Forms.Label inputJumpLabelX;
         private System.Windows.Forms.Label outputJumpLabelX;
-        private System.Windows.Forms.TextBox inputJumpBoxX;
-        private System.Windows.Forms.TextBox outputJumpBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox inputJumpBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox outputJumpBoxX;
         private System.Windows.Forms.Label constantThreeLabelX;
-        private System.Windows.Forms.TextBox midpointBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox midpointBoxX;
         private System.Windows.Forms.Label limitLabelX;
-        private System.Windows.Forms.TextBox limitBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox limitBoxX;
         private System.Windows.Forms.Label inCapLabelXClassic;
-        private System.Windows.Forms.TextBox inCapBoxXClassic;
+        private grapher.Models.Theming.Controls.ThemeableTextBox inCapBoxXClassic;
         private System.Windows.Forms.Label constantOneLabelX;
-        private System.Windows.Forms.TextBox accelerationBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox accelerationBoxX;
         private System.Windows.Forms.Label rotationLabel;
-        private System.Windows.Forms.TextBox rotationBox;
+        private grapher.Models.Theming.Controls.ThemeableTextBox rotationBox;
         private System.Windows.Forms.Label sensitivityLabel;
-        private System.Windows.Forms.TextBox sensitivityBoxX;
-        private System.Windows.Forms.ComboBox accelTypeDropX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox sensitivityBoxX;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox accelTypeDropX;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem graphsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scaleByDPIToolStripMenuItem;
@@ -2505,14 +2495,14 @@ namespace grapher
         private System.Windows.Forms.Panel DirectionalityPanel;
         private System.Windows.Forms.Label DirectionalityRangeLabel;
         private System.Windows.Forms.Label DirectionalDomainLabel;
-        private System.Windows.Forms.TextBox LpNormBox;
+        private grapher.Models.Theming.Controls.ThemeableTextBox LpNormBox;
         private System.Windows.Forms.Label LPNormLabel;
         private System.Windows.Forms.Label DirectionalityY;
         private System.Windows.Forms.Label DirectionalityX;
-        private System.Windows.Forms.TextBox RangeBoxY;
-        private System.Windows.Forms.TextBox RangeBoxX;
-        private System.Windows.Forms.TextBox DomainBoxY;
-        private System.Windows.Forms.TextBox DomainBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox RangeBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox RangeBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox DomainBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox DomainBoxX;
         private System.Windows.Forms.Button DirectionalityLabel;
         private System.Windows.Forms.CheckBox ByComponentCheckBox;
         private System.Windows.Forms.CheckBox WholeCheckBox;
@@ -2530,31 +2520,30 @@ namespace grapher
         private System.Windows.Forms.CheckBox gainSwitchY;
         private System.Windows.Forms.Label gainSwitchActiveLabelY;
         private System.Windows.Forms.Label gainSwitchActiveLabelX;
-        private System.Windows.Forms.RichTextBox YLutPointsBox;
-        private System.Windows.Forms.RichTextBox XLutPointsBox;
+        private grapher.Models.Theming.Controls.ThemeableRichTextBox YLutPointsBox;
+        private grapher.Models.Theming.Controls.ThemeableRichTextBox XLutPointsBox;
         private System.Windows.Forms.Label LutApplyActiveYLabel;
-        private System.Windows.Forms.ComboBox YLutApplyDropdown;
-        private System.Windows.Forms.ComboBox XLutApplyDropdown;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox YLutApplyDropdown;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox XLutApplyDropdown;
         private System.Windows.Forms.Label LutApplyActiveXLabel;
         private System.Windows.Forms.Label YLutApplyLabel;
         private System.Windows.Forms.Label XLutApplyLabel;
-        private System.Windows.Forms.RichTextBox YLutActiveValuesBox;
-        private System.Windows.Forms.RichTextBox XLutActiveValuesBox;
-        private System.Windows.Forms.ToolStripMenuItem streamingModeToolStripMenuItem;
+        private grapher.Models.Theming.Controls.ThemeableRichTextBox YLutActiveValuesBox;
+        private grapher.Models.Theming.Controls.ThemeableRichTextBox XLutActiveValuesBox;
         private System.Windows.Forms.Label powerLabelY;
         private System.Windows.Forms.Label powerLabelX;
-        private System.Windows.Forms.TextBox powerBoxY;
-        private System.Windows.Forms.TextBox powerBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox powerBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox powerBoxX;
         private System.Windows.Forms.Label PowerClassicActiveYLabel;
         private System.Windows.Forms.Label PowerClassicActiveXLabel;
         private System.Windows.Forms.Label growthRateLabelY;
         private System.Windows.Forms.Label growthRateLabelX;
         private System.Windows.Forms.Label decayRateLabelY;
         private System.Windows.Forms.Label decayRateLabelX;
-        private System.Windows.Forms.TextBox growthRateBoxY;
-        private System.Windows.Forms.TextBox growthRateBoxX;
-        private System.Windows.Forms.TextBox decayRateBoxY;
-        private System.Windows.Forms.TextBox decayRateBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox growthRateBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox growthRateBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox decayRateBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox decayRateBoxX;
         private System.Windows.Forms.Label GrowthRateActiveYLabel;
         private System.Windows.Forms.Label GrowthRateActiveXLabel;
         private System.Windows.Forms.Label DecayRateActiveYLabel;
@@ -2563,23 +2552,23 @@ namespace grapher
         private System.Windows.Forms.Label smoothLabelY;
         private System.Windows.Forms.Label SmoothActiveXLabel;
         private System.Windows.Forms.Label smoothLabelX;
-        private System.Windows.Forms.TextBox smoothBoxY;
-        private System.Windows.Forms.TextBox smoothBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox smoothBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox smoothBoxX;
         private System.Windows.Forms.Label VertHorzRatioLabel;
-        private System.Windows.Forms.ComboBox CapTypeDropdownYClassic;
-        private System.Windows.Forms.ComboBox CapTypeDropdownXClassic;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox CapTypeDropdownYClassic;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox CapTypeDropdownXClassic;
         private System.Windows.Forms.Label CapTypeLabelYClassic;
         private System.Windows.Forms.Label CapTypeLabelXClassic;
         private System.Windows.Forms.Label outCapLabelYClassic;
         private System.Windows.Forms.Label outCapLabelXClassic;
-        private System.Windows.Forms.TextBox outCapBoxYClassic;
-        private System.Windows.Forms.TextBox outCapBoxXClassic;
+        private grapher.Models.Theming.Controls.ThemeableTextBox outCapBoxYClassic;
+        private grapher.Models.Theming.Controls.ThemeableTextBox outCapBoxXClassic;
         private System.Windows.Forms.Label OutCapActiveXLabelClassic;
         private System.Windows.Forms.Label OutCapActiveYLabelClassic;
         private System.Windows.Forms.Label CapTypeActiveYLabelClassic;
         private System.Windows.Forms.Label CapTypeActiveXLabelClassic;
-        private System.Windows.Forms.ComboBox CapTypeDropdownYPower;
-        private System.Windows.Forms.ComboBox CapTypeDropdownXPower;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox CapTypeDropdownYPower;
+        private  grapher.Models.Theming.Controls.ThemeableComboBox CapTypeDropdownXPower;
         private System.Windows.Forms.Label OutCapActiveYLabelPower;
         private System.Windows.Forms.Label InCapActiveYLabelPower;
         private System.Windows.Forms.Label OutCapActiveXLabelPower;
@@ -2592,10 +2581,10 @@ namespace grapher
         private System.Windows.Forms.Label outCapLabelXPower;
         private System.Windows.Forms.Label inCapLabelXPower;
         private System.Windows.Forms.Label CapTypeLabelXPower;
-        private System.Windows.Forms.TextBox outCapBoxYPower;
-        private System.Windows.Forms.TextBox outCapBoxXPower;
-        private System.Windows.Forms.TextBox inCapBoxYPower;
-        private System.Windows.Forms.TextBox inCapBoxXPower;
+        private grapher.Models.Theming.Controls.ThemeableTextBox outCapBoxYPower;
+        private grapher.Models.Theming.Controls.ThemeableTextBox outCapBoxXPower;
+        private grapher.Models.Theming.Controls.ThemeableTextBox inCapBoxYPower;
+        private grapher.Models.Theming.Controls.ThemeableTextBox inCapBoxXPower;
         private System.Windows.Forms.TableLayoutPanel chartContainer;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using grapher.Models.Options;
 using System.Windows.Forms;
+using grapher.Models.Theming.Controls;
 
 namespace grapher
 {
@@ -28,7 +29,7 @@ namespace grapher
         }
 
         public Option(
-            TextBox box,
+            ThemeableTextBox box,
             Form containingForm,
             double defaultData,
             Label label,
@@ -43,7 +44,7 @@ namespace grapher
         }
 
         public Option(
-            TextBox box,
+            ThemeableTextBox box,
             Form containingForm,
             double defaultData,
             Label label,

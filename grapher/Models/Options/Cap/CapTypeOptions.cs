@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using grapher.Models.Theming;
 
 namespace grapher.Models.Options.Cap
 {
@@ -147,11 +148,11 @@ namespace grapher.Models.Options.Cap
         {
             if (SelectedCapOption.Equals(Default))
             {
-                OptionsDropdown.ForeColor = System.Drawing.Color.Gray;
+                OptionsDropdown.ForeColor = Theme.CurrentScheme.OnField;
             }
             else
             {
-                OptionsDropdown.ForeColor = System.Drawing.Color.Black;
+                OptionsDropdown.ForeColor = Theme.CurrentScheme.OnFocusedField;
             }
         }
 
