@@ -31,6 +31,18 @@ struct {
 
 extern "C" PULONG InitSafeBootMode;
 
+// precise behavior required to handle NaN (UB with /fp:fast)
+#pragma float_control(precise, on, push)
+
+static __forceinline
+bool 
+ValidCarry(double x, double y)
+{
+    return fabs(x) < 1 && fabs(y) < 1;
+}
+
+#pragma float_control(pop)
+
 __declspec(guard(ignore))
 VOID
 RawaccelCallback(
@@ -109,7 +121,7 @@ Arguments:
                 double carry_x = carried_result_x - out_x;
                 double carry_y = carried_result_y - out_y;
 
-                if (!ra::infnan(carry_x + carry_y)) {
+                if (ValidCarry(carry_x, carry_y)) {
                     devExt->carry.x = carry_x;
                     devExt->carry.y = carry_y;
                     it->LastX = out_x;
