@@ -5,7 +5,7 @@ Visit the [Releases page](https://github.com/a1xd/rawaccel/releases) and navigat
 
 ## Installation
 - **Prerequisites**
-  * Windows 10
+  * Windows 10 or Windows 11
   * Visual C++ 2019 runtime, [download here](https://aka.ms/vs/16/release/vc_redist.x64.exe)
   * .NET Framework 4.7.2+ runtime, [download here](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 
