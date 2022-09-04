@@ -1,6 +1,6 @@
 @echo off
 
-del "%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\raw*" 
+del "%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\rawaccel*" 
 for /f "delims=" %%a in ('dir /b /s rawaccel.exe') do @set rawlocation=%%a
 
 set SCRIPT="%TEMP%\%RANDOM%-%RANDOM%-%RANDOM%-%RANDOM%.vbs"
