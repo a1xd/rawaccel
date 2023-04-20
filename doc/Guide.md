@@ -70,7 +70,7 @@ $$(out_x, out_y) = (in_x * sens_x, in_y * sens_y) \left(\left(f\left(\left((doma
 
 This can be more easily understood as  
 
-$$(out_x, out_y) = (in_x * sens_x, in_y * sens_y) * ((f( domain-weighted lp-space speed) - 1) * (directional weight) + 1)$$, where $f(v)$ is our sensitivity function
+$$(out_x, out_y) = (in_x * sens_x, in_y * sens_y) * \left(\left(f\left( \text{domain-weighted } L^p \text{ space speed}\right) - 1\right) * (\text{directional weight}) + 1\right)$$, where $f(v)$ is our sensitivity function
 
 This formula guarantees the smooth transition from the horizontal to vertical curve and vice versa as the user moves their hand diagonally.
 
