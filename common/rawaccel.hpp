@@ -25,10 +25,10 @@ namespace rawaccel {
     };
 
     enum class distance_mode : unsigned char {
-        separate,
-        max,
-        Lp,
-        euclidean,
+        euclidean = 0,
+        separate = 1,
+        max = 2,
+        Lp = 3,
     };
 
     struct modifier_flags {
@@ -69,6 +69,70 @@ namespace rawaccel {
         modifier_flags() = default;
     };
 
+    struct speed_calculator {
+        double calc_speed(vec2d in, distance_mode mode, double lp_norm) const
+        {
+			double speed;
+
+			if (mode == distance_mode::max) {
+				speed = maxsd(in.x, in.y);
+			}
+			else if (mode == distance_mode::Lp) {
+				speed = lp_distance(in, lp_norm);
+			}
+			else {
+				speed = magnitude(in);
+			}
+
+            return speed;
+        }
+    };
+
+    struct smoother {
+        milliseconds times[100] = {};
+        double speeds[100] = {};
+        int index;
+
+        double smooth_speed(const double speed,
+                            const milliseconds time)
+        {
+            double total = speed;
+            int newIndex = index - 1;
+            if (newIndex < 0)
+            {
+                newIndex = 99;
+            }
+
+            times[index] = 0;
+            speeds[index] = speed;
+
+            while (index != newIndex)
+            {
+                index++;
+                if (index > 99)
+                {
+                    index = 0;
+                }
+
+                milliseconds age = times[index] + time;
+                if (age > 100)
+                {
+                    times[index] = 0;
+                    speeds[index] = 0;
+                }
+                else
+                {
+                    total += speeds[index];
+                    times[index] = age;
+                }
+            }
+
+            index = newIndex;
+
+            return total / 100;
+        }
+    };
+
     struct modifier_settings {
         profile prof;
 
@@ -101,6 +165,7 @@ namespace rawaccel {
         unsigned modifier_data_size = 0;
         unsigned device_data_size = 0;
     };
+
 
     static_assert(alignof(io_base) == alignof(modifier_settings) && alignof(modifier_settings) == alignof(device_settings));
 
@@ -159,17 +224,7 @@ namespace rawaccel {
                 in.y *= (*cb_y)(data.accel_y, args.accel_y, abs_weighted_vel.y, args.range_weights.y);
             }
             else {
-                double speed;
-
-                if (flags.dist_mode == distance_mode::max) {
-                    speed = maxsd(abs_weighted_vel.x, abs_weighted_vel.y);
-                }
-                else if (flags.dist_mode == distance_mode::Lp) {
-                    speed = lp_distance(abs_weighted_vel, args.lp_norm);
-                }
-                else {
-                    speed = magnitude(abs_weighted_vel);
-                }
+                double speed = speed_calc.calc_speed(abs_weighted_vel, flags.dist_mode, args.lp_norm);
 
                 double weight = args.range_weights.x;
 
@@ -226,6 +281,8 @@ namespace rawaccel {
 
         callback_t cb_x = &callback_template<accel_noaccel>;
         callback_t cb_y = &callback_template<accel_noaccel>;
+
+        speed_calculator speed_calc = {};
     };
 
 } // rawaccel
