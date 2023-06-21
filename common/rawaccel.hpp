@@ -69,8 +69,8 @@ namespace rawaccel {
         modifier_flags() = default;
     };
 
-    struct speed_calculator {
-        double calc_speed(vec2d in, distance_mode mode, double lp_norm) const
+    struct input_speed_processor {
+        double calc_speed(vec2d in, distance_mode mode, double lp_norm)
         {
 			double speed;
 
@@ -84,53 +84,54 @@ namespace rawaccel {
 				speed = magnitude(in);
 			}
 
+            speed = smooth_speed(speed, 1);
+
             return speed;
         }
-    };
 
-    struct smoother {
         milliseconds times[100] = {};
         double speeds[100] = {};
-        int index;
+        int smoothBufferIndex = 0;
 
         double smooth_speed(const double speed,
                             const milliseconds time)
         {
             double total = speed;
-            int newIndex = index - 1;
+            int newIndex = smoothBufferIndex - 1;
             if (newIndex < 0)
             {
                 newIndex = 99;
             }
 
-            times[index] = 0;
-            speeds[index] = speed;
+            times[smoothBufferIndex] = 0;
+            speeds[smoothBufferIndex] = speed;
 
-            while (index != newIndex)
+            while (smoothBufferIndex != newIndex)
             {
-                index++;
-                if (index > 99)
+                smoothBufferIndex++;
+                if (smoothBufferIndex > 99)
                 {
-                    index = 0;
+                    smoothBufferIndex = 0;
                 }
 
-                milliseconds age = times[index] + time;
+                milliseconds age = times[smoothBufferIndex] + time;
                 if (age > 100)
                 {
-                    times[index] = 0;
-                    speeds[index] = 0;
+                    times[smoothBufferIndex] = 0;
+                    speeds[smoothBufferIndex] = 0;
                 }
                 else
                 {
-                    total += speeds[index];
-                    times[index] = age;
+                    total += speeds[smoothBufferIndex];
+                    times[smoothBufferIndex] = age;
                 }
             }
 
-            index = newIndex;
+            smoothBufferIndex = newIndex;
 
             return total / 100;
         }
+
     };
 
     struct modifier_settings {
@@ -174,7 +175,7 @@ namespace rawaccel {
 #ifdef _KERNEL_MODE
         __forceinline
 #endif
-        void modify(vec2d& in, const modifier_settings& settings, double dpi_factor, milliseconds time) const
+        void modify(vec2d& in, input_speed_processor& speed_processor, const modifier_settings& settings, double dpi_factor, milliseconds time) const
         {
             auto& args = settings.prof;
             auto& data = settings.data;
@@ -224,7 +225,7 @@ namespace rawaccel {
                 in.y *= (*cb_y)(data.accel_y, args.accel_y, abs_weighted_vel.y, args.range_weights.y);
             }
             else {
-                double speed = speed_calc.calc_speed(abs_weighted_vel, flags.dist_mode, args.lp_norm);
+                double speed = speed_processor.calc_speed(abs_weighted_vel, flags.dist_mode, args.lp_norm);
 
                 double weight = args.range_weights.x;
 
@@ -281,8 +282,6 @@ namespace rawaccel {
 
         callback_t cb_x = &callback_template<accel_noaccel>;
         callback_t cb_y = &callback_template<accel_noaccel>;
-
-        speed_calculator speed_calc = {};
     };
 
 } // rawaccel

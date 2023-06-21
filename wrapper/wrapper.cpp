@@ -411,9 +411,15 @@ struct accel_instance_t {
     }
 };
 
+struct speed_calc_instance_t
+{
+    ra::input_speed_processor speed_calculator = {};
+};
+
 public ref class ManagedAccel
 {
     accel_instance_t* const instance = new accel_instance_t();
+    speed_calc_instance_t* const speed_instance = new speed_calc_instance_t();
 public:
 
     ManagedAccel() {}
@@ -443,7 +449,7 @@ public:
             (double)y
         };
 
-        instance->mod.modify(in_out_vec, instance->settings, dpi_factor, time);
+        instance->mod.modify(in_out_vec, speed_instance->speed_calculator, instance->settings, dpi_factor, time);
 
         return gcnew Tuple<double, double>(in_out_vec.x, in_out_vec.y);
     }
@@ -466,7 +472,19 @@ public:
     {
         return instance->settings;
     }
+};
 
+public ref class SpeedCalculator
+{
+    speed_calc_instance_t* const instance = new speed_calc_instance_t();
+public:
+    SpeedCalculator() {}
+
+    double CalculateSpeed(double x, double y, double time)
+    {
+        vec2d in = { x ,y };
+        return instance->speed_calculator.calc_speed(in, ra::distance_mode::euclidean, 2);
+    }
 };
 
 

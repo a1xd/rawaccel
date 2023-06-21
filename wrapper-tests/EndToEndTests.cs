@@ -3,7 +3,7 @@
 namespace wrapper_tests
 {
     [TestClass]
-    public class EndToEnd
+    public class EndToEndTests
     {
         [TestMethod]
         public void ModifyInput_Default_DoesNotChangeInput()

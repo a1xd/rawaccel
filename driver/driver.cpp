@@ -98,7 +98,7 @@ Arguments:
                     static_cast<double>(it->LastY)
                 };
 
-                devExt->mod.modify(input, devExt->mod_settings, devExt->dpi_factor, time);
+                devExt->mod.modify(input, devExt->speed_processor, devExt->mod_settings, devExt->dpi_factor, time);
 
                 double carried_result_x = input.x + devExt->carry.x;
                 double carried_result_y = input.y + devExt->carry.y;
