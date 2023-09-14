@@ -36,7 +36,6 @@ namespace rawaccel {
         bool compute_ref_angle = 0;
         bool apply_snap = 0;
         bool clamp_speed = 0;
-        distance_mode dist_mode = {};
         bool apply_directional_weight = 0;
         bool apply_dir_mul_x = 0;
         bool apply_dir_mul_y = 0;
@@ -51,6 +50,19 @@ namespace rawaccel {
             compute_ref_angle = apply_snap || apply_directional_weight;
             apply_dir_mul_x = args.lr_sens_ratio != 1;
             apply_dir_mul_y = args.ud_sens_ratio != 1;
+        }
+
+        modifier_flags() = default;
+    };
+
+    struct input_speed_processor {
+
+        input_speed_args speed_args = {};
+        distance_mode dist_mode = {};
+
+        void init(input_speed_args args)
+        {
+            speed_args = args;
 
             if (!args.whole) {
                 dist_mode = distance_mode::separate;
@@ -64,43 +76,45 @@ namespace rawaccel {
             else {
                 dist_mode = distance_mode::euclidean;
             }
+
         }
 
-        modifier_flags() = default;
-    };
-
-    struct input_speed_processor {
-        double calc_speed(vec2d in, distance_mode mode, double lp_norm)
+        double calc_speed(vec2d in, milliseconds time)
         {
 			double speed;
 
-			if (mode == distance_mode::max) {
+			if (dist_mode == distance_mode::max) {
 				speed = maxsd(in.x, in.y);
 			}
-			else if (mode == distance_mode::Lp) {
-				speed = lp_distance(in, lp_norm);
+			else if (dist_mode == distance_mode::Lp) {
+				speed = lp_distance(in, speed_args.lp_norm);
 			}
 			else {
 				speed = magnitude(in);
 			}
 
-            speed = smooth_speed(speed, 1);
+            if (speed_args.should_smooth &&
+                speed_args.smooth_window > 0)
+            {
+				speed = smooth_speed(speed, time);
+            }
 
             return speed;
         }
 
-        milliseconds times[100] = {};
-        double speeds[100] = {};
+        milliseconds times[SMOOTH_RAW_DATA_CAPACITY] = {};
+        double speeds[SMOOTH_RAW_DATA_CAPACITY] = {};
         int smoothBufferIndex = 0;
 
         double smooth_speed(const double speed,
                             const milliseconds time)
         {
-            double total = speed;
+            double windowSpeed = speed;
+            double cutoffWindowSpeed = speed;
             int newIndex = smoothBufferIndex - 1;
             if (newIndex < 0)
             {
-                newIndex = 99;
+                newIndex = SMOOTH_RAW_DATA_CAPACITY - 1;
             }
 
             times[smoothBufferIndex] = 0;
@@ -109,27 +123,46 @@ namespace rawaccel {
             while (smoothBufferIndex != newIndex)
             {
                 smoothBufferIndex++;
-                if (smoothBufferIndex > 99)
+                if (smoothBufferIndex >= SMOOTH_RAW_DATA_CAPACITY)
                 {
                     smoothBufferIndex = 0;
                 }
 
                 milliseconds age = times[smoothBufferIndex] + time;
-                if (age > 100)
+                if (age > speed_args.smooth_window)
                 {
                     times[smoothBufferIndex] = 0;
                     speeds[smoothBufferIndex] = 0;
                 }
                 else
                 {
-                    total += speeds[smoothBufferIndex];
+                    windowSpeed += speeds[smoothBufferIndex];
+
+                    if (speed_args.use_cutoff &&
+                        age <= speed_args.cutoff_window)
+                    {
+                        cutoffWindowSpeed += speeds[smoothBufferIndex];
+                    }
+
                     times[smoothBufferIndex] = age;
                 }
             }
 
             smoothBufferIndex = newIndex;
 
-            return total / 100;
+            windowSpeed /= speed_args.smooth_window;
+
+            if (speed_args.use_cutoff)
+            {
+                cutoffWindowSpeed /= speed_args.cutoff_window;
+
+                if (cutoffWindowSpeed < windowSpeed)
+                {
+                    return cutoffWindowSpeed;
+                }
+            }
+
+            return windowSpeed;
         }
 
     };
@@ -220,12 +253,12 @@ namespace rawaccel {
                 fabs(in.y * ips_factor * args.domain_weights.y)
             };
 
-            if (flags.dist_mode == distance_mode::separate) {
+            if (speed_processor.dist_mode == distance_mode::separate) {
                 in.x *= (*cb_x)(data.accel_x, args.accel_x, abs_weighted_vel.x, args.range_weights.x);
                 in.y *= (*cb_y)(data.accel_y, args.accel_y, abs_weighted_vel.y, args.range_weights.y);
             }
             else {
-                double speed = speed_processor.calc_speed(abs_weighted_vel, flags.dist_mode, args.lp_norm);
+                double speed = speed_processor.calc_speed(abs_weighted_vel, time);
 
                 double weight = args.range_weights.x;
 

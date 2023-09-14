@@ -19,6 +19,8 @@ namespace rawaccel {
     inline constexpr size_t LUT_RAW_DATA_CAPACITY = 514;
     inline constexpr size_t LUT_POINTS_CAPACITY = LUT_RAW_DATA_CAPACITY / 2;
 
+    inline constexpr size_t SMOOTH_RAW_DATA_CAPACITY = 8192;
+
     inline constexpr double MAX_NORM = 16;
 
     inline constexpr bool LEGACY = 0;
@@ -62,6 +64,15 @@ namespace rawaccel {
         mutable float data[LUT_RAW_DATA_CAPACITY] = {};
     };
 
+    struct input_speed_args
+    {
+        bool whole = true;
+        double lp_norm = 2;
+        bool should_smooth = false;
+        double smooth_window = 100;
+        bool use_cutoff = false;
+        double cutoff_window = 10;
+    };
 
     struct profile {
         wchar_t name[MAX_NAME_LEN] = L"default";
@@ -73,6 +84,7 @@ namespace rawaccel {
 
         accel_args accel_x;
         accel_args accel_y;
+        input_speed_args input_speed_args;
 
         double sensitivity = 1;
         double yx_sens_ratio = 1;

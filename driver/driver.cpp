@@ -380,6 +380,7 @@ DeviceSetup(WDFOBJECT hDevice)
             if (wcsncmp(prof_name, profile.name, ra::MAX_NAME_LEN) == 0) {
                 devExt->mod_settings = global.modifier_data[i];
                 devExt->mod = { devExt->mod_settings };
+                devExt->speed_processor.init(devExt->mod_settings.prof.input_speed_args);
                 return;
             }
         }

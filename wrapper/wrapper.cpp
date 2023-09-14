@@ -98,18 +98,36 @@ public value struct AccelArgs
     }
 };
 
+[StructLayout(LayoutKind::Sequential)]
+public value struct InputSpeedArgs
+{
+    [JsonProperty("Whole/combined accel (set false for 'by component' mode)")]
+    [MarshalAs(UnmanagedType::U1)]
+    bool combineMagnitudes;
+
+    double lpNorm;
+
+    [JsonProperty("Whether input speeds should be smoothed to determine acceleration speed")]
+    [MarshalAs(UnmanagedType::U1)]
+    bool shouldSmooth;
+
+    [JsonProperty("Time window in ms over which input should be smoothed")]
+	double smoothWindow;
+
+    [JsonProperty("Whether smoothed input speeds should stop smoothing and take latest speed when latest speed is lower")]
+    [MarshalAs(UnmanagedType::U1)]
+    bool shouldCutoff;
+
+    [JsonProperty("Time window in ms over which cutoff speed is calculated")]
+    float cutoffWindow;
+};
+
 [JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential, CharSet = CharSet::Unicode)]
 public ref struct Profile
 {
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_NAME_LEN)]
     System::String^ name;
-
-    [JsonProperty("Whole/combined accel (set false for 'by component' mode)")]
-    [MarshalAs(UnmanagedType::U1)]
-    bool combineMagnitudes;
-
-    double lpNorm;
 
     [JsonProperty("Stretches domain for horizontal vs vertical inputs")]
     Vec2<double> domainXY;
@@ -120,6 +138,8 @@ public ref struct Profile
     AccelArgs argsX;
     [JsonProperty("Vertical accel parameters")]
     AccelArgs argsY;
+    [JsonProperty("Input speed calculation parameters")]
+    InputSpeedArgs inputSpeedArgs;
 
     [JsonProperty("Sensitivity multiplier")]
     double sensitivity;
@@ -294,7 +314,7 @@ public:
             }
 
             auto msgs = elem->messages;
-            if (elem->prof->combineMagnitudes) {
+            if (elem->prof->inputSpeedArgs.combineMagnitudes) {
                 for (int i = 0; i < elem->lastX; i++) {
                     sb->AppendFormat("\t{0}\n", msgs[i]);
                 }
@@ -474,16 +494,43 @@ public:
     }
 };
 
+public ref class SpeedCalculatorArgs
+{
+public:
+    SpeedCalculatorArgs() {}
+    SpeedCalculatorArgs(
+        double lp_norm,
+        bool should_smooth,
+        double smooth_window,
+        bool should_cutoff,
+        double cutoff_window)
+    {
+        speed_args->lp_norm = lp_norm;
+        speed_args->smooth_window = smooth_window;
+        speed_args->should_smooth = should_smooth;
+        speed_args->use_cutoff = should_cutoff;
+        speed_args->cutoff_window = cutoff_window;
+    }
+
+    ra::input_speed_args* const speed_args = new ra::input_speed_args();
+};
+
 public ref class SpeedCalculator
 {
     speed_calc_instance_t* const instance = new speed_calc_instance_t();
+
 public:
     SpeedCalculator() {}
+
+    void Init(SpeedCalculatorArgs^ args)
+    {
+        instance->speed_calculator.init(*args->speed_args);
+    }
 
     double CalculateSpeed(double x, double y, double time)
     {
         vec2d in = { x ,y };
-        return instance->speed_calculator.calc_speed(in, ra::distance_mode::euclidean, 2);
+        return instance->speed_calculator.calc_speed(in, time);
     }
 };
 
