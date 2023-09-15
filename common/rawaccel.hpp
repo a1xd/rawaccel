@@ -45,7 +45,7 @@ namespace rawaccel {
             clamp_speed = args.speed_max > 0 && args.speed_min <= args.speed_max;
             apply_rotate = args.degrees_rotation != 0;
             apply_snap = args.degrees_snap != 0;
-            apply_directional_weight = args.whole && 
+            apply_directional_weight = args.input_speed_args.whole && 
                 args.range_weights.x != args.range_weights.y;
             compute_ref_angle = apply_snap || apply_directional_weight;
             apply_dir_mul_x = args.lr_sens_ratio != 1;

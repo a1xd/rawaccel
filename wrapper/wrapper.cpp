@@ -119,7 +119,7 @@ public value struct InputSpeedArgs
     bool shouldCutoff;
 
     [JsonProperty("Time window in ms over which cutoff speed is calculated")]
-    float cutoffWindow;
+    double cutoffWindow;
 };
 
 [JsonObject(ItemRequired = Required::Always)]

@@ -77,8 +77,6 @@ namespace rawaccel {
     struct profile {
         wchar_t name[MAX_NAME_LEN] = L"default";
 
-        bool whole = true;
-        double lp_norm = 2;
         vec2d domain_weights = { 1, 1 };
         vec2d range_weights = { 1, 1 };
 
