@@ -68,6 +68,12 @@ namespace wrapper_tests
             double speed = 0;
             double sum = 0;
 
+            // saturate speed calculator's speed data
+            for (int i = 0; i < 100; i++)
+            {
+                speedCalc.CalculateSpeed(0, 0, 1);
+            }
+
             foreach (var input in inputs)
             {
                 speed = speedCalc.CalculateSpeed(input.Item1, input.Item2, 1);
@@ -102,7 +108,7 @@ namespace wrapper_tests
             {
                 inputs.Add((i, i));
 
-                if (i <= (cutoff_window + 1))
+                if (i <= cutoff_window)
                 {
                     cutoff_sum += Magnitude(i, i);
                 }

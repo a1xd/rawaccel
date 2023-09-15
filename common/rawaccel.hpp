@@ -104,67 +104,114 @@ namespace rawaccel {
 
         milliseconds times[SMOOTH_RAW_DATA_CAPACITY] = {};
         double speeds[SMOOTH_RAW_DATA_CAPACITY] = {};
-        int smoothBufferIndex = 0;
+        int current_smooth_window_index = 0;
+        int end_smooth_window_index = 0;
+        double current_smooth_total = 0;
+        double current_smooth_window = 0;
+        int end_cutoff_window_index = 0;
+        double current_cutoff_total = 0;
+        double current_cutoff_window = 0;
 
         double smooth_speed(const double speed,
                             const milliseconds time)
         {
-            double windowSpeed = speed;
-            double cutoffWindowSpeed = speed;
-            int newIndex = smoothBufferIndex - 1;
-            if (newIndex < 0)
-            {
-                newIndex = SMOOTH_RAW_DATA_CAPACITY - 1;
-            }
+            // Add the most recent input to the window
+            current_smooth_window += time;
+            current_smooth_total += time * speed;
+            speeds[current_smooth_window_index] = speed;
+            times[current_smooth_window_index] = time;
+            current_smooth_window_index = increment_index(current_smooth_window_index);
 
-            times[smoothBufferIndex] = 0;
-            speeds[smoothBufferIndex] = speed;
+            // Check if the window is now larger than the user-set smoothing window time
+            double window_diff = current_smooth_window - speed_args.smooth_window;
 
-            while (smoothBufferIndex != newIndex)
+            if (window_diff > 0)
             {
-                smoothBufferIndex++;
-                if (smoothBufferIndex >= SMOOTH_RAW_DATA_CAPACITY)
+                double end_entry_time = times[end_smooth_window_index];
+
+                // If it is, then remove entries from end until removing next entry would make current window fit
+                while (end_entry_time <= window_diff)
                 {
-                    smoothBufferIndex = 0;
+                    window_diff -= end_entry_time;
+                    current_smooth_window -= end_entry_time;
+                    current_smooth_total -= end_entry_time * speeds[end_smooth_window_index];
+                    end_smooth_window_index = increment_index(end_smooth_window_index);
+                    end_entry_time = times[end_smooth_window_index];
                 }
 
-                milliseconds age = times[smoothBufferIndex] + time;
-                if (age > speed_args.smooth_window)
+                // Chop next entry to fit exactly in window
+                if (window_diff > 0)
                 {
-                    times[smoothBufferIndex] = 0;
-                    speeds[smoothBufferIndex] = 0;
-                }
-                else
-                {
-                    windowSpeed += speeds[smoothBufferIndex];
-
-                    if (speed_args.use_cutoff &&
-                        age <= speed_args.cutoff_window)
-                    {
-                        cutoffWindowSpeed += speeds[smoothBufferIndex];
-                    }
-
-                    times[smoothBufferIndex] = age;
+                    current_smooth_total -= window_diff * speeds[end_smooth_window_index];
+                    end_entry_time -= window_diff;
+                    current_smooth_window -= window_diff;
+                    times[end_smooth_window_index] = end_entry_time;
                 }
             }
 
-            smoothBufferIndex = newIndex;
+            if (current_smooth_window <= 0)
+            {
+                return 0;
+            }
 
-            windowSpeed /= speed_args.smooth_window;
+            double smoothed_speed = current_smooth_total / current_smooth_window;
 
+            // Repeat for cutoff window
             if (speed_args.use_cutoff)
             {
-                cutoffWindowSpeed /= speed_args.cutoff_window;
+				current_cutoff_window += time;
+				current_cutoff_total += time * speed;
+				double cutoff_window_diff = current_cutoff_window - speed_args.cutoff_window;
 
-                if (cutoffWindowSpeed < windowSpeed)
+				if (cutoff_window_diff > 0)
+				{
+					double end_entry_time = times[end_cutoff_window_index];
+
+					while (end_entry_time <= cutoff_window_diff)
+					{
+						cutoff_window_diff -= end_entry_time;
+						current_cutoff_window -= end_entry_time;
+						current_cutoff_total -= end_entry_time * speeds[end_cutoff_window_index];
+						end_cutoff_window_index = increment_index(end_cutoff_window_index);
+						end_entry_time = times[end_cutoff_window_index];
+					}
+
+					// Don't chop end here, because it will be reused by smoothing window.
+					// Todo: store "chopped" ends separately to allow for greater accuracy
+
+                    /*
+					if (window_diff > 0)
+					{
+						current_cutoff_total -= window_diff * speeds[end_cutoff_window_index];
+						end_entry_time -= window_diff;
+						current_cutoff_window -= window_diff;
+						times[end_smooth_window_index] = end_entry_time;
+					}
+                    */
+				}
+
+				double cutoff_speed = current_cutoff_total / current_cutoff_window;
+
+                if (cutoff_speed < smoothed_speed)
                 {
-                    return cutoffWindowSpeed;
+                    smoothed_speed = cutoff_speed;
                 }
             }
 
-            return windowSpeed;
+            return smoothed_speed;
         }
 
+        int increment_index(int index)
+        {
+            index++;
+
+            if (index >= SMOOTH_RAW_DATA_CAPACITY)
+            {
+                return index - SMOOTH_RAW_DATA_CAPACITY;
+            }
+
+            return index;
+        }
     };
 
     struct modifier_settings {

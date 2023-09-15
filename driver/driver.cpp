@@ -395,6 +395,7 @@ DeviceSetup(WDFOBJECT hDevice)
     set_ext_from_cfg(global.base_data.default_dev_cfg);
     devExt->mod_settings = *global.modifier_data;
     devExt->mod = { devExt->mod_settings };
+	devExt->speed_processor.init(devExt->mod_settings.prof.input_speed_args);
     
     for (auto i = 0u; i < global.base_data.device_data_size; i++) {
         auto& dev_settings = global.device_data[i];
