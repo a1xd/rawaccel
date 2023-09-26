@@ -43,19 +43,22 @@ namespace wrapper_tests
         }
 
         [TestMethod]
-        public void Given_Input_SmoothCalculator_Smooths()
+        public void Given_InputForSimpleExponentialSmoothing_SmoothCalculator_Smooths()
         {
-            double smooth_window = 100;
+            double smoothWindow = 100;
+            double averageAge = smoothWindow / 2.0;
+            double pollTime = 1;
 
             var speedArgs = new SpeedCalculatorArgs(
                 lp_norm: 2,
                 should_smooth: true,
-                smooth_window: smooth_window,
-                should_cutoff: false,
-                cutoff_window: 0);
+                smooth_window: smoothWindow,
+                use_linear: false);
 
             var speedCalc = new SpeedCalculator();
             speedCalc.Init(speedArgs);
+
+            var modelSmoother = new SimpleExponentialSmoother(averageAge);
 
             var inputs = new[]
             {
@@ -65,70 +68,168 @@ namespace wrapper_tests
                 (3,3),
             };
 
-            double speed = 0;
-            double sum = 0;
-
-            // saturate speed calculator's speed data
-            for (int i = 0; i < 100; i++)
-            {
-                speedCalc.CalculateSpeed(0, 0, 1);
-            }
+            double actualSpeed = 0;
+            double expectedSpeed = 0;
 
             foreach (var input in inputs)
             {
-                speed = speedCalc.CalculateSpeed(input.Item1, input.Item2, 1);
-                sum += Magnitude(input.Item1, input.Item2);
+                actualSpeed = speedCalc.CalculateSpeed(input.Item1, input.Item2, pollTime);
+
+                var magnitude = Magnitude(input.Item1, input.Item2);
+                var inputSpeed = magnitude / pollTime;
+                expectedSpeed = modelSmoother.Smooth(magnitude, pollTime);
             }
 
-            double expected = sum / smooth_window;
-
-            Assert.AreEqual(expected, speed, 0.0001);
+            Assert.AreEqual(expectedSpeed, actualSpeed, 0.0001);
         }
 
         [TestMethod]
-        public void Given_InputWithCutoff_SmoothCalculator_Smooths()
+        public void Given_InputForLinearExponentialSmoothing_SmoothCalculator_Smooths()
         {
-            double smooth_window = 100;
-            double cutoff_window = 10;
+            double smoothWindow = 100;
+            double averageAge = smoothWindow / 2.0;
+            double pollTime = 1;
 
             var speedArgs = new SpeedCalculatorArgs(
                 lp_norm: 2,
                 should_smooth: true,
-                smooth_window: smooth_window,
-                should_cutoff: true,
-                cutoff_window: cutoff_window);
+                smooth_window: smoothWindow,
+                use_linear: true);
 
             var speedCalc = new SpeedCalculator();
             speedCalc.Init(speedArgs);
 
-            var inputs = new List<(int, int)>();
-            double cutoff_sum = 0;
+            var modelSmoother = new LinearExponentialSmoother(averageAge);
 
-            for (int i = 100; i > 0; i--)
+            var inputs = new[]
             {
-                inputs.Add((i, i));
+                (0,0),
+                (1,1),
+                (2,2),
+                (3,3),
+            };
 
-                if (i <= cutoff_window)
-                {
-                    cutoff_sum += Magnitude(i, i);
-                }
-            }
-
-            double speed = 0;
+            double actualSpeed = 0;
+            double expectedSpeed = 0;
 
             foreach (var input in inputs)
             {
-                speed = speedCalc.CalculateSpeed(input.Item1, input.Item2, 1);
+                actualSpeed = speedCalc.CalculateSpeed(input.Item1, input.Item2, pollTime);
+
+                var magnitude = Magnitude(input.Item1, input.Item2);
+                var inputSpeed = magnitude / pollTime;
+                expectedSpeed = modelSmoother.Smooth(magnitude, pollTime);
             }
 
-            double expected = cutoff_sum / cutoff_window;
-
-            Assert.AreEqual(expected, speed, 0.0001);
+            Assert.AreEqual(expectedSpeed, actualSpeed, 0.0001);
         }
 
         public static double Magnitude (double x, double y)
         {
             return Math.Sqrt(x * x + y * y);
+        }
+
+        protected interface IMouseSmoother
+        {
+            double Smooth(double magnitude, double time);
+        }
+
+        protected class SimpleExponentialSmoother : IMouseSmoother
+        {
+            public SimpleExponentialSmoother(double averageAge)
+            {
+                WindowCoefficient = Math.Pow(Math.E, (-1 / averageAge));
+                CutoffCoefficient = 1 - Math.Sqrt(1 - WindowCoefficient);
+                SmoothedSpeeds = new List<double>();
+                WindowTotal = 0;
+                CutoffTotal = 0;
+            }
+
+            public List<double> SmoothedSpeeds { get; }
+
+            protected double WindowCoefficient { get; }
+
+            protected double CutoffCoefficient { get; }
+
+            protected double WindowTotal { get; set; }
+
+            protected double CutoffTotal { get; set; }
+
+            public double Smooth(double speed, double timeDelta)
+            {
+                var timeAdjustedCoefficient = 1 - Math.Pow(WindowCoefficient, timeDelta);
+                WindowTotal += timeAdjustedCoefficient * (speed - WindowTotal);
+                var timeAdjustedCutoffCoefficient = 1 - Math.Pow(CutoffCoefficient, timeDelta);
+                CutoffTotal += timeAdjustedCutoffCoefficient * (speed - CutoffTotal);
+
+                return Math.Min(WindowTotal, CutoffTotal);
+            }
+        }
+
+        protected class LinearExponentialSmoother : IMouseSmoother
+        {
+            public const double TrendAverageAge = 2.5;
+
+            public LinearExponentialSmoother(double averageAge)
+            {
+                WindowCoefficient = Math.Pow(Math.E, -1 / averageAge);
+                WindowTrendCoefficient = Math.Pow(Math.E, -1 / TrendAverageAge);
+                CutoffCoefficient = 1 - Math.Sqrt(1 - WindowCoefficient);
+                CutoffTrendCoefficient = 1 - Math.Sqrt(1 - WindowTrendCoefficient);
+                SmoothedSpeeds = new List<double>();
+                WindowTotal = 0;
+                CutoffTotal = 0;
+                WindowTrendTotal = 0;
+                CutoffTrendTotal = 0;
+                TrendDamping = 0.75;
+            }
+
+            public List<double> SmoothedSpeeds { get; }
+
+            protected double WindowCoefficient { get; }
+
+            protected double WindowTrendCoefficient { get; }
+
+            protected double CutoffCoefficient { get; }
+
+            protected double CutoffTrendCoefficient { get; }
+
+            protected double WindowTotal { get; set; }
+
+            protected double WindowTrendTotal { get; set; }
+
+            protected double CutoffTotal { get; set; }
+
+            protected double CutoffTrendTotal { get; set; }
+
+            protected double TrendDamping { get; set; }
+
+            public double Smooth(double speed, double timeDelta)
+            {
+                var oldTotal = WindowTotal;
+                var trendEstimate = WindowTrendTotal * timeDelta;
+                WindowTotal += TrendDamping * trendEstimate;
+                var timeAdjustedWindowCoefficient = 1 - Math.Pow(WindowCoefficient, timeDelta);
+                WindowTotal += timeAdjustedWindowCoefficient * (speed - WindowTotal);
+                // Don't let a trend carry us below 0
+                WindowTotal = Math.Max(WindowTotal, 0);
+                var timeAdjustedWindowTrendCoefficient = 1 - Math.Pow(WindowTrendCoefficient, timeDelta);
+                WindowTrendTotal *= TrendDamping;
+                WindowTrendTotal += timeAdjustedWindowTrendCoefficient * ((WindowTotal - oldTotal) / timeDelta - WindowTrendTotal);
+
+                var oldCutoffTotal = CutoffTotal;
+                var cutoffTrendEstimate = CutoffTrendTotal * timeDelta;
+                CutoffTotal += TrendDamping * cutoffTrendEstimate;
+                var timeAdjustedCutoffCoefficient = 1 - Math.Pow(CutoffCoefficient, timeDelta);
+                CutoffTotal += timeAdjustedCutoffCoefficient * (speed - CutoffTotal);
+                // Don't let a trend carry us below 0
+                CutoffTotal = Math.Max(CutoffTotal, 0);
+                var timeAdjustedCutoffTrendCoefficient = 1 - Math.Pow(CutoffTrendCoefficient, timeDelta);
+                CutoffTrendTotal *= TrendDamping;
+                CutoffTrendTotal += timeAdjustedCutoffTrendCoefficient * ((CutoffTotal - oldCutoffTotal) / timeDelta - CutoffTrendTotal);
+
+                return Math.Min(WindowTotal, CutoffTotal);
+            }
         }
     }
 }

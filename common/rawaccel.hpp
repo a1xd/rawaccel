@@ -60,6 +60,13 @@ namespace rawaccel {
         input_speed_args speed_args = {};
         distance_mode dist_mode = {};
 
+        const double trendAge = 2.5;
+
+        double windowCoefficient = 0;
+        double cutoffCoefficient = 0;
+        double windowTrendCoefficient = 0;
+        double cutoffTrendCoefficient = 0;
+
         void init(input_speed_args args)
         {
             speed_args = args;
@@ -77,6 +84,11 @@ namespace rawaccel {
                 dist_mode = distance_mode::euclidean;
             }
 
+            double averageAge = fabs(speed_args.smooth_window / 2.0);
+            windowCoefficient = averageAge > 0 ? exp(-1.0 / averageAge) : 0;
+            windowTrendCoefficient = trendAge > 0 ? exp(-1.0 / trendAge) : 0;
+            cutoffCoefficient = 1.0 - sqrt(1.0 - windowCoefficient);
+            cutoffTrendCoefficient = 1.0 - sqrt(1.0 - windowTrendCoefficient);
         }
 
         double calc_speed(vec2d in, milliseconds time)
@@ -96,121 +108,81 @@ namespace rawaccel {
             if (speed_args.should_smooth &&
                 speed_args.smooth_window > 0)
             {
-				speed = smooth_speed(speed, time);
+                if (speed_args.use_linear)
+                {
+
+					speed = smooth_speed_linear_ema(speed, time);
+                }
+                else
+                {
+					speed = smooth_speed_simple_ema(speed, time);
+                }
             }
 
             return speed;
         }
 
-        milliseconds times[SMOOTH_RAW_DATA_CAPACITY] = {};
-        double speeds[SMOOTH_RAW_DATA_CAPACITY] = {};
-        int current_smooth_window_index = 0;
-        int end_smooth_window_index = 0;
-        double current_smooth_total = 0;
-        double current_smooth_window = 0;
-        int end_cutoff_window_index = 0;
-        double current_cutoff_total = 0;
-        double current_cutoff_window = 0;
+        double windowTotal = 0;
+        double cutoffTotal = 0;
 
-        double smooth_speed(const double speed,
-                            const milliseconds time)
+        double smooth_speed_simple_ema(
+            const double speed,
+            const milliseconds time)
         {
-            // Add the most recent input to the window
-            current_smooth_window += time;
-            current_smooth_total += time * speed;
-            speeds[current_smooth_window_index] = speed;
-            times[current_smooth_window_index] = time;
-            current_smooth_window_index = increment_index(current_smooth_window_index);
+            // compute coefficients
+            double timeAdjustedWindowCoefficient = 1 - pow(windowCoefficient, time);
+            double timeAdjustedCutoffCoefficient = 1 - pow(cutoffCoefficient, time);
 
-            // Check if the window is now larger than the user-set smoothing window time
-            double window_diff = current_smooth_window - speed_args.smooth_window;
+            // adjust total based on coefficient and difference between new value and total
+            windowTotal += timeAdjustedWindowCoefficient * (speed - windowTotal);
+            cutoffTotal += timeAdjustedWindowCoefficient * (speed - cutoffTotal);
 
-            if (window_diff > 0)
-            {
-                double end_entry_time = times[end_smooth_window_index];
-
-                // If it is, then remove entries from end until removing next entry would make current window fit
-                while (end_entry_time <= window_diff)
-                {
-                    window_diff -= end_entry_time;
-                    current_smooth_window -= end_entry_time;
-                    current_smooth_total -= end_entry_time * speeds[end_smooth_window_index];
-                    end_smooth_window_index = increment_index(end_smooth_window_index);
-                    end_entry_time = times[end_smooth_window_index];
-                }
-
-                // Chop next entry to fit exactly in window
-                if (window_diff > 0)
-                {
-                    current_smooth_total -= window_diff * speeds[end_smooth_window_index];
-                    end_entry_time -= window_diff;
-                    current_smooth_window -= window_diff;
-                    times[end_smooth_window_index] = end_entry_time;
-                }
-            }
-
-            if (current_smooth_window <= 0)
-            {
-                return 0;
-            }
-
-            double smoothed_speed = current_smooth_total / current_smooth_window;
-
-            // Repeat for cutoff window
-            if (speed_args.use_cutoff)
-            {
-				current_cutoff_window += time;
-				current_cutoff_total += time * speed;
-				double cutoff_window_diff = current_cutoff_window - speed_args.cutoff_window;
-
-				if (cutoff_window_diff > 0)
-				{
-					double end_entry_time = times[end_cutoff_window_index];
-
-					while (end_entry_time <= cutoff_window_diff)
-					{
-						cutoff_window_diff -= end_entry_time;
-						current_cutoff_window -= end_entry_time;
-						current_cutoff_total -= end_entry_time * speeds[end_cutoff_window_index];
-						end_cutoff_window_index = increment_index(end_cutoff_window_index);
-						end_entry_time = times[end_cutoff_window_index];
-					}
-
-					// Don't chop end here, because it will be reused by smoothing window.
-					// Todo: store "chopped" ends separately to allow for greater accuracy
-
-                    /*
-					if (window_diff > 0)
-					{
-						current_cutoff_total -= window_diff * speeds[end_cutoff_window_index];
-						end_entry_time -= window_diff;
-						current_cutoff_window -= window_diff;
-						times[end_smooth_window_index] = end_entry_time;
-					}
-                    */
-				}
-
-				double cutoff_speed = current_cutoff_total / current_cutoff_window;
-
-                if (cutoff_speed < smoothed_speed)
-                {
-                    smoothed_speed = cutoff_speed;
-                }
-            }
-
-            return smoothed_speed;
+            return min(windowTotal, cutoffTotal);
         }
 
-        int increment_index(int index)
+        double windowTrendTotal = 0;
+        double cutoffTrendTotal = 0;
+
+        const double trendDampening = 0.75;
+
+        double smooth_speed_linear_ema(
+            const double speed,
+            const milliseconds time)
         {
-            index++;
+            // compute coefficients
+            double timeAdjustedWindowCoefficient = 1 - pow(windowCoefficient, time);
+            double timeAdjustedCutoffCoefficient = 1 - pow(cutoffCoefficient, time);
 
-            if (index >= SMOOTH_RAW_DATA_CAPACITY)
-            {
-                return index - SMOOTH_RAW_DATA_CAPACITY;
-            }
+            double timeAdjustedWindowTrendCoefficient = 1 - pow(windowTrendCoefficient, time);
+            double timeAdjustedCutoffTrendCoefficient = 1 - pow(cutoffTrendCoefficient, time);
 
-            return index;
+            // save old totals for trend adjustment
+            double oldWindowTotal = windowTotal;
+            double oldCutoffTotal = cutoffTotal;
+
+            // dampen trends
+            windowTrendTotal *= trendDampening;
+            cutoffTrendTotal *= trendDampening;
+
+            // add dampened trend
+            windowTotal += windowTrendTotal * time;
+            cutoffTotal += cutoffTrendTotal * time;
+
+            // adjust total based on coefficient and difference between new value and total
+            windowTotal += timeAdjustedWindowCoefficient * (speed - windowTotal);
+            cutoffTotal += timeAdjustedCutoffCoefficient * (speed - cutoffTotal);
+
+            // don't let trend carry us below 0
+            windowTotal = max(windowTotal, 0.0);
+            cutoffTotal = max(windowTotal, 0.0);
+
+            // adjust trend based on coefficient and difference between new value and total
+            double newWindowTrend = time > 0 ? (windowTotal - oldWindowTotal) / time : 0;
+            double newCutoffTrend = time > 0 ? (cutoffTotal - oldCutoffTotal) / time : 0;
+            windowTrendTotal += timeAdjustedWindowTrendCoefficient * (newWindowTrend - windowTrendTotal);
+            cutoffTrendTotal += timeAdjustedCutoffTrendCoefficient * (newCutoffTrend - cutoffTrendTotal);
+
+            return min(windowTotal, cutoffTotal);
         }
     };
 

@@ -114,12 +114,9 @@ public value struct InputSpeedArgs
     [JsonProperty("Time window in ms over which input should be smoothed")]
 	double smoothWindow;
 
-    [JsonProperty("Whether smoothed input speeds should stop smoothing and take latest speed when latest speed is lower")]
+    [JsonProperty("Whether smoothed input speeds should use linear (true) or simple (false) exponential smoothing")]
     [MarshalAs(UnmanagedType::U1)]
-    bool shouldCutoff;
-
-    [JsonProperty("Time window in ms over which cutoff speed is calculated")]
-    double cutoffWindow;
+    bool useLinear;
 };
 
 [JsonObject(ItemRequired = Required::Always)]
@@ -502,14 +499,12 @@ public:
         double lp_norm,
         bool should_smooth,
         double smooth_window,
-        bool should_cutoff,
-        double cutoff_window)
+        bool use_linear)
     {
         speed_args->lp_norm = lp_norm;
         speed_args->smooth_window = smooth_window;
         speed_args->should_smooth = should_smooth;
-        speed_args->use_cutoff = should_cutoff;
-        speed_args->cutoff_window = cutoff_window;
+        speed_args->use_linear = use_linear;
     }
 
     ra::input_speed_args* const speed_args = new ra::input_speed_args();

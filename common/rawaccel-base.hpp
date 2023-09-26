@@ -69,9 +69,8 @@ namespace rawaccel {
         bool whole = true;
         double lp_norm = 2;
         bool should_smooth = false;
-        double smooth_window = 100;
-        bool use_cutoff = false;
-        double cutoff_window = 10;
+        double smooth_window = 70;
+        bool use_linear = false;
     };
 
     struct profile {
