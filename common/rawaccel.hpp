@@ -60,7 +60,7 @@ namespace rawaccel {
         input_speed_args speed_args = {};
         distance_mode dist_mode = {};
 
-        const double trendAge = 2.5;
+        const double trendHalflife = 1.25;
 
         double windowCoefficient = 0;
         double cutoffCoefficient = 0;
@@ -84,9 +84,8 @@ namespace rawaccel {
                 dist_mode = distance_mode::euclidean;
             }
 
-            double averageAge = fabs(speed_args.smooth_window / 2.0);
-            windowCoefficient = averageAge > 0 ? exp(-1.0 / averageAge) : 0;
-            windowTrendCoefficient = trendAge > 0 ? exp(-1.0 / trendAge) : 0;
+            windowCoefficient = args.smooth_halflife > 0 ? pow(0.5, 1 / args.smooth_halflife) : 0;
+            windowTrendCoefficient = trendHalflife > 0 ? pow(0.5, 1 / trendHalflife) : 0;
             cutoffCoefficient = 1.0 - sqrt(1.0 - windowCoefficient);
             cutoffTrendCoefficient = 1.0 - sqrt(1.0 - windowTrendCoefficient);
         }
@@ -106,7 +105,7 @@ namespace rawaccel {
 			}
 
             if (speed_args.should_smooth &&
-                speed_args.smooth_window > 0)
+                speed_args.smooth_halflife > 0)
             {
                 if (speed_args.use_linear)
                 {

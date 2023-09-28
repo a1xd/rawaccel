@@ -45,20 +45,19 @@ namespace wrapper_tests
         [TestMethod]
         public void Given_InputForSimpleExponentialSmoothing_SmoothCalculator_Smooths()
         {
-            double smoothWindow = 100;
-            double averageAge = smoothWindow / 2.0;
+            double smoothHalfLife = 50;
             double pollTime = 1;
 
             var speedArgs = new SpeedCalculatorArgs(
                 lp_norm: 2,
                 should_smooth: true,
-                smooth_window: smoothWindow,
+                smooth_halflife: smoothHalfLife,
                 use_linear: false);
 
             var speedCalc = new SpeedCalculator();
             speedCalc.Init(speedArgs);
 
-            var modelSmoother = new SimpleExponentialSmoother(averageAge);
+            var modelSmoother = new SimpleExponentialSmoother(smoothHalfLife);
 
             var inputs = new[]
             {
@@ -86,20 +85,19 @@ namespace wrapper_tests
         [TestMethod]
         public void Given_InputForLinearExponentialSmoothing_SmoothCalculator_Smooths()
         {
-            double smoothWindow = 100;
-            double averageAge = smoothWindow / 2.0;
+            double smoothHalflife = 50;
             double pollTime = 1;
 
             var speedArgs = new SpeedCalculatorArgs(
                 lp_norm: 2,
                 should_smooth: true,
-                smooth_window: smoothWindow,
+                smooth_halflife: smoothHalflife,
                 use_linear: true);
 
             var speedCalc = new SpeedCalculator();
             speedCalc.Init(speedArgs);
 
-            var modelSmoother = new LinearExponentialSmoother(averageAge);
+            var modelSmoother = new LinearExponentialSmoother(smoothHalflife);
 
             var inputs = new[]
             {
@@ -136,9 +134,9 @@ namespace wrapper_tests
 
         protected class SimpleExponentialSmoother : IMouseSmoother
         {
-            public SimpleExponentialSmoother(double averageAge)
+            public SimpleExponentialSmoother(double halfLife)
             {
-                WindowCoefficient = Math.Pow(Math.E, (-1 / averageAge));
+                WindowCoefficient = Math.Pow(0.5, (1 / halfLife));
                 CutoffCoefficient = 1 - Math.Sqrt(1 - WindowCoefficient);
                 SmoothedSpeeds = new List<double>();
                 WindowTotal = 0;
@@ -168,12 +166,12 @@ namespace wrapper_tests
 
         protected class LinearExponentialSmoother : IMouseSmoother
         {
-            public const double TrendAverageAge = 2.5;
+            public const double TrendHalfLife = 1.25;
 
-            public LinearExponentialSmoother(double averageAge)
+            public LinearExponentialSmoother(double halfLife)
             {
-                WindowCoefficient = Math.Pow(Math.E, -1 / averageAge);
-                WindowTrendCoefficient = Math.Pow(Math.E, -1 / TrendAverageAge);
+                WindowCoefficient = Math.Pow(0.5, 1 / halfLife);
+                WindowTrendCoefficient = Math.Pow(0.5, 1 / TrendHalfLife);
                 CutoffCoefficient = 1 - Math.Sqrt(1 - WindowCoefficient);
                 CutoffTrendCoefficient = 1 - Math.Sqrt(1 - WindowTrendCoefficient);
                 SmoothedSpeeds = new List<double>();

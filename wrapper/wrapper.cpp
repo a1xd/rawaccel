@@ -111,8 +111,8 @@ public value struct InputSpeedArgs
     [MarshalAs(UnmanagedType::U1)]
     bool shouldSmooth;
 
-    [JsonProperty("Time window in ms over which input should be smoothed")]
-	double smoothWindow;
+    [JsonProperty("Time in ms after which an input is weighted at half its original value.")]
+	double smoothHalfLife;
 
     [JsonProperty("Whether smoothed input speeds should use linear (true) or simple (false) exponential smoothing")]
     [MarshalAs(UnmanagedType::U1)]
@@ -498,11 +498,11 @@ public:
     SpeedCalculatorArgs(
         double lp_norm,
         bool should_smooth,
-        double smooth_window,
+        double smooth_halflife,
         bool use_linear)
     {
         speed_args->lp_norm = lp_norm;
-        speed_args->smooth_window = smooth_window;
+        speed_args->smooth_halflife = smooth_halflife;
         speed_args->should_smooth = should_smooth;
         speed_args->use_linear = use_linear;
     }
