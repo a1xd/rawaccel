@@ -524,17 +524,17 @@ public:
     double CalculateSpeed(double x, double y, double time)
     {
         vec2d in = { x ,y };
-        return instance->speed_calculator.calc_speed(in, time);
+        return instance->speed_calculator.calc_speed_whole(in, time);
     }
 
     double SmoothScale(double scale, double time)
     {
-        return instance->speed_calculator.scale_smoother.smooth(scale, time);
+        return instance->speed_calculator.smoother_x.scale_smoother.smooth(scale, time);
     }
 
     double SmoothOutput(double outputSpeed, double time)
     {
-        return instance->speed_calculator.output_speed_smoother.smooth(outputSpeed, time);
+        return instance->speed_calculator.smoother_x.output_speed_smoother.smooth(outputSpeed, time);
     }
 };
 

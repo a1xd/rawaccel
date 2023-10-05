@@ -103,6 +103,11 @@ namespace rawaccel {
 
         void init(const double halfLife, const double trendHalfLife)
         {
+            windowTotal = 0;
+            cutoffTotal = 0;
+            windowTrendTotal = 0;
+            cutoffTrendTotal = 0;
+
             windowCoefficient = halfLife > 0 ? pow(0.5, 1 / halfLife) : 0;
             windowTrendCoefficient = trendHalfLife > 0 ? pow(0.5, 1 / trendHalfLife) : 0;
             cutoffCoefficient = 1.0 - sqrt(1.0 - windowCoefficient);
@@ -161,6 +166,12 @@ namespace rawaccel {
         distance_mode dist_mode = {};
     };
 
+    struct smoother {
+        linear_ema_smoother input_speed_smoother = {};
+        simple_ema_smoother scale_smoother = {};
+        linear_ema_smoother output_speed_smoother = {};
+    };
+
     /// <summary>
     /// Processes input and output speed. Can also smooth scaling.
     /// Stateful (smoothers can be used and require previous state.)
@@ -169,9 +180,8 @@ namespace rawaccel {
 
         speed_args args = {};
         speed_processor_flags speed_flags = {};
-        linear_ema_smoother input_speed_smoother = {};
-        simple_ema_smoother scale_smoother = {};
-        linear_ema_smoother output_speed_smoother = {};
+        smoother smoother_x = {};
+        smoother smoother_y = {};
 
         const double input_trend_halflife = 1.25;
         const double output_trend_halflife = 0.7;
@@ -201,21 +211,24 @@ namespace rawaccel {
 
             if (speed_flags.should_smooth_input)
             {
-				input_speed_smoother.init(in_args.input_speed_smooth_halflife, input_trend_halflife);
+				smoother_x.input_speed_smoother.init(in_args.input_speed_smooth_halflife, input_trend_halflife);
+				smoother_y.input_speed_smoother.init(in_args.input_speed_smooth_halflife, input_trend_halflife);
             }
 
             if (speed_flags.should_smooth_scale)
             {
-				scale_smoother.init(in_args.scale_smooth_halflife);
+				smoother_x.scale_smoother.init(in_args.scale_smooth_halflife);
+				smoother_y.scale_smoother.init(in_args.scale_smooth_halflife);
             }
 
             if (speed_flags.should_smooth_output)
             {
-				output_speed_smoother.init(in_args.output_speed_smooth_halflife, output_trend_halflife);
+				smoother_x.output_speed_smoother.init(in_args.output_speed_smooth_halflife, output_trend_halflife);
+				smoother_y.output_speed_smoother.init(in_args.output_speed_smooth_halflife, output_trend_halflife);
             }
         }
 
-        double calc_speed(vec2d in, milliseconds time)
+        double calc_speed_whole(vec2d in, milliseconds time)
         {
 			double speed;
 
@@ -231,10 +244,25 @@ namespace rawaccel {
 
             if (speed_flags.should_smooth_input)
             {
-				speed = input_speed_smoother.smooth(speed, time);
+				speed = smoother_x.input_speed_smoother.smooth(speed, time);
             }
 
             return speed;
+        }
+
+        void calc_speed_separate(vec2d& in, milliseconds time)
+        {
+			double speed_x = in.x;
+			double speed_y = in.y;
+
+            if (speed_flags.should_smooth_input)
+            {
+				speed_x = smoother_x.input_speed_smoother.smooth(speed_x, time);
+				speed_y = smoother_y.input_speed_smoother.smooth(speed_y, time);
+            }
+
+            in.x = speed_x;
+            in.y = speed_y;
         }
     };
 
@@ -325,11 +353,29 @@ namespace rawaccel {
             };
 
             if (speed_processor.speed_flags.dist_mode == distance_mode::separate) {
-                in.x *= (*cb_x)(data.accel_x, args.accel_x, abs_weighted_vel.x, args.range_weights.x);
-                in.y *= (*cb_y)(data.accel_y, args.accel_y, abs_weighted_vel.y, args.range_weights.y);
+
+                speed_processor.calc_speed_separate(abs_weighted_vel, time);
+
+                double scale_x = (*cb_x)(data.accel_x, args.accel_x, abs_weighted_vel.x, args.range_weights.x);
+                double scale_y = (*cb_y)(data.accel_y, args.accel_y, abs_weighted_vel.y, args.range_weights.y);
+
+                if (speed_processor.speed_flags.should_smooth_scale)
+                {
+                    scale_x = speed_processor.smoother_x.scale_smoother.smooth(scale_x, time);
+                    scale_y = speed_processor.smoother_y.scale_smoother.smooth(scale_y, time);
+                }
+                
+                in.x *= scale_x;
+                in.y *= scale_y;
+
+                if (speed_processor.speed_flags.should_smooth_output)
+                {
+                    in.x = speed_processor.smoother_x.output_speed_smoother.smooth(scale_x, time);
+                    in.y = speed_processor.smoother_y.output_speed_smoother.smooth(scale_y, time);
+                }
             }
             else {
-                double speed = speed_processor.calc_speed(abs_weighted_vel, time);
+                double speed = speed_processor.calc_speed_whole(abs_weighted_vel, time);
 
                 double weight = args.range_weights.x;
 
@@ -342,22 +388,22 @@ namespace rawaccel {
 
                 if (speed_processor.speed_flags.should_smooth_scale)
                 {
-                    scale = speed_processor.scale_smoother.smooth(scale, time);
+                    scale = speed_processor.smoother_x.scale_smoother.smooth(scale, time);
                 }
 
                 in.x *= scale;
                 in.y *= scale;
-            }
 
-            if (speed_processor.speed_flags.should_smooth_output)
-            {
-                double mag = magnitude(in);
-                if (mag > 0)
-                {
-					double smoothedMag = speed_processor.output_speed_smoother.smooth(mag, time);
-                    in.x *= (smoothedMag / mag);
-                    in.y *= (smoothedMag / mag);
-                }
+				if (speed_processor.speed_flags.should_smooth_output)
+				{
+					double mag = magnitude(in);
+					if (mag > 0)
+					{
+						double smoothedMag = speed_processor.smoother_x.output_speed_smoother.smooth(mag, time);
+						in.x *= (smoothedMag / mag);
+						in.y *= (smoothedMag / mag);
+					}
+				}
             }
 
             double dpi_adjusted_sens = args.sensitivity * dpi_factor;
