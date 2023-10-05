@@ -55,78 +55,24 @@ namespace rawaccel {
         modifier_flags() = default;
     };
 
-    struct input_speed_processor {
-
-        input_speed_args speed_args = {};
-        distance_mode dist_mode = {};
-
-        const double trendHalflife = 1.25;
+    /// <summary>
+    /// Simple exponential moving average smoother.
+    /// </summary>
+    struct simple_ema_smoother {
 
         double windowCoefficient = 0;
         double cutoffCoefficient = 0;
-        double windowTrendCoefficient = 0;
-        double cutoffTrendCoefficient = 0;
 
-        void init(input_speed_args args)
+        void init(const double halfLife)
         {
-            speed_args = args;
-
-            if (!args.whole) {
-                dist_mode = distance_mode::separate;
-            }
-            else if (args.lp_norm >= MAX_NORM || args.lp_norm <= 0) {
-                dist_mode = distance_mode::max;
-            }
-            else if (args.lp_norm != 2) {
-                dist_mode = distance_mode::Lp;
-            }
-            else {
-                dist_mode = distance_mode::euclidean;
-            }
-
-            windowCoefficient = args.smooth_halflife > 0 ? pow(0.5, 1 / args.smooth_halflife) : 0;
-            windowTrendCoefficient = trendHalflife > 0 ? pow(0.5, 1 / trendHalflife) : 0;
+            windowCoefficient = halfLife > 0 ? pow(0.5, 1 / halfLife) : 0;
             cutoffCoefficient = 1.0 - sqrt(1.0 - windowCoefficient);
-            cutoffTrendCoefficient = 1.0 - sqrt(1.0 - windowTrendCoefficient);
-        }
-
-        double calc_speed(vec2d in, milliseconds time)
-        {
-			double speed;
-
-			if (dist_mode == distance_mode::max) {
-				speed = maxsd(in.x, in.y);
-			}
-			else if (dist_mode == distance_mode::Lp) {
-				speed = lp_distance(in, speed_args.lp_norm);
-			}
-			else {
-				speed = magnitude(in);
-			}
-
-            if (speed_args.should_smooth &&
-                speed_args.smooth_halflife > 0)
-            {
-                if (speed_args.use_linear)
-                {
-
-					speed = smooth_speed_linear_ema(speed, time);
-                }
-                else
-                {
-					speed = smooth_speed_simple_ema(speed, time);
-                }
-            }
-
-            return speed;
         }
 
         double windowTotal = 0;
         double cutoffTotal = 0;
 
-        double smooth_speed_simple_ema(
-            const double speed,
-            const milliseconds time)
+        double smooth(const double speed, const milliseconds time)
         {
             // compute coefficients
             double timeAdjustedWindowCoefficient = 1 - pow(windowCoefficient, time);
@@ -138,15 +84,37 @@ namespace rawaccel {
 
             return min(windowTotal, cutoffTotal);
         }
+    };
 
+    /// <summary>
+    /// Linear exponential moving average smoother.
+    /// </summary>
+    struct linear_ema_smoother {
+
+        // This constant found via experimentation.
+        // Allowing user to specify may confuse parameterization without much gain.
+        const double trendDampening = 0.75;
+
+        double windowCoefficient = 0;
+        double cutoffCoefficient = 0;
+        double windowTrendCoefficient = 0;
+        double cutoffTrendCoefficient = 0;
+        bool is_init = false;
+
+        void init(const double halfLife, const double trendHalfLife)
+        {
+            windowCoefficient = halfLife > 0 ? pow(0.5, 1 / halfLife) : 0;
+            windowTrendCoefficient = trendHalfLife > 0 ? pow(0.5, 1 / trendHalfLife) : 0;
+            cutoffCoefficient = 1.0 - sqrt(1.0 - windowCoefficient);
+            cutoffTrendCoefficient = 1.0 - sqrt(1.0 - windowTrendCoefficient);
+        }
+
+        double windowTotal = 0;
+        double cutoffTotal = 0;
         double windowTrendTotal = 0;
         double cutoffTrendTotal = 0;
 
-        const double trendDampening = 0.75;
-
-        double smooth_speed_linear_ema(
-            const double speed,
-            const milliseconds time)
+        double smooth(const double speed, const milliseconds time)
         {
             // compute coefficients
             double timeAdjustedWindowCoefficient = 1 - pow(windowCoefficient, time);
@@ -182,6 +150,91 @@ namespace rawaccel {
             cutoffTrendTotal += timeAdjustedCutoffTrendCoefficient * (newCutoffTrend - cutoffTrendTotal);
 
             return min(windowTotal, cutoffTotal);
+        }
+    };
+
+    struct speed_processor_flags
+    {
+        bool should_smooth_input = false;
+        bool should_smooth_scale = false;
+        bool should_smooth_output = false;
+        distance_mode dist_mode = {};
+    };
+
+    /// <summary>
+    /// Processes input and output speed. Can also smooth scaling.
+    /// Stateful (smoothers can be used and require previous state.)
+    /// </summary>
+    struct speed_processor {
+
+        speed_args args = {};
+        speed_processor_flags speed_flags = {};
+        linear_ema_smoother input_speed_smoother = {};
+        simple_ema_smoother scale_smoother = {};
+        linear_ema_smoother output_speed_smoother = {};
+
+        const double input_trend_halflife = 1.25;
+        const double output_trend_halflife = 0.7;
+
+        speed_processor() = default;
+
+        void init(speed_args in_args)
+        {
+            args = in_args;
+
+            if (!in_args.whole) {
+                speed_flags.dist_mode = distance_mode::separate;
+            }
+            else if (in_args.lp_norm >= MAX_NORM || args.lp_norm <= 0) {
+                speed_flags.dist_mode = distance_mode::max;
+            }
+            else if (in_args.lp_norm != 2) {
+                speed_flags.dist_mode = distance_mode::Lp;
+            }
+            else {
+                speed_flags.dist_mode = distance_mode::euclidean;
+            }
+
+			speed_flags.should_smooth_input = in_args.input_speed_smooth_halflife > 0;
+			speed_flags.should_smooth_scale = in_args.scale_smooth_halflife > 0;
+			speed_flags.should_smooth_output = in_args.output_speed_smooth_halflife > 0;
+
+            if (speed_flags.should_smooth_input)
+            {
+				input_speed_smoother.init(in_args.input_speed_smooth_halflife, input_trend_halflife);
+            }
+
+            if (speed_flags.should_smooth_scale)
+            {
+				scale_smoother.init(in_args.scale_smooth_halflife);
+            }
+
+            if (speed_flags.should_smooth_output)
+            {
+				output_speed_smoother.init(in_args.output_speed_smooth_halflife, output_trend_halflife);
+            }
+        }
+
+        double calc_speed(vec2d in, milliseconds time)
+        {
+			double speed;
+
+			if (speed_flags.dist_mode == distance_mode::max) {
+				speed = maxsd(in.x, in.y);
+			}
+			else if (speed_flags.dist_mode == distance_mode::Lp) {
+				speed = lp_distance(in, args.lp_norm);
+			}
+			else {
+				speed = magnitude(in);
+			}
+
+            if (speed_flags.should_smooth_input)
+            {
+				speed = input_speed_smoother.smooth(speed, time);
+            }
+
+            return speed;
         }
     };
 
@@ -226,7 +279,7 @@ namespace rawaccel {
 #ifdef _KERNEL_MODE
         __forceinline
 #endif
-        void modify(vec2d& in, input_speed_processor& speed_processor, const modifier_settings& settings, double dpi_factor, milliseconds time) const
+        void modify(vec2d& in, speed_processor& speed_processor, const modifier_settings& settings, double dpi_factor, milliseconds time) const
         {
             auto& args = settings.prof;
             auto& data = settings.data;
@@ -271,7 +324,7 @@ namespace rawaccel {
                 fabs(in.y * ips_factor * args.domain_weights.y)
             };
 
-            if (speed_processor.dist_mode == distance_mode::separate) {
+            if (speed_processor.speed_flags.dist_mode == distance_mode::separate) {
                 in.x *= (*cb_x)(data.accel_x, args.accel_x, abs_weighted_vel.x, args.range_weights.x);
                 in.y *= (*cb_y)(data.accel_y, args.accel_y, abs_weighted_vel.y, args.range_weights.y);
             }
@@ -286,8 +339,25 @@ namespace rawaccel {
                 }
 
                 double scale = (*cb_x)(data.accel_x, args.accel_x, speed, weight);
+
+                if (speed_processor.speed_flags.should_smooth_scale)
+                {
+                    scale = speed_processor.scale_smoother.smooth(scale, time);
+                }
+
                 in.x *= scale;
                 in.y *= scale;
+            }
+
+            if (speed_processor.speed_flags.should_smooth_output)
+            {
+                double mag = magnitude(in);
+                if (mag > 0)
+                {
+					double smoothedMag = speed_processor.output_speed_smoother.smooth(mag, time);
+                    in.x *= (smoothedMag / mag);
+                    in.y *= (smoothedMag / mag);
+                }
             }
 
             double dpi_adjusted_sens = args.sensitivity * dpi_factor;
@@ -301,6 +371,7 @@ namespace rawaccel {
             if (flags.apply_dir_mul_y && in.y < 0) {
                 in.y *= args.ud_sens_ratio;
             }
+
         }
 
         modifier(modifier_settings& settings)

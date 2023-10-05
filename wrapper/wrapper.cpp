@@ -99,7 +99,7 @@ public value struct AccelArgs
 };
 
 [StructLayout(LayoutKind::Sequential)]
-public value struct InputSpeedArgs
+public value struct SpeedArgs
 {
     [JsonProperty("Whole/combined accel (set false for 'by component' mode)")]
     [MarshalAs(UnmanagedType::U1)]
@@ -107,16 +107,14 @@ public value struct InputSpeedArgs
 
     double lpNorm;
 
-    [JsonProperty("Whether input speeds should be smoothed to determine acceleration speed")]
-    [MarshalAs(UnmanagedType::U1)]
-    bool shouldSmooth;
-
     [JsonProperty("Time in ms after which an input is weighted at half its original value.")]
-	double smoothHalfLife;
+	double inputSmoothHalflife;
 
-    [JsonProperty("Whether smoothed input speeds should use linear (true) or simple (false) exponential smoothing")]
-    [MarshalAs(UnmanagedType::U1)]
-    bool useLinear;
+    [JsonProperty("Time in ms after which scale is weighted at half its original value.")]
+	double scaleSmoothHalflife;
+
+    [JsonProperty("Time in ms after which an output is weighted at half its original value.")]
+	double outputSmoothHalflife;
 };
 
 [JsonObject(ItemRequired = Required::Always)]
@@ -136,7 +134,7 @@ public ref struct Profile
     [JsonProperty("Vertical accel parameters")]
     AccelArgs argsY;
     [JsonProperty("Input speed calculation parameters")]
-    InputSpeedArgs inputSpeedArgs;
+    SpeedArgs inputSpeedArgs;
 
     [JsonProperty("Sensitivity multiplier")]
     double sensitivity;
@@ -430,13 +428,14 @@ struct accel_instance_t {
 
 struct speed_calc_instance_t
 {
-    ra::input_speed_processor speed_calculator = {};
+    ra::speed_processor speed_calculator = {};
 };
 
 public ref class ManagedAccel
 {
     accel_instance_t* const instance = new accel_instance_t();
     speed_calc_instance_t* const speed_instance = new speed_calc_instance_t();
+
 public:
 
     ManagedAccel() {}
@@ -497,17 +496,17 @@ public:
     SpeedCalculatorArgs() {}
     SpeedCalculatorArgs(
         double lp_norm,
-        bool should_smooth,
-        double smooth_halflife,
-        bool use_linear)
+        double input_speed_smooth_halflife,
+        double scale_smooth_halflife,
+        double output_speed_smooth_halflife)
     {
         speed_args->lp_norm = lp_norm;
-        speed_args->smooth_halflife = smooth_halflife;
-        speed_args->should_smooth = should_smooth;
-        speed_args->use_linear = use_linear;
+        speed_args->input_speed_smooth_halflife = input_speed_smooth_halflife;
+        speed_args->scale_smooth_halflife = scale_smooth_halflife;
+        speed_args->output_speed_smooth_halflife = output_speed_smooth_halflife;
     }
 
-    ra::input_speed_args* const speed_args = new ra::input_speed_args();
+    ra::speed_args* const speed_args = new ra::speed_args();
 };
 
 public ref class SpeedCalculator
@@ -526,6 +525,16 @@ public:
     {
         vec2d in = { x ,y };
         return instance->speed_calculator.calc_speed(in, time);
+    }
+
+    double SmoothScale(double scale, double time)
+    {
+        return instance->speed_calculator.scale_smoother.smooth(scale, time);
+    }
+
+    double SmoothOutput(double outputSpeed, double time)
+    {
+        return instance->speed_calculator.output_speed_smoother.smooth(outputSpeed, time);
     }
 };
 

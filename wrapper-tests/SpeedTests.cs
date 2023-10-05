@@ -43,21 +43,61 @@ namespace wrapper_tests
         }
 
         [TestMethod]
-        public void Given_InputForSimpleExponentialSmoothing_SmoothCalculator_Smooths()
+        public void Given_ScaleForSmoothing_SmoothCalculator_SmoothsWithSimpleEMA()
         {
             double smoothHalfLife = 50;
             double pollTime = 1;
 
             var speedArgs = new SpeedCalculatorArgs(
                 lp_norm: 2,
-                should_smooth: true,
-                smooth_halflife: smoothHalfLife,
-                use_linear: false);
+                0,
+                scale_smooth_halflife: smoothHalfLife,
+                0);
 
             var speedCalc = new SpeedCalculator();
             speedCalc.Init(speedArgs);
 
             var modelSmoother = new SimpleExponentialSmoother(smoothHalfLife);
+
+            var inputs = new[]
+            {
+                0,
+                1,
+                2,
+                3,
+            };
+
+            double actualSpeed = 0;
+            double expectedSpeed = 0;
+
+            foreach (var input in inputs)
+            {
+                actualSpeed = speedCalc.SmoothScale(input, pollTime);
+
+                var inputSpeed = input / pollTime;
+                expectedSpeed = modelSmoother.Smooth(inputSpeed, pollTime);
+            }
+
+            Assert.AreEqual(expectedSpeed, actualSpeed, 0.0001);
+        }
+
+        [TestMethod]
+        public void Given_InputForSmoothing_SmoothCalculator_SmoothsWithLinearEMA()
+        {
+            double smoothHalfLife = 50;
+            double trendHalfLife = 1.25;
+            double pollTime = 1;
+
+            var speedArgs = new SpeedCalculatorArgs(
+                lp_norm: 2,
+                input_speed_smooth_halflife: smoothHalfLife,
+                0,
+                0);
+
+            var speedCalc = new SpeedCalculator();
+            speedCalc.Init(speedArgs);
+
+            var modelSmoother = new LinearExponentialSmoother(smoothHalfLife, trendHalfLife);
 
             var inputs = new[]
             {
@@ -83,21 +123,22 @@ namespace wrapper_tests
         }
 
         [TestMethod]
-        public void Given_InputForLinearExponentialSmoothing_SmoothCalculator_Smooths()
+        public void Given_OutputForSmoothing_SmoothCalculator_SmoothsWithLinearEMA()
         {
-            double smoothHalflife = 50;
+            double smoothHalfLife = 50;
+            double trendHalfLife = 0.7;
             double pollTime = 1;
 
             var speedArgs = new SpeedCalculatorArgs(
                 lp_norm: 2,
-                should_smooth: true,
-                smooth_halflife: smoothHalflife,
-                use_linear: true);
+                0,
+                0,
+                output_speed_smooth_halflife: smoothHalfLife);
 
             var speedCalc = new SpeedCalculator();
             speedCalc.Init(speedArgs);
 
-            var modelSmoother = new LinearExponentialSmoother(smoothHalflife);
+            var modelSmoother = new LinearExponentialSmoother(smoothHalfLife, trendHalfLife);
 
             var inputs = new[]
             {
@@ -112,9 +153,57 @@ namespace wrapper_tests
 
             foreach (var input in inputs)
             {
-                actualSpeed = speedCalc.CalculateSpeed(input.Item1, input.Item2, pollTime);
-
                 var magnitude = Magnitude(input.Item1, input.Item2);
+                actualSpeed = speedCalc.SmoothOutput(magnitude, pollTime);
+
+                var inputSpeed = magnitude / pollTime;
+                expectedSpeed = modelSmoother.Smooth(magnitude, pollTime);
+            }
+
+            Assert.AreEqual(expectedSpeed, actualSpeed, 0.0001);
+        }
+
+        [TestMethod]
+        public void Reinitializing_ResultsIn_NewValues()
+        {
+            double smoothHalfLife = 50;
+            double trendHalfLife = 0.7;
+            double pollTime = 1;
+
+            var firstSpeedArgs = new SpeedCalculatorArgs(
+                lp_norm: 2,
+                100,
+                100,
+                output_speed_smooth_halflife: smoothHalfLife);
+
+            var speedArgs = new SpeedCalculatorArgs(
+                lp_norm: 2,
+                0,
+                0,
+                output_speed_smooth_halflife: smoothHalfLife);
+
+            var speedCalc = new SpeedCalculator();
+            speedCalc.Init(firstSpeedArgs);
+            speedCalc.Init(speedArgs);
+
+            var modelSmoother = new LinearExponentialSmoother(smoothHalfLife, trendHalfLife);
+
+            var inputs = new[]
+            {
+                (0,0),
+                (1,1),
+                (2,2),
+                (3,3),
+            };
+
+            double actualSpeed = 0;
+            double expectedSpeed = 0;
+
+            foreach (var input in inputs)
+            {
+                var magnitude = Magnitude(input.Item1, input.Item2);
+                actualSpeed = speedCalc.SmoothOutput(magnitude, pollTime);
+
                 var inputSpeed = magnitude / pollTime;
                 expectedSpeed = modelSmoother.Smooth(magnitude, pollTime);
             }
@@ -166,12 +255,10 @@ namespace wrapper_tests
 
         protected class LinearExponentialSmoother : IMouseSmoother
         {
-            public const double TrendHalfLife = 1.25;
-
-            public LinearExponentialSmoother(double halfLife)
+            public LinearExponentialSmoother(double halfLife, double trendHalfLife)
             {
                 WindowCoefficient = Math.Pow(0.5, 1 / halfLife);
-                WindowTrendCoefficient = Math.Pow(0.5, 1 / TrendHalfLife);
+                WindowTrendCoefficient = Math.Pow(0.5, 1 / trendHalfLife);
                 CutoffCoefficient = 1 - Math.Sqrt(1 - WindowCoefficient);
                 CutoffTrendCoefficient = 1 - Math.Sqrt(1 - WindowTrendCoefficient);
                 SmoothedSpeeds = new List<double>();

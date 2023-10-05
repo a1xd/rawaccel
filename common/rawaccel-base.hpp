@@ -64,14 +64,15 @@ namespace rawaccel {
         mutable float data[LUT_RAW_DATA_CAPACITY] = {};
     };
 
-    struct input_speed_args
+    struct speed_args
     {
         bool whole = true;
         double lp_norm = 2;
-        bool should_smooth = false;
-        double smooth_halflife = 25;
-        bool use_linear = false;
+        double input_speed_smooth_halflife = 10;
+        double scale_smooth_halflife = 0;
+        double output_speed_smooth_halflife = 0;
     };
+
 
     struct profile {
         wchar_t name[MAX_NAME_LEN] = L"default";
@@ -81,7 +82,7 @@ namespace rawaccel {
 
         accel_args accel_x;
         accel_args accel_y;
-        input_speed_args input_speed_args;
+        speed_args input_speed_args;
 
         double sensitivity = 1;
         double yx_sens_ratio = 1;
