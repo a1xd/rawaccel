@@ -45,7 +45,7 @@ namespace rawaccel {
             clamp_speed = args.speed_max > 0 && args.speed_min <= args.speed_max;
             apply_rotate = args.degrees_rotation != 0;
             apply_snap = args.degrees_snap != 0;
-            apply_directional_weight = args.input_speed_args.whole && 
+            apply_directional_weight = args.speed_processor_args.whole && 
                 args.range_weights.x != args.range_weights.y;
             compute_ref_angle = apply_snap || apply_directional_weight;
             apply_dir_mul_x = args.lr_sens_ratio != 1;
@@ -65,6 +65,9 @@ namespace rawaccel {
 
         void init(const double halfLife)
         {
+            windowTotal = 0;
+            cutoffTotal = 0;
+
             windowCoefficient = halfLife > 0 ? pow(0.5, 1 / halfLife) : 0;
             cutoffCoefficient = 1.0 - sqrt(1.0 - windowCoefficient);
         }
@@ -299,7 +302,6 @@ namespace rawaccel {
         unsigned device_data_size = 0;
     };
 
-
     static_assert(alignof(io_base) == alignof(modifier_settings) && alignof(modifier_settings) == alignof(device_settings));
 
     class modifier {
@@ -394,16 +396,16 @@ namespace rawaccel {
                 in.x *= scale;
                 in.y *= scale;
 
-				if (speed_processor.speed_flags.should_smooth_output)
-				{
-					double mag = magnitude(in);
-					if (mag > 0)
-					{
-						double smoothedMag = speed_processor.smoother_x.output_speed_smoother.smooth(mag, time);
-						in.x *= (smoothedMag / mag);
-						in.y *= (smoothedMag / mag);
-					}
-				}
+                if (speed_processor.speed_flags.should_smooth_output)
+                {
+                    double mag = magnitude(in);
+                    if (mag > 0)
+                    {
+                        double smoothedMag = speed_processor.smoother_x.output_speed_smoother.smooth(mag, time);
+                        in.x *= (smoothedMag / mag);
+                        in.y *= (smoothedMag / mag);
+                    }
+                }
             }
 
             double dpi_adjusted_sens = args.sensitivity * dpi_factor;
