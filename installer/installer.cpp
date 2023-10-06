@@ -6,13 +6,13 @@
 void add_service(SC_HANDLE srv_manager) {
     SC_HANDLE srv = CreateServiceW(
         srv_manager,               // SCM database 
-        DRIVER_NAME.c_str(),       // name of service 
-        DRIVER_NAME.c_str(),       // service name to display 
+        DRV_NAME,                  // name of service 
+        DRV_NAME,                  // service name to display 
         SERVICE_ALL_ACCESS,        // desired access 
         SERVICE_KERNEL_DRIVER,     // service type 
         SERVICE_DEMAND_START,      // start type 
         SERVICE_ERROR_NORMAL,      // error control type 
-        DRIVER_ENV_PATH.c_str(),   // path to service's binary 
+        DRV_DST_PATH,              // path to service's binary 
         NULL,                      // no load ordering group 
         NULL,                      // no tag identifier 
         NULL,                      // no dependencies 
@@ -30,13 +30,13 @@ BOOL update_service(SC_HANDLE srv) {
         SERVICE_KERNEL_DRIVER,     // service type 
         SERVICE_DEMAND_START,      // start type 
         SERVICE_ERROR_NORMAL,      // error control type 
-        DRIVER_ENV_PATH.c_str(),   // path to service's binary 
+        DRV_DST_PATH,              // path to service's binary 
         NULL,                      // no load ordering group 
         NULL,                      // no tag identifier 
         NULL,                      // no dependencies 
         NULL,                      // LocalSystem account 
         NULL,                      // no password
-        DRIVER_NAME.c_str()        // service name to display
+        DRV_NAME                   // service name to display
     );
 }
 
@@ -48,14 +48,14 @@ int main() {
             throw std::runtime_error("OS not supported, you need at least Windows 10");
         }
 
-        fs::path source = fs::path(L"driver") / DRIVER_FILE_NAME;
+        const fs::path bin = DRV_SRC_PATH;
 
-        if (!fs::exists(source)) {
-            throw std::runtime_error(source.generic_string() + " does not exist");
+        if (!fs::exists(bin)) {
+            throw std::runtime_error("Can't find driver binary");
         }
 
-        fs::path target = expand(DRIVER_ENV_PATH);
-        
+        fs::path target = expand(DRV_DST_PATH);
+
         if (fs::exists(target)) {
             std::cout << "Driver already installed. Removing previous installation.\n";
 
@@ -67,14 +67,14 @@ int main() {
             }
         }
 
-        if (!fs::copy_file(source, target, fs::copy_options::overwrite_existing)) {
+        if (!fs::copy_file(bin, target, fs::copy_options::overwrite_existing)) {
             throw sys_error("copy_file failed");
         }
 
         srv_manager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
         if (srv_manager == NULL) throw sys_error("OpenSCManager failed");
 
-        SC_HANDLE srv = OpenServiceW(srv_manager, DRIVER_NAME.c_str(), SC_MANAGER_ALL_ACCESS);
+        SC_HANDLE srv = OpenServiceW(srv_manager, DRV_NAME, SC_MANAGER_ALL_ACCESS);
 
         if (srv != NULL) {
             BOOL success = update_service(srv);
@@ -91,14 +91,7 @@ int main() {
             }
         }
 
-        modify_upper_filters([](std::vector<std::wstring>& filters) {
-            auto driver_pos = std::find(filters.begin(), filters.end(), DRIVER_NAME);
-
-            if (driver_pos != filters.end()) return;
-
-            auto mouclass_pos = std::find(filters.begin(), filters.end(), L"mouclass");
-            filters.insert(mouclass_pos, DRIVER_NAME);
-        });
+        set_registry_filter();
 
         std::cout << "Install complete, change will take effect after restart.\n";
     }

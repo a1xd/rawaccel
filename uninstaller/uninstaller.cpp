@@ -4,17 +4,9 @@
 
 int main() {
     try {
-        bool reboot_required = false;
-        modify_upper_filters([&reboot_required](std::vector<std::wstring>& filters) {
-            // check if driver is present in upper filters
-            bool driver_present = std::find(filters.begin(), filters.end(), DRIVER_NAME) != filters.end();
-            if (driver_present) {
-                std::erase(filters, DRIVER_NAME);
-                reboot_required = true;
-            }
-        });
+        bool reboot_required = set_registry_filter<0>();
 
-        fs::path target = expand(DRIVER_ENV_PATH);
+        fs::path target = expand(DRV_DST_PATH);
         fs::path tmp = make_temp_path(target);
 
         if (fs::exists(target)) {
@@ -28,14 +20,14 @@ int main() {
                 fs::remove(target);
             }
         }
-        
+
         if (reboot_required || fs::exists(tmp)) {
             std::cout << "Removal complete, change will take effect after restart.\n";
         }
         else {
             std::cout << "No installed driver found.\n";
         }
-        
+
     }
     catch (const std::system_error& e) {
         std::cerr << "Error: " << e.what() << ' ' << e.code() << '\n';
