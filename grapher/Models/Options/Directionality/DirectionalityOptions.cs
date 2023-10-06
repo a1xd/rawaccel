@@ -104,9 +104,9 @@ namespace grapher.Models.Options.Directionality
             Domain.SetActiveValues(settings.domainXY.x, settings.domainXY.y);
             Range.SetActiveValues(settings.rangeXY.x, settings.rangeXY.y);
 
-            if (settings.combineMagnitudes)
+            if (settings.inputSpeedArgs.combineMagnitudes)
             {
-                LpNorm.SetActiveValue(settings.lpNorm);
+                LpNorm.SetActiveValue(settings.inputSpeedArgs.lpNorm);
             }
             else
             {

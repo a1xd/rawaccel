@@ -57,7 +57,7 @@ namespace grapher
             {
                 var menuItem = new ToolStripMenuItem(colorScheme.Name);
 
-                menuItem.Checked = settings.CurrentColorScheme == colorScheme.Name;
+                menuItem.Checked = settings?.CurrentColorScheme == colorScheme.Name;
                 themeMenuItem.DropDownItems.Add(menuItem);
             }
 

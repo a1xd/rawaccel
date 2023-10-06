@@ -98,7 +98,7 @@ Arguments:
                     static_cast<double>(it->LastY)
                 };
 
-                devExt->mod.modify(input, devExt->mod_settings, devExt->dpi_factor, time);
+                devExt->mod.modify(input, devExt->speed_processor, devExt->mod_settings, devExt->dpi_factor, time);
 
                 double carried_result_x = input.x + devExt->carry.x;
                 double carried_result_y = input.y + devExt->carry.y;
@@ -380,6 +380,7 @@ DeviceSetup(WDFOBJECT hDevice)
             if (wcsncmp(prof_name, profile.name, ra::MAX_NAME_LEN) == 0) {
                 devExt->mod_settings = global.modifier_data[i];
                 devExt->mod = { devExt->mod_settings };
+                devExt->speed_processor.init(devExt->mod_settings.prof.speed_processor_args);
                 return;
             }
         }
@@ -394,6 +395,7 @@ DeviceSetup(WDFOBJECT hDevice)
     set_ext_from_cfg(global.base_data.default_dev_cfg);
     devExt->mod_settings = *global.modifier_data;
     devExt->mod = { devExt->mod_settings };
+    devExt->speed_processor.init(devExt->mod_settings.prof.speed_processor_args);
     
     for (auto i = 0u; i < global.base_data.device_data_size; i++) {
         auto& dev_settings = global.device_data[i];

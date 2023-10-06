@@ -24,7 +24,6 @@ namespace rawaccel {
 			double denom = exp(accel * (midpoint - log(x))) + 1;
 			return exp(motivity / denom + constant);
 		}
-
 	};
 
 	template <>

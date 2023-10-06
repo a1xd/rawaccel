@@ -106,8 +106,8 @@ namespace grapher.Models.Options
             YToXRatio.SetActiveValue(settings.yxSensRatio);
             Rotation.SetActiveValue(settings.rotation);
             
-            WholeVectorCheckBox.Checked = settings.combineMagnitudes;
-            ByComponentVectorCheckBox.Checked = !settings.combineMagnitudes;
+            WholeVectorCheckBox.Checked = settings.inputSpeedArgs.combineMagnitudes;
+            ByComponentVectorCheckBox.Checked = !settings.inputSpeedArgs.combineMagnitudes;
             ByComponentVectorXYLock.Checked = settings.argsX.Equals(settings.argsY);
             OptionSetX.SetActiveValues(ref settings.argsX);
             OptionSetY.SetActiveValues(ref settings.argsY);

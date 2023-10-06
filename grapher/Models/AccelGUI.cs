@@ -123,12 +123,12 @@ namespace grapher
 
             // TODO - separate sensitivity fields, add new label for ratio
             settings.yxSensRatio = ApplyOptions.YToXRatio.Value;
-            settings.combineMagnitudes = ApplyOptions.IsWhole;
+            settings.inputSpeedArgs.combineMagnitudes = ApplyOptions.IsWhole;
             ApplyOptions.SetArgsFromActiveValues(ref settings.argsX, ref settings.argsY);
 
             var (domWeights, lpNorm) = ApplyOptions.Directionality.GetDomainArgs();
             settings.domainXY = domWeights;
-            settings.lpNorm = lpNorm;
+            settings.inputSpeedArgs.lpNorm = lpNorm;
 
             settings.rangeXY = ApplyOptions.Directionality.GetRangeXY();
 
@@ -180,7 +180,7 @@ namespace grapher
 
         public void UpdateGraph()
         {
-            AccelCharts.Calculate(Settings.ActiveAccel, Settings.ActiveProfile);
+            AccelCharts.Calculate(Settings.ActiveAccelForGraphing, Settings.ActiveProfile);
             AccelCharts.Bind();
         }
 

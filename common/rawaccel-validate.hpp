@@ -132,7 +132,7 @@ namespace rawaccel {
 
 		check_accel(args.accel_x);
 
-		if (!args.whole) {
+		if (!args.speed_processor_args.whole) {
 			ret.last_x = ret.count;
 			check_accel(args.accel_y);
 			ret.last_y = ret.count;
@@ -170,7 +170,7 @@ namespace rawaccel {
 			error("sens ratio must be positive");
 		}
 
-		if (args.lp_norm <= 0) {
+		if (args.speed_processor_args.lp_norm <= 0) {
 			error("Lp norm must be positive (default=2)");
 		}
 

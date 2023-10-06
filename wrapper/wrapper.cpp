@@ -98,18 +98,31 @@ public value struct AccelArgs
     }
 };
 
+[StructLayout(LayoutKind::Sequential)]
+public value struct SpeedArgs
+{
+    [JsonProperty("Whole/combined accel (set false for 'by component' mode)")]
+    [MarshalAs(UnmanagedType::U1)]
+    bool combineMagnitudes;
+
+    double lpNorm;
+
+    [JsonProperty("Time in ms after which an input is weighted at half its original value.")]
+	double inputSmoothHalflife;
+
+    [JsonProperty("Time in ms after which scale is weighted at half its original value.")]
+	double scaleSmoothHalflife;
+
+    [JsonProperty("Time in ms after which an output is weighted at half its original value.")]
+	double outputSmoothHalflife;
+};
+
 [JsonObject(ItemRequired = Required::Always)]
 [StructLayout(LayoutKind::Sequential, CharSet = CharSet::Unicode)]
 public ref struct Profile
 {
     [MarshalAs(UnmanagedType::ByValTStr, SizeConst = ra::MAX_NAME_LEN)]
     System::String^ name;
-
-    [JsonProperty("Whole/combined accel (set false for 'by component' mode)")]
-    [MarshalAs(UnmanagedType::U1)]
-    bool combineMagnitudes;
-
-    double lpNorm;
 
     [JsonProperty("Stretches domain for horizontal vs vertical inputs")]
     Vec2<double> domainXY;
@@ -120,6 +133,8 @@ public ref struct Profile
     AccelArgs argsX;
     [JsonProperty("Vertical accel parameters")]
     AccelArgs argsY;
+    [JsonProperty("Input speed calculation parameters")]
+    SpeedArgs inputSpeedArgs;
 
     [JsonProperty("Sensitivity multiplier")]
     double sensitivity;
@@ -294,7 +309,7 @@ public:
             }
 
             auto msgs = elem->messages;
-            if (elem->prof->combineMagnitudes) {
+            if (elem->prof->inputSpeedArgs.combineMagnitudes) {
                 for (int i = 0; i < elem->lastX; i++) {
                     sb->AppendFormat("\t{0}\n", msgs[i]);
                 }
@@ -411,9 +426,16 @@ struct accel_instance_t {
     }
 };
 
+struct speed_calc_instance_t
+{
+    ra::speed_processor speed_calculator = {};
+};
+
 public ref class ManagedAccel
 {
     accel_instance_t* const instance = new accel_instance_t();
+    speed_calc_instance_t* const speed_instance = new speed_calc_instance_t();
+
 public:
 
     ManagedAccel() {}
@@ -436,6 +458,22 @@ public:
         delete instance;
     }
 
+    /// <summary>
+    /// The modifier inside of ManagedAccel is now stateful, which can result in strange graphs when used for graphing purposes.
+    /// This method creates a copy of its instance with any stateful elements turned off.
+    /// </summary>
+    /// <returns></returns>
+    ManagedAccel^ CreateStatelessCopy()
+    {
+        Profile^ profile = Settings;
+
+        profile->inputSpeedArgs.inputSmoothHalflife = 0;
+        profile->inputSpeedArgs.scaleSmoothHalflife = 0;
+        profile->inputSpeedArgs.outputSmoothHalflife = 0;
+
+        return gcnew ManagedAccel(profile);
+    }
+
     Tuple<double, double>^ Accelerate(int x, int y, double dpi_factor, double time)
     {
         vec2d in_out_vec = {
@@ -443,7 +481,7 @@ public:
             (double)y
         };
 
-        instance->mod.modify(in_out_vec, instance->settings, dpi_factor, time);
+        instance->mod.modify(in_out_vec, speed_instance->speed_calculator, instance->settings, dpi_factor, time);
 
         return gcnew Tuple<double, double>(in_out_vec.x, in_out_vec.y);
     }
@@ -466,7 +504,54 @@ public:
     {
         return instance->settings;
     }
+};
 
+public ref class SpeedCalculatorArgs
+{
+public:
+    SpeedCalculatorArgs() {}
+    SpeedCalculatorArgs(
+        double lp_norm,
+        double input_speed_smooth_halflife,
+        double scale_smooth_halflife,
+        double output_speed_smooth_halflife)
+    {
+        speed_args->lp_norm = lp_norm;
+        speed_args->input_speed_smooth_halflife = input_speed_smooth_halflife;
+        speed_args->scale_smooth_halflife = scale_smooth_halflife;
+        speed_args->output_speed_smooth_halflife = output_speed_smooth_halflife;
+    }
+
+    ra::speed_args* const speed_args = new ra::speed_args();
+};
+
+public ref class SpeedCalculator
+{
+    speed_calc_instance_t* const instance = new speed_calc_instance_t();
+
+public:
+    SpeedCalculator() {}
+
+    void Init(SpeedCalculatorArgs^ args)
+    {
+        instance->speed_calculator.init(*args->speed_args);
+    }
+
+    double CalculateSpeed(double x, double y, double time)
+    {
+        vec2d in = { x ,y };
+        return instance->speed_calculator.calc_speed_whole(in, time);
+    }
+
+    double SmoothScale(double scale, double time)
+    {
+        return instance->speed_calculator.smoother_x.scale_smoother.smooth(scale, time);
+    }
+
+    double SmoothOutput(double outputSpeed, double time)
+    {
+        return instance->speed_calculator.smoother_x.output_speed_smoother.smooth(outputSpeed, time);
+    }
 };
 
 

@@ -65,6 +65,8 @@ namespace grapher.Models.Serialized
         private DriverConfig ActiveConfigField;
         private DriverConfig UserConfigField;
 
+        private ManagedAccel ActiveAccelForGraphingField;
+
         #endregion Fields
 
         #region Properties
@@ -88,6 +90,8 @@ namespace grapher.Models.Serialized
                     ActiveConfigField = value;
                     ActiveProfileNamesSet = new HashSet<string>(value.profiles.Select(p => p.name));
                 }
+
+                ActiveAccelForGraphingField = value.accels[0].CreateStatelessCopy();
             }
         }
 
@@ -100,6 +104,14 @@ namespace grapher.Models.Serialized
         public ManagedAccel ActiveAccel
         {
             get => ActiveConfig.accels[0];
+        }
+
+        /// <summary>
+        /// Version of active accel modified to be appropriate for graphing (stateless)
+        /// </summary>
+        public ManagedAccel ActiveAccelForGraphing
+        {
+            get => ActiveAccelForGraphingField;
         }
 
         public DriverConfig UserConfig 

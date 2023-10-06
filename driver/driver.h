@@ -29,6 +29,7 @@ typedef struct _DEVICE_EXTENSION {
     vec2d carry;
     CONNECT_DATA UpperConnectData;
     ra::modifier_settings mod_settings;
+    ra::speed_processor speed_processor;
     WCHAR dev_id[ra::MAX_DEV_ID_LEN];
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
