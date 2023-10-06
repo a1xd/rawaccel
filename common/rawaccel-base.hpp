@@ -66,7 +66,7 @@ namespace rawaccel {
     {
         bool whole = true;
         double lp_norm = 2;
-        double input_speed_smooth_halflife = 10;
+        double input_speed_smooth_halflife = 0;
         double scale_smooth_halflife = 0;
         double output_speed_smooth_halflife = 0;
     };

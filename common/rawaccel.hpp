@@ -96,7 +96,7 @@ namespace rawaccel {
 
         // This constant found via experimentation.
         // Allowing user to specify may confuse parameterization without much gain.
-        const double trendDampening = 0.75;
+        static constexpr double trendDampening = 0.75;
 
         double windowCoefficient = 0;
         double cutoffCoefficient = 0;
@@ -186,8 +186,8 @@ namespace rawaccel {
         smoother smoother_x = {};
         smoother smoother_y = {};
 
-        const double input_trend_halflife = 1.25;
-        const double output_trend_halflife = 0.7;
+        static constexpr double input_trend_halflife = 1.25;
+        static constexpr double output_trend_halflife = 0.7;
 
         speed_processor() = default;
 
