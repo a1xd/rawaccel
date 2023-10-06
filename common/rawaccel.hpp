@@ -370,8 +370,8 @@ namespace rawaccel {
 
                 if (speed_processor.speed_flags.should_smooth_output)
                 {
-                    in.x = speed_processor.smoother_x.output_speed_smoother.smooth(scale_x, time);
-                    in.y = speed_processor.smoother_y.output_speed_smoother.smooth(scale_y, time);
+                    in.x = _copysign(speed_processor.smoother_x.output_speed_smoother.smooth(fabs(in.x), time), in.x);
+                    in.y = _copysign(speed_processor.smoother_y.output_speed_smoother.smooth(fabs(in.y), time), in.y);
                 }
             }
             else {

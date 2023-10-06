@@ -458,6 +458,22 @@ public:
         delete instance;
     }
 
+    /// <summary>
+    /// The modifier inside of ManagedAccel is now stateful, which can result in strange graphs when used for graphing purposes.
+    /// This method creates a copy of its instance with any stateful elements turned off.
+    /// </summary>
+    /// <returns></returns>
+    ManagedAccel^ CreateStatelessCopy()
+    {
+        Profile^ profile = Settings;
+
+        profile->inputSpeedArgs.inputSmoothHalflife = 0;
+        profile->inputSpeedArgs.scaleSmoothHalflife = 0;
+        profile->inputSpeedArgs.outputSmoothHalflife = 0;
+
+        return gcnew ManagedAccel(profile);
+    }
+
     Tuple<double, double>^ Accelerate(int x, int y, double dpi_factor, double time)
     {
         vec2d in_out_vec = {

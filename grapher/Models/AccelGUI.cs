@@ -180,7 +180,7 @@ namespace grapher
 
         public void UpdateGraph()
         {
-            AccelCharts.Calculate(Settings.ActiveAccel, Settings.ActiveProfile);
+            AccelCharts.Calculate(Settings.ActiveAccelForGraphing, Settings.ActiveProfile);
             AccelCharts.Bind();
         }
 
