@@ -208,46 +208,46 @@ namespace rawaccel {
                 speed_flags.dist_mode = distance_mode::euclidean;
             }
 
-			speed_flags.should_smooth_input = in_args.input_speed_smooth_halflife > 0;
-			speed_flags.should_smooth_scale = in_args.scale_smooth_halflife > 0;
-			speed_flags.should_smooth_output = in_args.output_speed_smooth_halflife > 0;
+            speed_flags.should_smooth_input = in_args.input_speed_smooth_halflife > 0;
+            speed_flags.should_smooth_scale = in_args.scale_smooth_halflife > 0;
+            speed_flags.should_smooth_output = in_args.output_speed_smooth_halflife > 0;
 
             if (speed_flags.should_smooth_input)
             {
-				smoother_x.input_speed_smoother.init(in_args.input_speed_smooth_halflife, input_trend_halflife);
-				smoother_y.input_speed_smoother.init(in_args.input_speed_smooth_halflife, input_trend_halflife);
+                smoother_x.input_speed_smoother.init(in_args.input_speed_smooth_halflife, input_trend_halflife);
+                smoother_y.input_speed_smoother.init(in_args.input_speed_smooth_halflife, input_trend_halflife);
             }
 
             if (speed_flags.should_smooth_scale)
             {
-				smoother_x.scale_smoother.init(in_args.scale_smooth_halflife);
-				smoother_y.scale_smoother.init(in_args.scale_smooth_halflife);
+                smoother_x.scale_smoother.init(in_args.scale_smooth_halflife);
+                smoother_y.scale_smoother.init(in_args.scale_smooth_halflife);
             }
 
             if (speed_flags.should_smooth_output)
             {
-				smoother_x.output_speed_smoother.init(in_args.output_speed_smooth_halflife, output_trend_halflife);
-				smoother_y.output_speed_smoother.init(in_args.output_speed_smooth_halflife, output_trend_halflife);
+                smoother_x.output_speed_smoother.init(in_args.output_speed_smooth_halflife, output_trend_halflife);
+                smoother_y.output_speed_smoother.init(in_args.output_speed_smooth_halflife, output_trend_halflife);
             }
         }
 
         double calc_speed_whole(vec2d in, milliseconds time)
         {
-			double speed;
+            double speed;
 
-			if (speed_flags.dist_mode == distance_mode::max) {
-				speed = maxsd(in.x, in.y);
-			}
-			else if (speed_flags.dist_mode == distance_mode::Lp) {
-				speed = lp_distance(in, args.lp_norm);
-			}
-			else {
-				speed = magnitude(in);
-			}
+            if (speed_flags.dist_mode == distance_mode::max) {
+                speed = maxsd(in.x, in.y);
+            }
+            else if (speed_flags.dist_mode == distance_mode::Lp) {
+                speed = lp_distance(in, args.lp_norm);
+            }
+            else {
+                speed = magnitude(in);
+            }
 
             if (speed_flags.should_smooth_input)
             {
-				speed = smoother_x.input_speed_smoother.smooth(speed, time);
+                speed = smoother_x.input_speed_smoother.smooth(speed, time);
             }
 
             return speed;
@@ -255,13 +255,13 @@ namespace rawaccel {
 
         void calc_speed_separate(vec2d& in, milliseconds time)
         {
-			double speed_x = in.x;
-			double speed_y = in.y;
+            double speed_x = in.x;
+            double speed_y = in.y;
 
             if (speed_flags.should_smooth_input)
             {
-				speed_x = smoother_x.input_speed_smoother.smooth(speed_x, time);
-				speed_y = smoother_y.input_speed_smoother.smooth(speed_y, time);
+                speed_x = smoother_x.input_speed_smoother.smooth(speed_x, time);
+                speed_y = smoother_y.input_speed_smoother.smooth(speed_y, time);
             }
 
             in.x = speed_x;
