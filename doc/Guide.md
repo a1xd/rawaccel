@@ -19,12 +19,12 @@ Visit the [Releases page](https://github.com/a1xd/rawaccel/releases) and navigat
 The Raw Accel driver and GUI's workings and exposed parameters are based on our understanding of mouse acceleration. Our understanding includes the concepts of "gain", "whole vs by component", and "anisotropy." For clarity, we will outline this understanding here. Those uninterested can skip to Features below.
 
 ### Measurements from Input Speed
-Raw Accel, like any mouse modification program, works by acting on a passed-in (x,y) input in order to pass back out an (x,y) output. The GUI program creates charts by feeding a set of (x,y) inputs and times to the driver code to receive a set of (x,y) outputs. The following measurements, available as charts in Raw Accel, are then found from the outputs:
+Raw Accel, like any mouse modification program, works by acting on a passed-in $(x,y)$ input in order to pass back out an $(x,y)$ output. The GUI program creates charts by feeding a set of $(x,y)$ inputs and times to the driver code to receive a set of $(x,y)$ outputs. The following measurements, available as charts in Raw Accel, are then found from the outputs:
 
 - **Sensitivity**: The ratio of the output speed to the input speed. The "sensitivity multiplier" parameter in the program is a multiplier used on the post-calculation output vector.
 - **(Output) Velocity**: The speed of the final output vector. The output vs input velocity curve is perhaps the most important relationship in a particular setup because it directly describes the output for any given input. (We use "speed" and "velocity" interchangeably, and are aware of the difference elsewhere.)
 - **Gain**: The slope of the output vs input velocity curve. It answers the question: "if I move my hand a little faster, how much faster will my cursor move?" The relationship between gain and sensitivity is that if gain is continuous, so is sensitivity. The reverse is not necessarily true, so keeping the gain "nice" ensures "nice" sensitivity but not vice versa.
-- For the mathematically inclined: for input speed "v" and Output Velocity f(v), Sensitivity is f(v)/v and Gain is f'(v) = d/dv(f(v)).
+- For the mathematically inclined: for input speed $v$ and Output Velocity $f(v)$, Sensitivity is $f(v)/v$ and Gain is $f'(v) = \frac{\mathrm d}{\mathrm d v} \left ( f(v) \right)$.
 
 Acceleration, then, is a characteristic of the velocity curve, defined as true when the velocity curve is non-linear for any input speed.
 
@@ -33,50 +33,57 @@ The above is much more clear with an example. Let's say I have
 - linear acceleration with acceleration parameter of 0.01
 - a sensitivity parameter of 0.5
 
-and I move my mouse to create an input of (30,40) at a poll rate of 1000 hz.
+and I move my mouse to create an input of $(30,40)$ at a poll rate of 1000 hz.
 
-Then our input speed is sqrt(30^2 + 40^2) = 50 counts/ms. Our accelerated sensitivity is calculated to be (1 + 0.01 \* 50) * 0.5 = 1.5 \* 0.5 = 0.75. So our output velocity is 0.75 \* 50  = 37.5. If I run the previous calculations with input speed 49.9 I get output velocity 37.40005, so our gain is about (37.5-37.40005)/(50-49.9) = 0.9995. Here is a picture of the charts in Raw Accel showing the same thing:
+Then our input speed is $\sqrt{30^2 + 40^2} = 50$ counts/ms. Our accelerated sensitivity is calculated to be $(1 + 0.01 * 50) * 0.5 = 1.5 * 0.5 = 0.75$. So our output velocity is $0.75 * 50  = 37.5$. If I run the previous calculations with input speed 49.9 I get output velocity 37.40005, so our gain is about $\frac{37.5-37.40005}{50-49.9} = 0.9995$. Here is a picture of the charts in Raw Accel showing the same thing:
 
 ![SensVelocityGainExample](images/accel_readme_example.png)
 
 ### Horizontal and Vertical
 Due to the mechanics of holding a mouse on a desk, users generally move their mouses horizontally (left and right) differently than they move them vertically (forward and back), with more freedom for the wrist and\or arm to move the mouse horizontally than vertically. A user may then desire for various aspects of their output to change based on the direction of their input. For settings which allow this we have co-opted the term "anisotropy", which is "the property of a material which allows it to change or assume different properties in different directions."
 
-In the above "example" section, the x and y inputs are not treated separately; rather they are "combined" by using the magnitude if the input vector: *sqrt(30^2 + 40^2) = 50 counts/ms*. This is called "Whole" application because the whole speed of the input is used and the result is applied to the whole vector. Application styles include:
+In the above "example" section, the $x$ and $y$ inputs are not treated separately; rather they are "combined" by using the magnitude if the input vector: $\sqrt{30^2 + 40^2} = 50$ counts/ms. This is called "Whole" application because the whole speed of the input is used and the result is applied to the whole vector. Application styles include:
 
 #### ***Whole***
 In this case, the magnitude of the input vector is input to sensitivity calculation, and applied to whole vector, as in example above.
-    - (out_x, out_y) = (in_x\*sens_x, in_y\*sens_y) \* f(sqrt(in_x^2 + in_y^2)), where f(v) is our sensitivity function
+
+$$(out_x, out_y) = (in_x * sens_x, in_y * sens_y) * f(\sqrt{in_x^2 + in_y^2})$$, where $f(v)$ is our sensitivity function
 
 Separate horizontal and vertical sensitivites still feel great in this mode. (For the mathematically inclined, that's because differing horizontal and vertical sensitivities create a vector field without curl or other oddities.)
 
 There are anisotropic settings for whole mode.  
 - **Range**. This scales the range of the sensitivity curve around 1 for the horizontal or vertical direction.  
-    - If a given curve varies from 1 to 2 sensitivity, then a range_y of 0.5 would mean that vertical movements vary from 1 to 1.5 sensitivity instead.  
+    - If a given curve varies from 1 to 2 sensitivity, then a $range_y$ of 0.5 would mean that vertical movements vary from 1 to 1.5 sensitivity instead.  
 - **Domain**. This scales the domain of curve around 0 for the horizontal or vertical direction.  
-    - If a given curve has an offset at 5 count/ms and a cap that is hit at 15 counts/ms, then a domain_y of 2 would mean that vertical movements hit the offset at 2.5 counts/ms and the cap at 7.5 counts/ms instead.  
-- **Lp Norm**. The distance calculation can be generalized to ((in_x)^p + (in_y)^p)^(1/p)), bringing the calculation into [Lp space](https://en.wikipedia.org/wiki/Lp_space).  
-    - p = 2 is then the "real world" value, yielding the pythagorean theorem as the distance calculation.  
-    - Increasing p makes distances for diagonal movements (where in_x and in_y are close) smaller, and increases the dominance of the larger of the two in determining the distance.  
-    - As p gets large, the above calculation approaches max(inx, iny). Raw Accel uses this formula when given any p > 64.
+    - If a given curve has an offset at 5 count/ms and a cap that is hit at 15 counts/ms, then a $domain_y$ of 2 would mean that vertical movements hit the offset at 2.5 counts/ms and the cap at 7.5 counts/ms instead.  
+- **Lp Norm**. The distance calculation can be generalized to $((in_x)^p + (in_y)^p)^\frac{1}{p}$, bringing the calculation into [Lp space](https://en.wikipedia.org/wiki/Lp_space).  
+    - $p = 2$ is then the "real world" value, yielding the pythagorean theorem as the distance calculation.  
+    - Increasing $p$ makes distances for diagonal movements (where $in_x$ and $in_y$ are close) smaller, and increases the dominance of the larger of the two in determining the distance.  
+    - As $p$ gets large, the above calculation approaches $\max(in_x, in_y)$. Raw Accel uses this formula when given any $p > 64$.
     - We recommend almost everyone leave this at 2.  
 
 ![AnisotropyExample](images/anisotropy_example.png)
 
 With all anisotropic settings considered, the full formula looks like:  
-- (out_x, out_y) = (in_x\*sens_x, in_y\*sens_y) \* ((f(((domain_x\*in_x)^p + (domain_y\*in_y)^p)^(1/p)) - 1) \* ((2 / Pi) \* arctan(abs(in_y/in_x)) \* (range_y - range_x) + range_x) + 1, where f(v) is our sensitivity function
+
+$$(out_x, out_y) = (in_x * sens_x, in_y * sens_y) \left(\left(f\left(\left((domain_x * in_x)^p + (domain_y * in_y)^p\right)^\frac{1}{p}\right) - 1\right) \left(\frac{2}{\pi} \arctan(| \frac{in_y}{in_x} |) (range_y - range_x) + range_x\right) + 1\right)$$, where $f(v)$ is our sensitivity function
 
 This can be more easily understood as  
-- (out_x, out_y) = (in_x\*sens_x, in_y\*sens_y) \* ((f( domain-weighted lp-space speed) - 1) \* (directional weight) + 1), where f(v) is our sensitivity function
+
+$$(out_x, out_y) = (in_x * sens_x, in_y * sens_y) * \left(\left(f\left( \text{domain-weighted } L^p \text{ space speed}\right) - 1\right) * (\text{directional weight}) + 1\right)$$, where $f(v)$ is our sensitivity function
 
 This formula guarantees the smooth transition from the horizontal to vertical curve and vice versa as the user moves their hand diagonally.
 
 #### ***By Component***  
 In this case, the horizontal components are separated and each is given as input to the sensitivity calculation to multiplied by itself before being recombined at output.
-    - (out_x, out_y) = (in_x \* f(in_x) \* sens_x, in_y \* f(in_y) \* sens_y))
-    - You can also do: (out_x, out_y) = (in_x \* f(in_x) \* sens_x, in_y \* g(in_y) \* sens_y)) where g(v) is some other sensitivity function.
 
-All anisotropic effects for By Component mode can be achieved by setting different x and y curves.  
+$$(out_x, out_y) = (in_x * f(in_x) * sens_x, in_y * f(in_y) * sens_y))$$
+
+You can also do:
+
+$$(out_x, out_y) = (in_x * f(in_x) * sens_x, in_y * g(in_y) * sens_y))$$, where $g(v)$ is some other sensitivity function.
+
+All anisotropic effects for By Component mode can be achieved by setting different $x$ and $y$ curves.  
 
 The authors of this program feel that Whole is the best style for most users, but that users who play games which have very separate horizontal and vertical actions to manage (such as tracking an enemy and controlling recoil) might benefit from trying By Component. By Component may seem more flexible, but it is precisely the restrictions imposed by Whole (no curl) that make it smoother.
   
