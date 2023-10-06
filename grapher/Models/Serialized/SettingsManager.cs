@@ -89,8 +89,9 @@ namespace grapher.Models.Serialized
                 {
                     ActiveConfigField = value;
                     ActiveProfileNamesSet = new HashSet<string>(value.profiles.Select(p => p.name));
-                    ActiveAccelForGraphingField = value.accels[0].CreateStatelessCopy();
                 }
+
+                ActiveAccelForGraphingField = value.accels[0].CreateStatelessCopy();
             }
         }
 
