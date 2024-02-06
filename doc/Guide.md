@@ -16,7 +16,7 @@ Visit the [Releases page](https://github.com/a1xd/rawaccel/releases) and navigat
 - Run `rawaccel.exe` when the driver is installed in order to run the Raw Accel GUI.
 
 ## Philosophy
-The Raw Accel driver and GUI's workings and exposed parameters are based on our understanding of mouse acceleration. Our understanding includes the concepts of "gain", "whole vs by component", and "anisotropy." For clarity, we will outline this understanding here. Those uninterested can skip to Features below.
+The Raw Accel driver and GUI's workings and exposed parameters are based on our understanding of mouse acceleration. Our understanding includes the concepts of "[gain](#gain-switch)", "[whole vs by component](#horizontal-and-vertical)", and "[anisotropy](#anisotropy)." For clarity, we will outline this understanding here. Those uninterested can skip to [Features](#features) below.
 
 ### Measurements from Input Speed
 Raw Accel, like any mouse modification program, works by acting on a passed-in $(x,y)$ input in order to pass back out an $(x,y)$ output. The GUI program creates charts by feeding a set of $(x,y)$ inputs and times to the driver code to receive a set of $(x,y)$ outputs. The following measurements, available as charts in Raw Accel, are then found from the outputs:
@@ -42,7 +42,7 @@ Then our input speed is $\sqrt{30^2 + 40^2} = 50$ counts/ms. Our accelerated sen
 ### Horizontal and Vertical
 Due to the mechanics of holding a mouse on a desk, users generally move their mouses horizontally (left and right) differently than they move them vertically (forward and back), with more freedom for the wrist and\or arm to move the mouse horizontally than vertically. A user may then desire for various aspects of their output to change based on the direction of their input. For settings which allow this we have co-opted the term "anisotropy", which is "the property of a material which allows it to change or assume different properties in different directions."
 
-In the above "example" section, the $x$ and $y$ inputs are not treated separately; rather they are "combined" by using the magnitude if the input vector: $\sqrt{30^2 + 40^2} = 50$ counts/ms. This is called "Whole" application because the whole speed of the input is used and the result is applied to the whole vector. Application styles include:
+In the above "[Example](#example)" section, the $x$ and $y$ inputs are not treated separately; rather they are "combined" by using the magnitude if the input vector: $\sqrt{30^2 + 40^2} = 50$ counts/ms. This is called "Whole" application because the whole speed of the input is used and the result is applied to the whole vector. Application styles include:
 
 #### ***Whole***
 In this case, the magnitude of the input vector is input to sensitivity calculation, and applied to whole vector, as in example above.
@@ -94,20 +94,20 @@ The authors of this program feel that Whole is the best style for most users, bu
 As described above, the "sensitivity multiplier" parameter is a multiplier used on the post-calculation output vector. The "Y/X Ratio" parameter is then only applied to the Y component of the output, so that it defines the ratio of vertical to horizontal output sensitivity without acceleration.
 
 ### Gain Switch
-The acceleration curve styles below (see "Acceleration Styles") each describe a certain shape mathematically. The gain switch determines whether that shape is applied in the sensitivity graph or the gain graph. For styles Linear, Classic, and Power, this setting does not change the possible shapes of the velocity curve - that is, for any particular settings with the gain switch set to Sensitivity, there is a different set of settings that will replicate the exact same velocity curve (output for a given hand motion) with the switch set to Gain. For styles Natural, Jump, and Motivity, this is not true, and the gain switch allows new velocity curves for each style. 
+The acceleration curve styles below (see "[Acceleration Styles](#acceleration-styles)") each describe a certain shape mathematically. The gain switch determines whether that shape is applied in the sensitivity graph or the gain graph. For styles [Linear](#linear), [Classic](#classic), and [Power](#power), this setting does not change the possible shapes of the velocity curve - that is, for any particular settings with the gain switch set to Sensitivity, there is a different set of settings that will replicate the exact same velocity curve (output for a given hand motion) with the switch set to Gain. For styles [Natural](#natural), [Jump](#jump), and [Motivity](#motivity), this is not true, and the gain switch allows new velocity curves for each style. 
 
 ### Offsets
 An offset, sometimes called a threshold, is a speed in counts before acceleration "kicks in". The legacy way of applying an offset is having a multiplier of 1 below and at the offset, and applying the sensitivity of (speed-offset) above. This legacy "sensitivity offset" is not available because it causes a discontinuity in gain at the point of offset, leading to non-smooth feeling at offset cross. The new "gain offset" does a little extra math to simply shift the gain graph by the offset amount without any discontinuity. This feels smoother and has almost no effect on sensitivity. The theory behind "gain offsets" is developed in [this document](https://docs.google.com/document/d/1P6LygpeEazyHfjVmaEygCsyBjwwW2A-eMBl81ZfxXZk).
 
-Offsets are only applicable to the Classic, Linear, and Natural modes, where they are defined in terms of an input speed. Power mode has a special "output offset", where the curve "starts from" some ratio of the sens multiplier, described in its section.
+Offsets are only applicable to the [Classic](#classic), [Linear](#linear), and [Natural](#natural) modes, where they are defined in terms of an input speed. Power mode has a special "output offset", where the curve "starts from" some ratio of the sens multiplier, described in its section.
 
 ### Caps
 A cap is a point after which acceleration is not applied. The legacy way of applying an offset is simply applying the minimum of the cap sensitivity and the calculated sensitivity for any acceleration calculation. Thus, for the legacy "sensitivity cap" the value given is a sensitivity. This cap style is still available but causes a large discontinuity at the point of offset, leading to a non-smooth feeling at cap cross. The new default "gain cap" effectively caps the gain, but for internal calculation reasons, does so for a given speed rather than a given gain value. This feels much smoother but might have a large effect on sensitivity as gain generally raises faster than sensitivity. We recommend that users use a gain cap and simply adjust it to hit at the gain equivalent to the sensitivity they'd like to cap at. The theory behind "gain caps" is developed in [this document](https://docs.google.com/document/d/1FCpkqRxUaCP7J258SupbxNxvdPfljb16AKMs56yDucA).
 
-Caps are only applicable to the Classic, Linear, and Power modes. The capping point can be defined in terms of an input speed, an output ratio, or both (which will then set other acceleration parameters for the mode.)
+Caps are only applicable to the [Classic](#classic), [Linear](#linear), and [Power](#power) modes. The capping point can be defined in terms of an input speed, an output ratio, or both (which will then set other acceleration parameters for the mode.)
 
 ### Anisotropy
-See "Horizontal and Vertical" in the philosophy section to understand what these options do.
+See "[Horizontal and Vertical](#horizontal-and-vertical)" in the philosophy section to understand what these options do.
 
 ### Last Mouse Move
 The Raw Accel GUI reads the output of the raw input stream, and thus the output of the Raw Accel Driver, and displays on the graphs red points corresponding to the last mouse movements. These calulations should be fast and your graph responsive, but it comes at the cost of higher CPU usage due to needing to refresh the graph often. This feature can be turned off in the "Charts" menu.
