@@ -149,7 +149,7 @@ namespace rawaccel {
 
             // don't let trend carry us below 0
             windowTotal = max(windowTotal, 0.0);
-            cutoffTotal = max(windowTotal, 0.0);
+            cutoffTotal = max(cutoffTotal, 0.0);
 
             // adjust trend based on coefficient and difference between new value and total
             double newWindowTrend = time > 0 ? (windowTotal - oldWindowTotal) / time : 0;
