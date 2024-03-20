@@ -30,7 +30,7 @@ namespace rawaccel {
 
     inline constexpr version_t version = { RA_VER_MAJOR, RA_VER_MINOR, RA_VER_PATCH };
 #ifndef _KERNEL_MODE
-    inline constexpr version_t min_driver_version = { 1, 6, 0 };
+    inline constexpr version_t min_driver_version = { 1, 7, 0 };
 #endif
 
 }
