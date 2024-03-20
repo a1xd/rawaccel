@@ -373,11 +373,19 @@ DeviceSetup(WDFOBJECT hDevice)
     auto set_ext_from_cfg = [devExt](const ra::device_config& cfg) {
         devExt->enable = !cfg.disable;
         devExt->set_extra_info = cfg.set_extra_info;
-        devExt->keep_time = cfg.polling_rate <= 0;
+        
         devExt->dpi_factor = (cfg.dpi > 0) ? (1000.0 / cfg.dpi) : 1;
+
+        bool rate_given = cfg.polling_rate > 0;
+
+        devExt->keep_time = !(cfg.poll_time_override && rate_given);
 
         if (devExt->keep_time) {
             devExt->clamp = cfg.clamp;
+
+            if (rate_given) {
+                devExt->clamp.min = 1000.0 / cfg.polling_rate;
+            }
         }
         else {
             milliseconds interval = 1000.0 / cfg.polling_rate;

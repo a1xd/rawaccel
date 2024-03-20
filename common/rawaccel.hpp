@@ -12,6 +12,7 @@ namespace rawaccel {
     struct device_config {
         bool disable = false;
         bool set_extra_info = false;
+        bool poll_time_override = false;
         int dpi = 0;
         int polling_rate = 0;
         time_clamp clamp;
