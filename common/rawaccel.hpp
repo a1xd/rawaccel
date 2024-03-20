@@ -83,7 +83,7 @@ namespace rawaccel {
 
             // adjust total based on coefficient and difference between new value and total
             windowTotal += timeAdjustedWindowCoefficient * (speed - windowTotal);
-            cutoffTotal += timeAdjustedWindowCoefficient * (speed - cutoffTotal);
+            cutoffTotal += timeAdjustedCutoffCoefficient * (speed - cutoffTotal);
 
             return min(windowTotal, cutoffTotal);
         }
