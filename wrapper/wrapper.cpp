@@ -177,7 +177,7 @@ public value struct DeviceConfig {
 
     [MarshalAs(UnmanagedType::U1)]
     [JsonProperty("Use constant time interval based on polling rate", Required = Required::Default)]
-    bool pollTimeOverride;
+    bool pollTimeLock;
 
     [JsonProperty("DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)")]
     int dpi;
@@ -212,7 +212,7 @@ public value struct DeviceConfig {
     {
         disable = cfg.disable;
         setExtraInfo = cfg.set_extra_info;
-        pollTimeOverride = cfg.poll_time_override;
+        pollTimeLock = cfg.poll_time_lock;
         dpi = cfg.dpi;
         pollingRate = cfg.polling_rate;
         minimumTime = cfg.clamp.min;
@@ -600,7 +600,7 @@ public:
         auto* base_data = reinterpret_cast<ra::io_base*>(byte_ptr);
         base_data->default_dev_cfg.disable = defaultDeviceConfig.disable;
         base_data->default_dev_cfg.set_extra_info = defaultDeviceConfig.setExtraInfo;
-        base_data->default_dev_cfg.poll_time_override = defaultDeviceConfig.pollTimeOverride;
+        base_data->default_dev_cfg.poll_time_lock = defaultDeviceConfig.pollTimeLock;
         base_data->default_dev_cfg.dpi = defaultDeviceConfig.dpi;
         base_data->default_dev_cfg.polling_rate = defaultDeviceConfig.pollingRate;
         base_data->default_dev_cfg.clamp.min = defaultDeviceConfig.minimumTime;
