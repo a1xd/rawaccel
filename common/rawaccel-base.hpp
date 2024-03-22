@@ -9,7 +9,7 @@ namespace rawaccel {
     inline constexpr int POLL_RATE_MAX = 8000;
 
     inline constexpr milliseconds DEFAULT_TIME_MIN = 1000.0 / POLL_RATE_MAX / 2;
-    inline constexpr milliseconds DEFAULT_TIME_MAX = 1000.0 / POLL_RATE_MIN * 2;
+    inline constexpr milliseconds DEFAULT_TIME_MAX = 100;
 
     inline constexpr milliseconds WRITE_DELAY = 1000;
 
