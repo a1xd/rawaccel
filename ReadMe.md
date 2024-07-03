@@ -14,6 +14,10 @@ For an overview of everything Raw Accel has to offer, please see the [guide](doc
 
 Development of Raw Accel is ongoing at https://github.com/a1xd/rawaccel. Bug reports and pull requests are always welcome.  Join [our Discord server](https://discord.gg/7pQh8zH) if you want to stay updated with releases or say hello.
 
+## External Websites
+The latest version of Raw Accel is always hosted [here on github](https://github.com/a1xd/rawaccel/releases). There is no other site or mirror where you can be sure get official versions of Raw Accel.   
+Raw Accel is not affiliated with any external websites, such as rawaccel.net or rawaccel.com. If Raw Accel ever were to be affiliated with an external site, it would be mentioned here on github first.
+
 ## Credits
 simon - Driver & Acceleration Logic  
 \_m00se\_ - GUI, Gain features, Acceleration types  
