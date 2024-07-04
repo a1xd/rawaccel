@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using grapher.Common;
 using grapher.Models.Theming;
 
 namespace grapher.Models.Options.Cap

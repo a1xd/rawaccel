@@ -1,4 +1,5 @@
-﻿using System;
+﻿using grapher.Common;
+using System;
 using System.Windows.Forms;
 
 namespace grapher

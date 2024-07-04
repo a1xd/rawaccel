@@ -1,4 +1,5 @@
-﻿using grapher.Models.Mouse;
+﻿using grapher.Common;
+using grapher.Models.Mouse;
 using System;
 using System.Collections;
 using System.Windows.Forms.DataVisualization.Charting;

@@ -1,4 +1,5 @@
-﻿using grapher.Models.Calculations;
+﻿using grapher.Common;
+using grapher.Models.Calculations;
 using System.Windows.Forms;
 
 namespace grapher.Models.Charts.ChartState

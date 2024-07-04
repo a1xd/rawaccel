@@ -1,4 +1,5 @@
-﻿using grapher.Models.Calculations;
+﻿using grapher.Common;
+using grapher.Models.Calculations;
 using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;

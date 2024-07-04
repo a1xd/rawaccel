@@ -1,4 +1,5 @@
-﻿using grapher.Models.Calculations;
+﻿using grapher.Common;
+using grapher.Models.Calculations;
 using grapher.Models.Calculations.Data;
 using grapher.Models.Charts;
 using grapher.Models.Charts.ChartState;

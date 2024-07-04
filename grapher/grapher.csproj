@@ -77,7 +77,7 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="DeviceMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>

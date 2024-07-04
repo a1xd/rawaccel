@@ -1,4 +1,5 @@
-﻿using grapher.Layouts;
+﻿using grapher.Common;
+using grapher.Layouts;
 using grapher.Models.Options;
 using grapher.Models.Options.Cap;
 using grapher.Models.Options.LUT;

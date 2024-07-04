@@ -10,6 +10,7 @@ using System;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using grapher.Models.Theming.Controls;
+using grapher.Common;
 
 namespace grapher.Models
 {

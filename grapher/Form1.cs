@@ -8,6 +8,7 @@ using grapher.Models;
 using System.IO;
 using grapher.Models.Serialized;
 using grapher.Models.Theming;
+using grapher.Common;
 
 namespace grapher
 {

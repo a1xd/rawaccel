@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using grapher.Models.Theming;
+using grapher.Common;
 
 namespace grapher.Models.Serialized
 {

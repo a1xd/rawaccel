@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Globalization;
 
-namespace grapher
+namespace grapher.Common
 {
     public static class Constants
     {

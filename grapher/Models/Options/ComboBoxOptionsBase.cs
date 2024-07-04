@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using grapher.Common;
+using System.Windows.Forms;
 
 namespace grapher.Models.Options
 {

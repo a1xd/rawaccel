@@ -1,6 +1,7 @@
 ﻿using grapher.Models.Options;
 using System.Windows.Forms;
 using grapher.Models.Theming.Controls;
+using grapher.Common;
 
 namespace grapher
 {
