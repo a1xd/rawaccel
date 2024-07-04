@@ -110,7 +110,7 @@ Arguments:
                     static_cast<double>(it->LastY)
                 };
 
-                devExt->mod.modify(input, devExt->speed_processor, devExt->mod_settings, devExt->input_dpi_factor, time);
+                devExt->mod.modify(input, devExt->speed_processor, devExt->mod_settings, devExt->input_dpi_normalization_factor, time);
 
                 double carried_result_x = input.x + devExt->carry.x;
                 double carried_result_y = input.y + devExt->carry.y;
@@ -373,7 +373,7 @@ DeviceSetup(WDFOBJECT hDevice)
     auto set_ext_from_cfg = [devExt](const ra::device_config& cfg) {
         devExt->enable = !cfg.disable;
         devExt->set_extra_info = cfg.set_extra_info;
-        devExt->input_dpi_factor = (cfg.dpi > 0) ? (1000.0 / cfg.dpi) : 1;
+        devExt->input_dpi_normalization_factor = (cfg.dpi > 0) ? (ra::NORMALIZED_DPI / cfg.dpi) : 1;
 
         bool rate_given = cfg.polling_rate > 0;
 
