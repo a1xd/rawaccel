@@ -102,7 +102,7 @@ namespace grapher.Models.Options
 
         public void SetActiveValues(Profile settings)
         {
-            Sensitivity.SetActiveValue(settings.outputDPI / Constants.DriverNormalizedDPI);
+            Sensitivity.SetActiveValue(Helper.GetSensitivityFactor(settings));
             YToXRatio.SetActiveValue(settings.yxSensRatio);
             Rotation.SetActiveValue(settings.rotation);
             

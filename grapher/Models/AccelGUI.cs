@@ -120,7 +120,7 @@ namespace grapher
             var settings = new Profile();
 
             settings.rotation = ApplyOptions.Rotation.Field.Data;
-            settings.outputDPI = ApplyOptions.Sensitivity.Field.Data * 1000;
+            settings.outputDPI = Helper.CalculatOutputDPI(ApplyOptions.Sensitivity.Field.Data);
 
             // TODO - separate sensitivity fields, add new label for ratio
             settings.yxSensRatio = ApplyOptions.YToXRatio.Value;

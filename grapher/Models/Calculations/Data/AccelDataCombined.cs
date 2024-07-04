@@ -44,7 +44,7 @@ namespace grapher.Models.Calculations.Data
         public void CreateGraphData(ManagedAccel accel, Profile settings)
         {
             Clear();
-            Calculator.Calculate(X, accel, settings.outputDPI / Constants.DriverNormalizedDPI, Calculator.SimulatedInputCombined);
+            Calculator.Calculate(X, accel, Helper.GetSensitivityFactor(settings), Calculator.SimulatedInputCombined);
         }
     }
 }
