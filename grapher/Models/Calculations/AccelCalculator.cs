@@ -246,7 +246,7 @@ namespace grapher.Models.Calculations
                     }
 
                     var ratio = DecimalCheck(magnitude / simulatedInputDatum.velocity);
-                    var slope = DecimalCheck(inDiff > 0 ? outDiff / inDiff : settings.sensitivity);
+                    var slope = DecimalCheck(inDiff > 0 ? outDiff / inDiff : settings.outputDPI / 1000.0);
 
                     bool indexToMeasureExtrema = (angleIndex == 0) || (angleIndex == (Constants.AngleDivisions - 1));
                     
@@ -484,7 +484,7 @@ namespace grapher.Models.Calculations
             settings.rotation > 0;
 
         public static (double, double) GetSens(Profile settings) =>
-            (settings.sensitivity, settings.sensitivity * settings.yxSensRatio);
+            (settings.outputDPI / 1000.0, settings.outputDPI * settings.yxSensRatio / 1000.0);
 
         public static (double, double) GetRotVector(Profile settings) =>
             (Math.Cos(settings.rotation), Math.Sin(settings.rotation));

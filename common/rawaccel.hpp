@@ -409,9 +409,9 @@ namespace rawaccel {
                 }
             }
 
-            double dpi_adjusted_sens = args.sensitivity * dpi_factor;
-            in.x *= dpi_adjusted_sens;
-            in.y *= dpi_adjusted_sens * args.yx_sens_ratio;
+            double dpi_adjustment = output_dpi_adjustment_factor * dpi_factor;
+            in.x *= dpi_adjustment;
+            in.y *= dpi_adjustment * args.yx_sens_ratio;
 
             if (flags.apply_dir_mul_x && in.x < 0) {
                 in.x *= args.lr_sens_ratio;
@@ -427,6 +427,7 @@ namespace rawaccel {
         {
             set_callback(cb_x, settings.data.accel_x, settings.prof.accel_x);
             set_callback(cb_y, settings.data.accel_y, settings.prof.accel_y);
+            output_dpi_adjustment_factor = settings.prof.output_dpi / NORMALIZED_DPI;
         }
 
         modifier() = default;
@@ -453,6 +454,8 @@ namespace rawaccel {
 
         callback_t cb_x = &callback_template<accel_noaccel>;
         callback_t cb_y = &callback_template<accel_noaccel>;
+
+        double output_dpi_adjustment_factor = 1;
     };
 
 } // rawaccel

@@ -15,5 +15,16 @@ namespace wrapper_tests
             Assert.AreEqual(input.x, output.Item1);
             Assert.AreEqual(input.y, output.Item2);
         }
+
+        [TestMethod]
+        public void ModifyInput_WithOutputDPI_HasCorrectFactor()
+        {
+            var accel = new ManagedAccel();
+            (int x, int y) input = (1, 1);
+            var output = accel.Accelerate(input.x, input.y, 1, 1);
+
+            Assert.AreEqual(input.x, output.Item1);
+            Assert.AreEqual(input.y, output.Item2);
+        }
     }
 }

@@ -57,8 +57,8 @@ namespace grapher.Models.Calculations.Data
         public void CreateGraphData(ManagedAccel accel, Profile settings)
         {
             Clear();
-            var sensY = settings.sensitivity * settings.yxSensRatio;
-            Calculator.Calculate(X, accel, settings.sensitivity, Calculator.SimulatedInputX);
+            var sensY = settings.outputDPI * settings.yxSensRatio / 1000.0;
+            Calculator.Calculate(X, accel, settings.outputDPI / 1000.0, Calculator.SimulatedInputX);
             Calculator.Calculate(Y, accel, sensY, Calculator.SimulatedInputY);
         }
     }

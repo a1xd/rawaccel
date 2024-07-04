@@ -153,7 +153,7 @@ namespace rawaccel {
 			error("snap angle must be between 0 and 45 degrees");
 		}
 
-		if (args.sensitivity == 0) {
+		if (args.output_dpi == 0) {
 			error("sens multiplier is 0");
 		}
 	

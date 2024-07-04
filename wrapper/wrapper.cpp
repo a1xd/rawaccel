@@ -136,8 +136,8 @@ public ref struct Profile
     [JsonProperty("Input speed calculation parameters")]
     SpeedArgs inputSpeedArgs;
 
-    [JsonProperty("Sensitivity multiplier")]
-    double sensitivity;
+    [JsonProperty("Output DPI")]
+    double outputDPI;
     [JsonProperty("Y/X sensitivity ratio (vertical sens multiplier)")]
     double yxSensRatio;
     [JsonProperty("L/R sensitivity ratio (left sens multiplier)")]
