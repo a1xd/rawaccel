@@ -785,8 +785,8 @@ namespace grapher.Models.Mouse
 
                 Vec2<double> dirMults = new Vec2<double>
                 {
-                    x = SettingsManager.ActiveProfile.lrSensRatio,
-                    y = SettingsManager.ActiveProfile.udSensRatio
+                    x = SettingsManager.ActiveProfile.lrOutputDPIRatio,
+                    y = SettingsManager.ActiveProfile.udOutputDPIRatio
                 };
 
                 if (dirMults.x > 0 && x < 0)

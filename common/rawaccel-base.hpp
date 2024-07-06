@@ -85,9 +85,9 @@ namespace rawaccel {
         speed_args speed_processor_args;
 
         double output_dpi = NORMALIZED_DPI;
-        double yx_sens_ratio = 1;
-        double lr_sens_ratio = 1;
-        double ud_sens_ratio = 1;
+        double yx_output_dpi_ratio = 1;
+        double lr_output_dpi_ratio = 1;
+        double ud_output_dpi_ratio = 1;
 
         double degrees_rotation = 0;
 

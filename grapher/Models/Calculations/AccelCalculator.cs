@@ -479,7 +479,7 @@ namespace grapher.Models.Calculations
         }
 
         public static bool ShouldStripSens(Profile settings) =>
-            settings.yxSensRatio != 1;
+            settings.yxOutputDPIRatio != 1;
 
         public static bool ShouldStripRot(Profile settings) =>
             settings.rotation > 0;
@@ -487,7 +487,7 @@ namespace grapher.Models.Calculations
         public static (double, double) GetSens(Profile settings)
         {
             var sensFactor = Helper.GetSensitivityFactor(settings); 
-            return (sensFactor, sensFactor * settings.yxSensRatio);
+            return (sensFactor, sensFactor * settings.yxOutputDPIRatio);
         }
 
         public static (double, double) GetRotVector(Profile settings) =>

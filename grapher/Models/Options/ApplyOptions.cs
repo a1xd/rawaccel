@@ -103,7 +103,7 @@ namespace grapher.Models.Options
         public void SetActiveValues(Profile settings)
         {
             Sensitivity.SetActiveValue(Helper.GetSensitivityFactor(settings));
-            YToXRatio.SetActiveValue(settings.yxSensRatio);
+            YToXRatio.SetActiveValue(settings.yxOutputDPIRatio);
             Rotation.SetActiveValue(settings.rotation);
             
             WholeVectorCheckBox.Checked = settings.inputSpeedArgs.combineMagnitudes;

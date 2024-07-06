@@ -56,7 +56,7 @@ namespace grapher.Models.Charts.ChartState
 
             if (settings.inputSpeedArgs.combineMagnitudes)
             {
-                if (settings.yxSensRatio != 1 ||
+                if (settings.yxOutputDPIRatio != 1 ||
                     settings.domainXY.x != settings.domainXY.y ||
                     settings.rangeXY.x != settings.rangeXY.y)
                 {

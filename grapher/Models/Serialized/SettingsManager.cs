@@ -201,8 +201,8 @@ namespace grapher.Models.Serialized
             settings.snap = UserProfile.snap;
             settings.maximumSpeed = UserProfile.maximumSpeed;
             settings.minimumSpeed = UserProfile.minimumSpeed;
-            settings.lrSensRatio = UserProfile.lrSensRatio;
-            settings.udSensRatio = UserProfile.udSensRatio;
+            settings.lrOutputDPIRatio = UserProfile.lrOutputDPIRatio;
+            settings.udOutputDPIRatio = UserProfile.udOutputDPIRatio;
         }
 
         public GUISettings MakeGUISettingsFromFields()

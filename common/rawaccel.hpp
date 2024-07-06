@@ -49,8 +49,8 @@ namespace rawaccel {
             apply_directional_weight = args.speed_processor_args.whole && 
                 args.range_weights.x != args.range_weights.y;
             compute_ref_angle = apply_snap || apply_directional_weight;
-            apply_dir_mul_x = args.lr_sens_ratio != 1;
-            apply_dir_mul_y = args.ud_sens_ratio != 1;
+            apply_dir_mul_x = args.lr_output_dpi_ratio != 1;
+            apply_dir_mul_y = args.ud_output_dpi_ratio != 1;
         }
 
         modifier_flags() = default;
@@ -411,14 +411,14 @@ namespace rawaccel {
 
             double dpi_adjustment = output_dpi_adjustment_factor * dpi_factor;
             in.x *= dpi_adjustment;
-            in.y *= dpi_adjustment * args.yx_sens_ratio;
+            in.y *= dpi_adjustment * args.yx_output_dpi_ratio;
 
             if (flags.apply_dir_mul_x && in.x < 0) {
-                in.x *= args.lr_sens_ratio;
+                in.x *= args.lr_output_dpi_ratio;
             }
 
             if (flags.apply_dir_mul_y && in.y < 0) {
-                in.y *= args.ud_sens_ratio;
+                in.y *= args.ud_output_dpi_ratio;
             }
 
         }

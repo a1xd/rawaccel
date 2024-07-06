@@ -123,7 +123,7 @@ namespace grapher
             settings.outputDPI = Helper.CalculatOutputDPI(ApplyOptions.Sensitivity.Field.Data);
 
             // TODO - separate sensitivity fields, add new label for ratio
-            settings.yxSensRatio = ApplyOptions.YToXRatio.Value;
+            settings.yxOutputDPIRatio = ApplyOptions.YToXRatio.Value;
             settings.inputSpeedArgs.combineMagnitudes = ApplyOptions.IsWhole;
             ApplyOptions.SetArgsFromActiveValues(ref settings.argsX, ref settings.argsY);
 
