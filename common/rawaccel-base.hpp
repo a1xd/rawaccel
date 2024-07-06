@@ -21,6 +21,9 @@ namespace rawaccel {
 
     inline constexpr double MAX_NORM = 16;
 
+    // At this DPI, one count per ms equals one inch per second.
+    inline constexpr double NORMALIZED_DPI = 1000;
+
     inline constexpr bool LEGACY = 0;
     inline constexpr bool GAIN = 1;
     
@@ -71,7 +74,6 @@ namespace rawaccel {
         double output_speed_smooth_halflife = 0;
     };
 
-
     struct profile {
         wchar_t name[MAX_NAME_LEN] = L"default";
 
@@ -82,10 +84,10 @@ namespace rawaccel {
         accel_args accel_y;
         speed_args speed_processor_args;
 
-        double sensitivity = 1;
-        double yx_sens_ratio = 1;
-        double lr_sens_ratio = 1;
-        double ud_sens_ratio = 1;
+        double output_dpi = NORMALIZED_DPI;
+        double yx_output_dpi_ratio = 1;
+        double lr_output_dpi_ratio = 1;
+        double ud_output_dpi_ratio = 1;
 
         double degrees_rotation = 0;
 
@@ -94,6 +96,4 @@ namespace rawaccel {
         double speed_min = 0;
         double speed_max = 0;
     };
-
-
 }

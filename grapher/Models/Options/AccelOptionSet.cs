@@ -1,4 +1,5 @@
-﻿using grapher.Models.Serialized;
+﻿using grapher.Common;
+using grapher.Models.Serialized;
 using System.Drawing;
 using System.Windows.Forms;
 

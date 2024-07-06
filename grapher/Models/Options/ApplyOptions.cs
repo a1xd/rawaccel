@@ -1,5 +1,5 @@
-﻿using grapher.Models.Options.Directionality;
-using grapher.Models.Serialized;
+﻿using grapher.Common;
+using grapher.Models.Options.Directionality;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -102,8 +102,8 @@ namespace grapher.Models.Options
 
         public void SetActiveValues(Profile settings)
         {
-            Sensitivity.SetActiveValue(settings.sensitivity);
-            YToXRatio.SetActiveValue(settings.yxSensRatio);
+            Sensitivity.SetActiveValue(Helper.GetSensitivityFactor(settings));
+            YToXRatio.SetActiveValue(settings.yxOutputDPIRatio);
             Rotation.SetActiveValue(settings.rotation);
             
             WholeVectorCheckBox.Checked = settings.inputSpeedArgs.combineMagnitudes;

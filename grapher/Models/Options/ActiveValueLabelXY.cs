@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using grapher.Common;
+using System.Drawing;
 
 namespace grapher.Models.Options
 {

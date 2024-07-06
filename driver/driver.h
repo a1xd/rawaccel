@@ -22,7 +22,7 @@ typedef struct _DEVICE_EXTENSION {
     bool enable;
     bool keep_time;
     bool set_extra_info;
-    double dpi_factor;
+    double input_dpi_normalization_factor;
     counter_t counter;
     ra::time_clamp clamp;
     ra::modifier mod;

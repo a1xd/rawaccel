@@ -1,17 +1,17 @@
 ﻿using System.Drawing;
 using System.Globalization;
 
-namespace grapher
+namespace grapher.Common
 {
     public static class Constants
     {
         #region Constants
 
         /// <summary> DPI by which charts are scaled if none is set by user. </summary>
-        public const int DefaultDPI = 1200;
+        public const int DefaultChartsScalingDPI = 1200;
 
         /// <summary> Poll rate by which charts are scaled if none is set by user. </summary>
-        public const int DefaultPollRate = 1000;
+        public const int DefaultChartsScalingPollRate = 1000;
 
         /// <summary> Resolution of chart calulation. </summary>
         public const int Resolution = 500;
@@ -145,6 +145,9 @@ namespace grapher
 
         /// <summary> Line Width For Series data on chart </summary>
         public const int ChartSeriesLineWidth = 3;
+
+        /// <summary> DPI to which driver is normalizing inputs </summary>
+        public const double DriverNormalizedDPI = 1000.0;
         #endregion Constants
 
         #region ReadOnly

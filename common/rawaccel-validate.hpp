@@ -153,12 +153,12 @@ namespace rawaccel {
 			error("snap angle must be between 0 and 45 degrees");
 		}
 
-		if (args.sensitivity == 0) {
-			error("sens multiplier is 0");
+		if (args.output_dpi == 0) {
+			error("output DPI is 0");
 		}
 	
-		if (args.yx_sens_ratio == 0) {
-			error("Y/X sens ratio is 0");
+		if (args.yx_output_dpi_ratio == 0) {
+			error("Y/X output DPI ratio is 0");
 		}
 
 		if (args.domain_weights.x <= 0 ||
@@ -166,8 +166,8 @@ namespace rawaccel {
 			error("domain weights"" must be positive");
 		}
 
-		if (args.lr_sens_ratio <= 0 || args.ud_sens_ratio <= 0) {
-			error("sens ratio must be positive");
+		if (args.lr_output_dpi_ratio <= 0 || args.ud_output_dpi_ratio <= 0) {
+			error("output DPI ratio must be positive");
 		}
 
 		if (args.speed_processor_args.lp_norm <= 0) {

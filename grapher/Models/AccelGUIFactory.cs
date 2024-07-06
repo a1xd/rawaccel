@@ -10,6 +10,7 @@ using System;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using grapher.Models.Theming.Controls;
+using grapher.Common;
 
 namespace grapher.Models
 {
@@ -213,8 +214,8 @@ namespace grapher.Models
             fakeBox.Hide();
 
             var accelCalculator = new AccelCalculator(
-                new Field(dpiTextBox.TextBox, form, Constants.DefaultDPI, 1),
-                new Field(pollRateTextBox.TextBox, form, Constants.DefaultPollRate, 1));
+                new Field(dpiTextBox.TextBox, form, Constants.DefaultChartsScalingDPI, 1),
+                new Field(pollRateTextBox.TextBox, form, Constants.DefaultChartsScalingPollRate, 1));
 
             var accelCharts = new AccelCharts(
                                 form,

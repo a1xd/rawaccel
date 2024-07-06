@@ -30,7 +30,7 @@ namespace rawaccel {
 				*/
 				offset = {};
 				constant = 0;
-				scale = scale_from_sens_point(args.cap.x, args.cap.y, n, constant);
+				scale = scale_from_output_point(args.cap.x, args.cap.y, n, constant);
 				return;
 			}
 
@@ -64,9 +64,9 @@ namespace rawaccel {
 			return pow(gain / (power + 1), 1 / power) / input;
 		}
 
-		static double scale_from_sens_point(double input, double sens, double power, double C)
+		static double scale_from_output_point(double input, double output, double power, double C)
 		{
-			return pow(sens - C / input, 1 / power) / input;
+			return pow(output - C / input, 1 / power) / input;
 		}
 	};
 

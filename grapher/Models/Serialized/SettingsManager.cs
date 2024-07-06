@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using grapher.Models.Theming;
+using grapher.Common;
 
 namespace grapher.Models.Serialized
 {
@@ -200,8 +201,8 @@ namespace grapher.Models.Serialized
             settings.snap = UserProfile.snap;
             settings.maximumSpeed = UserProfile.maximumSpeed;
             settings.minimumSpeed = UserProfile.minimumSpeed;
-            settings.lrSensRatio = UserProfile.lrSensRatio;
-            settings.udSensRatio = UserProfile.udSensRatio;
+            settings.lrOutputDPIRatio = UserProfile.lrOutputDPIRatio;
+            settings.udOutputDPIRatio = UserProfile.udOutputDPIRatio;
         }
 
         public GUISettings MakeGUISettingsFromFields()

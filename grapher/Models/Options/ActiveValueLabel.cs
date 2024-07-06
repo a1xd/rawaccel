@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using grapher.Common;
 using grapher.Models.Theming;
 
 namespace grapher.Models.Options

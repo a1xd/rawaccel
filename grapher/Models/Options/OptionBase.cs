@@ -1,4 +1,6 @@
-﻿namespace grapher.Models.Options
+﻿using grapher.Common;
+
+namespace grapher.Models.Options
 {
     public abstract class OptionBase : IOption
     {

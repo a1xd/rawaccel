@@ -1,4 +1,5 @@
-﻿using grapher.Models.Calculations;
+﻿using grapher.Common;
+using grapher.Models.Calculations;
 using grapher.Models.Devices;
 using grapher.Models.Mouse;
 using grapher.Models.Options;
@@ -119,10 +120,10 @@ namespace grapher
             var settings = new Profile();
 
             settings.rotation = ApplyOptions.Rotation.Field.Data;
-            settings.sensitivity = ApplyOptions.Sensitivity.Field.Data;
+            settings.outputDPI = Helper.CalculatOutputDPI(ApplyOptions.Sensitivity.Field.Data);
 
             // TODO - separate sensitivity fields, add new label for ratio
-            settings.yxSensRatio = ApplyOptions.YToXRatio.Value;
+            settings.yxOutputDPIRatio = ApplyOptions.YToXRatio.Value;
             settings.inputSpeedArgs.combineMagnitudes = ApplyOptions.IsWhole;
             ApplyOptions.SetArgsFromActiveValues(ref settings.argsX, ref settings.argsY);
 

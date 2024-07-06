@@ -1,4 +1,5 @@
-﻿using grapher.Models.Charts;
+﻿using grapher.Common;
+using grapher.Models.Charts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,8 +58,9 @@ namespace grapher.Models.Calculations.Data
         public void CreateGraphData(ManagedAccel accel, Profile settings)
         {
             Clear();
-            var sensY = settings.sensitivity * settings.yxSensRatio;
-            Calculator.Calculate(X, accel, settings.sensitivity, Calculator.SimulatedInputX);
+            var sensFactor = Helper.GetSensitivityFactor(settings);
+            var sensY = sensFactor * settings.yxOutputDPIRatio;
+            Calculator.Calculate(X, accel, sensFactor, Calculator.SimulatedInputX);
             Calculator.Calculate(Y, accel, sensY, Calculator.SimulatedInputY);
         }
     }

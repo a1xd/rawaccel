@@ -136,14 +136,14 @@ public ref struct Profile
     [JsonProperty("Input speed calculation parameters")]
     SpeedArgs inputSpeedArgs;
 
-    [JsonProperty("Sensitivity multiplier")]
-    double sensitivity;
-    [JsonProperty("Y/X sensitivity ratio (vertical sens multiplier)")]
-    double yxSensRatio;
-    [JsonProperty("L/R sensitivity ratio (left sens multiplier)")]
-    double lrSensRatio;
-    [JsonProperty("U/D sensitivity ratio (up sens multiplier)")]
-    double udSensRatio;
+    [JsonProperty("Output DPI")]
+    double outputDPI;
+    [JsonProperty("Y/X output DPI ratio (vertical sens multiplier)")]
+    double yxOutputDPIRatio;
+    [JsonProperty("L/R output DPI ratio (left sens multiplier)")]
+    double lrOutputDPIRatio;
+    [JsonProperty("U/D output DPI ratio (up sens multiplier)")]
+    double udOutputDPIRatio;
 
     [JsonProperty("Degrees of rotation")]
     double rotation;
@@ -179,7 +179,7 @@ public value struct DeviceConfig {
     [JsonProperty("Use constant time interval based on polling rate", Required = Required::Default)]
     bool pollTimeLock;
 
-    [JsonProperty("DPI (normalizes sens to 1000dpi and converts input speed unit: counts/ms -> in/s)")]
+    [JsonProperty("DPI (normalizes input speed unit: counts/ms -> in/s)")]
     int dpi;
 
     [JsonProperty("Polling rate Hz (keep at 0 for automatic adjustment)")]
