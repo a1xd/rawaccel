@@ -7,7 +7,8 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 $rawaccel_exe = Join-Path $PSScriptRoot rawaccel.exe
 
 $shell = New-Object -comObject WScript.Shell
-$shortcut = $shell.CreateShortcut('C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Raw Accel.lnk')
+$shortcut = $shell.CreateShortcut("$Env:PROGRAMDATA\Microsoft\Windows\Start Menu\Programs\Raw Accel.lnk")
 $shortcut.TargetPath = $rawaccel_exe
 $Shortcut.WorkingDirectory = '%LOCALAPPDATA%\Raw Accel'
+$Shortcut.Description = 'Edit mouse acceleration curves'
 $shortcut.Save()
