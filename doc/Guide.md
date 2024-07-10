@@ -13,7 +13,7 @@ We recommend copying the release directory into `%PROGRAMFILES%\Raw Accel`.
 
 - Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
 
-- Run `install-autorun.ps1` in the release directory to enable user specific settings on sign in for each user. The settings are stored in `%LOCALAPPDATA%\Raw Accel`
+- Run `install-autorun.ps1` in the release directory to enable user specific settings on sign in for each user. The settings are stored in `%LOCALAPPDATA%\Raw Accel`.
 
 - Run `install-shortcut.ps1` in the release directory to add a user specific shortcut to the Raw Accel GUI. The settings are stored in `%LOCALAPPDATA%\Raw Accel`. Sign out and back in for the installation to take effect.
 
