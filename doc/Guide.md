@@ -9,7 +9,7 @@ Visit the [Releases page](https://github.com/a1xd/rawaccel/releases) and navigat
   * Visual C++ 2019 runtime, [download here](https://aka.ms/vs/16/release/vc_redist.x64.exe)
   * .NET Framework 4.7.2+ runtime, [download here](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 
-We recommend copying the release directory into `%PROGRAMFILES%\Raw Accel`.
+We recommend extracting the release directory into `%PROGRAMFILES%\Raw Accel`.
 
 - Run `installer.exe` in the release directory to install the Raw Accel driver. Restart your computer for the installation to take effect.
 
