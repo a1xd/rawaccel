@@ -4,7 +4,7 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     Exit
 }
 
-$unlockScript = Join-Path $PSScriptRoot autorun.ps1
+$autorunScript = Join-Path $PSScriptRoot autorun.ps1
 $stateChangeTrigger = Get-CimClass `
     -Namespace ROOT\Microsoft\Windows\TaskScheduler `
     -ClassName MSFT_TaskSessionStateChangeTrigger
@@ -23,5 +23,5 @@ Register-ScheduledTask `
                 } `
                 -ClientOnly
         ) `
-    -Action (New-ScheduledTaskAction -Execute 'PowerShell' -Argument ('-WindowStyle Hidden -File "{0}"' -f $unlockScript)) `
+    -Action (New-ScheduledTaskAction -Execute 'PowerShell' -Argument ('-WindowStyle Hidden -File "{0}"' -f $autorunScript)) `
     -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -ExecutionTimeLimit 0)
