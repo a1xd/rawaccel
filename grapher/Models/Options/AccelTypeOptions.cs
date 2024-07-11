@@ -281,12 +281,12 @@ namespace grapher
             OutputOffset.SetActiveValue(args.outputOffset);
             InputOffset.SetActiveValue(args.inputOffset);
             DecayRate.SetActiveValue(args.decayRate);
-            GrowthRate.SetActiveValue(args.growthRate);
+            GrowthRate.SetActiveValue(args.gamma);
             Smooth.SetActiveValue(args.smooth);
             Limit.SetActiveValue((args.mode == AccelMode.motivity) ? args.motivity : args.limit);
             PowerClassic.SetActiveValue(args.exponentClassic);
             Exponent.SetActiveValue(args.exponentPower);
-            Midpoint.SetActiveValue(args.midpoint);
+            Midpoint.SetActiveValue(args.syncSpeed);
             LutPanel.SetActiveValues(args.data, args.length, args.mode);
             LutApply.SetActiveValue(args.gain);
         }
@@ -326,7 +326,7 @@ namespace grapher
                 GainSwitch.CheckBox.Checked;
 
             if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
-            if (GrowthRate.Visible) args.growthRate = GrowthRate.Field.Data;
+            if (GrowthRate.Visible) args.gamma = GrowthRate.Field.Data;
             if (Smooth.Visible) args.smooth = Smooth.Field.Data;
             if (ClassicCap.Visible)
             {
@@ -360,7 +360,7 @@ namespace grapher
             if (InputOffset.Visible) args.inputOffset = InputOffset.Field.Data;
             if (OutputOffset.Visible) args.outputOffset = OutputOffset.Field.Data;
 
-            if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
+            if (Midpoint.Visible) args.syncSpeed = Midpoint.Field.Data;
             if (LutPanel.Visible)
             {
                 (var points, var length) = LutPanel.GetPoints();

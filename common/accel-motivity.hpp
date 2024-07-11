@@ -8,21 +8,67 @@ namespace rawaccel {
 
 	template <>
 	struct loglog_sigmoid<LEGACY> {
-		double accel;
-		double motivity;
-		double midpoint;
-		double constant;
+		double log_motivity;
+		double gamma_const;
+		double log_syncspeed;
+		double syncspeed;
+		double sharpness;
+		double sharpness_recip;
+		bool use_linear_clamp;
+		double minimum_sens;
+		double maximum_sens;
 
 		loglog_sigmoid(const accel_args& args) :
-			accel(exp(args.growth_rate)),
-			motivity(2 * log(args.motivity)),
-			midpoint(log(args.midpoint)),
-			constant(-motivity / 2) {}
+			log_motivity(log(args.motivity)),
+			gamma_const(args.gamma / log_motivity),
+			log_syncspeed(log(args.sync_speed)),
+			syncspeed(args.sync_speed),
+			sharpness(args.smooth == 0 ? 16 : 0.5 / args.smooth),
+			sharpness_recip(1 / sharpness),
+		    use_linear_clamp(sharpness >= 16),
+		    minimum_sens(1 / args.motivity),
+		    maximum_sens(args.motivity) {}
 
 		double operator()(double x, const accel_args&) const
 		{
-			double denom = exp(accel * (midpoint - log(x))) + 1;
-			return exp(motivity / denom + constant);
+			// if sharpness >= 16, use linear clamp for activation function.
+			// linear clamp means: clamp(x, -1, 1).
+			if (use_linear_clamp)
+			{
+				double log_space = gamma_const * (log(x) - log_syncspeed);
+
+				if (log_space < -1)
+				{
+					return minimum_sens;
+				}
+
+				if (log_space > 1)
+				{
+					return maximum_sens;
+				}
+
+				return exp(log_space * log_motivity);
+			}
+
+			if (x == syncspeed) {
+				return 1.0;
+			}
+
+			double log_x = log(x);
+			double log_diff = log_x - log_syncspeed;
+
+			if (log_diff > 0)
+			{
+				double log_space = gamma_const * log_diff;
+				double exponent = pow(tanh(pow(log_space, sharpness)), sharpness_recip);
+				return exp(exponent * log_motivity);
+			}
+			else
+			{
+				double log_space = -gamma_const * log_diff;
+				double exponent = -pow(tanh(pow(log_space, sharpness)), sharpness_recip);
+				return exp(exponent * log_motivity);
+			}
 		}
 	};
 

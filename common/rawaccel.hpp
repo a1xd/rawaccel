@@ -420,7 +420,6 @@ namespace rawaccel {
             if (flags.apply_dir_mul_y && in.y < 0) {
                 in.y *= args.ud_output_dpi_ratio;
             }
-
         }
 
         modifier(modifier_settings& settings)

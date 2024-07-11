@@ -68,13 +68,13 @@ public value struct AccelArgs
     double outputOffset;
     double acceleration;
     double decayRate;
-    double growthRate;
+    double gamma;
     double motivity;
     double exponentClassic;
     double scale;
     double exponentPower;
     double limit;
-    double midpoint;
+    double syncSpeed;
     double smooth;
 
     [JsonProperty("Cap / Jump")]
