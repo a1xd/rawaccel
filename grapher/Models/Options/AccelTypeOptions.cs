@@ -33,7 +33,7 @@ namespace grapher
             Option outputJump,
             Option outputOffset,
             Option decayRate,
-            Option growthRate,
+            Option gamma,
             Option smooth,
             Option inputJump,
             Option inputOffset,
@@ -66,7 +66,7 @@ namespace grapher
 
             GainSwitch = gainSwitch;
             DecayRate = decayRate;
-            GrowthRate = growthRate;
+            Gammma = gamma;
             Smooth = smooth;
             ClassicCap = classicCap;
             PowerCap = powerCap;
@@ -111,7 +111,7 @@ namespace grapher
 
         public Option DecayRate { get; }
 
-        public Option GrowthRate { get; }
+        public Option Gammma { get; }
 
         public Option Smooth { get; }
 
@@ -232,7 +232,7 @@ namespace grapher
 
             GainSwitch.Hide();
             DecayRate.Hide();
-            GrowthRate.Hide();
+            Gammma.Hide();
             Smooth.Hide();
             ClassicCap.Hide();
             PowerCap.Hide();
@@ -281,7 +281,7 @@ namespace grapher
             OutputOffset.SetActiveValue(args.outputOffset);
             InputOffset.SetActiveValue(args.inputOffset);
             DecayRate.SetActiveValue(args.decayRate);
-            GrowthRate.SetActiveValue(args.gamma);
+            Gammma.SetActiveValue(args.gamma);
             Smooth.SetActiveValue(args.smooth);
             Limit.SetActiveValue((args.mode == AccelMode.synchronous) ? args.motivity : args.limit);
             PowerClassic.SetActiveValue(args.exponentClassic);
@@ -326,7 +326,7 @@ namespace grapher
                 GainSwitch.CheckBox.Checked;
 
             if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
-            if (GrowthRate.Visible) args.gamma = GrowthRate.Field.Data;
+            if (Gammma.Visible) args.gamma = Gammma.Field.Data;
             if (Smooth.Visible) args.smooth = Smooth.Field.Data;
             if (ClassicCap.Visible)
             {
@@ -382,7 +382,7 @@ namespace grapher
             AccelTypeActiveValue.Align();
             GainSwitch.AlignActiveValues();
             DecayRate.AlignActiveValues();
-            GrowthRate.AlignActiveValues();
+            Gammma.AlignActiveValues();
             Smooth.AlignActiveValues();
             ClassicCap.AlignActiveValues();
             PowerCap.AlignActiveValues();
@@ -424,7 +424,7 @@ namespace grapher
                 ClassicCap,
                 PowerCap,
                 DecayRate,
-                GrowthRate,
+                Gammma,
                 Smooth,
                 InputJump,
                 InputOffset,

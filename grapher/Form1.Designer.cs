@@ -96,12 +96,12 @@ namespace grapher
             this.smoothLabelY = new System.Windows.Forms.Label();
             this.SmoothActiveXLabel = new System.Windows.Forms.Label();
             this.smoothLabelX = new System.Windows.Forms.Label();
-            this.GrowthRateActiveYLabel = new System.Windows.Forms.Label();
-            this.GrowthRateActiveXLabel = new System.Windows.Forms.Label();
+            this.GammaActiveYLabel = new System.Windows.Forms.Label();
+            this.GammaActiveXLabel = new System.Windows.Forms.Label();
             this.DecayRateActiveYLabel = new System.Windows.Forms.Label();
             this.DecayRateActiveXLabel = new System.Windows.Forms.Label();
-            this.growthRateLabelY = new System.Windows.Forms.Label();
-            this.growthRateLabelX = new System.Windows.Forms.Label();
+            this.gammaLabelY = new System.Windows.Forms.Label();
+            this.gammaLabelX = new System.Windows.Forms.Label();
             this.decayRateLabelY = new System.Windows.Forms.Label();
             this.decayRateLabelX = new System.Windows.Forms.Label();
             this.PowerClassicActiveYLabel = new System.Windows.Forms.Label();
@@ -227,8 +227,8 @@ namespace grapher
             this.CapTypeDropdownXClassic = new grapher.Models.Theming.Controls.ThemeableComboBox();
             this.smoothBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.smoothBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
-            this.growthRateBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
-            this.growthRateBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.gammaBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.gammaBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.decayRateBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.decayRateBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.powerBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
@@ -319,16 +319,16 @@ namespace grapher
             this.optionsPanel.Controls.Add(this.smoothLabelX);
             this.optionsPanel.Controls.Add(this.smoothBoxY);
             this.optionsPanel.Controls.Add(this.smoothBoxX);
-            this.optionsPanel.Controls.Add(this.GrowthRateActiveYLabel);
-            this.optionsPanel.Controls.Add(this.GrowthRateActiveXLabel);
+            this.optionsPanel.Controls.Add(this.GammaActiveYLabel);
+            this.optionsPanel.Controls.Add(this.GammaActiveXLabel);
             this.optionsPanel.Controls.Add(this.DecayRateActiveYLabel);
             this.optionsPanel.Controls.Add(this.DecayRateActiveXLabel);
-            this.optionsPanel.Controls.Add(this.growthRateLabelY);
-            this.optionsPanel.Controls.Add(this.growthRateLabelX);
+            this.optionsPanel.Controls.Add(this.gammaLabelY);
+            this.optionsPanel.Controls.Add(this.gammaLabelX);
             this.optionsPanel.Controls.Add(this.decayRateLabelY);
             this.optionsPanel.Controls.Add(this.decayRateLabelX);
-            this.optionsPanel.Controls.Add(this.growthRateBoxY);
-            this.optionsPanel.Controls.Add(this.growthRateBoxX);
+            this.optionsPanel.Controls.Add(this.gammaBoxY);
+            this.optionsPanel.Controls.Add(this.gammaBoxX);
             this.optionsPanel.Controls.Add(this.decayRateBoxY);
             this.optionsPanel.Controls.Add(this.decayRateBoxX);
             this.optionsPanel.Controls.Add(this.PowerClassicActiveYLabel);
@@ -670,23 +670,23 @@ namespace grapher
             this.smoothLabelX.TabIndex = 190;
             this.smoothLabelX.Text = "Smooth";
             // 
-            // GrowthRateActiveYLabel
+            // GammaActiveYLabel
             // 
-            this.GrowthRateActiveYLabel.AutoSize = true;
-            this.GrowthRateActiveYLabel.Location = new System.Drawing.Point(417, 674);
-            this.GrowthRateActiveYLabel.Name = "GrowthRateActiveYLabel";
-            this.GrowthRateActiveYLabel.Size = new System.Drawing.Size(13, 13);
-            this.GrowthRateActiveYLabel.TabIndex = 187;
-            this.GrowthRateActiveYLabel.Text = "0";
+            this.GammaActiveYLabel.AutoSize = true;
+            this.GammaActiveYLabel.Location = new System.Drawing.Point(417, 674);
+            this.GammaActiveYLabel.Name = "GammaActiveYLabel";
+            this.GammaActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.GammaActiveYLabel.TabIndex = 187;
+            this.GammaActiveYLabel.Text = "0";
             // 
-            // GrowthRateActiveXLabel
+            // GammaActiveXLabel
             // 
-            this.GrowthRateActiveXLabel.AutoSize = true;
-            this.GrowthRateActiveXLabel.Location = new System.Drawing.Point(200, 674);
-            this.GrowthRateActiveXLabel.Name = "GrowthRateActiveXLabel";
-            this.GrowthRateActiveXLabel.Size = new System.Drawing.Size(13, 13);
-            this.GrowthRateActiveXLabel.TabIndex = 186;
-            this.GrowthRateActiveXLabel.Text = "0";
+            this.GammaActiveXLabel.AutoSize = true;
+            this.GammaActiveXLabel.Location = new System.Drawing.Point(200, 674);
+            this.GammaActiveXLabel.Name = "GammaActiveXLabel";
+            this.GammaActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.GammaActiveXLabel.TabIndex = 186;
+            this.GammaActiveXLabel.Text = "0";
             // 
             // DecayRateActiveYLabel
             // 
@@ -706,23 +706,23 @@ namespace grapher
             this.DecayRateActiveXLabel.TabIndex = 184;
             this.DecayRateActiveXLabel.Text = "0";
             // 
-            // growthRateLabelY
+            // gammaLabelY
             // 
-            this.growthRateLabelY.AutoSize = true;
-            this.growthRateLabelY.Location = new System.Drawing.Point(263, 675);
-            this.growthRateLabelY.Name = "growthRateLabelY";
-            this.growthRateLabelY.Size = new System.Drawing.Size(67, 13);
-            this.growthRateLabelY.TabIndex = 183;
-            this.growthRateLabelY.Text = "Growth Rate";
+            this.gammaLabelY.AutoSize = true;
+            this.gammaLabelY.Location = new System.Drawing.Point(263, 675);
+            this.gammaLabelY.Name = "gammaLabelY";
+            this.gammaLabelY.Size = new System.Drawing.Size(67, 13);
+            this.gammaLabelY.TabIndex = 183;
+            this.gammaLabelY.Text = "Gamma";
             // 
-            // growthRateLabelX
+            // gammaLabelX
             // 
-            this.growthRateLabelX.AutoSize = true;
-            this.growthRateLabelX.Location = new System.Drawing.Point(37, 675);
-            this.growthRateLabelX.Name = "growthRateLabelX";
-            this.growthRateLabelX.Size = new System.Drawing.Size(67, 13);
-            this.growthRateLabelX.TabIndex = 182;
-            this.growthRateLabelX.Text = "Growth Rate";
+            this.gammaLabelX.AutoSize = true;
+            this.gammaLabelX.Location = new System.Drawing.Point(37, 675);
+            this.gammaLabelX.Name = "gammaLabelX";
+            this.gammaLabelX.Size = new System.Drawing.Size(67, 13);
+            this.gammaLabelX.TabIndex = 182;
+            this.gammaLabelX.Text = "Gamma";
             // 
             // decayRateLabelY
             // 
@@ -2086,19 +2086,19 @@ namespace grapher
             this.smoothBoxX.Size = new System.Drawing.Size(76, 20);
             this.smoothBoxX.TabIndex = 106;
             // 
-            // growthRateBoxY
+            // gammaBoxY
             // 
-            this.growthRateBoxY.Location = new System.Drawing.Point(332, 671);
-            this.growthRateBoxY.Name = "growthRateBoxY";
-            this.growthRateBoxY.Size = new System.Drawing.Size(76, 20);
-            this.growthRateBoxY.TabIndex = 205;
+            this.gammaBoxY.Location = new System.Drawing.Point(332, 671);
+            this.gammaBoxY.Name = "gammaBoxY";
+            this.gammaBoxY.Size = new System.Drawing.Size(76, 20);
+            this.gammaBoxY.TabIndex = 205;
             // 
-            // growthRateBoxX
+            // gammaBoxX
             // 
-            this.growthRateBoxX.Location = new System.Drawing.Point(106, 672);
-            this.growthRateBoxX.Name = "growthRateBoxX";
-            this.growthRateBoxX.Size = new System.Drawing.Size(76, 20);
-            this.growthRateBoxX.TabIndex = 105;
+            this.gammaBoxX.Location = new System.Drawing.Point(106, 672);
+            this.gammaBoxX.Name = "gammaBoxX";
+            this.gammaBoxX.Size = new System.Drawing.Size(76, 20);
+            this.gammaBoxX.TabIndex = 105;
             // 
             // decayRateBoxY
             // 
@@ -2536,16 +2536,16 @@ namespace grapher
         private grapher.Models.Theming.Controls.ThemeableTextBox powerBoxX;
         private System.Windows.Forms.Label PowerClassicActiveYLabel;
         private System.Windows.Forms.Label PowerClassicActiveXLabel;
-        private System.Windows.Forms.Label growthRateLabelY;
-        private System.Windows.Forms.Label growthRateLabelX;
+        private System.Windows.Forms.Label gammaLabelY;
+        private System.Windows.Forms.Label gammaLabelX;
         private System.Windows.Forms.Label decayRateLabelY;
         private System.Windows.Forms.Label decayRateLabelX;
-        private grapher.Models.Theming.Controls.ThemeableTextBox growthRateBoxY;
-        private grapher.Models.Theming.Controls.ThemeableTextBox growthRateBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox gammaBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox gammaBoxX;
         private grapher.Models.Theming.Controls.ThemeableTextBox decayRateBoxY;
         private grapher.Models.Theming.Controls.ThemeableTextBox decayRateBoxX;
-        private System.Windows.Forms.Label GrowthRateActiveYLabel;
-        private System.Windows.Forms.Label GrowthRateActiveXLabel;
+        private System.Windows.Forms.Label GammaActiveYLabel;
+        private System.Windows.Forms.Label GammaActiveXLabel;
         private System.Windows.Forms.Label DecayRateActiveYLabel;
         private System.Windows.Forms.Label DecayRateActiveXLabel;
         private System.Windows.Forms.Label SmoothActiveYLabel;
