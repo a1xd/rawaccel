@@ -17,7 +17,7 @@ namespace wrapper_tests
 
             var profile = new Profile();
             profile.outputDPI = 1000;
-            profile.argsX.mode = AccelMode.motivity;
+            profile.argsX.mode = AccelMode.synchronous;
             profile.argsX.gain = false;
             profile.argsX.syncSpeed = syncSpeed;
             profile.argsX.gamma = gamma;

@@ -81,8 +81,8 @@ namespace grapher.Models
             ThemeableTextBox powerClassicBoxY,
             ThemeableTextBox expBoxX,
             ThemeableTextBox expBoxY,
-            ThemeableTextBox midpointBoxX,
-            ThemeableTextBox midpointBoxY,
+            ThemeableTextBox syncSpeedBoxX,
+            ThemeableTextBox syncSpeedBoxY,
             ThemeableTextBox domainBoxX,
             ThemeableTextBox domainBoxY,
             ThemeableTextBox rangeBoxX,
@@ -184,8 +184,8 @@ namespace grapher.Models
             Label powerClassicActiveLabelY,
             Label expActiveLabelX,
             Label expActiveLabelY,
-            Label midpointActiveLabelX,
-            Label midpointActiveLabelY,
+            Label syncSpeedActiveLabelX,
+            Label syncSpeedActiveLabelY,
             Label accelTypeActiveLabelX,
             Label accelTypeActiveLabelY,
             Label gainSwitchActiveLabelX,
@@ -430,16 +430,16 @@ namespace grapher.Models
                 new ActiveValueLabel(expActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
-            var midpointX = new Option(
-                new Field(midpointBoxX, form, 0),
+            var syncSpeedX = new Option(
+                new Field(syncSpeedBoxX, form, 0),
                 constantThreeLabelX,
-                new ActiveValueLabel(midpointActiveLabelX, activeValueTitleX),
+                new ActiveValueLabel(syncSpeedActiveLabelX, activeValueTitleX),
                 0);
 
-            var midpointY = new Option(
-                new Field(midpointBoxY, form, 0),
+            var syncSpeedY = new Option(
+                new Field(syncSpeedBoxY, form, 0),
                 constantThreeLabelY,
-                new ActiveValueLabel(midpointActiveLabelY, activeValueTitleY),
+                new ActiveValueLabel(syncSpeedActiveLabelY, activeValueTitleY),
                 optionSetYLeft);
 
             var inCapXClassic = new Option(
@@ -621,7 +621,7 @@ namespace grapher.Models
                 limitX,
                 powerClassicX,
                 exponentX,
-                midpointX,
+                syncSpeedX,
                 lutTextX,
                 new LUTPanelOptions(xLutPointsBox, xLutActiveValuesBox),
                 new LutApplyOptions(
@@ -646,7 +646,7 @@ namespace grapher.Models
                 limitY,
                 powerClassicY,
                 exponentY,
-                midpointY,
+                syncSpeedY,
                 lutTextY,
                 new LUTPanelOptions(yLutPointsBox, yLutActiveValuesBox),
                 new LutApplyOptions(

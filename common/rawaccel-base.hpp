@@ -31,7 +31,7 @@ namespace rawaccel {
         classic,
         jump,
         natural,
-        motivity,
+        synchronous,
         power,
         lookup,
         noaccel

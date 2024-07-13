@@ -4,10 +4,10 @@
 
 namespace rawaccel {
 
-	template <bool Gain> struct loglog_sigmoid;
+	template <bool Gain> struct activation_framework;
 
 	template <>
-	struct loglog_sigmoid<LEGACY> {
+	struct activation_framework<LEGACY> {
 		double log_motivity;
 		double gamma_const;
 		double log_syncspeed;
@@ -18,7 +18,7 @@ namespace rawaccel {
 		double minimum_sens;
 		double maximum_sens;
 
-		loglog_sigmoid(const accel_args& args) :
+		activation_framework(const accel_args& args) :
 			log_motivity(log(args.motivity)),
 			gamma_const(args.gamma / log_motivity),
 			log_syncspeed(log(args.sync_speed)),
@@ -73,20 +73,20 @@ namespace rawaccel {
 	};
 
 	template <>
-	struct loglog_sigmoid<GAIN> {
+	struct activation_framework<GAIN> {
 		enum { capacity = LUT_RAW_DATA_CAPACITY };
 
 		bool velocity;
 		fp_rep_range range;
 		double x_start;
 
-		loglog_sigmoid(const accel_args& args) 
+		activation_framework(const accel_args& args) 
 		{
 			init({ -3, 9, 8 }, true);
 
 			double sum = 0;
 			double a = 0;
-			auto sig = loglog_sigmoid<LEGACY>(args);
+			auto sig = activation_framework<LEGACY>(args);
 			auto sigmoid_sum = [&](double b) {
 				int partitions = 2;
 

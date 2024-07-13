@@ -160,14 +160,14 @@ namespace grapher
             this.inCapLabelYClassic = new System.Windows.Forms.Label();
             this.constantOneLabelY = new System.Windows.Forms.Label();
             this.ByComponentXYLock = new System.Windows.Forms.CheckBox();
-            this.MidpointActiveYLabel = new System.Windows.Forms.Label();
+            this.SyncSpeedActiveYLabel = new System.Windows.Forms.Label();
             this.LimitActiveYLabel = new System.Windows.Forms.Label();
             this.InputJumpActiveYLabel = new System.Windows.Forms.Label();
             this.OutputJumpActiveYLabel = new System.Windows.Forms.Label();
             this.InputOffsetActiveYLabel = new System.Windows.Forms.Label();
             this.OutputOffsetActiveYLabel = new System.Windows.Forms.Label();
             this.AccelerationActiveLabelY = new System.Windows.Forms.Label();
-            this.MidpointActiveXLabel = new System.Windows.Forms.Label();
+            this.SyncSpeedActiveXLabel = new System.Windows.Forms.Label();
             this.LimitActiveXLabel = new System.Windows.Forms.Label();
             this.InputJumpActiveXLabel = new System.Windows.Forms.Label();
             this.OutputJumpActiveXLabel = new System.Windows.Forms.Label();
@@ -245,7 +245,7 @@ namespace grapher
             this.expBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.expBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.accelTypeDropY = new grapher.Models.Theming.Controls.ThemeableComboBox();
-            this.midpointBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.syncSpeedBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.limitBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.inputJumpBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.outputJumpBoxY = new grapher.Models.Theming.Controls.ThemeableTextBox();
@@ -258,7 +258,7 @@ namespace grapher
             this.outputJumpBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.inputOffsetBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.outputOffsetBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
-            this.midpointBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
+            this.syncSpeedBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.limitBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.inCapBoxXClassic = new grapher.Models.Theming.Controls.ThemeableTextBox();
             this.accelerationBoxX = new grapher.Models.Theming.Controls.ThemeableTextBox();
@@ -381,7 +381,7 @@ namespace grapher
             this.optionsPanel.Controls.Add(this.inCapLabelYClassic);
             this.optionsPanel.Controls.Add(this.constantOneLabelY);
             this.optionsPanel.Controls.Add(this.ByComponentXYLock);
-            this.optionsPanel.Controls.Add(this.MidpointActiveYLabel);
+            this.optionsPanel.Controls.Add(this.SyncSpeedActiveYLabel);
             this.optionsPanel.Controls.Add(this.LimitActiveYLabel);
             this.optionsPanel.Controls.Add(this.InputJumpActiveYLabel);
             this.optionsPanel.Controls.Add(this.OutputJumpActiveYLabel);
@@ -389,14 +389,14 @@ namespace grapher
             this.optionsPanel.Controls.Add(this.OutputOffsetActiveYLabel);
             this.optionsPanel.Controls.Add(this.AccelerationActiveLabelY);
             this.optionsPanel.Controls.Add(this.accelTypeDropY);
-            this.optionsPanel.Controls.Add(this.midpointBoxY);
+            this.optionsPanel.Controls.Add(this.syncSpeedBoxY);
             this.optionsPanel.Controls.Add(this.limitBoxY);
             this.optionsPanel.Controls.Add(this.inputJumpBoxY);
             this.optionsPanel.Controls.Add(this.outputJumpBoxY);
             this.optionsPanel.Controls.Add(this.inputOffsetBoxY);
             this.optionsPanel.Controls.Add(this.outputOffsetBoxY);
             this.optionsPanel.Controls.Add(this.accelerationBoxY);
-            this.optionsPanel.Controls.Add(this.MidpointActiveXLabel);
+            this.optionsPanel.Controls.Add(this.SyncSpeedActiveXLabel);
             this.optionsPanel.Controls.Add(this.LimitActiveXLabel);
             this.optionsPanel.Controls.Add(this.InputJumpActiveXLabel);
             this.optionsPanel.Controls.Add(this.OutputJumpActiveXLabel);
@@ -425,7 +425,7 @@ namespace grapher
             this.optionsPanel.Controls.Add(this.inputOffsetBoxX);
             this.optionsPanel.Controls.Add(this.outputOffsetBoxX);
             this.optionsPanel.Controls.Add(this.constantThreeLabelX);
-            this.optionsPanel.Controls.Add(this.midpointBoxX);
+            this.optionsPanel.Controls.Add(this.syncSpeedBoxX);
             this.optionsPanel.Controls.Add(this.limitLabelX);
             this.optionsPanel.Controls.Add(this.limitBoxX);
             this.optionsPanel.Controls.Add(this.inCapLabelXClassic);
@@ -1202,7 +1202,7 @@ namespace grapher
             this.constantThreeLabelY.Name = "constantThreeLabelY";
             this.constantThreeLabelY.Size = new System.Drawing.Size(47, 13);
             this.constantThreeLabelY.TabIndex = 137;
-            this.constantThreeLabelY.Text = "Midpoint";
+            this.constantThreeLabelY.Text = "SyncSpeed";
             // 
             // limitLabelY
             // 
@@ -1278,14 +1278,14 @@ namespace grapher
             this.ByComponentXYLock.TabIndex = 20;
             this.ByComponentXYLock.UseVisualStyleBackColor = true;
             // 
-            // MidpointActiveYLabel
+            // SyncSpeedActiveYLabel
             // 
-            this.MidpointActiveYLabel.AutoSize = true;
-            this.MidpointActiveYLabel.Location = new System.Drawing.Point(414, 330);
-            this.MidpointActiveYLabel.Name = "MidpointActiveYLabel";
-            this.MidpointActiveYLabel.Size = new System.Drawing.Size(13, 13);
-            this.MidpointActiveYLabel.TabIndex = 131;
-            this.MidpointActiveYLabel.Text = "0";
+            this.SyncSpeedActiveYLabel.AutoSize = true;
+            this.SyncSpeedActiveYLabel.Location = new System.Drawing.Point(414, 330);
+            this.SyncSpeedActiveYLabel.Name = "SyncSpeedActiveYLabel";
+            this.SyncSpeedActiveYLabel.Size = new System.Drawing.Size(13, 13);
+            this.SyncSpeedActiveYLabel.TabIndex = 131;
+            this.SyncSpeedActiveYLabel.Text = "0";
             // 
             // LimitActiveYLabel
             // 
@@ -1341,14 +1341,14 @@ namespace grapher
             this.AccelerationActiveLabelY.TabIndex = 128;
             this.AccelerationActiveLabelY.Text = "0";
             // 
-            // MidpointActiveXLabel
+            // SyncSpeedActiveXLabel
             // 
-            this.MidpointActiveXLabel.AutoSize = true;
-            this.MidpointActiveXLabel.Location = new System.Drawing.Point(197, 330);
-            this.MidpointActiveXLabel.Name = "MidpointActiveXLabel";
-            this.MidpointActiveXLabel.Size = new System.Drawing.Size(13, 13);
-            this.MidpointActiveXLabel.TabIndex = 127;
-            this.MidpointActiveXLabel.Text = "0";
+            this.SyncSpeedActiveXLabel.AutoSize = true;
+            this.SyncSpeedActiveXLabel.Location = new System.Drawing.Point(197, 330);
+            this.SyncSpeedActiveXLabel.Name = "SyncSpeedActiveXLabel";
+            this.SyncSpeedActiveXLabel.Size = new System.Drawing.Size(13, 13);
+            this.SyncSpeedActiveXLabel.TabIndex = 127;
+            this.SyncSpeedActiveXLabel.Text = "0";
             // 
             // LimitActiveXLabel
             // 
@@ -1553,7 +1553,7 @@ namespace grapher
             this.constantThreeLabelX.Name = "constantThreeLabelX";
             this.constantThreeLabelX.Size = new System.Drawing.Size(47, 13);
             this.constantThreeLabelX.TabIndex = 105;
-            this.constantThreeLabelX.Text = "Midpoint";
+            this.constantThreeLabelX.Text = "SyncSpeed";
             this.constantThreeLabelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // limitLabelX
@@ -2216,12 +2216,12 @@ namespace grapher
             this.accelTypeDropY.TabIndex = 140;
             this.accelTypeDropY.Text = "Accel Type";
             // 
-            // midpointBoxY
+            // syncSpeedBoxY
             // 
-            this.midpointBoxY.Location = new System.Drawing.Point(332, 327);
-            this.midpointBoxY.Name = "midpointBoxY";
-            this.midpointBoxY.Size = new System.Drawing.Size(76, 20);
-            this.midpointBoxY.TabIndex = 214;
+            this.syncSpeedBoxY.Location = new System.Drawing.Point(332, 327);
+            this.syncSpeedBoxY.Name = "syncSpeedBoxY";
+            this.syncSpeedBoxY.Size = new System.Drawing.Size(76, 20);
+            this.syncSpeedBoxY.TabIndex = 214;
             // 
             // limitBoxY
             // 
@@ -2307,12 +2307,12 @@ namespace grapher
             this.outputOffsetBoxX.Size = new System.Drawing.Size(76, 20);
             this.outputOffsetBoxX.TabIndex = 113;
             // 
-            // midpointBoxX
+            // syncSpeedBoxX
             // 
-            this.midpointBoxX.Location = new System.Drawing.Point(106, 327);
-            this.midpointBoxX.Name = "midpointBoxX";
-            this.midpointBoxX.Size = new System.Drawing.Size(76, 20);
-            this.midpointBoxX.TabIndex = 114;
+            this.syncSpeedBoxX.Location = new System.Drawing.Point(106, 327);
+            this.syncSpeedBoxX.Name = "syncSpeedBoxX";
+            this.syncSpeedBoxX.Size = new System.Drawing.Size(76, 20);
+            this.syncSpeedBoxX.TabIndex = 114;
             // 
             // limitBoxX
             // 
@@ -2417,7 +2417,7 @@ namespace grapher
         private System.Windows.Forms.Label inCapLabelYClassic;
         private System.Windows.Forms.Label constantOneLabelY;
         private System.Windows.Forms.CheckBox ByComponentXYLock;
-        private System.Windows.Forms.Label MidpointActiveYLabel;
+        private System.Windows.Forms.Label SyncSpeedActiveYLabel;
         private System.Windows.Forms.Label LimitActiveYLabel;
         private System.Windows.Forms.Label InputJumpActiveYLabel;
         private System.Windows.Forms.Label OutputJumpActiveYLabel;
@@ -2425,14 +2425,14 @@ namespace grapher
         private System.Windows.Forms.Label OutputOffsetActiveYLabel;
         private System.Windows.Forms.Label AccelerationActiveLabelY;
         private  grapher.Models.Theming.Controls.ThemeableComboBox accelTypeDropY;
-        private grapher.Models.Theming.Controls.ThemeableTextBox midpointBoxY;
+        private grapher.Models.Theming.Controls.ThemeableTextBox syncSpeedBoxY;
         private grapher.Models.Theming.Controls.ThemeableTextBox limitBoxY;
         private grapher.Models.Theming.Controls.ThemeableTextBox inputJumpBoxY;
         private grapher.Models.Theming.Controls.ThemeableTextBox outputJumpBoxY;
         private grapher.Models.Theming.Controls.ThemeableTextBox inputOffsetBoxY;
         private grapher.Models.Theming.Controls.ThemeableTextBox outputOffsetBoxY;
         private grapher.Models.Theming.Controls.ThemeableTextBox accelerationBoxY;
-        private System.Windows.Forms.Label MidpointActiveXLabel;
+        private System.Windows.Forms.Label SyncSpeedActiveXLabel;
         private System.Windows.Forms.Label LimitActiveXLabel;
         private System.Windows.Forms.Label InputJumpActiveXLabel;
         private System.Windows.Forms.Label OutputJumpActiveXLabel;
@@ -2461,7 +2461,7 @@ namespace grapher
         private grapher.Models.Theming.Controls.ThemeableTextBox inputJumpBoxX;
         private grapher.Models.Theming.Controls.ThemeableTextBox outputJumpBoxX;
         private System.Windows.Forms.Label constantThreeLabelX;
-        private grapher.Models.Theming.Controls.ThemeableTextBox midpointBoxX;
+        private grapher.Models.Theming.Controls.ThemeableTextBox syncSpeedBoxX;
         private System.Windows.Forms.Label limitLabelX;
         private grapher.Models.Theming.Controls.ThemeableTextBox limitBoxX;
         private System.Windows.Forms.Label inCapLabelXClassic;

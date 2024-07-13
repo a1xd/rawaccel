@@ -15,14 +15,14 @@ namespace grapher.Layouts
             ClassicCapLayout = new OptionLayout(false, string.Empty);
             PowerCapLayout = new OptionLayout(false, string.Empty);
             DecayRateLayout = new OptionLayout(true, DecayRate);
-            GrowthRateLayout = new OptionLayout(true, GrowthRate);
+            GammaLayout = new OptionLayout(true, Gamma);
             SmoothLayout = new OptionLayout(true, Smooth);
             InputOffsetLayout = new OptionLayout(true, InputOffset);
             LimitLayout = new OptionLayout(true, Limit);
             PowerClassicLayout = new OptionLayout(true, PowerClassic);
             ExponentLayout = new OptionLayout(true, Exponent);
             OutputOffsetLayout = new OptionLayout(false, string.Empty);
-            MidpointLayout = new OptionLayout(true, Midpoint);
+            SyncSpeedLayout = new OptionLayout(true, SyncSpeed);
             LutTextLayout = new OptionLayout(false, string.Empty);
             LutPanelLayout = new OptionLayout(false, string.Empty);
             LutApplyOptionsLayout = new OptionLayout(false, string.Empty);

@@ -37,7 +37,7 @@ public ref struct VersionHelper
 [JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class AccelMode
 {
-    classic, jump, natural, motivity, power, lut, noaccel
+    classic, jump, natural, synchronous, power, lut, noaccel
 };
 
 [JsonConverter(Converters::StringEnumConverter::typeid)]

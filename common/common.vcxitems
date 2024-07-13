@@ -17,7 +17,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-classic.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-jump.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-lookup.hpp" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)accel-motivity.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)accel-synchronous.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-natural.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-noaccel.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)accel-power.hpp" />
