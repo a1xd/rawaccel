@@ -21,7 +21,7 @@ namespace grapher.Layouts
             PowerCapLayout = new OptionLayout(false, string.Empty);
             DecayRateLayout = new OptionLayout(false, string.Empty);
             GammaLayout = new OptionLayout(true, Gamma);
-            SmoothLayout = new OptionLayout(false, string.Empty);
+            SmoothLayout = new OptionLayout(true, Smooth);
             InputOffsetLayout = new OptionLayout(false, string.Empty);
             LimitLayout = new OptionLayout(true, Motivity);
             PowerClassicLayout = new OptionLayout(false, string.Empty);
