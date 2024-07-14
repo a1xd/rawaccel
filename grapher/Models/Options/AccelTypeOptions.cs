@@ -16,7 +16,7 @@ namespace grapher
         public static readonly LayoutBase Classic = new ClassicLayout();
         public static readonly LayoutBase Jump = new JumpLayout();
         public static readonly LayoutBase Natural = new NaturalLayout();
-        public static readonly LayoutBase Motivity = new MotivityLayout();
+        public static readonly LayoutBase Synchronous = new SynchronousLayout();
         public static readonly LayoutBase Power = new PowerLayout();
         public static readonly LayoutBase LUT = new LUTLayout();
         public static readonly LayoutBase Off = new OffLayout();
@@ -33,14 +33,14 @@ namespace grapher
             Option outputJump,
             Option outputOffset,
             Option decayRate,
-            Option growthRate,
+            Option gamma,
             Option smooth,
             Option inputJump,
             Option inputOffset,
             Option limit,
             Option powerClassic,
             Option exponent,
-            Option midpoint,
+            Option syncSpeed,
             TextOption lutText,
             LUTPanelOptions lutPanelOptions,
             LutApplyOptions lutApplyOptions,
@@ -56,7 +56,7 @@ namespace grapher
                     Classic,
                     Jump,
                     Natural,
-                    Motivity,
+                    Synchronous,
                     Power,
                     LUT,
                     Off
@@ -66,7 +66,7 @@ namespace grapher
 
             GainSwitch = gainSwitch;
             DecayRate = decayRate;
-            GrowthRate = growthRate;
+            Gammma = gamma;
             Smooth = smooth;
             ClassicCap = classicCap;
             PowerCap = powerCap;
@@ -77,7 +77,7 @@ namespace grapher
             Exponent = exponent;
             OutputJump = outputJump;
             OutputOffset = outputOffset;
-            Midpoint = midpoint;
+            SyncSpeed = syncSpeed;
             WriteButton = writeButton;
             AccelTypeActiveValue = accelTypeActiveValue;
             LutText = lutText;
@@ -111,7 +111,7 @@ namespace grapher
 
         public Option DecayRate { get; }
 
-        public Option GrowthRate { get; }
+        public Option Gammma { get; }
 
         public Option Smooth { get; }
 
@@ -137,7 +137,7 @@ namespace grapher
 
         public Option Exponent { get; }
 
-        public Option Midpoint { get; }
+        public Option SyncSpeed { get; }
 
         public TextOption LutText { get; }
 
@@ -232,7 +232,7 @@ namespace grapher
 
             GainSwitch.Hide();
             DecayRate.Hide();
-            GrowthRate.Hide();
+            Gammma.Hide();
             Smooth.Hide();
             ClassicCap.Hide();
             PowerCap.Hide();
@@ -243,7 +243,7 @@ namespace grapher
             Limit.Hide();
             PowerClassic.Hide();
             Exponent.Hide();
-            Midpoint.Hide();
+            SyncSpeed.Hide();
             LutText.Hide();
             LutPanel.Hide();
             LutApply.Hide();
@@ -281,12 +281,12 @@ namespace grapher
             OutputOffset.SetActiveValue(args.outputOffset);
             InputOffset.SetActiveValue(args.inputOffset);
             DecayRate.SetActiveValue(args.decayRate);
-            GrowthRate.SetActiveValue(args.growthRate);
+            Gammma.SetActiveValue(args.gamma);
             Smooth.SetActiveValue(args.smooth);
-            Limit.SetActiveValue((args.mode == AccelMode.motivity) ? args.motivity : args.limit);
+            Limit.SetActiveValue((args.mode == AccelMode.synchronous) ? args.motivity : args.limit);
             PowerClassic.SetActiveValue(args.exponentClassic);
             Exponent.SetActiveValue(args.exponentPower);
-            Midpoint.SetActiveValue(args.midpoint);
+            SyncSpeed.SetActiveValue(args.syncSpeed);
             LutPanel.SetActiveValues(args.data, args.length, args.mode);
             LutApply.SetActiveValue(args.gain);
         }
@@ -326,7 +326,7 @@ namespace grapher
                 GainSwitch.CheckBox.Checked;
 
             if (DecayRate.Visible) args.decayRate = DecayRate.Field.Data;
-            if (GrowthRate.Visible) args.growthRate = GrowthRate.Field.Data;
+            if (Gammma.Visible) args.gamma = Gammma.Field.Data;
             if (Smooth.Visible) args.smooth = Smooth.Field.Data;
             if (ClassicCap.Visible)
             {
@@ -346,7 +346,7 @@ namespace grapher
             if (OutputJump.Visible) args.cap.y = OutputJump.Field.Data;
             if (Limit.Visible)
             {
-                if (args.mode == AccelMode.motivity)
+                if (args.mode == AccelMode.synchronous)
                 {
                     args.motivity = Limit.Field.Data;
                 }
@@ -360,7 +360,7 @@ namespace grapher
             if (InputOffset.Visible) args.inputOffset = InputOffset.Field.Data;
             if (OutputOffset.Visible) args.outputOffset = OutputOffset.Field.Data;
 
-            if (Midpoint.Visible) args.midpoint = Midpoint.Field.Data;
+            if (SyncSpeed.Visible) args.syncSpeed = SyncSpeed.Field.Data;
             if (LutPanel.Visible)
             {
                 (var points, var length) = LutPanel.GetPoints();
@@ -382,7 +382,7 @@ namespace grapher
             AccelTypeActiveValue.Align();
             GainSwitch.AlignActiveValues();
             DecayRate.AlignActiveValues();
-            GrowthRate.AlignActiveValues();
+            Gammma.AlignActiveValues();
             Smooth.AlignActiveValues();
             ClassicCap.AlignActiveValues();
             PowerCap.AlignActiveValues();
@@ -393,7 +393,7 @@ namespace grapher
             Limit.AlignActiveValues();
             PowerClassic.AlignActiveValues();
             Exponent.AlignActiveValues();
-            Midpoint.AlignActiveValues();
+            SyncSpeed.AlignActiveValues();
             LutApply.AlignActiveValues();
         }
 
@@ -424,7 +424,7 @@ namespace grapher
                 ClassicCap,
                 PowerCap,
                 DecayRate,
-                GrowthRate,
+                Gammma,
                 Smooth,
                 InputJump,
                 InputOffset,
@@ -433,7 +433,7 @@ namespace grapher
                 Exponent,
                 OutputJump,
                 OutputOffset,
-                Midpoint,
+                SyncSpeed,
                 LutText,
                 LutPanel,
                 LutApply,
@@ -447,7 +447,7 @@ namespace grapher
                 case AccelMode.classic:  return (args.exponentClassic == 2) ? Linear : Classic;
                 case AccelMode.jump:     return Jump;
                 case AccelMode.natural:  return Natural;
-                case AccelMode.motivity: return Motivity;
+                case AccelMode.synchronous: return Synchronous;
                 case AccelMode.power:    return Power;
                 case AccelMode.lut:      return LUT;
                 default:                 return Off;

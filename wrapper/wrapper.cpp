@@ -37,7 +37,7 @@ public ref struct VersionHelper
 [JsonConverter(Converters::StringEnumConverter::typeid)]
 public enum class AccelMode
 {
-    classic, jump, natural, motivity, power, lut, noaccel
+    classic, jump, natural, synchronous, power, lut, noaccel
 };
 
 [JsonConverter(Converters::StringEnumConverter::typeid)]
@@ -68,13 +68,13 @@ public value struct AccelArgs
     double outputOffset;
     double acceleration;
     double decayRate;
-    double growthRate;
+    double gamma;
     double motivity;
     double exponentClassic;
     double scale;
     double exponentPower;
     double limit;
-    double midpoint;
+    double syncSpeed;
     double smooth;
 
     [JsonProperty("Cap / Jump")]

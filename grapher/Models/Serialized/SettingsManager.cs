@@ -203,6 +203,7 @@ namespace grapher.Models.Serialized
             settings.minimumSpeed = UserProfile.minimumSpeed;
             settings.lrOutputDPIRatio = UserProfile.lrOutputDPIRatio;
             settings.udOutputDPIRatio = UserProfile.udOutputDPIRatio;
+            settings.inputSpeedArgs = UserProfile.inputSpeedArgs;
         }
 
         public GUISettings MakeGUISettingsFromFields()

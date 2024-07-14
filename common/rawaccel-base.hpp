@@ -31,7 +31,7 @@ namespace rawaccel {
         classic,
         jump,
         natural,
-        motivity,
+        synchronous,
         power,
         lookup,
         noaccel
@@ -49,13 +49,13 @@ namespace rawaccel {
         double output_offset = 0;
         double acceleration = 0.005;
         double decay_rate = 0.1;
-        double growth_rate = 1;
+        double gamma = 1;
         double motivity = 1.5;
         double exponent_classic = 2;
         double scale = 1;
         double exponent_power = 0.05;
         double limit = 1.5;
-        double midpoint = 5;
+        double sync_speed = 5;
         double smooth = 0.5;
 
         vec2d cap = { 15, 1.5 };

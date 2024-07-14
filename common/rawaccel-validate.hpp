@@ -96,8 +96,8 @@ namespace rawaccel {
 				error("scale"" must be positive");
 			}
 
-			if (args.growth_rate <= 0) {
-				error("growth rate"" must be positive");
+			if (args.gamma <= 0) {
+				error("gamma"" must be positive");
 			}
 
 			if (args.decay_rate <= 0) {
@@ -120,8 +120,8 @@ namespace rawaccel {
 				error("limit"" must be positive");
 			}
 
-			if (args.midpoint <= 0) {
-				error("midpoint"" must be positive");
+			if (args.sync_speed <= 0) {
+				error("synchronous speed"" must be positive");
 			}
 
 			if (args.smooth < 0 || args.smooth > 1) {

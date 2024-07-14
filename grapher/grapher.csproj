@@ -78,12 +78,12 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Constants.cs" />
-	<Compile Include="Common\Helper.cs" />
+    <Compile Include="Common\Helper.cs" />
     <Compile Include="DeviceMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Layouts\LUTLayout.cs" />
-    <Compile Include="Layouts\MotivityLayout.cs" />
+    <Compile Include="Layouts\SynchronousLayout.cs" />
     <Compile Include="Layouts\JumpLayout.cs" />
     <Compile Include="Layouts\UnsupportedLayout.cs" />
     <Compile Include="MessageDialog.cs">

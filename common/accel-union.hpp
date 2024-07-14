@@ -3,7 +3,7 @@
 #include "accel-classic.hpp"
 #include "accel-jump.hpp"
 #include "accel-lookup.hpp"
-#include "accel-motivity.hpp"
+#include "accel-synchronous.hpp"
 #include "accel-natural.hpp"
 #include "accel-noaccel.hpp"
 #include "accel-power.hpp"
@@ -21,8 +21,8 @@ namespace rawaccel {
         natural<LEGACY> natural_l;
         power<GAIN> power_g;
         power<LEGACY> power_l;
-        loglog_sigmoid<GAIN> loglog_sigmoid_g;
-        loglog_sigmoid<LEGACY> loglog_sigmoid_l;
+        activation_framework<GAIN> loglog_sigmoid_g;
+        activation_framework<LEGACY> loglog_sigmoid_l;
 
         template <template <bool> class AccelTemplate, typename Visitor>
         auto visit_helper(Visitor vis, bool gain)
@@ -35,13 +35,13 @@ namespace rawaccel {
         auto visit(Visitor vis, const accel_args& args)
         {
             switch (args.mode) {
-            case accel_mode::classic:  return visit_helper<classic>(vis, args.gain);
-            case accel_mode::jump:     return visit_helper<jump>(vis, args.gain);
-            case accel_mode::natural:  return visit_helper<natural>(vis, args.gain);
-            case accel_mode::motivity: return visit_helper<loglog_sigmoid>(vis, args.gain);
-            case accel_mode::power:    return visit_helper<power>(vis, args.gain);
-            case accel_mode::lookup:   return vis(lut);
-            default:                   return vis(noaccel);
+            case accel_mode::classic:       return visit_helper<classic>(vis, args.gain);
+            case accel_mode::jump:          return visit_helper<jump>(vis, args.gain);
+            case accel_mode::natural:       return visit_helper<natural>(vis, args.gain);
+            case accel_mode::synchronous:   return visit_helper<activation_framework>(vis, args.gain);
+            case accel_mode::power:         return visit_helper<power>(vis, args.gain);
+            case accel_mode::lookup:        return vis(lut);
+            default:                        return vis(noaccel);
             }
         }
 
