@@ -151,8 +151,12 @@ Natural features a concave curve which starts at 1 and approaches some maximum s
 ![NaturalGainExample](images/jump_example.png)
 
 ### Motivity
+This accel type is removed from latest RawAccel master, in favor of "synchronous" below, which we believe is a more powerful and correct expression of the framework of ideas underlying the motivity mode.
 This curve looks like an "S" with the top half bigger than the bottom. Mathematically it's a "Sigmoid function on a log-log plot". A user can set the "midpoint" of the S, the "growth rate" (i.e. slantedness) of the S, and the "motivity". "Motivity" sets min and max sensitivity, where the maximum is just "motivity", and the minimum is "1/motivity." (Sensitivity or gain is 1 at the midpoint.) The gain version of this curve is calculated and stored in a lookup table before applying acceleration, which makes the gain graph look a little funny.  This is an excellent choice for power users and new users who don't mind playing with the settings a little.
 ![MotivityExample](images/motivity_example.png)
+
+### Synchronous
+(This section under construction)
 
 ### Look Up Table
 This curve style is a blank canvas on which to create a curve. It allows the user to define the points which will make up the curve. For this reason, this mode is only for experts who know exactly what they want. Points can be supplied in the GUI according to format x1,y1;x2,y2;...xn.yn or in the settings.json in json format. The default Windows mouse acceleration settings (Enhanced Pointer Precision) can be very closely emulated with this style, using velocity points: "1.505035,0.85549892;4.375,3.30972978;13.51,15.17478447;140,354.7026875;".
